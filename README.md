@@ -1,0 +1,2 @@
+# pienryhmien-optimointi
+Ohjelmistotuotantoprojektin lopputuotteen repositorio
