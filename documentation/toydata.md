@@ -4,8 +4,8 @@ Simple data created for testing the early algorithms for grouping people by pref
 #### Group preferences
 The data is structured intentionally so that the groups have different profiles in preferences.
 
-A is very popular as both first and second preference.
-B is a popular second preference, but not first preference.
-C is a fairly popular first preference
-D is not a popular choice
-E has exactly three people choosing it as first preference
+- A is very popular as both first and second preference.
+- B is a popular second preference, but not first preference.
+- C is a fairly popular first preference
+- D is not a popular choice
+- E has exactly three people choosing it as first preference
