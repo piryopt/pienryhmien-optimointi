@@ -1,1 +1,4 @@
-hospitals.py: Algorithm for sorting groups based on the solution to the hospital/residents problem by Gale/Shapley. 
+# Algorithms
+
+### Hospital/residents algorithm (hospital.py)
+Algorithm for sorting groups based on the solution to the hospital/residents problem by Gale/Shapley. 
