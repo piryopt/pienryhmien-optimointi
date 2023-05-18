@@ -9,6 +9,7 @@ class User:
     def __eq__(self, other):
        return self.id == other.id
     
+    ## This might cause problems when we want to inspect the rankings of choices of the user. 
     def remove_first_selection(self):
         new_selections = self.selections
         new_selections.pop(0)
@@ -31,6 +32,7 @@ def get_worst_student(group, prio):
     if len(prio) == 0:
         print("FIX THIS ERROR ASAP")
         return
+    ## Fix recursive function at some point!
     ##if prio[-1] in group:
         ##print("FOUND IT")
         ##return prio[-1]
@@ -78,22 +80,23 @@ def main():
 
     group_prio(students, groups)
 
+    ## Continue until all students have been matched. 
     while False in matched:
         for i, s in enumerate(students):
             if not s.selections or matched[i]: continue
             print(f"inspecting student: {s.name}")
+            ## Pick the students best possible group.
             best_group = s.selections[0]
             group_participants = best_group.participants
-            ##selection_number = get_best_selection(s)
-            ##g = s.selections[selection_number]
-            ##group = groups[g].participants
             prio = best_group.prio
             
+            # Add the student to the group
             if not s in group_participants:
                 group_participants.append((s))
                 print(f"added {s.name} to {best_group.name}")
                 matched[i] = True
-
+            
+            ## If the group is over-subscribed, kick the worst candidate out.
             if len(group_participants) > max_group_size:
                 worst = get_worst_student(group_participants, prio)
                 worst.remove_first_selection()
@@ -103,6 +106,7 @@ def main():
                 print()
                 
 
+    ## Print out the group selections.
     print()
     for g in groups:
         print(f"Group name: {g.name}")
