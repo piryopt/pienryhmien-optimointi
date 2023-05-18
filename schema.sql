@@ -2,24 +2,27 @@ CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	firstname TEXT,
  	lastname TEXT,
+ 	student_number TEXT, -- or int or not at all
 	isteacher BOOLEAN
 );
 
 CREATE TABLE courses (
 	id SERIAL PRIMARY KEY,
 	coursename TEXT UNIQUE,
-	teacher_id INTEGER REFERENCES users
+	teacher_id INTEGER REFERENCES users -- maybe not needed
 );
 
-CREATE TABLE groups (
+CREATE TABLE surveys ( -- yksittäinen kysely
 	id SERIAL PRIMARY KEY,
 	groupname TEXT,
-	course_id INTEGER REFERENCES courses
+	course_id INTEGER REFERENCES courses,
+	min_choices INTEGER
 );
 
-CREATE TABLE choices (
+CREATE TABLE choices ( -- yksittäinen päiväkoti, pienryhmä
 	id SERIAL PRIMARY KEY,
 	course_id INTEGER REFERENCES courses,
+	survey_id INTEGER REFERENCES surveys,
 	name TEXT,
 	max_spaces INTEGER,
 	current_spaces INTEGER,
@@ -30,7 +33,7 @@ CREATE TABLE choices (
 CREATE TABLE rankings (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users,
-	group_id INTEGER REFERENCES groups,
+	survey_id INTEGER REFERENCES surveys,
 	choice_id INTEGER REFERENCES choices,
 	ranking INTEGER
 );
@@ -38,26 +41,15 @@ CREATE TABLE rankings (
 CREATE TABLE participants (
 	id SERIAL PRIMARY KEY,
 	course_id INTEGER REFERENCES courses,
-	user_id INTEGER REFERENCES users	
+	user_id INTEGER REFERENCES users,
+	privileged BOOLEAN
 );
 
-CREATE TABLE user_group (
+CREATE TABLE final_group ( -- lopullinen sijoitus
 	id SERIAL PRIMARY KEY,
 	course_id INTEGER REFERENCES courses,
 	user_id INTEGER REFERENCES users,
-	group_id INTEGER REFERENCES groups
+	survey_id INTEGER REFERENCES surveys,
+	choice_id INTEGER REFERENCES choices
 );
 
-USERS lisätän entry, kun käyttäjä kirjautuu ensimmäistä kertaa sisään.
-
-COURSES opettaja voi lisätä kurssin
-
-GROUPS kysely, liittyy tiettyyn kurssiin
-
-CHOICES kyselyyn liittyvä pienryhmä/päiväkoti yms. sisältää tiedon käyttäjien määrästä ja kaksi lisätietokenttää (esim osoite ja ikäryhmä)
-
-RANKINGS iso taulu, käyttäjän id - kyselyn id - valinnan id - valittu tärkeys
-
-PARTICIPANTS pääse näkemään kurssille osallistujat
-
-USER_GROUP lopullinen sijoitus
