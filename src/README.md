@@ -1,8 +1,7 @@
 # Basic usage
 
-1. Install Python and pip
+To run flask app, type:
 
-2. Type "python3 -m venv .venv"
-3. Type "source .venv/bin/activate"
-1. To install requirements type "pip install -r requirements.txt"
-2. Type 'flask run' to run the application
+1. chmod +x ./build-and-run.sh
+2. ./build-and-run.sh
+
