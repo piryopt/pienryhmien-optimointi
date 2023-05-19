@@ -1,10 +1,11 @@
-import random
+import hospital_data_gen
 
 class User:
     def __init__(self, id, name, selections):
         self.id = id
         self.name = name
         self.selections = selections
+        self.happiness = 1
 
     def __eq__(self, other):
        return self.id == other.id
@@ -14,14 +15,20 @@ class User:
         new_selections = self.selections
         new_selections.pop(0)
         self.selections = new_selections
+        self.happiness += 1
     
-
 class Group:
     def __init__(self, id, name):
         self.id = id
         self.name = name
         self.participants = []
         self.prio = []
+
+    def get_average_happiness(self):
+        sum = 0
+        for p in self.participants:
+            sum += p.happiness
+        return sum / len(self.participants)
 
 def get_best_selection(student):
     for i, x in enumerate(student.selections_removed):
@@ -32,19 +39,20 @@ def get_worst_student(group, prio):
     if len(prio) == 0:
         print("FIX THIS ERROR ASAP")
         return
-    ## Fix recursive function at some point!
-    ##if prio[-1] in group:
-        ##print("FOUND IT")
-        ##return prio[-1]
-    ##get_worst_student(group, prio[:-1])
-    prio = list(reversed(prio))
-    for student in prio:
-        if student in group:
-            return student
+    student = prio[-1]
+    if student in group:
+        return student
+    return get_worst_student(group, prio[:-1])
+    ## Leaving this for now if problems arise with the recursive function
+    ##prio = list(reversed(prio))
+    ##for student in prio:
+        ##if student in group:
+            ##return student
 
-def group_prio(students, groups):
-    ## make this work with n selections
-    max_selections = 3
+def group_prio(students):
+    ## Make this work with n selections Currently only accepts the size of groups. Doesn't take into account
+    ## different amount of choices between users.
+    max_selections = 5
     ## fix infinite loop caused by the list matched (shuffled students not in sync with it)
     ##random.shuffle(students)
     for i in range(max_selections):
@@ -53,32 +61,15 @@ def group_prio(students, groups):
             group.prio.append(s)
 
 def main():
-    group0 = Group(0, "group0")
-    group1 = Group(1, "group1")
-    group2 = Group(2, "group2")
+    groups = hospital_data_gen.generate_groups(100)
 
-    groups = [group0, group1, group2]
+    students = hospital_data_gen.generate_students(1000, groups)
 
-    student0 = User(0, "carl", [group2,group1,group0])
-    student1 = User(1, "bob", [group1,group2,group0])
-    student2 = User(2, "tom", [group2,group1,group0])
-    student3 = User(3, "sarah", [group0,group2,group1])
-    student4 = User(4, "james", [group2,group0,group1])
-    student5 = User(5, "jessica", [group2,group1,group0])
-    student6 = User(6, "timo", [group2,group0,group1])
-    student7 = User(7, "aino", [group2,group1,group0])
-    student8 = User(8, "anssi", [group1,group2,group0])
-    student9 = User(9, "inka", [group1,group0,group2])
-    student10 = User(10, "elina", [group0,group1,group2])
-    student11 = User(11, "matti", [group0,group2,group1])
+    matched = [False for i in range(len(students))]
 
-    students = [student0, student1, student2, student3, student4, student5, student6, student7, student8, student9, student10, student11]
+    max_group_size = 10
 
-    matched = [False, False, False, False, False, False, False, False, False, False, False, False]
-
-    max_group_size = 4
-
-    group_prio(students, groups)
+    group_prio(students)
 
     ## Continue until all students have been matched. 
     while False in matched:
@@ -109,9 +100,9 @@ def main():
     ## Print out the group selections.
     print()
     for g in groups:
-        print(f"Group name: {g.name}")
+        print(f"Group name: Group{g.name}, Group happiness: {g.get_average_happiness()}")
         for p in g.participants:
-            print(f"Student name: {p.name}")
+            print(f"Student name: {p.name}, got his/her {p.happiness}. choice")
         print()
 
 if __name__=="__main__":
