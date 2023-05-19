@@ -1,4 +1,3 @@
-import hospital_data_gen
 
 class User:
     def __init__(self, id, name, selections):
@@ -60,6 +59,8 @@ def group_prio(students):
             group = s.selections[i]
             group.prio.append(s)
 
+import hospital_data_gen
+
 def main():
     groups = hospital_data_gen.generate_groups(100)
 
@@ -104,6 +105,7 @@ def main():
         for p in g.participants:
             print(f"Student name: {p.name}, got his/her {p.happiness}. choice")
         print()
+    return groups
 
 if __name__=="__main__":
     main()
