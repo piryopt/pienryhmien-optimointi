@@ -27,6 +27,8 @@ class Group:
         sum = 0
         for p in self.participants:
             sum += p.happiness
+        if sum == 0:
+            return 0
         return sum / len(self.participants)
     
     def priobump(self, student):
@@ -58,7 +60,7 @@ def get_worst_student(group, prio):
 def group_prio(students):
     ## Make this work with n selections Currently only accepts the size of groups. Doesn't take into account
     ## different amount of choices between users.
-    max_selections = 4
+    max_selections = 5
     ## fix infinite loop caused by the list matched (shuffled students not in sync with it)
     ##random.shuffle(students)
     for i in range(max_selections):
@@ -69,13 +71,13 @@ def group_prio(students):
 import hospital_data_gen
 
 def main():
-    groups = hospital_data_gen.generate_groups(5)
+    groups = hospital_data_gen.generate_groups(30)
 
-    students = hospital_data_gen.generate_students(20, groups)
+    students = hospital_data_gen.generate_students(100, groups)
 
     matched = [False for i in range(len(students))]
 
-    max_group_size = 4
+    max_group_size = 5
 
     group_prio(students)
 
@@ -112,12 +114,16 @@ def main():
 
     ## Print out the group selections.
     print()
+    overall_happiness = 0
     for g in groups:
         print(f"Group name: Group{g.name}, Group happiness: {g.get_average_happiness()}")
         for p in g.participants:
+            overall_happiness += p.happiness
             print(f"Student name: {p.name}, got his/her {p.happiness}. choice")
         print()
-    return groups
+    print()
+    print(f"The average happiness of all people is {overall_happiness / len(students)}")
+
 
 if __name__=="__main__":
     main()
