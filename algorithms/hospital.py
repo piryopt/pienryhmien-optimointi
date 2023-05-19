@@ -29,6 +29,13 @@ class Group:
         for p in self.participants:
             sum += p.happiness
         return sum / len(self.participants)
+    
+    def priobump(self, student):
+        self.prio.remove(student)
+        new_prio = [student]
+        new_prio.extend(self.prio)
+        self.prio = new_prio
+        print(f"Updated {student.name}'s prio in Group{self.name}")
 
 def get_best_selection(student):
     for i, x in enumerate(student.selections_removed):
@@ -52,7 +59,7 @@ def get_worst_student(group, prio):
 def group_prio(students):
     ## Make this work with n selections Currently only accepts the size of groups. Doesn't take into account
     ## different amount of choices between users.
-    max_selections = 5
+    max_selections = 4
     ## fix infinite loop caused by the list matched (shuffled students not in sync with it)
     ##random.shuffle(students)
     for i in range(max_selections):
@@ -61,13 +68,13 @@ def group_prio(students):
             group.prio.append(s)
 
 def main():
-    groups = hospital_data_gen.generate_groups(100)
+    groups = hospital_data_gen.generate_groups(5)
 
-    students = hospital_data_gen.generate_students(1000, groups)
+    students = hospital_data_gen.generate_students(20, groups)
 
     matched = [False for i in range(len(students))]
 
-    max_group_size = 10
+    max_group_size = 4
 
     group_prio(students)
 
@@ -84,7 +91,7 @@ def main():
             # Add the student to the group
             if not s in group_participants:
                 group_participants.append((s))
-                print(f"added {s.name} to {best_group.name}")
+                print(f"added {s.name} to Group{best_group.name}")
                 matched[i] = True
             
             ## If the group is over-subscribed, kick the worst candidate out.
@@ -92,7 +99,12 @@ def main():
                 worst = get_worst_student(group_participants, prio)
                 worst.remove_first_selection()
                 group_participants.remove(worst)
-                print(f"removed {worst.name} from {best_group.name}")
+                print(f"removed {worst.name} from Group{best_group.name}")
+                
+                ## Update prio for the next best group.
+                worst_students_next_group = worst.selections[0]
+                worst_students_next_group.priobump(worst)
+
                 matched[worst.id] = False
                 print()
                 
