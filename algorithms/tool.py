@@ -34,8 +34,6 @@ def multiple_runs(n):
     for i,j in sorted(master_tally.items()):
         print(i,j/n)
 
-multiple_runs(2)
-
 
 ## AVERAGES FROM 1000 RUNS OF 1000 STUDENTS
 ## 1: 767
