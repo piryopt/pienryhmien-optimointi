@@ -1,3 +1,10 @@
+
+################################
+# This scirpt builds container #
+# and run it on local machine  #
+################################
+
+
 #!/bin/bash
 
 docker build . -t ohtu-projekti
