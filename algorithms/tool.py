@@ -1,4 +1,4 @@
-from hospital import main
+from hospital import hospital_algo
 
 class SolutionChecker:
 
@@ -22,7 +22,7 @@ class SolutionChecker:
 def multiple_runs(n):
     master_tally = {}
     for i in range(n):
-        s = SolutionChecker(main())
+        s = SolutionChecker(hospital_algo())
         s.create_tally()
         tally = s.tally
         for k,v in tally.items():

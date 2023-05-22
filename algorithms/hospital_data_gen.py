@@ -1,7 +1,8 @@
-from hospital import Group
+from entities.group import Group
+from entities.user import User
 from random import sample, randint
 from string import ascii_lowercase
-from hospital import User
+
 '''Functions to generate data for hospitals/recidents algorithm'''
 
 def generate_groups(n: int):
