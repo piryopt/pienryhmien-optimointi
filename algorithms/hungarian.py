@@ -61,6 +61,13 @@ class Hungarian:
         max = np.max(self.matrix)
         self.matrix = self.matrix*-1+max
 
+    def subtract_column_minima(self):
+        self.matrix = self.matrix-self.matrix.min(axis=0)
+
+    def subtract_row_minima(self):
+        self.matrix = self.matrix-self.matrix.min(axis=1)
+
+
 #print(profit_matrix)
 #cost_matrix = 100 - reshape_matrix(profit_matrix)
 #print(cost_matrix)
@@ -71,5 +78,4 @@ s.create_matrix()
 s.reshape_matrix(s.matrix)
 print(s.reshape_matrix(s.matrix))
 s.profit_matrix_to_nonnegative_cost_matrix()
-
 
