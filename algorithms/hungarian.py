@@ -56,7 +56,10 @@ class Hungarian:
         else:
             mat = matrix
         return mat
-        
+
+    def profit_matrix_to_nonnegative_cost_matrix(self):
+        max = np.max(self.matrix)
+        self.matrix = self.matrix*-1+max
 
 #print(profit_matrix)
 #cost_matrix = 100 - reshape_matrix(profit_matrix)
@@ -67,5 +70,6 @@ s = Hungarian(groups,students)
 s.create_matrix()
 s.reshape_matrix(s.matrix)
 print(s.reshape_matrix(s.matrix))
+s.profit_matrix_to_nonnegative_cost_matrix()
 
 
