@@ -22,6 +22,7 @@ def hospital_algo():
     #students = excelreader.create_users(excel, groups)
     
     shuffle(students)
+    # The list matched is indexed in the same order as the students in the students list. 
     matched = [False for i in range(len(students))]
 
     # Form prio for each group based on the selections of the students 
