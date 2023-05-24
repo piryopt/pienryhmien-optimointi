@@ -1,6 +1,8 @@
 from matplotlib import pyplot as plt
 
 def pie(student_n, group_n, max_selections, students):
+    '''Takes in the amount of students, amount of groups, maximum amount of allowed selections and the list of students. Returns a piechart that diplays
+    how many students got their n:th choice'''
     happiness_counter = [0 for i in range(max_selections + 1)]
     for i, s in enumerate(students):
         happiness_counter[s.happiness] += 1

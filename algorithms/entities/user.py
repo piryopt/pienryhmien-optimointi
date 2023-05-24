@@ -10,6 +10,8 @@ class User:
     
     ## This might cause problems when we want to inspect the rankings of choices of the user. 
     def remove_first_selection(self):
+        '''Removes the first selection from the list. This happened because they were ranked lowest in the groups prio
+        As a result of this, their prio in the next most favoured group was increased.'''
         new_selections = self.selections
         new_selections.pop(0)
         self.selections = new_selections

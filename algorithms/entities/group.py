@@ -6,6 +6,7 @@ class Group:
         self.prio = []
 
     def get_average_happiness(self):
+        '''Returns the average happiness of all users of the group'''
         sum = 0
         for p in self.participants:
             sum += p.happiness
@@ -14,21 +15,16 @@ class Group:
         return sum / len(self.participants)
     
     def priobump(self, student):
+        '''Prio is increased for the next best group selection of the input student'''
         self.prio.remove(student)
         new_prio = [student]
         new_prio.extend(self.prio)
         self.prio = new_prio
-        #print(f"Updated {student.name}'s prio in Group{self.name}")
+        #print(f"Updated {student.name}'s prio in Group {self.name}")
 
-    def get_worst_student(self, prio):
-        '''if len(prio) == 0:
-            print("FIX THIS ERROR ASAP")
-            return
-        student = prio[-1]
-        if student in self.participants:
-            return student
-        return self.get_worst_student(prio[:-1])'''
-        prio = list(reversed(prio))
+    def get_worst_student(self):
+        '''Returns the student with the worst prio in the participants of the group.'''
+        prio = list(reversed(self.prio))
         for student in prio:
             if student in self.participants:
                 return student
