@@ -163,4 +163,4 @@ cython_debug/
 #.idea/
 
 # Generateable documentation
-documentation/generated/
+documentation/generated/*
