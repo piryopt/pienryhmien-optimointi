@@ -23,8 +23,6 @@ def hospital_algo():
     
     shuffle(students)
     matched = [False for i in range(len(students))]
-    for s in students:
-        matched.append((False, s))
 
     # Form prio for each group based on the selections of the students 
     group_prio(students)
