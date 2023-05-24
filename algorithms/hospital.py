@@ -22,7 +22,6 @@ def hospital_algo():
     #students = excelreader.create_users(excel, groups)
     
     shuffle(students)
-    matched = []
     matched = [False for i in range(len(students))]
     for s in students:
         matched.append((False, s))
