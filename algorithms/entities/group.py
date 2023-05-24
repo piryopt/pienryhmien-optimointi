@@ -18,18 +18,17 @@ class Group:
         new_prio = [student]
         new_prio.extend(self.prio)
         self.prio = new_prio
-        print(f"Updated {student.name}'s prio in Group{self.name}")
+        #print(f"Updated {student.name}'s prio in Group{self.name}")
 
     def get_worst_student(self, prio):
-        if len(prio) == 0:
+        '''if len(prio) == 0:
             print("FIX THIS ERROR ASAP")
             return
         student = prio[-1]
         if student in self.participants:
             return student
-        return self.get_worst_student(prio[:-1])
-        ## Leaving this for now if problems arise with the recursive function
-        ##prio = list(reversed(prio))
-        ##for student in prio:
-            ##if student in group:
-                ##return student
+        return self.get_worst_student(prio[:-1])'''
+        prio = list(reversed(prio))
+        for student in prio:
+            if student in self.participants:
+                return student
