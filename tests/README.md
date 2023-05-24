@@ -1,4 +1,4 @@
-# Tests
+# Testing in the project 
 
 ## Creating tests
 - Use naming conventions established in [unittest -documentation](https://docs.python.org/3/library/unittest.html#basic-example)
@@ -18,5 +18,5 @@
 
 ### Generating a HTML-coverage report 
 ```
-> python3 -m coverage html
+> python3 -m coverage html -d ./documentation/generated/test-coverage
 ```
