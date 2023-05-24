@@ -1,9 +1,9 @@
 from tools import hospital_data_gen, piechart, excelreader
-#from random import sample, shuffle
+from random import shuffle
 
-group_n = 10
-student_n = 103
-max_group_size = 11
+group_n = 25
+student_n = 500
+max_group_size = 20
 max_selections = 10
 excel = 'Kohtitutkivaatyötapaa.xlsx'
 
@@ -16,13 +16,12 @@ def group_prio(students):
 
 def hospital_algo():
     '''Sorting algorithm based on the hospital-residents problem'''
-    #groups = hospital_data_gen.generate_groups(group_n)
-    groups = excelreader.create_groups(excel)
-    #students = hospital_data_gen.generate_students(student_n, groups)
-    students = excelreader.create_users(excel, groups)
-    #students = sample(students, len(students))
-    #shuffle(students)
-
+    groups = hospital_data_gen.generate_groups(group_n)
+    #groups = excelreader.create_groups(excel)
+    students = hospital_data_gen.generate_students(student_n, groups)
+    #students = excelreader.create_users(excel, groups)
+    
+    shuffle(students)
     matched = [False for i in range(len(students))]
 
     # Form prio for each group based on the selections of the students 
@@ -54,8 +53,8 @@ def hospital_algo():
                 worst_students_next_group = worst.selections[0]
                 worst_students_next_group.priobump(worst)
 
-                matched[worst.id] = False
-                #print()
+                worst_index = students.index(worst)
+                matched[worst_index] = False
                 
 
     # Print out the group selections.
