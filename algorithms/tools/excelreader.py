@@ -8,19 +8,18 @@ def create_groups(excel):
     '''Takes in the name of the excel chart, returns the list of all possible groups.'''
     book = load_workbook(excel)
     sheet = book.active
-    groups = []
+    groups = {}
     list = sheet['Q2'].value.split(';')
     for i, l in enumerate(list):
         if l != '':
-            new_group = Group(i, l)
-            groups.append(new_group)
+            groups[i] = Group(i, l)
     return groups
 
 def create_users(excel, groups):
     '''Takes in the name of the excel chart and the list of groups. Returns the list of users with the list of their selections'''
     book = load_workbook(excel)
     sheet = book.active
-    users = []
+    users = {}
 
     listofselections = sheet['Q']
     i = 0
@@ -30,8 +29,8 @@ def create_users(excel, groups):
         selection_list = []
         for s in selections:
             for g in groups:
-                if g.name == s:
-                    selection_list.append(g)
-        users.append(User(i, 'opiskelija' + str(i), selection_list))
+                if groups[g].name == s:
+                    selection_list.append(groups[g].id)
+        users[i] = User(i, 'opiskelija' + str(i), selection_list)
         i += 1
     return users
