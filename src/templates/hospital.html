@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Hospital{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  <h1>Hospital</h1>
+  <li>
+    {% for i in range(0, groups_dict|length) %}
+      <li></li>
+    {% endfor %}
+  </li>
+  
+{% endblock %}

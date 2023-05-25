@@ -1,13 +1,9 @@
 from random import shuffle
 import datetime
 
-group_n = 500
-student_n = 10000
-max_group_size = 20
-max_selections = 10
 excel = 'Kohtitutkivaatyötapaa.xlsx'
 
-def group_prio(students, students_dict, groups_dict):
+def group_prio(students, students_dict, groups_dict, max_selections):
     '''For the input list students, the function ranks students for each group based on the rankings of selections.'''
     for i in range(max_selections):
         for student_id in students:
@@ -16,7 +12,7 @@ def group_prio(students, students_dict, groups_dict):
             group = groups_dict[group_id]
             group.prio.append(student_id)
 
-def hospital_algo(groups_dict, students_dict):
+def hospital_algo(groups_dict, students_dict, max_selections, max_group_size):
     start = datetime.datetime.now()
     '''Sorting algorithm based on the hospital-residents problem'''
     #groups_dict = hospital_data_gen.generate_groups(group_n)
@@ -33,7 +29,7 @@ def hospital_algo(groups_dict, students_dict):
     matched = [False for i in range(len(students))]
 
     # Form prio for each group based on the selections of the students 
-    group_prio(students, students_dict, groups_dict)
+    group_prio(students, students_dict, groups_dict, max_selections)
 
     # Continue until all students have been matched. 
     while False in matched:
@@ -73,14 +69,17 @@ def hospital_algo(groups_dict, students_dict):
     #print()
     overall_happiness = 0
     for g in groups_dict:
-        #print(f"Group name: Group{g.name}, Group happiness: {g.get_average_happiness()}")
+        print(f"Group name: Group{groups_dict[g].name}, Group happiness: {groups_dict[g].get_average_happiness(students_dict)}")
         for student_id in groups_dict[g].participants:
             student = students_dict[student_id]
             overall_happiness += student.happiness
-            #print(f"Student name: {p.name}, got his/her {p.happiness}. choice")
+            #print(f"Student name: {student.name}, got his/her {student.happiness}. choice")
         #print()
     #print()
     print(f"The average happiness of all people is {overall_happiness / len(students)}")
     end = datetime.datetime.now()
     print(end - start)
-    #piechart.pie(student_n, group_n, max_selections, students_dict)
+    
+    
+    #pie(student_n, group_n, max_selections, students_dict)
+    return groups_dict
