@@ -1,7 +1,9 @@
-# Use the official Python image as the base image
 FROM python:3.9
 
 WORKDIR /usr/src/app
+
+
+ENV DATABASE_URL=null
 
 COPY ./src .
 
