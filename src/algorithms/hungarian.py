@@ -1,7 +1,7 @@
 import numpy as np
 from entities.group import Group
 from entities.user import User
-import hospital_data_gen as h
+import tools.hospital_data_gen as h
 
 WEIGHTS = {0:100,
            1:75,
@@ -30,7 +30,7 @@ class Hungarian:
         Creates a dictionary which maps the column indices of the
         matrix to the group IDs.
         """
-        group_sizes = [group.size for group in self.groups]
+        group_sizes = [group.size for key,group in self.groups.items()]
         total = 0
         for i in range(len(group_sizes)):
             for j in range(group_sizes[i]):
@@ -54,7 +54,7 @@ class Hungarian:
         """
         Creates a list of lists of group IDs from the student's preferences.
         """
-        prefs = [[group.id for group in student.selections] for student in self.students]
+        prefs = [[group.id for group in student.selections] for key, student in self.students.items()]
         return prefs
 
     def reshape_matrix(self,matrix):
