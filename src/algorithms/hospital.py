@@ -1,4 +1,6 @@
 from random import shuffle
+from entities.output_data import Output_data
+from entities.input_data import Input_data
 import datetime
 
 def group_prio(students, students_dict, groups_dict, max_selections):
@@ -11,7 +13,12 @@ def group_prio(students, students_dict, groups_dict, max_selections):
                 group = groups_dict[group_id]
                 group.prio.append(student_id)
 
-def hospital_algo(groups_dict, students_dict, max_selections, max_group_size):
+def hospital_algo(input_data):
+    groups_dict = input_data.groups_dict
+    students_dict = input_data.students_dict
+    max_selections = input_data.max_selections
+    max_group_size = input_data.max_group_size
+
     start = datetime.datetime.now()
     '''Sorting algorithm based on the hospital-residents problem'''
     students = []
@@ -74,14 +81,7 @@ def hospital_algo(groups_dict, students_dict, max_selections, max_group_size):
     end = datetime.datetime.now()
     total_time = (end - start)
     avg_happiness = overall_happiness / len(students)
-    data = []
+    data = Output_data(groups_dict, total_time, avg_happiness)
 
-    #data[0]=groups_dict
-    #data[1]=total_time
-    #data[2]=avg_happiness
-    data.append(groups_dict)
-    data.append(total_time)
-    data.append(avg_happiness)
-    
     #pie(student_n, group_n, max_selections, students_dict)
     return data

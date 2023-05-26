@@ -1,13 +1,8 @@
 from flask import render_template, request
 from app import app
 from algorithms.hospital import hospital_algo
+from entities.input_data import Input_data
 from tools import hospital_data_gen
-
-group_n = 50
-student_n = 1000
-max_group_size = 20
-max_selections = 10
-excel = 'Kohtitutkivaatyötapaa.xlsx'
 
 @app.route("/")
 def hello_world() -> str:
@@ -30,5 +25,7 @@ def hospital_test() -> str:
     groups_dict = hospital_data_gen.generate_groups(group_n)
     students_dict = hospital_data_gen.generate_students(student_n, groups_dict)
 
-    data = hospital_algo(groups_dict, students_dict, max_selections, max_group_size)
-    return render_template("hospital_test.html", groups_dict=data[0], students_dict = students_dict, time = data[1], happiness = data[2])
+    input_data = Input_data(groups_dict, students_dict, max_selections, max_group_size)
+
+    output_data = hospital_algo(input_data)
+    return render_template("hospital_test.html", groups_dict=output_data.groups_dict, students_dict = students_dict, time = output_data.time, happiness = output_data.happiness)
