@@ -1,0 +1,7 @@
+[report]
+# Report coverage for all .py files, don't require __init__.py in directory
+include_namespace_packages = True
+
+[html]
+# Don't show empty files (such as __init__.py's) in HTML reprots
+skip_empty = True

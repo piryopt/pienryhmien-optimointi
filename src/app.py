@@ -1,6 +1,16 @@
-from flask import Flask, render_template
-app = Flask(__name__)
+from flask import Flask
+#from flask_sqlalchemy import SQLAlchemy
+#from os import getenv
 
-@app.route("/")
-def hello_world():
-    return render_template('index.html')
+app = Flask(__name__)
+app.debug = True
+
+#db = SQLAlchemy(app)
+#app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
+
+import routes
+
+'''def db_connection_test():
+    """
+    Tests db-connection. 
+    """'''
