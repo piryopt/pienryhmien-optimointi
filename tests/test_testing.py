@@ -7,7 +7,7 @@ class TestTestingCapabilities(unittest.TestCase):
         User(1, "FOO", [])
 
     def test_importing_src(self):
-        from src.app import hello_world
+        from src.routes import hello_world
 
 if __name__ == "__main__":
     unittest.main()
