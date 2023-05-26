@@ -1,6 +1,6 @@
 from flask import Flask
 #from flask_sqlalchemy import SQLAlchemy
-from os import getenv
+#from os import getenv
 
 app = Flask(__name__)
 app.debug = True
