@@ -3,9 +3,6 @@ from entities.group import Group
 from entities.user import User
 import hospital_data_gen as h
 
-groups = h.generate_groups(2)
-students = h.generate_students(8,groups)
-
 WEIGHTS = {0:100,
            1:75,
            2:50,
@@ -28,13 +25,24 @@ class Hungarian:
         self.matrix = []
         self.prefs = self.student_preferences()
 
-    def create_matrix(self):
+    def create_group_dict(self):
+        """
+        Creates a dictionary which maps the column indices of the
+        matrix to the group IDs.
+        """
         group_sizes = [group.size for group in self.groups]
         total = 0
         for i in range(len(group_sizes)):
             for j in range(group_sizes[i]):
                 self.index_to_group_dict[total+j] = i
             total += group_sizes[i]
+
+    def create_matrix(self):
+        """
+        Creates a matrix which has spots in the groups as columns
+        and students as the rows. Fills the matrix based on student's
+        group preferences.
+        """
         
         for student_prefs in self.prefs:
             row = [WEIGHTS[student_prefs.index(v)] for k,v in self.index_to_group_dict.items()]
@@ -43,10 +51,16 @@ class Hungarian:
         self.matrix = np.matrix(self.matrix)
 
     def student_preferences(self):
+        """
+        Creates a list of lists of group IDs from the student's preferences.
+        """
         prefs = [[group.id for group in student.selections] for student in self.students]
         return prefs
 
     def reshape_matrix(self,matrix):
+        """
+        Makes the matrix square if necessary by padding with zeroes. 
+        """
         a = np.shape(matrix)[0]
         b = np.shape(matrix)[1]
         if b > a:
@@ -58,28 +72,20 @@ class Hungarian:
         self.matrix = mat
 
     def profit_matrix_to_nonnegative_cost_matrix(self):
+        """
+        Creates a cost matrix from the profit matrix.
+        """
         maximum = np.max(self.matrix)
         self.matrix = self.matrix*-1+maximum
 
     def subtract_column_minima(self):
+        """
+        Subtracts the internal minimun of each column in the matrix from each value in the column.
+        """
         self.matrix = self.matrix-self.matrix.min(axis=0)
 
     def subtract_row_minima(self):
+        """
+        Subtracts the internal minimun of each row in the matrix from each value in the row.
+        """
         self.matrix = self.matrix-self.matrix.min(axis=1)[:,None]
-
-
-#print(profit_matrix)
-#cost_matrix = 100 - reshape_matrix(profit_matrix)
-#print(cost_matrix)
-
-
-s = Hungarian(groups,students)
-s.create_matrix()
-s.reshape_matrix(s.matrix)
-print(s.matrix)
-s.profit_matrix_to_nonnegative_cost_matrix()
-print(s.matrix)
-s.subtract_column_minima()
-print(s.matrix)
-s.subtract_row_minima()
-print(s.matrix)
