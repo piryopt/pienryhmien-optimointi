@@ -1,13 +1,14 @@
-FROM alpine:3.14
+FROM python:3.9
 
 WORKDIR /usr/src/app
 
+ENV DATABASE_URL=postgresql://username:password@possu.it.helsinki.fi/KANTA?ssl=true:5432/piryopt
+
 COPY ./src .
 
-RUN apk add python3
-RUN apk add py3-pip
-RUN pip3 install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
+COPY . .
 
 CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
 

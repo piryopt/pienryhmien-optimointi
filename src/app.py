@@ -1,8 +1,16 @@
-from flask import Flask, render_template, request, redirect
-from algorithms.hospital import hospital_algo
+from flask import Flask, session
 from tools import hospital_data_gen
+from flask_sqlalchemy import SQLAlchemy
+form os import getenv
 
 app = Flask(__name__)
-app.debug = True
+
+db = SQLAlchemy(app)
+app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 
 import routes
+
+def db_connection_test():
+    """
+    Tests db-connection. 
+    """
