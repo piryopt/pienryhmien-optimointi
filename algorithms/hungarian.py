@@ -3,8 +3,8 @@ from entities.group import Group
 from entities.user import User
 import hospital_data_gen as h
 
-groups = h.generate_groups(3)
-students = h.generate_students(12,groups)
+groups = h.generate_groups(2)
+students = h.generate_students(8,groups)
 
 WEIGHTS = {0:100,
            1:75,
@@ -55,17 +55,17 @@ class Hungarian:
             mat = np.pad(matrix,[(0,0),(0,a-b)],mode="constant")
         else:
             mat = matrix
-        return mat
+        self.matrix = mat
 
     def profit_matrix_to_nonnegative_cost_matrix(self):
-        max = np.max(self.matrix)
-        self.matrix = self.matrix*-1+max
+        maximum = np.max(self.matrix)
+        self.matrix = self.matrix*-1+maximum
 
     def subtract_column_minima(self):
         self.matrix = self.matrix-self.matrix.min(axis=0)
 
     def subtract_row_minima(self):
-        self.matrix = self.matrix-self.matrix.min(axis=1)
+        self.matrix = self.matrix-self.matrix.min(axis=1)[:,None]
 
 
 #print(profit_matrix)
@@ -76,6 +76,10 @@ class Hungarian:
 s = Hungarian(groups,students)
 s.create_matrix()
 s.reshape_matrix(s.matrix)
-print(s.reshape_matrix(s.matrix))
+print(s.matrix)
 s.profit_matrix_to_nonnegative_cost_matrix()
-
+print(s.matrix)
+s.subtract_column_minima()
+print(s.matrix)
+s.subtract_row_minima()
+print(s.matrix)
