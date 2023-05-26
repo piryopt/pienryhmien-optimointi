@@ -1,6 +1,6 @@
 from entities.group import Group
 from entities.user import User
-from random import sample, randint, shuffle
+from random import sample, randint
 from string import ascii_lowercase
 
 '''Functions to generate data for hospitals/recidents algorithm'''
