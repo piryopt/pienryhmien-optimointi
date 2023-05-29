@@ -11,11 +11,13 @@ db = SQLAlchemy(app)
 
 
 database_url = DatabaseURL()
-DATABASE_URL_TEST = database_url.get_url("test")
-DATABASE_URL_PRODUCTION = database_url.get_url("production")
 
+string_template = "postgresql://{username}:{password}@{host}:{port}/{database}"
+DATABASE_URL = string_template.format(database_url.get_user_production, database_url.get_production_password, database_url.get_host, database_url.get_port, database_url.get_database_production)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL_PRODUCTION
+#DATABASE_URL_TEST = database_url.get_url("test")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 
 # TODO: entäs testikanta?
 
