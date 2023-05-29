@@ -19,16 +19,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv(DATABASE_URL_PRODUCTION)
 
 # TODO: entäs testikanta?
 
-@app.route("/")
-def hello_world() -> str:
-    """
-    Returns the rendered skeleton template
-    """
-    return render_template('index.html')
+import routes
 
-def db_connection_test():
+'''def db_connection_test():
     """
     Tests db-connection. 
-    """
-
-
+    """'''

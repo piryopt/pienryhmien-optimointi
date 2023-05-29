@@ -1,5 +1,6 @@
 flask
 coverage
 pdoc3
+openpyxl
 Flask-SQLAlchemy
 python-dotenv
