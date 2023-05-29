@@ -1,7 +1,9 @@
 from flask import Flask, render_template
 from flask import redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 from db_urls import DatabaseURL
+import os
 
 #import routes
 
@@ -23,15 +25,12 @@ db = SQLAlchemy(app)
 
 app.debug = True
 
-# TODO: entäs testikanta?
 
-
-
-'''def db_connection_test():
-    """
-    Tests db-connection. 
-    """'''
-
+@app.route("/db_connection_test")
+def db_connection_test():
+    run_query = db.session.execute(text('SELECT 1;'))
+    result = run_query.fetchone()
+    return str(result)
 
 
 if __name__ == '__main__':
