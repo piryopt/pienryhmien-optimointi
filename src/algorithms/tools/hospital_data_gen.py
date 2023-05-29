@@ -11,7 +11,7 @@ def generate_groups(n: int):
     Returns a list of Group objects'''
     groups = {}
     for i in range(n):
-        groups.append(Group(i, i,5))
+        groups[i] = (Group(i, i,5))
     return groups
 
 def randomize_groups(groups):
