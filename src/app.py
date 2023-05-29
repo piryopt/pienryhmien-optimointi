@@ -15,7 +15,7 @@ DATABASE_URL_TEST = database_url.get_url("test")
 DATABASE_URL_PRODUCTION = database_url.get_url("production")
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = getenv(DATABASE_URL_PRODUCTION)
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL_PRODUCTION
 
 # TODO: entäs testikanta?
 
