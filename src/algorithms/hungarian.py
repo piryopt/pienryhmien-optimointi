@@ -54,7 +54,7 @@ class Hungarian:
         """
         Creates a list of lists of group IDs from the student's preferences.
         """
-        prefs = [[group.id for group in student.selections] for key, student in self.students.items()]
+        prefs = [[group for group in student.selections] for key, student in self.students.items()]
         return prefs
 
     def reshape_matrix(self,matrix):
