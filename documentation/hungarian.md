@@ -1,5 +1,6 @@
 ### Steps of the Hungarian algorithm
 Steps 3-6 as presented on [hungarianalgorithm.com](https://www.hungarianalgorithm.com/hungarianalgorithm.php) as steps 1-4
+Steps 5-7 follow pseudocode presented on page 743 in Zhu et al, 2012, Group Role Assignment via a Kuhn–Munkres Algorithm-Based Solution, IEEE Transactions on Systems, Man, and Cybernetics — Part A: Systems and Humans, VOL. 42, NO. 3
 
 **Step 1: Formulate an nxn matrix where each column represents a spot open for a student, and the cells represent the profit of placing a student to a group**
 - If a group has multiple spots represent each of these with a column
