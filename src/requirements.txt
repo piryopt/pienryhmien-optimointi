@@ -2,3 +2,4 @@ flask
 coverage
 pdoc3
 Flask-SQLAlchemy
+python-dotenv
