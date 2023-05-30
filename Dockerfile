@@ -3,9 +3,7 @@ FROM python:3.9
 
 WORKDIR /usr/src/app
 
-#ENV DATABASE_URL=postgresql://username:password@possu.it.helsinki.fi/KANTA?ssl=true:5432/piryopt
-
-COPY .env .
+#COPY .env .
 
 COPY ./src .
 
