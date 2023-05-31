@@ -25,8 +25,8 @@ def hospital_test() -> str:
     groups_dict = hospital_data_gen.generate_groups(group_n)
     students_dict = hospital_data_gen.generate_students(student_n, groups_dict)
 
-    #groups_excel = excelreader.create_groups()
-    #students_excel = excelreader.create_users(groups_dict)
+    #groups_dict = excelreader.create_groups()
+    #students_dict = excelreader.create_users(groups_dict)
 
     input_data = Input_data(groups_dict, students_dict, max_selections, max_group_size)
     sort = Hospital(input_data)
