@@ -1,7 +1,9 @@
-FROM python:3.9
+FROM registry.access.redhat.com/ubi8/python-39
+#FROM python:3.9
 #FROM ubuntu
 
 WORKDIR /usr/src/app
+
 
 #COPY .env .
 
