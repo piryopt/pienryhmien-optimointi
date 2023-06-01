@@ -5,3 +5,4 @@ openpyxl
 Flask-SQLAlchemy
 python-dotenv
 psycopg2-binary
+robotframework
