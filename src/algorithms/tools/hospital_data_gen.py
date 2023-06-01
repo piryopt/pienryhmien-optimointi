@@ -1,6 +1,6 @@
 from entities.group import Group
 from entities.user import User
-from random import sample, randint, shuffle
+from random import sample, randint
 from string import ascii_lowercase
 
 '''Functions to generate data for hospitals/recidents algorithm'''
@@ -11,7 +11,7 @@ def generate_groups(n: int):
     Returns a list of Group objects'''
     groups = {}
     for i in range(n):
-        groups[i] = Group(i, i)
+        groups[i] = (Group(i, i,5))
     return groups
 
 def randomize_groups(groups):

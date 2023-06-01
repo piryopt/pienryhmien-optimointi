@@ -3,7 +3,7 @@ from entities.group import Group
 from entities.user import User
 
 #Used for testing real data. Only works for the single excel file at the moment. (Kohti tutkivaa työtapaa VO -22 SiltaSanoma lööpit (jakoon))
-excel = "tutki.xlsx"
+excel = "src/tutki.xlsx"
 
 def create_groups():
     '''Takes in the name of the excel chart, returns the list of all possible groups.'''
@@ -11,9 +11,10 @@ def create_groups():
     sheet = book.active
     groups = {}
     list = sheet['Q2'].value.split(';')
+    del list[-1]
     for i, l in enumerate(list):
         if l != '':
-            groups[i] = Group(i, l)
+            groups[i] = Group(i, l, 12)
     return groups
 
 def create_users(groups):
