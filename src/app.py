@@ -47,7 +47,18 @@ def db_connection_test():
         conn.close()
     except Exception as e:
         print(e)
-    
+
+
+#
+@app.route("/")
+def results():
+
+    # For testings only - later to be replaced with sorting algorithm function call
+    results = [["Maija Mehiläinen", 12345, "ryhmä 1"],
+               ["Matti Mehiläinen", 12346, "ryhmä 2"],
+               ["Minna Mehiläinen", 12347, "ryhmä 3"]]
+
+    return render_template("results.html", results=results)
 
 
 if __name__ == '__main__':
