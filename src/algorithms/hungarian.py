@@ -13,7 +13,8 @@ WEIGHTS = {0:100,
            6:0,
            7:0,
            8:0,
-           9:0
+           9:0,
+           None: 0
            }
 
 
@@ -46,7 +47,7 @@ class Hungarian:
         """
         
         for student_prefs in self.prefs:
-            row = [WEIGHTS[student_prefs.index(v)] for k,v in self.index_to_group_dict.items()]
+            row = [WEIGHTS[student_prefs.index(v) if v in student_prefs else None] for k,v in self.index_to_group_dict.items()]
             self.matrix.append(row)
 
         self.matrix = np.matrix(self.matrix)
@@ -55,7 +56,7 @@ class Hungarian:
         """
         Creates a list of lists of group IDs from the student's preferences.
         """
-        prefs = [[group for group in student.selections] for key, student in self.students.items()]
+        prefs = [[group.id for group in student.selections] for key, student in self.students.items()]
         return prefs
 
     def reshape_matrix(self):
