@@ -13,27 +13,11 @@ app = Flask(__name__)
 
 database_url = DatabaseURL()
 
-'''
-username = database_url.get_user_production()
-password = database_url.get_production_password()
-port = database_url.get_port()
-host = database_url.get_host()
-path = database_url.get_path()
-database = database_url.get_database_production()
-
-# EI TOIMI VIELÄ!!
-DATABASE_URL = "postgresql+psycopg2://" + username + ":" + password + "@" + host + ":" + str(port) + path + "/" + database
-'''
 
 # TOIMII
 conn_info = DatabaseURL()
 TESTDATABASE_URL = "postgresql://" + conn_info.get_user_test() + ":" + conn_info.get_test_password() + "@" + conn_info.get_host() +  ":5432/" + conn_info.get_database_test() + "?ssl=true"
 
-#print(DATABASE_URL)
-
-#app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
-
-#db = SQLAlchemy(app)
 
 app.debug = True
 
