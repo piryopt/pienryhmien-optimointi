@@ -164,3 +164,6 @@ cython_debug/
 
 # Generateable documentation
 documentation/generated/*
+
+.github_token
+push_to_cloud.sh

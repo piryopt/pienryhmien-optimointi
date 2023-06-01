@@ -1,0 +1,63 @@
+<!doctype html>
+
+{% extends 'base.html' %}
+
+{% block title %}Tulokset{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+<head>
+    <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>    
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+</head>
+
+<h2>Lajittelun tulokset</h2>
+
+
+<!--I suggest we add here data from sorting results, e.g. "90 % got their 1st option"-->
+
+<b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
+
+<BR><BR>
+<table id="results_table">
+    <tr>
+        <th>nimi</th>
+        <th>opiskelijanumero</th>
+        <th>ryhmä</th>
+    </tr>
+    <tr></tr>
+    <tr>
+        <!--The data is expected to be as a list ("results") containing 3 cell long list-->
+        {% for row in results %}
+        <td>{{ row[0] }}</td>       <!--name--> 
+        <td>{{ row[1] }}</td>       <!--student ID--> 
+        <td>{{ row[2] }}</td>       <!--assigned group--> 
+        
+    </tr>
+    {% endfor %}
+    
+</table>
+
+<BR><hr><BR>
+
+<button id="export_to_excel" 
+onclick="ExportAllData_HTML(this)">Vie tulokset Excel-taulukkoon</button>
+
+
+<script>
+
+function ExportAllData_HTML(){
+    var wb = {SheetNames:[],Sheets:{}};
+    var ws9 = XLSX.utils.table_to_sheet(document.getElementById('results_table'),{raw:true});
+    wb.SheetNames.push('tulokset'); 
+    wb.Sheets["tulokset"] = ws9;
+    XLSX.writeFile(wb,"tulokset.xlsx",{cellStyles:true});
+}
+
+</script>
+
+
+{% endblock %}
