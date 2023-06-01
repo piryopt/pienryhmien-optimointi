@@ -2,6 +2,7 @@ import numpy as np
 from entities.group import Group
 from entities.user import User
 import tools.hospital_data_gen as h
+from scipy.optimize import linear_sum_assignment
 
 WEIGHTS = {0:100,
            1:75,
@@ -57,18 +58,18 @@ class Hungarian:
         prefs = [[group for group in student.selections] for key, student in self.students.items()]
         return prefs
 
-    def reshape_matrix(self,matrix):
+    def reshape_matrix(self):
         """
         Makes the matrix square if necessary by padding with zeroes. 
         """
-        a = np.shape(matrix)[0]
-        b = np.shape(matrix)[1]
+        a = np.shape(self.matrix)[0]
+        b = np.shape(self.matrix)[1]
         if b > a:
-            mat = np.pad(matrix,[(0,b-a),(0,0)],mode="constant")
+            mat = np.pad(self.matrix,[(0,b-a),(0,0)],mode="constant")
         elif b < a:
-            mat = np.pad(matrix,[(0,0),(0,a-b)],mode="constant")
+            mat = np.pad(self.matrix,[(0,0),(0,a-b)],mode="constant")
         else:
-            mat = matrix
+            mat = self.matrix
         self.matrix = mat
 
     def profit_matrix_to_nonnegative_cost_matrix(self):
@@ -78,14 +79,9 @@ class Hungarian:
         maximum = np.max(self.matrix)
         self.matrix = self.matrix*-1+maximum
 
-    def subtract_column_minima(self):
+    def find_assignment(self):
         """
-        Subtracts the internal minimun of each column in the matrix from each value in the column.
+        Uses scipy function linear_sum_assignemt to find the assignemt of
+        students to groups that incurs minimum cost
         """
-        self.matrix = self.matrix-self.matrix.min(axis=0)
-
-    def subtract_row_minima(self):
-        """
-        Subtracts the internal minimun of each row in the matrix from each value in the row.
-        """
-        self.matrix = self.matrix-self.matrix.min(axis=1)[:,None]
+        row_id, col_id = linear_sum_assignment(self.matrix)

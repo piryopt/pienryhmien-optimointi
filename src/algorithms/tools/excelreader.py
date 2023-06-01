@@ -10,9 +10,10 @@ def create_groups(excel):
     sheet = book.active
     groups = {}
     list = sheet['Q2'].value.split(';')
+    del list[-1]
     for i, l in enumerate(list):
         if l != '':
-            groups[i] = Group(i, l)
+            groups[i] = Group(i, l, 12)
     return groups
 
 def create_users(excel, groups):
