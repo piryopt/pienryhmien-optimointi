@@ -3,6 +3,12 @@ from app import app
 from algorithms.hospital import Hospital
 from entities.input_data import Input_data
 from tools import hospital_data_gen, excelreader
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from db_urls import DatabaseURL
+import psycopg2
 
 @app.route("/")
 def hello_world() -> str:
@@ -11,12 +17,29 @@ def hello_world() -> str:
     """
     return render_template('index.html')
 
+@app.route("/db_connection_test")
+def db_connection_test():
+    database_url = DatabaseURL()
+
+
+    # TOIMII
+    conn_info = DatabaseURL()
+    TESTDATABASE_URL = "postgresql://" + conn_info.get_user_test() + ":" + conn_info.get_test_password() + "@" + conn_info.get_host() +  ":5432/" + conn_info.get_database_test() + "?ssl=true"
+
+    try:
+        connection_uri = TESTDATABASE_URL
+        print(connection_uri)
+        conn = psycopg2.connect(connection_uri)
+        conn.close()
+    except Exception as e:
+        print(e)
+
 @app.route("/hospitalinput_test")
 def hospitalinput_test() -> str:
     return render_template('hospitalinput_test.html')
 
-@app.route("/hospital_test", methods = ["POST"])
-def hospital_test() -> str:
+@app.route("/results", methods = ["POST"])
+def results():    
     group_n = int(request.form.get("group_n"))
     student_n = int(request.form.get("student_n"))
     max_group_size = int(request.form.get("max_group_size"))
@@ -31,4 +54,6 @@ def hospital_test() -> str:
     input_data = Input_data(groups_dict, students_dict, max_selections, max_group_size)
     sort = Hospital(input_data)
     output_data = sort.hospital_algo()
-    return render_template("hospital_test.html", groups_dict=output_data.groups_dict, students_dict = students_dict, time = output_data.time, happiness = output_data.happiness)
+
+    return render_template("results.html", results = output_data.selections, happiness_data = output_data.happiness_data,
+                           time = output_data.time, happiness = output_data.happiness)

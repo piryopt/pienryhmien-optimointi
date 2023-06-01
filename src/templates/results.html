@@ -18,6 +18,11 @@
 
 
 <!--I suggest we add here data from sorting results, e.g. "90 % got their 1st option"-->
+<b>Ryhmänvalintojen keskiarvo: {{ happiness }}, aikaa kului: {{ time }}s</b></br>
+{% for h in happiness_data%}
+{{ h }}</br>
+{% endfor %}
+</br>
 
 <b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
 
