@@ -7,3 +7,4 @@ python-dotenv
 psycopg2-binary
 robotframework
 robotframework-seleniumlibrary
+matplotlib
