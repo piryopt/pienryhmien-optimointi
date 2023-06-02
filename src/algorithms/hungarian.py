@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from scipy.optimize import linear_sum_assignment
 
 WEIGHTS = {0:100,
@@ -36,6 +37,7 @@ class Hungarian:
             are a list of student ids assigned to the group
             self.student_happiness: array with columns representing student id and
             the student's personal ranking of the group they were assigned to
+            self.runtime: data on how long it took to run the algorithm
         """
         #TODO dictionary index_to_student
 
@@ -46,16 +48,21 @@ class Hungarian:
         self.prefs = self.student_preferences()
         self.assigned_groups = self.initiate_assigned_groups_dict()
         self.student_happiness = np.zeros((len(self.students),2))
+        self.runtime = 0
 
     def run(self):
         """
         Calls functions in appropriate order to reshape matrix and run algorithm
+        Measures how long it takes to run the algorithm
         """
+        start = time.time()
         self.create_group_dict()
         self.create_matrix()
         self.reshape_matrix()
         self.profit_matrix_to_nonnegative_cost_matrix()
         self.find_assignment()
+        end = time.time()
+        self.runtime = end-start
 
     def create_group_dict(self):
         """
