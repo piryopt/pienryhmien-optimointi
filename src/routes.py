@@ -1,3 +1,5 @@
+import os
+
 from flask import render_template, request
 from app import app
 from algorithms.hospital import Hospital
@@ -19,15 +21,8 @@ def hello_world() -> str:
 
 @app.route("/db_connection_test")
 def db_connection_test():
-    database_url = DatabaseURL()
-
-
-    # TOIMII
-    conn_info = DatabaseURL()
-    TESTDATABASE_URL = "postgresql://" + conn_info.get_user_test() + ":" + conn_info.get_test_password() + "@" + conn_info.get_host() +  ":5432/" + conn_info.get_database_test() + "?ssl=true"
-
     try:
-        connection_uri = TESTDATABASE_URL
+        connection_uri = os.getenv("DATABASE_URL")
         print(connection_uri)
         conn = psycopg2.connect(connection_uri)
         conn.close()
