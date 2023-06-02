@@ -1,7 +1,4 @@
 import numpy as np
-from entities.group import Group
-from entities.user import User
-import tools.hospital_data_gen as h
 from scipy.optimize import linear_sum_assignment
 
 WEIGHTS = {0:100,
