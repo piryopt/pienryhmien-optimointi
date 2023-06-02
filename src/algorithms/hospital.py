@@ -2,6 +2,7 @@ from random import shuffle
 from entities.output_data import Output_data
 from tools.piechart import pie
 import datetime
+import time
 
 class Hospital:
     def __init__(self, input_data):
@@ -22,7 +23,7 @@ class Hospital:
 
     def hospital_algo(self):
         '''Sorting algorithm based on the hospital-residents problem'''
-        start = datetime.datetime.now()
+        start = time.time()
         students = []
         for student_id in self.students_dict.keys():
             students.append(student_id)
@@ -81,9 +82,27 @@ class Hospital:
         #print(f"The average happiness of all people is {overall_happiness / len(students)}")
 
         avg_happiness = overall_happiness / len(students)
-        end = datetime.datetime.now()
+        end = time.time()
         total_time = (end - start)
-        data = Output_data(self.groups_dict, total_time, avg_happiness)
+
+        #Get data of 
+        happiness_counter = [0 for i in range(self.max_selections + 1)]
+        for s in self.students_dict:
+            happiness_counter[self.students_dict[s].happiness] += 1
+        happiness_data = []
+        for i, h in enumerate(happiness_counter):
+            if h != 0:
+                happiness_data.append(f"{i}. choice: {h}")
+
+        selections = []
+        for g in self.groups_dict:
+            group_participants = self.groups_dict[g].participants
+            group_name = self.groups_dict[g].name
+            for s_id in group_participants:
+                student = self.students_dict[s_id]
+                selections.append([student.name, s_id, group_name])
+
+        data = Output_data(selections, total_time, avg_happiness, happiness_data)
 
         #pie(len(self.students_dict), len(self.groups_dict), self.max_selections, self.students_dict)
         return data
