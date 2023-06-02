@@ -9,7 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_urls import DatabaseURL
 import psycopg2
 
 @app.route("/")
