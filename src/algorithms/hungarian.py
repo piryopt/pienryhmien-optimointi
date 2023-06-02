@@ -148,3 +148,4 @@ class Hungarian:
             assigned_group = self.index_to_group_dict[col_id[i]]
             self.assigned_groups[assigned_group].append(i)
             self.student_happiness[i] = [i, self.prefs[i].index(assigned_group)+1]
+        print(self.assigned_groups)

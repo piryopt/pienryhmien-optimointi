@@ -11,10 +11,9 @@ def create_groups():
     sheet = book.active
     groups = {}
     list = sheet['Q2'].value.split(';')
-    del list[-1]
     for i, l in enumerate(list):
         if l != '':
-            groups[i] = Group(i, l, 12)
+            groups[i] = Group(i, l, 11)
     return groups
 
 def create_users(groups):
