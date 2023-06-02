@@ -1,5 +1,6 @@
 import numpy as np
 import time
+from entities.output_data import Output_data
 from scipy.optimize import linear_sum_assignment
 
 WEIGHTS = {0:100,
@@ -163,3 +164,24 @@ class Hungarian:
             assigned_group = self.index_to_group_dict[col_id[i]]
             self.assigned_groups[assigned_group].append(i)
             self.student_happiness[i] = [i, self.prefs[i].index(assigned_group)+1]
+
+    def get_data(self):
+        """
+        Modifies algorithm data to be ready to Output_data tool and inputs
+        data to the tool, returns the resulting data format
+
+        selections: list of lists, inner list has student name, student id
+        and the group student was assigned to
+        """
+
+        choice, number = np.unique(self.student_happiness[:,1], return_counts=True)
+        happiness_data = []
+        for i in range(len(choice)):
+            happiness_data.append(f"{choice[i]}. choice: {number[i]}")
+
+        selections = []
+        for group in self.assigned_groups:
+            for student in self.assigned_groups[group]:
+                selections.append([self.students[student].name, student, self.groups[group].name])
+        
+        return Output_data(selections, self.runtime, np.average(self.student_happiness[:,1]), happiness_data)
