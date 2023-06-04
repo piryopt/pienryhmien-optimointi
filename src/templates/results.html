@@ -13,13 +13,14 @@
     <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>    
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 </head>
-
+<div class="top-container">
 <h2>Lajittelun tulokset</h2>
-
-
+</div>
+<div class = "left">
+<h3>Hospitals-residents-algoritmi</h3>
 <!--I suggest we add here data from sorting results, e.g. "90 % got their 1st option"-->
-<b>Ryhmänvalintojen keskiarvo: {{ happiness }}, aikaa kului: {{ time }}s</b></br>
-{% for h in happiness_data%}
+<b>Ryhmänvalintojen keskiarvo: {{ happiness1 }}, aikaa kului: {{ time1 }}s</b></br>
+{% for h in happiness_data1%}
 {{ h }}</br>
 {% endfor %}
 </br>
@@ -36,7 +37,7 @@
     <tr></tr>
     <tr>
         <!--The data is expected to be as a list ("results") containing 3 cell long list-->
-        {% for row in results %}
+        {% for row in results1 %}
         <td>{{ row[0] }}</td>       <!--name--> 
         <td>{{ row[1] }}</td>       <!--student ID--> 
         <td>{{ row[2] }}</td>       <!--assigned group--> 
@@ -45,6 +46,39 @@
     {% endfor %}
     
 </table>
+</div>
+
+<div class = "right">
+    <h3>Unkarilainen algoritmi</h3>
+    <!--I suggest we add here data from sorting results, e.g. "90 % got their 1st option"-->
+    <b>Ryhmänvalintojen keskiarvo: {{ happiness2 }}, aikaa kului: {{ time2 }}s</b></br>
+    {% for h in happiness_data2%}
+    {{ h }}</br>
+    {% endfor %}
+    </br>
+    
+    <b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
+    
+    <BR><BR>
+    <table id="results_table">
+        <tr>
+            <th>nimi</th>
+            <th>opiskelijanumero</th>
+            <th>ryhmä</th>
+        </tr>
+        <tr></tr>
+        <tr>
+            <!--The data is expected to be as a list ("results") containing 3 cell long list-->
+            {% for row in results2 %}
+            <td>{{ row[0] }}</td>       <!--name--> 
+            <td>{{ row[1] }}</td>       <!--student ID--> 
+            <td>{{ row[2] }}</td>       <!--assigned group--> 
+            
+        </tr>
+        {% endfor %}
+        
+    </table>
+</div>
 
 <BR><hr><BR>
 

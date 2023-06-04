@@ -1,3 +1,20 @@
 h1 {
     color: red;
 }
+
+.left {
+    width: 50%;
+    padding-top: 50px;
+    float: left;
+}
+
+.right {
+    width: 50%;
+    padding-top: 50px;
+    float: left;
+}
+
+.top-container {
+    height: 50px;
+    width: 100%;
+}
