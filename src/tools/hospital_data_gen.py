@@ -5,13 +5,13 @@ from string import ascii_lowercase
 
 '''Functions to generate data for hospitals/recidents algorithm'''
 
-def generate_groups(n: int):
+def generate_groups(n: int, size: int):
     '''generates groups with a running id number starting from 0
     Name is id
     Returns a list of Group objects'''
     groups = {}
     for i in range(n):
-        groups[i] = (Group(i, i,5))
+        groups[i] = (Group(i, i, size))
     return groups
 
 def randomize_groups(groups):
