@@ -3,10 +3,9 @@ import os
 from flask import render_template, request
 from app import app
 from copy import deepcopy
-from algorithms.hospital import Hospital
 import algorithms.hungarian as h
 from entities.input_data import Input_data
-from tools import hospital_data_gen, excelreader
+from tools import data_gen, excelreader
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy import create_engine
@@ -30,16 +29,14 @@ def db_connection_test():
     except Exception as e:
         print(e)
 
-@app.route("/hospitalinput_test")
-def hospitalinput_test() -> str:
-    return render_template('hospitalinput_test.html')
+@app.route("/input")
+def input() -> str:
+    return render_template('input.html')
 
 @app.route("/results", methods = ["POST"])
 def results():    
     group_n = int(request.form.get("group_n"))
     student_n = int(request.form.get("student_n"))
-    max_group_size = int(request.form.get("max_group_size"))
-    max_selections = int(request.form.get("max_selections"))
 
     groups_dict = hospital_data_gen.generate_groups(group_n, max_group_size)
     students_dict = hospital_data_gen.generate_students(student_n, groups_dict)
