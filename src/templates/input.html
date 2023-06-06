@@ -6,13 +6,13 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Hospital input</h1>
+  <h1>Luo satunnaista testidataa</h1>
   <a href="/">Home page</a></br></br>
   <form action="/results" method="POST">
-    group_n: <input type="number" name="group_n"><br>
-    student_n: <input type="number" name="student_n"><br>
-    max_selections: <input type="number" name="max_selections"><br>
-    max_group_size: <input type="number" name="max_group_size"><br>
-    <button type="submit">Submit</button>
+    Ryhmien lukumäärä: <input type="number" name="group_n"><br>
+    Ryhmien maksimikoko: <input type="number" name="group_size"><br>
+    Opiskelijoiden lukumäärä: <input type="number" name="student_n"><br>
+    Montako ryhmää opiskelija valitsee?: <input type="number" name="max_selections"><br>
+    <button type="submit">Luo dataa!</button>
   </form>
 {% endblock %}

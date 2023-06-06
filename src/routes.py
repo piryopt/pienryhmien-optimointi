@@ -4,7 +4,6 @@ from flask import render_template, request
 from app import app
 from copy import deepcopy
 import algorithms.hungarian as h
-from entities.input_data import Input_data
 from tools import data_gen, excelreader
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
@@ -37,24 +36,26 @@ def input() -> str:
 def results():    
     group_n = int(request.form.get("group_n"))
     student_n = int(request.form.get("student_n"))
+    group_size = int(request.form.get("group_size"))
 
-    groups_dict = hospital_data_gen.generate_groups(group_n, max_group_size)
-    students_dict = hospital_data_gen.generate_students(student_n, groups_dict)
+    groups_dict = data_gen.generate_groups(group_n, group_size)
+    students_dict = data_gen.generate_students(student_n, groups_dict)
 
-    groups_dict2 = deepcopy(groups_dict)
-    students_dict2 = deepcopy(students_dict)
+    sort = h.Hungarian(groups_dict, students_dict)
+    sort.run()
+    output_data = sort.get_data()
 
-    #groups_dict = excelreader.create_groups()
-    #students_dict = excelreader.create_users(groups_dict)
+    return render_template("results.html", results1 = output_data.selections, happiness_data = output_data.happiness_data,
+                           time = output_data.time, happiness = output_data.happiness)
 
-    input_data = Input_data(groups_dict, students_dict, max_selections, max_group_size)
-    sort = Hospital(input_data)
-    output_data = sort.hospital_algo()
+@app.route("/excel")
+def excel():
+    groups_dict = excelreader.create_groups()
+    students_dict = excelreader.create_users(groups_dict)
 
-    sort2 = h.Hungarian(groups_dict2, students_dict2)
-    sort2.run()
-    output_data2 = sort2.get_data()
+    sort = h.Hungarian(groups_dict, students_dict)
+    sort.run()
+    output_data = sort.get_data()
 
-    return render_template("results.html", results1 = output_data.selections, happiness_data1 = output_data.happiness_data,
-                           time1 = output_data.time, happiness1 = output_data.happiness, results2 = output_data2.selections,
-                           happiness_data2 = output_data2.happiness_data, time2 = output_data2.time, happiness2 = output_data2.happiness)
+    return render_template("results.html", results1 = output_data.selections, happiness_data = output_data.happiness_data,
+                           time = output_data.time, happiness = output_data.happiness)
