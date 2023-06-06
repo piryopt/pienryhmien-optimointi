@@ -177,7 +177,7 @@ class Hungarian:
         choice, number = np.unique(self.student_happiness[:,1], return_counts=True)
         happiness_data = []
         for i in range(len(choice)):
-            happiness_data.append(f"{choice[i]}. choice: {number[i]}")
+            happiness_data.append(f"{choice[i]}. valinta: {number[i]}")
 
         selections = []
         for group in self.assigned_groups:
