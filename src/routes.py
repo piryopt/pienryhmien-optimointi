@@ -1,8 +1,6 @@
 import os
-
 from flask import render_template, request
 from app import app
-from copy import deepcopy
 import algorithms.hungarian as h
 from tools import data_gen, excelreader
 from flask_sqlalchemy import SQLAlchemy
