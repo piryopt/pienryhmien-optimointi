@@ -57,3 +57,7 @@ def excel():
 
     return render_template("results.html", results = output_data.selections, happiness_data = output_data.happiness_data,
                            time = output_data.time, happiness = output_data.happiness)
+
+@app.route("/groups")
+def groups():
+    return render_template("groups.html")
