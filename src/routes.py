@@ -21,11 +21,12 @@ def hello_world() -> str:
 def db_connection_test():
     try:
         connection_uri = os.getenv("DATABASE_URL")
-        print(connection_uri)
         conn = psycopg2.connect(connection_uri)
         conn.close()
+        return "<pre><code>" + str(conn) + "</code></pre>"
     except Exception as e:
         print(e)
+        return "<code>" + str(e) + "</code>"
 
 @app.route("/input")
 def input() -> str:
