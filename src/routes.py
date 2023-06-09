@@ -64,4 +64,7 @@ def excel():
 
 @app.route("/groups")
 def groups():
-    return render_template("groups.html")
+    survey_id = 1
+    sql = "SELECT name, info1, info2 FROM choices WHERE survey_id=:survey_id"
+    group_choices = [("Ryhmä1","ohjaaja1","osoite1"),("Ryhmä2","ohjaaja2","osoite2"),("Ryhmä3","ohjaaja3","osoite3")]
+    return render_template("groups.html", choices = group_choices)
