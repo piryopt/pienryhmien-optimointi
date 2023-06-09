@@ -18,3 +18,17 @@ h1 {
     height: 50px;
     width: 100%;
 }
+
+.list-br {
+    display: block;
+    margin: 3px 0;
+}
+
+.item-container {
+    border: 1px solid;
+    text-align: center;
+    padding: 5px;
+    height: 30px;
+    width: 300px;
+    background-color: cyan;
+}
