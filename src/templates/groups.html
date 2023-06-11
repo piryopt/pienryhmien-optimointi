@@ -6,14 +6,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="list-container">
-<ul style="list-style-type:none">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+    $( function() {
+        $( "#sortable1" ).sortable();
+    });
+</script>
+<ul id="sortable1" class="connectedSortable">
     {% for group in choices %}
-    <div class = "item-container">
-    <li>{{ group[0] }}</li>
-    </div>
-    <div class="list-br"></div>
+    <li class="ui-state-default" id="{{ group[0] }}">{{ group[1] }}</li>
     {% endfor %}
 </ul>
-</div>
+<input type="submit" value="Submit" onclick="submit()">
 {% endblock %}
