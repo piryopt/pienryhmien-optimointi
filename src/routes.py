@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request
+from flask import render_template, request, redirect
 from app import app
 import algorithms.hungarian as h
 import algorithms.weights as w
@@ -65,6 +65,12 @@ def excel():
 @app.route("/groups")
 def groups():
     survey_id = 1
-    sql = "SELECT name, info1, info2 FROM choices WHERE survey_id=:survey_id"
-    group_choices = [("Ryhmä1","ohjaaja1","osoite1"),("Ryhmä2","ohjaaja2","osoite2"),("Ryhmä3","ohjaaja3","osoite3")]
+    sql = "SELECT id, name, info1, info2 FROM choices WHERE survey_id=:survey_id"
+    group_choices = [(0,"Ryhmä1","ohjaaja1","osoite1"),(1,"Ryhmä2","ohjaaja2","osoite2"),(2,"Ryhmä3","ohjaaja3","osoite3")]
     return render_template("groups.html", choices = group_choices)
+
+@app.route("/get_choices", methods=["POST"])
+def get_choices():
+    choices = [int(i) for i in request.form["choices"].split(",")]
+    print(choices)
+    return ""
