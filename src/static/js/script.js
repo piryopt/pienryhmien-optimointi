@@ -4,10 +4,19 @@ window.onload = function() {
 
 function submit() {
     var choiceIDs = $("#sortable1").sortable("toArray");
-    const formData = new FormData();
-    formData.append("choices", choiceIDs);
+    var alertContainer = document.getElementById("message");
     
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST","/get_choices",true);
-    xhr.send(formData);
+    alertContainer.style.display = "block";
+
+
+    $.ajax({
+    type: "POST",
+    url: "/get_choices",
+    data: JSON.stringify(choiceIDs),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(result) {
+        alertContainer.innerHTML = result.msg;
+    }
+    });
 }
