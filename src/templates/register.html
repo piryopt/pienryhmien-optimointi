@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  <h1>Register</h1>
+  <a href="/">Palaa etusivulle</a></br></br>
+  <form action="/register" method="POST">
+    Email: <input type="email" name="email"><br>
+    First name: <input type="text" name="firstname"><br>
+    Last name: <input type="text" name="lastname"><br>
+    Student number: <input type="number" name="student_number"><br>
+    Password: <input type="password" name="password1"><br>
+    Password: <input type="password" name="password2"><br>
+    User type: 
+    <select name="isteacher">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+    </select><br>
+    <button type="submit">Register</button>
+  </form>
+{% endblock %}
