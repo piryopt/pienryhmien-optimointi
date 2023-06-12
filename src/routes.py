@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify
 from app import app
 import algorithms.hungarian as h
 import algorithms.weights as w
@@ -76,7 +76,9 @@ def groups():
     return render_template("groups.html", choices = group_choices)
 
 @app.route("/get_choices", methods=["POST"])
-def get_choices():
-    choices = [int(i) for i in request.form["choices"].split(",")]
-    print(choices)
-    return ""
+def test_ajax():
+    raw_data = request.get_json()
+    choices = [int(i) for i in raw_data]
+    response = {"msg":"Tallennus onnistui."}
+    return jsonify(response)
+    
