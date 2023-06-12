@@ -58,7 +58,7 @@ def results():
 @app.route("/excel")
 def excel():
     groups_dict = excelreader.create_groups()
-    students_dict = excelreader.create_users(groups_dict)
+    students_dict = excelreader.create_students(groups_dict)
     weights = w.Weights(len(groups_dict), len(students_dict), True).get_weights()
 
     sort = h.Hungarian(groups_dict, students_dict, weights)
