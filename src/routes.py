@@ -10,6 +10,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import psycopg2
 
+"""
+GLOBALS
+"""
+connection_uri = os.getenv("DATABASE_URL")
+
 @app.route("/")
 def hello_world() -> str:
     """
@@ -19,12 +24,13 @@ def hello_world() -> str:
 
 @app.route("/db_connection_test")
 def db_connection_test():
+    conn = None
     try:
-        connection_uri = os.getenv("DATABASE_URL")
         conn = psycopg2.connect(connection_uri)
         conn.close()
         return "<pre><code>" + str(conn) + "</code></pre>"
     except Exception as e:
+        conn.close()
         print(e)
         return "<code>" + str(e) + "</code>"
 
@@ -65,3 +71,6 @@ def excel():
 @app.route("/groups")
 def groups():
     return render_template("groups.html")
+
+
+    
