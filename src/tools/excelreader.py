@@ -1,6 +1,6 @@
 from openpyxl import Workbook, load_workbook
 from entities.group import Group
-from entities.user import User
+from entities.student import Student
 
 #Used for testing real data. Only works for the single excel file at the moment. (Kohti tutkivaa työtapaa VO -22 SiltaSanoma lööpit (jakoon))
 excel = "tutki.xlsx"
@@ -16,11 +16,11 @@ def create_groups():
             groups[i] = Group(i, l, 11)
     return groups
 
-def create_users(groups):
+def create_students(groups):
     '''Takes in the name of the excel chart and the list of groups. Returns the list of users with the list of their selections'''
     book = load_workbook(excel)
     sheet = book.active
-    users = {}
+    students = {}
 
     listofselections = sheet['Q']
     i = 0
@@ -32,6 +32,6 @@ def create_users(groups):
             for g in groups:
                 if groups[g].name == s:
                     selection_list.append(groups[g].id)
-        users[i] = User(i, 'opiskelija' + str(i), selection_list)
+        students[i] = Student(i, 'opiskelija' + str(i), selection_list)
         i += 1
-    return users
+    return students
