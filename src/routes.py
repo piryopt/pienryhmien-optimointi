@@ -11,6 +11,11 @@ from sqlalchemy.orm import sessionmaker
 import psycopg2
 from services.user_service import user_service
 
+"""
+GLOBALS
+"""
+connection_uri = os.getenv("DATABASE_URL")
+
 @app.route("/")
 def hello_world() -> str:
     """
@@ -20,8 +25,8 @@ def hello_world() -> str:
 
 @app.route("/db_connection_test")
 def db_connection_test():
+    conn = None
     try:
-        connection_uri = os.getenv("DATABASE_URL")
         conn = psycopg2.connect(connection_uri)
         cursor = conn.cursor()
         sql = "SELECT * FROM dummyusers"
@@ -36,6 +41,7 @@ def db_connection_test():
         #return "<pre><code>" + str(conn) + "</code></pre>"
         return user.email
     except Exception as e:
+        conn.close()
         print(e)
         return "<code>" + str(e) + "</code>"
 
@@ -51,8 +57,9 @@ def results():
 
     groups_dict = data_gen.generate_groups(group_n, group_size)
     students_dict = data_gen.generate_students(student_n, groups_dict)
+    weights = w.Weights(group_n, student_n, True).get_weights()
 
-    sort = h.Hungarian(groups_dict, students_dict)
+    sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
 
@@ -111,4 +118,7 @@ def logout():
     user_service.logout()
     return render_template("index.html")
 
-    
+@app.route("/groups")
+def groups():
+    return render_template("groups.html")
+

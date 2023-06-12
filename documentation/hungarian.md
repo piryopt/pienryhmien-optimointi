@@ -30,3 +30,15 @@ The steps 3-6 presented below follow steps 1-4 on hungarianalgorithm.com
 
 **Step 7: Find optimal combination of zeros**
 - Choose zeroes so that no chosen zeroes are on the same column or same row
+
+### Weights
+The current weights are a function of the number of students and the number of possible choices.
+
+#### Number of students
+The number of students is used to scale the maximum and minimum points a choice made by a student can give to a certain group. The maximum is scaled based on the number of students to try and make sure that the maximum preference is a large enough number that it has enough weight when the entire matrix is calculated. The minimum points are still >0 to allow for a situation where a student needs to be protected from being put in a group they can not participate in, in which case the students points for that group is 0 and the algorithm differentiates this from the otherwise minimum points in the system. The minimum is scaled depending on the number of students to make sure that the minimum is high enough.
+
+#### Choices
+The current number of choices is assumed to be a discreet set. This works both for a set number of options put in order by preference, or a set number of preference points (e.g. rate choice 1-10) given to each choice without limits on how many choices the student can rate.
+
+#### Interval between weights
+Currently the interval is a constant, but it is also worth experimenting with a coefficient so that the next weight depends on the previous weight and the coefficient and the interval gets higher on the most preferred choices.
