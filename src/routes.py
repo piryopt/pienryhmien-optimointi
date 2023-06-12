@@ -2,6 +2,7 @@ import os
 from flask import render_template, request
 from app import app
 import algorithms.hungarian as h
+import algorithms.weights as w
 from tools import data_gen, excelreader
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
@@ -39,8 +40,9 @@ def results():
 
     groups_dict = data_gen.generate_groups(group_n, group_size)
     students_dict = data_gen.generate_students(student_n, groups_dict)
+    weights = w.Weights(group_n, student_n, True).get_weights()
 
-    sort = h.Hungarian(groups_dict, students_dict)
+    sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
 
@@ -51,10 +53,15 @@ def results():
 def excel():
     groups_dict = excelreader.create_groups()
     students_dict = excelreader.create_students(groups_dict)
+    weights = w.Weights(len(groups_dict), len(students_dict), True).get_weights()
 
-    sort = h.Hungarian(groups_dict, students_dict)
+    sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
 
     return render_template("results.html", results = output_data.selections, happiness_data = output_data.happiness_data,
                            time = output_data.time, happiness = output_data.happiness)
+
+@app.route("/groups")
+def groups():
+    return render_template("groups.html")
