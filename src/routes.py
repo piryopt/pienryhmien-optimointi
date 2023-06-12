@@ -10,6 +10,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import psycopg2
 
+"""
+GLOBALS
+"""
+connection_uri = os.getenv("DATABASE_URL")
+
 @app.route("/")
 def hello_world() -> str:
     """
@@ -20,11 +25,11 @@ def hello_world() -> str:
 @app.route("/db_connection_test")
 def db_connection_test():
     try:
-        connection_uri = os.getenv("DATABASE_URL")
         conn = psycopg2.connect(connection_uri)
         conn.close()
         return "<pre><code>" + str(conn) + "</code></pre>"
     except Exception as e:
+        conn.close()
         print(e)
         return "<code>" + str(e) + "</code>"
 
@@ -64,10 +69,35 @@ def excel():
 
 @app.route("/groups")
 def groups():
-    survey_id = 1
-    sql = "SELECT id, name, info1, info2 FROM choices WHERE survey_id=:survey_id"
-    group_choices = [(0,"Ryhmä1","ohjaaja1","osoite1"),(1,"Ryhmä2","ohjaaja2","osoite2"),(2,"Ryhmä3","ohjaaja3","osoite3")]
-    return render_template("groups.html", choices = group_choices)
+    return render_template("groups.html")
+    
+@app.route("/user_survey", methods=["POST"])
+def user_survey():
+    """
+    Handle POST-parameters like this:
+
+    param1 = request.form["param1"]
+	param2 = request.form["param2"]
+    ...
+
+    """
+
+    conn = None
+    try:
+        conn = psycopg2.connect(connection_uri)
+
+        # TODO: handle POST-request here
+        survey_id = 1
+        sql = "SELECT id, name, info1, info2 FROM choices WHERE survey_id=:survey_id"
+        group_choices = [(0,"Ryhmä1","ohjaaja1","osoite1"),(1,"Ryhmä2","ohjaaja2","osoite2"),(2,"Ryhmä3","ohjaaja3","osoite3")]
+
+        conn.close()
+
+        return render_template("groups.html", choices = group_choices)
+    except Exception as e:
+        conn.close()
+        print(e)
+        return "Database connection error: " + e
 
 @app.route("/get_choices", methods=["POST"])
 def get_choices():
