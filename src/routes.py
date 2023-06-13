@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify
 from app import app
 import algorithms.hungarian as h
 import algorithms.weights as w
@@ -24,6 +24,7 @@ def hello_world() -> str:
 
 @app.route("/db_connection_test")
 def db_connection_test():
+    conn = None
     try:
         conn = psycopg2.connect(connection_uri)
         conn.close()
@@ -57,7 +58,7 @@ def results():
 @app.route("/excel")
 def excel():
     groups_dict = excelreader.create_groups()
-    students_dict = excelreader.create_users(groups_dict)
+    students_dict = excelreader.create_students(groups_dict)
     weights = w.Weights(len(groups_dict), len(students_dict), True).get_weights()
 
     sort = h.Hungarian(groups_dict, students_dict, weights)

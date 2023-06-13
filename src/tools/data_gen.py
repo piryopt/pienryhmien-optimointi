@@ -1,5 +1,5 @@
 from entities.group import Group
-from entities.user import User
+from entities.student import Student
 from random import sample, randint
 from string import ascii_lowercase
 
@@ -32,5 +32,5 @@ def generate_students(n: int, groups):
     for group_id in groups.keys():
         selections.append(group_id)
     for i in range(n):
-        students[i] =  User(i, f"Opiskelija {i}", sample(selections, len(selections)))
+        students[i] =  Student(i, f"Opiskelija {i}", sample(selections, len(selections)))
     return students
