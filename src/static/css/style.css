@@ -36,9 +36,22 @@ h1 {
 }
 
 #sortable1 li, #sortable2 li {
+    border-radius: 10px;
     margin: 0 5px 5px 5px;
     padding: 5px;
     font-size: 1.2em;
     width: 120px;
     background-color: cyan;
+}
+
+#fade {
+    border-radius: 10px;
+    display: none;
+    background: green;
+    height: 50px;
+    width: 200px;
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+    padding-top: 20px;
 }
