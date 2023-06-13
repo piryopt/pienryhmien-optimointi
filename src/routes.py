@@ -69,38 +69,26 @@ def excel():
 
 @app.route("/groups")
 def groups():
-    return render_template("groups.html")
-    
-@app.route("/user_survey", methods=["POST"])
-def user_survey():
-    """
-    Handle POST-parameters like this:
-
-    param1 = request.form["param1"]
-	param2 = request.form["param2"]
-    ...
-
-    """
-
     conn = None
     try:
         conn = psycopg2.connect(connection_uri)
 
-        # TODO: handle POST-request here
         survey_id = 1
         sql = "SELECT id, name, info1, info2 FROM choices WHERE survey_id=:survey_id"
         group_choices = [(0,"Ryhmä1","ohjaaja1","osoite1"),(1,"Ryhmä2","ohjaaja2","osoite2"),(2,"Ryhmä3","ohjaaja3","osoite3")]
 
         conn.close()
-
-        return render_template("groups.html", choices = group_choices)
     except Exception as e:
         conn.close()
         print(e)
         return "Database connection error: " + e
 
+    return render_template("groups.html", choices = group_choices)
+
+
 @app.route("/get_choices", methods=["POST"])
-def get_choices():
-    choices = [int(i) for i in request.form["choices"].split(",")]
-    print(choices)
-    return ""
+def test_ajax():
+    raw_data = request.get_json()
+    choices = [int(i) for i in raw_data]
+    response = {"msg":"Tallennus onnistui."}
+    return jsonify(response)
