@@ -17,6 +17,12 @@ function submit() {
     dataType: "json",
     success: function(result) {
         alertContainer.innerHTML = result.msg;
+        var fade = document.getElementById("fade");
+        if (fade.style.display === "none") {
+            fade.style.display = "block";
+        } else {
+        }
+        $("#fade").delay(3000).fadeOut(500);
     }
     });
 }
