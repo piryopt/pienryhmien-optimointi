@@ -85,7 +85,6 @@ def surveys(survey_id):
 
     return render_template("survey.html", choices = group_choices)
 
-
 @app.route("/get_choices", methods=["POST"])
 def get_choices():
     raw_data = request.get_json()
