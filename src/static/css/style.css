@@ -42,6 +42,7 @@ h1 {
     font-size: 1.2em;
     width: 120px;
     background-color: cyan;
+    cursor: grab;
 }
 
 #fade {
