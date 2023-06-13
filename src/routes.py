@@ -87,7 +87,7 @@ def surveys(survey_id):
 
 
 @app.route("/get_choices", methods=["POST"])
-def test_ajax():
+def get_choices():
     raw_data = request.get_json()
     choices = [int(i) for i in raw_data]
     response = {"msg":"Tallennus onnistui."}
