@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, redirect, jsonify
+from flask import render_template, request, redirect, jsonify, session
 from app import app
 import algorithms.hungarian as h
 import algorithms.weights as w
@@ -9,6 +9,7 @@ from sqlalchemy import text
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import psycopg2
+from services.user_service import user_service
 
 """
 GLOBALS
@@ -27,8 +28,18 @@ def db_connection_test():
     conn = None
     try:
         conn = psycopg2.connect(connection_uri)
+        cursor = conn.cursor()
+        sql = "SELECT * FROM dummyusers"
+        cursor.execute(text(sql))
+        for i in cursor.fetchall():
+            print(i)
         conn.close()
-        return "<pre><code>" + str(conn) + "</code></pre>"
+        sql = "SELECT * FROM dummyusers"
+        result = db.session.execute(text(sql))
+        user = result.fetchone()
+        print(user)
+        #return "<pre><code>" + str(conn) + "</code></pre>"
+        return user.email
     except Exception as e:
         conn.close()
         print(e)
@@ -91,3 +102,42 @@ def get_choices():
     choices = [int(i) for i in raw_data]
     response = {"msg":"Tallennus onnistui."}
     return jsonify(response)
+
+@app.route("/register", methods = ["GET", "POST"])
+def register():
+    if request.method == "GET":
+        return render_template("register.html")
+    else:
+        email = request.form.get("email")
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        student_number = request.form.get("student_number")
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password2")
+        isteacher = request.form.get("isteacher")
+        teacher_priv = False
+        if isteacher == "teacher":
+            teacher_priv = True
+
+        new_user = user_service.create_user(firstname, lastname, student_number, email, password1, password2, teacher_priv)
+        if new_user == None:
+            return render_template("register.html")
+        return render_template("login.html")
+    
+@app.route("/login", methods = ["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    else:
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        logged_in = user_service.check_credentials(email, password)
+        if not logged_in:
+            return render_template("login.html")
+        return render_template("index.html")
+    
+@app.route("/logout")
+def logout():
+    user_service.logout()
+    return render_template("index.html")

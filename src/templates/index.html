@@ -7,7 +7,15 @@
 
 {% block content %}
   <h1>Index</h1>
-  <p>Hello from flask!</p>
+  <p>Hello {{session.email}}</p>
   <a href="/input">Kokeile luoda dataa</a><br>
   <a href="/excel">Kokeile valmiilla datalla</a>
+  <br/><br/>
+  {% if not session.user_id %}
+  <a href="/login">Kirjaudu sisään</a><br>
+  <a href="/register">Rekisteröidy</a>
+  {% endif %}
+  {% if session.user_id %}
+  <a href="/logout">Kirjaudu ulos</a>
+  {% endif %}
 {% endblock %}

@@ -7,6 +7,16 @@ CREATE TABLE users (
 	isteacher BOOLEAN
 );
 
+CREATE TABLE dummyusers (
+	id SERIAL PRIMARY KEY,
+	firstname TEXT,
+ 	lastname TEXT,
+ 	student_number TEXT, -- or int or not at all
+	email TEXT,
+	password TEXT,
+	isteacher BOOLEAN
+);
+
 CREATE TABLE courses (
 	id SERIAL PRIMARY KEY,
 	coursename TEXT UNIQUE,
