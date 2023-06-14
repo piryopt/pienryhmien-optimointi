@@ -3,7 +3,7 @@ from repositories.user_repository import (
     user_repository as default_user_repository
 )
 from flask import session
-import re
+
 
 class UserService:
     def __init__(self, user_repositroy=default_user_repository):
@@ -13,8 +13,8 @@ class UserService:
         if not email or not password:
             print("Email and password are required!")
             return False
-        user = self._user_repository.find_by_email(email)
-        if not user or user.password != password:
+        user = self._user_repository.find_by_email(email, password)
+        if not user:
             print("Invalid username or password")
             return False
         session["email"] = user.email
