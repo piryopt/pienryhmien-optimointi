@@ -7,7 +7,14 @@ readme = "README.md"
 packages = [{include = "pienryhmien_optimointi"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.9,<3.12"
+numpy = "^1.24.3"
+scipy = "^1.10.1"
+matplotlib = "^3.7.1"
+flask = "^2.3.2"
+openpyxl = "^3.1.2"
+flask-sqlalchemy = "^3.0.3"
+psycopg2 = "^2.9.6"
 
 
 [tool.poetry.group.dev.dependencies]
