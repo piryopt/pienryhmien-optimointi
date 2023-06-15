@@ -29,12 +29,12 @@ def db_connection_test():
     try:
         conn = psycopg2.connect(connection_uri)
         cursor = conn.cursor()
-        sql = "SELECT * FROM dummyusers"
+        sql = "SELECT * FROM users"
         cursor.execute(text(sql))
         for i in cursor.fetchall():
             print(i)
         conn.close()
-        sql = "SELECT * FROM dummyusers"
+        sql = "SELECT * FROM users"
         result = db.session.execute(text(sql))
         user = result.fetchone()
         print(user)

@@ -80,7 +80,7 @@ class Hungarian:
             row = [self.weights[student_prefs.index(v) if v in student_prefs else None] for k,v in self.index_to_group_dict.items()]
             self.matrix.append(row)
 
-        self.matrix = np.matrix(self.matrix)
+        self.matrix = np.array(self.matrix)
 
     def student_preferences(self):
         """
