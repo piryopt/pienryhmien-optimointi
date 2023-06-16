@@ -5,13 +5,13 @@ window.onload = function() {
 function submit() {
     var choiceIDs = $("#sortable1").sortable("toArray");
     var alertContainer = document.getElementById("message");
-    
+    var surveyID = document.getElementById("survey_id").value;
     alertContainer.style.display = "block";
 
 
     $.ajax({
     type: "POST",
-    url: "/get_choices",
+    url: "/get_choices/" + surveyID,
     data: JSON.stringify(choiceIDs),
     contentType: "application/json",
     dataType: "json",
