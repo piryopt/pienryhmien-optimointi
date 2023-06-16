@@ -21,7 +21,7 @@ class Weights:
             self.weights = self.calculate_weights(n_choices, n_students)
         else:
             self.weights = self.calculate_weights(n_choices+1, n_students)
-    
+
     def calculate_weights(self, n_choices, n_students):
         """calculate_weights
         Calculates the interval for weights in the hungarian algorithm based
@@ -50,7 +50,7 @@ class Weights:
         for i in range(n_choices):
             weights_dict[i] = weights[i]
         weights_dict[None] = n_students
-        return weights_dict            
+        return weights_dict
 
     def get_weights(self):
         return self.weights
