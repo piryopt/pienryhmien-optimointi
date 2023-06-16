@@ -1,0 +1,22 @@
+tr.editable {
+    border: 3px blue solid;
+    background-color: aquamarine;
+    height: 40px;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+#newRow:not(.editable){
+    background-color: darkgray;
+}
+
+td>input {
+    height: 40px;
+}
+
+
+table,th,td,tr.choice-table {
+    border: 1px black solid;
+    border-collapse: collapse;
+    width: 1200px;
+}

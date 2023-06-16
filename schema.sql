@@ -3,6 +3,8 @@ CREATE TABLE users (
 	firstname TEXT,
  	lastname TEXT,
  	student_number TEXT, -- or int or not at all
+	email TEXT,
+	password TEXT,
 	isteacher BOOLEAN
 );
 
