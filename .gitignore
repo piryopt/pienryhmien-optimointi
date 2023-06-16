@@ -1,6 +1,10 @@
 # Python.gitignore boilerplate
 # https://github.com/github/gitignore/blob/main/Python.gitignore
 
+# Human manually added
+*.html
+*.xml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
