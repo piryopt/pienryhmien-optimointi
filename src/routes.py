@@ -122,3 +122,13 @@ def logout():
 def groups():
     return render_template("groups.html")
 
+@app.route("/previous_surveys")
+def previous_surveys():
+    '''For fetching previous survey list from the database'''
+
+    # mock data, to be replaced with one fetched from the database
+    results = [["kysely 1", "suljettu", 12],
+               ["kysely 2", "avoinna", 104],
+               ["kysely 3", "suljettu", 0]]
+    
+    return render_template("previous_surveys.html", results=results)
