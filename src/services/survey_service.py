@@ -18,10 +18,17 @@ class SurveyService:
         if user_id == 0:
             print("MUST BE LOGGED IN!")
             return False
-        if self._survey_repository.new_user_ranking(user_id, survey_id, ranking):
-            return True
+        if not self.user_ranking_exists(user_id, survey_id):
+            if self._survey_repository.new_user_ranking(user_id, survey_id, ranking):
+                return True
         print("ERROR IN ADDING NEW USER RANKING!")
         return False
+    
+    def user_ranking_exists(self, user_id, survey_id):
+        if not self._survey_repository.check_if_ranking_exists(user_id, survey_id):
+            return False
+        print("USER RANKING ALREADY EXISTS!")
+        return True
 
 
 survey_service = SurveyService()
