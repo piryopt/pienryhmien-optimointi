@@ -1,5 +1,5 @@
 import os
-from flask import render_template, request, session
+from flask import render_template, request, session, jsonify
 from app import app,db
 import algorithms.hungarian as h
 import algorithms.weights as w
@@ -130,3 +130,15 @@ def previous_surveys():
                ["kysely 3", "suljettu", 0]]
     
     return render_template("surveys.html", results=results)
+
+@app.route("/create_survey", methods = ["GET"])
+def new_survey_form():
+    return render_template("create_survey.html")
+
+@app.route("/create_survey", methods = ["POST"])
+def new_survey_post():
+    #TODO
+    print(request.get_data().decode('utf-8'))
+    print(session)
+    response = {"msg":"vastaanotettu"}
+    return jsonify(response)

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Luo uusi kysely{% endblock %}
+
+{% block head %}
+  <script src="{{ url_for('static', filename='js/create_survey.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/create_survey.css') }}">
+{% endblock %}
+
+{% block content %}
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script>
+    $( function() {
+            $("#choiceTable").sortable({
+              items: "tr:not(#newRow)"
+            });
+    })
+  </script>
+
+  <h1>Luo uusi kysely</h1>
+
+    <label for="groupname">Kyselyn nimi</label>
+    <br/>
+    <input type="text" id="groupname" name="groupname" />
+    <br/>
+    <h2>Priorisoitavat ryhmät</h2>
+
+    <table class="choice-table">
+      <thead>
+        <tr>
+          <th>Nimi</th>
+          <th>Enimmäispaikat</th>
+          <th>Lisätietokenttä 1</th>
+          <th>Lisätietokenttä 2</th>
+        </tr>
+      </thead>
+      <tbody id="choiceTable">
+        <tr id="newRow" class="editable">
+          <td>
+              <input type="text" id="choiceName" class="new-row-input" />
+          </td>
+          <td>
+              <input type="number" id="choiceMaxSpaces" class="new-row-input"/>
+          </td>
+          <td>
+              <textarea id="choiceInfo1" class="new-row-input"></textarea>
+          </td>
+          <td>
+              <textarea id="choiceInfo2" class="new-row-input"></textarea>
+          </td>
+          <td>
+              <button onclick="addChoice()" class="new-row-input">Lisää rivi</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br/><br/><br/>
+    <input type="submit" value="Luo kysely" onclick="createNewSurvey()" />
+
+{% endblock %}
