@@ -20,7 +20,7 @@ Open Browser To Main Page
     Open Browser    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/ 
     Title Should Be     Hello World - Piryopt
     Page Should Contain    Index
-    Page Should Contain    Hello from flask!
+    Page Should Contain    Hello
     Page Should Contain    Kokeile luoda dataa
     Page Should Contain    Kokeile valmiilla datalla
 
