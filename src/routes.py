@@ -131,4 +131,4 @@ def previous_surveys():
                ["kysely 2", "avoinna", 104],
                ["kysely 3", "suljettu", 0]]
     
-    return render_template("previous_surveys.html", results=results)
+    return render_template("surveys.html", results=results)
