@@ -2,8 +2,7 @@
 # https://github.com/github/gitignore/blob/main/Python.gitignore
 
 # Human manually added
-*.html
-*.xml
+logs
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
