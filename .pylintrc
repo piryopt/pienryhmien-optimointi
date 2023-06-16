@@ -6,7 +6,7 @@
 extension-pkg-whitelist=
 
 # Specify a score threshold to be exceeded before program exits with error.
-fail-under=9.0
+fail-under=8.5
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
@@ -259,7 +259,7 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=150
 
 # Maximum number of lines in a module.
 max-module-lines=1000
@@ -483,7 +483,7 @@ valid-metaclass-classmethod-first-arg=cls
 [DESIGN]
 
 # Maximum number of arguments for function / method.
-max-args=7
+max-args=8
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=8

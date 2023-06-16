@@ -2,12 +2,9 @@ import unittest
 
 class TestTestingCapabilities(unittest.TestCase):
 
-    def test_importing_algorithms(self):
-        from algorithms.entities.user import User
-        User(1, "FOO", [])
-
-    def test_importing_src(self):
-        from src.routes import hello_world
+    def test_importing_user(self):
+        from src.entities.user import User
+        User("Moti", "Motivaatio", 15634019, "moti@motivaatio.com", "salasana", False)
 
 if __name__ == "__main__":
     unittest.main()

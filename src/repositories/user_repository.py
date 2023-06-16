@@ -1,6 +1,6 @@
-from app import db
 from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
+from app import db
 
 class UserRepository:
 
@@ -24,8 +24,10 @@ class UserRepository:
             return
         hash_value = generate_password_hash(user.password)
         try:
-            sql = "INSERT INTO users (firstname, lastname, student_number, email, password, isteacher) VALUES (:firstname, :lastname, :student_number, :email, :password, :isteacher)"
-            db.session.execute(text(sql), {"firstname":user.firstname, "lastname":user.lastname, "student_number":user.student_number, "email":user.email, "password":hash_value, "isteacher":user.isteacher})
+            sql = "INSERT INTO users (firstname, lastname, student_number, email, password, isteacher)" \
+                  "VALUES (:firstname, :lastname, :student_number, :email, :password, :isteacher)"
+            db.session.execute(text(sql), {"firstname":user.firstname, "lastname":user.lastname,
+            "student_number":user.student_number, "email":user.email, "password":hash_value, "isteacher":user.isteacher})
             db.session.commit()
         except:
             print("ERROR WHEN ADDING NEW USER TO DB")
