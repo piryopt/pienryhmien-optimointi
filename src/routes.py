@@ -62,9 +62,8 @@ def results():
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
-
-    return render_template("results.html", results = output_data.selections, happiness_data = output_data.happiness_data,
-                           time = output_data.time, happiness = output_data.happiness)
+    return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
+                           time = output_data[1], happiness = output_data[2])
 
 @app.route("/excel")
 def excel():
@@ -75,9 +74,8 @@ def excel():
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
-
-    return render_template("results.html", results = output_data.selections, happiness_data = output_data.happiness_data,
-                           time = output_data.time, happiness = output_data.happiness)
+    return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
+                           time = output_data[1], happiness = output_data[2])
 
 @app.route("/register", methods = ["GET", "POST"])
 def register():
