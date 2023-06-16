@@ -88,14 +88,14 @@ def surveys(survey_id):
         return render_template("index.html")
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id)
 
-@app.route("/get_choices", methods=["POST"])
-def get_choices():
+@app.route("/get_choices/<int:survey_id>", methods=["POST"])
+def get_choices(survey_id):
     raw_data = request.get_json()
-    print(raw_data)
     ranking = ','.join(raw_data)
-    print(ranking)
-    #submission = survey_service.new_user_ranking()
+    submission = survey_service.new_user_ranking(survey_id, ranking)
     response = {"msg":"Tallennus onnistui."}
+    if not submission:
+        response = {"msg":"Tallennus epäonnistui."}
     return jsonify(response)
 
 @app.route("/register", methods = ["GET", "POST"])

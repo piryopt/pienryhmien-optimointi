@@ -16,9 +16,11 @@ class SurveyService:
     def new_user_ranking(self, survey_id, ranking):
         user_id = session.get("user_id", 0)
         if user_id == 0:
+            print("MUST BE LOGGED IN!")
             return False
         if self._survey_repository.new_user_ranking(user_id, survey_id, ranking):
             return True
+        print("ERROR IN ADDING NEW USER RANKING!")
         return False
 
 

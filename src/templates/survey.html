@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+<a href="/">Palaa etusivulle</a></br></br>
 <script>
     $( function() {
         $( "#sortable1" ).sortable();
@@ -17,6 +18,7 @@
     {% endfor %}
 </ul>
 <input type="submit" value="Submit" onclick="submit()">
+<input type="hidden" id="survey_id" value="{{ survey_id }}">
 <br>
 <br>
 <br>
