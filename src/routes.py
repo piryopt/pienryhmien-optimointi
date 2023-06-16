@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import psycopg2
 from services.user_service import user_service
+from services.survey_service import survey_service
 
 """
 GLOBALS
@@ -81,25 +82,19 @@ def excel():
 
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
-    conn = None
-    try:
-        conn = psycopg2.connect(connection_uri)
-
-        sql = "SELECT id, name, info1, info2 FROM choices WHERE survey_id=:survey_id"
-        group_choices = [(0,"Ryhmä1","ohjaaja1","osoite1"),(1,"Ryhmä2","ohjaaja2","osoite2"),(2,"Ryhmä3","ohjaaja3","osoite3")]
-
-        conn.close()
-    except Exception as e:
-        conn.close()
-        print(e)
-        return "Database connection error: " + e
-
-    return render_template("survey.html", choices = group_choices)
+    survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    if not survey_choices:
+        print("SURVEY DOES NOT EXIST!")
+        return render_template("index.html")
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id)
 
 @app.route("/get_choices", methods=["POST"])
 def get_choices():
     raw_data = request.get_json()
-    choices = [int(i) for i in raw_data]
+    print(raw_data)
+    ranking = ','.join(raw_data)
+    print(ranking)
+    #submission = survey_service.new_user_ranking()
     response = {"msg":"Tallennus onnistui."}
     return jsonify(response)
 
