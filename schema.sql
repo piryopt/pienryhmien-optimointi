@@ -16,7 +16,7 @@ CREATE TABLE courses (
 
 CREATE TABLE surveys ( -- yksittäinen kysely
 	id SERIAL PRIMARY KEY,
-	groupname TEXT,
+	surveyname TEXT,
 	course_id INTEGER REFERENCES courses,
 	min_choices INTEGER
 );
