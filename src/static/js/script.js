@@ -18,9 +18,14 @@ function submit() {
     success: function(result) {
         alertContainer.innerHTML = result.msg;
         var fade = document.getElementById("fade");
+        if (result.status === "1") {
+            fade.style.backgroundColor = "#6F0";
+        }
+        if (result.status === "0") {
+            fade.style.backgroundColor = "red"
+        }
         if (fade.style.display === "none") {
             fade.style.display = "block";
-        } else {
         }
         $("#fade").delay(3000).fadeOut(500);
     }

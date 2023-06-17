@@ -110,9 +110,9 @@ def get_choices(survey_id):
     raw_data = request.get_json()
     ranking = ','.join(raw_data)
     submission = survey_service.new_user_ranking(survey_id, ranking)
-    response = {"msg":"Tallennus onnistui. Päivitä sivu uudelleen"}
+    response = {"status":"1","msg":"Tallennus onnistui. Päivitä sivu uudelleen"}
     if not submission:
-        response = {"msg":"Tallennus epäonnistui."}
+        response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)
 
 @app.route("/register", methods = ["GET", "POST"])
