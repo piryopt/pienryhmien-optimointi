@@ -79,17 +79,38 @@ def excel():
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
-    if not survey_choices:
-        print("SURVEY DOES NOT EXIST!")
+    if not survey_choices or session.get("user_id", 0) == 0:
+        print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return render_template("index.html")
+    ranking = survey_service.user_ranking_exists(survey_id)
+    if ranking:
+        user_rankings = ranking[3]
+        list_of_survey_choice_id = user_rankings.split(",")
+        
+        list_of_survey_choice = []
+        for survey_choice_id in list_of_survey_choice_id:
+            survey_choice = survey_service.get_survey_choice(survey_choice_id)
+            if not survey_choice:
+                continue
+            list_of_survey_choice.append(survey_choice)
+
+        survey_name = survey_service.get_survey_name(survey_id)
+        return render_template("userranking.html", choices = list_of_survey_choice, survey_id = survey_id, survey_name = survey_name)
+    
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id)
+
+@app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
+def delete_submission(survey_id):
+    if survey_service.delete_ranking(survey_id):
+        return redirect("/surveys/" + str(survey_id))
+    return redirect("index.html")
 
 @app.route("/get_choices/<int:survey_id>", methods=["POST"])
 def get_choices(survey_id):
     raw_data = request.get_json()
     ranking = ','.join(raw_data)
     submission = survey_service.new_user_ranking(survey_id, ranking)
-    response = {"msg":"Tallennus onnistui."}
+    response = {"msg":"Tallennus onnistui. Päivitä sivu uudelleen"}
     if not submission:
         response = {"msg":"Tallennus epäonnistui."}
     return jsonify(response)

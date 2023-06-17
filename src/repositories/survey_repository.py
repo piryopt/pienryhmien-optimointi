@@ -4,12 +4,12 @@ from sqlalchemy import text
 class SurveyRepository:
     def check_if_survey_exists(self, survey_id):
         try:
-            sql = "SELECT id FROM surveys WHERE id=:survey_id"
+            sql = "SELECT * FROM surveys WHERE id=:survey_id"
             result = db.session.execute(text(sql), {"survey_id":survey_id})
-            surveys = result.fetchall()
-            if len(surveys) > 0:
-                return True
-            return False
+            survey = result.fetchone()
+            if not survey:
+                return False
+            return survey
         except:
             return False
 
@@ -31,14 +31,34 @@ class SurveyRepository:
         except:
             return False
         
-    def check_if_ranking_exists(self, user_id, survey_id):
+    def get_user_ranking(self, user_id, survey_id):
         try:
             sql = "SELECT * FROM user_survey_rankings WHERE (survey_id=:survey_id AND user_id=:user_id AND deleted=False)"
             result = db.session.execute(text(sql), {"survey_id":survey_id, "user_id":user_id})
-            surveys = result.fetchall()
-            if len(surveys) > 0:
-                return True
+            ranking = result.fetchone()
+            if not ranking:
+                return False
+            return ranking
+        except:
             return False
+                
+    def delete_user_ranking(self, user_id, survey_id):
+        try:
+            sql = "UPDATE user_survey_rankings SET deleted = True WHERE (survey_id=:survey_id and user_id=:user_id)"
+            db.session.execute(text(sql), {"survey_id":survey_id, "user_id":user_id})
+            db.session.commit()
+            return True
+        except:
+            return False
+        
+    def get_survey_choice(self, id):
+        try:
+            sql = "SELECT * FROM survey_choices WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":id})
+            ranking = result.fetchone()
+            if not ranking:
+                return False
+            return ranking
         except:
             return False
 

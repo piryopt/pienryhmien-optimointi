@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}User ranking{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<a href="/">Palaa etusivulle</a></br></br>
+<h1>Kysely: {{ survey_name }}</h1>
+<p>Olet jo lähettänyt hakemuksen kyselyyn</p>
+<p>Toiveet:</p>
+<ol>
+    {% for group in choices %}
+    <li>{{ group[2] }}</li></br>
+    {% endfor %}
+</ol>
+</br></br>
+<form method="POST" action="/surveys/{{survey_id}}/deletesubmission">
+    <input type="submit" value="Poista hakemus" onclick="return confirm('Oletko varma, että haluat poistaa hakemuksen?')">
+</form>
+{% endblock %}
