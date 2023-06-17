@@ -1,5 +1,5 @@
-from app import db
 from sqlalchemy import text
+from app import db
 
 class SurveyRepository:
     def check_if_survey_exists(self, survey_id):
@@ -21,7 +21,7 @@ class SurveyRepository:
             return survey_choices
         except:
             return False
-        
+
     def new_user_ranking(self, user_id, survey_id, ranking):
         try:
             sql = "INSERT INTO user_survey_rankings (user_id, survey_id, ranking, deleted) VALUES (:user_id, :survey_id, :ranking, :deleted)"
@@ -30,7 +30,7 @@ class SurveyRepository:
             return True
         except:
             return False
-        
+
     def get_user_ranking(self, user_id, survey_id):
         try:
             sql = "SELECT * FROM user_survey_rankings WHERE (survey_id=:survey_id AND user_id=:user_id AND deleted=False)"
@@ -41,7 +41,7 @@ class SurveyRepository:
             return ranking
         except:
             return False
-                
+    
     def delete_user_ranking(self, user_id, survey_id):
         try:
             sql = "UPDATE user_survey_rankings SET deleted = True WHERE (survey_id=:survey_id and user_id=:user_id)"
@@ -50,7 +50,7 @@ class SurveyRepository:
             return True
         except:
             return False
-        
+
     def get_survey_choice(self, id):
         try:
             sql = "SELECT * FROM survey_choices WHERE id=:id"
