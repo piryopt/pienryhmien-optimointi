@@ -58,4 +58,9 @@ class SurveyService:
             return False
         return survey_choice
 
+    def add_user_ranking(self, survey_id, ranking):
+        user_id = session.get("user_id",0)
+        self._survey_repository.add_user_ranking(user_id,survey_id,ranking)
+        return True
+
 survey_service = SurveyService()

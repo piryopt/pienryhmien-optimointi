@@ -62,4 +62,17 @@ class SurveyRepository:
         except: # pylint: disable=W0702
             return False
 
+    def add_user_ranking(self,user_id,survey_id,ranking):
+        try:
+            sql = """
+                INSERT INTO user_survey_rankings (user_id, survey_id, ranking) 
+                VALUES (:user_id, :survey_id, :ranking) 
+                ON CONFLICT (user_id, survey_id) 
+                DO UPDATE SET ranking = :ranking
+                """
+            db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking})
+            db.session.commit()
+        except Exception as e:
+            print(e)
+
 survey_repository = SurveyRepository()
