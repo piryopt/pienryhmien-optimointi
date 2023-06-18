@@ -14,7 +14,7 @@ class UserRepository:
             if check_password_hash(user.password, password):
                 return user
             return False
-        except:
+        except: # pylint: disable=W0702
             return False
 
     def register(self, user):
@@ -29,7 +29,7 @@ class UserRepository:
             db.session.execute(text(sql), {"firstname":user.firstname, "lastname":user.lastname,
             "student_number":user.student_number, "email":user.email, "password":hash_value, "isteacher":user.isteacher})
             db.session.commit()
-        except:
+        except: # pylint: disable=W0702
             print("ERROR WHEN ADDING NEW USER TO DB")
             return False
         return user

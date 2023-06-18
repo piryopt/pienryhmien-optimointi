@@ -10,7 +10,7 @@ class SurveyRepository:
             if not survey:
                 return False
             return survey
-        except:
+        except: # pylint: disable=W0702
             return False
 
     def find_survey_choices(self, survey_id):
@@ -19,7 +19,7 @@ class SurveyRepository:
             result = db.session.execute(text(sql), {"survey_id":survey_id})
             survey_choices = result.fetchall()
             return survey_choices
-        except:
+        except: # pylint: disable=W0702
             return False
 
     def new_user_ranking(self, user_id, survey_id, ranking):
@@ -28,7 +28,7 @@ class SurveyRepository:
             db.session.execute(text(sql), {"user_id":user_id, "survey_id":survey_id, "ranking":ranking, "deleted":False})
             db.session.commit()
             return True
-        except:
+        except: # pylint: disable=W0702
             return False
 
     def get_user_ranking(self, user_id, survey_id):
@@ -39,16 +39,16 @@ class SurveyRepository:
             if not ranking:
                 return False
             return ranking
-        except:
+        except: # pylint: disable=W0702
             return False
-    
+
     def delete_user_ranking(self, user_id, survey_id):
         try:
             sql = "UPDATE user_survey_rankings SET deleted = True WHERE (survey_id=:survey_id and user_id=:user_id)"
             db.session.execute(text(sql), {"survey_id":survey_id, "user_id":user_id})
             db.session.commit()
             return True
-        except:
+        except: # pylint: disable=W0702
             return False
 
     def get_survey_choice(self, id):
@@ -59,7 +59,7 @@ class SurveyRepository:
             if not ranking:
                 return False
             return ranking
-        except:
+        except: # pylint: disable=W0702
             return False
 
 survey_repository = SurveyRepository()

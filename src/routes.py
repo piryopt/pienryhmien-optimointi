@@ -11,6 +11,8 @@ from services.survey_service import survey_service
 from tools import data_gen, excelreader
 import algorithms.hungarian as h
 import algorithms.weights as w
+from entities.survey_tools import survey_tools
+from tools import data_gen, excelreader
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -156,17 +158,6 @@ def logout():
 def groups():
     return render_template("groups.html")
 
-@app.route("/previous_surveys")
-def previous_surveys():
-    '''For fetching previous survey list from the database'''
-
-    # mock data, to be replaced with one fetched from the database
-    results = [["kysely 1", "suljettu", 12],
-               ["kysely 2", "avoinna", 104],
-               ["kysely 3", "suljettu", 0]]
-
-    return render_template("surveys.html", results=results)
-
 @app.route("/create_survey", methods = ["GET"])
 def new_survey_form():
     return render_template("create_survey.html")
@@ -178,3 +169,19 @@ def new_survey_post():
     print(session)
     response = {"msg":"vastaanotettu"}
     return jsonify(response)
+
+@app.route("/previous_surveys")
+def previous_surveys():
+    '''For fetching previous survey list from the database'''
+    results = survey_tools.fetch_surveys_and_answer_amounts()
+    return render_template("surveys.html", results=results)
+
+@app.route("/survey_answers", methods = ["post"])
+def survey_answers():
+    '''For listing answers on a certain survey'''
+    survey_id = request.form["survey_id"]
+    survey_name = request.form["survey_name"]
+    results = survey_tools.fetch_survey_responses(survey_id)
+    return render_template("survey_answers.html", 
+                           survey_name=survey_name, results=results)
+
