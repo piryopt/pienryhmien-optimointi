@@ -53,3 +53,4 @@ CREATE TABLE final_group ( -- lopullinen sijoitus
 	choice_id INTEGER REFERENCES survey_choices
 );
 
+CREATE INDEX idx_user_survey_rankings_user_id_survey_id on user_survey_rankings (user_id,survey_id);
