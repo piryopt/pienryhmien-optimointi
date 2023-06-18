@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Kyselyn vastaukset {% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  <h1>Kyselyn vastaukset: {{ survey_name }}</h1>
+
+  <BR><BR>
+    <table id="answers_table" cellspacing="10">
+        <tr align="left">
+            <th>Vastaajan id</th>
+            <th>Vastaus</th>
+        </tr>
+        <tr>
+          {% for row in results %}
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+        </tr>
+        {% endfor %}
+        
+    </table><br>
+
+  <a href="/previous_surveys">Palaa kyselylistaan</a><br>
+  <a href="/">Palaa etusivulle</a>
+{% endblock %}
