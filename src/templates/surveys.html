@@ -18,7 +18,7 @@
         </tr>
         <tr>
           <!--The data is expected to be as a list ("results") containing lists-->
-          {% for row in results %}
+          {% for row in search_results %}
           <td>{{ row[1] }}</td>       <!--survey name--> 
           <td>avoinna</td>            <!--survey status - functionality to be added later--> 
           <td>{{ row[2] }}</td>        <!--amount of answers--> 

@@ -132,14 +132,14 @@ def new_survey_post():
 @app.route("/previous_surveys")
 def previous_surveys():
     '''For fetching previous survey list from the database'''
-    results = SurveyTools.fetch_surveys_and_answer_amounts()
-    return render_template("surveys.html", results=results)
+    search_results = SurveyTools.fetch_surveys_and_answer_amounts()
+    return render_template("surveys.html", search_results=search_results)
 
 @app.route("/survey_answers", methods = ["post"])
 def survey_answers():
     '''For displaying answers on a certain survey'''
     survey_id = request.form["survey_id"]
     survey_name = request.form["survey_name"]
-    results = SurveyTools.fetch_survey_responses(survey_id)
+    survey_answers = SurveyTools.fetch_survey_responses(survey_id)
     return render_template("survey_answers.html",
-                           survey_name=survey_name, results=results)
+                           survey_name=survey_name, survey_answers=survey_answers)
