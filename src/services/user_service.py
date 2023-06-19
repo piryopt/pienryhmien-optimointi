@@ -1,9 +1,8 @@
+from flask import session
 from entities.user import User
 from repositories.user_repository import (
     user_repository as default_user_repository
 )
-from flask import session
-
 
 class UserService:
     def __init__(self, user_repositroy=default_user_repository):
@@ -24,11 +23,10 @@ class UserService:
     def create_user(self, firstname, lastname, student_number, email, password1, password2, isteacher):
         if not self.validate(firstname, lastname, student_number, password1, password2):
             return False
-        else:
-            new_user = User(firstname, lastname, student_number, email, password1, isteacher)
-            user = self._user_repository.register(new_user)
-            return user
-    
+        new_user = User(firstname, lastname, student_number, email, password1, isteacher)
+        user = self._user_repository.register(new_user)
+        return user
+
     def validate(self, firstname, lastname, student_number, password1, password2):
         if not firstname or not lastname or not student_number or not password1 or not password2:
             print("All fields are required!")
@@ -43,7 +41,7 @@ class UserService:
             print("Password is too short!")
             return False
         return True
-    
+
     def logout(self):
         del session["email"]
         del session["user_id"]
