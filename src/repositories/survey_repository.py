@@ -10,7 +10,7 @@ class SurveyRepository:
             if not survey:
                 return False
             return survey
-        except Exception as e:
+        except Exception as e: # pylint: disable=C0103
             print(e)
             return False
 
@@ -20,7 +20,7 @@ class SurveyRepository:
             result = db.session.execute(text(sql), {"survey_id":survey_id})
             survey_choices = result.fetchall()
             return survey_choices
-        except Exception as e:
+        except Exception as e: # pylint: disable=C0103
             print(e)
             return False
 
@@ -30,7 +30,7 @@ class SurveyRepository:
             db.session.execute(text(sql), {"user_id":user_id, "survey_id":survey_id, "ranking":ranking, "deleted":False})
             db.session.commit()
             return True
-        except Exception as e:
+        except Exception as e: # pylint: disable=C0103
             print(e)
             return False
 
@@ -42,7 +42,7 @@ class SurveyRepository:
             if not ranking:
                 return False
             return ranking
-        except Exception as e:
+        except Exception as e: # pylint: disable=C0103
             print(e)
             return False
 
@@ -52,7 +52,7 @@ class SurveyRepository:
             db.session.execute(text(sql), {"survey_id":survey_id, "user_id":user_id})
             db.session.commit()
             return True
-        except Exception as e:
+        except Exception as e: # pylint: disable=C0103
             print(e)
             return False
 
@@ -64,7 +64,7 @@ class SurveyRepository:
             if not ranking:
                 return False
             return ranking
-        except Exception as e:
+        except Exception as e: # pylint: disable=C0103
             print(e)
             return False
 
@@ -78,7 +78,7 @@ class SurveyRepository:
                 """
             db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking, "deleted":False})
             db.session.commit()
-        except Exception as e:
+        except Exception as e: # pylint: disable=C0103
             print(e)
 
 survey_repository = SurveyRepository()

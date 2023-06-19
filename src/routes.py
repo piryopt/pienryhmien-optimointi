@@ -1,9 +1,6 @@
 import os
 from flask import render_template, request, session, jsonify, redirect
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 import psycopg2
 from app import app,db
 from services.user_service import user_service
@@ -12,7 +9,6 @@ from tools import data_gen, excelreader
 import algorithms.hungarian as h
 import algorithms.weights as w
 from entities.survey_tools import survey_tools
-from tools import data_gen, excelreader
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -92,7 +88,7 @@ def surveys(survey_id):
         existing = True
         user_rankings = user_survey_ranking[3]
         list_of_survey_choice_id = user_rankings.split(",")
-        
+
         survey_choices = []
         for survey_choice_id in list_of_survey_choice_id:
             survey_choice = survey_service.get_survey_choice(survey_choice_id)
@@ -182,6 +178,6 @@ def survey_answers():
     survey_id = request.form["survey_id"]
     survey_name = request.form["survey_name"]
     results = survey_tools.fetch_survey_responses(survey_id)
-    return render_template("survey_answers.html", 
+    return render_template("survey_answers.html",
                            survey_name=survey_name, results=results)
 
