@@ -5,3 +5,7 @@ include_namespace_packages = True
 [html]
 # Don't show empty files (such as __init__.py's) in HTML reprots
 skip_empty = True
+
+[run]
+source = src
+omit = src/**/__init__.py,src/local_db/**,src/static/**,src/app.py,src/routes.py,src/tools/**,src/templates/**

@@ -1,35 +1,22 @@
-import numpy as np
 import time
-from entities.output_data import Output_data
+import numpy as np
 from scipy.optimize import linear_sum_assignment
-
-WEIGHTS = {0:100,
-           1:75,
-           2:50,
-           3:25,
-           4:10,
-           5:0,
-           6:0,
-           7:0,
-           8:0,
-           9:0,
-           None: 0
-           }
-
 
 class Hungarian:
 
-    def __init__(self,groups,students):
+    def __init__(self,groups,students,weights):
         """
         Initiates data structures used in assigning students to groups
         with the hungarian algorithm
         Args:
             groups (dict): dictionary of Group objects
             students (dict): dictionary of User objects
+            weights (dict): dictionary of weights for group order
 
         variables:
             self.groups: dictionary of Group objects
             self.students: dictionary of User objects
+            self.weights: dictionary of weights for group order
             self.matrix: NxN 2D numpy array where students are represented on rows
             and groups on columns
             self.prefs: list of lists, each sublist has a student's list
@@ -44,6 +31,7 @@ class Hungarian:
 
         self.groups = groups
         self.students = students
+        self.weights = weights
         self.index_to_group_dict = {}
         self.matrix = []
         self.prefs = self.student_preferences()
@@ -88,10 +76,10 @@ class Hungarian:
         """
 
         for student_prefs in self.prefs:
-            row = [WEIGHTS[student_prefs.index(v) if v in student_prefs else None] for k,v in self.index_to_group_dict.items()]
+            row = [self.weights[student_prefs.index(v) if v in student_prefs else None] for k,v in self.index_to_group_dict.items()]
             self.matrix.append(row)
 
-        self.matrix = np.matrix(self.matrix)
+        self.matrix = np.array(self.matrix)
 
     def student_preferences(self):
         """
@@ -177,11 +165,11 @@ class Hungarian:
         choice, number = np.unique(self.student_happiness[:,1], return_counts=True)
         happiness_data = []
         for i in range(len(choice)):
-            happiness_data.append(f"{choice[i]}. choice: {number[i]}")
+            happiness_data.append(f"{choice[i]}. valinta: {number[i]}")
 
         selections = []
         for group in self.assigned_groups:
             for student in self.assigned_groups[group]:
                 selections.append([self.students[student].name, student, self.groups[group].name])
-        
-        return Output_data(selections, self.runtime, np.average(self.student_happiness[:,1]), happiness_data)
+
+        return (selections, self.runtime, np.average(self.student_happiness[:,1]), happiness_data)

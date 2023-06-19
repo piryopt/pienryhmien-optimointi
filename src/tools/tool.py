@@ -1,4 +1,4 @@
-from hospital import hospital_algo
+from tools.data_gen import hospital_algo
 
 class SolutionChecker:
 
@@ -30,10 +30,9 @@ def multiple_runs(n):
                 master_tally[k] += tally[k]
             else:
                 master_tally[k] = tally[k]
-    
+
     for i,j in sorted(master_tally.items()):
         print(i,j/n)
-
 
 ## AVERAGES FROM 1000 RUNS OF 1000 STUDENTS
 ## 1: 767
