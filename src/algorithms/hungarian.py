@@ -1,5 +1,5 @@
-import numpy as np
 import time
+import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 class Hungarian:
@@ -171,5 +171,5 @@ class Hungarian:
         for group in self.assigned_groups:
             for student in self.assigned_groups[group]:
                 selections.append([self.students[student].name, student, self.groups[group].name])
-        
+
         return (selections, self.runtime, np.average(self.student_happiness[:,1]), happiness_data)
