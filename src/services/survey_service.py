@@ -37,7 +37,6 @@ class SurveyService:
         ranking = self._survey_repository.get_user_ranking(user_id, survey_id)
         if not ranking:
             return False
-        print("USER RANKING ALREADY EXISTS!")
         return ranking
 
     def delete_ranking(self, survey_id):

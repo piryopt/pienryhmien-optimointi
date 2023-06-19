@@ -84,22 +84,22 @@ def surveys(survey_id):
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return render_template("index.html")
-    #ranking = survey_service.user_ranking_exists(survey_id)
-    #if ranking:
-    #    user_rankings = ranking[3]
-    #    list_of_survey_choice_id = user_rankings.split(",")
-    #    
-    #    list_of_survey_choice = []
-    #    for survey_choice_id in list_of_survey_choice_id:
-    #        survey_choice = survey_service.get_survey_choice(survey_choice_id)
-    #        if not survey_choice:
-    #            continue
-    #        list_of_survey_choice.append(survey_choice)
-    #
-    #    survey_name = survey_service.get_survey_name(survey_id)
-    #    return render_template("userranking.html", choices = list_of_survey_choice, survey_id = survey_id, survey_name = survey_name)
-    
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id)
+    survey_name = survey_service.get_survey_name(survey_id)
+    existing = False
+    user_survey_ranking = survey_service.user_ranking_exists(survey_id)
+
+    if user_survey_ranking:
+        existing = True
+        user_rankings = user_survey_ranking[3]
+        list_of_survey_choice_id = user_rankings.split(",")
+        
+        survey_choices = []
+        for survey_choice_id in list_of_survey_choice_id:
+            survey_choice = survey_service.get_survey_choice(survey_choice_id)
+            if not survey_choice:
+                continue
+            survey_choices.append(survey_choice)
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -112,7 +112,7 @@ def get_choices(survey_id):
     raw_data = request.get_json()
     ranking = ','.join(raw_data)
     submission = survey_service.add_user_ranking(survey_id, ranking)
-    response = {"status":"1","msg":"Tallennus onnistui. Päivitä sivu uudelleen"}
+    response = {"status":"1","msg":"Tallennus onnistui."}
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)

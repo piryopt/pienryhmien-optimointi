@@ -10,7 +10,8 @@ class SurveyRepository:
             if not survey:
                 return False
             return survey
-        except: # pylint: disable=W0702
+        except Exception as e:
+            print(e)
             return False
 
     def find_survey_choices(self, survey_id):
@@ -19,7 +20,8 @@ class SurveyRepository:
             result = db.session.execute(text(sql), {"survey_id":survey_id})
             survey_choices = result.fetchall()
             return survey_choices
-        except: # pylint: disable=W0702
+        except Exception as e:
+            print(e)
             return False
 
     def new_user_ranking(self, user_id, survey_id, ranking):
@@ -28,7 +30,8 @@ class SurveyRepository:
             db.session.execute(text(sql), {"user_id":user_id, "survey_id":survey_id, "ranking":ranking, "deleted":False})
             db.session.commit()
             return True
-        except: # pylint: disable=W0702
+        except Exception as e:
+            print(e)
             return False
 
     def get_user_ranking(self, user_id, survey_id):
@@ -39,7 +42,8 @@ class SurveyRepository:
             if not ranking:
                 return False
             return ranking
-        except: # pylint: disable=W0702
+        except Exception as e:
+            print(e)
             return False
 
     def delete_user_ranking(self, user_id, survey_id):
@@ -48,29 +52,31 @@ class SurveyRepository:
             db.session.execute(text(sql), {"survey_id":survey_id, "user_id":user_id})
             db.session.commit()
             return True
-        except: # pylint: disable=W0702
+        except Exception as e:
+            print(e)
             return False
 
     def get_survey_choice(self, id):
         try:
-            sql = "SELECT * FROM survey_choices WHERE id=:id"
+            sql = "SELECT id, name, info1, info2 FROM survey_choices WHERE id=:id"
             result = db.session.execute(text(sql), {"id":id})
             ranking = result.fetchone()
             if not ranking:
                 return False
             return ranking
-        except: # pylint: disable=W0702
+        except Exception as e:
+            print(e)
             return False
 
     def add_user_ranking(self,user_id,survey_id,ranking):
         try:
             sql = """
-                INSERT INTO user_survey_rankings (user_id, survey_id, ranking) 
-                VALUES (:user_id, :survey_id, :ranking) 
+                INSERT INTO user_survey_rankings (user_id, survey_id, ranking, deleted) 
+                VALUES (:user_id, :survey_id, :ranking, :deleted) 
                 ON CONFLICT (user_id, survey_id) 
-                DO UPDATE SET ranking = :ranking
+                DO UPDATE SET ranking=:ranking, deleted=:deleted
                 """
-            db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking})
+            db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking, "deleted":False})
             db.session.commit()
         except Exception as e:
             print(e)
