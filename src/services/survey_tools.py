@@ -1,7 +1,9 @@
+'''Module for survey related functions'''
 from sqlalchemy.sql import text
 from app import db
 
-class survey_tools:
+class SurveyTools:
+    '''Class for survey related functions'''
 
     def fetch_all_surveys():
         '''Returns a list of all surveys in the database'''

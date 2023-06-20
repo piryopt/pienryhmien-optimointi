@@ -9,7 +9,7 @@ from services.user_service import user_service
 from app import app,db
 import algorithms.hungarian as h
 import algorithms.weights as w
-from entities.survey_tools import survey_tools
+from services.survey_tools import SurveyTools
 from tools import data_gen, excelreader
 
 # Globals
@@ -132,15 +132,14 @@ def new_survey_post():
 @app.route("/previous_surveys")
 def previous_surveys():
     '''For fetching previous survey list from the database'''
-    results = survey_tools.fetch_surveys_and_answer_amounts()
-    return render_template("surveys.html", results=results)
+    search_results = SurveyTools.fetch_surveys_and_answer_amounts()
+    return render_template("surveys.html", search_results=search_results)
 
 @app.route("/survey_answers", methods = ["post"])
 def survey_answers():
-    '''For listing answers on a certain survey'''
+    '''For displaying answers on a certain survey'''
     survey_id = request.form["survey_id"]
     survey_name = request.form["survey_name"]
-    results = survey_tools.fetch_survey_responses(survey_id)
-    return render_template("survey_answers.html", 
-                           survey_name=survey_name, results=results)
-
+    survey_answers = SurveyTools.fetch_survey_responses(survey_id)
+    return render_template("survey_answers.html",
+                           survey_name=survey_name, survey_answers=survey_answers)
