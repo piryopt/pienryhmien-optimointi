@@ -32,9 +32,9 @@ class Hungarian:
         self.groups = groups
         self.students = students
         self.weights = weights
-        self.index_to_group_dict = {}
-        self.matrix = []
         self.prefs = self.student_preferences()
+        self.index_to_group_dict = self.create_group_dict()
+        self.matrix = self.create_matrix()
         self.assigned_groups = self.initiate_assigned_groups_dict()
         self.student_happiness = np.zeros((len(self.students),2))
         self.runtime = 0
@@ -45,8 +45,6 @@ class Hungarian:
         Measures how long it takes to run the algorithm
         """
         start = time.time()
-        self.create_group_dict()
-        self.create_matrix()
         self.reshape_matrix()
         self.profit_matrix_to_nonnegative_cost_matrix()
         self.find_assignment()
@@ -60,10 +58,12 @@ class Hungarian:
         """
         group_sizes = [group.size for key,group in self.groups.items()]
         total = 0
+        index_to_group_dict = {}
         for i in range(len(group_sizes)):
             for j in range(group_sizes[i]):
-                self.index_to_group_dict[total+j] = i
+                index_to_group_dict[total+j] = i
             total += group_sizes[i]
+        return index_to_group_dict
 
     def create_matrix(self):
         """
@@ -74,12 +74,12 @@ class Hungarian:
         Fills the matrix with profit numbers based on student's
         group preferences.
         """
-
+        matrix = []
         for student_prefs in self.prefs:
             row = [self.weights[student_prefs.index(v) if v in student_prefs else None] for k,v in self.index_to_group_dict.items()]
-            self.matrix.append(row)
+            matrix.append(row)
 
-        self.matrix = np.array(self.matrix)
+        return np.array(matrix)
 
     def student_preferences(self):
         """
