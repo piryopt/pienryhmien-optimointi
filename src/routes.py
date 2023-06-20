@@ -182,8 +182,6 @@ def previous_surveys():
     '''For fetching previous survey list from the database'''
     #search_results = SurveyTools.fetch_surveys_and_answer_amounts() 
     search_results = SurveyTools.fetch_all_surveys()
-    for s in search_results:
-        print(s)
     return render_template("surveys.html", search_results=search_results)
 
 @app.route("/survey_answers", methods = ["post"])
