@@ -15,6 +15,7 @@
             <th>Kyselyn tila </th>
             <!-- <th>Vastauksia yhteensä</th> -->
             <th>Toiminnot</th>
+            <th>Linki kyselyyn</th>
         </tr>
         <tr>
           <!--The data is expected to be as a list ("results") containing lists-->
@@ -29,6 +30,12 @@
             <input type="hidden" name="survey_name" value="{{ row[1] }}">
             <input type="submit" value="Tarkastele tuloksia">
             </form>
+          </td>
+          <td>
+            
+            <a href="/surveys/{{ row[0] }}">{{ row[1] }}</a>
+          </td>
+
 
             <!--<button id="copy_survey">Kopioi kysely</button>--> 
             <!--<button id="close_survey">Sulje kysely</button></td>-->
