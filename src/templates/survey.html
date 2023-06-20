@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Kysely{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<a href="/">Palaa etusivulle</a></br></br>
+<h3>{{ survey_name }}</h3>
+<script>
+    $( function() {
+        $( "#sortable1" ).sortable();
+    });
+</script>
+<ul id="sortable1" class="connectedSortable">
+    {% for group in choices %}
+    <li class="ui-state-default" id="{{ group[0] }}">{{ group[1] }}</li>
+    {% endfor %}
+</ul>
+{% if existing %}
+<input type="submit" value="Päivitä valinnat" onclick="submit()">
+{% else %}
+<input type="submit" value="Submit" onclick="submit()">
+{% endif %}
+<input type="hidden" id="survey_id" value="{{ survey_id }}">
+<br>
+<br>
+<br>
+<br>
+{% if existing %}
+<form method="POST" action="/surveys/{{survey_id}}/deletesubmission">
+    <input type="submit" value="Poista hakemus" onclick="return confirm('Oletko varma, että haluat poistaa hakemuksen?')">
+</form>
+{% endif %}
+<div id="fade" style="display: none;">
+    <span id="message">
+    </span>
+</div>
+{% endblock %}

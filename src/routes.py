@@ -1,16 +1,15 @@
 import os
-from flask import render_template, request, session, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import render_template, request, session, jsonify, redirect
 from sqlalchemy import text
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 import psycopg2
-from services.user_service import user_service
 from app import app,db
+from services.user_service import user_service
+from services.survey_service import survey_service
+from tools import data_gen, excelreader
 import algorithms.hungarian as h
 import algorithms.weights as w
 from services.survey_tools import SurveyTools
-from tools import data_gen, excelreader
+
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -76,6 +75,45 @@ def excel():
     return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
                            time = output_data[1], happiness = output_data[2])
 
+@app.route("/surveys/<int:survey_id>")
+def surveys(survey_id):
+    survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    if not survey_choices or session.get("user_id", 0) == 0:
+        print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
+        return render_template("index.html")
+    survey_name = survey_service.get_survey_name(survey_id)
+    existing = False
+    user_survey_ranking = survey_service.user_ranking_exists(survey_id)
+
+    if user_survey_ranking:
+        existing = True
+        user_rankings = user_survey_ranking[3]
+        list_of_survey_choice_id = user_rankings.split(",")
+
+        survey_choices = []
+        for survey_choice_id in list_of_survey_choice_id:
+            survey_choice = survey_service.get_survey_choice(survey_choice_id)
+            if not survey_choice:
+                continue
+            survey_choices.append(survey_choice)
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing)
+
+@app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
+def delete_submission(survey_id):
+    if survey_service.delete_ranking(survey_id):
+        return redirect("/surveys/" + str(survey_id))
+    return redirect("index.html")
+
+@app.route("/get_choices/<int:survey_id>", methods=["POST"])
+def get_choices(survey_id):
+    raw_data = request.get_json()
+    ranking = ','.join(raw_data)
+    submission = survey_service.add_user_ranking(survey_id, ranking)
+    response = {"status":"1","msg":"Tallennus onnistui."}
+    if not submission:
+        response = {"status":"0","msg":"Tallennus epäonnistui."}
+    return jsonify(response)
+
 @app.route("/register", methods = ["GET", "POST"])
 def register():
     if request.method == "GET":
@@ -123,10 +161,20 @@ def new_survey_form():
 
 @app.route("/create_survey", methods = ["POST"])
 def new_survey_post():
-    #TODO
-    print(request.get_data().decode('utf-8'))
-    print(session)
-    response = {"msg":"vastaanotettu"}
+    data = request.get_json()
+    survey_name = data["surveyGroupname"]
+    new_survey_id = survey_service.add_new_survey(survey_name)
+    if not new_survey_id:
+        return redirect("create_survey.html")
+    survey_choices = data["choices"] 
+    for choice in survey_choices:
+        choice_name = choice["choiceName"]
+        max_spaces = choice["choiceMaxSpaces"]
+        info1 = choice["choiceInfo1"]
+        info2 = choice["choiceInfo2"]
+        survey_service.add_survey_choice(new_survey_id, choice_name, max_spaces, info1, info2)
+        
+    response = {"msg":"Uusi kysely luotu!"}
     return jsonify(response)
 
 @app.route("/previous_surveys")
