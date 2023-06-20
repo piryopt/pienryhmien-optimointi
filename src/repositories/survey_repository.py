@@ -81,4 +81,41 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=C0103
             print(e)
 
+    def add_new_survey(self, surveyname):
+        try:
+            sql = "INSERT INTO surveys (surveyname, min_choices) VALUES (:surveyname, :min_choices) RETURNING id"
+            result = db.session.execute(text(sql), {"surveyname":surveyname, "min_choices":10})
+            survey = result.fetchone()[0]
+            if not survey:
+                return False
+            return survey
+        except Exception as e: # pylint: disable=C0103
+            print(e)
+            return False
+    
+    def survey_name_exists(self, surveyname):
+        try:
+            sql = "SELECT id FROM surveys WHERE surveyname=:surveyname"
+            result = db.session.execute(text(sql), {"surveyname":surveyname})
+            survey = result.fetchone()
+            if not survey:
+                return False
+            return True
+        except Exception as e: # pylint: disable=C0103
+            print(e)
+            return False
+        
+    def add_new_survey_choice(self, survey_id, name, max_spaces, info1, info2):
+        try:
+            sql = """
+                INSERT INTO survey_choices (survey_id, name, max_spaces, info1, info2)
+                VALUES (:survey_id, :name, :max_spaces, :info1, :info2)
+                """
+            db.session.execute(text(sql), {"survey_id":survey_id, "name":name, "max_spaces":max_spaces, "info1":info1, "info2":info2})
+            db.session.commit()
+            return True
+        except Exception as e: # pylint: disable=C0103
+            print(e)
+            return False
+
 survey_repository = SurveyRepository()

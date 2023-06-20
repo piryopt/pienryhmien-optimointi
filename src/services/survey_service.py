@@ -61,5 +61,33 @@ class SurveyService:
         user_id = session.get("user_id",0)
         self._survey_repository.add_user_ranking(user_id,survey_id,ranking)
         return True
+    
+    def add_new_survey(self, surveyname):
+        if self._survey_repository.survey_name_exists(surveyname):
+            print("A SURVEY WITH THIS NAME ALREADY EXISTS!")
+            return False
+        if len(surveyname) < 4:
+            print("The name is too short!")
+            return False
+        survey_id = self._survey_repository.add_new_survey(surveyname)
+        if not survey_id:
+            return False
+        return survey_id
+    
+    def add_survey_choice(self, survey_id, name, max_spaces, info1, info2):
+        survey_exists = self._survey_repository.check_if_survey_exists(survey_id)
+        if not survey_exists:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        if len(name) < 3:
+            print("The name is too short!")
+            return False
+        new_choice = self._survey_repository.add_new_survey_choice(survey_id, name, max_spaces, info1, info2)
+        if not new_choice:
+            return False
+        return True
+
+
+        
 
 survey_service = SurveyService()
