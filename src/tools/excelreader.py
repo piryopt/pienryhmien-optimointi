@@ -24,7 +24,7 @@ def create_students(groups):
 
     listofselections = sheet['Q']
     i = 0
-    for list_value in listofselections:
+    for list_value in listofselections: # pylint: disable=R1702
         if list_value.value == 'Lööpit kiinnostusjärjestykseen!': continue
         selections = list_value.value.split(';')
         selection_list = []
