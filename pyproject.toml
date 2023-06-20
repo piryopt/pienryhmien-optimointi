@@ -13,8 +13,8 @@ matplotlib = "^3.7.1"
 flask = "^2.3.2"
 openpyxl = "^3.1.2"
 flask-sqlalchemy = "^3.0.3"
-psycopg2 = "^2.9.6"
 python-dotenv = "^1.0.0"
+psycopg2-binary = "^2.9.6"
 
 
 [tool.poetry.group.dev.dependencies]
