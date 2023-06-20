@@ -14,14 +14,15 @@
             <th>Kyselyn nimi </th>
             <th>Kyselyn tila </th>
             <th>Vastauksia yhteensä</th>
+            <th>Toiminnot</th>
         </tr>
         <tr>
           <!--The data is expected to be as a list ("results") containing lists-->
-          {% for row in results %}
+          {% for row in search_results %}
           <td>{{ row[1] }}</td>       <!--survey name--> 
           <td>avoinna</td>            <!--survey status - functionality to be added later--> 
           <td>{{ row[2] }}</td>        <!--amount of answers--> 
-          
+
           <td>
             <form action="/survey_answers" method="post">
             <input type="hidden" name="survey_id" value="{{ row[0] }}">
@@ -29,8 +30,9 @@
             <input type="submit" value="Tarkastele tuloksia">
             </form>
 
-            <button id="copy_survey">Kopioi kysely</button>
-            <button id="close_survey">Sulje kysely</button></td>
+            <!--<button id="copy_survey">Kopioi kysely</button>--> 
+            <!--<button id="close_survey">Sulje kysely</button></td>-->
+
         </tr>
         {% endfor %}
         

@@ -1,4 +1,4 @@
-from flask import session
+from flask import session # pylint: disable=R0401
 from entities.user import User
 from repositories.user_repository import (
     user_repository as default_user_repository
