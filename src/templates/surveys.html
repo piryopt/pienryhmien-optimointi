@@ -13,7 +13,7 @@
         <tr align="left">
             <th>Kyselyn nimi </th>
             <th>Kyselyn tila </th>
-            <th>Vastauksia yhteensä</th>
+            <!-- <th>Vastauksia yhteensä</th> -->
             <th>Toiminnot</th>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
           {% for row in search_results %}
           <td>{{ row[1] }}</td>       <!--survey name--> 
           <td>avoinna</td>            <!--survey status - functionality to be added later--> 
-          <td>{{ row[2] }}</td>        <!--amount of answers--> 
+          <!-- <td>{{ row[2] }}</td>-->        <!--amount of answers - functionality to be added later--> 
 
           <td>
             <form action="/survey_answers" method="post">

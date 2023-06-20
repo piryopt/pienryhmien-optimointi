@@ -7,7 +7,7 @@ class SurveyTools:
 
     def fetch_all_surveys():
         '''Returns a list of all surveys in the database'''
-        sql = text("SELECT surveyname FROM surveys")
+        sql = text("SELECT id, surveyname FROM surveys")
         result = db.session.execute(sql)
         all_surveys = result.fetchall()
         return all_surveys
