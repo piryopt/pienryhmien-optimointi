@@ -7,11 +7,12 @@
 
 {% block content %}
   <h1>Kyselyn vastaukset: {{ survey_name }}</h1>
+  <i>Vastauksia: {{ survey_answers_amount }} kpl</i>
 
   <BR><BR>
     <table id="answers_table" cellspacing="10">
         <tr align="left">
-            <th>Vastaajan id</th>
+            <th>id</th>
             <th>Vastaus</th>
         </tr>
         <tr>
