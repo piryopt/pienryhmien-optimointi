@@ -11,7 +11,6 @@ import algorithms.weights as w
 from services.survey_tools import SurveyTools
 from pathlib import Path
 
-
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
 
@@ -199,8 +198,7 @@ def survey_answers():
 @app.route("/api/admintools/reset")
 def reset_database() -> str:
     '''Drop all database tables and recreate them based on the schema at project root'''
+    db.reflect()
     db.drop_all()
-    create_clause = (Path(__file__).parents[1] / "schema.sql").read_text()
-    for statement in create_clause.split(";"):
-        db.session.execute(text(statement + ";"))
+    db.create_all()
     return "database reset"
