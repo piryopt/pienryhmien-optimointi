@@ -208,6 +208,7 @@ def reset_database() -> str:
     db.reflect()
     db.drop_all()
     create_clause = data["schema"]
-    for statement in create_clause.split(";"):
+    for statement in create_clause.split(";")[:-1]:
         db.session.execute(text(statement + ";"))
+        db.session.commit()
     return "database reset"
