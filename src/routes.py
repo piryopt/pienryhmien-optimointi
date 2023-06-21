@@ -9,6 +9,7 @@ from tools import data_gen, excelreader
 import algorithms.hungarian as h
 import algorithms.weights as w
 from services.survey_tools import SurveyTools
+from pathlib import Path
 
 
 # Globals
@@ -194,3 +195,12 @@ def survey_answers():
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=survey_answers,
                            survey_answers_amount=survey_answers_amount)
+
+@app.route("/api/admintools/reset")
+def reset_database() -> str:
+    '''Drop all database tables and recreate them based on the schema at project root'''
+    db.drop_all()
+    create_clause = (Path(__file__).parents[1] / "schema.sql").read_text()
+    for statement in create_clause.split(";"):
+        db.session.execute(text(statement + ";"))
+    return "database reset"
