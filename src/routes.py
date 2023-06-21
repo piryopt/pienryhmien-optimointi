@@ -10,6 +10,7 @@ import algorithms.hungarian as h
 import algorithms.weights as w
 from services.survey_tools import SurveyTools
 from pathlib import Path
+from random import shuffle
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -78,6 +79,7 @@ def excel():
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    shuffle(survey_choices)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return render_template("index.html")
