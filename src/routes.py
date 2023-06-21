@@ -82,11 +82,11 @@ def surveys(survey_id):
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return render_template("index.html")
     survey_name = survey_service.get_survey_name(survey_id)
-    existing = False
+    existing = "0"
     user_survey_ranking = survey_service.user_ranking_exists(survey_id)
 
     if user_survey_ranking:
-        existing = True
+        existing = "1"
         user_rankings = user_survey_ranking[3]
         list_of_survey_choice_id = user_rankings.split(",")
 
@@ -100,9 +100,10 @@ def surveys(survey_id):
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
+    response = {"status":"0", "msg":"Poistaminen epäonnistui"}
     if survey_service.delete_ranking(survey_id):
-        return redirect("/surveys/" + str(survey_id))
-    return redirect("index.html")
+        response = {"status":"1", "msg":"Valinnat poistettu"}
+    return jsonify(response)
 
 @app.route("/get_choices/<int:survey_id>", methods=["POST"])
 def get_choices(survey_id):
