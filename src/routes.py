@@ -200,5 +200,7 @@ def reset_database() -> str:
     '''Drop all database tables and recreate them based on the schema at project root'''
     db.reflect()
     db.drop_all()
-    db.create_all()
+    create_clause = (Path(__file__).parents[1] / "schema.sql").read_text()
+    for statement in create_clause.split(";"):
+        db.session.execute(text(statement + ";"))
     return "database reset"
