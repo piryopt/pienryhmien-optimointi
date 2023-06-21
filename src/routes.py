@@ -195,12 +195,19 @@ def survey_answers():
                            survey_name=survey_name, survey_answers=survey_answers,
                            survey_answers_amount=survey_answers_amount)
 
-@app.route("/api/admintools/reset")
+@app.route("/admintools/", methods = ["GET"])
+def admin_dashboard() -> str:
+    return render_template('/admintools/dashboard.html')
+
+
+@app.route("/api/admintools/reset", methods = ["POST"])
 def reset_database() -> str:
     '''Drop all database tables and recreate them based on the schema at project root'''
+    data = request.get_json()
+    print(data)
     db.reflect()
     db.drop_all()
-    create_clause = (Path(__file__).parents[1] / "schema.sql").read_text()
+    create_clause = data["schema"]
     for statement in create_clause.split(";"):
         db.session.execute(text(statement + ";"))
     return "database reset"
