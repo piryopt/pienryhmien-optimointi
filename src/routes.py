@@ -9,7 +9,7 @@ from tools import data_gen, excelreader
 import algorithms.hungarian as h
 import algorithms.weights as w
 from services.survey_tools import SurveyTools
-
+from pathlib import Path
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -194,3 +194,11 @@ def survey_answers():
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=survey_answers,
                            survey_answers_amount=survey_answers_amount)
+
+@app.route("/api/admintools/reset")
+def reset_database() -> str:
+    '''Drop all database tables and recreate them based on the schema at project root'''
+    db.reflect()
+    db.drop_all()
+    db.create_all()
+    return "database reset"
