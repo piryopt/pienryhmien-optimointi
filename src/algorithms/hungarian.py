@@ -46,7 +46,7 @@ class Hungarian:
         """
         start = time.time()
         self.reshape_matrix()
-        self.profit_matrix_to_nonnegative_cost_matrix()
+        self.profit_matrix_to_cost_matrix()
         self.find_assignment()
         end = time.time()
         self.runtime = end-start
@@ -107,7 +107,10 @@ class Hungarian:
         """
         Makes the matrix square if necessary by padding with zeroes. 
         """
-        #TODO if not enough spots for all students and padded with columns, check after assignment who got left out
+        #TODO if not enough spots for all students and padded with columns,
+        # check after assignment who got left out
+        #TODO minimum weight (probably =padding number) is not 0, requires
+        #changes in the Weights class and tests
 
         a = np.shape(self.matrix)[0]
         b = np.shape(self.matrix)[1]
@@ -119,7 +122,7 @@ class Hungarian:
             mat = self.matrix
         self.matrix = mat
 
-    def profit_matrix_to_nonnegative_cost_matrix(self):
+    def profit_matrix_to_cost_matrix(self):
         """
         Creates a cost matrix from the profit matrix.
         """
