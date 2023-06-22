@@ -15,8 +15,6 @@ class SurveyTools:
     def fetch_survey_responses(survey):
         '''Returns a list of answers submitted to a certain survey'''
         sql = text ("SELECT user_id, ranking FROM user_survey_rankings " +
-                    "WHERE (survey_id=:survey AND deleted=:deleted)")
-        result = db.session.execute(sql, {"survey":survey, "deleted":False})
                     "WHERE survey_id=:survey AND deleted IS FALSE")
         result = db.session.execute(sql, {"survey":survey})
         responses = result.fetchall()
