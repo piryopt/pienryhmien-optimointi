@@ -18,23 +18,55 @@
     <li class="ui-state-default" id="{{ group[0] }}">{{ group[1] }}</li>
     {% endfor %}
 </ul>
-{% if existing %}
-<input type="submit" value="Päivitä valinnat" onclick="submit()">
-{% else %}
-<input type="submit" value="Submit" onclick="submit()">
-{% endif %}
+<div id="submitExists" style="display: none;">
+    <input type="submit" value="Päivitä valinnat" onclick="submit(0)">
+</div>
+<div id="submitDoesntExist">
+    <input type="submit" value="Lähetä valinnat" onclick="submit(1)">
+</div>
 <input type="hidden" id="survey_id" value="{{ survey_id }}">
+<input type="hidden" id="existing" value="{{ existing }}">
 <br>
 <br>
 <br>
 <br>
-{% if existing %}
-<form method="POST" action="/surveys/{{survey_id}}/deletesubmission">
-    <input type="submit" value="Poista hakemus" onclick="return confirm('Oletko varma, että haluat poistaa hakemuksen?')">
-</form>
-{% endif %}
+<div id="deleteContainer" style="display: none;">
+<input type="button" id="deleteSubmission" value="Poista valinnat">
+    <script>
+        $("#deleteSubmission").click(function() {
+            $("#submitExists").hide();
+            $("#deleteContainer").hide();
+            $("#confirmContainer").show();
+        });
+    </script>
+</div>
+
+<div id="confirmContainer" style="display: none;">
+    <p>Oletko varma?</p>
+    <input type="button" id="noDeletion" value="Peruuta">
+    <script>
+        $("#noDeletion").click(function() {
+            $("#submitExists").show();
+            $("#deleteContainer").show();
+            $("#confirmContainer").hide();
+        });
+    </script>
+    <input type="button" id="confirmDelete" value ="Poista" onclick="deleteSubmission()">
+</div>
 <div id="fade" style="display: none;">
     <span id="message">
     </span>
 </div>
+<script>
+    $( document ).ready(function() {
+        var submitExists = document.getElementById("existing").value;
+
+        if (submitExists === "1") {
+            $("#deleteContainer").show();
+            $("#submitExists").show();
+            $("#submitDoesntExist").hide();
+        }
+
+    });
+</script>
 {% endblock %}

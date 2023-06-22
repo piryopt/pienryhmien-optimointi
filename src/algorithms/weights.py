@@ -8,6 +8,9 @@ class Weights:
         int numbers that act as profit weights in hungarian algorithm.
         The weights are relative to the number of students and number of
         choices. More info in documentation/hungarian.md
+        TODO: minimum weight isn't 0, that way 0 can be given to students
+        when they must not be put to a certain group. Requires changes to
+        Hungarian function reshape_matrix and tests
 
         Args:
             n_choices (int): number of choices a student makes

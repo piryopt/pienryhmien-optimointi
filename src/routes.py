@@ -9,7 +9,8 @@ from tools import data_gen, excelreader
 import algorithms.hungarian as h
 import algorithms.weights as w
 from services.survey_tools import SurveyTools
-
+from pathlib import Path
+from random import shuffle
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -78,15 +79,16 @@ def excel():
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    shuffle(survey_choices)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return render_template("index.html")
     survey_name = survey_service.get_survey_name(survey_id)
-    existing = False
+    existing = "0"
     user_survey_ranking = survey_service.user_ranking_exists(survey_id)
 
     if user_survey_ranking:
-        existing = True
+        existing = "1"
         user_rankings = user_survey_ranking[3]
         list_of_survey_choice_id = user_rankings.split(",")
 
@@ -100,9 +102,10 @@ def surveys(survey_id):
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
+    response = {"status":"0", "msg":"Poistaminen epäonnistui"}
     if survey_service.delete_ranking(survey_id):
-        return redirect("/surveys/" + str(survey_id))
-    return redirect("index.html")
+        response = {"status":"1", "msg":"Valinnat poistettu"}
+    return jsonify(response)
 
 @app.route("/get_choices/<int:survey_id>", methods=["POST"])
 def get_choices(survey_id):
@@ -194,3 +197,21 @@ def survey_answers():
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=survey_answers,
                            survey_answers_amount=survey_answers_amount)
+
+@app.route("/admintools/", methods = ["GET"])
+def admin_dashboard() -> str:
+    return render_template('/admintools/dashboard.html')
+
+
+@app.route("/api/admintools/reset", methods = ["POST"])
+def reset_database() -> str:
+    '''Drop all database tables and recreate them based on the schema at project root'''
+    data = request.get_json()
+    print(data)
+    db.reflect()
+    db.drop_all()
+    create_clause = data["schema"]
+    for statement in create_clause.split(";")[:-1]:
+        db.session.execute(text(statement + ";"))
+        db.session.commit()
+    return "database reset"
