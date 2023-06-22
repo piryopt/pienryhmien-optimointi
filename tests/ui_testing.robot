@@ -1,11 +1,14 @@
 *** Settings ***
+Resource  resource.robot
 Documentation     Testing
 Library    SeleniumLibrary
+Suite Setup  Open And Configure Browser
+Suite Teardown  Close Browser
 #Library    Browser
 
 
 *** Variables ***
-${BROWSER}    firefox
+${BROWSER}  headlesschrome
 ${MAIN_URL}    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/ 
 ${EXCEL URL}    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/excel
 ${TOY DATA FORM}    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/input 
@@ -17,12 +20,8 @@ ${TOY DATA COUNT TEST CASE 1}    18
 
 *** Test Cases ***
 Open Browser To Main Page
-    Open Browser    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/ 
-    Title Should Be     Hello World - Piryopt
-    Page Should Contain    Index
-    Page Should Contain    Hello
-    Page Should Contain    Kokeile luoda dataa
-    Page Should Contain    Kokeile valmiilla datalla
+    Go To Main Page
+    Main Page Should Be Open
 
 Click 'Kokeile valmiilla datalla' link
     Click Link     Kokeile valmiilla datalla
@@ -98,5 +97,3 @@ Toy data results are correct
     ${Rows}=    get element count    xpath://table[@id='results_table']/tbody/tr
     Log To Console     ${Rows}
     Should Be Equal As Strings    ${TOY DATA COUNT TEST CASE 1}    ${Rows} 
-    close browser
-
