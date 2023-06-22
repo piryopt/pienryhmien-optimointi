@@ -51,12 +51,12 @@
               <textarea id="choiceInfo2" class="new-row-input"></textarea>
           </td>
           <td>
-              <button onclick="addChoice()" class="new-row-input">Lisää rivi</button>
+              <button onclick="addChoice()" class="new-row-input" name="addchoice">Lisää rivi</button>
           </td>
         </tr>
       </tbody>
     </table>
     <br/><br/><br/>
-    <input type="submit" value="Luo kysely" onclick="createNewSurvey()" />
+    <input type="submit" value="Luo kysely" onclick="createNewSurvey()" name="createsurvey"/>
 
 {% endblock %}
