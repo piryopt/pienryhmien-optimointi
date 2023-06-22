@@ -48,6 +48,5 @@ jobs:
       - name: Run robot tests
         run: |
           cd src
-          poetry run flask run 
-          cd ../
-          poetry run robot tests
+          poetry run flask run &
+          poetry run robot ../tests
