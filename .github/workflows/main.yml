@@ -2,13 +2,26 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   pull_request:
-    branches: [main]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +33,20 @@ jobs:
         run: pip install poetry
       - name: Install dependencies
         run: poetry install
-      - name: Run tests
+      - name: Create .env file
+        run: |
+          cd src
+          echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
+          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env
+          cd ../
+      - name: Run migrations
+        run: psql -f schema.sql postgresql://postgres:postgres@localhost:5432/postgres
+      - name: Run pytest tests
         run: poetry run coverage run --branch -m pytest
       - name: lint
         run: poetry run pylint src/
+      - name: Run robot tests
+        run: |
+          cd src
+          poetry run flask run &
+          poetry run robot ../tests

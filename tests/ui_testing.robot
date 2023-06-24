@@ -1,44 +1,23 @@
 *** Settings ***
+Resource  resource.robot
 Documentation     Testing
 Library    SeleniumLibrary
+Suite Setup  Open And Configure Browser
+Suite Teardown  Close Browser
 #Library    Browser
 
 
 *** Variables ***
-${BROWSER}    firefox
-${MAIN_URL}    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/ 
-${EXCEL URL}    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/excel
-${TOY DATA FORM}    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/input 
-${TOY DATA RESULTS URL}    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/results
 ${DATA COUNT}    105
 ${TOY DATA COUNT TEST CASE 1}    18
 # Note: it counts the header riw as 2 rows
 
 
 *** Test Cases ***
-Open Browser To Main Page
-    Open Browser    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/ 
-    Title Should Be     Hello World - Piryopt
-    Page Should Contain    Index
-    Page Should Contain    Hello
-    Page Should Contain    Kokeile luoda dataa
-    Page Should Contain    Kokeile valmiilla datalla
-
 Click 'Kokeile valmiilla datalla' link
+    Go To Main Page
     Click Link     Kokeile valmiilla datalla
-    Location Should Be     ${EXCEL URL}
-    Title Should Be     Tulokset - Piryopt
-
-Results page has required texts
-    Location Should Be     ${EXCEL URL}
-    Title Should Be     Tulokset - Piryopt
-    Page Should Contain     Lajittelun tulokset
-    Page Should Contain     Ryhmänvalintojen keskiarvo
-    Page Should Contain     1.0. valinta:
-    Page Should Contain     2.0. valinta:
-    Page Should Contain     3.0. valinta: 
-    Page Should Contain     aikaa kului
-    Page Should Contain     Opiskelijat on lajiteltu ryhmiin seuraavasti
+    Excel Page Should Be Open
 
 Results page has table and table has content
     Wait Until Page Contains Element    //table
@@ -52,22 +31,13 @@ Excel Export button is present and functional
     Click Element        //*[contains(text(),'Vie tulokset Excel-taulukkoon')]
     Title Should Be     Tulokset - Piryopt
 
-
-Click 'Palaa etusivulle' link and close broser (end of testing)
-    Click Link     Palaa etusivulle
-    Location Should Be     ${MAIN URL}
-    Title Should Be     Hello World - Piryopt
-    close browser
-
 Main Page 'Kokeile luoda dataa' link is functional
-    Open Browser    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/ 
-    Title Should Be     Hello World - Piryopt
+    Go To Main Page
     Click Link    Kokeile luoda dataa
-    Location Should Be   ${TOY DATA FORM}
-    close browser
+    Toy Data Input Page Should Be Open
 
 'Kokeile luoda dataa' form in functional
-    Open Browser    https://piryopt.ext.ocp-test-0.k8s.it.helsinki.fi/input 
+    Go To Toy Data Input Page 
     Title Should Be    Data input - Piryopt
     Wait Until Element Is Visible    group_n
     Click Element    group_n
@@ -84,7 +54,6 @@ Main Page 'Kokeile luoda dataa' link is functional
     Click Element        //*[contains(text(),'Luo dataa!')] 
 
 Toy data results are correct
-    Location Should Be     ${TOY DATA RESULTS URL}
     Title Should Be     Tulokset - Piryopt
     Page Should Contain     Lajittelun tulokset
     Page Should Contain     Ryhmänvalintojen keskiarvo
@@ -97,6 +66,4 @@ Toy data results are correct
     Element Should Be Visible    //table
     ${Rows}=    get element count    xpath://table[@id='results_table']/tbody/tr
     Log To Console     ${Rows}
-    Should Be Equal As Strings    ${TOY DATA COUNT TEST CASE 1}    ${Rows} 
-    close browser
-
+    Should Be Equal As Strings    ${TOY DATA COUNT TEST CASE 1}    ${Rows}
