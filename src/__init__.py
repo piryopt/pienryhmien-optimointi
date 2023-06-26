@@ -13,7 +13,4 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 db = SQLAlchemy(app)
 
-import routes # pylint: disable=C0413
-
-if __name__ == '__main__':
-    app.run()
+from src import routes
