@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block content %}
-  <a href="/">Palaa etusivulle</a></br></br>
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
   <script>
@@ -19,11 +18,11 @@
     })
   </script>
 
-  <h1>Luo uusi kysely</h1>
+<h2 class="display-4">Luo uusi kysely</h2>
 
     <label for="groupname">Kyselyn nimi</label>
     <br/>
-    <input type="text" id="groupname" name="groupname" />
+    <input type="text" class="form-control" id="groupname" name="groupname" />
     <br/>
     <h2>Priorisoitavat ryhmät</h2>
 
@@ -57,6 +56,6 @@
       </tbody>
     </table>
     <br/><br/><br/>
-    <input type="submit" value="Luo kysely" onclick="createNewSurvey()" name="createsurvey"/>
+    <button type="submit" class="btn btn-primary" value="Luo kysely" onclick="createNewSurvey()" name="createsurvey">Luo kysely</button>
 
 {% endblock %}

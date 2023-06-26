@@ -6,20 +6,33 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Register</h1>
-  <a href="/">Palaa etusivulle</a></br></br>
+  <h2 class="display-4">Rekisteröidy</h2>
   <form action="/register" method="POST">
-    Email: <input type="email" name="email"><br>
-    First name: <input type="text" name="firstname"><br>
-    Last name: <input type="text" name="lastname"><br>
-    Student number: <input type="number" name="student_number"><br>
-    Password: <input type="password" name="password1"><br>
-    Password: <input type="password" name="password2"><br>
-    User type: 
-    <select name="isteacher">
+      <label for="email">Sähköposti</label>
+      <input type="email" class="form-control" name="email">
+
+      <label for="firstname">Etunimi</label>
+      <input type="text" class="form-control" name="firstname">
+
+      <label for="lastname">Sukunimi</label>
+      <input type="text" class="form-control" name="lastname">
+
+      <label for="firstname">Opiskelijanumero</label>
+      <input type="number" class="form-control" name="student_number">
+
+      <label for="password1">Salasana</label>
+      <input type="password" class="form-control" name="password1" >
+
+      <label for="password2">Vahvista salasana</label>
+      <input type="password" class="form-control" name="password2" ></br>
+
+      <label for="user_type">Rooli:</label>
+      <select class="form-select" name="isteacher">
         <option value="student">Student</option>
         <option value="teacher">Teacher</option>
-    </select><br>
-    <button type="submit" name="register">Register</button>
+      </select><br>
+      
+      <button type="submit" class="btn btn-primary" name="register">Luo tunnus</button>
   </form>
+  
 {% endblock %}

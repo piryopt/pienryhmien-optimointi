@@ -23,6 +23,8 @@
 {{ h }}</br>
 {% endfor %}
 </br>
+<button type="submit" class="btn btn-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button>
+</br></br>
 
 <b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
 
@@ -47,12 +49,6 @@
 </table>
 </div>
 
-<BR><hr><BR>
-
-<button id="export_to_excel" 
-onclick="ExportAllData_HTML(this)">Vie tulokset Excel-taulukkoon</button>
-
-
 <script>
 
 function ExportAllData_HTML(){
@@ -65,7 +61,5 @@ function ExportAllData_HTML(){
 
 </script>
 
-<br>
-<a href="/">Palaa etusivulle</a>
 
 {% endblock %}
