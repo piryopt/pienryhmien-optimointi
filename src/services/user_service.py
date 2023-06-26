@@ -1,6 +1,6 @@
 from flask import session # pylint: disable=R0401
-from entities.user import User
-from repositories.user_repository import (
+from src.entities.user import User
+from src.repositories.user_repository import (
     user_repository as default_user_repository
 )
 
@@ -18,6 +18,11 @@ class UserService:
             return False
         session["email"] = user.email
         session["user_id"] = user.id
+        session["full_name"] = user.firstname + " " + user.lastname
+        if user.isteacher:
+            session["role"] = "Opettaja"
+        else:
+            session["role"] = "Opiskelija"
         return True
 
     def create_user(self, firstname, lastname, student_number, email, password1, password2, isteacher):
@@ -45,5 +50,7 @@ class UserService:
     def logout(self):
         del session["email"]
         del session["user_id"]
+        del session["full_name"]
+        del session["role"]
 
 user_service = UserService()
