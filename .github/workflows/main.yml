@@ -47,6 +47,5 @@ jobs:
         run: poetry run pylint src/
       - name: Run robot tests
         run: |
-          cd src
           poetry run flask run &
-          poetry run robot ../tests
+          poetry run robot tests
