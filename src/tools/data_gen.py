@@ -1,5 +1,5 @@
-from entities.group import Group
-from entities.student import Student
+from src.entities.group import Group
+from src.entities.student import Student
 from random import sample, randint
 from string import ascii_lowercase
 

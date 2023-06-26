@@ -1,6 +1,6 @@
 '''Module for survey related functions'''
 from sqlalchemy.sql import text
-from app import db
+from src import db
 
 class SurveyTools:
     '''Class for survey related functions'''
