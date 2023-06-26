@@ -3,6 +3,11 @@ Resource  resource.robot
 Suite Setup  Open And Configure Browser
 Suite Teardown  Close Browser
 
+*** Variables ***
+${REGISTERBUTTON}    xpath=//button[@type='submit' and contains(text(),'Luo tunnus')]
+${LOGINBUTTON}    xpath=//button[@type='submit' and contains(text(),'Kirjaudu')]
+${NEWSURVEY}    xpath=//button[@type='submit' and contains(text(),'Luo kysely')]
+
 *** Test Cases ***
 Open Main Page Test
     Go To Main Page
@@ -23,43 +28,43 @@ Open Previous Surveys Page Test
 Register New Student Test
     Go To Register Page
     Register Page Should Be Open
-    Set Email  srobot@robot.com
+    Set Email  studenttrobot@robot.com
     Set Firstname  Robot
     Set Lastname  McRobot
     Set Student_number  010101010
     Set Password1  robot4lyfe
     Set Password2  robot4lyfe
     Select From List By Value  name:isteacher  student
-    Click Button  register
+    Click Element  ${REGISTERBUTTON}
     Login Page Should Be Open
 
 Register New Teacher Test
     Go To Register Page
     Register Page Should Be Open
-    Set Email  trobot@robot.com
+    Set Email  testtrobot@robot.com
     Set Firstname  Roboty
     Set Lastname  McRobotface
     Set Student_number  010101011
     Set Password1  robot4lyfe
     Set Password2  robot4lyfe
     Select From List By Value  name:isteacher  teacher
-    Click Button  register
+    Click Element  ${REGISTERBUTTON}
     Login Page Should Be Open
 
 Login With Incorrect Credentials Test
     Go To Login Page
     Login Page Should Be Open
-    Set Email  norobot@robot.com
+    Set Email  norobott@robot.com
     Set Password  robot4lyfe
-    Click Button  login
+    Click Element  ${LOGINBUTTON}
     Login Page Should Be Open
 
 Login Teacher Test
     Go To Login Page
     Login Page Should Be Open
-    Set Email  trobot@robot.com
+    Set Email  testtrobot@robot.com
     Set Password  robot4lyfe
-    Click Button  login
+    Click Element  ${LOGINBUTTON}
     Main Page Should Be Open
 
 Create New Survey Test
@@ -91,7 +96,7 @@ Create New Survey Test
     Set Info1  FeelsBadMan
     Set Info2  Transformers
     Click Button  addchoice
-    Click Button  createsurvey
+    Click Element  ${NEWSURVEY}
     Go To Previous Surveys Page
     Page Should Contain  Best robots
 
@@ -149,7 +154,3 @@ Set Info1
 Set Info2
     [Arguments]  ${choiceInfo2}
     Input Text  choiceInfo2  ${choiceInfo2}
-
-
-
-

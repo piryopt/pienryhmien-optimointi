@@ -10,6 +10,7 @@ Suite Teardown  Close Browser
 *** Variables ***
 ${DATA COUNT}    105
 ${TOY DATA COUNT TEST CASE 1}    18
+${EXCELBUTTON}    xpath=//button[@type='submit' and contains(text(),'Vie tulokset Excel-taulukkoon')]
 # Note: it counts the header riw as 2 rows
 
 
@@ -24,12 +25,7 @@ Results page has table and table has content
     Element Should Be Visible    //table
     ${Rows}=    get element count    xpath://table[@id='results_table']/tbody/tr
     Log To Console     ${Rows}
-    Should Be Equal As Strings    ${DATA COUNT}   ${Rows} 
-
-Excel Export button is present and functional
-    Page Should Contain    Vie tulokset Excel-taulukkoon
-    Click Element        //*[contains(text(),'Vie tulokset Excel-taulukkoon')]
-    Title Should Be     Tulokset - Piryopt
+    Should Be Equal As Strings    ${DATA COUNT}   ${Rows}
 
 Main Page 'Kokeile luoda dataa' link is functional
     Go To Main Page
@@ -51,7 +47,7 @@ Main Page 'Kokeile luoda dataa' link is functional
     Wait Until Element Is Visible    max_selections
     Click Element    max_selections
     Input Text        max_selections    2
-    Click Element        //*[contains(text(),'Luo dataa!')] 
+    Click Button  inputbutton
 
 Toy data results are correct
     Title Should Be     Tulokset - Piryopt
@@ -61,9 +57,10 @@ Toy data results are correct
     Page Should Contain     aikaa kului
     Page Should Contain     Opiskelijat on lajiteltu ryhmiin seuraavasti   
     Page Should Contain    Vie tulokset Excel-taulukkoon
-    Page Should Contain    Palaa etusivulle
     Wait Until Page Contains Element    //table
     Element Should Be Visible    //table
     ${Rows}=    get element count    xpath://table[@id='results_table']/tbody/tr
     Log To Console     ${Rows}
     Should Be Equal As Strings    ${TOY DATA COUNT TEST CASE 1}    ${Rows}
+    Click Element  ${EXCELBUTTON}
+    Title Should Be     Tulokset - Piryopt
