@@ -7,7 +7,9 @@
 
 {% block content %}
 <a href="/">Palaa etusivulle</a></br></br>
-<h3>{{ survey_name }}</h3>
+<div class="row">
+    <h3>{{ survey_name }}</h3>
+<div class="col">
 <script>
     $( function() {
         $( "#sortable1" ).sortable({
@@ -60,7 +62,12 @@
     </script>
     <input type="button" id="confirmDelete" value ="Poista" onclick="deleteSubmission()">
 </div>
-<div id="fade" style="display: none;">
+</div>
+<div class="col" id="info-container">
+
+</div>
+</div>
+<div class="row" id="fade" style="display: none;">
     <span id="message">
     </span>
 </div>
