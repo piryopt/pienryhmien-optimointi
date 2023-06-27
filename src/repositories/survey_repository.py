@@ -16,7 +16,7 @@ class SurveyRepository:
 
     def find_survey_choices(self, survey_id):
         try:
-            sql = "SELECT id, name, info1, info2 FROM survey_choices WHERE survey_id=:survey_id"
+            sql = "SELECT * FROM survey_choices WHERE survey_id=:survey_id"
             result = db.session.execute(text(sql), {"survey_id":survey_id})
             survey_choices = result.fetchall()
             return survey_choices

@@ -34,5 +34,29 @@ class UserRepository:
             print(e)
             return False
         return user
+    
+    def get_all_users(self):
+        try:
+            sql = "SELECT * FROM users"
+            result = db.session.execute(text(sql))
+            users = result.fetchall()
+            if not users:
+                return False
+            return users
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_user_data(self, id):
+        try:
+            sql = "SELECT * FROM users WHERE id=:id "
+            result = db.session.execute(text(sql), {"id":id})
+            users = result.fetchall()
+            if not users:
+                return False
+            return users
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 user_repository = UserRepository()
