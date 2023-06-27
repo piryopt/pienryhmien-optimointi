@@ -120,6 +120,11 @@ def get_choices(survey_id):
         response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)
 
+@app.route("/surveys/getinfo", methods=["POST"])
+def get_info():
+    raw_id = request.get_json()
+    return render_template("moreinfo.html", choice_name = raw_id)
+
 @app.route("/register", methods = ["GET", "POST"])
 def register():
     if request.method == "GET":
