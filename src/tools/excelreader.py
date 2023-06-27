@@ -1,9 +1,9 @@
 from openpyxl import load_workbook
-from entities.group import Group
-from entities.student import Student
+from src.entities.group import Group
+from src.entities.student import Student
 
 #Used for testing real data. Only works for the single excel file at the moment. (Kohti tutkivaa työtapaa VO -22 SiltaSanoma lööpit (jakoon))
-EXCEL = "tutki.xlsx"
+EXCEL = "src/tutki.xlsx"
 
 def create_groups():
     '''Takes in the name of the excel chart, returns the list of all possible groups.'''

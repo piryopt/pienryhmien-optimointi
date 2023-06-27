@@ -4,7 +4,7 @@ Library  SeleniumLibrary
 
 *** Variables ***
 ${SERVER}  localhost:5000
-${BROWSER}  headlesschrome
+${BROWSER}  headlessfirefox
 ${DELAY}  0.0 seconds
 ${HOME URL}  http://${SERVER}
 ${REGISTER URL}  http://${SERVER}/register
@@ -29,7 +29,11 @@ Main Page Should Be Open
     Page Should Contain  Kokeile valmiilla datalla
 
 Register Page Should Be Open
-	Page Should Contain  Register
+	Page Should Contain  Etunimi
+    Page Should Contain  Sukunimi
+    Page Should Contain  Opiskelijanumero
+    Page Should Contain  Salasana
+    Page Should Contain  Vahvista salasana
 
 Login Page Should Be Open
 	Page Should Contain  Login
@@ -84,4 +88,3 @@ Go To Toy Data Input Page
 
 Go To Toy Data Results Page
     Go To  ${TOY DATA RESULTS URL}
-
