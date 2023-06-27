@@ -14,7 +14,8 @@
     $( function() {
         $( "#sortable1" ).sortable({
             cursor: 'grabbing',
-            revert: true
+            revert: true,
+            helper: 'clone'
         });
 
         $("#sortable1 li").on("click", function() {
