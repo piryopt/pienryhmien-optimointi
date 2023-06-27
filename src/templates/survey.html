@@ -10,7 +10,14 @@
 <h3>{{ survey_name }}</h3>
 <script>
     $( function() {
-        $( "#sortable1" ).sortable();
+        $( "#sortable1" ).sortable({
+            cursor: 'grabbing',
+            revert: true
+        });
+
+        $("#sortable1 li").on("click", function() {
+            showMoreInfo(this.id);
+        });
     });
 </script>
 <ul id="sortable1" class="connectedSortable">
