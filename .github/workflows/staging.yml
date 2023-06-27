@@ -3,7 +3,6 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - main
       - shib_logging
 
 jobs:
