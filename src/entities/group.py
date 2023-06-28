@@ -3,5 +3,4 @@ class Group:
         self.id = id
         self.name = name
         self.participants = []
-        self.prio = []
         self.size = size
