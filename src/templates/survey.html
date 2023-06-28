@@ -9,64 +9,64 @@
 <a href="/">Palaa etusivulle</a></br></br>
 <div class="row">
     <h3>{{ survey_name }}</h3>
-<div class="col">
-<script>
-    $( function() {
-        $( "#sortable1" ).sortable({
-            cursor: 'grabbing',
-            revert: true,
-            helper: 'clone'
-        });
+    <div class="col">
+        <script>
+            $( function() {
+                $( "#sortable1" ).sortable({
+                    cursor: 'grabbing',
+                    revert: true,
+                    helper: 'clone'
+                });
 
-        $("#sortable1 li").on("click", function() {
-            showMoreInfo(this.id);
-        });
-    });
-</script>
-<ul id="sortable1" class="connectedSortable">
-    {% for group in choices %}
-    <li class="ui-state-default" id="{{ group[0] }}">{{ group[1] }}</li>
-    {% endfor %}
-</ul>
-<div id="submitExists" style="display: none;">
-    <input type="submit" value="Päivitä valinnat" onclick="submit(0)">
-</div>
-<div id="submitDoesntExist">
-    <input type="submit" value="Lähetä valinnat" onclick="submit(1)">
-</div>
-<input type="hidden" id="survey_id" value="{{ survey_id }}">
-<input type="hidden" id="existing" value="{{ existing }}">
-<br>
-<br>
-<br>
-<br>
-<div id="deleteContainer" style="display: none;">
-<input type="button" id="deleteSubmission" value="Poista valinnat">
-    <script>
-        $("#deleteSubmission").click(function() {
-            $("#submitExists").hide();
-            $("#deleteContainer").hide();
-            $("#confirmContainer").show();
-        });
-    </script>
-</div>
+                $("#sortable1 li").on("click", function() {
+                    showMoreInfo(this.id);
+                });
+            });
+        </script>
+        <ul id="sortable1" class="connectedSortable">
+            {% for group in choices %}
+            <li class="ui-state-default" id="{{ group[0] }}">{{ group[1] }}</li>
+            {% endfor %}
+        </ul>
+        <div id="submitExists" style="display: none;">
+            <input type="submit" value="Päivitä valinnat" onclick="submit(0)">
+        </div>
+        <div id="submitDoesntExist">
+            <input type="submit" value="Lähetä valinnat" onclick="submit(1)">
+        </div>
+        <input type="hidden" id="survey_id" value="{{ survey_id }}">
+        <input type="hidden" id="existing" value="{{ existing }}">
+        <br>
+        <br>
+        <br>
+        <br>
+        <div id="deleteContainer" style="display: none;">
+            <input type="button" id="deleteSubmission" value="Poista valinnat">
+            <script>
+                $("#deleteSubmission").click(function() {
+                $("#submitExists").hide();
+                $("#deleteContainer").hide();
+                $("#confirmContainer").show();
+                });
+            </script>
+        </div>
 
-<div id="confirmContainer" style="display: none;">
-    <p>Oletko varma?</p>
-    <input type="button" id="noDeletion" value="Peruuta">
-    <script>
-        $("#noDeletion").click(function() {
-            $("#submitExists").show();
-            $("#deleteContainer").show();
-            $("#confirmContainer").hide();
-        });
-    </script>
-    <input type="button" id="confirmDelete" value ="Poista" onclick="deleteSubmission()">
-</div>
-</div>
-<div class="col" id="info-container">
+        <div id="confirmContainer" style="display: none;">
+            <p>Oletko varma?</p>
+            <input type="button" id="noDeletion" value="Peruuta">
+            <script>
+                $("#noDeletion").click(function() {
+                    $("#submitExists").show();
+                    $("#deleteContainer").show();
+                    $("#confirmContainer").hide();
+                });
+            </script>
+            <input type="button" id="confirmDelete" value ="Poista" onclick="deleteSubmission()">
+        </div>
+    </div>
+    <div class="col" id="info-container">
 
-</div>
+    </div>
 </div>
 <div class="row" id="fade" style="display: none;">
     <span id="message">
