@@ -1,36 +1,38 @@
 import time
 import numpy as np
+import itertools
 from scipy.optimize import linear_sum_assignment
 
 class Hungarian:
 
-    def __init__(self,groups,students,weights):
+    def __init__(self,groups:dict,students:dict,weights:dict):
         """
         Initiates data structures used in assigning students to groups
         with the hungarian algorithm
         Args:
-            groups (dict): dictionary of Group objects
-            students (dict): dictionary of User objects
-            weights (dict): dictionary of weights for group order
+            groups: dictionary of Group objects, id as key
+            students: dictionary of User objects, id as key
+            weights: dictionary of weights for group order, priority number as key
 
+        #TODO shuffle students before assignment, keep info so that shuffle is repeatable
         variables:
-            self.groups: dictionary of Group objects
-            self.students: dictionary of User objects
+            self.groups: dictionary of Group objects, id as key
+            self.students: dictionary of User objects, matrix row id as key
             self.weights: dictionary of weights for group order
-            self.matrix: NxN 2D numpy array where students are represented on rows
-            and groups on columns
             self.prefs: list of lists, each sublist has a student's list
             of group preferences in order
+            self.index_to_group_dict: Maps matrix column to group id
+            self.matrix: NxN 2D numpy array where students are represented on rows
+            and groups on columns
             self.assigned_groups: dictionary where keys are group ids and values
             are a list of student ids assigned to the group
             self.student_happiness: array with columns representing student id and
             the student's personal ranking of the group they were assigned to
             self.runtime: data on how long it took to run the algorithm
         """
-        #TODO dictionary index_to_student
 
         self.groups = groups
-        self.students = students
+        self.students = self.map_student_to_index(students)
         self.weights = weights
         self.prefs = self.student_preferences()
         self.index_to_group_dict = self.create_group_dict()
@@ -56,14 +58,20 @@ class Hungarian:
         Creates a dictionary which maps the column indices of the
         matrix to the group IDs.
         """
-        group_sizes = [group.size for key,group in self.groups.items()]
-        total = 0
-        index_to_group_dict = {}
-        for i in range(len(group_sizes)):
-            for j in range(group_sizes[i]):
-                index_to_group_dict[total+j] = i
-            total += group_sizes[i]
-        return index_to_group_dict
+        ids = list(itertools.chain.from_iterable([[key]*group.size for key, group in self.groups.items()]))
+        return {index:id for (index, id) in zip(list(range(len(ids))), ids)}
+
+    def map_student_to_index(self, students):
+        """
+        Takes a dictionary of Student objects with id as key
+        returns a dictionary of Student objects with keys corresponding to matrix row indeces
+        """
+        dictionary = {}
+        i = 0
+        for key, student in students.items():
+            dictionary[i] = student
+            i+=1
+        return dictionary
 
     def create_matrix(self):
         """
