@@ -82,3 +82,7 @@ function showMoreInfo(choiceID) {
         }
     });
 }
+
+function exitMoreInfo() {
+    document.getElementById("info-container").innerHTML = "";
+}
