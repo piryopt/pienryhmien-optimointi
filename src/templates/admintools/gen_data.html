@@ -14,6 +14,12 @@
     <button type="submit" class="btn btn-primary" name="create">Luo käyttäjät</button>
   </form></br>
 
+  <form action="/admintools/gen_data/survey" method="POST">
+    <label for="survey">Luo lomake (Luo ainoastaan yhden ja aina saman, ei tee mitään jos kerran luotu. Toimii n. 100 opiskelijalle, muuten sekoaa)</label>
+    </br></br>
+    <button type="submit" class="btn btn-primary" name="get">Luo lomake</button>
+  </form></br>
+
   <form action="/admintools/gen_data/rankings" method="POST">
     <label for="survey">Valitse lomake, johon KAIKKI opiskelijat vastaavat</label>
     <select class="form-select" name="survey_list">

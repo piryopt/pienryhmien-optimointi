@@ -250,6 +250,14 @@ def admin_gen_rankings():
                            survey_name=survey_name, survey_answers=survey_answers,
                            survey_answers_amount=survey_answers_amount, survey_id = survey_id)
 
+@app.route("/admintools/gen_data/survey", methods = ["POST"])
+def admin_gen_survey():
+    gen_data.generate_survey()
+    surveys = SurveyTools.fetch_all_surveys()
+    return render_template("/admintools/gen_data.html", surveys = surveys)
+
+
+
 @app.route("/surveyresults", methods = ["POST"])
 def survey_results():
     survey_id = request.form.get("survey_id")

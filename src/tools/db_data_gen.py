@@ -25,11 +25,12 @@ class DbDataGen:
         for i in range(n):
             firstname = choice(self.firstnames)
             lastname = choice(self.lastnames)
+            name = firstname + " " + lastname
             student_number = "01"
             for i in range(7):
                 student_number += str(choice(self.numbers))
             email = firstname.lower() + "." + lastname.lower() + "@test.com"
-            new_user = User(firstname, lastname, student_number, email, "motivaatio", False)
+            new_user = User(name, student_number, email, False)
             self.users.append(new_user)
 
     def add_generated_users_db(self):
@@ -47,5 +48,37 @@ class DbDataGen:
             shuffle(choice_ids)
             ranking = ','.join(choice_ids)
             sr.add_user_ranking(user[0], survey_id, ranking)
+
+    def generate_survey(self):
+        name = "GENERATED SURVEY"
+        exists = sr.survey_name_exists(name)
+        if exists:
+            return
+        survey_id = sr.add_new_survey(name)
+        choice_name1 = "Weather-based recommendation for outdoor activities in Helsinki"
+        choice_name2 = "Sovellus pienryhmien optimointiin eli miten jakaa opiskelijat pienryhmiin heidän kiinnostusten perusteella?"
+        choice_name3 = "Seamless TinyML lifecycle management"
+        choice_name4 = "Improved tools for data scientists"
+        choice_name5 = "Automatic local news generator with Generative AI"
+        choice_name6 = "Berry Picker Tracker"
+        choice_name7 = "Urheiluseura 3.0"
+        choice_name8 = "BookCine: the movie-book recommender system"
+        choice_name9 = "Ohjelmistotuotantoprojektien ilmoittautumissovelluksen laajennus"
+        choice_name10 = "Tietojen importti/exporttityökalu MammalBaseen"
+
+        #Info generated with ChatGPT :D
+        sr.add_new_survey_choice(survey_id, choice_name1, 11,  "Leena Nieminen", "Kirkkokatu 8, Tampere")
+        sr.add_new_survey_choice(survey_id, choice_name2, 11, "Juha Virtanen", "Peltolantie 12, Vantaa")
+        sr.add_new_survey_choice(survey_id, choice_name3, 11, "Anna Koskinen", "Mannerheimintie 15, Helsinki")
+        sr.add_new_survey_choice(survey_id, choice_name4, 11, "Markus Järvinen", "Saaristokatu 6, Turku")
+        sr.add_new_survey_choice(survey_id, choice_name5, 11, "Riikka Kallio", "Puistokatu 3, Jyväskylä")
+        sr.add_new_survey_choice(survey_id, choice_name6, 11, "Mikko Rantanen", "Pohjoinen Rautatiekatu 20, Oulu")
+        sr.add_new_survey_choice(survey_id, choice_name7, 11, "Satu Laine", "Kauppakatu 2, Kuopio")
+        sr.add_new_survey_choice(survey_id, choice_name8, 11, "Jari Korhonen", "Aleksanterinkatu 14, Lahti")
+        sr.add_new_survey_choice(survey_id, choice_name9, 11, "Maria Virtanen", "Rantakatu 5, Joensuu")
+        sr.add_new_survey_choice(survey_id, choice_name10, 11, "Antti Jokinen", "Rauhankatu 6, Hämeenlinna")
+        
+
+
 
 gen_data = DbDataGen()
