@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}ADMIN GEN DATA{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<h2 class="display-4">LUO DATAA</h2>
+  <form action="/admintools/gen_data" method="POST">
+    <label for="student_n">Opiskelijoiden määrä</label>
+    <input type="number" class="form-control" name="student_n"></br>
+
+    <button type="submit" class="btn btn-primary" name="create">Luo käyttäjät</button>
+  </form></br>
+
+  <form action="/admintools/gen_data/rankings" method="POST">
+    <label for="survey">Valitse lomake, johon KAIKKI opiskelijat vastaavat</label>
+    <select class="form-select" name="survey_list">
+        {% for survey in surveys %}
+        <option value="{{ survey[0] }}">{{ survey[1] }}</option>
+        {% endfor %}
+    </select><br>
+
+    <button type="submit" class="btn btn-primary" name="go_to_survey_data">Luo rankingit</button>
+  </form></br>
+{% endblock %}
