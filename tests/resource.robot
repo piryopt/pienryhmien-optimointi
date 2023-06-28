@@ -29,11 +29,10 @@ Main Page Should Be Open
     Page Should Contain  Kokeile valmiilla datalla
 
 Register Page Should Be Open
-	Page Should Contain  Etunimi
-    Page Should Contain  Sukunimi
+	Page Should Contain  Nimi
     Page Should Contain  Opiskelijanumero
-    Page Should Contain  Salasana
-    Page Should Contain  Vahvista salasana
+    Page Should Contain  Rooli
+
 
 Login Page Should Be Open
 	Page Should Contain  Login
