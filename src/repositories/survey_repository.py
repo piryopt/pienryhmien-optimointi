@@ -61,7 +61,7 @@ class SurveyRepository:
 
     def get_survey_choice(self, id):
         try:
-            sql = "SELECT id, name, info1, info2 FROM survey_choices WHERE id=:id"
+            sql = "SELECT * FROM survey_choices WHERE id=:id"
             result = db.session.execute(text(sql), {"id":id})
             ranking = result.fetchone()
             if not ranking:
