@@ -22,7 +22,7 @@ def hello_world() -> str:
     """
     Returns the rendered skeleton template
     """
-    print(f'HEADERS:\n{request.headers["Connection"]}')
+    #print(f'HEADERS:\n{request.headers["Connection"]}')
     return render_template('index.html')
 
 
