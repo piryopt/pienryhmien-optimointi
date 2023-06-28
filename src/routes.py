@@ -136,17 +136,14 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     email = request.form.get("email")
-    firstname = request.form.get("firstname")
-    lastname = request.form.get("lastname")
+    name = request.form.get("name")
     student_number = request.form.get("student_number")
-    password1 = request.form.get("password1")
-    password2 = request.form.get("password2")
     isteacher = request.form.get("isteacher")
     teacher_priv = False
     if isteacher == "teacher":
         teacher_priv = True
 
-    new_user = user_service.create_user(firstname, lastname, student_number, email, password1, password2, teacher_priv)
+    new_user = user_service.create_user(name, student_number, email, teacher_priv)
     if new_user is None:
         return render_template("register.html")
     return render_template("login.html")
@@ -156,9 +153,8 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
     email = request.form.get("email")
-    password = request.form.get("password")
 
-    logged_in = user_service.check_credentials(email, password)
+    logged_in = user_service.check_credentials(email)
     if not logged_in:
         return render_template("login.html")
     return render_template("index.html")

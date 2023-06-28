@@ -1,34 +1,30 @@
 from sqlalchemy import text
-from werkzeug.security import check_password_hash, generate_password_hash
 from src import db
 
 class UserRepository:
 
-    def find_by_email(self, email, password):
+    def find_by_email(self, email):
         try:
             sql = "SELECT * FROM users WHERE email=:email"
             result = db.session.execute(text(sql), {"email":email})
             user = result.fetchone()
             if not user:
                 return False
-            if check_password_hash(user.password, password):
-                return user
-            return False
+            return user
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
 
     def register(self, user):
-        existing_user = self.find_by_email(user.email, user.password)
+        existing_user = self.find_by_email(user.email)
         if existing_user:
             print(f"The user with the email {user.email} already exists!")
             return
-        hash_value = generate_password_hash(user.password)
         try:
-            sql = "INSERT INTO users (firstname, lastname, student_number, email, password, isteacher)" \
-                  "VALUES (:firstname, :lastname, :student_number, :email, :password, :isteacher)"
-            db.session.execute(text(sql), {"firstname":user.firstname, "lastname":user.lastname,
-            "student_number":user.student_number, "email":user.email, "password":hash_value, "isteacher":user.isteacher})
+            sql = "INSERT INTO users (name, student_number, email, isteacher)" \
+                  "VALUES (:name, :student_number, :email, :isteacher)"
+            db.session.execute(text(sql), {"name":user.name,"student_number":user.student_number,
+                                            "email":user.email, "isteacher":user.isteacher})
             db.session.commit()
         except Exception as e: # pylint: disable=W0718
             print(e)
