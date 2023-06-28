@@ -20,7 +20,6 @@
           <img src="{{ url_for('static', filename='images/testbox.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">
           Piryopt
         </a>
-        {% if session.user_id %}
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -28,6 +27,7 @@
                 </li>
             </ul>
         </div>
+        {% if session.user_id %}
         <div class="d-flex">
             <div class="dropdown">
                 <button class="btn btn-primary btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #076aa3;">

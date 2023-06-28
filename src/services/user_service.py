@@ -8,42 +8,36 @@ class UserService:
     def __init__(self, user_repositroy=default_user_repository):
         self._user_repository = user_repositroy
 
-    def check_credentials(self, email, password):
-        if not email or not password:
-            print("Email and password are required!")
+    def check_credentials(self, email):
+        if not email:
+            print("Email is required!")
             return False
-        user = self._user_repository.find_by_email(email, password)
+        user = self._user_repository.find_by_email(email)
         if not user:
-            print("Invalid username or password")
+            print("Invalid email!")
             return False
         session["email"] = user.email
         session["user_id"] = user.id
-        session["full_name"] = user.firstname + " " + user.lastname
+        session["full_name"] = user.name
         if user.isteacher:
             session["role"] = "Opettaja"
         else:
             session["role"] = "Opiskelija"
         return True
 
-    def create_user(self, firstname, lastname, student_number, email, password1, password2, isteacher):
-        if not self.validate(firstname, lastname, student_number, password1, password2):
+    def create_user(self, name, student_number, email, isteacher):
+        if not self.validate(name, student_number):
             return False
-        new_user = User(firstname, lastname, student_number, email, password1, isteacher)
+        new_user = User(name, student_number, email, isteacher)
         user = self._user_repository.register(new_user)
         return user
 
-    def validate(self, firstname, lastname, student_number, password1, password2):
-        if not firstname or not lastname or not student_number or not password1 or not password2:
+    def validate(self, name, student_number):
+        if not name or not student_number:
             print("All fields are required!")
             return False
-        if password1 != password2:
-            print("Passwords do not match!")
-            return False
-        if len(firstname) < 2 or len(lastname) < 2:
+        if len(name) < 1:
             print("Name is too short!")
-            return False
-        if len(password1)  < 4:
-            print("Password is too short!")
             return False
         return True
 

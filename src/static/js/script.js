@@ -64,5 +64,25 @@ function deleteSubmission() {
             
             $("#fade").delay(3000).fadeOut(500);
         }
-    })
+    });
+}
+
+function showMoreInfo(choiceID) {
+    var surveyID = document.getElementById("survey_id").value;
+    var infoContainer = document.getElementById("info-container");
+
+    $.ajax({
+        type: "POST",
+        url: "/surveys/getinfo",
+        data: JSON.stringify(choiceID),
+        contentType: "application/json",
+        dataType: "html",
+        success: function(result) {
+            infoContainer.innerHTML = result;
+        }
+    });
+}
+
+function exitMoreInfo() {
+    document.getElementById("info-container").innerHTML = "";
 }

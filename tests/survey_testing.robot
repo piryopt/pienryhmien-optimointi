@@ -29,11 +29,8 @@ Register New Student Test
     Go To Register Page
     Register Page Should Be Open
     Set Email  studenttrobot@robot.com
-    Set Firstname  Robot
-    Set Lastname  McRobot
+    Set Name  Robot McRobot
     Set Student_number  010101010
-    Set Password1  robot4lyfe
-    Set Password2  robot4lyfe
     Select From List By Value  name:isteacher  student
     Click Element  ${REGISTERBUTTON}
     Login Page Should Be Open
@@ -42,11 +39,8 @@ Register New Teacher Test
     Go To Register Page
     Register Page Should Be Open
     Set Email  testtrobot@robot.com
-    Set Firstname  Roboty
-    Set Lastname  McRobotface
+    Set Name  Roboty McRobotface
     Set Student_number  010101011
-    Set Password1  robot4lyfe
-    Set Password2  robot4lyfe
     Select From List By Value  name:isteacher  teacher
     Click Element  ${REGISTERBUTTON}
     Login Page Should Be Open
@@ -55,7 +49,6 @@ Login With Incorrect Credentials Test
     Go To Login Page
     Login Page Should Be Open
     Set Email  norobott@robot.com
-    Set Password  robot4lyfe
     Click Element  ${LOGINBUTTON}
     Login Page Should Be Open
 
@@ -63,7 +56,6 @@ Login Teacher Test
     Go To Login Page
     Login Page Should Be Open
     Set Email  testtrobot@robot.com
-    Set Password  robot4lyfe
     Click Element  ${LOGINBUTTON}
     Main Page Should Be Open
 
@@ -111,29 +103,13 @@ Set Email
     [Arguments]  ${email}
     Input Text  email  ${email}
 
-Set Firstname
-    [Arguments]  ${firstname}
-    Input Text  firstname  ${firstname}
-
-Set Lastname
-    [Arguments]  ${Lastname}
-    Input Text  lastname  ${lastname}
+Set Name
+    [Arguments]  ${name}
+    Input Text  firstname  ${name}
 
 Set Student_number
     [Arguments]  ${student_number}
     Input Text  student_number  ${student_number}
-
-Set Password
-    [Arguments]  ${password}
-    Input Text  password  ${password}
-
-Set Password1
-    [Arguments]  ${password1}
-    Input Text  password1  ${password1}
-
-Set Password2
-    [Arguments]  ${password2}
-    Input Text  password2  ${password2}
 
 Set Surveyname
     [Arguments]  ${groupname}
