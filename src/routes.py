@@ -21,7 +21,7 @@ def hello_world() -> str:
     Returns the rendered skeleton template
     """
     print(f'HEADERS:\n{request.headers["Connection"]}')
-    return render_template('index.html', name = request.headers["Cn"])
+    return render_template('index.html')
 
 
 
