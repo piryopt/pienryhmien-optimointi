@@ -1,22 +1,15 @@
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
-	firstname TEXT,
- 	lastname TEXT,
+	name TEXT,
  	student_number TEXT, -- or int or not at all
 	email TEXT,
-	password TEXT,
 	isteacher BOOLEAN
-);
-
-CREATE TABLE courses (
-	id SERIAL PRIMARY KEY,
-	coursename TEXT UNIQUE,
-	teacher_id INTEGER REFERENCES users -- maybe not needed
 );
 
 CREATE TABLE surveys ( -- yksittäinen kysely
 	id SERIAL PRIMARY KEY,
 	surveyname TEXT,
+	teacher_id INTEGER REFERENCES users,
 	course_id INTEGER REFERENCES courses,
 	min_choices INTEGER
 );
@@ -38,16 +31,8 @@ CREATE TABLE user_survey_rankings (
 	deleted BOOLEAN
 );
 
-CREATE TABLE participants (
-	id SERIAL PRIMARY KEY,
-	course_id INTEGER REFERENCES courses,
-	user_id INTEGER REFERENCES users,
-	privileged BOOLEAN
-);
-
 CREATE TABLE final_group ( -- lopullinen sijoitus
 	id SERIAL PRIMARY KEY,
-	course_id INTEGER REFERENCES courses,
 	user_id INTEGER REFERENCES users,
 	survey_id INTEGER REFERENCES surveys,
 	choice_id INTEGER REFERENCES survey_choices
