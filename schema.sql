@@ -10,7 +10,8 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	id SERIAL PRIMARY KEY,
 	surveyname TEXT,
 	teacher_id INTEGER REFERENCES users,
-	min_choices INTEGER
+	min_choices INTEGER,
+	closed BOOLEAN 
 );
 
 CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
