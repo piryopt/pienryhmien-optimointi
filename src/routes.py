@@ -23,7 +23,7 @@ def hello_world() -> str:
     Returns the rendered skeleton template
     """
     print(f'HEADERS:\n{request.headers["Connection"]}')
-    return render_template('index.html', name = request.headers["Cn"])
+    return render_template('index.html')
 
 
 
@@ -124,6 +124,12 @@ def get_choices(survey_id):
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)
+
+@app.route("/surveys/getinfo", methods=["POST"])
+def get_info():
+    raw_id = request.get_json()
+    choice_info = survey_service.get_survey_choice(int(raw_id))
+    return render_template("moreinfo.html", choice_info = choice_info)
 
 @app.route("/register", methods = ["GET", "POST"])
 def register():
