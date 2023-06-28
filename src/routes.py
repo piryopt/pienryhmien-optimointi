@@ -20,7 +20,10 @@ def hello_world() -> str:
     """
     Returns the rendered skeleton template
     """
-    return render_template('index.html')
+    print(f'HEADERS:\n{request.headers["Connection"]}')
+    return render_template('index.html', name = request.headers["Cn"])
+
+
 
 @app.route("/db_connection_test")
 def db_connection_test():
