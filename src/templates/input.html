@@ -6,13 +6,20 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Luo satunnaista testidataa</h1>
-  <a href="/">Palaa etusivulle</a></br></br>
+  <h2 class="display-4">Luo satunnaista testidataa</h2>
   <form action="/results" method="POST">
-    Ryhmien lukumäärä: <input type="number" name="group_n"><br>
-    Ryhmien maksimikoko: <input type="number" name="group_size"><br>
-    Opiskelijoiden lukumäärä: <input type="number" name="student_n"><br>
-    Montako ryhmää opiskelija valitsee?: <input type="number" name="max_selections"><br>
-    <button type="submit">Luo dataa!</button>
+    <label for="group_n">Ryhmien lukumäärä</label>
+    <input type="number" class="form-control" name="group_n"><br>
+
+    <label for="group_size">Ryhmien maksimikoko</label>
+    <input type="number" class="form-control" name="group_size"><br>
+
+    <label for="student_n">Opiskelijoiden lukumäärä</label>
+    <input type="number" class="form-control" name="student_n"><br>
+
+    <label for="max_selections">Montako ryhmää opiskelija valitsee?</label>
+    <input type="number" class="form-control" name="max_selections"><br>
+    
+    <button type="submit" class="btn btn-primary" name="inputbutton">Luo dataa!</button>
   </form>
 {% endblock %}

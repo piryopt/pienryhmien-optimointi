@@ -2,14 +2,15 @@ import os
 from flask import render_template, request, session, jsonify, redirect
 from sqlalchemy import text
 import psycopg2
-from app import app,db
-from services.user_service import user_service
-from services.survey_service import survey_service
-from tools import data_gen, excelreader
-import algorithms.hungarian as h
-import algorithms.weights as w
-from services.survey_tools import SurveyTools
-
+from pathlib import Path
+from random import shuffle
+from src import app,db
+from src.services.user_service import user_service
+from src.services.survey_service import survey_service
+from src.tools import data_gen, excelreader
+import src.algorithms.hungarian as h
+import src.algorithms.weights as w
+from src.services.survey_tools import SurveyTools
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -19,7 +20,10 @@ def hello_world() -> str:
     """
     Returns the rendered skeleton template
     """
-    return render_template('index.html')
+    print(f'HEADERS:\n{request.headers["Connection"]}')
+    return render_template('index.html', name = request.headers["Cn"])
+
+
 
 @app.route("/db_connection_test")
 def db_connection_test():
@@ -78,15 +82,17 @@ def excel():
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    shuffle(survey_choices)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return render_template("index.html")
     survey_name = survey_service.get_survey_name(survey_id)
-    existing = False
-    user_survey_ranking = survey_service.user_ranking_exists(survey_id)
+    existing = "0"
+    user_id = session.get("user_id", 0)
+    user_survey_ranking = survey_service.user_ranking_exists(survey_id, user_id)
 
     if user_survey_ranking:
-        existing = True
+        existing = "1"
         user_rankings = user_survey_ranking[3]
         list_of_survey_choice_id = user_rankings.split(",")
 
@@ -100,15 +106,18 @@ def surveys(survey_id):
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
-    if survey_service.delete_ranking(survey_id):
-        return redirect("/surveys/" + str(survey_id))
-    return redirect("index.html")
+    response = {"status":"0", "msg":"Poistaminen epäonnistui"}
+    current_user_id = session.get("user_id", 0)
+    if survey_service.delete_ranking(survey_id, current_user_id):
+        response = {"status":"1", "msg":"Valinnat poistettu"}
+    return jsonify(response)
 
 @app.route("/get_choices/<int:survey_id>", methods=["POST"])
 def get_choices(survey_id):
     raw_data = request.get_json()
     ranking = ','.join(raw_data)
-    submission = survey_service.add_user_ranking(survey_id, ranking)
+    user_id = session.get("user_id",0)
+    submission = survey_service.add_user_ranking(survey_id, ranking, user_id)
     response = {"status":"1","msg":"Tallennus onnistui."}
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
@@ -166,14 +175,14 @@ def new_survey_post():
     new_survey_id = survey_service.add_new_survey(survey_name)
     if not new_survey_id:
         return redirect("create_survey.html")
-    survey_choices = data["choices"] 
+    survey_choices = data["choices"]
     for choice in survey_choices:
         choice_name = choice["choiceName"]
         max_spaces = choice["choiceMaxSpaces"]
         info1 = choice["choiceInfo1"]
         info2 = choice["choiceInfo2"]
         survey_service.add_survey_choice(new_survey_id, choice_name, max_spaces, info1, info2)
-        
+
     response = {"msg":"Uusi kysely luotu!"}
     return jsonify(response)
 
@@ -194,3 +203,21 @@ def survey_answers():
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=survey_answers,
                            survey_answers_amount=survey_answers_amount)
+
+@app.route("/admintools/", methods = ["GET"])
+def admin_dashboard() -> str:
+    return render_template('/admintools/dashboard.html')
+
+
+@app.route("/api/admintools/reset", methods = ["POST"])
+def reset_database() -> str:
+    '''Drop all database tables and recreate them based on the schema at project root'''
+    data = request.get_json()
+    print(data)
+    db.reflect()
+    db.drop_all()
+    create_clause = data["schema"]
+    for statement in create_clause.split(";")[:-1]:
+        db.session.execute(text(statement + ";"))
+        db.session.commit()
+    return "database reset"

@@ -1,6 +1,6 @@
 '''Module for survey related functions'''
 from sqlalchemy.sql import text
-from app import db
+from src import db
 
 class SurveyTools:
     '''Class for survey related functions'''
@@ -15,7 +15,7 @@ class SurveyTools:
     def fetch_survey_responses(survey):
         '''Returns a list of answers submitted to a certain survey'''
         sql = text ("SELECT user_id, ranking FROM user_survey_rankings " +
-                    "WHERE survey_id=:survey")
+                    "WHERE survey_id=:survey AND deleted IS FALSE")
         result = db.session.execute(sql, {"survey":survey})
         responses = result.fetchall()
         return responses

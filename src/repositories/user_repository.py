@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
-from app import db
+from src import db
 
 class UserRepository:
 
@@ -14,7 +14,7 @@ class UserRepository:
             if check_password_hash(user.password, password):
                 return user
             return False
-        except Exception as e:
+        except Exception as e: # pylint: disable=W0718
             print(e)
             return False
 
@@ -30,7 +30,7 @@ class UserRepository:
             db.session.execute(text(sql), {"firstname":user.firstname, "lastname":user.lastname,
             "student_number":user.student_number, "email":user.email, "password":hash_value, "isteacher":user.isteacher})
             db.session.commit()
-        except Exception as e:
+        except Exception as e: # pylint: disable=W0718
             print(e)
             return False
         return user

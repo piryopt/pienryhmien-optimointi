@@ -6,11 +6,15 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Login</h1>
-  <a href="/">Palaa etusivulle</a></br></br>
+<h2 class="display-4">Kirjaudu sisään</h2>
   <form action="/login" method="POST">
-    Email: <input type="email" name="email"><br>
-    Password: <input type="password" name="password"><br>
-    <button type="submit">Login</button>
-  </form>
+    <label for="email">Sähköposti</label>
+    <input type="email" class="form-control" name="email">
+
+    <label for="password">Salasana</label>
+    <input type="password" class="form-control" name="password"></br>
+
+    <button type="submit" class="btn btn-primary" name="login">Kirjaudu</button>
+  </form></br>
+  <a href="/register">Luo tunnus</a>
 {% endblock %}
