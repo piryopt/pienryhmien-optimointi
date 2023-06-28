@@ -16,7 +16,7 @@ class Hungarian:
 
         #TODO shuffle students before assignment, keep info so that shuffle is repeatable
         variables:
-            self.groups: dictionary of Group objects
+            self.groups: dictionary of Group objects, id as key
             self.students: dictionary of User objects, matrix row id as key
             self.weights: dictionary of weights for group order
             self.prefs: list of lists, each sublist has a student's list
