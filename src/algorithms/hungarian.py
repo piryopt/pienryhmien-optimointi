@@ -17,9 +17,8 @@ class Hungarian:
         #TODO shuffle students before assignment, keep info so that shuffle is repeatable
         variables:
             self.groups: dictionary of Group objects
-            self.students: dictionary of User objects
+            self.students: dictionary of User objects, matrix row id as key
             self.weights: dictionary of weights for group order
-            self.index_to_student_dict: Maps matrix row to student id
             self.prefs: list of lists, each sublist has a student's list
             of group preferences in order
             self.index_to_group_dict: Maps matrix column to group id
@@ -33,9 +32,8 @@ class Hungarian:
         """
 
         self.groups = groups
-        self.students = students
+        self.students = self.map_student_to_index(students)
         self.weights = weights
-        self.index_to_student_dict = {}
         self.prefs = self.student_preferences()
         self.index_to_group_dict = self.create_group_dict()
         self.matrix = self.create_matrix()
@@ -61,13 +59,19 @@ class Hungarian:
         matrix to the group IDs.
         """
         ids = list(itertools.chain.from_iterable([[key]*group.size for key, group in self.groups.items()]))
-        #index_to_group_dict = {}
-        #for i in range(len(group_sizes)):
-        #    for j in range(group_sizes[i]):
-        #        index_to_group_dict[total+j] = i
-        #    total += group_sizes[i]
-        #return index_to_group_dict
         return {index:id for (index, id) in zip(list(range(len(ids))), ids)}
+
+    def map_student_to_index(self, students):
+        """
+        Takes a dictionary of Student objects with id as key
+        returns a dictionary of Student objects with keys corresponding to matrix row indeces
+        """
+        dictionary = {}
+        i = 0
+        for key, student in students.items():
+            dictionary[i] = student
+            i+=1
+        return dictionary
 
     def create_matrix(self):
         """
