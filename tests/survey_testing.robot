@@ -105,7 +105,7 @@ Set Email
 
 Set Name
     [Arguments]  ${name}
-    Input Text  firstname  ${name}
+    Input Text  name  ${name}
 
 Set Student_number
     [Arguments]  ${student_number}
