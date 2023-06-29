@@ -11,6 +11,8 @@ from src.tools import data_gen, excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 from src.services.survey_tools import SurveyTools
+from src.tools.db_data_gen import gen_data
+from src.tools.survey_result_helper import convert_choices_groups, convert_users_students
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -20,7 +22,7 @@ def hello_world() -> str:
     """
     Returns the rendered skeleton template
     """
-    print(f'HEADERS:\n{request.headers["Connection"]}')
+    #print(f'HEADERS:\n{request.headers["Connection"]}')
     return render_template('index.html')
 
 
@@ -134,17 +136,14 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
     email = request.form.get("email")
-    firstname = request.form.get("firstname")
-    lastname = request.form.get("lastname")
+    name = request.form.get("name")
     student_number = request.form.get("student_number")
-    password1 = request.form.get("password1")
-    password2 = request.form.get("password2")
     isteacher = request.form.get("isteacher")
     teacher_priv = False
     if isteacher == "teacher":
         teacher_priv = True
 
-    new_user = user_service.create_user(firstname, lastname, student_number, email, password1, password2, teacher_priv)
+    new_user = user_service.create_user(name, student_number, email, teacher_priv)
     if new_user is None:
         return render_template("register.html")
     return render_template("login.html")
@@ -154,9 +153,8 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
     email = request.form.get("email")
-    password = request.form.get("password")
 
-    logged_in = user_service.check_credentials(email, password)
+    logged_in = user_service.check_credentials(email)
     if not logged_in:
         return render_template("login.html")
     return render_template("index.html")
@@ -208,7 +206,7 @@ def survey_answers():
     survey_answers_amount = len(survey_answers)
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=survey_answers,
-                           survey_answers_amount=survey_answers_amount)
+                           survey_answers_amount=survey_answers_amount, survey_id = survey_id)
 
 @app.route("/admintools/", methods = ["GET"])
 def admin_dashboard() -> str:
@@ -227,3 +225,56 @@ def reset_database() -> str:
         db.session.execute(text(statement + ";"))
         db.session.commit()
     return "database reset"
+
+@app.route("/admintools/gen_data", methods = ["GET", "POST"])
+def admin_gen_data():
+    surveys = SurveyTools.fetch_all_surveys()
+    if request.method == "GET":
+        return render_template("/admintools/gen_data.html", surveys = surveys)
+    
+    if request.method == "POST":
+        student_n = request.form.get("student_n")
+        gen_data.generate_users(int(student_n))
+        gen_data.add_generated_users_db()
+        return render_template("/admintools/gen_data.html", surveys = surveys)
+
+@app.route("/admintools/gen_data/rankings", methods = ["POST"])
+def admin_gen_rankings():
+    survey_id = request.form.get("survey_list")
+    survey_name = survey_service.get_survey_name(survey_id)
+    gen_data.generate_rankings(survey_id)
+
+    survey_answers = SurveyTools.fetch_survey_responses(survey_id)
+    survey_answers_amount = len(survey_answers)
+    return render_template("survey_answers.html",
+                           survey_name=survey_name, survey_answers=survey_answers,
+                           survey_answers_amount=survey_answers_amount, survey_id = survey_id)
+
+@app.route("/admintools/gen_data/survey", methods = ["POST"])
+def admin_gen_survey():
+    gen_data.generate_survey()
+    surveys = SurveyTools.fetch_all_surveys()
+    return render_template("/admintools/gen_data.html", surveys = surveys)
+
+
+
+@app.route("/surveyresults", methods = ["POST"])
+def survey_results():
+    survey_id = request.form.get("survey_id")
+    survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    user_rankings = SurveyTools.fetch_survey_responses(survey_id)
+
+    groups_dict = convert_choices_groups(survey_choices)
+    students_dict = convert_users_students(user_rankings)
+
+    weights = w.Weights(len(groups_dict), len(students_dict), True).get_weights()
+    
+    sort = h.Hungarian(groups_dict, students_dict, weights)
+    sort.run()
+    output_data = sort.get_data()
+
+    return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
+                           time = output_data[1], happiness = output_data[2])
+
+
+

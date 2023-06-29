@@ -7,7 +7,12 @@
 
 {% block content %}
   <h1>Kyselyn vastaukset: {{ survey_name }}</h1>
-  <i>Vastauksia: {{ survey_answers_amount }} kpl</i>
+  <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
+
+  <form action="/surveyresults" method="POST">
+    <input type="hidden" name="survey_id" value="{{ survey_id }}"></input>
+    <button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button>
+</form>
 
   <BR><BR>
     <table id="answers_table" cellspacing="10">

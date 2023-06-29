@@ -20,9 +20,9 @@ class TestSurveyService(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
 
-        user = User("Not on tren", "Testerr", 101010101, "tren4lyfe@tester.com", "passwordxD", True)
+        user = User("Not on tren Testerr", 101010101, "tren4lyfe@tester.com", True)
         ur.register(user)
-        self.user_id = ur.find_by_email(user.email, user.password)[0]
+        self.user_id = ur.find_by_email(user.email)[0]
 
 
     def tearDown(self):

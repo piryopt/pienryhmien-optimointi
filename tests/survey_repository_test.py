@@ -58,8 +58,8 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that adding and deleting user rankings works
         """
-        ur.register(User("Testosterone", "Tester", 1010101011, "testosterone.tester@test.com", "password", True))
-        user_id = ur.find_by_email("testosterone.tester@test.com", "password").id
+        ur.register(User("Testosterone Tester", 1010101011, "testosterone.tester@test.com", True))
+        user_id = ur.find_by_email("testosterone.tester@test.com").id
         test_survey3_id = sr.add_new_survey("Test survey 3")
         for i in range(3):
             sr.add_new_survey_choice(test_survey3_id, "test" + str(i) + "choice", 10, "info1", "info2")

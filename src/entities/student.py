@@ -3,4 +3,3 @@ class Student:
         self.id = id
         self.name = name
         self.selections = selections
-        self.happiness = 1

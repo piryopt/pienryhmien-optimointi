@@ -16,7 +16,7 @@ class SurveyRepository:
 
     def find_survey_choices(self, survey_id):
         try:
-            sql = "SELECT id, name, info1, info2 FROM survey_choices WHERE survey_id=:survey_id"
+            sql = "SELECT * FROM survey_choices WHERE survey_id=:survey_id"
             result = db.session.execute(text(sql), {"survey_id":survey_id})
             survey_choices = result.fetchall()
             return survey_choices
@@ -61,7 +61,7 @@ class SurveyRepository:
 
     def get_survey_choice(self, id):
         try:
-            sql = "SELECT id, name, info1, info2 FROM survey_choices WHERE id=:id"
+            sql = "SELECT * FROM survey_choices WHERE id=:id"
             result = db.session.execute(text(sql), {"id":id})
             ranking = result.fetchone()
             if not ranking:
@@ -73,8 +73,8 @@ class SurveyRepository:
 
     def add_new_survey(self, surveyname):
         try:
-            sql = "INSERT INTO surveys (surveyname, min_choices) VALUES (:surveyname, :min_choices) RETURNING id"
-            result = db.session.execute(text(sql), {"surveyname":surveyname, "min_choices":10})
+            sql = "INSERT INTO surveys (surveyname, min_choices, closed) VALUES (:surveyname, :min_choices, :closed) RETURNING id"
+            result = db.session.execute(text(sql), {"surveyname":surveyname, "min_choices":10, "closed":False})
             db.session.commit()
             survey = result.fetchone()[0]
             if not survey:
