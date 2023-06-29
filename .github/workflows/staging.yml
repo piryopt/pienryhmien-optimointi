@@ -3,7 +3,7 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - connect_algo_data
+      - main
 
 jobs:
 
