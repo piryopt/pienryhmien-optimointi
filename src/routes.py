@@ -12,7 +12,6 @@ import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 from src.services.survey_tools import SurveyTools
 
-from src.entities.new_user import NewUser
 
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
@@ -38,9 +37,7 @@ def token_required(f):
         try:
             # decoding the payload to fetch the stored details
             data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = NewUser.query\
-                .filter_by(public_id = data['public_id'])\
-                .first()
+            current_user = {"foo": "bar"}
         except:
             return jsonify({
                 'message' : 'Token is invalid !!'
