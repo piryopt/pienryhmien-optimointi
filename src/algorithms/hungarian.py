@@ -32,7 +32,8 @@ class Hungarian:
         """
 
         self.groups = groups
-        self.students = self.map_student_to_index(students)
+        self.students = students
+        self.index_to_student_dict = self.map_student_to_index()
         self.weights = weights
         self.prefs = self.student_preferences()
         self.index_to_group_dict = self.create_group_dict()
@@ -51,7 +52,7 @@ class Hungarian:
         self.profit_matrix_to_cost_matrix()
         self.find_assignment()
         end = time.time()
-        self.runtime = end-start
+        self.runtime = end-start 
 
     def create_group_dict(self):
         """
@@ -61,14 +62,14 @@ class Hungarian:
         ids = list(itertools.chain.from_iterable([[key]*group.size for key, group in self.groups.items()]))
         return {index:id for (index, id) in zip(list(range(len(ids))), ids)}
 
-    def map_student_to_index(self, students):
+    def map_student_to_index(self):
         """
-        Takes a dictionary of Student objects with id as key
+        Takes self.students dictionary of Student objects with id as key
         returns a dictionary of Student objects with keys corresponding to matrix row indeces
         """
         dictionary = {}
         i = 0
-        for key, student in students.items():
+        for key, student in self.students.items():
             dictionary[i] = student
             i+=1
         return dictionary
@@ -98,7 +99,7 @@ class Hungarian:
         #TODO index_to_student dictionary, in the final product student ID's might not be consecutive numbers
         #in the questionnaire, students might also be shuffled for the algorithm
 
-        prefs = [[group for group in student.selections] for key, student in self.students.items()]
+        prefs = [[group for group in student.selections] for key, student in self.index_to_student_dict.items()]
         return prefs
 
     def initiate_assigned_groups_dict(self):
@@ -161,8 +162,8 @@ class Hungarian:
 
         for i in range(len(self.prefs)):
             assigned_group = self.index_to_group_dict[col_id[i]]
-            self.assigned_groups[assigned_group].append(i)
-            self.student_happiness[i] = [i, self.prefs[i].index(assigned_group)+1]
+            self.assigned_groups[assigned_group].append(self.index_to_student_dict[i].id)
+            self.student_happiness[i] = [self.index_to_student_dict[i].id, self.prefs[i].index(assigned_group)+1]
 
     def get_data(self):
         """
