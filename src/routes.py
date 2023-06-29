@@ -12,15 +12,50 @@ import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 from src.services.survey_tools import SurveyTools
 
+from src.entities.new_user import NewUser
+
 # Globals
 CONNECTION_URL = os.getenv("DATABASE_URL")
 
+import jwt
+from datetime import datetime, timedelta
+from functools import wraps
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        # jwt is passed in the request header
+        print('\nHeaders:\n')
+        print(request.headers)
+        
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        # return 401 if token is not passed
+        if not token:
+            print("No x-access-token header found")
+            return f(None)
+  
+        try:
+            # decoding the payload to fetch the stored details
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+            current_user = NewUser.query\
+                .filter_by(public_id = data['public_id'])\
+                .first()
+        except:
+            return jsonify({
+                'message' : 'Token is invalid !!'
+            }), 401
+        # returns the current logged in users context to the routes
+        return  f(current_user, *args, **kwargs)
+    return decorated
+
 @app.route("/")
-def hello_world() -> str:
+@token_required
+def hello_world(current_user):
     """
     Returns the rendered skeleton template
     """
-    print(f'HEADERS:\n{request.headers["Connection"]}')
+    print(f'current user: {current_user}')
     return render_template('index.html')
 
 
