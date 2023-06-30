@@ -34,7 +34,7 @@ Main Page 'Kokeile luoda dataa' link is functional
 
 'Kokeile luoda dataa' form in functional
     Go To Toy Data Input Page 
-    Title Should Be    Data input - Piryopt
+    Title Should Be    Data input - Jakaja
     Wait Until Element Is Visible    group_n
     Click Element    group_n
     Input Text        group_n    4
@@ -50,7 +50,7 @@ Main Page 'Kokeile luoda dataa' link is functional
     Click Button  inputbutton
 
 Toy data results are correct
-    Title Should Be     Tulokset - Piryopt
+    Title Should Be     Tulokset - Jakaja
     Page Should Contain     Lajittelun tulokset
     Page Should Contain     Ryhmänvalintojen keskiarvo
     Page Should Contain     1.0. valinta:
@@ -63,4 +63,4 @@ Toy data results are correct
     Log To Console     ${Rows}
     Should Be Equal As Strings    ${TOY DATA COUNT TEST CASE 1}    ${Rows}
     Click Element  ${EXCELBUTTON}
-    Title Should Be     Tulokset - Piryopt
+    Title Should Be     Tulokset - Jakaja

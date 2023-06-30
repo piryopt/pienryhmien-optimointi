@@ -47,7 +47,7 @@ Previous Surveys Page Should Be Open
     Page Should Contain  Kyselyn tila
 
 Excel Page Should Be Open
-    Title Should Be     Tulokset - Piryopt
+    Title Should Be     Tulokset - Jakaja
     Page Should Contain     Lajittelun tulokset
     Page Should Contain     Ryhmänvalintojen keskiarvo
     Page Should Contain     1.0. valinta:
