@@ -47,46 +47,10 @@ class UserRepository:
         try:
             sql = "SELECT * FROM users WHERE id=:id "
             result = db.session.execute(text(sql), {"id":id})
-            users = result.fetchall()
-            if not users:
+            user = result.fetchone()
+            if not user:
                 return False
-            return users
-        except Exception as e: # pylint: disable=W0718
-            print(e)
-            return False
-        
-    def get_student_number(self, id):
-        try:
-            sql = "SELECT student_number FROM users WHERE id=:id "
-            result = db.session.execute(text(sql), {"id":id})
-            student_number = result.fetchone().student_number
-            if not student_number:
-                return False
-            return student_number
-        except Exception as e: # pylint: disable=W0718
-            print(e)
-            return False
-        
-    def get_email(self, id):
-        try:
-            sql = "SELECT email FROM users WHERE id=:id "
-            result = db.session.execute(text(sql), {"id":id})
-            email = result.fetchone().email
-            if not email:
-                return False
-            return email
-        except Exception as e: # pylint: disable=W0718
-            print(e)
-            return False
-        
-    def get_name(self, id):
-        try:
-            sql = "SELECT name FROM users WHERE id=:id "
-            result = db.session.execute(text(sql), {"id":id})
-            name = result.fetchone().name
-            if not name:
-                return False
-            return name
+            return user
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False

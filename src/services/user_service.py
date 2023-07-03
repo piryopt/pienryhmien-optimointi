@@ -45,21 +45,30 @@ class UserService:
         if not id:
             print("user_id required!")
             return False
-        student_number = self._user_repository.get_student_number(id)
+        user = self._user_repository.get_user_data(id)
+        if not user:
+            return False
+        student_number = user.student_number
         return student_number
     
     def get_email(self, id):
         if not id:
             print("user_id required!")
             return False
-        email = self._user_repository.get_email(id)
+        user = self._user_repository.get_user_data(id)
+        if not user:
+            return False
+        email = user.email
         return email
     
     def get_name(self, id):
         if not id:
             print("user_id required!")
             return False
-        name = self._user_repository.get_name(id)
+        user = self._user_repository.get_user_data(id)
+        if not user:
+            return False
+        name = user.name
         return name
 
     def logout(self):
