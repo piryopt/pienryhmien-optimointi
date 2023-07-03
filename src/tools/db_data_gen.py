@@ -11,7 +11,7 @@ class DbDataGen:
                              "Donald", "Steven", "Andrew", "Paul", "Joshua", "Mary", "Patricia", "Jennifer",
                                "Linda", "Elizabeth", "Barbara", "Susan", "Jessica", "Sarah", "Karen", "Lisa",
                                  "Nancy", "Betty", "Sandra", "Margaret", "Ashley", "Kimberly", "Emily", "Donna", "Michelle"]
-        
+
         self.lastnames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez",
                            "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore",
                              "Martin", "Jackson", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis",
@@ -20,7 +20,7 @@ class DbDataGen:
         
         self.numbers = [0,1,2,3,4,5,6,7,8,9]
         self.users = []
-        
+
     def generate_users(self, n):
         for i in range(n):
             firstname = choice(self.firstnames)
@@ -77,8 +77,5 @@ class DbDataGen:
         sr.add_new_survey_choice(survey_id, choice_name8, 11, "Jari Korhonen", "Aleksanterinkatu 14, Lahti")
         sr.add_new_survey_choice(survey_id, choice_name9, 11, "Maria Virtanen", "Rantakatu 5, Joensuu")
         sr.add_new_survey_choice(survey_id, choice_name10, 11, "Antti Jokinen", "Rauhankatu 6, Hämeenlinna")
-        
-
-
 
 gen_data = DbDataGen()
