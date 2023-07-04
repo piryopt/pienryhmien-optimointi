@@ -3,7 +3,7 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - tables_and_data_changes
+      - main
 
 jobs:
 
