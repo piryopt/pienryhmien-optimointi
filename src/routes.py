@@ -61,7 +61,7 @@ def results():
 
     groups_dict = data_gen.generate_groups(group_n, group_size)
     students_dict = data_gen.generate_students(student_n, groups_dict)
-    weights = w.Weights(group_n, student_n, True).get_weights()
+    weights = w.Weights(group_n, student_n).get_weights()
 
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
@@ -73,7 +73,7 @@ def results():
 def excel():
     groups_dict = excelreader.create_groups()
     students_dict = excelreader.create_students(groups_dict)
-    weights = w.Weights(len(groups_dict), len(students_dict), True).get_weights()
+    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
 
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
@@ -267,7 +267,7 @@ def survey_results():
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
 
-    weights = w.Weights(len(groups_dict), len(students_dict), True).get_weights()
+    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
     
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
