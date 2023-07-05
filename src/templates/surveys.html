@@ -30,7 +30,7 @@
             <form action="/survey_answers/{{row[0]}}" method="post">
             <input type="hidden" name="survey_id" value="{{ row[0] }}">
             <input type="hidden" name="survey_name" value="{{ row[1] }}">
-            <input type="submit" value="Tarkastele tuloksia">
+            <input type="submit" id="{{ row[1] }}"value="Tarkastele tuloksia">
             </form>
           </td>
 
