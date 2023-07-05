@@ -40,6 +40,36 @@ class UserService:
             print("Name is too short!")
             return False
         return True
+    
+    def get_student_number(self, id):
+        if not id:
+            print("user_id required!")
+            return False
+        user = self._user_repository.get_user_data(id)
+        if not user:
+            return False
+        student_number = user.student_number
+        return student_number
+    
+    def get_email(self, id):
+        if not id:
+            print("user_id required!")
+            return False
+        user = self._user_repository.get_user_data(id)
+        if not user:
+            return False
+        email = user.email
+        return email
+    
+    def get_name(self, id):
+        if not id:
+            print("user_id required!")
+            return False
+        user = self._user_repository.get_user_data(id)
+        if not user:
+            return False
+        name = user.name
+        return name
 
     def logout(self):
         del session["email"]

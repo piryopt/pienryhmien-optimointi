@@ -1,6 +1,6 @@
 from src.entities.group import Group
 from src.entities.student import Student
-from src.repositories.user_repository import user_repository
+from src.services.user_service import user_service
 
 def convert_choices_groups(survey_choices):
     groups = {}
@@ -12,9 +12,8 @@ def convert_users_students(user_rankings):
     students = {}
     for user_ranking in user_rankings:
         user_id = user_ranking[0]
-        user = user_repository.get_user_data(user_id)
+        name = user_service.get_name(user_id)
         ranking = user_ranking[1].split(",")
         int_ranking = [int(i) for i in ranking]
-        student_name = user[0].name
-        students[user_id] = Student(user_id, student_name, int_ranking)
+        students[user_id] = Student(user_id, name, int_ranking)
     return students
