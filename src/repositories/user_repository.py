@@ -47,10 +47,10 @@ class UserRepository:
         try:
             sql = "SELECT * FROM users WHERE id=:id "
             result = db.session.execute(text(sql), {"id":id})
-            users = result.fetchall()
-            if not users:
+            user = result.fetchone()
+            if not user:
                 return False
-            return users
+            return user
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False

@@ -6,34 +6,32 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Aiemmat kyselyt</h1>
+  <h2>Aiemmat kyselyt</h2>
 
-  <BR><BR>
-    <table id="results_table" cellspacing="10">
-        <tr align="left">
-            <th>Kyselyn nimi </th>
-            <th>Kyselyn tila </th>
+  <BR>
+    <table id="results_table" cellspacing="10" class="table">
+      <thead class="table-primary">
+        <tr>
+            <th scope="col">Kyselyn nimi </th>
+            <th scope="col">Kyselyn tila </th>
             <!-- <th>Vastauksia yhteensä</th> -->
-            <th>Toiminnot</th>
-            <th>Linki kyselyyn</th>
+            <th scope="col">Toiminnot</th>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <!--The data is expected to be as a list ("results") containing lists-->
           {% for row in search_results %}
-          <td>{{ row[1] }}</td>       <!--survey name--> 
+          <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
           <td>avoinna</td>            <!--survey status - functionality to be added later--> 
           <!-- <td>{{ row[2] }}</td>-->        <!--amount of answers - functionality to be added later--> 
-
+          
           <td>
-            <form action="/survey_answers" method="post">
+            <form action="/survey_answers/{{row[0]}}" method="post">
             <input type="hidden" name="survey_id" value="{{ row[0] }}">
             <input type="hidden" name="survey_name" value="{{ row[1] }}">
             <input type="submit" value="Tarkastele tuloksia">
             </form>
-          </td>
-          <td>
-            
-            <a href="/surveys/{{ row[0] }}">{{ row[1] }}</a>
           </td>
 
 
@@ -42,6 +40,7 @@
 
         </tr>
         {% endfor %}
-        
+      </tbody>
     </table>
+    
 {% endblock %}

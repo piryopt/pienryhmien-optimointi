@@ -8,8 +8,8 @@ Suite Teardown  Close Browser
 
 
 *** Variables ***
-${DATA COUNT}    105
-${TOY DATA COUNT TEST CASE 1}    18
+${DATA COUNT}    104
+${TOY DATA COUNT TEST CASE 1}    17
 ${EXCELBUTTON}    xpath=//button[@type='submit' and contains(text(),'Vie tulokset Excel-taulukkoon')]
 # Note: it counts the header riw as 2 rows
 
