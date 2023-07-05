@@ -105,7 +105,7 @@ Survey Submitting Works Test
     Click Element  ${LOGINBUTTON}
     Main Page Should Be Open
     Go To Previous Surveys Page
-    Scroll Element Into View  Best robots
+    Run Keyword And Ignore Error  Scroll Element Into View  Best robots
     Click Link  Best robots
     Page Should Contain  Best robots
     Click Button  Lähetä valinnat
@@ -115,14 +115,14 @@ Survey Submitting Works Test
 
 Show More Choice Info Test
     Go To Previous Surveys Page
-    Scroll Element Into View  Best robots
+    Run Keyword And Ignore Error  Scroll Element Into View  Best robots
     Click Link  Best robots
     Click Element  xpath://*[contains(text(), "Megatron")]
     Page Should Contain  NOBODY SUMMONS MEGATRON
 
 Removing Submission Works Test
     Go To Previous Surveys Page
-    Scroll Element Into View  Best robots
+    Run Keyword And Ignore Error  Scroll Element Into View  Best robots
     Click Link  Best robots
     Click Button  Poista valinnat
     Click Button  id:confirmDelete
