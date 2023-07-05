@@ -3,7 +3,7 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - main
+      - survey_tests_and_more
 
 jobs:
 
