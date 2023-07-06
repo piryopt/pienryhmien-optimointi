@@ -17,8 +17,8 @@
             });
     })
   </script>
-
-<h2 class="display-4">Luo uusi kysely</h2>
+</br>
+<h2><img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}" alt="" class="d-inline-block align-text-top">  Luo uusi kysely</h2>
 
     <label for="groupname">Kyselyn nimi</label>
     <br/>
@@ -26,13 +26,14 @@
     <br/>
     <h2>Priorisoitavat ryhmät</h2>
 
-    <table class="choice-table">
-      <thead>
+    <table class="table table-striped">
+      <thead class="table-dark">
         <tr>
           <th>Nimi</th>
           <th>Enimmäispaikat</th>
           <th>Lisätietokenttä 1</th>
           <th>Lisätietokenttä 2</th>
+          <th>Muokkaa/Vahvista</th>
         </tr>
       </thead>
       <tbody id="choiceTable">
@@ -57,5 +58,27 @@
     </table>
     <br/><br/><br/>
     <button type="submit" class="btn btn-primary" value="Luo kysely" onclick="createNewSurvey()" name="createsurvey">Luo kysely</button>
+
+    <div id="deleteContainer" style="display: none;">
+      <input type="button" id="deleteSubmission" value="Poista valinnat">
+      <script>
+          $("#deleteSubmission").click(function() {
+              $("#confirmContainer").show();
+          });
+      </script>
+    </div>
+
+    <div id="confirmContainer" style="display: none;">
+        <p>Oletko varma?</p>
+        <input type="button" id="noDeletion" value="Peruuta">
+        <script>
+            $("#noDeletion").click(function() {
+                $("#submitExists").show();
+                $("#deleteContainer").show();
+                $("#confirmContainer").hide();
+            });
+        </script>
+        <input type="button" id="confirmDelete" value ="Poista" onclick="createNewSurvey()">
+    </div>
 
 {% endblock %}
