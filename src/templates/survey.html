@@ -14,9 +14,11 @@
             $( function() {
                 $( "#sortable1" ).sortable({
                     cursor: 'grabbing',
-                    revert: true,
+                    revert: 50,
                     helper: 'clone',
-                    axis: 'y'
+                    axis: 'y',
+                    containment: 'parent',
+                    tolerance: 'pointer'
                 });
 
                 $("#sortable1 li").on("click", function() {
@@ -24,9 +26,9 @@
                 });
             });
         </script>
-        <ul id="sortable1" class="connectedSortable" style="color: #fff;">
+        <ul id="sortable1" class="connectedSortable">
             {% for group in choices %}
-            <li class="ui-state-default" id="{{ group[0] }}" style="background-color: #076aa3;">{{ group[2] }}</li>
+            <li class="ui-state-default" id="{{ group[0] }}">{{ group[2] }}</li>
             {% endfor %}
         </ul>
         <div id="submitExists" style="display: none;">

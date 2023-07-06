@@ -33,6 +33,7 @@ h1 {
     padding: 5px 0 0 0;
     float: left;
     margin-right: 10px;
+    color: #fff;
 }
 
 #sortable1 li, #sortable2 li {
@@ -41,7 +42,7 @@ h1 {
     margin: 0 5px 5px 5px;
     padding: 5px;
     font-size: 1.2em;
-    background-color: cyan;
+    background-color: #076aa3;
     cursor: grab;
 }
 
