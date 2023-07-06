@@ -16,8 +16,8 @@
 <a href="/previous_surveys">Palaa kyselylistaan</a>
 
   <BR><BR>
-    <table id="answers_table" cellspacing="10" class="table">
-      <thead class="table-primary">
+    <table id="answers_table" cellspacing="10" class="table table-striped">
+      <thead class="table-dark">
         <tr>
             <th>Sähköposti</th>
             <th>Valinnat</th>
@@ -26,8 +26,8 @@
       <tbody>
         <tr>
         {% for row in survey_answers %}
-          <td>{{ row[0] }}</td>
-          <td>{{ row[1] }}</td>
+          <td><p>{{ row[0] }}</p></td>
+          <td><p>{{ row[1] }}</p></td>
         </tr>
         {% endfor %}
       </tbody>

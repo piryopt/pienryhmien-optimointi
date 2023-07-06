@@ -1,5 +1,11 @@
-h1 {
-    color: red;
+h1, h2, h3, h4, h5, label {
+    color: rgb(255, 255, 255);
+    opacity: 0.8;
+}
+
+b, small {
+    color: rgb(255, 255, 255);
+    opacity: 0.9;
 }
 
 .left {
@@ -56,3 +62,37 @@ h1 {
     text-align: center;
     padding-top: 10px;
 }
+
+p, i {
+    color: rgb(255, 255, 255);
+    opacity: 0.8;
+}
+
+
+.navbar {
+    -webkit-box-shadow: 0 8px 6px -6px #000000;
+    -moz-box-shadow: 0 8px 6px -6px #000000;
+    box-shadow: 0 8px 6px -6px #000000;
+}
+
+.list-group-item {
+    -webkit-box-shadow: 0 8px 6px -6px #000000;
+    -moz-box-shadow: 0 8px 6px -6px #000000;
+    box-shadow: 0 8px 6px -6px #000000;
+    background-color: rgb(24, 26, 27);
+  }
+.list-group-item:hover {
+    background-color: rgb(24, 26, 27);
+    opacity: 0.5;
+}
+
+.btn-light {
+    background-color: #5e0474;
+}
+
+.navbar-expand-lg {
+    background-color: #5e0474;
+}
+
+body {background-color: rgb(24, 26, 27);}
+
