@@ -66,8 +66,8 @@ def results():
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
-    return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
-                           time = output_data[1], happiness = output_data[2])
+    return render_template("results.html", results = output_data[0],
+                           happiness_data = output_data[2], happiness = output_data[1])
 
 @app.route("/excel")
 def excel():
@@ -78,8 +78,8 @@ def excel():
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
-    return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
-                           time = output_data[1], happiness = output_data[2])
+    return render_template("results.html", results = output_data[0],
+                           happiness_data = output_data[2], happiness = output_data[1])
 
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
@@ -273,8 +273,8 @@ def survey_results():
     sort.run()
     output_data = sort.get_data()
 
-    return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
-                           time = output_data[1], happiness = output_data[2])
+    return render_template("results.html", results = output_data[0],
+                           happiness_data = output_data[2], happiness = output_data[1])
 
 
 

@@ -2,46 +2,76 @@ import unittest
 import numpy as np
 from src.entities.group import Group
 from src.entities.student import Student
+from src.algorithms.weights import Weights
 from src.algorithms.hungarian import Hungarian
 from copy import deepcopy
 
 class TestHungarian(unittest.TestCase):
     def setUp(self):
         """
-        Sets up a small number of groups and students with trivial weights,
+        Sets up a small number of groups and students with appropriate weights,
         inputs them to the hungarian algorithm and calls functions to run
-        the algorithm and saves some of the data structures for tests
+        the algorithm while saving some of the preliminary data structures for tests
         """
-        small_groups = {0:Group(0,'A',2), 1:Group(1,'B',1), 2:Group(2,'C',1)}
-        few_students = {0:Student(0, 'A', [0,1,2]),
-                        1:Student(1, 'B', [0,2,1]),
-                        2:Student(2, 'C', [2,0,1])}
-        small_weights = {0:20, 1:10, 2:0}
-        self.h = Hungarian(small_groups, few_students, small_weights)
+        self.groups = {22:Group(22,'Ducks',2), 14:Group(14,'Geese',1), 55:Group(55,'Mallards',1)}
+        self.students = {114:Student(114, 'Jane', [22,14,55]),
+                        367:Student(367, 'Joe', [22,55,14]),
+                        847:Student(847, 'Janet', [55,22,14])}
+        self.weights = Weights(len(self.groups), len(self.students)).get_weights()
+        self.h = Hungarian(self.groups, self.students, self.weights)
         self.original_matrix = self.h.matrix
         self.original_assigned_groups_dict = deepcopy(self.h.assigned_groups)
         self.original_student_happiness = self.h.student_happiness
-        self.h.run()
-        
+        self.h.reshape_matrix()
+        self.reshaped_matrix = self.h.matrix
+        self.h.profit_matrix_to_cost_matrix()
+        self.h.find_assignment()
 
-    def test_create_group_dict(self):
+    def test_students_saved(self):
+        """
+        Checks student names to see the students are saved correctly
+        """
+        names = [student.name for key, student in self.h.students.items()]
+        self.assertEqual(names, ['Jane', 'Joe', 'Janet'])
+
+    def test_groups_saved(self):
+        """
+        Checks group names to see the groups are saved correctly
+        """
+        names = [group.name for key, group in self.h.groups.items()]
+        self.assertEqual(names, ['Ducks', 'Geese', 'Mallards'])
+
+    def test_weights_saved(self):
+        """
+        Checks saved weights keys to see that keys neede by the algorithm are found
+        """
+        keys = [key for key, weight in self.h.weights.items()]
+        self.assertEqual(keys, [0, 1, 2, -1, None])
+
+    def test_create_student_to_id_dict(self):
+        """
+        Tests that the dictionary mapping matrix indices to student IDs
+        contains the correct student IDs
+        """
+        student_ids = [student for key, student in self.h.index_to_student_dict.items()]
+        self.assertEqual(student_ids, [114,367,847])
+
+    def test_create_group_to_id_dict(self):
         """
         Tests that the group dictionary mapping matrix indices to groups
-        creates the correct dictionary by getting group id's by key
-        into a list from index_to_group_dict
+        creates the correct dictionary by checking the list of group IDs
         """
         group_ids = [group for key,group in self.h.index_to_group_dict.items()]
-        self.assertEqual(group_ids, [0, 0, 1, 2])
+        self.assertEqual(group_ids, [22, 22, 14, 55])
 
     def test_initial_matrix_created_correctly(self):
         """
-        Tests that the matrix created matches the given groups and students before
-        the step adding empty rows
+        Tests that matrix initially contains correct weights
         """
         np.testing.assert_array_equal(self.original_matrix,
-                                      np.array([[20, 20, 10, 0],
-                                                [20, 20, 0, 10],
-                                                [10, 10, 0, 20]]))
+                                      np.array([[15, 15, 12, 9],
+                                                [15, 15, 9, 12],
+                                                [12, 12, 9, 15]]))
 
     def test_that_assigned_groups_dict_has_correct_number_of_groups_initially(self):
         """
@@ -62,23 +92,38 @@ class TestHungarian(unittest.TestCase):
         """
         self.assertEqual(np.shape(self.original_student_happiness),(len(self.h.students), 2))
 
-    def test_that_matrix_is_nxn(self):
+    def test_that_reshaped_matrix_is_nxn(self):
         """
         The algorithm needs and nxn algorithm, test that after matrix has been reshaped
         the matrix is square
         """
-        x, y = np.shape(self.h.matrix)
+        x, y = np.shape(self.reshaped_matrix)
         self.assertEqual(x, y)
 
     def test_nxn_matrix_adds_empty_rows_to_bottom(self):
         """
         Test that empty rows in creating nxn matrix have been added to the bottom
-
-        Note! This test will break and need to be modified once algorithm is modified so
-        that the empty value is not the highest to give the highest values to people who
-        can't be placed in a certain group
+        by checking that top part matches original matrix
         """
-        self.assertEqual(sum(self.h.matrix[-1]), 80)
+        np.testing.assert_array_equal(self.reshaped_matrix[0:3,], self.original_matrix)
+
+    def tests_that_reshape_pads_with_correct_minimum_weight(self):
+        """
+        Checks that the number of unique values on the padded row is 1 and
+        that it matches the empty weight (key -1) in the weights dictionary
+        """
+        values = np.unique(self.reshaped_matrix[-1])
+        self.assertEqual((len(values),values[0]),(1,self.weights[-1]))
+
+    def test_profit_to_cost_matrix_works_correctly(self):
+        """
+        Checks that row 0 col 0 value that was previously highest value is 0
+        after hungarian function profit_matrix_to_cost_matrix and that the
+        previously lowest value used for padding the matrix  is now
+        the highest value in the matrix
+        """
+        max = np.max(self.h.matrix)
+        self.assertEqual((self.h.matrix[0,0],self.h.matrix[3,3]),(0,max))
 
     def test_students_sorted_to_correct_groups(self):
         """
@@ -86,42 +131,57 @@ class TestHungarian(unittest.TestCase):
         to see that students are put in their favourite groups
         """
         assigned_groups = [students for key,students in self.h.assigned_groups.items()]
-        self.assertEqual(assigned_groups, [[0,1], [], [2]])
+        self.assertEqual(assigned_groups, [[114,367], [], [847]])
+
+    def tests_student_happiness_updated_after_group_assignment(self):
+        """
+        Tests that no student happiness score is 0 after assignment
+        This group assinment should have all students in their first preference
+        so test checks that all values are 1
+        """
+        values = np.unique(self.h.student_happiness[:,1])
+        self.assertEqual((len(values),values[0]),(1,1))
+
+    def test_algorithm_function_run_calls_correct_functions(self):
+        """
+        Tests that after reverting algo matrix to original matrix and calling run()
+        the resulting algorithm is equal to the matrix resulting from manually calling
+        appropriate functions in setUp
+        """
+        ref = self.h.matrix
+        self.h.matrix = self.original_matrix
+        self.h.run()
+        np.testing.assert_array_equal(self.h.matrix,ref)
 
     def test_get_data_returns_correct_size_tuple(self):
         """
         Calls get data and tests that the tuple has 4 members
         """
-        self.assertEqual(len(self.h.get_data()), 4)
-
-    def test_profit_matrix_to_cost_matrix(self):
-        """
-        Creates a new small instance of hungarian algorithm to test that
-        the profit matrix to cost matrix works as intended
-        """
-        small_groups = {0:Group(0,'A',1), 1:Group(1,'B',1), 2:Group(2,'C',1)}
-        few_students = {0:Student(0, 'A', [0,1,2]),
-                        1:Student(1, 'B', [0,2,1]),
-                        2:Student(2, 'C', [2,0,1])}
-        small_weights = {0:20, 1:10, 2:0}
-        h = Hungarian(small_groups, few_students, small_weights)
-        h.profit_matrix_to_cost_matrix()
-        np.testing.assert_array_equal(h.matrix, np.array([[0,10,20],[0,20,10],[10,20,0]]))
+        self.assertEqual(len(self.h.get_data()), 3)
 
     def test_reshape_matrix_can_add_empty_columns(self):
         """
-        Creates a small instance of hungarian algorithm to test that if the algorithm
-        needs added columns to the matrix, they are empty
+        Adds students to the student pool until number of students is higher than number
+        of spots available for students.
+        Checks that last column has only one unique value that is equal to weights
+        value for key -1
         """
-        small_groups = {0:Group(0,'A',1), 1:Group(1,'B',1), 2:Group(2,'C',1)}
-        few_students = {0:Student(0, 'A', [0,1,2]),
-                        1:Student(1, 'B', [0,2,1]),
-                        2:Student(2, 'C', [2,0,1]),
-                        3:Student(3, 'C', [1,0,2])}
-        small_weights = {0:20, 1:10, 2:0}
-        h = Hungarian(small_groups, few_students, small_weights)
+        self.students[999] = Student(999, 'Bob', [22,14,55])
+        self.students[654] = Student(654, "Ginny", [14,22,55])
+        weights = Weights(len(self.groups), len(self.students)).get_weights()
+        h = Hungarian(self.groups, self.students, weights)
         h.reshape_matrix()
-        np.testing.assert_array_equal(h.matrix, np.array([[20,10,0,0],
-                                                          [20,0,10,0],
-                                                          [10,0,20,0],
-                                                          [10,20,0,0]]))
+        values = np.unique(h.matrix[:,-1])
+        self.assertEqual((len(values), values[0]),(1,weights[-1]))
+
+    def test_that_reshape_does_not_add_columns_if_not_needed(self):
+        """
+        Adds one student so that available spots is equal to number of students
+        and matrix should not be padded
+        """
+        self.students[999] = Student(999, 'Bob', [22,14,55])
+        weights = Weights(len(self.groups), len(self.students)).get_weights()
+        h = Hungarian(self.groups, self.students, weights)
+        ref = h.matrix
+        h.reshape_matrix()
+        np.testing.assert_array_equal(h.matrix, ref)
