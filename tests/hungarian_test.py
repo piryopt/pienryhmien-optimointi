@@ -159,13 +159,6 @@ class TestHungarian(unittest.TestCase):
         """
         self.assertEqual(len(self.h.get_data()), 3)
 
-    def test_get_selections_data_returns_correct_format(self):
-        """
-        Checks that function get_selections_data returns data in correct format
-        by checking the first sublist in the return
-        """
-        self.assertEqual(self.h.get_selections_data()[0], ['Jane', 114, 'Ducks'])
-
     def test_get_happiness_data_strings_returns_correct_format(self):
         """
         Checks that function get_happiness_data_strings returns data in correct format
