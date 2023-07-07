@@ -1,4 +1,4 @@
-# Jakaja application for small group optimization
+# Jakaja application for small group assignment optimization
 ![GHA workflow badge](https://github.com/piryopt/pienryhmien-optimointi/workflows/CI/badge.svg)
 
 This is the repository of the final product of the [Software Engineering Lab course](https://studies.helsinki.fi/courses/cur/otm-96ddc0a9-a15b-4717-bfdc-23872092b730) (the department of Computer Science in University of Helsinki). 
@@ -15,3 +15,7 @@ Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/wiki/
 [Database documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/database_doc.md)
 
 User guide (TBA)
+
+Application architecture (TBA)
+
+Application logic (TBA)
