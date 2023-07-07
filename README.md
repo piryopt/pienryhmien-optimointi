@@ -22,6 +22,8 @@ Application logic (TBA)
 
 Privacy statement (TBA)
 
+Licensing information (TBA)
+
 
 ### Project team
 
