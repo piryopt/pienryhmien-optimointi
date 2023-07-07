@@ -4,10 +4,7 @@ window.onload = function() {
 
 function submit(resubmit) {
     var choiceIDs = $("#sortable1").sortable("toArray");
-    var alertContainer = document.getElementById("message");
     var surveyID = document.getElementById("survey_id").value;
-    alertContainer.style.display = "block";
-
 
     $.ajax({
     type: "POST",
@@ -16,53 +13,62 @@ function submit(resubmit) {
     contentType: "application/json",
     dataType: "json",
     success: function(result) {
-        alertContainer.innerHTML = result.msg;
-        var fade = document.getElementById("fade");
+        var alertMsg = {
+            msg: result.msg,
+            color: ""
+        }
         if (result.status === "1") {
-            fade.style.backgroundColor = "#6F0";
+            alertMsg.color = "#6F0";
         }
         if (result.status === "0") {
-            fade.style.backgroundColor = "red";
+            alertMsg.color = "red";
         }
-        if (fade.style.display === "none") {
-            fade.style.display = "block";
-        }
+        showAlert(alertMsg);
         if (resubmit === 1) {
             $("#submitExists").toggle();
             $("#submitDoesntExist").toggle();
             $("#deleteContainer").toggle();
-        }
-        $("#fade").delay(3000).fadeOut(500);        
+        }        
     }
     });
 }
 
-function deleteSubmission() {
+function showAlert(props) {
     var alertContainer = document.getElementById("message");
-    var surveyID = document.getElementById("survey_id").value;
+    var fade = document.getElementById("fade");
+
     alertContainer.style.display = "block";
+    alertContainer.innerHTML = props.msg;
+    fade.style.backgroundColor = props.color;
+    if (fade.style.display === "none") {
+        fade.style.display = "block";
+    }
+    $("#fade").delay(3000).fadeOut(500);
+}
+
+function deleteSubmission() {
+    var surveyID = document.getElementById("survey_id").value;
 
     $.ajax({
         type: "POST",
         url: "/surveys/" + surveyID + "/deletesubmission",
         success: function(result) {
-            alertContainer.innerHTML = result.msg;
-            var fade = document.getElementById("fade");
+            var alertMsg = {
+                msg: result.msg,
+                color: ""
+            }
             if (result.status === "1") {
-                fade.style.backgroundColor = "#6F0";
+                alertMsg.color = "#6F0";
             }
             if (result.status === "0") {
-                fade.style.backgroundColor = "red";
+                alertMsg.color = "red";
             }
-            if (fade.style.display === "none") {
-                fade.style.display = "block";
-            }
+            showAlert(alertMsg);
             $("#submitExists").hide();
             $("#submitDoesntExist").show();
             $("#deleteContainer").hide()
             $("#confirmContainer").hide()
             
-            $("#fade").delay(3000).fadeOut(500);
         }
     });
 }
