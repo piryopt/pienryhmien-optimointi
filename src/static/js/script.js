@@ -74,21 +74,42 @@ function deleteSubmission() {
 }
 
 function showMoreInfo(choiceID) {
-    var surveyID = document.getElementById("survey_id").value;
     var infoContainer = document.getElementById("info-container");
+    var currentlySelected = document.getElementById("currently_selected").value;
 
-    $.ajax({
-        type: "POST",
-        url: "/surveys/getinfo",
-        data: JSON.stringify(choiceID),
-        contentType: "application/json",
-        dataType: "html",
-        success: function(result) {
-            infoContainer.innerHTML = result;
-        }
-    });
+    if (currentlySelected === "") {
+        $.ajax({
+            type: "POST",
+            url: "/surveys/getinfo",
+            data: JSON.stringify(choiceID),
+            contentType: "application/json",
+            datatype: "html",
+            success: function(result) {
+                infoContainer.innerHTML = result;
+                $('input[id="currently_selected"]').val(choiceID);
+            }
+        });
+    }
+    
+    if (currentlySelected != choiceID) {
+        $.ajax({
+            type: "POST",
+            url: "/surveys/getinfo",
+            data: JSON.stringify(choiceID),
+            contentType: "application/json",
+            dataType: "html",
+            success: function(result) {
+                infoContainer.innerHTML = result;
+                $('input[id="currently_selected"]').val(choiceID);
+            }
+        });
+    } else {
+        infoContainer.innerHTML = "";
+        $('input[id="currently_selected"]').val("");
+    }
 }
 
 function exitMoreInfo() {
     document.getElementById("info-container").innerHTML = "";
+    $('input[id="currently_selected"]').val("");
 }
