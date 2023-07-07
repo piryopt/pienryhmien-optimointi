@@ -1,6 +1,7 @@
 import itertools
 import numpy as np
 from scipy.optimize import linear_sum_assignment
+from src.services.user_service import user_service
 
 class Hungarian:
 
@@ -146,8 +147,8 @@ class Hungarian:
         selections = []
         for group in self.assigned_groups:
             for student in self.assigned_groups[group]:
-                selections.append([self.students[student].name, student, self.groups[group].name])
-        return selections
+                student_number = user_service.get_student_number(student)
+                selections.append([self.students[student].name, student_number, self.groups[group].name])
 
     def get_happiness_data_strings(self):
         """

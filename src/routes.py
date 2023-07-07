@@ -14,9 +14,6 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students
 
-# Globals
-CONNECTION_URL = os.getenv("DATABASE_URL")
-
 @app.route("/")
 def hello_world() -> str:
     """
@@ -24,30 +21,6 @@ def hello_world() -> str:
     """
     #print(f'HEADERS:\n{request.headers["Connection"]}')
     return render_template('index.html')
-
-
-
-@app.route("/db_connection_test")
-def db_connection_test():
-    conn = None
-    try:
-        conn = psycopg2.connect(CONNECTION_URL)
-        cursor = conn.cursor()
-        sql = "SELECT * FROM users"
-        cursor.execute(text(sql))
-        for i in cursor.fetchall():
-            print(i)
-        conn.close()
-        sql = "SELECT * FROM users"
-        result = db.session.execute(text(sql))
-        user = result.fetchone()
-        print(user)
-        #return "<pre><code>" + str(conn) + "</code></pre>"
-        return user.email
-    except Exception as e:
-        conn.close()
-        print(e)
-        return "<code>" + str(e) + "</code>"
 
 @app.route("/input")
 def input() -> str:
@@ -197,21 +170,22 @@ def previous_surveys():
     search_results = SurveyTools.fetch_all_surveys()
     return render_template("surveys.html", search_results=search_results)
 
-@app.route("/survey_answers", methods = ["post"])
-def survey_answers():
+@app.route("/survey_answers/<int:survey_id>", methods = ["post"])
+def survey_answers(survey_id):
     '''For displaying answers on a certain survey'''
-    survey_id = request.form["survey_id"]
     survey_name = request.form["survey_name"]
     survey_answers = SurveyTools.fetch_survey_responses(survey_id)
+    choices_data = []
+    for s in survey_answers:
+        choices_data.append([user_service.get_email(s[0]), s[1]])
     survey_answers_amount = len(survey_answers)
     return render_template("survey_answers.html",
-                           survey_name=survey_name, survey_answers=survey_answers,
+                           survey_name=survey_name, survey_answers=choices_data,
                            survey_answers_amount=survey_answers_amount, survey_id = survey_id)
 
 @app.route("/admintools/", methods = ["GET"])
 def admin_dashboard() -> str:
     return render_template('/admintools/dashboard.html')
-
 
 @app.route("/api/admintools/reset", methods = ["POST"])
 def reset_database() -> str:
@@ -255,8 +229,6 @@ def admin_gen_survey():
     gen_data.generate_survey()
     surveys = SurveyTools.fetch_all_surveys()
     return render_template("/admintools/gen_data.html", surveys = surveys)
-
-
 
 @app.route("/surveyresults", methods = ["POST"])
 def survey_results():

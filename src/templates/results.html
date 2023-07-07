@@ -29,13 +29,16 @@
 <b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
 
 <BR><BR>
-<table id="results_table">
-    <tr>
-        <th>nimi</th>
-        <th>opiskelijanumero</th>
-        <th>ryhmä</th>
-    </tr>
+<table id="results_table" cellspacing="10" class="table">
+    <thead class="table-primary">
+        <tr>
+            <th>nimi</th>
+            <th>opiskelijanumero</th>
+            <th>ryhmä</th>
+        </tr>
+    </thead>
     <tr></tr>
+    <tbody>
     <tr>
         <!--The data is expected to be as a list ("results") containing 3 cell long list-->
         {% for row in results %}
@@ -45,7 +48,7 @@
         
     </tr>
     {% endfor %}
-    
+    </tbody>
 </table>
 </div>
 

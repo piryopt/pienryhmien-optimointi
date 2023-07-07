@@ -19,7 +19,7 @@ ${TOY DATA RESULTS URL}  http://${SERVER}/results
 *** Keywords ***
 Open And Configure Browser
     Open Browser  browser=${BROWSER}
-    Maximize Browser Window
+    Set Window Size  1920  1080
     Set Selenium Speed  ${DELAY}
 
 Main Page Should Be Open
