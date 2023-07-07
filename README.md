@@ -23,9 +23,9 @@ Application logic (TBA)
 
 ### Project team
 
-Mikko Anttonen
-Katja Kvintus
-Viljami Latvala
-Heli Parviainen
-Rasmus Salmela
-Jerry Tammi
+- Mikko Anttonen
+- Katja Kvintus
+- Viljami Latvala
+- Heli Parviainen
+- Rasmus Salmela
+- Jerry Tammi
