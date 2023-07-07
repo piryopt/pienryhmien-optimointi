@@ -69,7 +69,6 @@ p, i {
     opacity: 0.8;
 }
 
-
 .navbar {
     -webkit-box-shadow: 0 8px 6px -6px #000000;
     -moz-box-shadow: 0 8px 6px -6px #000000;
@@ -82,6 +81,7 @@ p, i {
     box-shadow: 0 8px 6px -6px #000000;
     background-color: rgb(24, 26, 27);
   }
+
 .list-group-item:hover {
     background-color: rgb(24, 26, 27);
     opacity: 0.5;
@@ -96,4 +96,16 @@ p, i {
 }
 
 body {background-color: rgb(24, 26, 27);}
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    --bs-table-accent-bg: var(--bs-table-striped-bg);
+    color: #ffffff;
+    opacity: 0.8;
+}
+
+.table>:not(caption)>*>* {
+    color: #ffffff;
+    opacity: 0.8;
+}
+
 

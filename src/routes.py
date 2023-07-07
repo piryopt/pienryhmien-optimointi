@@ -20,7 +20,9 @@ def hello_world() -> str:
     Returns the rendered skeleton template
     """
     #print(f'HEADERS:\n{request.headers["Connection"]}')
-    return render_template('index.html')
+    user_id = session.get("user_id",0)
+    surveys_created = survey_service.count_surveys_created(user_id)
+    return render_template('index.html', surveys_created = surveys_created)
 
 @app.route("/input")
 def input() -> str:
@@ -130,7 +132,7 @@ def login():
     logged_in = user_service.check_credentials(email)
     if not logged_in:
         return render_template("login.html")
-    return render_template("index.html")
+    return hello_world()
 
 @app.route("/logout")
 def logout():
@@ -149,7 +151,8 @@ def new_survey_form():
 def new_survey_post():
     data = request.get_json()
     survey_name = data["surveyGroupname"]
-    new_survey_id = survey_service.add_new_survey(survey_name)
+    user_id = session.get("user_id",0)
+    new_survey_id = survey_service.add_new_survey(survey_name, user_id)
     if not new_survey_id:
         return redirect("create_survey.html")
     survey_choices = data["choices"]
@@ -170,7 +173,7 @@ def previous_surveys():
     search_results = SurveyTools.fetch_all_surveys()
     return render_template("surveys.html", search_results=search_results)
 
-@app.route("/survey_answers/<int:survey_id>", methods = ["post"])
+@app.route("/surveys/<int:survey_id>/answers", methods = ["post"])
 def survey_answers(survey_id):
     '''For displaying answers on a certain survey'''
     survey_name = request.form["survey_name"]
@@ -226,13 +229,13 @@ def admin_gen_rankings():
 
 @app.route("/admintools/gen_data/survey", methods = ["POST"])
 def admin_gen_survey():
-    gen_data.generate_survey()
+    user_id = session.get("user_id",0)
+    gen_data.generate_survey(user_id)
     surveys = SurveyTools.fetch_all_surveys()
     return render_template("/admintools/gen_data.html", surveys = surveys)
 
-@app.route("/surveyresults", methods = ["POST"])
-def survey_results():
-    survey_id = request.form.get("survey_id")
+@app.route("/surveys/<int:survey_id>/results", methods = ["POST"])
+def survey_results(survey_id):
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
     user_rankings = SurveyTools.fetch_survey_responses(survey_id)
 
@@ -247,3 +250,10 @@ def survey_results():
 
     return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
                            time = output_data[1], happiness = output_data[2])
+
+@app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
+def close_survey(survey_id):
+    user_id = session.get("user_id",0)
+    if survey_service.close_survey(survey_id, user_id):
+        return previous_surveys()
+    return hello_world()

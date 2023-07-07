@@ -37,7 +37,7 @@
         </tr>
       </thead>
       <tbody id="choiceTable">
-        <tr id="newRow" class="editable">
+        <tr id="newRow" class="editable" style="background-color: rgb(24, 26, 27); border: 3px rgb(0, 0, 0) solid;">
           <td>
               <input type="text" id="choiceName" class="new-row-input" />
           </td>
@@ -58,27 +58,5 @@
     </table>
     <br/><br/><br/>
     <button type="submit" class="btn btn-primary" value="Luo kysely" onclick="createNewSurvey()" name="createsurvey">Luo kysely</button>
-
-    <div id="deleteContainer" style="display: none;">
-      <input type="button" id="deleteSubmission" value="Poista valinnat">
-      <script>
-          $("#deleteSubmission").click(function() {
-              $("#confirmContainer").show();
-          });
-      </script>
-    </div>
-
-    <div id="confirmContainer" style="display: none;">
-        <p>Oletko varma?</p>
-        <input type="button" id="noDeletion" value="Peruuta">
-        <script>
-            $("#noDeletion").click(function() {
-                $("#submitExists").show();
-                $("#deleteContainer").show();
-                $("#confirmContainer").hide();
-            });
-        </script>
-        <input type="button" id="confirmDelete" value ="Poista" onclick="createNewSurvey()">
-    </div>
 
 {% endblock %}
