@@ -53,8 +53,7 @@ Toy data results are correct
     Title Should Be     Tulokset - Jakaja
     Page Should Contain     Lajittelun tulokset
     Page Should Contain     Ryhmänvalintojen keskiarvo
-    Page Should Contain     1.0. valinta:
-    Page Should Contain     aikaa kului
+    Page Should Contain     1. valintaansa sijoitetut opiskelijat:
     Page Should Contain     Opiskelijat on lajiteltu ryhmiin seuraavasti   
     Page Should Contain    Vie tulokset Excel-taulukkoon
     Wait Until Page Contains Element    //table
