@@ -149,6 +149,7 @@ class Hungarian:
             for student in self.assigned_groups[group]:
                 student_number = user_service.get_student_number(student)
                 selections.append([self.students[student].name, student_number, self.groups[group].name])
+        return selections
 
     def get_happiness_data_strings(self):
         """
