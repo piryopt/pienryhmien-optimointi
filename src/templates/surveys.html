@@ -28,8 +28,7 @@
           <!-- <td>{{ row[2] }}</td>-->        <!--amount of answers - functionality to be added later--> 
           
           <td>
-            <form action="/survey_answers/{{row[0]}}" method="post">
-            <input type="hidden" name="survey_id" value="{{ row[0] }}">
+            <form action="/surveys/{{ row[0] }}/answers" method="post">
             <input type="hidden" name="survey_name" value="{{ row[1] }}">
             <input type="submit" id="{{ row[1] }}"value="Tarkastele tuloksia">
             </form>

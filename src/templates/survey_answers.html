@@ -9,8 +9,7 @@
   <h2>{{ survey_name }}</h2>
   <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
 
-  <form action="/surveyresults" method="POST">
-    <input type="hidden" name="survey_id" value="{{ survey_id }}"></input>
+  <form action="/surveys/{{ survey_id }}/results" method="POST">
     <button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button>
 </form><br>
 <a href="/previous_surveys">Palaa kyselylistaan</a>
