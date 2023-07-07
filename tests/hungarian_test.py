@@ -159,6 +159,20 @@ class TestHungarian(unittest.TestCase):
         """
         self.assertEqual(len(self.h.get_data()), 3)
 
+    def test_get_selections_data_returns_correct_format(self):
+        """
+        Checks that function get_selections_data returns data in correct format
+        by checking the first sublist in the return
+        """
+        self.assertEqual(self.h.get_selections_data()[0], ['Jane', 114, 'Ducks'])
+
+    def test_get_happiness_data_strings_returns_correct_format(self):
+        """
+        Checks that function get_happiness_data_strings returns data in correct format
+        """
+        happiness = self.h.get_happiness_data_strings()
+        self.assertEqual((len(happiness), happiness[0]),(1,'1. valintaansa sijoitetut opiskelijat: 3 kpl'))
+
     def test_reshape_matrix_can_add_empty_columns(self):
         """
         Adds students to the student pool until number of students is higher than number
