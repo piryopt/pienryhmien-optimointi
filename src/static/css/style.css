@@ -47,13 +47,14 @@ h1 {
 }
 
 #fade {
-    border-radius: 10px;
     display: none;
+    bottom: 0;
     background: green;
     height: 50px;
-    width: 200px;
+    width: 100%;
     margin: 0 auto;
     color: black;
     text-align: center;
     padding-top: 10px;
+    position: fixed;
 }
