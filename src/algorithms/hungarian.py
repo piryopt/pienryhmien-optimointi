@@ -1,6 +1,5 @@
-import time
-import numpy as np
 import itertools
+import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 class Hungarian:
@@ -57,26 +56,25 @@ class Hungarian:
         row indeces
         """
         ids = [key for key, student in self.students.items()]
-        return {index:id for (index, id) in zip(list(range(len(ids))), ids)}
+        return dict(zip(list(range(len(ids))), ids))
 
     def student_preferences(self):
         """
         Creates a list of lists of group IDs from the student's preferences.
         Preferences are in the same order as students in the index_to_students_dict
         """
-        #TODO take into account students' list of "absolutely not" places in preferences
+
         #Note! if multiple preferences allowed, it might be better to write a class to
         #process n preference lists per student
 
-        prefs = [[group for group in student.selections] for key, student in self.students.items()]
-        return prefs
+        return [list(student.selections) for key, student in self.students.items()]
 
     def create_group_dict(self):
         """
         Creates a dictionary which maps the column indices of the matrix to the group IDs.
         """
         ids = list(itertools.chain.from_iterable([[key]*group.size for key, group in self.groups.items()]))
-        return {index:id for (index, id) in zip(list(range(len(ids))), ids)}
+        return dict(zip(list(range(len(ids))), ids))
 
     def create_matrix(self):
         """
@@ -94,8 +92,6 @@ class Hungarian:
         """
         Makes the matrix square if necessary by padding with zeroes. 
         """
-        #TODO if not enough spots for all students and padded with columns,
-        # check after assignment who got left out
 
         rows, cols = np.shape(self.matrix)
         if cols > rows:
@@ -160,5 +156,5 @@ class Hungarian:
         choice, number = np.unique(self.student_happiness[:,1], return_counts=True)
         happiness_strings = []
         for i in range(len(choice)):
-            happiness_strings.append(f"{choice[i]}. valinta: {number[i]}")
+            happiness_strings.append(f"{int(choice[i])}. valintaansa sijoitetut opiskelijat: {number[i]} kpl")
         return happiness_strings

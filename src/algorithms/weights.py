@@ -20,7 +20,6 @@ class Weights:
             that is !=0 to be given to options not chosen by student
         """
         self.weights = self.calculate_weights(n_choices, n_students)
-        
 
     def calculate_weights(self, n_choices, n_students):
         """
@@ -41,7 +40,7 @@ class Weights:
             lowest key
         """
         weights = list(range((n_choices+2)*n_students, n_students*2, -n_students))
-        weights = {index:weight for (index, weight) in zip(list(range(len(weights))), weights)}
+        weights = dict(zip(list(range(len(weights))), weights))
         weights[-1] = n_students*2
         weights[None] = n_students*2
         return weights
