@@ -10,9 +10,10 @@ _The project follows the scrum methodology and scrum meeting practises._
   * Every day when workday at Luola (project space)
   * When working remotely: at 10 am every Monday, Wednesday and Friday in Zoom
 * Practises:
+  * 10 - 20 min meeting time
   * Be in time - notify others in time if you are late or unable to participate
   * If you work remotely other days, write a short message to Slack #daily channel
-* In your turn tell shortly what you have done since last daily, what are you planning to work on today and if you have any problems/issues with your tasks
+  * In your turn tell shortly what you have done since last daily, what are you planning to work on today and if you have any problems/issues with your tasks
 
 
 ### Preparing for the sprint preview
