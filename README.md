@@ -24,12 +24,18 @@ Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/wiki/
 
 ### Project practicalities and documentation
 
-- [Product backlog](https://tasks.office.com/HelsinkiFI.onmicrosoft.com/en-GB/Home/Planner/#/plantaskboard?groupId=ba568d54-ac10-4284-8546-4bd5009e3f22&planId=PWuNfrTpM0uMVnV2NHTlY5YAEsh-)
-- [Sprint backlogs](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=1803644692)
-- [Working hours](https://docs.google.com/spreadsheets/d/1rd8avaP7OGhgrX-mo4E5-mgfgCE71X50_aM8jR2hNEc/edit#gid=1189482618)
-- [Project meetings](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/project_meetings.md)
 - [Definition of done](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Definition%20of%20done.md)
+- [Product backlog](https://tasks.office.com/HelsinkiFI.onmicrosoft.com/en-GB/Home/Planner/#/plantaskboard?groupId=ba568d54-ac10-4284-8546-4bd5009e3f22&planId=PWuNfrTpM0uMVnV2NHTlY5YAEsh-)
+- [Project meetings](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/project_meetings.md)
+- Sprint backlogs
+  - [Sprint 1](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=466729438)
+  - [Sprint 2](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=59763564)
+  - [Sprint 3](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=1576777136)
+  - [Sprint 4](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=1803644692)
+  - Sprint 5 (TBA)
+  - Sprint 6 (TBA)
 - [Workflow guide](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/workflow_guide.md)
+- [Working hours](https://docs.google.com/spreadsheets/d/1rd8avaP7OGhgrX-mo4E5-mgfgCE71X50_aM8jR2hNEc/edit#gid=1189482618)
 
 
 ### Communication
