@@ -15,6 +15,7 @@ Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/wiki/
 - [The hungarian Algorithm description](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md)
 - [Database documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/database_doc.md)
 - [Definition of done](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Definition%20of%20done.md)
+- [Workflow guide](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/workflow_guide.md)
 - User guide (TBA)
 - Application architecture (TBA)
 - Application logic (TBA)
