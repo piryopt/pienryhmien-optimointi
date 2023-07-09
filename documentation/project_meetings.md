@@ -1,6 +1,6 @@
 # Project meetings
 
-The project follows the scrum methodology and scrum meeting practises.
+_The project follows the scrum methodology and scrum meeting practises._
 
 
 ### Daily
