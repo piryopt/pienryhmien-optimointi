@@ -13,6 +13,8 @@ import src.algorithms.weights as w
 from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students
+from src.tools.parsers import parser_elomake_csv
+import csv
 
 @app.route("/")
 def hello_world() -> str:
@@ -247,3 +249,28 @@ def survey_results():
 
     return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
                            time = output_data[1], happiness = output_data[2])
+
+@app.route("/from_csv", methods = ["GET", "POST"])
+def from_csv():
+    teacher = user_service.is_teacher_bool()
+    if request.method == "GET":
+        return render_template("from_csv.html", teacher=teacher)
+    if request.method == "POST":
+        file = request.files['file']
+
+        if file.filename == '': # did user provide a file
+            return redirect(request.url)
+        if not file.filename[-4:] == ".csv": # is it a .csv file
+            return redirect(request.url)
+        if not teacher:
+            return redirect(request.url)
+        
+        filename = "to_be_parsed.csv"
+        survey_name = request.form["name"]
+
+        file.save(os.path.join("documentation", filename)) # save csv to
+
+        parser_elomake_csv(filename, survey_name)
+
+
+        return redirect("/previous_surveys")

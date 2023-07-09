@@ -16,6 +16,7 @@ ${EXCEL URL}  http://${SERVER}/excel
 ${TOY DATA FORM}  http://${SERVER}/input
 ${TOY DATA RESULTS URL}  http://${SERVER}/results
 
+
 *** Keywords ***
 Open And Configure Browser
     Open Browser  browser=${BROWSER}

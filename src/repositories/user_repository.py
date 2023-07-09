@@ -1,4 +1,5 @@
 from sqlalchemy import text
+from flask import session
 from src import db
 
 class UserRepository:
@@ -54,5 +55,14 @@ class UserRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def is_teacher_bool(self):
+        temp = session.get("role", 0)
+        teacher = True if temp == "Opettaja" else False
+
+        return teacher
+    
+    def get_user_id(self):
+        return session.get("user_id", 0)
 
 user_repository = UserRepository()

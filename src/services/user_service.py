@@ -77,4 +77,7 @@ class UserService:
         del session["full_name"]
         del session["role"]
 
+    def is_teacher_bool(self):
+        return self._user_repository.is_teacher_bool()
+
 user_service = UserService()

@@ -18,9 +18,14 @@ CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
 	id SERIAL PRIMARY KEY,
 	survey_id INTEGER REFERENCES surveys,
 	name TEXT,
-	max_spaces INTEGER,
-	info1 TEXT,
-	info2 TEXT
+	max_spaces INTEGER
+);
+
+CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices
+	id SERIAL PRIMARY KEY,
+	choice_id INTEGER REFERENCES survey_choices,
+	info_key TEXT,
+	info_value TEXT
 );
 
 CREATE TABLE user_survey_rankings (
