@@ -25,6 +25,12 @@ Privacy statement (TBA)
 Licensing information (TBA)
 
 
+### Project progress
+
+- [Product backlog](https://tasks.office.com/HelsinkiFI.onmicrosoft.com/en-GB/Home/Planner/#/plantaskboard?groupId=ba568d54-ac10-4284-8546-4bd5009e3f22&planId=PWuNfrTpM0uMVnV2NHTlY5YAEsh-)
+- [Sprint backlogs](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=1803644692)
+- [Working hours](https://docs.google.com/spreadsheets/d/1rd8avaP7OGhgrX-mo4E5-mgfgCE71X50_aM8jR2hNEc/edit#gid=1189482618)
+
 ### Project team
 
 - Mikko Anttonen
