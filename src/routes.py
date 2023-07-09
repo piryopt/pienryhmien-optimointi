@@ -103,8 +103,9 @@ def get_choices(survey_id):
 @app.route("/surveys/getinfo", methods=["POST"])
 def get_info():
     raw_id = request.get_json()
-    choice_info = survey_service.get_survey_choice(int(raw_id))
-    return render_template("moreinfo.html", choice_info = choice_info)
+    choice_basics = survey_service.get_choice_name_and_spaces(int(raw_id))
+    choice_info = survey_service.get_choice_additional_infos(int(raw_id))
+    return render_template("moreinfo.html", choice_info = choice_info, basic_info = choice_basics)
 
 @app.route("/register", methods = ["GET", "POST"])
 def register():

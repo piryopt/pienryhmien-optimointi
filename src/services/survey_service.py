@@ -69,5 +69,11 @@ class SurveyService:
         if not new_choice:
             return False
         return True
+    
+    def get_choice_additional_infos(self, choice_id):
+        return self._survey_repository.get_choice_additional_infos(choice_id)
+    
+    def get_choice_name_and_spaces(self, choice_id):
+        return self._survey_repository.get_choice_name_and_spaces(choice_id)
 
 survey_service = SurveyService()
