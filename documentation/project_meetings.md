@@ -1,6 +1,6 @@
 # Project meetings
 
-The project follows scrum methodology and its meeting practises.
+The project follows the scrum methodology and scrum meeting practises.
 
 
 ### Daily
@@ -14,16 +14,18 @@ The project follows scrum methodology and its meeting practises.
   * If you work remotely other days, write a short message to Slack #daily channel
 * In your turn tell shortly what you have done since last daily, what are you planning to work on today and if you have any problems/issues with your tasks
 
+
 ### Preparing for the sprint preview
 
 * Participants: the project team and the tutor
 * When: at the end of the sprint, 1/2 hour before the sprint review
-* Preparations for the sprint previe meeting:
+* Preparations for the sprint preview meeting:
   * set up the meeting presentation
   * share your screen
   * try the demo
   * check remote connections
   * discuss with the team if there are any last minute issues
+
 
 ### Sprint review
 
@@ -42,6 +44,16 @@ The project follows scrum methodology and its meeting practises.
     3. choosing the user stories for the next sprint
     4. Discuss about the timing of the next meeting
     5. Other topical issues
+
+
+
+
+### Sprint planning
+
+* Participants: the project team and the tutor
+* When: after sprint retrospective
+
+
 
 
 
