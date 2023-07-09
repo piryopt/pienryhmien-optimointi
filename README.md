@@ -14,7 +14,7 @@ Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/wiki/
 
 [Database documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/database_doc.md)
 
-[Definition of done](https://github.com/piryopt/pienryhmien-optimointi/tree/main/documentation)
+[Definition of done](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Definition%20of%20done.md)
 
 User guide (TBA)
 
