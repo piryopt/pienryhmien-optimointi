@@ -12,7 +12,6 @@
 * Create a new branch `git checkout -b AddYourBranchNameHere` and switch to it `git checkout AddYourBranchNameHere`
 * Write the code
 * Writes tests (Unittest and/or Robot Framework UI tests)
-* [branching practices etc.](https://github.com/agis-/git-style-guide)
 * Commiting: add and commit changed files and push always to your own branch `git push origin AddYourBranchNameHere`
 * Create a pull request in GitHub
 * Post a short message in Slack #pull-requess channel about new pull request requiring to be approved and merged
