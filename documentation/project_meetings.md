@@ -17,7 +17,7 @@ The project follows the scrum methodology and scrum meeting practises.
 
 ### Preparing for the sprint preview
 
-* Participants: the project team and the tutor
+* Participants: the project team and the sponsor
 * When: at the end of the sprint, 1/2 hour before the sprint review
 * Preparations for the sprint preview meeting:
   * set up the meeting presentation
@@ -29,7 +29,7 @@ The project follows the scrum methodology and scrum meeting practises.
 
 ### Sprint review meeting
 
-* Participants: the project team, the tutor and the customer
+* Participants: the project team, the sponsor and the customer
 * When: at the end of every sprint
 * Project team roles:
   * Chairperson: sends meeting invitation, prepares the presentation, leads the meeting
@@ -48,25 +48,22 @@ The project follows the scrum methodology and scrum meeting practises.
 
 ### Sprint retrospective
 
-* Participants: the project team and the tutor 
+* Participants: the project team and the sponsor 
 * When: at the end of every sprint, immediately after the sprint review meeting
 * Practises:
   * [The Mad Sad Glad discussion frame](https://www.teamretro.com/retrospectives/mad-sad-glad-retrospective)
-  * The tutor as the facilitator
+  * The sponsor as the facilitator
   * Safe space to speak up
 
 
 ### Sprint planning meeting
 
-* Participants: the project team and the tutor
+* Participants: the project team and the sponsor
 * When: after the sprint retrospective meeting
-* Practises:
-  * User stories agreed in the sprint review are added in the sprint backlog
+* Agenda:
+  * User stories agreed in the sprint review are added in the sprint backlog + add MISC task for all task that are not related to a specific user story but need to be done
   * The team will define technical tasks to each user story
   * Sharing the tasks
-
-
-
 
 
 
