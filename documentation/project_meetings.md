@@ -27,7 +27,7 @@ The project follows the scrum methodology and scrum meeting practises.
   * discuss with the team if there are any last minute issues
 
 
-### Sprint review
+### Sprint review meeting
 
 * Participants: the project team, the tutor and the customer
 * When: at the end of every sprint
@@ -46,12 +46,24 @@ The project follows the scrum methodology and scrum meeting practises.
     5. Other topical issues
 
 
+### Sprint retrospective
+
+* Participants: the project team and the tutor 
+* When: at the end of every sprint, immediately after the sprint review meeting
+* Practises:
+  * [The Mad Sad Glad discussion frame](https://www.teamretro.com/retrospectives/mad-sad-glad-retrospective)
+  * The tutor as the facilitator
+  * Safe space to speak up
 
 
-### Sprint planning
+### Sprint planning meeting
 
 * Participants: the project team and the tutor
-* When: after sprint retrospective
+* When: after the sprint retrospective meeting
+* Practises:
+  * User stories agreed in the sprint review are added in the sprint backlog
+  * The team will define technical tasks to each user story
+  * Sharing the tasks
 
 
 
