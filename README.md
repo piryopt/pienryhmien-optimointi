@@ -28,6 +28,7 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
 - [Definition of done](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Definition%20of%20done.md)
 - [Product backlog](https://tasks.office.com/HelsinkiFI.onmicrosoft.com/en-GB/Home/Planner/#/plantaskboard?groupId=ba568d54-ac10-4284-8546-4bd5009e3f22&planId=PWuNfrTpM0uMVnV2NHTlY5YAEsh-)
 - [Project meetings](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/project_meetings.md)
+- [Project practices agreed by the project team](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/project_practices.md)
 - Sprint backlogs
   - [Sprint 1](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=466729438)
   - [Sprint 2](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=59763564)
