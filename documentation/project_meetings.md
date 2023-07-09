@@ -1,0 +1,48 @@
+# Project meetings
+
+The project follows scrum methodology and its meeting practises.
+
+
+### Daily
+
+* Participants: the project team
+* When:
+  * Every day when workday at Luola (project space)
+  * When working remotely: at 10 am every Monday, Wednesday and Friday in Zoom
+* Practises:
+  * Be in time - notify others in time if you are late or unable to participate
+  * If you work remotely other days, write a short message to Slack #daily channel
+* In your turn tell shortly what you have done since last daily, what are you planning to work on today and if you have any problems/issues with your tasks
+
+### Preparing for the sprint preview
+
+* Participants: the project team and the tutor
+* When: at the end of the sprint, 1/2 hour before the sprint review
+* Preparations for the sprint previe meeting:
+  * set up the meeting presentation
+  * share your screen
+  * try the demo
+  * check remote connections
+  * discuss with the team if there are any last minute issues
+
+### Sprint review
+
+* Participants: the project team, the tutor and the customer
+* When: at the end of every sprint
+* Project team roles:
+  * Chairperson: sends meeting invitation, prepares the presentation, leads the meeting
+  * Demo presenter: shows customer the demo of the new functions
+  * Secretary: writes meeting memo
+* Practicalities:
+  * Preferably a F2F meeting in a meeting room, but if not possible, use Zoom
+  * Lenght: max 1 hour
+* Agenda:
+    1. sprint achievements, issues, open questions
+    2. demo
+    3. choosing the user stories for the next sprint
+    4. Discuss about the timing of the next meeting
+    5. Other topical issues
+
+
+
+
