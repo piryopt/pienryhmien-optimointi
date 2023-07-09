@@ -19,7 +19,7 @@ Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/wiki/
 - Application logic (TBA)
 - Privacy statement (TBA)
 - Licensing information (TBA)
-- [1st demo](https://youtu.be/z548R3cHm54) 30.6.2023, after the 1st half of the project
+- [1st demo](https://youtu.be/z548R3cHm54) (30.6.2023, after the 1st half of the project)
 
 
 ### Project practicalities and documentation
