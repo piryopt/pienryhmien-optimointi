@@ -188,8 +188,10 @@ def new_survey_post():
 def previous_surveys():
     '''For fetching previous survey list from the database'''
     #search_results = SurveyTools.fetch_surveys_and_answer_amounts() 
-    search_results = SurveyTools.fetch_all_surveys()
-    return render_template("surveys.html", search_results=search_results)
+    user_id = session.get("user_id",0)
+    active_surveys = SurveyTools.fetch_all_active_surveys(user_id)
+    closed_surveys = survey_service.get_list_closed_surveys(user_id)
+    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
 
 @app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
 def survey_answers(survey_id):
@@ -223,7 +225,8 @@ def reset_database() -> str:
 
 @app.route("/admintools/gen_data", methods = ["GET", "POST"])
 def admin_gen_data():
-    surveys = SurveyTools.fetch_all_surveys()
+    user_id = session.get("user_id",0)
+    surveys = SurveyTools.fetch_all_active_surveys(user_id)
     if request.method == "GET":
         return render_template("/admintools/gen_data.html", surveys = surveys)
     
@@ -249,7 +252,7 @@ def admin_gen_rankings():
 def admin_gen_survey():
     user_id = session.get("user_id",0)
     gen_data.generate_survey(user_id)
-    surveys = SurveyTools.fetch_all_surveys()
+    surveys = SurveyTools.fetch_all_active_surveys(user_id)
     return render_template("/admintools/gen_data.html", surveys = surveys)
 
 @app.route("/surveys/<int:survey_id>/results", methods = ["POST"])
