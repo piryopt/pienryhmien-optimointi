@@ -84,10 +84,10 @@ class SurveyRepository:
             print(e)
             return False
 
-    def survey_name_exists(self, surveyname):
+    def survey_name_exists(self, surveyname, teacher_id):
         try:
-            sql = "SELECT id FROM surveys WHERE surveyname=:surveyname"
-            result = db.session.execute(text(sql), {"surveyname":surveyname})
+            sql = "SELECT id FROM surveys WHERE (surveyname=:surveyname AND teacher_id=:teacher_id AND closed=False)"
+            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":teacher_id})
             survey = result.fetchone()
             if not survey:
                 return False

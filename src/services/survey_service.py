@@ -46,7 +46,7 @@ class SurveyService:
         return True
 
     def add_new_survey(self, surveyname, teacher_id):
-        if self._survey_repository.survey_name_exists(surveyname):
+        if self._survey_repository.survey_name_exists(surveyname, teacher_id):
             print("A SURVEY WITH THIS NAME ALREADY EXISTS!")
             return False
         if len(surveyname) < 4:

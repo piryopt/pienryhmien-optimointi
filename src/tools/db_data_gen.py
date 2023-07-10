@@ -51,7 +51,7 @@ class DbDataGen:
 
     def generate_survey(self, user_id):
         name = "GENERATED SURVEY"
-        exists = sr.survey_name_exists(name)
+        exists = sr.survey_name_exists(name, user_id)
         if exists:
             return
         survey_id = sr.add_new_survey(name, user_id)
