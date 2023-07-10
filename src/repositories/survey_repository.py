@@ -122,12 +122,24 @@ class SurveyRepository:
             print(e)
             return False
         
-    def close_survey(self, survey_id, user_id):
+    def close_survey(self, survey_id, teacher_id):
         try:
-            sql = "UPDATE surveys SET closed = True WHERE (survey_id=:survey_id and user_id=:user_id)"
-            db.session.execute(text(sql), {"survey_id":survey_id, "user_id":user_id})
+            sql = "UPDATE surveys SET closed = True WHERE (id=:survey_id and teacher_id=:teacher_id)"
+            db.session.execute(text(sql), {"survey_id":survey_id, "teacher_id":teacher_id})
             db.session.commit()
             return True
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_active_surveys(self, teacher_id):
+        try:
+            sql = "SELECT id, surveyname FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)"
+            result = db.session.execute(text(sql), {"teacher_id":teacher_id})
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
