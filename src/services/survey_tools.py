@@ -7,7 +7,7 @@ class SurveyTools:
 
     def fetch_all_surveys():
         '''Returns a list of all surveys in the database'''
-        sql = text("SELECT id, surveyname FROM surveys")
+        sql = text("SELECT id, surveyname, closed FROM surveys")
         result = db.session.execute(sql)
         all_surveys = result.fetchall()
         return all_surveys
@@ -25,7 +25,7 @@ class SurveyTools:
         '''Returns a list of surveys and the amount of how many answers
         each of them have'''
         sql = text("SELECT surveys.id, surveys.surveyname, " +
-                   "COUNT(user_survey_rankings.survey_id) " +
+                   "surveys.closed, COUNT(user_survey_rankings.survey_id) " +
                    "AS answer_count FROM surveys JOIN user_survey_rankings " +
                    "ON surveys.id = user_survey_rankings.survey_id " +
                    "GROUP BY surveys.id, surveys.surveyname")
