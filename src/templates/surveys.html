@@ -22,7 +22,7 @@
       <tbody>
         <tr>
           <!--The data is expected to be as a list ("results") containing lists-->
-          {% for row in search_results %}
+          {% for row in active_surveys %}
           <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
           <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
           <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
@@ -31,13 +31,31 @@
             <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a>
           </td>
 
-
             <!--<button id="copy_survey">Kopioi kysely</button>--> 
             <!--<button id="close_survey">Sulje kysely</button></td>-->
 
         </tr>
         {% endfor %}
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+          <tr>
+            <!--The data is expected to be as a list ("results") containing lists-->
+            {% for row in closed_surveys %}
+            <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
+            <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
+            <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
+            
+            <td>
+              <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a>
+            </td>
+  
+  
+              <!--<button id="copy_survey">Kopioi kysely</button>--> 
+              <!--<button id="close_survey">Sulje kysely</button></td>-->
+  
+          </tr>
+          {% endfor %}
       </tbody>
     </table>
-    
 {% endblock %}
