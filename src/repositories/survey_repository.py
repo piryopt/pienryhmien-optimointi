@@ -143,5 +143,17 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def get_closed_surveys(self, teacher_id):
+        try:
+            sql = "SELECT id, surveyname, closed FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
+            result = db.session.execute(text(sql), {"teacher_id":teacher_id})
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 survey_repository = SurveyRepository()

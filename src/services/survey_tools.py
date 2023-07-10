@@ -5,10 +5,10 @@ from src import db
 class SurveyTools:
     '''Class for survey related functions'''
 
-    def fetch_all_surveys():
+    def fetch_all_active_surveys(teacher_id):
         '''Returns a list of all surveys in the database'''
-        sql = text("SELECT id, surveyname, closed FROM surveys")
-        result = db.session.execute(sql)
+        sql = text("SELECT id, surveyname, closed FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)")
+        result = db.session.execute(sql, {"teacher_id":teacher_id})
         all_surveys = result.fetchall()
         return all_surveys
 
