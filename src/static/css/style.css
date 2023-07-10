@@ -31,9 +31,8 @@ b, small {
 }
 
 #sortable1, #sortable2 {
-    border: 1px solid;
     min-height: 20px;
-    min-width: 50%;
+    min-width: 100%;
     list-style-type: none;
     margin: 0;
     padding: 5px 0 0 0;
@@ -43,17 +42,17 @@ b, small {
 }
 
 #sortable1 li, #sortable2 li {
-    border-radius: 10px;
-    text-align: center;
+    border-radius: 5px;
+    text-align: left;
     margin: 0 5px 5px 5px;
-    padding: 5px;
-    font-size: 1.2em;
-    background-color: #076aa3;
+    padding: 7px;
+    background-color: rgb(24, 26, 27);
+    border-color: #4b4848;
     cursor: grab;
 }
 
 #fade {
-    border-radius: 10px;
+    border-radius: 5px;
     display: none;
     background: green;
     height: 50px;

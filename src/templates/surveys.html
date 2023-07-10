@@ -15,7 +15,7 @@
         <tr>
             <th scope="col"><p>Nimi</p></th>
             <th scope="col"><p>Kyselyn tila</p> </th>
-            <!-- <th>Vastauksia yhteensä</th> -->
+            <!--<th><p>Vastauksia yhteensä</p></th>--> 
             <th scope="col"><p>Toiminnot</p></th>
         </tr>
       </thead>
@@ -24,14 +24,11 @@
           <!--The data is expected to be as a list ("results") containing lists-->
           {% for row in search_results %}
           <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
-          <td><p>avoinna</p></td>            <!--survey status - functionality to be added later--> 
-          <!-- <td>{{ row[2] }}</td>-->        <!--amount of answers - functionality to be added later--> 
+          <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
+          <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
           
           <td>
-            <form action="/surveys/{{ row[0] }}/answers" method="post">
-            <input type="hidden" name="survey_name" value="{{ row[1] }}">
-            <input type="submit" id="{{ row[1] }}"value="Tarkastele tuloksia">
-            </form>
+            <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a>
           </td>
 
 
