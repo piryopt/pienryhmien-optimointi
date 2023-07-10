@@ -22,7 +22,19 @@ def hello_world() -> str:
     #print(f'HEADERS:\n{request.headers["Connection"]}')
     user_id = session.get("user_id",0)
     surveys_created = survey_service.count_surveys_created(user_id)
-    return render_template('index.html', surveys_created = surveys_created)
+    if surveys_created == 0:
+        return render_template('index.html', surveys_created = 0, exists = False)
+    surveys = survey_service.get_active_surveys(user_id)
+    data = []
+    for s in surveys:
+        survey_id = s[0]
+        surveyname = s[1]
+        survey_answers = SurveyTools.fetch_survey_responses(survey_id)
+        participants = len(survey_answers)
+        # VAIHDA TÄMÄ OIKEESEEN PÄIVÄMÄÄRÄÄN KUN SAADAAN TOIMINNALLISUUS!!
+        survey_ending_date = "31.8.2023"
+        data.append([survey_id, surveyname, participants, survey_ending_date])
+    return render_template('index.html', surveys_created = surveys_created, exists = True, data = data)
 
 @app.route("/input")
 def input() -> str:
@@ -59,10 +71,12 @@ def excel():
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
-    shuffle(survey_choices)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return render_template("index.html")
+    shuffle(survey_choices)
+    closed = survey_service.check_if_survey_closed(survey_id)
+
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
     user_id = session.get("user_id", 0)
@@ -79,6 +93,10 @@ def surveys(survey_id):
             if not survey_choice:
                 continue
             survey_choices.append(survey_choice)
+    if closed:
+        if user_survey_ranking:
+            return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
+        return render_template("closedsurvey.html", survey_name = survey_name)
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
@@ -173,10 +191,10 @@ def previous_surveys():
     search_results = SurveyTools.fetch_all_surveys()
     return render_template("surveys.html", search_results=search_results)
 
-@app.route("/surveys/<int:survey_id>/answers", methods = ["post"])
+@app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
 def survey_answers(survey_id):
     '''For displaying answers on a certain survey'''
-    survey_name = request.form["survey_name"]
+    survey_name = survey_service.get_survey_name(survey_id)
     survey_answers = SurveyTools.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
