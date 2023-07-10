@@ -50,10 +50,9 @@ Excel Page Should Be Open
     Title Should Be     Tulokset - Jakaja
     Page Should Contain     Lajittelun tulokset
     Page Should Contain     Ryhmänvalintojen keskiarvo
-    Page Should Contain     1.0. valinta:
-    Page Should Contain     2.0. valinta:
-    Page Should Contain     3.0. valinta: 
-    Page Should Contain     aikaa kului
+    Page Should Contain     1. valintaansa sijoitetut opiskelijat:
+    Page Should Contain     2. valintaansa sijoitetut opiskelijat:
+    Page Should Contain     3. valintaansa sijoitetut opiskelijat: 
     Page Should Contain     Opiskelijat on lajiteltu ryhmiin seuraavasti
 
 Toy Data Input Page Should Be Open
