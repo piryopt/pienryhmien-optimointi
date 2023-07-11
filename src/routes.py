@@ -97,7 +97,7 @@ def surveys(survey_id):
         if user_survey_ranking:
             return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
         return render_template("closedsurvey.html", survey_name = survey_name)
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing)
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10")
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
