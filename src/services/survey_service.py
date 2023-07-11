@@ -103,9 +103,6 @@ class SurveyService:
     
     def get_list_closed_surveys(self, teacher_id):
         surveys = self._survey_repository.get_closed_surveys(teacher_id)
-        if not surveys:
-            print("ERROR NO CLOSED SURVEYS!")
-            return False
         return surveys
 
 survey_service = SurveyService()

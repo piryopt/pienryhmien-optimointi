@@ -189,6 +189,8 @@ def previous_surveys():
     '''For fetching previous survey list from the database'''
     #search_results = SurveyTools.fetch_surveys_and_answer_amounts() 
     user_id = session.get("user_id",0)
+    if user_id == 0:
+        return hello_world()
     active_surveys = SurveyTools.fetch_all_active_surveys(user_id)
     closed_surveys = survey_service.get_list_closed_surveys(user_id)
     return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
