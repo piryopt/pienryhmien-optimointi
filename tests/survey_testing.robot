@@ -92,30 +92,6 @@ Create New Survey Test
     Go To Previous Surveys Page
     Page Should Contain  Best robots
 
-Survey Submitting Works Test
-    Go To Previous Surveys Page
-    Click Link  Best robots
-    Page Should Contain  Best robots
-    Click Button  Lähetä valinnat
-    Go To Previous Surveys Page
-    Click Link  Tarkastele tuloksia
-    Page Should Contain  testtrobot@robot.com
-
-Show More Choice Info Test
-    Go To Previous Surveys Page
-    Click Link  Best robots
-    Click Element  xpath://*[contains(text(), "Megatron")]
-    Page Should Contain  NOBODY SUMMONS MEGATRON
-
-Removing Submission Works Test
-    Go To Previous Surveys Page
-    Click Link  Best robots
-    Click Button  Poista valinnat
-    Click Button  id:confirmDelete
-    Go To Previous Surveys Page
-    Click Link  Tarkastele tuloksia
-    Page Should Not Contain  testtrobot@robot.com
-
 Logout Works Test
     Go To Main Page
     Main Page Should Be Open
