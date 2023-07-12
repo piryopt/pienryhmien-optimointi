@@ -109,4 +109,10 @@ class SurveyService:
     def create_survey_from_csv(self, filename, survey_name, user_id):
         parser_elomake_csv(filename, survey_name, user_id) # in tools
 
+    def get_choice_additional_infos(self, choice_id):
+        return self._survey_repository.get_choice_additional_infos(choice_id)
+
+    def get_choice_name_and_spaces(self, choice_id):
+        return self._survey_repository.get_choice_name_and_spaces(choice_id)
+
 survey_service = SurveyService()

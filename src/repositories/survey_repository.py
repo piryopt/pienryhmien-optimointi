@@ -188,4 +188,18 @@ class SurveyRepository:
         result = db.session.execute(text(sql), {"c_id":choice_id, "i_key":info_key, "i_value":info_value})
         db.session.commit()
 
+    def get_choice_additional_infos(self, choice_id):
+        '''
+        Gets a list of key-value pairs based on choice_id from choice_infos tables
+        '''
+
+        sql = "SELECT info_key, info_value FROM choice_infos WHERE choice_id=:choice_id"
+        result = db.session.execute(text(sql), {"choice_id":choice_id})
+        return result.fetchall()
+
+    def get_choice_name_and_spaces(self, choice_id):
+        sql = "SELECT name, max_spaces FROM survey_choices WHERE id=:id"
+        result = db.session.execute(text(sql), {"id":choice_id})
+        return result.fetchone()
+
 survey_repository = SurveyRepository()
