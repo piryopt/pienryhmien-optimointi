@@ -49,12 +49,12 @@ class DbDataGen:
             ranking = ','.join(choice_ids)
             sr.add_user_ranking(user[0], survey_id, ranking)
 
-    def generate_survey(self):
+    def generate_survey(self, user_id):
         name = "GENERATED SURVEY"
-        exists = sr.survey_name_exists(name)
+        exists = sr.survey_name_exists(name, user_id)
         if exists:
             return
-        survey_id = sr.add_new_survey(name)
+        survey_id = sr.add_new_survey(name, user_id)
         choice_name1 = "Weather-based recommendation for outdoor activities in Helsinki"
         choice_name2 = "Sovellus pienryhmien optimointiin eli miten jakaa opiskelijat pienryhmiin heidän kiinnostusten perusteella?"
         choice_name3 = "Seamless TinyML lifecycle management"

@@ -22,7 +22,21 @@ def hello_world() -> str:
     Returns the rendered skeleton template
     """
     #print(f'HEADERS:\n{request.headers["Connection"]}')
-    return render_template('index.html')
+    user_id = session.get("user_id",0)
+    surveys_created = survey_service.count_surveys_created(user_id)
+    if surveys_created == 0:
+        return render_template('index.html', surveys_created = 0, exists = False)
+    surveys = survey_service.get_active_surveys(user_id)
+    data = []
+    for s in surveys:
+        survey_id = s[0]
+        surveyname = s[1]
+        survey_answers = SurveyTools.fetch_survey_responses(survey_id)
+        participants = len(survey_answers)
+        # VAIHDA TÄMÄ OIKEESEEN PÄIVÄMÄÄRÄÄN KUN SAADAAN TOIMINNALLISUUS!!
+        survey_ending_date = "31.8.2023"
+        data.append([survey_id, surveyname, participants, survey_ending_date])
+    return render_template('index.html', surveys_created = surveys_created, exists = True, data = data)
 
 @app.route("/input")
 def input() -> str:
@@ -36,33 +50,35 @@ def results():
 
     groups_dict = data_gen.generate_groups(group_n, group_size)
     students_dict = data_gen.generate_students(student_n, groups_dict)
-    weights = w.Weights(group_n, student_n, True).get_weights()
+    weights = w.Weights(group_n, student_n).get_weights()
 
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
-    return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
-                           time = output_data[1], happiness = output_data[2])
+    return render_template("results.html", results = output_data[0],
+                           happiness_data = output_data[2], happiness = output_data[1])
 
 @app.route("/excel")
 def excel():
     groups_dict = excelreader.create_groups()
     students_dict = excelreader.create_students(groups_dict)
-    weights = w.Weights(len(groups_dict), len(students_dict), True).get_weights()
+    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
 
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
-    return render_template("results.html", results = output_data[0], happiness_data = output_data[3],
-                           time = output_data[1], happiness = output_data[2])
+    return render_template("results.html", results = output_data[0],
+                           happiness_data = output_data[2], happiness = output_data[1])
 
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
-    shuffle(survey_choices)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return render_template("index.html")
+    shuffle(survey_choices)
+    closed = survey_service.check_if_survey_closed(survey_id)
+
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
     user_id = session.get("user_id", 0)
@@ -79,7 +95,11 @@ def surveys(survey_id):
             if not survey_choice:
                 continue
             survey_choices.append(survey_choice)
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing)
+    if closed:
+        if user_survey_ranking:
+            return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
+        return render_template("closedsurvey.html", survey_name = survey_name)
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10")
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -133,7 +153,7 @@ def login():
     logged_in = user_service.check_credentials(email)
     if not logged_in:
         return render_template("login.html")
-    return render_template("index.html")
+    return hello_world()
 
 @app.route("/logout")
 def logout():
@@ -152,7 +172,8 @@ def new_survey_form():
 def new_survey_post():
     data = request.get_json()
     survey_name = data["surveyGroupname"]
-    new_survey_id = survey_service.add_new_survey(survey_name)
+    user_id = session.get("user_id",0)
+    new_survey_id = survey_service.add_new_survey(survey_name, user_id)
     if not new_survey_id:
         return redirect("create_survey.html")
     survey_choices = data["choices"]
@@ -170,13 +191,17 @@ def new_survey_post():
 def previous_surveys():
     '''For fetching previous survey list from the database'''
     #search_results = SurveyTools.fetch_surveys_and_answer_amounts() 
-    search_results = SurveyTools.fetch_all_surveys()
-    return render_template("surveys.html", search_results=search_results)
+    user_id = session.get("user_id",0)
+    if user_id == 0:
+        return hello_world()
+    active_surveys = SurveyTools.fetch_all_active_surveys(user_id)
+    closed_surveys = survey_service.get_list_closed_surveys(user_id)
+    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
 
-@app.route("/survey_answers/<int:survey_id>", methods = ["post"])
+@app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
 def survey_answers(survey_id):
     '''For displaying answers on a certain survey'''
-    survey_name = request.form["survey_name"]
+    survey_name = survey_service.get_survey_name(survey_id)
     survey_answers = SurveyTools.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
@@ -205,7 +230,8 @@ def reset_database() -> str:
 
 @app.route("/admintools/gen_data", methods = ["GET", "POST"])
 def admin_gen_data():
-    surveys = SurveyTools.fetch_all_surveys()
+    user_id = session.get("user_id",0)
+    surveys = SurveyTools.fetch_all_active_surveys(user_id)
     if request.method == "GET":
         return render_template("/admintools/gen_data.html", surveys = surveys)
     
@@ -229,20 +255,20 @@ def admin_gen_rankings():
 
 @app.route("/admintools/gen_data/survey", methods = ["POST"])
 def admin_gen_survey():
-    gen_data.generate_survey()
-    surveys = SurveyTools.fetch_all_surveys()
+    user_id = session.get("user_id",0)
+    gen_data.generate_survey(user_id)
+    surveys = SurveyTools.fetch_all_active_surveys(user_id)
     return render_template("/admintools/gen_data.html", surveys = surveys)
 
-@app.route("/surveyresults", methods = ["POST"])
-def survey_results():
-    survey_id = request.form.get("survey_id")
+@app.route("/surveys/<int:survey_id>/results", methods = ["POST"])
+def survey_results(survey_id):
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
     user_rankings = SurveyTools.fetch_survey_responses(survey_id)
 
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
 
-    weights = w.Weights(len(groups_dict), len(students_dict), True).get_weights()
+    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
     
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
@@ -276,3 +302,10 @@ def from_csv():
 
 
         return redirect("/previous_surveys")
+
+@app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
+def close_survey(survey_id):
+    user_id = session.get("user_id",0)
+    if survey_service.close_survey(survey_id, user_id):
+        return previous_surveys()
+    return hello_world()

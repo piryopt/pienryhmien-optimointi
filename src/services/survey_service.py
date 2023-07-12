@@ -46,14 +46,14 @@ class SurveyService:
         self._survey_repository.add_user_ranking(user_id,survey_id,ranking)
         return True
 
-    def add_new_survey(self, surveyname):
-        if self._survey_repository.survey_name_exists(surveyname):
+    def add_new_survey(self, surveyname, teacher_id):
+        if self._survey_repository.survey_name_exists(surveyname, teacher_id):
             print("A SURVEY WITH THIS NAME ALREADY EXISTS!")
             return False
         if len(surveyname) < 4:
             print("The name is too short!")
             return False
-        survey_id = self._survey_repository.add_new_survey(surveyname)
+        survey_id = self._survey_repository.add_new_survey(surveyname, teacher_id)
         if not survey_id:
             return False
         return survey_id
@@ -79,5 +79,40 @@ class SurveyService:
     
     def get_choice_name_and_spaces(self, choice_id):
         return self._survey_repository.get_choice_name_and_spaces(choice_id)
+    
+    def count_surveys_created(self, user_id):
+        list_n = self._survey_repository.count_created_surveys(user_id)
+        if not list_n:
+            return 0
+        return list_n
+
+    def close_survey(self, survey_id, teacher_id):
+        survey = self._survey_repository.check_if_survey_exists(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        if survey.teacher_id != teacher_id:
+            print("YOU DID NOT CREATE THIS SURVEY. YOU CANNOT CLOSE IT")
+            return False
+        return self._survey_repository.close_survey(survey_id, teacher_id)
+    
+    def get_active_surveys(self, teacher_id):
+        surveys = self._survey_repository.get_active_surveys(teacher_id)
+        if not surveys:
+            print("THIS USER HAS NOT CREATED ANY SURVEYS!")
+            return False
+        return surveys
+    
+    def check_if_survey_closed(self, survey_id):
+        survey = self._survey_repository.check_if_survey_exists(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        closed = survey.closed
+        return closed
+    
+    def get_list_closed_surveys(self, teacher_id):
+        surveys = self._survey_repository.get_closed_surveys(teacher_id)
+        return surveys
 
 survey_service = SurveyService()

@@ -6,41 +6,56 @@
 {% endblock %}
 
 {% block content %}
-  <h2>Aiemmat kyselyt</h2>
+</br>
+  <h2><img src="{{ url_for('static', filename='images/list_white_36dp.svg') }}"width="42" height="47" class="d-inline-block align-text-top">  Aiemmat kyselyt</h2>
 
   <BR>
-    <table id="results_table" cellspacing="10" class="table">
-      <thead class="table-primary">
+    <table id="surveys_table" cellspacing="10" class="table table-striped">
+      <thead class="table-dark">
         <tr>
-            <th scope="col">Kyselyn nimi </th>
-            <th scope="col">Kyselyn tila </th>
-            <!-- <th>Vastauksia yhteensä</th> -->
-            <th scope="col">Toiminnot</th>
+            <th scope="col"><p>Nimi</p></th>
+            <th scope="col"><p>Kyselyn tila</p> </th>
+            <!--<th><p>Vastauksia yhteensä</p></th>--> 
+            <th scope="col"><p>Toiminnot</p></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <!--The data is expected to be as a list ("results") containing lists-->
-          {% for row in search_results %}
+          {% for row in active_surveys %}
           <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
-          <td>avoinna</td>            <!--survey status - functionality to be added later--> 
-          <!-- <td>{{ row[2] }}</td>-->        <!--amount of answers - functionality to be added later--> 
+          <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
+          <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
           
           <td>
-            <form action="/survey_answers/{{row[0]}}" method="post">
-            <input type="hidden" name="survey_id" value="{{ row[0] }}">
-            <input type="hidden" name="survey_name" value="{{ row[1] }}">
-            <input type="submit" id="{{ row[1] }}"value="Tarkastele tuloksia">
-            </form>
+            <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a>
           </td>
-
 
             <!--<button id="copy_survey">Kopioi kysely</button>--> 
             <!--<button id="close_survey">Sulje kysely</button></td>-->
 
         </tr>
         {% endfor %}
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+          <tr>
+            <!--The data is expected to be as a list ("results") containing lists-->
+            {% for row in closed_surveys %}
+            <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
+            <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
+            <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
+            
+            <td>
+              <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a>
+            </td>
+  
+  
+              <!--<button id="copy_survey">Kopioi kysely</button>--> 
+              <!--<button id="close_survey">Sulje kysely</button></td>-->
+  
+          </tr>
+          {% endfor %}
       </tbody>
     </table>
-    
 {% endblock %}

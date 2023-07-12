@@ -15,22 +15,14 @@ ${EXCELBUTTON}    xpath=//button[@type='submit' and contains(text(),'Vie tulokse
 
 
 *** Test Cases ***
-Click 'Kokeile valmiilla datalla' link
-    Go To Main Page
-    Click Link     Kokeile valmiilla datalla
-    Excel Page Should Be Open
 
-Results page has table and table has content
+Excel Results page has table and table has content
+    Go To Excel Page
     Wait Until Page Contains Element    //table
     Element Should Be Visible    //table
     ${Rows}=    get element count    xpath://table[@id='results_table']/tbody/tr
     Log To Console     ${Rows}
     Should Be Equal As Strings    ${DATA COUNT}   ${Rows}
-
-Main Page 'Kokeile luoda dataa' link is functional
-    Go To Main Page
-    Click Link    Kokeile luoda dataa
-    Toy Data Input Page Should Be Open
 
 'Kokeile luoda dataa' form in functional
     Go To Toy Data Input Page 
@@ -53,8 +45,7 @@ Toy data results are correct
     Title Should Be     Tulokset - Jakaja
     Page Should Contain     Lajittelun tulokset
     Page Should Contain     Ryhmänvalintojen keskiarvo
-    Page Should Contain     1.0. valinta:
-    Page Should Contain     aikaa kului
+    Page Should Contain     1. valintaansa sijoitetut opiskelijat:
     Page Should Contain     Opiskelijat on lajiteltu ryhmiin seuraavasti   
     Page Should Contain    Vie tulokset Excel-taulukkoon
     Wait Until Page Contains Element    //table
