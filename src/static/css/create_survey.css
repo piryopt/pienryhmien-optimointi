@@ -20,3 +20,23 @@ table,th,td,tr.choice-table {
     border-collapse: collapse;
     width: 1200px;
 }
+
+section {
+    margin-bottom: 40px;
+}
+
+th:hover,td:hover {
+    background-color: #323539;
+}
+
+.variable-header:hover {
+    cursor: pointer;
+}
+
+.constant-header:hover {
+    cursor: not-allowed;
+}
+
+td .edited {
+    padding: 0 0 0 0;
+}

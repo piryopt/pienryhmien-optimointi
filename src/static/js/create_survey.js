@@ -33,41 +33,41 @@ function createNewSurvey() {
     }); 
 }
 
-function addChoice() {
-    var newChoice = {
-        choiceName: $("#choiceName").val(),
-        choiceMaxSpaces: $("#choiceMaxSpaces").val(),
-        choiceInfo1: $("#choiceInfo1").val(),
-        choiceInfo2: $("#choiceInfo2").val()
-    }
-
+function addRow() {
     var choiceTable = document.getElementById("choiceTable")
-    var newRow = choiceTable.insertRow(choiceTable.rows.length - 1 )
+    var newRow = choiceTable.insertRow(choiceTable.rows.length)
 
     var rowContent = 
     `<td class="choice-name">
-        ${newChoice['choiceName']}
+        <span>tyhjä<span>
     </td>
     <td class="choice-max-spaces">
-        ${newChoice['choiceMaxSpaces']}
-    </td>
-    <td class="choice-info1">
-        ${newChoice['choiceInfo1']}
-    </td>
-    <td class="choice-info2">
-        ${newChoice['choiceInfo2']}
-    </td>
-    <td class="choice-edit-btn">
-        <button onclick="editRow(this)">edit</button>
+        <span>tyhjä<span>
     </td>
     `
     newRow.setAttribute('class', 'choice-row not-edited')
     newRow.innerHTML = rowContent
+}
 
-    $("#choiceName").val(""),
-    $("#choiceMaxSpaces").val(""),
-    $("#choiceInfo1").val(""),
-    $("#choiceInfo2").val("")
+function invokeAddColumn() {
+    console.log("Hello!")
+    var headersRow = document.getElementById("table-headers")
+    var addColHeader = document.getElementById("add-column-header")
+    //stash inner html, it is returned after new column is created
+    var addColHeaderInnerHtml = addColHeader.innerHTML
+
+    var newColField = document.createElement("input");
+    newColField.setAttribute('type', 'text');
+    newColField.addEventListener('focusout', finishAddColumn, )
+    newColField.focus()
+
+    var newCol = document.createElement("th")
+    newCol.innerText = "FOO"
+    headersRow.insertBefore(newCol, addColHeader)
+}
+
+function finishAddColumn(event, addColumnHeader) {
+    console.log("FINISH EM")
 }
 
 function editRow(element) {
