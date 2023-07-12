@@ -1,32 +1,5 @@
-tr.editable {
-    border: 3px blue solid;
-    background-color: aquamarine;
-    height: 40px;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-}
-
-#newRow:not(.editable){
-    background-color: darkgray;
-}
-
-td>input {
-    height: 40px;
-}
-
-
-table,th,td,tr.choice-table {
-    border: 1px black solid;
-    border-collapse: collapse;
-    width: 1200px;
-}
-
 section {
     margin-bottom: 40px;
-}
-
-th:hover,td:hover {
-    background-color: #323539;
 }
 
 .variable-header:hover {
@@ -37,9 +10,12 @@ th:hover,td:hover {
     cursor: not-allowed;
 }
 
-th input {
+th:hover, td:hover {
+    background-color: #99999b;
+}
+
+th input, td input{
     background-color: #323539;
-    width: 100%;
     color: white;
     font-weight: bold;
     border:0;
@@ -55,10 +31,10 @@ table th,td {
     position: relative;
 }
 
-th.edited:after {
+th.edited:after, td.edited:after {
     content: '';
     position: absolute;
     top: 0; right: 0;
     bottom: 0; left: 0;
-    border: 2px solid red;
+    border: 2px solid #99999b;
 }

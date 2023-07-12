@@ -1,25 +1,35 @@
-function parseObjFromRow(row) {
+var emptyCellText = "tyhjä"
+
+function parseObjFromRow(row, headers) {
     var cells = Array.from(row.getElementsByTagName('td'))
-    
-    return {
-        choiceName: cells[0].innerText,
-        choiceMaxSpaces: cells[1].innerText,
-        choiceInfo1: cells[2].innerText,
-        choiceInfo2: cells[3].innerText
+    console.log("Cells", cells)
+    console.log("Headers", headers)
+    obj = {}
+
+    for (var i=0; i < headers.length;i++) {
+        obj[headers[i]] = cells[i].innerText
     }
+
+    return obj
 }
 
 function createNewSurvey() {
     console.log("createNewSurvey()")
     
-    var choiceTableRows = Array.from(document.querySelectorAll("#choiceTable tr:not(:last-of-type)"))
-    var rowsAsJson = choiceTableRows.map(parseObjFromRow)
+    // Get column names from the choice table
+    var tableHeaders = Array.from(document.querySelectorAll("#table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
+    console.log(tableHeaders)
+
+    var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
+    var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
 
     var requestData = {
         surveyGroupname: $("#groupname").val(),
         choices: rowsAsJson,
-        course_id: "dummy"
+        surveyInformation: document.getElementById("survey-information").innerText
     }
+
+    console.log(requestData)
 
     $.ajax({
     type: "POST",
@@ -37,109 +47,109 @@ function addRow() {
     var choiceTable = document.getElementById("choiceTable")
     var newRow = choiceTable.insertRow(choiceTable.rows.length)
 
-    var rowContent = 
-    `<td class="choice-name">
-        <span>tyhjä<span>
-    </td>
-    <td class="choice-max-spaces">
-        <span>tyhjä<span>
-    </td>
-    `
-    newRow.setAttribute('class', 'choice-row not-edited')
-    newRow.innerHTML = rowContent
-}
-
-function invokeAddColumn() {
-    console.log("Hello!")
-    var headersRow = document.getElementById("table-headers")
-    var addColHeader = document.getElementById("add-column-header")
-    //stash inner html, it is returned after new column is created
-    var addColHeaderInnerHtml = addColHeader.innerHTML
-
-    var newColField = document.createElement("input");
-    var stylingDiv = document.createElement("div");
+    // Getting the number of columns in the table,
+    // Last header is subtracted, it is the add new column one
+    headersCount = (document.getElementById("table-headers").getElementsByTagName("th").length) - 1
     
-    newColField.setAttribute('type', 'text');
-    newColField.setAttribute('id', 'new-col-name-input')
-    stylingDiv.appendChild(newColField)
-
-    addColHeader.removeAttribute('onclick')
-    addColHeader.setAttribute('class', 'edited')
-
-    addColHeader.innerHTML = stylingDiv.outerHTML
-
-    newColField = document.getElementById('new-col-name-input')
-    newColField.addEventListener(
-        'focusout', function() {finishAddColumn(evt, addColHeaderInnerHtml)}, false )
-    newColField.focus()
+    for (var i = 0; i < headersCount; i++) {
+        // create an empty cell and attach event listener to it
+        var newEmptyCell = document.createElement("td")
+        newEmptyCell.innerHTML = emptyCellText
+        newRow.appendChild(newEmptyCell).addEventListener("click", editCell)
+    }      
 }
 
-function finishAddColumn(evt, addColumnHeader) {
-    console.log(evt)
-    console.log(addColumnHeader)
+function editCell(event) {
+    console.log("editCell")
+    console.log(event.target)
+    var editableField = document.createElement("input");
+    editableField.setAttribute('type', 'text');
 
-    var headersRow = document.getElementById("table-headers")
+    // if edited cell is not the "add new column" header, edit the current content 
+    // special case for "add new column" header to not keep old value
+    if (event.target.id !== "add-column-header") {
+        editableField.value = event.target.innerText    
+    }
+
+    event.target.innerText = ""
+    event.target.setAttribute('class', 'edited')
+    event.target.appendChild(editableField)
+
+    // Special event handler for "add new column" header
+    if (event.target.id !== "add-column-header") {
+        editableField.addEventListener("focusout", submitCell)
+    } else {
+        editableField.addEventListener("focusout", submitNewColumn)
+    }
+
+
+    editableField.focus()
+
+}
+
+function submitNewColumn(event) {
+    var newValue = event.target.value
+    var editedCell = event.target.parentNode
+    editedCell.classList.remove("edited")
+
+    // Case: New column name was left empty
+    //  -->: No new column will be added
+    if (event.target.value === "") {
+        editedCell.innerHTML = ""
+        editedCell.innerText = "+ Lisää sarake"
+        return
+    }
+
+    // Case: New column has a name
+    //  -->: Change name of the column, remove id
+    editedCell.removeAttribute("id")
+
+    //  -->: Set header value to what was given to the input field
+    editedCell.innerHTML = ""
+    editedCell.innerText = newValue
+
+    // -->: Create new "Add new column" header to the table
+    var headers = document.getElementById("table-headers")
+    var newAddColumnHeader = document.createElement("th")
+    newAddColumnHeader.setAttribute("id", "add-column-header")
+    newAddColumnHeader.setAttribute("class", "variable-header")
+    newAddColumnHeader.innerText = "+ Lisää sarake"
+    headers.appendChild(newAddColumnHeader)
+    newAddColumnHeader.addEventListener("click", editCell)
+
+    // -->: Add cell matching the header to all existing rows in the table
+    var rows = document.getElementById("choiceTable").getElementsByTagName("tr")
+    for (var row of rows) {
+        var newCell = document.createElement("td")
+        newCell.innerText = emptyCellText
+        row.appendChild(newCell)
+        newCell.addEventListener("click", editCell)
+    }
+}
+
+function submitCell(event) {
+    var newValue = event.target.value
+    var editedCell = event.target.parentNode
+    editedCell.classList.remove("edited")
+    editedCell.innerHTML = ""
+    editedCell.innerText = newValue
+
+}
+
+function pageLoadActions() {
+    var choiceTable = document.getElementById("choiceTable")
+
+    // Add onClick event to all regular table cells
+    var cells = choiceTable.getElementsByTagName("td")
+    for (var cell of cells) {
+        cell.addEventListener("click", editCell)
+    }
+
+    // Add onClick event to "add new column" -header
     var addColHeader = document.getElementById("add-column-header")
-    headersRow.insertBefore(newCol, addColHeader)
+    addColHeader.addEventListener("click", editCell)
 }
 
-function editRow(element) {
-    document.getElementById('newRow').classList.remove('editable')
-    var rowToEdit = element.parentNode.parentNode
-    rowToEdit.classList.add('editable')
-    rowToEdit.classList.remove('not-edited')
-    choiceNameTd = rowToEdit.querySelector(".choice-name")
-    choiceMaxSpacesTd = rowToEdit.querySelector(".choice-max-spaces")
-    choiceInfo1Td = rowToEdit.querySelector(".choice-info1")
-    choiceInfo2Td = rowToEdit.querySelector(".choice-info2")
-    choiceEditBtnTd = rowToEdit.querySelector(".choice-edit-btn")
-
-    choiceNameTd.innerHTML = `<input type="text" id="choiceNameEditedRow" value="${choiceNameTd.innerText}" />`
-    choiceMaxSpacesTd.innerHTML = `<input type="number" id="choiceMaxSpacesEditedRow" value="${choiceMaxSpacesTd.innerText}" />`
-    choiceInfo1Td.innerHTML = `<textarea id="choiceInfo1EditedRow">${choiceInfo1Td.innerText}</textarea>`
-    choiceInfo2Td.innerHTML = `<textarea id="choiceInfo2EditedRow">${choiceInfo2Td.innerText}</textarea>`
-    choiceEditBtnTd.innerHTML = `<button onclick="applyRowEdit(this)">apply</button>`
-
-    toggleEditRowElements()
-}
-
-function applyRowEdit(element) {
-    var rowToEdit = element.parentNode.parentNode
-    rowToEdit.classList.remove('editable')
-
-    choiceNameTd = rowToEdit.querySelector(".choice-name")
-    choiceMaxSpacesTd = rowToEdit.querySelector(".choice-max-spaces")
-    choiceInfo1Td = rowToEdit.querySelector(".choice-info1")
-    choiceInfo2Td = rowToEdit.querySelector(".choice-info2")
-    choiceEditBtnTd = rowToEdit.querySelector(".choice-edit-btn")
-
-    var rowContent = 
-    `<td class="choice-name">
-        ${ $(choiceNameTd.querySelector(":first-child")).val()}
-    </td>
-    <td class="choice-max-spaces">
-        ${ $(choiceMaxSpacesTd.querySelector(":first-child")).val()}
-    </td>
-    <td class="choice-info1">
-        ${ $(choiceInfo1Td.querySelector(":first-child")).val()}
-    </td>
-    <td class="choice-info2">
-        ${ $(choiceInfo2Td.querySelector(":first-child")).val()}
-    </td>
-    <td class="choice-edit-btn">
-        <button onclick="editRow(this)">edit</button>
-    </td>
-    `
-
-    rowToEdit.innerHTML = rowContent
-    document.getElementById('newRow').classList.add('editable')
-    toggleEditRowElements()
-}
-
-function toggleEditRowElements() {
-    var editRowElements = document.querySelectorAll("#newRow .new-row-input")
-    editRowElements.forEach(elem => {elem.disabled = (elem.disabled?false:true)})
-
-    var otherRowsEditBtns = document.querySelectorAll(".not-edited .choice-edit-btn>button")
-    otherRowsEditBtns.forEach(elem => {elem.disabled = (elem.disabled?false:true)})
-}
+document.addEventListener("DOMContentLoaded",function() {
+   pageLoadActions() 
+})
