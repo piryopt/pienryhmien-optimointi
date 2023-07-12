@@ -155,4 +155,37 @@ class SurveyRepository:
             print(e)
             return False
 
+    
+    def create_new_survey(self, surveyname, user_id, min_choices =1):
+        '''
+        Creates a new survey, updates just surveys table
+        RETURNS created survey's id
+        '''
+
+        sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed)"\
+            " VALUES (:surveyname, :teacher_id, :min_choices, :closed) RETURNING id"
+        result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False})
+        db.session.commit()
+        return result.fetchone()[0]
+
+    def create_new_survey_choice(self, survey_id, name, seats):
+        '''
+        Adds a new choice to existing survey, updates just survey_choices table
+        RETURNS created choice's id
+        '''
+        sql = "INSERT INTO survey_choices (survey_id, name, max_spaces)"\
+              " VALUES (:survey_id, :name, :max_spaces) RETURNING id"
+        result = db.session.execute(text(sql), {"survey_id":survey_id, "name":name, "max_spaces":seats})
+        db.session.commit()
+        return result.fetchone()[0]
+
+    def create_new_choice_info(self, choice_id, info_key, info_value):
+        '''
+        Adds an additional to existing survey choice, updates choice_infos table
+        '''
+        sql = "INSERT INTO choice_infos (choice_id, info_key, info_value)"\
+              " VALUES (:c_id, :i_key, :i_value)"
+        result = db.session.execute(text(sql), {"c_id":choice_id, "i_key":info_key, "i_value":info_value})
+        db.session.commit()
+
 survey_repository = SurveyRepository()

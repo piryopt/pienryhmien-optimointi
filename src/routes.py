@@ -280,3 +280,29 @@ def close_survey(survey_id):
     if survey_service.close_survey(survey_id, user_id):
         return previous_surveys()
     return hello_world()
+
+@app.route("/from_csv", methods = ["GET", "POST"])
+def from_csv():
+    teacher = True if session.get("role", 0) == "Opettaja" else False
+    if request.method == "GET":
+        return render_template("from_csv.html", teacher=teacher)
+    if request.method == "POST":
+        file = request.files['file']
+
+        if file.filename == '': # did user provide a file
+            return redirect(request.url)
+        if not file.filename[-4:] == ".csv": # is it a .csv file
+            return redirect(request.url)
+        if not teacher:
+            return redirect(request.url)
+
+        filename = "to_be_parsed.csv"
+        survey_name = request.form["name"]
+
+        file.save(os.path.join("documentation", filename)) # save csv to
+
+        user_id = session.get("user_id", 0)
+        survey_service.create_survey_from_csv(filename, survey_name, user_id)
+
+
+        return redirect("/previous_surveys")

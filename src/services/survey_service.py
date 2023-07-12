@@ -1,6 +1,7 @@
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
+from src.tools.parsers import parser_elomake_csv
 
 class SurveyService:
     def __init__(self, survey_repositroy=default_survey_repository):
@@ -104,5 +105,8 @@ class SurveyService:
     def get_list_closed_surveys(self, teacher_id):
         surveys = self._survey_repository.get_closed_surveys(teacher_id)
         return surveys
+    
+    def create_survey_from_csv(self, filename, survey_name, user_id):
+        parser_elomake_csv(filename, survey_name, user_id) # in tools
 
 survey_service = SurveyService()
