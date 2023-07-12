@@ -23,19 +23,16 @@ Open And Configure Browser
     Set Selenium Speed  ${DELAY}
 
 Main Page Should Be Open
-    Page Should Contain  Index
-    Page Should Contain  Hello
-    Page Should Contain  Kokeile luoda dataa
-    Page Should Contain  Kokeile valmiilla datalla
+    Page Should Contain  Tervetuloa
+    Page Should Contain  Näytä vanhat kyselyt
 
 Register Page Should Be Open
 	Page Should Contain  Nimi
     Page Should Contain  Opiskelijanumero
     Page Should Contain  Rooli
 
-
 Login Page Should Be Open
-	Page Should Contain  Login
+	Page Should Contain  Kirjaudu sisään
 
 Create Survey Page Should Be Open
 	Page Should Contain  Luo uusi kysely
@@ -43,8 +40,9 @@ Create Survey Page Should Be Open
 
 Previous Surveys Page Should Be Open
 	Page Should Contain  Aiemmat kyselyt
-    Page Should Contain  Kyselyn nimi
+    Page Should Contain  Nimi
     Page Should Contain  Kyselyn tila
+    Page Should Contain  Toiminnot
 
 Excel Page Should Be Open
     Title Should Be     Tulokset - Jakaja

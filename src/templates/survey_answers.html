@@ -6,28 +6,33 @@
 {% endblock %}
 
 {% block content %}
-  <h2>{{ survey_name }}</h2>
-  <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
+</br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}</h5>
+<i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
 
-  <form action="/surveyresults" method="POST">
-    <input type="hidden" name="survey_id" value="{{ survey_id }}"></input>
-    <button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button>
-</form><br>
+<form action="/surveys/{{ survey_id }}/results" method="POST">
+  <button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button>
+</form>
+
+<form action="/surveys/{{ survey_id }}/close" method="POST" onsubmit="return confirm ('Haluatko varmasti sulkea kyselyn?')">
+  <button type="submit" class="btn btn-danger" name="closin_time" style="float: right;" onclick="">Sulje kysely</button>
+</form>
+<br>
+
 <a href="/previous_surveys">Palaa kyselylistaan</a>
 
   <BR><BR>
-    <table id="answers_table" cellspacing="10" class="table">
-      <thead class="table-primary">
+    <table id="answers_table" cellspacing="10" class="table table-striped">
+      <thead class="table-dark">
         <tr>
-            <th>Sähköposti</th>
+            <th><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Sähköposti</th>
             <th>Valinnat</th>
         </tr>
       </thead>
       <tbody>
         <tr>
         {% for row in survey_answers %}
-          <td>{{ row[0] }}</td>
-          <td>{{ row[1] }}</td>
+          <td><p>{{ row[0] }}</p></td>
+          <td><p>{{ row[1] }}</p></td>
         </tr>
         {% endfor %}
       </tbody>

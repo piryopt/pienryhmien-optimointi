@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Kysely{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+</br>
+<h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }} (Vastausaika on loppunut)</h5>
+<label>Valinnat:</label>
+<ul id="sortable1" class="list-group">
+    {% for group in choices %}
+    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ group[2] }}</h5>
+        </div>
+        <small class="text-muted">You cannot stop him, you can only hope to contain him!</small>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

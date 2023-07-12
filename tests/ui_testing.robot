@@ -15,22 +15,14 @@ ${EXCELBUTTON}    xpath=//button[@type='submit' and contains(text(),'Vie tulokse
 
 
 *** Test Cases ***
-Click 'Kokeile valmiilla datalla' link
-    Go To Main Page
-    Click Link     Kokeile valmiilla datalla
-    Excel Page Should Be Open
 
-Results page has table and table has content
+Excel Results page has table and table has content
+    Go To Excel Page
     Wait Until Page Contains Element    //table
     Element Should Be Visible    //table
     ${Rows}=    get element count    xpath://table[@id='results_table']/tbody/tr
     Log To Console     ${Rows}
     Should Be Equal As Strings    ${DATA COUNT}   ${Rows}
-
-Main Page 'Kokeile luoda dataa' link is functional
-    Go To Main Page
-    Click Link    Kokeile luoda dataa
-    Toy Data Input Page Should Be Open
 
 'Kokeile luoda dataa' form in functional
     Go To Toy Data Input Page 
