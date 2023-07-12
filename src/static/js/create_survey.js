@@ -57,17 +57,30 @@ function invokeAddColumn() {
     var addColHeaderInnerHtml = addColHeader.innerHTML
 
     var newColField = document.createElement("input");
+    var stylingDiv = document.createElement("div");
+    
     newColField.setAttribute('type', 'text');
-    newColField.addEventListener('focusout', finishAddColumn, )
-    newColField.focus()
+    newColField.setAttribute('id', 'new-col-name-input')
+    stylingDiv.appendChild(newColField)
 
-    var newCol = document.createElement("th")
-    newCol.innerText = "FOO"
-    headersRow.insertBefore(newCol, addColHeader)
+    addColHeader.removeAttribute('onclick')
+    addColHeader.setAttribute('class', 'edited')
+
+    addColHeader.innerHTML = stylingDiv.outerHTML
+
+    newColField = document.getElementById('new-col-name-input')
+    newColField.addEventListener(
+        'focusout', function() {finishAddColumn(evt, addColHeaderInnerHtml)}, false )
+    newColField.focus()
 }
 
-function finishAddColumn(event, addColumnHeader) {
-    console.log("FINISH EM")
+function finishAddColumn(evt, addColumnHeader) {
+    console.log(evt)
+    console.log(addColumnHeader)
+
+    var headersRow = document.getElementById("table-headers")
+    var addColHeader = document.getElementById("add-column-header")
+    headersRow.insertBefore(newCol, addColHeader)
 }
 
 function editRow(element) {

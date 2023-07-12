@@ -37,6 +37,28 @@ th:hover,td:hover {
     cursor: not-allowed;
 }
 
-td .edited {
-    padding: 0 0 0 0;
+th input {
+    background-color: #323539;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    border:0;
+    outline:0;
+    outline:none!important;
+}
+
+.edited {
+    background-color: #323539 !important;
+}
+
+table th,td {
+    position: relative;
+}
+
+th.edited:after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    bottom: 0; left: 0;
+    border: 2px solid red;
 }
