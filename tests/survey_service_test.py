@@ -8,12 +8,9 @@ from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_repository import user_repository as ur
 from src.services.user_service import user_service as us
 from src.entities.user import User
+from src.tools.parsers import clear_database
 
 class TestSurveyService(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        pass
 
     def setUp(self):
         load_dotenv()
@@ -36,6 +33,8 @@ class TestSurveyService(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
     
+    def test_notreally_clear_database_begin_serv(self):
+        clear_database()
 
     def test_invalid_survey_id_list_choices(self):
         """
@@ -161,7 +160,7 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(False, exists)
 
     def test_create_survey_from_csv(self):
-        ss.create_survey_from_csv("test_survey.csv", "AAAAAAA", 3)
+        ss.create_survey_from_csv("test_survey.csv", "AAAAAAA", self.user_id)
         
     def test_count_surveys_created_invalid(self):
         """
@@ -237,4 +236,7 @@ class TestSurveyService(unittest.TestCase):
         ss.close_survey(survey_id, self.user_id2)
         count = len(ss.get_list_closed_surveys(self.user_id2))
         self.assertEqual(2, count)
+
+    def test_notreally_clear_database_end_serv(self):
+        clear_database()
 

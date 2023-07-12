@@ -6,6 +6,7 @@ from src import db
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_repository import user_repository as ur
 from src.entities.user import User
+from src.tools.parsers import clear_database
 
 class TestSurveyRepository(unittest.TestCase):
     def setUp(self):
@@ -29,6 +30,9 @@ class TestSurveyRepository(unittest.TestCase):
     def tearDown(self):
         db.drop_all()
         self.app_context.pop()
+
+    def test_notreally_clear_database_begin_rep(self):
+        clear_database()
 
     def test_check_if_survey_exists(self):
         """
@@ -125,6 +129,9 @@ class TestSurveyRepository(unittest.TestCase):
         sr.close_survey(survey_id, self.user_id2)
         closed_list = sr.get_closed_surveys(self.user_id2)
         self.assertEqual(1, len(closed_list))
+
+    def test_notreally_clear_database_end_rep(self):
+        clear_database()
 
 
 if __name__ == "__main__":
