@@ -7,6 +7,7 @@ Suite Teardown  Close Browser
 ${REGISTERBUTTON}    xpath=//button[@type='submit' and contains(text(),'Luo tunnus')]
 ${LOGINBUTTON}    xpath=//button[@type='submit' and contains(text(),'Kirjaudu')]
 ${NEWSURVEY}    xpath=//button[@type='submit' and contains(text(),'Luo kysely')]
+${CSVBUTTON}    xpath=//button[@type='submit' and contains(text(),'Luo kysely')]
 
 *** Test Cases ***
 Open Main Page Test
@@ -130,6 +131,23 @@ Removing Submission Works Test
     Click Button  id:Best robots
     Page Should Not Contain  studenttrobot@robot.com
 
+Import Csv As Teacher Test
+    Login As Teacher
+    Go To Csv Import Page
+    Set Name  Testi päiväkodit
+    
+Import Csv As Studnet Test
+    [documentation]  Students should not have access here
+    Login As Student
+    Go To Csv Import Page
+    Page Should Contain  Sinulla ei ole oikeuksia luoda kyselyitä
+
+Import Csv As Unlogged Test
+    [documentation]  Unlogged should not have access here
+    Go To Logout Page
+    Go To Csv Import Page
+    Page Should Contain   Kirjaudu sisään päästäksesi alueelle
+
 *** Keywords ***
 Set Email
     [Arguments]  ${email}
@@ -162,3 +180,17 @@ Set Info1
 Set Info2
     [Arguments]  ${choiceInfo2}
     Input Text  choiceInfo2  ${choiceInfo2}
+
+Login As Teacher
+    [documentation]  Logs out and logs in with earlier created teacher email
+    Go To Logout Page
+    Go To Login Page
+    Set Email  testtrobot@robot.com
+    Click Element  ${LOGINBUTTON}
+
+Login As Student
+    [documentation]  Logs out and logs in with earlier created student email
+    Go To Logout Page
+    Go To Login Page
+    Set Email  studenttrobot@robot.com
+    Click Element  ${LOGINBUTTON}

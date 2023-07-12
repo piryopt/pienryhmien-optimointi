@@ -10,6 +10,7 @@ ${HOME URL}  http://${SERVER}
 ${REGISTER URL}  http://${SERVER}/register
 ${LOGIN URL}  http://${SERVER}/login
 ${CREATE SURVEY URL}  http://${SERVER}/create_survey
+${FROM CSV URL}  http://${SERVER}/from_csv
 ${PREVIOUS SURVEYS URL}  http://${SERVER}/previous_surveys
 ${LOGOUT URL}  http://${SERVER}/logout
 ${EXCEL URL}  http://${SERVER}/excel
@@ -88,3 +89,6 @@ Go To Toy Data Input Page
 
 Go To Toy Data Results Page
     Go To  ${TOY DATA RESULTS URL}
+
+Go To Csv Import Page
+    Go To  ${FROM CSV URL}

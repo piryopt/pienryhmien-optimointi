@@ -10,6 +10,11 @@ from src.services.user_service import user_service as us
 from src.entities.user import User
 
 class TestSurveyService(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        pass
+
     def setUp(self):
         load_dotenv()
         self.app = Flask(__name__)
@@ -24,15 +29,16 @@ class TestSurveyService(unittest.TestCase):
         ur.register(user)
         self.user_id = ur.find_by_email(user.email)[0]
 
-
     def tearDown(self):
         db.drop_all()
         self.app_context.pop()
+    
 
     def test_invalid_survey_id_list_choices(self):
         """
         Test that no list of choices is returned for an invalid survey id
         """
+
         exists = ss.get_list_of_survey_choices(-1)
         self.assertEqual(False, exists)
 
@@ -119,3 +125,6 @@ class TestSurveyService(unittest.TestCase):
     def test_get_invalid_survey_choice(self):
         exists = ss.get_survey_choice(-1)
         self.assertEqual(False, exists)
+
+    def test_create_survey_from_csv(self):
+        ss.create_survey_from_csv("test_survey.csv", "AAAAAAA", 3)
