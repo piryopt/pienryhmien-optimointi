@@ -1,6 +1,7 @@
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
+from src.tools.parsers import parser_elomake_csv
 
 class SurveyService:
     def __init__(self, survey_repositroy=default_survey_repository):
@@ -69,6 +70,9 @@ class SurveyService:
         if not new_choice:
             return False
         return True
+    
+    def create_survey_from_csv(self, filename, survey_name, teacher_id):
+        parser_elomake_csv(filename, survey_name, teacher_id) # in tools
     
     def get_choice_additional_infos(self, choice_id):
         return self._survey_repository.get_choice_additional_infos(choice_id)

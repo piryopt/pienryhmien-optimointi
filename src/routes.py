@@ -271,7 +271,8 @@ def from_csv():
 
         file.save(os.path.join("documentation", filename)) # save csv to
 
-        parser_elomake_csv(filename, survey_name)
+        teacher_id = session.get("user_id", 0)
+        survey_service.create_survey_from_csv(filename, survey_name, teacher_id)
 
 
         return redirect("/previous_surveys")

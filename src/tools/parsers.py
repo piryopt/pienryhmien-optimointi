@@ -1,13 +1,13 @@
 import csv
 from src.repositories.survey_repository import survey_repository
 
-def parser_elomake_csv(filename, survey_name): # bit verbose, but should be easy to read
+
+def parser_elomake_csv(filename, survey_name, teacher_id): # bit verbose, but should be easy to read
     '''
     Parses a survey from Elomake exported CSV file and creates a survey,
     including choices etc.
     '''
-    survey_id = survey_repository.create_new_survey(survey_name)
-    print(survey_id)
+    survey_id = survey_repository.create_new_survey(survey_name, teacher_id)
 
     filename = "documentation/" + filename
 

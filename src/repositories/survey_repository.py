@@ -113,13 +113,13 @@ class SurveyRepository:
 
     # new functions for new schema
 
-    def create_new_survey(self, surveyname, min_choices =1):
+    def create_new_survey(self, surveyname, teacher_id, min_choices =1):
         '''
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
         '''
 
-        teacher_id = user_repository.get_user_id()
+        
         sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed)"\
             " VALUES (:surveyname, :teacher_id, :min_choices, :closed) RETURNING id"
         result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":teacher_id, "min_choices":min_choices, "closed":False})
