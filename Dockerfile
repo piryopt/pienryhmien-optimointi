@@ -8,6 +8,7 @@ COPY ./schema.sql .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN chmod u=rw,g=rw
 
 CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
 
