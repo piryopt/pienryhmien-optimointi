@@ -107,4 +107,7 @@ body {background-color: rgb(24, 26, 27);}
     opacity: 0.8;
 }
 
-
+.dropdown-menu {
+    min-width: 100%;
+    text-align: left;
+  }
