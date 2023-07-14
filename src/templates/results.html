@@ -22,10 +22,11 @@
 <label>{{ h }}</label></br>
 {% endfor %}
 </br>
-<p><button type="submit" class="btn btn-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button>
-    <button type="submit" class="btn btn-success">Tallenna tulokset</button>
+<button type="submit" class="btn btn-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button></br></br>
+    <form action="/surveys/{{ survey_id }}/results" method="POST" onsubmit="return confirm ('Haluatko varmasti tallentaa tulokset?')">
+        <button type="submit" class="btn btn-success" name="savin_time">Tallenna tulokset</button>
+    </form></br>
     <button type="submit" class="btn btn-warning">Vapaan muokkauksen tila</button>
-</p>
 </br></br>
 
 <b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
