@@ -123,5 +123,24 @@ class SurveyService:
         if not ranking:
             print("No ranking for this user!")
         return ranking
+    
+    def save_result(self, user_id, survey_id, choice_id):
+        survey = self._survey_repository.check_if_survey_exists(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        ranking_exists = self.user_ranking_exists(survey_id, user_id)
+        if not ranking_exists:
+            print("USER RANKING FOR THIS USER DOES NOT EXIST!")
+            return False
+        saved = self._survey_repository.save_result(user_id, survey_id, choice_id)
+        return saved
+
+    def check_if_survey_results_saved(self, survey_id):
+        survey = self._survey_repository.check_if_survey_exists(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        return survey.results_saved
 
 survey_service = SurveyService()
