@@ -9,13 +9,19 @@
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}</h5>
 <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
 
+
+{% if closed %}
 <form action="/surveys/{{ survey_id }}/results" method="POST">
   <button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button>
 </form>
-
+<form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
+  <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
+</form>
+{% else %}
 <form action="/surveys/{{ survey_id }}/close" method="POST" onsubmit="return confirm ('Haluatko varmasti sulkea kyselyn?')">
   <button type="submit" class="btn btn-danger" name="closin_time" style="float: right;" onclick="">Sulje kysely</button>
 </form>
+{% endif %}
 <br>
 
 <a href="/previous_surveys">Palaa kyselylistaan</a>
