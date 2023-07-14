@@ -261,8 +261,11 @@ def admin_gen_survey():
     surveys = SurveyTools.fetch_all_active_surveys(user_id)
     return render_template("/admintools/gen_data.html", surveys = surveys)
 
-@app.route("/surveys/<int:survey_id>/results", methods = ["POST"])
+@app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
 def survey_results(survey_id):
+    if not survey_service.check_if_survey_closed(survey_id):
+        return hello_world()
+
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
     user_rankings = SurveyTools.fetch_survey_responses(survey_id)
 
@@ -270,7 +273,7 @@ def survey_results(survey_id):
     students_dict = convert_users_students(user_rankings)
 
     weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
-    
+        
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
@@ -282,9 +285,22 @@ def survey_results(survey_id):
         ranking = survey_service.get_choice_ranking(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking)
         results.append(happiness)
+  
+    if request.method == "GET":
+        return render_template("results.html", survey_id = survey_id, results = output_data[0],
+                            happiness_data = output_data[2], happiness = output_data[1])
 
-    return render_template("results.html", results = output_data[0],
-                           happiness_data = output_data[2], happiness = output_data[1])
+    saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
+    if saved_result_exists:
+        print("Results have already been saved!")
+        return previous_surveys()
+    for results in output_data[0]:
+        user_id = results[0][0]
+        choice_id =  results[2][0]
+        saved = survey_service.save_result(user_id, survey_id, choice_id)
+        if not saved:
+            print(f"ERROR IN SAVING {results[0][1]} RESULTS!")
+    return previous_surveys()
 
 @app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
 def close_survey(survey_id):
