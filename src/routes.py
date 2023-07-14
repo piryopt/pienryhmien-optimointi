@@ -12,7 +12,8 @@ import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
-from src.tools.survey_result_helper import convert_choices_groups, convert_users_students
+from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
+from src.tools.rankings_converter import convert_to_list, convert_to_string
 
 @app.route("/")
 def hello_world() -> str:
@@ -25,6 +26,8 @@ def hello_world() -> str:
     if surveys_created == 0:
         return render_template('index.html', surveys_created = 0, exists = False)
     surveys = survey_service.get_active_surveys(user_id)
+    if not surveys:
+        return render_template('index.html', surveys_created = surveys_created, exists = False)
     data = []
     for s in surveys:
         survey_id = s[0]
@@ -85,7 +88,7 @@ def surveys(survey_id):
     if user_survey_ranking:
         existing = "1"
         user_rankings = user_survey_ranking[3]
-        list_of_survey_choice_id = user_rankings.split(",")
+        list_of_survey_choice_id = convert_to_list(user_rankings)
 
         survey_choices = []
         for survey_choice_id in list_of_survey_choice_id:
@@ -110,7 +113,7 @@ def delete_submission(survey_id):
 @app.route("/get_choices/<int:survey_id>", methods=["POST"])
 def get_choices(survey_id):
     raw_data = request.get_json()
-    ranking = ','.join(raw_data)
+    ranking = convert_to_string(raw_data)
     user_id = session.get("user_id",0)
     submission = survey_service.add_user_ranking(survey_id, ranking, user_id)
     response = {"status":"1","msg":"Tallennus onnistui."}
@@ -204,9 +207,10 @@ def survey_answers(survey_id):
     for s in survey_answers:
         choices_data.append([user_service.get_email(s[0]), s[1]])
     survey_answers_amount = len(survey_answers)
+    closed = survey_service.check_if_survey_closed(survey_id)
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=choices_data,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id)
+                           survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed)
 
 @app.route("/admintools/", methods = ["GET"])
 def admin_dashboard() -> str:
@@ -271,12 +275,29 @@ def survey_results(survey_id):
     sort.run()
     output_data = sort.get_data()
 
+    # Add to data the number of the choice the user got
+    for results in output_data[0]:
+        user_id = results[0][0]
+        choice_id =  results[2][0]
+        ranking = survey_service.get_choice_ranking(user_id, survey_id)
+        happiness = get_happiness(choice_id, ranking)
+        results.append(happiness)
+
     return render_template("results.html", results = output_data[0],
                            happiness_data = output_data[2], happiness = output_data[1])
 
 @app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
 def close_survey(survey_id):
     user_id = session.get("user_id",0)
-    if survey_service.close_survey(survey_id, user_id):
-        return previous_surveys()
-    return hello_world()
+    closed = survey_service.close_survey(survey_id, user_id)
+    if not closed:
+        print("ERROR IN CLOSING SURVEY")
+    return survey_answers(survey_id)
+
+@app.route("/surveys/<int:survey_id>/open", methods = ["POST"])
+def open_survey(survey_id):
+    user_id = session.get("user_id",0)
+    opened = survey_service.open_survey(survey_id, user_id)
+    if not opened:
+        print("ERROR IN OPENING SURVEY")
+    return survey_answers(survey_id)

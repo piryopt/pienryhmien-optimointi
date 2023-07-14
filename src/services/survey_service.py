@@ -86,6 +86,19 @@ class SurveyService:
             return False
         return self._survey_repository.close_survey(survey_id, teacher_id)
     
+    def open_survey(self, survey_id, teacher_id):
+        survey = self._survey_repository.check_if_survey_exists(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        if survey.teacher_id != teacher_id:
+            print("YOU DID NOT CREATE THIS SURVEY. YOU CANNOT OPEN IT")
+            return False
+        if self._survey_repository.survey_name_exists(survey.surveyname, teacher_id):
+            print("A SURVEY WITH THIS NAME ALREADY EXISTS!")
+            return False
+        return self._survey_repository.open_survey(survey_id, teacher_id)
+
     def get_active_surveys(self, teacher_id):
         surveys = self._survey_repository.get_active_surveys(teacher_id)
         if not surveys:
@@ -104,5 +117,11 @@ class SurveyService:
     def get_list_closed_surveys(self, teacher_id):
         surveys = self._survey_repository.get_closed_surveys(teacher_id)
         return surveys
+    
+    def get_choice_ranking(self, user_id, survey_id):
+        ranking = self._survey_repository.get_choice_ranking(user_id, survey_id)
+        if not ranking:
+            print("No ranking for this user!")
+        return ranking
 
 survey_service = SurveyService()

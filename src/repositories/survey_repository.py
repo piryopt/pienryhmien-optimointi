@@ -132,6 +132,16 @@ class SurveyRepository:
             print(e)
             return False
         
+    def open_survey(self, survey_id, teacher_id):
+        try:
+            sql = "UPDATE surveys SET closed = False WHERE (id=:survey_id and teacher_id=:teacher_id)"
+            db.session.execute(text(sql), {"survey_id":survey_id, "teacher_id":teacher_id})
+            db.session.commit()
+            return True
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+
     def get_active_surveys(self, teacher_id):
         try:
             sql = "SELECT id, surveyname FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)"
@@ -151,6 +161,18 @@ class SurveyRepository:
             surveys = result.fetchall()
             
             return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_choice_ranking(self, user_id, survey_id):
+        try:
+            sql = "SELECT ranking FROM user_survey_rankings WHERE (user_id=:user_id AND survey_id=survey_id)"
+            result = db.session.execute(text(sql), {"user_id":user_id, "survey_id":survey_id})
+            ranking = result.fetchone()
+            if not ranking:
+                return False
+            return ranking.ranking
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
