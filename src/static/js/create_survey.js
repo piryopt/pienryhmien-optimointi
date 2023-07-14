@@ -26,7 +26,7 @@ function createNewSurvey() {
     var requestData = {
         surveyGroupname: $("#groupname").val(),
         choices: rowsAsJson,
-        surveyInformation: document.getElementById("survey-information").innerText
+        surveyInformation: document.getElementById("survey-information").value
     }
 
     console.log(requestData)
