@@ -197,16 +197,4 @@ class SurveyRepository:
             print(e)
             return False
 
-    def check_if_survey_results_saved(self, survey_id):
-        try:
-            sql = "SELECT * FROM final_group WHERE survey_id=survey_id"
-            result = db.session.execute(text(sql), {"survey_id":survey_id})
-            saved_result = result.fetchone()
-            if not saved_result:
-                return False
-            return True
-        except Exception as e: # pylint: disable=W0718
-            print(e)
-            return False
-
 survey_repository = SurveyRepository()
