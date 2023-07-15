@@ -61,6 +61,7 @@ def results():
 
 @app.route("/excel")
 def excel():
+    '''Performance test for the Hungarian algortihm with real life data.'''
     groups_dict = excelreader.create_groups()
     students_dict = excelreader.create_students(groups_dict)
     weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
@@ -73,18 +74,23 @@ def excel():
 
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
+    '''The answer page for surveys.'''
+    # If the survey has no choices, redirect to home page.
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
-        return render_template("index.html")
-    shuffle(survey_choices)
-    closed = survey_service.check_if_survey_closed(survey_id)
+        return hello_world()
 
+    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
+    shuffle(survey_choices)
+
+    closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
     user_id = session.get("user_id", 0)
     user_survey_ranking = survey_service.user_ranking_exists(survey_id, user_id)
 
+    # If a ranking exists, display the choices in the order that the student chose them.
     if user_survey_ranking:
         existing = "1"
         user_rankings = user_survey_ranking[3]
@@ -96,14 +102,18 @@ def surveys(survey_id):
             if not survey_choice:
                 continue
             survey_choices.append(survey_choice)
+
+    # If the survey is closed, return a different page, where the student can view their answers.
     if closed:
         if user_survey_ranking:
             return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
         return render_template("closedsurvey.html", survey_name = survey_name)
+
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10")
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
+    '''Delete the current ranking of the student.'''
     response = {"status":"0", "msg":"Poistaminen epäonnistui"}
     current_user_id = session.get("user_id", 0)
     if survey_service.delete_ranking(survey_id, current_user_id):
@@ -112,6 +122,7 @@ def delete_submission(survey_id):
 
 @app.route("/get_choices/<int:survey_id>", methods=["POST"])
 def get_choices(survey_id):
+    '''Save the ranking to the database.'''
     raw_data = request.get_json()
     ranking = convert_to_string(raw_data)
     user_id = session.get("user_id",0)
@@ -160,10 +171,6 @@ def logout():
     user_service.logout()
     return render_template("index.html")
 
-@app.route("/groups")
-def groups():
-    return render_template("groups.html")
-
 @app.route("/create_survey", methods = ["GET"])
 def new_survey_form():
     return render_template("create_survey.html")
@@ -199,7 +206,10 @@ def previous_surveys():
 
 @app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
 def survey_answers(survey_id):
-    '''For displaying answers on a certain survey'''
+    '''For displaying the answers of a certain survey'''
+    # If the results have been saved, redirect to the ersults page
+    if survey_service.check_if_survey_results_saved(survey_id):
+        return survey_results(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
     survey_answers = SurveyTools.fetch_survey_responses(survey_id)
     choices_data = []
@@ -232,6 +242,7 @@ def reset_database() -> str:
 
 @app.route("/admintools/gen_data", methods = ["GET", "POST"])
 def admin_gen_data():
+    '''Page for generating users, a survey and user rankings.'''
     user_id = session.get("user_id",0)
     surveys = SurveyTools.fetch_all_active_surveys(user_id)
     if request.method == "GET":
@@ -245,6 +256,7 @@ def admin_gen_data():
 
 @app.route("/admintools/gen_data/rankings", methods = ["POST"])
 def admin_gen_rankings():
+    '''Generate user rankings for a survey (chosen from a list) for testing.'''
     survey_id = request.form.get("survey_list")
     survey_name = survey_service.get_survey_name(survey_id)
     gen_data.generate_rankings(survey_id)
@@ -257,6 +269,7 @@ def admin_gen_rankings():
 
 @app.route("/admintools/gen_data/survey", methods = ["POST"])
 def admin_gen_survey():
+    '''Generate a survey for testing.'''
     user_id = session.get("user_id",0)
     gen_data.generate_survey(user_id)
     surveys = SurveyTools.fetch_all_active_surveys(user_id)
@@ -264,18 +277,20 @@ def admin_gen_survey():
 
 @app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
 def survey_results(survey_id):
+    '''Display survey results. For the post request, the answers are saved to the database.'''
+
+    # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
         return hello_world()
+    # Check if the answers are already saved to the database. This determines which operations are available to the teacher.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
+    # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
     user_rankings = SurveyTools.fetch_survey_responses(survey_id)
-
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
-
     weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
-        
     sort = h.Hungarian(groups_dict, students_dict, weights)
     sort.run()
     output_data = sort.get_data()
@@ -287,17 +302,22 @@ def survey_results(survey_id):
         ranking = survey_service.get_choice_ranking(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking)
         results.append(happiness)
-  
+
     if request.method == "GET":
         return render_template("results.html", survey_id = survey_id, results = output_data[0],
                             happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists)
 
+    # If the request is post, check if results have been saved. If they have, redirect to previous_surveys page.
     if saved_result_exists:
         print("Results have already been saved!")
         return previous_surveys()
+
+    # Update the database entry for the survey, so that result_saved = True.
     survey_answered = survey_service.update_survey_answered(survey_id)
     if not survey_answered:
         return previous_surveys()
+
+    # Create new database entrys for final groups of the sorted students.
     for results in output_data[0]:
         user_id = results[0][0]
         choice_id =  results[2][0]
@@ -308,6 +328,7 @@ def survey_results(survey_id):
 
 @app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
 def close_survey(survey_id):
+    '''Close survey, so that no more answers can be submitted'''
     user_id = session.get("user_id",0)
     closed = survey_service.close_survey(survey_id, user_id)
     if not closed:
@@ -316,6 +337,7 @@ def close_survey(survey_id):
 
 @app.route("/surveys/<int:survey_id>/open", methods = ["POST"])
 def open_survey(survey_id):
+    '''Open survey back up so that students can submit answers'''
     user_id = session.get("user_id",0)
     opened = survey_service.open_survey(survey_id, user_id)
     if not opened:
