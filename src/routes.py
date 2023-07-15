@@ -37,7 +37,7 @@ def hello_world() -> str:
         # VAIHDA TÄMÄ OIKEESEEN PÄIVÄMÄÄRÄÄN KUN SAADAAN TOIMINNALLISUUS!!
         survey_ending_date = "31.8.2023"
         data.append([survey_id, surveyname, participants, survey_ending_date])
-    return render_template('index.html', surveys_created = surveys_created, exists = True, data = data)
+    return render_template('index.html', surveys_created = surveys_created, exists = True, data = data, error_statement = "DOES THIS WORK?")
 
 @app.route("/input")
 def input() -> str:
@@ -190,7 +190,6 @@ def new_survey_post():
 @app.route("/previous_surveys")
 def previous_surveys():
     '''For fetching previous survey list from the database'''
-    #search_results = SurveyTools.fetch_surveys_and_answer_amounts() 
     user_id = session.get("user_id",0)
     if user_id == 0:
         return hello_world()
@@ -208,9 +207,11 @@ def survey_answers(survey_id):
         choices_data.append([user_service.get_email(s[0]), s[1]])
     survey_answers_amount = len(survey_answers)
     closed = survey_service.check_if_survey_closed(survey_id)
+    answers_saved = survey_service.check_if_survey_results_saved(survey_id)
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=choices_data,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed)
+                           survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed,
+                           answered = answers_saved)
 
 @app.route("/admintools/", methods = ["GET"])
 def admin_dashboard() -> str:
@@ -265,6 +266,7 @@ def admin_gen_survey():
 def survey_results(survey_id):
     if not survey_service.check_if_survey_closed(survey_id):
         return hello_world()
+    saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
     user_rankings = SurveyTools.fetch_survey_responses(survey_id)
@@ -288,11 +290,13 @@ def survey_results(survey_id):
   
     if request.method == "GET":
         return render_template("results.html", survey_id = survey_id, results = output_data[0],
-                            happiness_data = output_data[2], happiness = output_data[1])
+                            happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists)
 
-    saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
     if saved_result_exists:
         print("Results have already been saved!")
+        return previous_surveys()
+    survey_answered = survey_service.update_survey_answered(survey_id)
+    if not survey_answered:
         return previous_surveys()
     for results in output_data[0]:
         user_id = results[0][0]
