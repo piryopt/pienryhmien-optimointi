@@ -19,7 +19,7 @@ def parser_elomake_csv(file, survey_name, user_id):
     which is why straight up strip() doesn't work, so they have to removed at all
     points that could be the last column.
     '''
-    survey_id = survey_repository.create_new_survey(survey_name, user_id)
+    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1)
 
     file = file.split('\n')
     row_count = len(file)
@@ -57,3 +57,27 @@ def parser_elomake_csv(file, survey_name, user_id):
 
         index += 1
 
+
+def parser_manual(survey_choices, survey_name, user_id):
+
+    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1)
+
+    for choice in survey_choices:
+
+        # unsophisticated, but since all the data is key-value pairs,
+        # this is the way it has to be
+        count = 0
+        choice_id = 0
+        for pair in choice:
+            if count == 0:
+                name = choice[pair]
+                count += 1
+                continue
+            if count == 1:
+                spaces = choice[pair]
+                count += 1
+                choice_id = survey_repository.create_new_survey_choice(survey_id, name, spaces)
+                continue
+
+            survey_repository.create_new_choice_info(choice_id, pair, choice[pair])
+            count += 1

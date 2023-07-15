@@ -1,7 +1,7 @@
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
-from src.tools.parsers import parser_elomake_csv
+from src.tools.parsers import parser_elomake_csv, parser_manual
 
 class SurveyService:
     def __init__(self, survey_repositroy=default_survey_repository):
@@ -114,5 +114,8 @@ class SurveyService:
 
     def get_choice_name_and_spaces(self, choice_id):
         return self._survey_repository.get_choice_name_and_spaces(choice_id)
+    
+    def create_new_survey_manual(self, survey_choices,survey_name, user_id):
+        parser_manual(survey_choices, survey_name, user_id)
 
 survey_service = SurveyService()

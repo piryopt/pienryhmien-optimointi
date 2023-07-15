@@ -168,16 +168,9 @@ def new_survey_post():
     data = request.get_json()
     survey_name = data["surveyGroupname"]
     user_id = session.get("user_id",0)
-    new_survey_id = survey_service.add_new_survey(survey_name, user_id)
-    if not new_survey_id:
-        return redirect("create_survey.html")
     survey_choices = data["choices"]
-    for choice in survey_choices:
-        choice_name = choice[0]
-        max_spaces = choice[1]
-        #info1 = choice["choiceInfo1"]
-        #info2 = choice["choiceInfo2"]
-        survey_service.add_survey_choice(new_survey_id, choice_name, max_spaces) # Additional information here
+
+    survey_service.create_new_survey_manual(survey_choices, survey_name, user_id)
 
     response = {"msg":"Uusi kysely luotu!"}
     return jsonify(response)
