@@ -36,9 +36,6 @@ def hello_world() -> str:
         data.append([survey_id, surveyname, participants, survey_ending_date])
     return render_template('index.html', surveys_created = surveys_created, exists = True, data = data)
 
-@app.route("/input")
-def input() -> str:
-    return render_template('input.html')
 
 @app.route("/results", methods = ["POST"])
 def results():
