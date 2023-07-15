@@ -290,20 +290,20 @@ def from_csv():
     if request.method == "POST":
         file = request.files['file']
 
+        
         if file.filename == '': # did user provide a file
             return redirect(request.url)
         if not file.filename[-4:] == ".csv": # is it a .csv file
             return redirect(request.url)
         if not teacher:
             return redirect(request.url)
+        
 
-        filename = "to_be_parsed.csv"
+        file = file.read().decode("utf-8")
         survey_name = request.form["name"]
 
-        file.save(os.path.join("documentation", filename)) # save csv to
-
         user_id = session.get("user_id", 0)
-        survey_service.create_survey_from_csv(filename, survey_name, user_id)
+        survey_service.create_survey_from_csv(file, survey_name, user_id)
 
 
         return redirect("/previous_surveys")

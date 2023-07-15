@@ -106,8 +106,8 @@ class SurveyService:
         surveys = self._survey_repository.get_closed_surveys(teacher_id)
         return surveys
     
-    def create_survey_from_csv(self, filename, survey_name, user_id):
-        parser_elomake_csv(filename, survey_name, user_id) # in tools
+    def create_survey_from_csv(self, file, survey_name, user_id):
+        parser_elomake_csv(file, survey_name, user_id) # in tools
 
     def get_choice_additional_infos(self, choice_id):
         return self._survey_repository.get_choice_additional_infos(choice_id)
