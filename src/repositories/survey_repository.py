@@ -73,8 +73,8 @@ class SurveyRepository:
 
     def add_new_survey(self, surveyname, teacher_id):
         try:
-            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed) VALUES (:surveyname, :teacher_id, :min_choices, :closed) RETURNING id"
-            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":teacher_id, "min_choices":10, "closed":False})
+            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved) VALUES (:surveyname, :teacher_id, :min_choices, :closed, :results_saved) RETURNING id"
+            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":teacher_id, "min_choices":10, "closed":False, "results_saved":False})
             db.session.commit()
             survey = result.fetchone()[0]
             if not survey:
@@ -156,7 +156,7 @@ class SurveyRepository:
         
     def get_closed_surveys(self, teacher_id):
         try:
-            sql = "SELECT id, surveyname, closed FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
+            sql = "SELECT id, surveyname, closed, results_saved FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
             surveys = result.fetchall()
             
@@ -181,6 +181,16 @@ class SurveyRepository:
         try:
             sql = "INSERT INTO final_group (user_id, survey_id, choice_id) VALUES (:user_id, :survey_id, :choice_id)"
             db.session.execute(text(sql), {"user_id":user_id, "survey_id":survey_id, "choice_id":choice_id})
+            db.session.commit()
+            return True
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def update_survey_answered(self, survey_id):
+        try:
+            sql = "UPDATE surveys SET results_saved = True WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id":survey_id})
             db.session.commit()
             return True
         except Exception as e: # pylint: disable=W0718

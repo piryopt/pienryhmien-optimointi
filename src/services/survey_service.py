@@ -135,6 +135,14 @@ class SurveyService:
             return False
         saved = self._survey_repository.save_result(user_id, survey_id, choice_id)
         return saved
+    
+    def update_survey_answered(self, survey_id):
+        survey = self._survey_repository.check_if_survey_exists(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        saved = self._survey_repository.update_survey_answered(survey_id)
+        return saved
 
     def check_if_survey_results_saved(self, survey_id):
         survey = self._survey_repository.check_if_survey_exists(survey_id)
