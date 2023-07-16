@@ -121,15 +121,36 @@ class TestSurveyRepository(unittest.TestCase):
         self.assertEqual(True, closed)
 
     def test_get_active_surveys(self):
+        """
+        Test that getting a list of active surveys works
+        """
         active_list = sr.get_active_surveys(self.user_id2)
         self.assertEqual(2, len(active_list))
 
     def test_get_closed_surveys(self):
+        """
+        Test that getting a list of closed surveys works
+        """
         survey_id = sr.add_new_survey("Test survey 8", self.user_id2)
         sr.close_survey(survey_id, self.user_id2)
         closed_list = sr.get_closed_surveys(self.user_id2)
         self.assertEqual(1, len(closed_list))
 
+    def test_open_survey(self):
+        """
+        Test that closing a survey works
+        """
+        survey_id = sr.add_new_survey("Test survey 8", self.user_id)
+        sr.close_survey(survey_id, self.user_id)
+
+        closed = sr.check_if_survey_exists(survey_id).closed
+        self.assertEqual(True, closed)
+
+        sr.open_survey(survey_id, self.user_id)
+        opened = sr.check_if_survey_exists(survey_id).closed
+        self.assertEqual(False, opened)
+
+    
     def test_not_clear_db_end_rep(self):
         clear_database()
 

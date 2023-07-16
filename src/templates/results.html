@@ -17,14 +17,19 @@
 <h2>Lajittelun tulokset</h2>
 </div>
 <div>
-<!--I suggest we add here data from sorting results, e.g. "90 % got their 1st option"-->
 <b>Ryhmänvalintojen keskiarvo: {{ happiness }}</b></br>
 {% for h in happiness_data%}
 <label>{{ h }}</label></br>
 {% endfor %}
 </br>
-<button type="submit" class="btn btn-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button>
-</br></br>
+<button type="submit" class="btn btn-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button></br></br>
+{% if not answered %}
+<form action="/surveys/{{ survey_id }}/results" method="POST" onsubmit="return confirm ('Haluatko varmasti tallentaa tulokset?')">
+    <button type="submit" class="btn btn-success" name="savin_time">Tallenna tulokset</button>
+</form>
+</br>
+{% endif %}
+</br>
 
 <b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
 
@@ -35,16 +40,17 @@
             <th><p>Nimi</p></th>
             <th><p>Opiskelijanumero</p></th>
             <th><p>Ryhmä</p></th>
+            <th><p>Monesko valinta</p></th>
         </tr>
     </thead>
     <tr></tr>
     <tbody>
     <tr>
-        <!--The data is expected to be as a list ("results") containing 3 cell long list-->
         {% for row in results %}
-        <td><p>{{ row[0] }}</p></td>       <!--name--> 
+        <td><p>{{ row[0][1] }}</p></td>       <!--name--> 
         <td><p>{{ row[1] }}</p></td>       <!--student ID--> 
-        <td><p>{{ row[2] }}</p></td>       <!--assigned group--> 
+        <td><p>{{ row[2][1] }}</p></td>       <!--assigned group--> 
+        <td><p>{{ row[3] }}</p></td>       <!--Which choice--> 
         
     </tr>
     {% endfor %}
