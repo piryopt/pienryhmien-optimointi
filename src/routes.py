@@ -23,19 +23,20 @@ def home_decorator():
             # just do here everything what you need
             result = f(*args, **kwargs)
 
-            print("Nimi", request.headers.get('cn'))
-            print("Rooli", request.headers.get('eduPersonAffiliation'))
-            print("Sposti", request.headers.get('mail'))
-            print("Opiskelijanumero", request.headers.get('uid'))
+            name = request.headers.get('cn')
+            # in production this may not be a single string
+            # keep that in mind
+            role = request.headers.get('eduPersonAffiliation')
+            role = True if role == "staff" else False
+            email = request.headers.get('mail')
+            student_number = request.headers.get('uid')
 
 
-            uid = session.get("user_id", 0) 
+            uid = session.get("user_id", 0) # check if logged in already
             if uid == 0:
-                print("Et ole kirjautunut sisään")
-            else:
-                print("Olet kirjautunut sisään user id", uid)
-
-
+                if not user_service.find_by_email(email): # account doesn't exist, register
+                    user_service.create_user(name, student_number, email, role)
+                user_service.check_credentials(email)
 
             return result
         return __home_decorator
