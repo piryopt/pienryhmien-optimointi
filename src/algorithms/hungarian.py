@@ -145,10 +145,10 @@ class Hungarian:
         is in the form [student name, student ID, group name]
         """
         selections = []
-        for group in self.assigned_groups:
-            for student in self.assigned_groups[group]:
-                student_number = user_service.get_student_number(student)
-                selections.append([self.students[student].name, student_number, self.groups[group].name])
+        for group_id in self.assigned_groups:
+            for student_id in self.assigned_groups[group_id]:
+                student_number = user_service.get_student_number(student_id)
+                selections.append([[student_id, self.students[student_id].name], student_number, [group_id, self.groups[group_id].name]])
         return selections
 
     def get_happiness_data_strings(self):
