@@ -3,7 +3,7 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - save_results
+      - main
 
 jobs:
 
