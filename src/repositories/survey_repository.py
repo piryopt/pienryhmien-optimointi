@@ -204,9 +204,9 @@ class SurveyRepository:
         RETURNS created survey's id
         '''
 
-        sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed)"\
-            " VALUES (:surveyname, :teacher_id, :min_choices, :closed) RETURNING id"
-        result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False})
+        sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved)"\
+            " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved) RETURNING id"
+        result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False})
         db.session.commit()
         return result.fetchone()[0]
 

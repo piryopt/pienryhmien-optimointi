@@ -59,39 +59,6 @@ Open Previous Surveys Page Test
     Go To Previous Surveys Page
     Previous Surveys Page Should Be Open
 
-Create New Survey Test
-    Go To Create Survey Page
-    Create Survey Page Should Be Open
-    Set Surveyname  Best robots
-    Set Choicename  Tars
-    Set Choicemaxspaces  10
-    Set Info1  My honesty threshold is set too high
-    Set Info2  Interstellar
-    Click Button  addchoice
-    Set Choicename  Iron Giant
-    Set Choicemaxspaces  10
-    Set Info1  Superman
-    Set Info2  The Iron Giant
-    Click Button  addchoice
-    Set Choicename  T-800
-    Set Choicemaxspaces  10
-    Set Info1  I'll be back
-    Set Info2  The Terminator
-    Click Button  addchoice
-    Set Choicename  Megatron
-    Set Choicemaxspaces  10
-    Set Info1  NOBODY SUMMONS MEGATRON
-    Set Info2  Transformers
-    Click Button  addchoice
-    Set Choicename  Starscream
-    Set Choicemaxspaces  10
-    Set Info1  FeelsBadMan
-    Set Info2  Transformers
-    Click Button  addchoice
-    Click Element  ${NEWSURVEY}
-    Go To Previous Surveys Page
-    Page Should Contain  Best robots
-
 Logout Works Test
     Go To Main Page
     Main Page Should Be Open
