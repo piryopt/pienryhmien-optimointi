@@ -14,8 +14,37 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
+from functools import wraps
+
+def home_decorator():
+    def _home_decorator(f):
+        @wraps(f)
+        def __home_decorator(*args, **kwargs):
+            # just do here everything what you need
+            result = f(*args, **kwargs)
+
+            print("Nimi", request.headers.get('cn'))
+            print("Rooli", request.headers.get('eduPersonAffiliation'))
+            print("Sposti", request.headers.get('mail'))
+            print("Opiskelijanumero", request.headers.get('uid'))
+
+
+            uid = session.get("user_id", 0) 
+            if uid == 0:
+                print("Et ole kirjautunut sisään")
+            else:
+                print("Olet kirjautunut sisään user id", uid)
+
+
+
+            return result
+        return __home_decorator
+    return _home_decorator
+
+
 
 @app.route("/")
+@home_decorator()
 def hello_world() -> str:
     """
     Returns the rendered skeleton template
@@ -170,6 +199,7 @@ def logout():
     return render_template("index.html")
 
 @app.route("/create_survey", methods = ["GET"])
+@home_decorator()
 def new_survey_form():
     return render_template("create_survey.html")
 
