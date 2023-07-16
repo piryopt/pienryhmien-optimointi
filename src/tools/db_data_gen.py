@@ -2,6 +2,8 @@ from random import choice, shuffle
 from src.entities.user import User
 from src.repositories.user_repository import user_repository as ur
 from src.repositories.survey_repository import survey_repository as sr
+from src.repositories.survey_choices_repository import survey_choices_repository as scr
+from src.repositories.user_rankings_repository import user_rankings_repository as urr
 
 
 class DbDataGen:
@@ -38,7 +40,7 @@ class DbDataGen:
             ur.register(user)
 
     def generate_rankings(self, survey_id):
-        survey_choices = sr.find_survey_choices(survey_id)
+        survey_choices = scr.find_survey_choices(survey_id)
         choice_ids = []
         for choice in survey_choices:
             choice_ids.append(str(choice[0]))
@@ -47,7 +49,7 @@ class DbDataGen:
         for user in db_users:
             shuffle(choice_ids)
             ranking = ','.join(choice_ids)
-            sr.add_user_ranking(user[0], survey_id, ranking)
+            urr.add_user_ranking(user[0], survey_id, ranking)
 
     def generate_survey(self, user_id):
         name = "GENERATED SURVEY"
@@ -67,15 +69,15 @@ class DbDataGen:
         choice_name10 = "Tietojen importti/exporttityökalu MammalBaseen"
 
         #Info generated with ChatGPT :D
-        sr.add_new_survey_choice(survey_id, choice_name1, 11,  "Leena Nieminen", "Kirkkokatu 8, Tampere")
-        sr.add_new_survey_choice(survey_id, choice_name2, 11, "Juha Virtanen", "Peltolantie 12, Vantaa")
-        sr.add_new_survey_choice(survey_id, choice_name3, 11, "Anna Koskinen", "Mannerheimintie 15, Helsinki")
-        sr.add_new_survey_choice(survey_id, choice_name4, 11, "Markus Järvinen", "Saaristokatu 6, Turku")
-        sr.add_new_survey_choice(survey_id, choice_name5, 11, "Riikka Kallio", "Puistokatu 3, Jyväskylä")
-        sr.add_new_survey_choice(survey_id, choice_name6, 11, "Mikko Rantanen", "Pohjoinen Rautatiekatu 20, Oulu")
-        sr.add_new_survey_choice(survey_id, choice_name7, 11, "Satu Laine", "Kauppakatu 2, Kuopio")
-        sr.add_new_survey_choice(survey_id, choice_name8, 11, "Jari Korhonen", "Aleksanterinkatu 14, Lahti")
-        sr.add_new_survey_choice(survey_id, choice_name9, 11, "Maria Virtanen", "Rantakatu 5, Joensuu")
-        sr.add_new_survey_choice(survey_id, choice_name10, 11, "Antti Jokinen", "Rauhankatu 6, Hämeenlinna")
+        scr.add_new_survey_choice(survey_id, choice_name1, 11,  "Leena Nieminen", "Kirkkokatu 8, Tampere")
+        scr.add_new_survey_choice(survey_id, choice_name2, 11, "Juha Virtanen", "Peltolantie 12, Vantaa")
+        scr.add_new_survey_choice(survey_id, choice_name3, 11, "Anna Koskinen", "Mannerheimintie 15, Helsinki")
+        scr.add_new_survey_choice(survey_id, choice_name4, 11, "Markus Järvinen", "Saaristokatu 6, Turku")
+        scr.add_new_survey_choice(survey_id, choice_name5, 11, "Riikka Kallio", "Puistokatu 3, Jyväskylä")
+        scr.add_new_survey_choice(survey_id, choice_name6, 11, "Mikko Rantanen", "Pohjoinen Rautatiekatu 20, Oulu")
+        scr.add_new_survey_choice(survey_id, choice_name7, 11, "Satu Laine", "Kauppakatu 2, Kuopio")
+        scr.add_new_survey_choice(survey_id, choice_name8, 11, "Jari Korhonen", "Aleksanterinkatu 14, Lahti")
+        scr.add_new_survey_choice(survey_id, choice_name9, 11, "Maria Virtanen", "Rantakatu 5, Joensuu")
+        scr.add_new_survey_choice(survey_id, choice_name10, 11, "Antti Jokinen", "Rauhankatu 6, Hämeenlinna")
 
 gen_data = DbDataGen()

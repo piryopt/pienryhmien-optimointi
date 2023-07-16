@@ -7,6 +7,9 @@ from random import shuffle
 from src import app,db
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
+from src.services.survey_choices_service import survey_choices_service
+from src.services.user_rankings_service import user_rankings_service
+from src.services.final_group_service import final_group_service
 from src.tools import data_gen, excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
@@ -76,7 +79,7 @@ def excel():
 def surveys(survey_id):
     '''The answer page for surveys.'''
     # If the survey has no choices, redirect to home page.
-    survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return hello_world()
@@ -88,7 +91,7 @@ def surveys(survey_id):
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
     user_id = session.get("user_id", 0)
-    user_survey_ranking = survey_service.user_ranking_exists(survey_id, user_id)
+    user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
 
     # If a ranking exists, display the choices in the order that the student chose them.
     if user_survey_ranking:
@@ -98,7 +101,7 @@ def surveys(survey_id):
 
         survey_choices = []
         for survey_choice_id in list_of_survey_choice_id:
-            survey_choice = survey_service.get_survey_choice(survey_choice_id)
+            survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
             if not survey_choice:
                 continue
             survey_choices.append(survey_choice)
@@ -116,7 +119,7 @@ def delete_submission(survey_id):
     '''Delete the current ranking of the student.'''
     response = {"status":"0", "msg":"Poistaminen epäonnistui"}
     current_user_id = session.get("user_id", 0)
-    if survey_service.delete_ranking(survey_id, current_user_id):
+    if user_rankings_service.delete_ranking(survey_id, current_user_id):
         response = {"status":"1", "msg":"Valinnat poistettu"}
     return jsonify(response)
 
@@ -126,7 +129,7 @@ def get_choices(survey_id):
     raw_data = request.get_json()
     ranking = convert_to_string(raw_data)
     user_id = session.get("user_id",0)
-    submission = survey_service.add_user_ranking(survey_id, ranking, user_id)
+    submission = user_rankings_service.add_user_ranking(survey_id, ranking, user_id)
     response = {"status":"1","msg":"Tallennus onnistui."}
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
@@ -135,7 +138,7 @@ def get_choices(survey_id):
 @app.route("/surveys/getinfo", methods=["POST"])
 def get_info():
     raw_id = request.get_json()
-    choice_info = survey_service.get_survey_choice(int(raw_id))
+    choice_info = survey_choices_service.get_survey_choice(int(raw_id))
     return render_template("moreinfo.html", choice_info = choice_info)
 
 @app.route("/register", methods = ["GET", "POST"])
@@ -189,7 +192,7 @@ def new_survey_post():
         max_spaces = choice["choiceMaxSpaces"]
         info1 = choice["choiceInfo1"]
         info2 = choice["choiceInfo2"]
-        survey_service.add_survey_choice(new_survey_id, choice_name, max_spaces, info1, info2)
+        survey_choices_service.add_survey_choice(new_survey_id, choice_name, max_spaces, info1, info2)
 
     response = {"msg":"Uusi kysely luotu!"}
     return jsonify(response)
@@ -286,7 +289,7 @@ def survey_results(survey_id):
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
-    survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     user_rankings = SurveyTools.fetch_survey_responses(survey_id)
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
@@ -299,7 +302,7 @@ def survey_results(survey_id):
     for results in output_data[0]:
         user_id = results[0][0]
         choice_id =  results[2][0]
-        ranking = survey_service.get_choice_ranking(user_id, survey_id)
+        ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking)
         results.append(happiness)
 
@@ -321,7 +324,7 @@ def survey_results(survey_id):
     for results in output_data[0]:
         user_id = results[0][0]
         choice_id =  results[2][0]
-        saved = survey_service.save_result(user_id, survey_id, choice_id)
+        saved = final_group_service.save_result(user_id, survey_id, choice_id)
         if not saved:
             print(f"ERROR IN SAVING {results[0][1]} RESULTS!")
     return previous_surveys()
