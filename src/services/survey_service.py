@@ -14,18 +14,6 @@ class SurveyService:
             return False
         return survey[1]
 
-    def add_new_survey(self, surveyname, teacher_id):
-        if self._survey_repository.survey_name_exists(surveyname, teacher_id):
-            print("A SURVEY WITH THIS NAME ALREADY EXISTS!")
-            return False
-        if len(surveyname) < 4:
-            print("The name is too short!")
-            return False
-        survey_id = self._survey_repository.add_new_survey(surveyname, teacher_id)
-        if not survey_id:
-            return False
-        return survey_id
-
     def count_surveys_created(self, user_id):
         list_n = self._survey_repository.count_created_surveys(user_id)
         if not list_n:
@@ -89,15 +77,8 @@ class SurveyService:
             return False
         return survey.results_saved
 
-    
     def create_survey_from_csv(self, file, survey_name, user_id):
         parser_elomake_csv(file, survey_name, user_id) # in tools
-
-    def get_choice_additional_infos(self, choice_id):
-        return self._survey_repository.get_choice_additional_infos(choice_id)
-
-    def get_choice_name_and_spaces(self, choice_id):
-        return self._survey_repository.get_choice_name_and_spaces(choice_id)
     
     def create_new_survey_manual(self, survey_choices,survey_name, user_id):
         parser_manual(survey_choices, survey_name, user_id)
