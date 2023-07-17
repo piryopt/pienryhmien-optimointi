@@ -12,7 +12,8 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	teacher_id INTEGER REFERENCES users,
 	min_choices INTEGER,
 	closed BOOLEAN,
-	results_saved BOOLEAN
+	results_saved BOOLEAN,
+	survey_description TEXT
 );
 
 CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä

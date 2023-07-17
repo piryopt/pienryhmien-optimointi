@@ -198,15 +198,15 @@ class SurveyRepository:
             return False
 
     
-    def create_new_survey(self, surveyname, user_id, min_choices =1):
+    def create_new_survey(self, surveyname, user_id, min_choices, description):
         '''
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
         '''
 
-        sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved)"\
-            " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved) RETURNING id"
-        result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False})
+        sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description)"\
+            " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc) RETURNING id"
+        result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description})
         db.session.commit()
         return result.fetchone()[0]
 
@@ -243,5 +243,10 @@ class SurveyRepository:
         sql = "SELECT name, max_spaces FROM survey_choices WHERE id=:id"
         result = db.session.execute(text(sql), {"id":choice_id})
         return result.fetchone()
+    
+    def get_survey_description(self, survey_id):
+        sql = "SELECT survey_description FROM surveys WHERE id=:id"
+        result = db.session.execute(text(sql), {"id":survey_id})
+        return result.fetchone()[0]
 
 survey_repository = SurveyRepository()

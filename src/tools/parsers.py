@@ -2,7 +2,7 @@ from src import db
 from src.repositories.survey_repository import survey_repository
 from sqlalchemy import text
 
-def parser_elomake_csv(file, survey_name, user_id):
+def parser_elomake_csv(file, survey_name, user_id, description):
     '''
     Parses a survey from Elomake exported CSV file and creates a survey,
     including choices etc.
@@ -10,7 +10,7 @@ def parser_elomake_csv(file, survey_name, user_id):
     which is why straight up strip() doesn't work, so they have to removed at all
     points that could be the last column.
     '''
-    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1)
+    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
 
     file = file.split('\n')
     row_count = len(file)
@@ -49,9 +49,9 @@ def parser_elomake_csv(file, survey_name, user_id):
         index += 1
 
 
-def parser_manual(survey_choices, survey_name, user_id):
+def parser_manual(survey_choices, survey_name, user_id, description):
 
-    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1)
+    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
 
     for choice in survey_choices:
 
