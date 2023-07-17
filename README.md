@@ -13,7 +13,7 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
 ### Product documentation
 
 - [The hungarian Algorithm description](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md)
-- [Database documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/database_doc.md)
+- [Database documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/database_docs)
 - User guide (TBA)
 - Application architecture (TBA)
 - Application logic (TBA)
