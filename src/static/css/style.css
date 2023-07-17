@@ -96,6 +96,7 @@ p, i {
 
 body {background-color: rgb(24, 26, 27);}
 
+
 .table-striped>tbody>tr:nth-of-type(odd)>* {
     --bs-table-accent-bg: var(--bs-table-striped-bg);
     color: #ffffff;
@@ -111,3 +112,8 @@ body {background-color: rgb(24, 26, 27);}
     min-width: 100%;
     text-align: left;
   }
+
+.page-title {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}

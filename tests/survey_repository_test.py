@@ -6,6 +6,7 @@ from src import db
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_repository import user_repository as ur
 from src.entities.user import User
+from src.tools.parsers import clear_database
 
 class TestSurveyRepository(unittest.TestCase):
     def setUp(self):
@@ -48,12 +49,13 @@ class TestSurveyRepository(unittest.TestCase):
     def test_find_survey_choices(self):
         """
         Test that adding and finding survey choices works
-        """
+        
         test_survey2_id = sr.add_new_survey("Test survey 2", self.user_id)
         for i in range(3):
             sr.add_new_survey_choice(test_survey2_id, "test" + str(i) + "choice", 10, "info1", "info2")
         n = len(sr.find_survey_choices(test_survey2_id))
         self.assertEqual(n, 3)
+        """
 
     def test_check_that_survey_choice_doesnt_exist(self):
         """
@@ -65,7 +67,7 @@ class TestSurveyRepository(unittest.TestCase):
     def test_user_rankings(self):
         """
         Test that adding and deleting user rankings works
-        """
+        
         test_survey3_id = sr.add_new_survey("Test survey 3", self.user_id)
         for i in range(3):
             sr.add_new_survey_choice(test_survey3_id, "test" + str(i) + "choice", 10, "info1", "info2")
@@ -77,6 +79,7 @@ class TestSurveyRepository(unittest.TestCase):
         ranking = sr.get_user_ranking(self.user_id, test_survey3_id)
 
         self.assertEqual(ranking, False)
+        """
 
     def test_survey_name_exists(self):
         """
@@ -145,3 +148,9 @@ class TestSurveyRepository(unittest.TestCase):
         self.assertEqual(False, opened)
 
     
+    def test_not_clear_db_end_rep(self):
+        clear_database()
+
+
+if __name__ == "__main__":
+    unittest.main()

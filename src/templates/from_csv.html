@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Luo uusi kysely CSV-tiedostosta{% endblock %}
+
+
+{% block content %}
+
+
+{% if session.email %} 
+{% if teacher %}
+Kyselyn nimi<br>
+<form method="post" enctype="multipart/form-data">
+  <input type="text" name="name"><br>
+  <input type="file" name="file"><br>
+  <input type="submit">
+</form>
+{% endif %}
+{% if not teacher %}
+<br>
+Sinulla ei ole oikeuksia luoda kyselyitä<br>
+<a href="/">Etusivulle</a>
+{% endif %}
+{% else %}
+<br>
+Kirjaudu sisään päästäksesi alueelle<br>
+<a href="/login">Kirjaudu sisään</a>
+
+{% endif %}
+
+{% endblock %}

@@ -1,13 +1,8 @@
-<h4>
-    {{ choice_info.name }}
-</h4>
-<br>
-<h5>
-    Ohjaaja: {{ choice_info.info1 }}
-</h5>
-<br>
-<h5>
-    Osoite: {{ choice_info.info2 }}
-</h5>
+{{ basic[0] }}<br>
+{{ basic[1] }} paikkaa
+<br><br>
+{% for info in infos %}
+{{ info[0] }}: {{ info[1] }}<br>
+{% endfor %}
 <br>
 <input type="button" id="exitMoreInfo" value="Sulje" onclick="exitMoreInfo()">

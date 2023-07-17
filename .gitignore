@@ -3,6 +3,7 @@
 
 # Human manually added
 logs
+to_be_parsed.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
