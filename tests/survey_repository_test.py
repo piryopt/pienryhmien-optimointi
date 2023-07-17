@@ -30,19 +30,19 @@ class TestSurveyRepository(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_check_if_survey_exists(self):
+    def test_get_survey(self):
         """
         Create new survey and test if it exists and also test if the surveyname exists
         """
         test_survey1_id = sr.add_new_survey("Test survey 1", self.user_id)
-        survey = sr.check_if_survey_exists(test_survey1_id)
+        survey = sr.get_survey(test_survey1_id)
         self.assertEqual(survey[0], test_survey1_id)
 
     def test_check_that_survey_doesnt_exist(self):
         """
         Test that survey with invalid id doesn't exist
         """
-        exists = sr.check_if_survey_exists(-1)
+        exists = sr.get_survey(-1)
         self.assertEqual(False, exists)
 
     def test_find_survey_choices(self):
@@ -111,7 +111,7 @@ class TestSurveyRepository(unittest.TestCase):
         survey_id = sr.add_new_survey("Test survey 7", self.user_id)
         sr.close_survey(survey_id, self.user_id)
 
-        closed = sr.check_if_survey_exists(survey_id).closed
+        closed = sr.get_survey(survey_id).closed
         self.assertEqual(True, closed)
 
     def test_get_active_surveys(self):
@@ -137,11 +137,11 @@ class TestSurveyRepository(unittest.TestCase):
         survey_id = sr.add_new_survey("Test survey 8", self.user_id)
         sr.close_survey(survey_id, self.user_id)
 
-        closed = sr.check_if_survey_exists(survey_id).closed
+        closed = sr.get_survey(survey_id).closed
         self.assertEqual(True, closed)
 
         sr.open_survey(survey_id, self.user_id)
-        opened = sr.check_if_survey_exists(survey_id).closed
+        opened = sr.get_survey(survey_id).closed
         self.assertEqual(False, opened)
 
     
