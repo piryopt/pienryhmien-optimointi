@@ -336,7 +336,7 @@ def open_survey(survey_id):
     return survey_answers(survey_id)
 
 
-@app.route("/from_csv", methods = ["GET", "POST"])
+@app.route("/create_survey/csv", methods = ["GET", "POST"])
 def from_csv():
     teacher = True if session.get("role", 0) == "Opettaja" else False
     if request.method == "GET":
