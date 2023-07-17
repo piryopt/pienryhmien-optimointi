@@ -77,7 +77,4 @@ class UserService:
         del session["full_name"]
         del session["role"]
 
-    def find_by_email(self, email):
-        return self._user_repository.find_by_email(email)
-
 user_service = UserService()
