@@ -8,7 +8,7 @@ from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_repository import user_repository as ur
 from src.services.user_service import user_service as us
 from src.entities.user import User
-from src.tools.parsers import clear_database
+from src.tools.db_tools import clear_database
 
 class TestSurveyService(unittest.TestCase):
     def setUp(self):
