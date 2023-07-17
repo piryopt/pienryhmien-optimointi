@@ -14,8 +14,36 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
+from functools import wraps
+
+def home_decorator():
+    def _home_decorator(f):
+        @wraps(f)
+        def __home_decorator(*args, **kwargs):
+            # just do here everything what you need
+            result = f(*args, **kwargs)
+
+            name = request.headers.get('cn')
+            # in production this may not be a single string
+            # keep that in mind
+            role = request.headers.get('eduPersonAffiliation')
+            role = True if role == "staff" else False
+            email = request.headers.get('mail')
+            student_number = request.headers.get('uid')
+
+
+            uid = session.get("user_id", 0) # check if logged in already
+            if uid == 0:
+                if not user_service.find_by_email(email): # account doesn't exist, register
+                    user_service.create_user(name, student_number, email, role)
+                user_service.check_credentials(email)
+
+            return result
+        return __home_decorator
+    return _home_decorator
 
 @app.route("/")
+@home_decorator()
 def hello_world() -> str:
     """
     Returns the rendered skeleton template
@@ -41,6 +69,7 @@ def hello_world() -> str:
 
 
 @app.route("/results", methods = ["POST"])
+@home_decorator()
 def results():
     group_n = int(request.form.get("group_n"))
     student_n = int(request.form.get("student_n"))
@@ -57,6 +86,7 @@ def results():
                            happiness_data = output_data[2], happiness = output_data[1])
 
 @app.route("/excel")
+@home_decorator()
 def excel():
     '''Performance test for the Hungarian algortihm with real life data.'''
     groups_dict = excelreader.create_groups()
@@ -70,6 +100,7 @@ def excel():
                            happiness_data = output_data[2], happiness = output_data[1])
 
 @app.route("/surveys/<int:survey_id>")
+@home_decorator()
 def surveys(survey_id):
     '''The answer page for surveys.'''
     # If the survey has no choices, redirect to home page.
@@ -110,6 +141,7 @@ def surveys(survey_id):
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
+@home_decorator()
 def delete_submission(survey_id):
     '''Delete the current ranking of the student.'''
     response = {"status":"0", "msg":"Poistaminen epäonnistui"}
@@ -119,6 +151,7 @@ def delete_submission(survey_id):
     return jsonify(response)
 
 @app.route("/get_choices/<int:survey_id>", methods=["POST"])
+@home_decorator()
 def get_choices(survey_id):
     '''Save the ranking to the database.'''
     raw_data = request.get_json()
@@ -131,6 +164,7 @@ def get_choices(survey_id):
     return jsonify(response)
 
 @app.route("/surveys/getinfo", methods=["POST"])
+@home_decorator()
 def get_info():
     raw_id = request.get_json()
     basic_info = survey_service.get_choice_name_and_spaces(int(raw_id))
@@ -138,6 +172,7 @@ def get_info():
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/register", methods = ["GET", "POST"])
+@home_decorator()
 def register():
     if request.method == "GET":
         return render_template("register.html")
@@ -155,6 +190,7 @@ def register():
     return render_template("login.html")
 
 @app.route("/login", methods = ["GET", "POST"])
+@home_decorator()
 def login():
     if request.method == "GET":
         return render_template("login.html")
@@ -171,10 +207,12 @@ def logout():
     return render_template("index.html")
 
 @app.route("/create_survey", methods = ["GET"])
+@home_decorator()
 def new_survey_form():
     return render_template("create_survey.html")
 
 @app.route("/create_survey", methods = ["POST"])
+@home_decorator()
 def new_survey_post():
     data = request.get_json()
     survey_name = data["surveyGroupname"]
@@ -188,6 +226,7 @@ def new_survey_post():
     return jsonify(response)
 
 @app.route("/previous_surveys")
+@home_decorator()
 def previous_surveys():
     '''For fetching previous survey list from the database'''
     user_id = session.get("user_id",0)
@@ -198,6 +237,7 @@ def previous_surveys():
     return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
 
 @app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
+@home_decorator()
 def survey_answers(survey_id):
     '''For displaying the answers of a certain survey'''
     # If the results have been saved, redirect to the ersults page
@@ -217,6 +257,7 @@ def survey_answers(survey_id):
                            answered = answers_saved)
 
 @app.route("/admintools/", methods = ["GET"])
+@home_decorator()
 def admin_dashboard() -> str:
     return render_template('/admintools/dashboard.html')
 
@@ -234,6 +275,7 @@ def reset_database() -> str:
     return "database reset"
 
 @app.route("/admintools/gen_data", methods = ["GET", "POST"])
+@home_decorator()
 def admin_gen_data():
     '''Page for generating users, a survey and user rankings.'''
     user_id = session.get("user_id",0)
@@ -261,6 +303,7 @@ def admin_gen_rankings():
                            survey_answers_amount=survey_answers_amount, survey_id = survey_id)
 
 @app.route("/admintools/gen_data/survey", methods = ["POST"])
+@home_decorator()
 def admin_gen_survey():
     '''Generate a survey for testing.'''
     user_id = session.get("user_id",0)
@@ -269,6 +312,7 @@ def admin_gen_survey():
     return render_template("/admintools/gen_data.html", surveys = surveys)
 
 @app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
+@home_decorator()
 def survey_results(survey_id):
     '''Display survey results. For the post request, the answers are saved to the database.'''
 
@@ -339,6 +383,7 @@ def open_survey(survey_id):
 
 
 @app.route("/create_survey/csv", methods = ["GET", "POST"])
+@home_decorator()
 def from_csv():
     teacher = True if session.get("role", 0) == "Opettaja" else False
     if request.method == "GET":
