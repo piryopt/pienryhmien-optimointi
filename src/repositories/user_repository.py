@@ -2,7 +2,6 @@ from sqlalchemy import text
 from src import db
 
 class UserRepository:
-
     def find_by_email(self, email):
         try:
             sql = "SELECT * FROM users WHERE email=:email"
@@ -30,7 +29,7 @@ class UserRepository:
             print(e)
             return False
         return user
-    
+
     def get_all_users(self):
         try:
             sql = "SELECT * FROM users"
@@ -42,11 +41,11 @@ class UserRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-        
-    def get_user_data(self, id):
+
+    def get_user_data(self, user_id):
         try:
-            sql = "SELECT * FROM users WHERE id=:id "
-            result = db.session.execute(text(sql), {"id":id})
+            sql = "SELECT * FROM users WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":user_id})
             user = result.fetchone()
             if not user:
                 return False

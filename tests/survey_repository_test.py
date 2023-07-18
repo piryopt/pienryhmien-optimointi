@@ -19,6 +19,8 @@ class TestSurveyRepository(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
 
+        clear_database()
+
         self.ur = ur
         user1 = User("Not on tren Testerr", 101010101, "feelsbadman@tester.com", True)
         user2 = User("Not on anabolic", 101010101, "anabolic@tester.com", True)
@@ -31,72 +33,26 @@ class TestSurveyRepository(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_not_clear_db_begin_rep(self):
-        clear_database()
-
-    def test_check_if_survey_exists(self):
+    def test_get_survey(self):
         """
         Create new survey and test if it exists and also test if the surveyname exists
         """
-        test_survey1_id = sr.add_new_survey("Test survey 1", self.user_id)
-        survey = sr.check_if_survey_exists(test_survey1_id)
+        test_survey1_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio")
+        survey = sr.get_survey(test_survey1_id)
         self.assertEqual(survey[0], test_survey1_id)
 
     def test_check_that_survey_doesnt_exist(self):
         """
         Test that survey with invalid id doesn't exist
         """
-        exists = sr.check_if_survey_exists(-1)
+        exists = sr.get_survey(-1)
         self.assertEqual(False, exists)
-
-    def test_find_survey_choices(self):
-        """
-        Test that adding and finding survey choices works
-        
-        test_survey2_id = sr.add_new_survey("Test survey 2", self.user_id)
-        for i in range(3):
-            sr.add_new_survey_choice(test_survey2_id, "test" + str(i) + "choice", 10, "info1", "info2")
-        n = len(sr.find_survey_choices(test_survey2_id))
-        self.assertEqual(n, 3)
-        """
-
-    def test_check_that_survey_choice_doesnt_exist(self):
-        """
-        Test that survey choice with invalid id doesn't exist
-        """
-        exists = sr.get_survey_choice(-1)
-        self.assertEqual(False, exists)
-
-    def test_user_rankings(self):
-        """
-        Test that adding and deleting user rankings works
-        
-        test_survey3_id = sr.add_new_survey("Test survey 3", self.user_id)
-        for i in range(3):
-            sr.add_new_survey_choice(test_survey3_id, "test" + str(i) + "choice", 10, "info1", "info2")
-        sr.add_user_ranking(self.user_id, test_survey3_id, "1,2,3")
-        ranking = sr.get_user_ranking(self.user_id, test_survey3_id)
-        self.assertEqual(ranking[3], "1,2,3")
-
-        sr.delete_user_ranking(self.user_id, test_survey3_id)
-        ranking = sr.get_user_ranking(self.user_id, test_survey3_id)
-
-        self.assertEqual(ranking, False)
-        """
-
-    def test_survey_name_exists(self):
-        """
-        Test that surveyname exists
-        """
-        sr.add_new_survey("Test survey 4", self.user_id)
-        exists = sr.survey_name_exists("Test survey 4", self.user_id)
-        self.assertEqual(True, exists)
 
     def test_survey_name_doesnt_exist(self):
         """
         Test that surveyname doesn't exist
         """
-        test_survey5_name = "Test survey 5"
+        test_survey5_name = "Test survey 2"
         exists = sr.survey_name_exists(test_survey5_name, self.user_id)
         self.assertEqual(False, exists)
 
@@ -105,8 +61,8 @@ class TestSurveyRepository(unittest.TestCase):
         Test that the number of created surveys is correct
         """
 
-        sr.add_new_survey("Test survey 5", self.user_id2)
-        sr.add_new_survey("Test survey 6", self.user_id2)
+        sr.create_new_survey("Test survey 3", self.user_id2, 10, "Motivaatio")
+        sr.create_new_survey("Test survey 4", self.user_id2, 10, "Motivaatio")
         count = sr.count_created_surveys(self.user_id2)
         self.assertEqual(2, count)
 
@@ -114,24 +70,25 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that closing a survey works
         """
-        survey_id = sr.add_new_survey("Test survey 7", self.user_id)
-        sr.close_survey(survey_id, self.user_id)
+        survey_id = sr.create_new_survey("Test survey 5", self.user_id2, 10, "Motivaatio")
+        sr.close_survey(survey_id, self.user_id2)
 
-        closed = sr.check_if_survey_exists(survey_id).closed
+        closed = sr.get_survey(survey_id).closed
         self.assertEqual(True, closed)
 
     def test_get_active_surveys(self):
         """
         Test that getting a list of active surveys works
         """
+        sr.create_new_survey("Test survey 6", self.user_id2, 10, "Motivaatio")
         active_list = sr.get_active_surveys(self.user_id2)
-        self.assertEqual(2, len(active_list))
+        self.assertEqual(1, len(active_list))
 
     def test_get_closed_surveys(self):
         """
         Test that getting a list of closed surveys works
         """
-        survey_id = sr.add_new_survey("Test survey 8", self.user_id2)
+        survey_id = sr.create_new_survey("Test survey 7", self.user_id2, 10, "Motivaatio")
         sr.close_survey(survey_id, self.user_id2)
         closed_list = sr.get_closed_surveys(self.user_id2)
         self.assertEqual(1, len(closed_list))
@@ -140,20 +97,36 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that closing a survey works
         """
-        survey_id = sr.add_new_survey("Test survey 8", self.user_id)
+        survey_id = sr.create_new_survey("Test survey 8", self.user_id, 10, "Motivaatio")
         sr.close_survey(survey_id, self.user_id)
 
-        closed = sr.check_if_survey_exists(survey_id).closed
+        closed = sr.get_survey(survey_id).closed
         self.assertEqual(True, closed)
 
         sr.open_survey(survey_id, self.user_id)
-        opened = sr.check_if_survey_exists(survey_id).closed
+        opened = sr.get_survey(survey_id).closed
         self.assertEqual(False, opened)
 
-    
-    def test_not_clear_db_end_rep(self):
-        clear_database()
+    def test_survey_name_exists(self):
+        sr.create_new_survey("Test survey 9", self.user_id, 10, "Motivaatio")
+        exists = sr.survey_name_exists("Test survey 9", self.user_id)
+        self.assertEqual(True, exists)
 
+    def test_count_created_surveys_invalid_id(self):
+        exists = sr.count_created_surveys(-1)
+        self.assertEqual(False, exists)
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_count_active_surveys_invalid_id(self):
+        exists = sr.get_active_surveys(-1)
+        self.assertEqual(False, exists)
+
+    def test_survey_description(self):
+        survey_id = sr.create_new_survey("Test survey 10", self.user_id, 10, "Motivaatio")
+        desc = sr.get_survey_description(survey_id)
+        self.assertEqual("Motivaatio", desc)
+
+    def test_survey_answered(self):
+        survey_id = sr.create_new_survey("Test survey 11", self.user_id, 10, "Motivaatio")
+        sr.update_survey_answered(survey_id)
+        answered = sr.get_survey(survey_id).results_saved
+        self.assertEqual(True, answered)

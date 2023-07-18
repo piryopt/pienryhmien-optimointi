@@ -1,12 +1,14 @@
-import os
-from flask import render_template, request, session, jsonify, redirect
-from sqlalchemy import text
-import psycopg2
 from pathlib import Path
+from sqlalchemy import text
 from random import shuffle
+from functools import wraps
+from flask import render_template, request, session, jsonify, redirect
 from src import app,db
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
+from src.services.survey_choices_service import survey_choices_service
+from src.services.user_rankings_service import user_rankings_service
+from src.services.final_group_service import final_group_service
 from src.tools import data_gen, excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
@@ -14,6 +16,33 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
+
+
+def home_decorator():
+    def _home_decorator(f):
+        @wraps(f)
+        def __home_decorator(*args, **kwargs):
+            # just do here everything what you need
+            result = f(*args, **kwargs)
+
+            name = request.headers.get('cn')
+            # in production this may not be a single string
+            # keep that in mind
+            role = request.headers.get('eduPersonAffiliation')
+            role = True if role == "staff" else False
+            email = request.headers.get('mail')
+            student_number = request.headers.get('uid')
+
+
+            uid = session.get("user_id", 0) # check if logged in already
+            if uid == 0:
+                if not user_service.check_credentials(email): # account doesn't exist, register
+                    user_service.create_user(name, student_number, email, role)
+                user_service.check_credentials(email)
+
+            return result
+        return __home_decorator
+    return _home_decorator
 
 @app.route("/")
 def hello_world() -> str:
@@ -73,7 +102,7 @@ def excel():
 def surveys(survey_id):
     '''The answer page for surveys.'''
     # If the survey has no choices, redirect to home page.
-    survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     desc = survey_service.get_survey_description(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
@@ -86,7 +115,7 @@ def surveys(survey_id):
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
     user_id = session.get("user_id", 0)
-    user_survey_ranking = survey_service.user_ranking_exists(survey_id, user_id)
+    user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
 
     # If a ranking exists, display the choices in the order that the student chose them.
     if user_survey_ranking:
@@ -96,7 +125,7 @@ def surveys(survey_id):
 
         survey_choices = []
         for survey_choice_id in list_of_survey_choice_id:
-            survey_choice = survey_service.get_survey_choice(survey_choice_id)
+            survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
             if not survey_choice:
                 continue
             survey_choices.append(survey_choice)
@@ -107,14 +136,15 @@ def surveys(survey_id):
             return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
         return render_template("closedsurvey.html", survey_name = survey_name)
 
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc)
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
+                            survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
     '''Delete the current ranking of the student.'''
     response = {"status":"0", "msg":"Poistaminen epäonnistui"}
     current_user_id = session.get("user_id", 0)
-    if survey_service.delete_ranking(survey_id, current_user_id):
+    if user_rankings_service.delete_ranking(survey_id, current_user_id):
         response = {"status":"1", "msg":"Valinnat poistettu"}
     return jsonify(response)
 
@@ -124,7 +154,7 @@ def get_choices(survey_id):
     raw_data = request.get_json()
     ranking = convert_to_string(raw_data)
     user_id = session.get("user_id",0)
-    submission = survey_service.add_user_ranking(survey_id, ranking, user_id)
+    submission = user_rankings_service.add_user_ranking(survey_id, ranking, user_id)
     response = {"status":"1","msg":"Tallennus onnistui."}
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
@@ -133,8 +163,8 @@ def get_choices(survey_id):
 @app.route("/surveys/getinfo", methods=["POST"])
 def get_info():
     raw_id = request.get_json()
-    basic_info = survey_service.get_choice_name_and_spaces(int(raw_id))
-    additional_info = survey_service.get_choice_additional_infos(int(raw_id))
+    basic_info = survey_choices_service.get_choice_name_and_spaces(int(raw_id))
+    additional_info = survey_choices_service.get_choice_additional_infos(int(raw_id))
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/register", methods = ["GET", "POST"])
@@ -240,7 +270,7 @@ def admin_gen_data():
     surveys = SurveyTools.fetch_all_active_surveys(user_id)
     if request.method == "GET":
         return render_template("/admintools/gen_data.html", surveys = surveys)
-    
+
     if request.method == "POST":
         student_n = request.form.get("student_n")
         gen_data.generate_users(int(student_n))
@@ -279,7 +309,7 @@ def survey_results(survey_id):
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
-    survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     user_rankings = SurveyTools.fetch_survey_responses(survey_id)
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
@@ -292,7 +322,7 @@ def survey_results(survey_id):
     for results in output_data[0]:
         user_id = results[0][0]
         choice_id =  results[2][0]
-        ranking = survey_service.get_choice_ranking(user_id, survey_id)
+        ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking)
         results.append(happiness)
 
@@ -314,7 +344,7 @@ def survey_results(survey_id):
     for results in output_data[0]:
         user_id = results[0][0]
         choice_id =  results[2][0]
-        saved = survey_service.save_result(user_id, survey_id, choice_id)
+        saved = final_group_service.save_result(user_id, survey_id, choice_id)
         if not saved:
             print(f"ERROR IN SAVING {results[0][1]} RESULTS!")
     return previous_surveys()
@@ -346,20 +376,18 @@ def from_csv():
     if request.method == "POST":
         file = request.files['file']
         description = request.form.get("desc")
-        
+
         if file.filename == '': # did user provide a file
             return redirect(request.url)
         if not file.filename[-4:] == ".csv": # is it a .csv file
             return redirect(request.url)
         if not teacher:
             return redirect(request.url)
-        
 
         file = file.read().decode("utf-8")
         survey_name = request.form["name"]
 
         user_id = session.get("user_id", 0)
         survey_service.create_survey_from_csv(file, survey_name, user_id, description)
-
 
         return redirect("/previous_surveys")

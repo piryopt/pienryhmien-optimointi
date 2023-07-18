@@ -1,5 +1,5 @@
-from src import db
 from sqlalchemy import text
+from src import db
 
 def clear_database():
     db.session.execute(text("DELETE FROM final_group"))
