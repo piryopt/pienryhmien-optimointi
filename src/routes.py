@@ -17,33 +17,6 @@ from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 
-
-def home_decorator():
-    def _home_decorator(f):
-        @wraps(f)
-        def __home_decorator(*args, **kwargs):
-            # just do here everything what you need
-            result = f(*args, **kwargs)
-
-            name = request.headers.get('cn')
-            # in production this may not be a single string
-            # keep that in mind
-            role = request.headers.get('eduPersonAffiliation')
-            role = True if role == "staff" else False
-            email = request.headers.get('mail')
-            student_number = request.headers.get('uid')
-
-
-            uid = session.get("user_id", 0) # check if logged in already
-            if uid == 0:
-                if not user_service.check_credentials(email): # account doesn't exist, register
-                    user_service.create_user(name, student_number, email, role)
-                user_service.check_credentials(email)
-
-            return result
-        return __home_decorator
-    return _home_decorator
-
 @app.route("/")
 def hello_world() -> str:
     """
