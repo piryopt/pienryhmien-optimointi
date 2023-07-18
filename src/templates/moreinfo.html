@@ -1,8 +1,8 @@
-{{ basic[0] }}<br>
-{{ basic[1] }} paikkaa
+<p>{{ basic[0] }}</p>
+<p>{{ basic[1] }} paikkaa</p>
 <br><br>
 {% for info in infos %}
-{{ info[0] }}: {{ info[1] }}<br>
+<p>{{ info[0] }}: {{ info[1] }}</p>
 {% endfor %}
 <br>
 <input type="button" id="exitMoreInfo" value="Sulje" onclick="exitMoreInfo()">

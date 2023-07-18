@@ -8,11 +8,14 @@
 
 {% if session.email %} 
 {% if teacher %}
-Kyselyn nimi<br>
 <form method="post" enctype="multipart/form-data">
+  <p>Kyselyn nimi</p>
   <input type="text" name="name"><br>
+  <p>Kyselyn kuvaus, pari virkettä</p>
+  <textarea name="desc" rows="4" cols="25"></textarea><br>
+  <p>Valitse tiedosto</p>
   <input type="file" name="file"><br>
-  <input type="submit">
+  <input type="submit" value="Luo Kysely">
 </form>
 {% endif %}
 {% if not teacher %}

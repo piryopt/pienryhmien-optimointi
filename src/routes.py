@@ -46,7 +46,6 @@ def home_decorator():
     return _home_decorator
 
 @app.route("/")
-@home_decorator()
 def hello_world() -> str:
     """
     Returns the rendered skeleton template
@@ -105,6 +104,7 @@ def surveys(survey_id):
     '''The answer page for surveys.'''
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    desc = survey_service.get_survey_description(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return hello_world()
@@ -137,7 +137,7 @@ def surveys(survey_id):
             return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
         return render_template("closedsurvey.html", survey_name = survey_name)
 
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10")
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -201,7 +201,6 @@ def logout():
     return render_template("index.html")
 
 @app.route("/create_survey", methods = ["GET"])
-@home_decorator()
 def new_survey_form():
     return render_template("create_survey.html")
 
@@ -209,10 +208,11 @@ def new_survey_form():
 def new_survey_post():
     data = request.get_json()
     survey_name = data["surveyGroupname"]
+    description = data["surveyInformation"]
     user_id = session.get("user_id",0)
     survey_choices = data["choices"]
 
-    survey_service.create_new_survey_manual(survey_choices, survey_name, user_id)
+    survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description)
 
     response = {"msg":"Uusi kysely luotu!"}
     return jsonify(response)
@@ -368,14 +368,14 @@ def open_survey(survey_id):
     return survey_answers(survey_id)
 
 
-@app.route("/from_csv", methods = ["GET", "POST"])
+@app.route("/create_survey/csv", methods = ["GET", "POST"])
 def from_csv():
     teacher = True if session.get("role", 0) == "Opettaja" else False
     if request.method == "GET":
         return render_template("from_csv.html", teacher=teacher)
     if request.method == "POST":
         file = request.files['file']
-
+        description = request.form.get("desc")
         
         if file.filename == '': # did user provide a file
             return redirect(request.url)
@@ -389,7 +389,7 @@ def from_csv():
         survey_name = request.form["name"]
 
         user_id = session.get("user_id", 0)
-        survey_service.create_survey_from_csv(file, survey_name, user_id)
+        survey_service.create_survey_from_csv(file, survey_name, user_id, description)
 
 
         return redirect("/previous_surveys")

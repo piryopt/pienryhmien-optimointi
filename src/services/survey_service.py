@@ -77,6 +77,7 @@ class SurveyService:
             return False
         return survey.results_saved
 
+    
     def create_survey_from_csv(self, file, survey_name, user_id):
         parser_elomake_csv(file, survey_name, user_id) # in tools
     
