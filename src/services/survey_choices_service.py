@@ -4,16 +4,11 @@ from src.repositories.survey_choices_repository import (
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
-from src.repositories.choice_infos_repository import (
-    choice_infos_repository as default_choice_infos_repository
-)
 
 class SurveyChoicesService:
-    def __init__(self, survey_choices_repository = default_survey_choices_repository,
-                  survey_repository = default_survey_repository, choice_infos_repository = default_choice_infos_repository):
+    def __init__(self, survey_choices_repository = default_survey_choices_repository, survey_repository = default_survey_repository):
         self._survey_choices_repository = survey_choices_repository
         self._survey_repository = survey_repository
-        self._choice_infos_repository = choice_infos_repository
 
     def get_list_of_survey_choices(self, survey_id):
         survey = self._survey_repository.get_survey(survey_id)
@@ -43,9 +38,9 @@ class SurveyChoicesService:
         return True
     
     def get_choice_name_and_spaces(self, choice_id):
-        return self._choice_infos_repository.get_choice_name_and_spaces(choice_id)
+        return self._survey_choices_repository.get_choice_name_and_spaces(choice_id)
     
     def get_choice_additional_infos(self, choice_id):
-            return self._choice_infos_repository.get_choice_additional_infos(choice_id)
+            return self._survey_choices_repository.get_choice_additional_infos(choice_id)
 
 survey_choices_service = SurveyChoicesService()

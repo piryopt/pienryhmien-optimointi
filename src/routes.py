@@ -10,7 +10,6 @@ from src.services.survey_service import survey_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.services.final_group_service import final_group_service
-from src.services.choice_infos_service import choice_infos_service
 from src.tools import data_gen, excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
@@ -165,7 +164,7 @@ def get_choices(survey_id):
 def get_info():
     raw_id = request.get_json()
     basic_info = survey_choices_service.get_choice_name_and_spaces(int(raw_id))
-    additional_info = choice_infos_service.get_choice_additional_infos(int(raw_id))
+    additional_info = survey_choices_service.get_choice_additional_infos(int(raw_id))
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/register", methods = ["GET", "POST"])
