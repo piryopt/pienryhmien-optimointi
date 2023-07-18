@@ -77,11 +77,13 @@ class SurveyService:
             return False
         return survey.results_saved
 
+    def create_survey_from_csv(self, file, survey_name, user_id, description):
+        parser_elomake_csv(file, survey_name, user_id, description) # in tools
     
-    def create_survey_from_csv(self, file, survey_name, user_id):
-        parser_elomake_csv(file, survey_name, user_id) # in tools
-    
-    def create_new_survey_manual(self, survey_choices,survey_name, user_id):
-        parser_manual(survey_choices, survey_name, user_id)
+    def create_new_survey_manual(self, survey_choices,survey_name, user_id, description):
+        parser_manual(survey_choices, survey_name, user_id, description)
+
+    def get_survey_description(self, survey_id):
+        return self._survey_repository.get_survey_description(survey_id)
 
 survey_service = SurveyService()
