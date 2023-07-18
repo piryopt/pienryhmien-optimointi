@@ -46,8 +46,6 @@ def home_decorator():
         return __home_decorator
     return _home_decorator
 
-
-
 @app.route("/")
 @home_decorator()
 def hello_world() -> str:

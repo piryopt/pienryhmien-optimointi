@@ -1,7 +1,6 @@
 from src import db
 from src.repositories.survey_repository import survey_repository
 from src.repositories.survey_choices_repository import survey_choices_repository
-from src.repositories.choice_infos_repository import choice_infos_repository
 from sqlalchemy import text
 
 def clear_database():
@@ -54,7 +53,7 @@ def parser_elomake_csv(file, survey_name, user_id):
         i = 4
         while i < col_count:
             temp_string = ''.join(c for c in temp[i] if c.isprintable())
-            choice_infos_repository.create_new_choice_info(choice_id, info_headers[i], temp_string.strip('"'))
+            survey_choices_repository.create_new_choice_info(choice_id, info_headers[i], temp_string.strip('"'))
             i += 1
 
         index += 1
@@ -81,5 +80,5 @@ def parser_manual(survey_choices, survey_name, user_id):
                 choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, spaces)
                 continue
 
-            choice_infos_repository.create_new_choice_info(choice_id, pair, choice[pair])
+            survey_choices_repository.create_new_choice_info(choice_id, pair, choice[pair])
             count += 1
