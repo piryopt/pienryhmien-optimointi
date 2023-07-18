@@ -91,23 +91,28 @@ class SurveyRepository:
             print(e)
             return False
 
-    
     def create_new_survey(self, surveyname, user_id, min_choices, description):
         '''
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
         '''
+        try:
+            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description)"\
+                " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc) RETURNING id"
+            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description})
+            db.session.commit()
+            return result.fetchone()[0]
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
-        sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description)"\
-            " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc) RETURNING id"
-        result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description})
-        db.session.commit()
-        return result.fetchone()[0]
-
-    
     def get_survey_description(self, survey_id):
-        sql = "SELECT survey_description FROM surveys WHERE id=:id"
-        result = db.session.execute(text(sql), {"id":survey_id})
-        return result.fetchone()[0]
+        try:
+            sql = "SELECT survey_description FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 survey_repository = SurveyRepository()

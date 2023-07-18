@@ -383,7 +383,6 @@ def from_csv():
             return redirect(request.url)
         if not teacher:
             return redirect(request.url)
-        
 
         file = file.read().decode("utf-8")
         survey_name = request.form["name"]

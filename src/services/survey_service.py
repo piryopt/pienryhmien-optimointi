@@ -80,7 +80,7 @@ class SurveyService:
     def create_survey_from_csv(self, file, survey_name, user_id, description):
         parser_elomake_csv(file, survey_name, user_id, description) # in tools
     
-    def create_new_survey_manual(self, survey_choices,survey_name, user_id, description):
+    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description):
         parser_manual(survey_choices, survey_name, user_id, description)
 
     def get_survey_description(self, survey_id):
