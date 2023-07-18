@@ -25,7 +25,7 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-        
+
     def count_created_surveys(self, user_id):
         # Do we want to diplay all surveys created or only the active ones?
         try:
@@ -38,7 +38,7 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-        
+
     def close_survey(self, survey_id, teacher_id):
         try:
             sql = "UPDATE surveys SET closed = True WHERE (id=:survey_id and teacher_id=:teacher_id)"
@@ -48,7 +48,7 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-        
+
     def open_survey(self, survey_id, teacher_id):
         try:
             sql = "UPDATE surveys SET closed = False WHERE (id=:survey_id and teacher_id=:teacher_id)"
@@ -70,7 +70,7 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-        
+
     def get_closed_surveys(self, teacher_id):
         try:
             sql = "SELECT id, surveyname, closed, results_saved FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"

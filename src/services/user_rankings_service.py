@@ -13,7 +13,7 @@ class UserRankingsService:
     def add_user_ranking(self, survey_id, ranking, user_id):
         self._user_rankings_repository.add_user_ranking(user_id,survey_id,ranking)
         return True
-    
+
     def user_ranking_exists(self, survey_id, user_id):
         ranking = self._user_rankings_repository.get_user_ranking(user_id, survey_id)
         if not ranking:

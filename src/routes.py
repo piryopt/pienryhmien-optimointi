@@ -1,9 +1,8 @@
-import os
-from flask import render_template, request, session, jsonify, redirect
-from sqlalchemy import text
-import psycopg2
 from pathlib import Path
+from sqlalchemy import text
 from random import shuffle
+from functools import wraps
+from flask import render_template, request, session, jsonify, redirect
 from src import app,db
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -17,7 +16,7 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
-from functools import wraps
+
 
 def home_decorator():
     def _home_decorator(f):
@@ -37,7 +36,7 @@ def home_decorator():
 
             uid = session.get("user_id", 0) # check if logged in already
             if uid == 0:
-                if not user_service.find_by_email(email): # account doesn't exist, register
+                if not user_service.check_credentials(email): # account doesn't exist, register
                     user_service.create_user(name, student_number, email, role)
                 user_service.check_credentials(email)
 
@@ -137,7 +136,8 @@ def surveys(survey_id):
             return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
         return render_template("closedsurvey.html", survey_name = survey_name)
 
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc)
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
+                            survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -270,7 +270,7 @@ def admin_gen_data():
     surveys = SurveyTools.fetch_all_active_surveys(user_id)
     if request.method == "GET":
         return render_template("/admintools/gen_data.html", surveys = surveys)
-    
+
     if request.method == "POST":
         student_n = request.form.get("student_n")
         gen_data.generate_users(int(student_n))
@@ -376,7 +376,7 @@ def from_csv():
     if request.method == "POST":
         file = request.files['file']
         description = request.form.get("desc")
-        
+
         if file.filename == '': # did user provide a file
             return redirect(request.url)
         if not file.filename[-4:] == ".csv": # is it a .csv file
@@ -389,6 +389,5 @@ def from_csv():
 
         user_id = session.get("user_id", 0)
         survey_service.create_survey_from_csv(file, survey_name, user_id, description)
-
 
         return redirect("/previous_surveys")

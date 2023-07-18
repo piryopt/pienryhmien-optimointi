@@ -11,11 +11,11 @@ class SurveyChoicesRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-            
-    def get_survey_choice(self, id):
+
+    def get_survey_choice(self, choice_id):
         try:
             sql = "SELECT * FROM survey_choices WHERE id=:id"
-            result = db.session.execute(text(sql), {"id":id})
+            result = db.session.execute(text(sql), {"id":choice_id})
             ranking = result.fetchone()
             if not ranking:
                 return False
@@ -23,7 +23,7 @@ class SurveyChoicesRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-            
+
     def create_new_survey_choice(self, survey_id, name, seats):
         '''
         Adds a new choice to existing survey, updates just survey_choices table
@@ -47,7 +47,7 @@ class SurveyChoicesRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-        
+
     def create_new_choice_info(self, choice_id, info_key, info_value):
         '''
         Adds an additional to existing survey choice, updates choice_infos table
