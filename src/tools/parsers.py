@@ -49,6 +49,8 @@ def parser_elomake_csv(file, survey_name, user_id, description):
 
         index += 1
 
+    return survey_id
+
 
 def parser_manual(survey_choices, survey_name, user_id, description):
 
@@ -73,3 +75,5 @@ def parser_manual(survey_choices, survey_name, user_id, description):
 
             survey_choices_repository.create_new_choice_info(choice_id, pair, choice[pair])
             count += 1
+
+    return survey_id
