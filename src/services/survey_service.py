@@ -81,7 +81,7 @@ class SurveyService:
         return parser_elomake_csv(file, survey_name, user_id, description) # in tools
     
     def create_new_survey_manual(self, survey_choices, survey_name, user_id, description):
-         return parser_manual(survey_choices, survey_name, user_id, description)
+        return parser_manual(survey_choices, survey_name, user_id, description)
 
     def get_survey_description(self, survey_id):
         return self._survey_repository.get_survey_description(survey_id)
