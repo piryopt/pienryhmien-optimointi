@@ -74,6 +74,7 @@ def surveys(survey_id):
     '''The answer page for surveys.'''
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_service.get_list_of_survey_choices(survey_id)
+    desc = survey_service.get_survey_description(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return hello_world()
@@ -106,7 +107,7 @@ def surveys(survey_id):
             return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
         return render_template("closedsurvey.html", survey_name = survey_name)
 
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10")
+    return render_template("survey.html", choices = survey_choices, survey_id = survey_id, survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -132,8 +133,9 @@ def get_choices(survey_id):
 @app.route("/surveys/getinfo", methods=["POST"])
 def get_info():
     raw_id = request.get_json()
-    choice_info = survey_service.get_survey_choice(int(raw_id))
-    return render_template("moreinfo.html", choice_info = choice_info)
+    basic_info = survey_service.get_choice_name_and_spaces(int(raw_id))
+    additional_info = survey_service.get_choice_additional_infos(int(raw_id))
+    return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/register", methods = ["GET", "POST"])
 def register():
@@ -176,17 +178,11 @@ def new_survey_form():
 def new_survey_post():
     data = request.get_json()
     survey_name = data["surveyGroupname"]
+    description = data["surveyInformation"]
     user_id = session.get("user_id",0)
-    new_survey_id = survey_service.add_new_survey(survey_name, user_id)
-    if not new_survey_id:
-        return redirect("create_survey.html")
     survey_choices = data["choices"]
-    for choice in survey_choices:
-        choice_name = choice["choiceName"]
-        max_spaces = choice["choiceMaxSpaces"]
-        info1 = choice["choiceInfo1"]
-        info2 = choice["choiceInfo2"]
-        survey_service.add_survey_choice(new_survey_id, choice_name, max_spaces, info1, info2)
+
+    survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description)
 
     response = {"msg":"Uusi kysely luotu!"}
     return jsonify(response)
@@ -340,3 +336,30 @@ def open_survey(survey_id):
     if not opened:
         print("ERROR IN OPENING SURVEY")
     return survey_answers(survey_id)
+
+
+@app.route("/create_survey/csv", methods = ["GET", "POST"])
+def from_csv():
+    teacher = True if session.get("role", 0) == "Opettaja" else False
+    if request.method == "GET":
+        return render_template("from_csv.html", teacher=teacher)
+    if request.method == "POST":
+        file = request.files['file']
+        description = request.form.get("desc")
+        
+        if file.filename == '': # did user provide a file
+            return redirect(request.url)
+        if not file.filename[-4:] == ".csv": # is it a .csv file
+            return redirect(request.url)
+        if not teacher:
+            return redirect(request.url)
+        
+
+        file = file.read().decode("utf-8")
+        survey_name = request.form["name"]
+
+        user_id = session.get("user_id", 0)
+        survey_service.create_survey_from_csv(file, survey_name, user_id, description)
+
+
+        return redirect("/previous_surveys")

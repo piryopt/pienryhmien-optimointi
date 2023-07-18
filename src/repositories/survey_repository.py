@@ -197,4 +197,56 @@ class SurveyRepository:
             print(e)
             return False
 
+    
+    def create_new_survey(self, surveyname, user_id, min_choices, description):
+        '''
+        Creates a new survey, updates just surveys table
+        RETURNS created survey's id
+        '''
+
+        sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description)"\
+            " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc) RETURNING id"
+        result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description})
+        db.session.commit()
+        return result.fetchone()[0]
+
+    def create_new_survey_choice(self, survey_id, name, seats):
+        '''
+        Adds a new choice to existing survey, updates just survey_choices table
+        RETURNS created choice's id
+        '''
+        sql = "INSERT INTO survey_choices (survey_id, name, max_spaces)"\
+              " VALUES (:survey_id, :name, :max_spaces) RETURNING id"
+        result = db.session.execute(text(sql), {"survey_id":survey_id, "name":name, "max_spaces":seats})
+        db.session.commit()
+        return result.fetchone()[0]
+
+    def create_new_choice_info(self, choice_id, info_key, info_value):
+        '''
+        Adds an additional to existing survey choice, updates choice_infos table
+        '''
+        sql = "INSERT INTO choice_infos (choice_id, info_key, info_value)"\
+              " VALUES (:c_id, :i_key, :i_value)"
+        result = db.session.execute(text(sql), {"c_id":choice_id, "i_key":info_key, "i_value":info_value})
+        db.session.commit()
+
+    def get_choice_additional_infos(self, choice_id):
+        '''
+        Gets a list of key-value pairs based on choice_id from choice_infos tables
+        '''
+
+        sql = "SELECT info_key, info_value FROM choice_infos WHERE choice_id=:choice_id"
+        result = db.session.execute(text(sql), {"choice_id":choice_id})
+        return result.fetchall()
+
+    def get_choice_name_and_spaces(self, choice_id):
+        sql = "SELECT name, max_spaces FROM survey_choices WHERE id=:id"
+        result = db.session.execute(text(sql), {"id":choice_id})
+        return result.fetchone()
+    
+    def get_survey_description(self, survey_id):
+        sql = "SELECT survey_description FROM surveys WHERE id=:id"
+        result = db.session.execute(text(sql), {"id":survey_id})
+        return result.fetchone()[0]
+
 survey_repository = SurveyRepository()
