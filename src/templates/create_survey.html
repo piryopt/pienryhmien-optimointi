@@ -28,31 +28,61 @@
 
     <section>
       <h2>Kyselyn nimi</h2>
-      <input type="text" class="form-control" id="groupname" name="groupname" />
+      <input type="text" class="form-control" id="groupname" name="groupname"
+        {% if survey.surveyname %}
+          value="{{survey.surveyname}}"
+        {% endif %}
+      />
     </section>
 
     <section>
       <h2>Kyselyn kuvaus</h2>
       <p>Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen. Kuvausteksti näytetään vastaajalle kyselyn yhteydessä</p>
-      <textarea id="survey-information" class="form-control"></textarea>
+      <textarea id="survey-information" class="form-control">{% if survey.surveyname %}{{survey.survey_description}}{% endif %}</textarea>
     </section>
 
     <section>
       <h2>Priorisoitavat ryhmät</h2>
       <p>Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää sarake".</p>
+      <input id="choiceFileInput" type="file" style="display: none;" onchange="handleFileUpload()"/>
+      <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">Tuo valinnat CSV-tiedostosta</button>
       <table class="table table-dark table-striped table-hover">
         <thead class="">
           <tr id="table-headers">
             <th class="constant-header">Nimi</th>
             <th class="constant-header">Enimmäispaikat</th>
+          {# additional columns if template loaded with survey parameter present #}
+          {% if survey is not none %}
+            {% for info in survey.choices[0].info_columns %}
+              <th>{{info.info_key}}</th>
+            {% endfor %}
+          {% endif %}
             <th class="variable-header" id="add-column-header">+ Lisää sarake</th>
           </tr>
         </thead>
         <tbody id="choiceTable" class="">
-          <tr>
-            <td><span>tyhjä</span></td>
-            <td><span>tyhjä</span></td>
-          </tr>
+        {# If survey parameter is present, create rows for each choice #}
+        {% if survey is not none %}
+          {% if survey.choices|length > 0 %}
+            {% for choice in survey.choices %}
+              <tr>
+                <td>{{ choice.name }}</td>
+                <td>{{ choice.max_spaces }}</td>
+              {% for info in choice.info_columns %}
+                <td>{{info.info_value}}</td>
+              {% endfor %}
+              </tr>
+            {% endfor %}
+
+          {# If survey parameter is not set, create empty row with columns for constant values #}
+          {% else %}
+            <tr>
+              <td><span>tyhjä</span></td>
+              <td><span>tyhjä</span></td>
+            </tr>
+          {% endif %}
+        {% endif %}
+          
         </tbody>
       </table>
       <button onclick="addRow()" class="new-row-input btn btn-secondary" name="addchoice">+ Lisää rivi</button>

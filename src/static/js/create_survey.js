@@ -153,3 +153,76 @@ function pageLoadActions() {
 document.addEventListener("DOMContentLoaded",function() {
    pageLoadActions() 
 })
+
+function uploadChoiceFileBtn() {
+    document.getElementById("choiceFileInput").click()
+}
+
+function handleFileUpload() {
+    var uploadInput = document.getElementById("choiceFileInput")
+    var file = uploadInput.files[0]
+    console.log(file)
+    var reader = new FileReader()
+    reader.readAsText(file)
+    reader.onload = function() {
+        // Validate file and handle uploading it to backend
+        console.log(reader.result)
+
+        var requestData = {
+            surveyGroupname: $("#groupname").val(),
+            surveyInformation: document.getElementById("survey-information").value,
+            uploadedFileContent: reader.result
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/create_survey/import",
+            data: JSON.stringify(requestData),
+            contentType: "application/json",
+            dataType: "json",
+            success: function(result) {
+                console.log(result)
+                setUploadedTableValues(result['headers'], result['choices'])
+            }
+            }); 
+
+    }
+    
+}
+
+function setUploadedTableValues(headers, choices) {
+    console.log(headers)
+    // set table headers
+    var headersRow = document.getElementById('table-headers')
+
+    // Remove variable columns if they exist
+    var begin = (headersRow.childElementCount-2)*-1
+    var end = headersRow.childElementCount - 1
+    console.log("begin", begin, "end",end)
+    var variableHeaders = Array.from(headersRow.children).slice(begin, end)
+    console.log("HEADERS", variableHeaders)
+    variableHeaders.forEach(header => header.remove())
+
+    // Add new headers if they exist
+    // TODO: Correct naming
+    for(var header in headers.slice(2)) {
+        var headerElement = document.createElement('th')
+        headerElement.innerText = header
+        headersRow.insertBefore(headerElement, document.getElementById('add-column-header'))
+    }
+
+
+
+    // set table body
+    var tableBody = document.getElementById('choiceTable')
+    tableBody.innerHTML = ''
+    for(var row of choices) {
+        var rowElement = document.createElement('tr')
+        for(var cell of row) {
+            var cellElement = document.createElement('td')
+            cellElement.innerText = cell
+            rowElement.appendChild(cellElement)
+        }
+        tableBody.append(rowElement)
+    }
+}

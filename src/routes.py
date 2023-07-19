@@ -2,7 +2,7 @@ from pathlib import Path
 from sqlalchemy import text
 from random import shuffle
 from functools import wraps
-from flask import render_template, request, session, jsonify, redirect
+from flask import render_template, request, session, jsonify, redirect, url_for
 from src import app,db
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -16,6 +16,12 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
+
+# Temporary imports for branch csv-importing TO REMOVE
+from src.entities.survey import Survey, SurveyChoice, SurveyChoiceInfo, MOCK_SURVEY
+import pandas as pd
+from io import StringIO
+
 
 @app.route("/")
 def hello_world() -> str:
@@ -39,6 +45,10 @@ def hello_world() -> str:
         # VAIHDA TÄMÄ OIKEESEEN PÄIVÄMÄÄRÄÄN KUN SAADAAN TOIMINNALLISUUS!!
         survey_ending_date = "31.8.2023"
         data.append([survey_id, surveyname, participants, survey_ending_date])
+
+    # Debug
+    print(MOCK_SURVEY)
+
     return render_template('index.html', surveys_created = surveys_created, exists = True, data = data, error_statement = "DOES THIS WORK?")
 
 
@@ -174,8 +184,8 @@ def logout():
     return render_template("index.html")
 
 @app.route("/create_survey", methods = ["GET"])
-def new_survey_form():
-    return render_template("create_survey.html")
+def new_survey_form(survey=None):
+    return render_template("create_survey.html", survey=survey)
 
 @app.route("/create_survey", methods = ["POST"])
 def new_survey_post():
@@ -189,6 +199,24 @@ def new_survey_post():
 
     response = {"msg":"Uusi kysely luotu!"}
     return jsonify(response)
+
+@app.route("/create_survey/import", methods = ["POST"])
+def import_survey_choices():
+    data = request.get_json()
+    """
+    survey = Survey(
+            id= None,
+            surveyname = data.surveyGroupname,
+            teacher_id = None,
+            min_choices = None,
+            results_saved = False
+            )
+    """
+    df = pd.read_csv(StringIO(data['uploadedFileContent']), sep=";")
+    data['uploadedFileContent'] = df.to_dict()
+    data['headers'] = df.columns.values.tolist()
+    data['choices'] = df.values.tolist()
+    return jsonify(data)
 
 @app.route("/previous_surveys")
 def previous_surveys():
