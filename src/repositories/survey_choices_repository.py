@@ -39,15 +39,6 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
-    def get_choice_name_and_spaces(self, choice_id):
-        try:
-            sql = "SELECT name, max_spaces FROM survey_choices WHERE id=:id"
-            result = db.session.execute(text(sql), {"id":choice_id})
-            return result.fetchone()
-        except Exception as e: # pylint: disable=W0718
-            print(e)
-            return False
-
     def create_new_choice_info(self, choice_id, info_key, info_value):
         '''
         Adds an additional to existing survey choice, updates choice_infos table

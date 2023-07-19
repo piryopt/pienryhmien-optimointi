@@ -58,9 +58,3 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         info = scr.get_choice_additional_infos(choice_id)
         self.assertEqual(info[0].info_key, "Moti")
         self.assertEqual(info[0].info_value, "Vaatio")
-
-    def test_get_choice_name(self):
-        survey_id = sr.create_new_survey("Test survey 4", self.user_id, 10, "Motivaatio")
-        choice_id = scr.create_new_survey_choice(survey_id, "moti 1", 10)
-        name_and_spaces = scr.get_choice_name_and_spaces(choice_id)
-        self.assertEqual(name_and_spaces.name, "moti 1")
