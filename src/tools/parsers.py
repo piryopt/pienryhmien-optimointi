@@ -2,6 +2,7 @@ from src import db
 from src.repositories.survey_repository import survey_repository
 from src.repositories.survey_choices_repository import survey_choices_repository
 from sqlalchemy import text
+import json
 
 def parser_elomake_csv(file, survey_name, user_id, description):
     '''
@@ -12,6 +13,11 @@ def parser_elomake_csv(file, survey_name, user_id, description):
     points that could be the last column.
     '''
     survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
+
+    ret_dict = {}
+    ret_dict["surveyName"] = survey_name
+    ret_dict["surveyDescription"] = description
+    ret_dict["choices"] = [] # array of dicts
 
     file = file.split('\n')
     row_count = len(file)
@@ -39,16 +45,25 @@ def parser_elomake_csv(file, survey_name, user_id, description):
         name = ''.join(c for c in temp[2] if c.isprintable())
         spaces = ''.join(c for c in temp[3] if c.isprintable()).strip('"')
 
+        # update dict/JSON
+        ret_dict["choices"].append({})
+        ret_dict["choices"][index - 1]["name"] = name
+        ret_dict["choices"][index - 1]["spaces"] = spaces
+
+
         choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, int(spaces))
 
         i = 4
         while i < col_count:
             temp_string = ''.join(c for c in temp[i] if c.isprintable())
             survey_choices_repository.create_new_choice_info(choice_id, info_headers[i], temp_string.strip('"'))
+            # update dict/JSON
+            ret_dict["choices"][index - 1][info_headers[i]] = temp_string.strip('"')
             i += 1
 
         index += 1
 
+    print(ret_dict)
     return survey_id
 
 
