@@ -187,10 +187,15 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(surveys[0][0], closed_id)
         self.assertEqual(len(surveys), 1)
 
-    def test_get_list_closed_surveys(self):
+    def test_get_list_open_surveys(self):
         '''
-        Test only closed surveys are acquired
+        Test only open surveys are acquired
         '''
+
+        # first check 0 surveys branch
+        surveys = ss.get_active_surveys(self.user_id)
+        self.assertEqual(surveys, False)
+
         with open("tests/test_files/test_survey1.json", 'r') as openfile:
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
@@ -204,4 +209,63 @@ class TestSurveyService(unittest.TestCase):
 
         self.assertEqual(surveys[0][0], open_id)
         self.assertEqual(len(surveys), 1)
+
+    def test_open_survey_normal(self):
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        ss.close_survey(survey_id, self.user_id)
+        closed = ss.check_if_survey_closed(survey_id)
+        self.assertEqual(closed, True)
+
+        ss.open_survey(survey_id, self.user_id)
+        closed = ss.check_if_survey_closed(survey_id)
+        self.assertEqual(closed, False)
+
+    def test_open_survey_non_existant(self):
+
+        ret = ss.open_survey(-1, self.user_id)
+        self.assertEqual(ret, False)
+
+    def test_open_survey_wrong_teacher(self):
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        ss.close_survey(survey_id, self.user_id)
+        ret = ss.open_survey(survey_id, self.user_id2)
+        self.assertEqual(ret, False)
+
+        ret = ss.check_if_survey_closed(survey_id)
+        self.assertEqual(ret, True)
+
+    def test_check_if_survey_results_saved(self):
+        '''
+        Test functions update_survey_answered() and check_if_survey_results_saved()
+        '''
+
+        # first check non existant case
+        ret = ss.check_if_survey_results_saved(-1)
+        self.assertEqual(ret, False)
+        ret = ss.update_survey_answered(-1)
+        self.assertEqual(ret, False)
+
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        answered = ss.check_if_survey_results_saved(survey_id)
+        self.assertEqual(answered, False)
+
+        ss.update_survey_answered(survey_id)
+
+        answered = ss.check_if_survey_results_saved(survey_id)
+        self.assertEqual(answered, True)
 
