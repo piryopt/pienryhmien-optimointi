@@ -2,24 +2,15 @@ from src import db
 from src.repositories.survey_repository import survey_repository
 from src.repositories.survey_choices_repository import survey_choices_repository
 from sqlalchemy import text
-import json
 
-def parser_elomake_csv(file):
+def parser_elomake_csv_to_dict(file):
     '''
-    Parses a survey from Elomake exported CSV file and creates a survey,
-    including choices etc.
-    The last column on a row (probably) contains unprintable control characters,
-    which is why straight up strip() doesn't work, so they have to removed at all
-    points that could be the last column.
+    Parses an Elomake imported CSV to a dictionary,
+    the dictionary is later used by parser_manual() (below)
+    RETURNS dictionary that can be parsed by later functions
     '''
-    #survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
 
     ret_dict = {}
-
-    """
-    ret_dict["surveyName"] = survey_name
-    ret_dict["surveyDescription"] = description
-    """
     ret_dict["choices"] = [] # array of dicts
 
     file = file.split('\n')
@@ -53,24 +44,23 @@ def parser_elomake_csv(file):
         ret_dict["choices"][index - 1]["name"] = name
         ret_dict["choices"][index - 1]["spaces"] = spaces
 
-
-        #choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, int(spaces))
-
         i = 4
         while i < col_count:
             temp_string = ''.join(c for c in temp[i] if c.isprintable())
-            #survey_choices_repository.create_new_choice_info(choice_id, info_headers[i], temp_string.strip('"'))
             # update dict/JSON
             ret_dict["choices"][index - 1][info_headers[i]] = temp_string.strip('"')
             i += 1
 
         index += 1
 
-    print(ret_dict)
     return ret_dict
 
 
-def parser_manual(survey_choices, survey_name, user_id, description):
+def parser_dict_to_survey(survey_choices, survey_name, user_id, description):
+    '''
+    Parses a dictionary and creates a survey, its choices and their additional infos
+    RETURNS created survey's id
+    '''
 
     survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
 

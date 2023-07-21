@@ -1,7 +1,7 @@
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
-from src.tools.parsers import parser_elomake_csv, parser_manual
+from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey
 
 class SurveyService:
     def __init__(self, survey_repositroy=default_survey_repository):
@@ -77,11 +77,20 @@ class SurveyService:
             return False
         return survey.results_saved
 
-    def create_survey_from_csv(self, file, survey_name, user_id, description):
-        return parser_elomake_csv(file, survey_name, user_id, description) # in tools
+    def create_survey_from_csv(self, file):
+        '''
+        Calls tools.parsers Elomake csv to dict parser
+        RETURNS the dictionary
+        '''
+        return parser_elomake_csv_to_dict(file) # in tools
     
     def create_new_survey_manual(self, survey_choices, survey_name, user_id, description):
-        return parser_manual(survey_choices, survey_name, user_id, description)
+        '''
+        Calls tools.parsers dictionary to survey parser
+        that creates the survey, its choices and their additional infos
+        RETURNS created survey's id
+        '''
+        return parser_dict_to_survey(survey_choices, survey_name, user_id, description)
 
     def get_survey_description(self, survey_id):
         return self._survey_repository.get_survey_description(survey_id)

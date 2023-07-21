@@ -16,7 +16,7 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
-from src.tools.parsers import parser_elomake_csv
+from src.tools.parsers import parser_elomake_csv_to_dict
 
 @app.route("/")
 def hello_world() -> str:
@@ -196,7 +196,7 @@ def new_survey_post():
 def import_survey_choices():
     print("IMPORT")
     data = request.get_json()
-    return jsonify(parser_elomake_csv(data['uploadedFileContent'])["choices"])
+    return jsonify(parser_elomake_csv_to_dict(data['uploadedFileContent'])["choices"])
 
 @app.route("/previous_surveys")
 def previous_surveys():

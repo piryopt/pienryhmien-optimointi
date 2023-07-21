@@ -42,8 +42,32 @@ class TestSurveyService(unittest.TestCase):
         name = ss.get_survey_name(-1)
         self.assertEqual(name, False)
 
+    def test_elomake_csv_to_dict_parsing_case_normal(self):
+        '''
+        Tests that Elomake imported CSV is parsed correctly to a dict
+        '''
+        file = open("tests/test_files/test_survey1.csv", 'r').read()
+        dict = ss.create_survey_from_csv(file)
+
+        choice1 = dict["choices"][0]
+        choice2 = dict["choices"][1]
+
+        self.assertEqual(choice1["name"], "Päiväkoti Toivo")
+        self.assertEqual(int(choice1["spaces"]), 3)
+        self.assertEqual(choice1["Postinumero"], "00790")
+        self.assertEqual(choice1["Lisätietoja"], "Tässä tekstiä, pilkulla")
+
+        self.assertEqual(choice2["name"], "Päiväkoti Gehenna")
+        self.assertEqual(int(choice2["spaces"]), 6)
+        self.assertEqual(choice2["Postinumero"], "00666")
+        self.assertEqual(choice2["Lisätietoja"], "Tässä tekstiä,, kahdella pilkulla")
+
     
-    def test_manual_survey_creation_case_normal(self):
+    def test_survey_creation_case_normal(self):
+        '''
+        Tests that dict is parsed correctly to survey, its choices and their additional infos
+        CASE NORMAL, the dict is valid etc.
+        '''
 
         with open("tests/test_files/test_survey1.json", 'r') as openfile:
             # open as JSON instead of TextIOWrapper or something
