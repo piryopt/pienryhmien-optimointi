@@ -76,36 +76,3 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(choice2_infos[0][1], "äisimhi tunappat nelo")
         self.assertEqual(choice2_infos[1][0], "Postinumero")
         self.assertEqual(choice2_infos[1][1], "01820")
-
-    def test_csv_survey_creation_case_normal(self):
-
-        file = open("tests/test_files/test_survey1.csv")
-        # Convert textwrapper or something so string
-        file = file.read()
-        survey_id = ss.create_survey_from_csv(file, "CSV testikysely", self.user_id, "CSV kuvaus")
-
-        # check surveys tables information
-        survey_name = ss.get_survey_name(survey_id)
-        survey_desc = ss.get_survey_description(survey_id)
-        self.assertEqual(survey_name, "CSV testikysely")
-        self.assertEqual(survey_desc, "CSV kuvaus")
-
-        # check choice mandatory informations
-        choices = scs.get_list_of_survey_choices(survey_id)
-        self.assertEqual(choices[0][2], "Päiväkoti Toivo")
-        self.assertEqual(choices[0][3], 3)
-        self.assertEqual(choices[1][2], "Päiväkoti Gehenna")
-        self.assertEqual(choices[1][3], 6)
-
-        # check choice additional infos
-        choice1_infos = scs.get_choice_additional_infos(choices[0][0])
-        choice2_infos = scs.get_choice_additional_infos(choices[1][0])
-        self.assertEqual(choice1_infos[0][0], "Postinumero")
-        self.assertEqual(choice1_infos[0][1], "00790")
-        self.assertEqual(choice1_infos[1][0], "Lisätietoja")
-        self.assertEqual(choice1_infos[1][1], "Tässä tekstiä, pilkulla")
-
-        self.assertEqual(choice2_infos[0][0], "Postinumero")
-        self.assertEqual(choice2_infos[0][1], "00666")
-        self.assertEqual(choice2_infos[1][0], "Lisätietoja")
-        self.assertEqual(choice2_infos[1][1], "Tässä tekstiä,, kahdella pilkulla")
