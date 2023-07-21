@@ -1,7 +1,9 @@
+/* Styles for general page layout */
 section {
     margin-bottom: 40px;
 }
 
+/* Styles for choice table */
 .variable-header:hover {
     cursor: pointer;
 }
@@ -39,6 +41,7 @@ th.edited:after, td.edited:after {
     border: 2px solid #99999b;
 }
 
+/* Styles for start- and end-time fields */
 .datetime-input-field {
     padding: .375rem .75rem;
     line-height: 1.5;
@@ -51,6 +54,8 @@ th.edited:after, td.edited:after {
     margin-right: .25rem;
 }
 
+
+/* Styles for JQuery datepicker */
 .ui-datepicker {
     background-color: #99999b;
     padding: 1rem;
