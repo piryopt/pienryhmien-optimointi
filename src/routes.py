@@ -347,28 +347,3 @@ def open_survey(survey_id):
     if not opened:
         print("ERROR IN OPENING SURVEY")
     return survey_answers(survey_id)
-
-
-@app.route("/create_survey/csv", methods = ["GET", "POST"])
-def from_csv():
-    teacher = True if session.get("role", 0) == "Opettaja" else False
-    if request.method == "GET":
-        return render_template("from_csv.html", teacher=teacher)
-    if request.method == "POST":
-        file = request.files['file']
-        description = request.form.get("desc")
-
-        if file.filename == '': # did user provide a file
-            return redirect(request.url)
-        if not file.filename[-4:] == ".csv": # is it a .csv file
-            return redirect(request.url)
-        if not teacher:
-            return redirect(request.url)
-
-        file = file.read().decode("utf-8")
-        survey_name = request.form["name"]
-
-        user_id = session.get("user_id", 0)
-        survey_service.create_survey_from_csv(file, survey_name, user_id, description)
-
-        return redirect("/previous_surveys")
