@@ -16,12 +16,7 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
-
-# Temporary imports for branch csv-importing TO REMOVE
-from src.entities.survey import Survey, SurveyChoice, SurveyChoiceInfo, MOCK_SURVEY
-import pandas as pd
-from io import StringIO
-
+from src.tools.parsers import parser_elomake_csv
 
 @app.route("/")
 def hello_world() -> str:
@@ -45,9 +40,6 @@ def hello_world() -> str:
         # VAIHDA TÄMÄ OIKEESEEN PÄIVÄMÄÄRÄÄN KUN SAADAAN TOIMINNALLISUUS!!
         survey_ending_date = "31.8.2023"
         data.append([survey_id, surveyname, participants, survey_ending_date])
-
-    # Debug
-    print(MOCK_SURVEY)
 
     return render_template('index.html', surveys_created = surveys_created, exists = True, data = data, error_statement = "DOES THIS WORK?")
 
@@ -202,21 +194,9 @@ def new_survey_post():
 
 @app.route("/create_survey/import", methods = ["POST"])
 def import_survey_choices():
+    print("IMPORT")
     data = request.get_json()
-    """
-    survey = Survey(
-            id= None,
-            surveyname = data.surveyGroupname,
-            teacher_id = None,
-            min_choices = None,
-            results_saved = False
-            )
-    """
-    df = pd.read_csv(StringIO(data['uploadedFileContent']), sep=";")
-    data['uploadedFileContent'] = df.to_dict()
-    data['headers'] = df.columns.values.tolist()
-    data['choices'] = df.values.tolist()
-    return jsonify(data)
+    return jsonify(parser_elomake_csv(data['uploadedFileContent'])["choices"])
 
 @app.route("/previous_surveys")
 def previous_surveys():

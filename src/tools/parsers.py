@@ -4,7 +4,7 @@ from src.repositories.survey_choices_repository import survey_choices_repository
 from sqlalchemy import text
 import json
 
-def parser_elomake_csv(file, survey_name, user_id, description):
+def parser_elomake_csv(file):
     '''
     Parses a survey from Elomake exported CSV file and creates a survey,
     including choices etc.
@@ -12,11 +12,14 @@ def parser_elomake_csv(file, survey_name, user_id, description):
     which is why straight up strip() doesn't work, so they have to removed at all
     points that could be the last column.
     '''
-    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
+    #survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
 
     ret_dict = {}
+
+    """
     ret_dict["surveyName"] = survey_name
     ret_dict["surveyDescription"] = description
+    """
     ret_dict["choices"] = [] # array of dicts
 
     file = file.split('\n')
@@ -51,12 +54,12 @@ def parser_elomake_csv(file, survey_name, user_id, description):
         ret_dict["choices"][index - 1]["spaces"] = spaces
 
 
-        choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, int(spaces))
+        #choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, int(spaces))
 
         i = 4
         while i < col_count:
             temp_string = ''.join(c for c in temp[i] if c.isprintable())
-            survey_choices_repository.create_new_choice_info(choice_id, info_headers[i], temp_string.strip('"'))
+            #survey_choices_repository.create_new_choice_info(choice_id, info_headers[i], temp_string.strip('"'))
             # update dict/JSON
             ret_dict["choices"][index - 1][info_headers[i]] = temp_string.strip('"')
             i += 1
@@ -64,7 +67,7 @@ def parser_elomake_csv(file, survey_name, user_id, description):
         index += 1
 
     print(ret_dict)
-    return survey_id
+    return ret_dict
 
 
 def parser_manual(survey_choices, survey_name, user_id, description):
