@@ -22,8 +22,14 @@ function createNewSurvey() {
     var requestData = {
         surveyGroupname: $("#groupname").val(),
         choices: rowsAsJson,
-        surveyInformation: document.getElementById("survey-information").value
+        surveyInformation: document.getElementById("survey-information").value,
+        startdate: document.getElementById("start-date").value,
+        starttime: document.getElementById("starttime").value,
+        enddate: document.getElementById("end-date").value,
+        endtime: document.getElementById("endtime").value 
     }
+
+    console.log("requestData", requestData)
 
     $.ajax({
     type: "POST",
@@ -48,6 +54,7 @@ function addRow() {
     for (var i = 0; i < headersCount; i++) {
         // create an empty cell and attach event listener to it
         var newEmptyCell = document.createElement("td")
+        newEmptyCell.classList.add("empty")
         newEmptyCell.innerHTML = emptyCellText
         newRow.appendChild(newEmptyCell).addEventListener("click", editCell)
     }      
@@ -58,8 +65,8 @@ function editCell(event) {
     editableField.setAttribute('type', 'text');
 
     // if edited cell is not the "add new column" header, edit the current content 
-    // special case for "add new column" header to not keep old value
-    if (event.target.id !== "add-column-header") {
+    // special cases for "add new column" header and empty cell to not keep old value
+    if (event.target.id !== "add-column-header" && !event.target.classList.contains("empty")) {
         editableField.value = event.target.innerText    
     }
 
@@ -113,6 +120,7 @@ function submitNewColumn(event) {
     var rows = document.getElementById("choiceTable").getElementsByTagName("tr")
     for (var row of rows) {
         var newCell = document.createElement("td")
+        newCell.classList.add("empty")
         newCell.innerText = emptyCellText
         row.appendChild(newCell)
         newCell.addEventListener("click", editCell)
@@ -122,9 +130,20 @@ function submitNewColumn(event) {
 function submitCell(event) {
     var newValue = event.target.value
     var editedCell = event.target.parentNode
+    var wasEmpty = editedCell.classList.contains("empty")
     editedCell.classList.remove("edited")
     editedCell.innerHTML = ""
-    editedCell.innerText = newValue
+    
+    if (newValue === '' && !wasEmpty) {
+        editedCell.innerText = emptyCellText
+        editedCell.classList.add("empty")
+    } else {
+        editedCell.innerText = newValue
+        if (wasEmpty) {
+            editedCell.classList.remove("empty")
+        }
+    }
+    
 
 }
 

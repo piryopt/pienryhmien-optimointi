@@ -10,12 +10,24 @@
 {% block content %}
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <!-- Removing sortability
   <script>
     $( function() {
             $("#choiceTable").sortable({
               items: "tr:not(#newRow)"
             });
     })
+  </script>
+  -->
+  <script>
+      $( document ).ready(function() {
+        $("#start-date").datepicker({
+          dateFormat: "dd.mm.yy"
+        });
+        $("#end-date").datepicker({
+          dateFormat: "dd.mm.yy"
+        });
+      });
   </script>
     <h1 class="page-title">
       <img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}"
@@ -32,6 +44,18 @@
           value="{{survey.surveyname}}"
         {% endif %}
       />
+    </section>
+
+    <section>
+      <h2>Vastausaika</h2>
+      <p>Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata.</p>
+      <label>Vastausaika alkaa:</label><br />
+      <input data-role="date" type="text" id="start-date" class="datetime-input-field">
+      <label for="starttime" class="time-label">Kello:</label><input type="time" name="starttime" id="starttime" class="datetime-input-field"/>
+      <br/>
+      <label>Vastausaika päättyy:</label><br />
+      <input data-role="date" type="text" id="end-date" class="datetime-input-field">
+      <label for="endtime" class="time-label">Kello:</label><input type="time" name="endtime" id="endtime" class="datetime-input-field"/>
     </section>
 
     <section>
@@ -76,10 +100,15 @@
           {# If survey parameter is not set, create empty row with columns for constant values #}
           {% else %}
             <tr>
-              <td><span>tyhjä</span></td>
-              <td><span>tyhjä</span></td>
+              <td class="empty">tyhjä</td>
+              <td class="empty">tyhjä</td>
             </tr>
           {% endif %}
+          {% else %}
+            <tr>
+              <td class="empty">tyhjä</td>
+              <td class="empty">tyhjä</td>
+            </tr>
         {% endif %}
           
         </tbody>
