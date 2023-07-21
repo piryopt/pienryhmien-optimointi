@@ -24,21 +24,11 @@ class SurveyChoicesService:
             return False
         return survey_choice
 
-    def add_survey_choice(self, survey_id, name, max_spaces, info1, info2):
-        survey_exists = self._survey_repository.get_survey(survey_id)
-        if not survey_exists:
-            print("SURVEY DOES NOT EXIST!")
-            return False
-        if len(name) < 3:
-            print("The name is too short!")
-            return False
-        new_choice = self._survey_choices_repository.add_new_survey_choice(survey_id, name, max_spaces, info1, info2)
-        if not new_choice:
-            return False
-        return True
-
     def get_choice_name_and_spaces(self, choice_id):
-        return self._survey_choices_repository.get_choice_name_and_spaces(choice_id)
+
+        # take only the needed columns
+        data = self._survey_choices_repository.get_survey_choice(choice_id)
+        return (data[2], data[3])
 
     def get_choice_additional_infos(self, choice_id):
         return self._survey_choices_repository.get_choice_additional_infos(choice_id)

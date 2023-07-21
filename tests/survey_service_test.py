@@ -76,3 +76,195 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(choice2_infos[0][1], "äisimhi tunappat nelo")
         self.assertEqual(choice2_infos[1][0], "Postinumero")
         self.assertEqual(choice2_infos[1][1], "01820")
+
+    def test_csv_survey_creation_case_normal(self):
+
+        file = open("tests/test_files/test_survey1.csv")
+        # Convert textwrapper or something so string
+        file = file.read()
+        survey_id = ss.create_survey_from_csv(file, "CSV testikysely", self.user_id, "CSV kuvaus")
+
+        # check surveys tables information
+        survey_name = ss.get_survey_name(survey_id)
+        survey_desc = ss.get_survey_description(survey_id)
+        self.assertEqual(survey_name, "CSV testikysely")
+        self.assertEqual(survey_desc, "CSV kuvaus")
+
+        # check choice mandatory informations
+        choices = scs.get_list_of_survey_choices(survey_id)
+        self.assertEqual(choices[0][2], "Päiväkoti Toivo")
+        self.assertEqual(choices[0][3], 3)
+        self.assertEqual(choices[1][2], "Päiväkoti Gehenna")
+        self.assertEqual(choices[1][3], 6)
+
+        # check choice additional infos
+        choice1_infos = scs.get_choice_additional_infos(choices[0][0])
+        choice2_infos = scs.get_choice_additional_infos(choices[1][0])
+        self.assertEqual(choice1_infos[0][0], "Postinumero")
+        self.assertEqual(choice1_infos[0][1], "00790")
+        self.assertEqual(choice1_infos[1][0], "Lisätietoja")
+        self.assertEqual(choice1_infos[1][1], "Tässä tekstiä, pilkulla")
+
+        self.assertEqual(choice2_infos[0][0], "Postinumero")
+        self.assertEqual(choice2_infos[0][1], "00666")
+        self.assertEqual(choice2_infos[1][0], "Lisätietoja")
+        self.assertEqual(choice2_infos[1][1], "Tässä tekstiä,, kahdella pilkulla")
+
+    def test_count_surveys_created(self):
+        '''
+        Test survey service function count_surveys_created()
+        UPDATE WHEN SURVEYS OF SAME NAME NO LONGER ACCEPTED
+        '''
+        count = ss.count_surveys_created(self.user_id)
+        self.assertEqual(count, 0)
+
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        count = ss.count_surveys_created(self.user_id)
+        self.assertEqual(count, 1)
+
+    def test_survey_closed(self):
+        '''
+        Test survey service functions close_survey() and check_if_survey_closed() normal cases
+        '''
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        closed = ss.check_if_survey_closed(survey_id)
+        self.assertEqual(closed, False)
+
+        ss.close_survey(survey_id, self.user_id)
+        closed = ss.check_if_survey_closed(survey_id)
+        self.assertEqual(closed, True)
+
+    def test_close_non_existing_survey(self):
+        '''
+        Test survey service functions close_survey() and check_if_survey_closed() non existing cases
+        doesn't differentiate between non-existing and closed, might be a problem
+        '''
+        ret = ss.close_survey(-1, self.user_id)
+        self.assertEqual(ret, False)
+
+        ret = ss.check_if_survey_closed(-1)
+        self.assertEqual(ret, False)
+
+    def test_wrong_teacher_cant_close_survey(self):
+        '''
+        Test that wrong user id can't close an survey
+        '''
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        ret = ss.close_survey(survey_id, self.user_id2)
+
+        self.assertEqual(ret, False)
+
+    def test_get_list_closed_surveys(self):
+        '''
+        Test only closed surveys are acquired
+        '''
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        closed_id = ss.create_new_survey_manual(json_object["choices"], "Suljettu", self.user_id, json_object["surveyInformation"])
+        open_id = ss.create_new_survey_manual(json_object["choices"], "Avoin", self.user_id, json_object["surveyInformation"])
+
+        ss.close_survey(closed_id, self.user_id)
+
+        surveys = ss.get_list_closed_surveys(self.user_id)
+
+        self.assertEqual(surveys[0][0], closed_id)
+        self.assertEqual(len(surveys), 1)
+
+    def test_get_list_open_surveys(self):
+        '''
+        Test only open surveys are acquired
+        '''
+
+        # first check 0 surveys branch
+        surveys = ss.get_active_surveys(self.user_id)
+        self.assertEqual(surveys, False)
+
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        closed_id = ss.create_new_survey_manual(json_object["choices"], "Suljettu", self.user_id, json_object["surveyInformation"])
+        open_id = ss.create_new_survey_manual(json_object["choices"], "Avoin", self.user_id, json_object["surveyInformation"])
+
+        ss.close_survey(closed_id, self.user_id)
+
+        surveys = ss.get_active_surveys(self.user_id)
+
+        self.assertEqual(surveys[0][0], open_id)
+        self.assertEqual(len(surveys), 1)
+
+    def test_open_survey_normal(self):
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        ss.close_survey(survey_id, self.user_id)
+        closed = ss.check_if_survey_closed(survey_id)
+        self.assertEqual(closed, True)
+
+        ss.open_survey(survey_id, self.user_id)
+        closed = ss.check_if_survey_closed(survey_id)
+        self.assertEqual(closed, False)
+
+    def test_open_survey_non_existant(self):
+
+        ret = ss.open_survey(-1, self.user_id)
+        self.assertEqual(ret, False)
+
+    def test_open_survey_wrong_teacher(self):
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        ss.close_survey(survey_id, self.user_id)
+        ret = ss.open_survey(survey_id, self.user_id2)
+        self.assertEqual(ret, False)
+
+        ret = ss.check_if_survey_closed(survey_id)
+        self.assertEqual(ret, True)
+
+    def test_check_if_survey_results_saved(self):
+        '''
+        Test functions update_survey_answered() and check_if_survey_results_saved()
+        '''
+
+        # first check non existant case
+        ret = ss.check_if_survey_results_saved(-1)
+        self.assertEqual(ret, False)
+        ret = ss.update_survey_answered(-1)
+        self.assertEqual(ret, False)
+
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"])
+
+        answered = ss.check_if_survey_results_saved(survey_id)
+        self.assertEqual(answered, False)
+
+        ss.update_survey_answered(survey_id)
+
+        answered = ss.check_if_survey_results_saved(survey_id)
+        self.assertEqual(answered, True)
