@@ -3,15 +3,15 @@ from src.repositories.survey_repository import survey_repository
 from src.repositories.survey_choices_repository import survey_choices_repository
 from sqlalchemy import text
 
-def parser_elomake_csv(file, survey_name, user_id, description):
+def parser_elomake_csv_to_dict(file):
     '''
-    Parses a survey from Elomake exported CSV file and creates a survey,
-    including choices etc.
-    The last column on a row (probably) contains unprintable control characters,
-    which is why straight up strip() doesn't work, so they have to removed at all
-    points that could be the last column.
+    Parses an Elomake imported CSV to a dictionary,
+    the dictionary is later used by parser_manual() (below)
+    RETURNS dictionary that can be parsed by later functions
     '''
-    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
+
+    ret_dict = {}
+    ret_dict["choices"] = [] # array of dicts
 
     file = file.split('\n')
     row_count = len(file)
@@ -39,20 +39,28 @@ def parser_elomake_csv(file, survey_name, user_id, description):
         name = ''.join(c for c in temp[2] if c.isprintable())
         spaces = ''.join(c for c in temp[3] if c.isprintable()).strip('"')
 
-        choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, int(spaces))
+        # update dict/JSON
+        ret_dict["choices"].append({})
+        ret_dict["choices"][index - 1]["name"] = name
+        ret_dict["choices"][index - 1]["spaces"] = spaces
 
         i = 4
         while i < col_count:
             temp_string = ''.join(c for c in temp[i] if c.isprintable())
-            survey_choices_repository.create_new_choice_info(choice_id, info_headers[i], temp_string.strip('"'))
+            # update dict/JSON
+            ret_dict["choices"][index - 1][info_headers[i]] = temp_string.strip('"')
             i += 1
 
         index += 1
 
-    return survey_id
+    return ret_dict
 
 
-def parser_manual(survey_choices, survey_name, user_id, description):
+def parser_dict_to_survey(survey_choices, survey_name, user_id, description):
+    '''
+    Parses a dictionary and creates a survey, its choices and their additional infos
+    RETURNS created survey's id
+    '''
 
     survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
 

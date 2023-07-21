@@ -2,7 +2,7 @@ from pathlib import Path
 from sqlalchemy import text
 from random import shuffle
 from functools import wraps
-from flask import render_template, request, session, jsonify, redirect
+from flask import render_template, request, session, jsonify, redirect, url_for
 from src import app,db
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -16,6 +16,7 @@ from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
+from src.tools.parsers import parser_elomake_csv_to_dict
 
 @app.route("/")
 def hello_world() -> str:
@@ -39,6 +40,7 @@ def hello_world() -> str:
         # VAIHDA TÄMÄ OIKEESEEN PÄIVÄMÄÄRÄÄN KUN SAADAAN TOIMINNALLISUUS!!
         survey_ending_date = "31.8.2023"
         data.append([survey_id, surveyname, participants, survey_ending_date])
+
     return render_template('index.html', surveys_created = surveys_created, exists = True, data = data, error_statement = "DOES THIS WORK?")
 
 
@@ -174,8 +176,8 @@ def logout():
     return render_template("index.html")
 
 @app.route("/create_survey", methods = ["GET"])
-def new_survey_form():
-    return render_template("create_survey.html")
+def new_survey_form(survey=None):
+    return render_template("create_survey.html", survey=survey)
 
 @app.route("/create_survey", methods = ["POST"])
 def new_survey_post():
@@ -189,6 +191,12 @@ def new_survey_post():
 
     response = {"msg":"Uusi kysely luotu!"}
     return jsonify(response)
+
+@app.route("/create_survey/import", methods = ["POST"])
+def import_survey_choices():
+    print("IMPORT")
+    data = request.get_json()
+    return jsonify(parser_elomake_csv_to_dict(data['uploadedFileContent'])["choices"])
 
 @app.route("/previous_surveys")
 def previous_surveys():
@@ -339,28 +347,3 @@ def open_survey(survey_id):
     if not opened:
         print("ERROR IN OPENING SURVEY")
     return survey_answers(survey_id)
-
-
-@app.route("/create_survey/csv", methods = ["GET", "POST"])
-def from_csv():
-    teacher = True if session.get("role", 0) == "Opettaja" else False
-    if request.method == "GET":
-        return render_template("from_csv.html", teacher=teacher)
-    if request.method == "POST":
-        file = request.files['file']
-        description = request.form.get("desc")
-
-        if file.filename == '': # did user provide a file
-            return redirect(request.url)
-        if not file.filename[-4:] == ".csv": # is it a .csv file
-            return redirect(request.url)
-        if not teacher:
-            return redirect(request.url)
-
-        file = file.read().decode("utf-8")
-        survey_name = request.form["name"]
-
-        user_id = session.get("user_id", 0)
-        survey_service.create_survey_from_csv(file, survey_name, user_id, description)
-
-        return redirect("/previous_surveys")

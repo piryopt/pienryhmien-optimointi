@@ -2,8 +2,6 @@ var emptyCellText = "tyhjä"
 
 function parseObjFromRow(row, headers) {
     var cells = Array.from(row.getElementsByTagName('td'))
-    console.log("Cells", cells)
-    console.log("Headers", headers)
     obj = {}
 
     for (var i=0; i < headers.length;i++) {
@@ -14,8 +12,6 @@ function parseObjFromRow(row, headers) {
 }
 
 function createNewSurvey() {
-    console.log("createNewSurvey()")
-    
     // Get column names from the choice table
     var tableHeaders = Array.from(document.querySelectorAll("#table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
     console.log(tableHeaders)
@@ -28,8 +24,6 @@ function createNewSurvey() {
         choices: rowsAsJson,
         surveyInformation: document.getElementById("survey-information").value
     }
-
-    console.log(requestData)
 
     $.ajax({
     type: "POST",
@@ -60,8 +54,6 @@ function addRow() {
 }
 
 function editCell(event) {
-    console.log("editCell")
-    console.log(event.target)
     var editableField = document.createElement("input");
     editableField.setAttribute('type', 'text');
 
@@ -153,3 +145,80 @@ function pageLoadActions() {
 document.addEventListener("DOMContentLoaded",function() {
    pageLoadActions() 
 })
+
+function uploadChoiceFileBtn() {
+    document.getElementById("choiceFileInput").click()
+}
+
+function handleFileUpload() {
+    var uploadInput = document.getElementById("choiceFileInput")
+    var file = uploadInput.files[0]
+    var reader = new FileReader()
+    reader.readAsText(file)
+    reader.onload = function() {
+        // Validate file and handle uploading it to backend
+
+        var requestData = {
+            surveyGroupname: $("#groupname").val(),
+            surveyInformation: document.getElementById("survey-information").value,
+            uploadedFileContent: reader.result
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/create_survey/import",
+            data: JSON.stringify(requestData),
+            contentType: "application/json",
+            dataType: "json",
+            success: function(result) {
+                setUploadedTableValues(result)
+            }
+            }); 
+
+    }
+    
+}
+
+function setUploadedTableValues(table) {
+    // set table headers
+    var headersRow = document.getElementById('table-headers')
+
+    // Remove variable columns if they exist
+    var begin = (headersRow.childElementCount-2)*-1
+    var end = headersRow.childElementCount - 1
+    var variableHeaders = Array.from(headersRow.children).slice(begin, end)
+    variableHeaders.forEach(header => header.remove())
+
+    // Add new headers if they exist
+    // TODO: Correct naming
+    var headers = Object.keys(table[0])
+    var headers = Object.keys(table[0]).filter(header => header !== 'name' && header !== 'spaces')
+
+    for(var header of headers) {
+        headersRow.insertBefore(createElementWithText('th', header), document.getElementById('add-column-header'))
+        
+    }
+
+    // set table body
+    var tableBody = document.getElementById('choiceTable')
+    tableBody.innerHTML = ''
+    
+    for(var row of table) {
+        var rowElement = document.createElement('tr')
+        // set constant column variables
+        rowElement.appendChild(createElementWithText('td', row['name']))
+        rowElement.appendChild(createElementWithText('td', row['spaces']))
+
+        // set variable column variables
+        for(var cellHeader of headers) {
+            rowElement.appendChild(createElementWithText('td', row[cellHeader]))
+        }
+        tableBody.append(rowElement)
+    }
+}
+
+function createElementWithText(type, content) {
+    var element = document.createElement(type)
+    element.innerText = content
+    return element
+}
