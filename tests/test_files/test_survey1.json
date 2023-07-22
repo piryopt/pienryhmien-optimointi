@@ -1,0 +1,18 @@
+{
+    "surveyGroupname": "Testikysely JSON",
+    "choices": [
+      {
+        "Nimi": "Ensimmäinen choice",
+        "Enimmäispaikat": "8",
+        "Eka lisätieto": "vaikeuksia csv testaamisessa",
+        "Postinumero": "00790"
+      },
+      {
+        "Nimi": "Toinen choice",
+        "Enimmäispaikat": "6",
+        "Eka lisätieto": "äisimhi tunappat nelo",
+        "Postinumero": "01820"
+      }
+    ],
+    "surveyInformation": "Tällä testataan manuaalista luomista"
+  }

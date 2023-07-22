@@ -15,23 +15,16 @@
     {% block head %}{% endblock %}
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #076aa3;">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-          <img src="{{ url_for('static', filename='images/testbox.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+          <img src="{{ url_for('static', filename='images/fact_check_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">
           Jakaja
         </a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/previous_surveys">Surveys</a>
-                </li>
-            </ul>
-        </div>
         {% if session.user_id %}
         <div class="d-flex">
             <div class="dropdown">
-                <button class="btn btn-primary btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #076aa3;">
+                <button class="btn dropdown btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                   <b>{{ session.full_name }}</b><br>
                   <small>{{ session.role }}</small>
                 </button>

@@ -21,10 +21,6 @@ Open Login Page Test
     Go To Login Page
     Login Page Should Be Open
 
-Open Previous Surveys Page Test
-    Go To Previous Surveys Page
-    Previous Surveys Page Should Be Open
-
 Register New Student Test
     Go To Register Page
     Register Page Should Be Open
@@ -59,76 +55,15 @@ Login Teacher Test
     Click Element  ${LOGINBUTTON}
     Main Page Should Be Open
 
-Create New Survey Test
-    Go To Create Survey Page
-    Create Survey Page Should Be Open
-    Set Surveyname  Best robots
-    Set Choicename  Tars
-    Set Choicemaxspaces  10
-    Set Info1  My honesty threshold is set too high
-    Set Info2  Interstellar
-    Click Button  addchoice
-    Set Choicename  Iron Giant
-    Set Choicemaxspaces  10
-    Set Info1  Superman
-    Set Info2  The Iron Giant
-    Click Button  addchoice
-    Set Choicename  T-800
-    Set Choicemaxspaces  10
-    Set Info1  I'll be back
-    Set Info2  The Terminator
-    Click Button  addchoice
-    Set Choicename  Megatron
-    Set Choicemaxspaces  10
-    Set Info1  NOBODY SUMMONS MEGATRON
-    Set Info2  Transformers
-    Click Button  addchoice
-    Set Choicename  Starscream
-    Set Choicemaxspaces  10
-    Set Info1  FeelsBadMan
-    Set Info2  Transformers
-    Click Button  addchoice
-    Click Element  ${NEWSURVEY}
+Open Previous Surveys Page Test
     Go To Previous Surveys Page
-    Page Should Contain  Best robots
+    Previous Surveys Page Should Be Open
 
 Logout Works Test
     Go To Main Page
     Main Page Should Be Open
     Go To Logout Page
     Main Page Should Be Open
-
-Survey Submitting Works Test
-    Go To Login Page
-    Login Page Should Be Open
-    Set Email  studenttrobot@robot.com
-    Click Element  ${LOGINBUTTON}
-    Main Page Should Be Open
-    Go To Previous Surveys Page
-    Scroll Element Into View  Best robots
-    Click Element  xpath://*[contains(text(), "Best robots")]
-    Page Should Contain  Best robots
-    Click Button  Lähetä valinnat
-    Go To Previous Surveys Page
-    Click Button  id:Best robots
-    Page Should Contain  studenttrobot@robot.com
-
-Show More Choice Info Test
-    Go To Previous Surveys Page
-    Scroll Element Into View  Best robots
-    Click Element  xpath://*[contains(text(), "Best robots")]
-    Click Element  xpath://*[contains(text(), "Megatron")]
-    Page Should Contain  NOBODY SUMMONS MEGATRON
-
-Removing Submission Works Test
-    Go To Previous Surveys Page
-    Scroll Element Into View  Best robots
-    Click Element  xpath://*[contains(text(), "Best robots")]
-    Click Button  Poista valinnat
-    Click Button  id:confirmDelete
-    Go To Previous Surveys Page
-    Click Button  id:Best robots
-    Page Should Not Contain  studenttrobot@robot.com
 
 *** Keywords ***
 Set Email

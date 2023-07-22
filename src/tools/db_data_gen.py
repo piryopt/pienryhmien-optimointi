@@ -2,6 +2,8 @@ from random import choice, shuffle
 from src.entities.user import User
 from src.repositories.user_repository import user_repository as ur
 from src.repositories.survey_repository import survey_repository as sr
+from src.repositories.survey_choices_repository import survey_choices_repository as scr
+from src.repositories.user_rankings_repository import user_rankings_repository as urr
 
 
 class DbDataGen:
@@ -38,7 +40,7 @@ class DbDataGen:
             ur.register(user)
 
     def generate_rankings(self, survey_id):
-        survey_choices = sr.find_survey_choices(survey_id)
+        survey_choices = scr.find_survey_choices(survey_id)
         choice_ids = []
         for choice in survey_choices:
             choice_ids.append(str(choice[0]))
@@ -47,35 +49,64 @@ class DbDataGen:
         for user in db_users:
             shuffle(choice_ids)
             ranking = ','.join(choice_ids)
-            sr.add_user_ranking(user[0], survey_id, ranking)
+            urr.add_user_ranking(user[0], survey_id, ranking)
 
-    def generate_survey(self):
-        name = "GENERATED SURVEY"
-        exists = sr.survey_name_exists(name)
+    def generate_survey(self, user_id):
+        name = "PÄIVÄKOTIKYSELY"
+        exists = sr.survey_name_exists(name, user_id)
         if exists:
             return
-        survey_id = sr.add_new_survey(name)
-        choice_name1 = "Weather-based recommendation for outdoor activities in Helsinki"
-        choice_name2 = "Sovellus pienryhmien optimointiin eli miten jakaa opiskelijat pienryhmiin heidän kiinnostusten perusteella?"
-        choice_name3 = "Seamless TinyML lifecycle management"
-        choice_name4 = "Improved tools for data scientists"
-        choice_name5 = "Automatic local news generator with Generative AI"
-        choice_name6 = "Berry Picker Tracker"
-        choice_name7 = "Urheiluseura 3.0"
-        choice_name8 = "BookCine: the movie-book recommender system"
-        choice_name9 = "Ohjelmistotuotantoprojektien ilmoittautumissovelluksen laajennus"
-        choice_name10 = "Tietojen importti/exporttityökalu MammalBaseen"
+        survey_id = sr.create_new_survey(name, user_id, 10, "AUTOMAATTISESTI GENEROITU!")
+        choice_name1 =  "Päiväkoti Aurinkoleikki"
+        choice_name2 =  "Päiväkoti Pikku Käpälät"
+        choice_name3 =  "Päiväkoti Taikametsä"
+        choice_name4 =  "Päiväkoti Satutupa"
+        choice_name5 =  "Päiväkoti Onnenkoti"
+        choice_name6 =  "Päiväkoti Tähtipolku"
+        choice_name7 =  "Päiväkoti Pikkupirtti"
+        choice_name8 =  "Päiväkoti Kultakutri"
+        choice_name9 =  "Päiväkoti Nallenpesä"
+        choice_name10 = "Päiväkoti Ilonpisara"
 
         #Info generated with ChatGPT :D
-        sr.add_new_survey_choice(survey_id, choice_name1, 11,  "Leena Nieminen", "Kirkkokatu 8, Tampere")
-        sr.add_new_survey_choice(survey_id, choice_name2, 11, "Juha Virtanen", "Peltolantie 12, Vantaa")
-        sr.add_new_survey_choice(survey_id, choice_name3, 11, "Anna Koskinen", "Mannerheimintie 15, Helsinki")
-        sr.add_new_survey_choice(survey_id, choice_name4, 11, "Markus Järvinen", "Saaristokatu 6, Turku")
-        sr.add_new_survey_choice(survey_id, choice_name5, 11, "Riikka Kallio", "Puistokatu 3, Jyväskylä")
-        sr.add_new_survey_choice(survey_id, choice_name6, 11, "Mikko Rantanen", "Pohjoinen Rautatiekatu 20, Oulu")
-        sr.add_new_survey_choice(survey_id, choice_name7, 11, "Satu Laine", "Kauppakatu 2, Kuopio")
-        sr.add_new_survey_choice(survey_id, choice_name8, 11, "Jari Korhonen", "Aleksanterinkatu 14, Lahti")
-        sr.add_new_survey_choice(survey_id, choice_name9, 11, "Maria Virtanen", "Rantakatu 5, Joensuu")
-        sr.add_new_survey_choice(survey_id, choice_name10, 11, "Antti Jokinen", "Rauhankatu 6, Hämeenlinna")
+        choice_id1 = scr.create_new_survey_choice(survey_id, choice_name1, 11)
+        scr.create_new_choice_info(choice_id1, "Opettaja", "Leena Nieminen")
+        scr.create_new_choice_info(choice_id1, "Osoite", "Kirkkokatu 8, Tampere")
+
+        choice_id2 = scr.create_new_survey_choice(survey_id, choice_name2, 11)
+        scr.create_new_choice_info(choice_id2, "Opettaja", "Juha Virtanen")
+        scr.create_new_choice_info(choice_id2, "Osoite", "Peltolantie 12, Vantaa")
+
+        choice_id3 = scr.create_new_survey_choice(survey_id, choice_name3, 11)
+        scr.create_new_choice_info(choice_id3, "Opettaja", "Anna Koskinen")
+        scr.create_new_choice_info(choice_id3, "Osoite", "Mannerheimintie 15, Helsinki")
+
+        choice_id4 = scr.create_new_survey_choice(survey_id, choice_name4, 11)
+        scr.create_new_choice_info(choice_id4, "Opettaja", "Markus Järvinen")
+        scr.create_new_choice_info(choice_id4, "Osoite", "Saaristokatu 6, Turku")
+
+        choice_id5 = scr.create_new_survey_choice(survey_id, choice_name5, 11)
+        scr.create_new_choice_info(choice_id5, "Opettaja", "Riikka Kallio")
+        scr.create_new_choice_info(choice_id5, "Osoite", "Puistokatu 3, Jyväskylä")
+
+        choice_id6 = scr.create_new_survey_choice(survey_id, choice_name6, 11)
+        scr.create_new_choice_info(choice_id6, "Opettaja", "Mikko Rantanen")
+        scr.create_new_choice_info(choice_id6, "Osoite", "Pohjoinen Rautatiekatu 20, Oulu")
+
+        choice_id7 = scr.create_new_survey_choice(survey_id, choice_name7, 11)
+        scr.create_new_choice_info(choice_id7, "Opettaja", "Satu Laine")
+        scr.create_new_choice_info(choice_id7, "Osoite", "Kauppakatu 2, Kuopio")
+
+        choice_id8 = scr.create_new_survey_choice(survey_id, choice_name8, 11)
+        scr.create_new_choice_info(choice_id8, "Opettaja", "Jari Korhonen")
+        scr.create_new_choice_info(choice_id8, "Osoite", "Aleksanterinkatu 14, Lahti")
+
+        choice_id9 = scr.create_new_survey_choice(survey_id, choice_name9, 11)
+        scr.create_new_choice_info(choice_id9, "Opettaja", "Maria Virtanen")
+        scr.create_new_choice_info(choice_id9, "Osoite", "Rantakatu 5, Joensuu")
+
+        choice_id10 = scr.create_new_survey_choice(survey_id, choice_name10, 11)
+        scr.create_new_choice_info(choice_id10, "Opettaja", "Antti Jokinen")
+        scr.create_new_choice_info(choice_id10, "Osoite", "Rauhankatu 6, Hämeenlinna")
 
 gen_data = DbDataGen()

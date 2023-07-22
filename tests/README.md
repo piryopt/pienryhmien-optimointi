@@ -20,3 +20,12 @@
 ```
 > python3 -m coverage html -d ./documentation/generated/test-coverage
 ```
+
+### Or
+```
+poetry run invoke robots
+```
+In poetry shell
+```
+coverage run --branch -m pytest; coverage html
+```

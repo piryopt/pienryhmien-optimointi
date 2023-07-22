@@ -1,73 +1,98 @@
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
+from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey
 
 class SurveyService:
     def __init__(self, survey_repositroy=default_survey_repository):
         self._survey_repository = survey_repositroy
 
-    def get_list_of_survey_choices(self, survey_id):
-        survey = self._survey_repository.check_if_survey_exists(survey_id)
-        if not survey:
-            return False
-        survey_choices = self._survey_repository.find_survey_choices(survey_id)
-        return survey_choices
-
     def get_survey_name(self, survey_id):
-        survey = self._survey_repository.check_if_survey_exists(survey_id)
+        survey = self._survey_repository.get_survey(survey_id)
         if not survey:
             print("SURVEY DOES NOT EXIST!")
             return False
         return survey[1]
 
-    def user_ranking_exists(self, survey_id, user_id):
-        ranking = self._survey_repository.get_user_ranking(user_id, survey_id)
-        if not ranking:
-            return False
-        return ranking
+    def count_surveys_created(self, user_id):
+        list_n = self._survey_repository.count_created_surveys(user_id)
+        if not list_n:
+            return 0
+        return list_n
 
-    def delete_ranking(self, survey_id, current_user_id):
-        ranking = self._survey_repository.get_user_ranking(current_user_id, survey_id)
-        if not ranking:
-            print("NO RANKING FOR THIS SURVEY!")
-            return False
-        self._survey_repository.delete_user_ranking(current_user_id, survey_id)
-        return True
-
-    def get_survey_choice(self, survey_choice_id):
-        survey_choice = self._survey_repository.get_survey_choice(survey_choice_id)
-        if not survey_choice:
-            print("SURVEY CHOICE NOT FOUND!")
-            return False
-        return survey_choice
-
-    def add_user_ranking(self, survey_id, ranking, user_id):
-        self._survey_repository.add_user_ranking(user_id,survey_id,ranking)
-        return True
-
-    def add_new_survey(self, surveyname):
-        if self._survey_repository.survey_name_exists(surveyname):
-            print("A SURVEY WITH THIS NAME ALREADY EXISTS!")
-            return False
-        if len(surveyname) < 4:
-            print("The name is too short!")
-            return False
-        survey_id = self._survey_repository.add_new_survey(surveyname)
-        if not survey_id:
-            return False
-        return survey_id
-
-    def add_survey_choice(self, survey_id, name, max_spaces, info1, info2):
-        survey_exists = self._survey_repository.check_if_survey_exists(survey_id)
-        if not survey_exists:
+    def close_survey(self, survey_id, teacher_id):
+        survey = self._survey_repository.get_survey(survey_id)
+        if not survey:
             print("SURVEY DOES NOT EXIST!")
             return False
-        if len(name) < 3:
-            print("The name is too short!")
+        if survey.teacher_id != teacher_id:
+            print("YOU DID NOT CREATE THIS SURVEY. YOU CANNOT CLOSE IT")
             return False
-        new_choice = self._survey_repository.add_new_survey_choice(survey_id, name, max_spaces, info1, info2)
-        if not new_choice:
+        return self._survey_repository.close_survey(survey_id, teacher_id)
+
+    def open_survey(self, survey_id, teacher_id):
+        survey = self._survey_repository.get_survey(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
             return False
-        return True
+        if survey.teacher_id != teacher_id:
+            print("YOU DID NOT CREATE THIS SURVEY. YOU CANNOT OPEN IT")
+            return False
+        if self._survey_repository.survey_name_exists(survey.surveyname, teacher_id):
+            print("A SURVEY WITH THIS NAME ALREADY EXISTS!")
+            return False
+        return self._survey_repository.open_survey(survey_id, teacher_id)
+
+    def get_active_surveys(self, teacher_id):
+        surveys = self._survey_repository.get_active_surveys(teacher_id)
+        if not surveys:
+            print("THIS USER HAS NOT CREATED ANY SURVEYS!")
+            return False
+        return surveys
+
+    def check_if_survey_closed(self, survey_id):
+        survey = self._survey_repository.get_survey(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        closed = survey.closed
+        return closed
+
+    def get_list_closed_surveys(self, teacher_id):
+        surveys = self._survey_repository.get_closed_surveys(teacher_id)
+        return surveys
+
+    def update_survey_answered(self, survey_id):
+        survey = self._survey_repository.get_survey(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        saved = self._survey_repository.update_survey_answered(survey_id)
+        return saved
+
+    def check_if_survey_results_saved(self, survey_id):
+        survey = self._survey_repository.get_survey(survey_id)
+        if not survey:
+            print("SURVEY DOES NOT EXIST!")
+            return False
+        return survey.results_saved
+
+    def create_survey_from_csv(self, file):
+        '''
+        Calls tools.parsers Elomake csv to dict parser
+        RETURNS the dictionary
+        '''
+        return parser_elomake_csv_to_dict(file) # in tools
+    
+    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description):
+        '''
+        Calls tools.parsers dictionary to survey parser
+        that creates the survey, its choices and their additional infos
+        RETURNS created survey's id
+        '''
+        return parser_dict_to_survey(survey_choices, survey_name, user_id, description)
+
+    def get_survey_description(self, survey_id):
+        return self._survey_repository.get_survey_description(survey_id)
 
 survey_service = SurveyService()

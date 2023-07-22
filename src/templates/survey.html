@@ -6,9 +6,10 @@
 {% endblock %}
 
 {% block content %}
-<a href="/">Palaa etusivulle</a></br></br>
+</br>
 <div class="row">
-    <h3>{{ survey_name }}</h3>
+    <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}</h5>
+    <h5>{{ desc }}</h5>
     <div class="col">
         <script>
             $( function() {
@@ -26,11 +27,18 @@
                 });
             });
         </script>
-        <ul id="sortable1" class="connectedSortable">
+
+        <ul id="sortable1" class="list-group">
             {% for group in choices %}
-            <li class="ui-state-default" id="{{ group[0] }}">{{ group[2] }}</li>
+            <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">{{ group[2] }}</h5>
+                </div>
+                <small class="text-muted">{{ spaces }}</small>
+            </li>
             {% endfor %}
         </ul>
+
         <div id="submitExists" style="display: none;">
             <input type="submit" value="Päivitä valinnat" onclick="submit(0)">
         </div>

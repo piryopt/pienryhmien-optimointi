@@ -1,15 +1,39 @@
 {% extends 'base.html' %}
 
-{% block title %}Hello World{% endblock %}
+{% block title %}Etusivu{% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block content %}
-  <h1>Index</h1>
-  <a href="/input">Kokeile luoda dataa</a><br>
-  <a href="/excel">Kokeile valmiilla datalla</a><br>
-  <a href="/previous_surveys">Näytä vanhat kyselyt</a>
-  <br/><br/>
-  <a href="/create_survey">Luo uusi kysely</a></br></br>
+  </br>
+  <h2>Tervetuloa</h2></br>
+  <div class="list-group">
+    <a href="/create_survey" class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1"><img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  Luo uusi kysely</h5>
+      </div>
+      <small class="text-muted">Just wanted to get the gang together early in my tenure to say uh....yo.</small>
+    </a></br>
+
+    <a href="/previous_surveys" class="list-group-item list-group-item-action flex-column align-items-start">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1"><img src="{{ url_for('static', filename='images/list_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  Näytä vanhat kyselyt</h5>
+      </div>
+      <small class="text-muted">Luotuja kyselyitä: {{ surveys_created }} kpl</small>
+    </a></br>
+
+    {% if exists %}
+    </br><label>Käynnissä olevat kyselyt</label></br>
+    {% for d in data %}
+    <a href="/surveys/{{ d[0] }}/answers" class="list-group-item list-group-item-action flex-column align-items-start" >
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1"><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ d[1] }}</h5>
+        <small class="text-muted">Vastausaika loppuu {{ d[3] }}</small>
+      </div>
+      <small class="text-muted">Kyselyyn on vastannut {{ d[2] }} opiskelijaa</small>
+    </a></br>
+    {% endfor %}
+    {% endif %}
+  </div>
 {% endblock %}
