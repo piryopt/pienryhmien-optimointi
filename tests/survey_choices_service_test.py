@@ -109,5 +109,5 @@ class TestSurveyChoicesService(unittest.TestCase):
 
         choice = scs.get_choice_name_and_spaces(choices[0][0])
 
-        self.assertEqual(choice[0], "Ensimmäinen choice")
-        self.assertEqual(choice[1], 8)
+        self.assertEqual(choice[1], "Ensimmäinen choice")
+        self.assertEqual(choice[2], 8)
