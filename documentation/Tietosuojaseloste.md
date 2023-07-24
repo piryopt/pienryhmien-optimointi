@@ -1,1 +1,0 @@
-Varasta ja muokkaa häpeilemättä tämä https://github.com/UniversityOfHelsinkiCS/palaute/blob/master/Tietosuojaseloste.md
