@@ -1,8 +1,9 @@
-<p>{{ basic[0] }}</p>
-<p>{{ basic[1] }} paikkaa</p>
+<p>{{ basic[1] }}</p>
+<p>{{ basic[2] }} paikkaa</p>
 <br><br>
 {% for info in infos %}
 <p>{{ info[0] }}: {{ info[1] }}</p>
 {% endfor %}
 <br>
+<input type="hidden" id="currently_selected" value="{{ basic[0] }}">
 <input type="button" id="exitMoreInfo" value="Sulje" onclick="exitMoreInfo()">
