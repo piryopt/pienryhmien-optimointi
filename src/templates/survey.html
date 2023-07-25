@@ -13,22 +13,23 @@
     <div class="col">
         <script>
             $( function() {
-                $( "#sortable1" ).sortable({
+                $( "#sortable1, #sortable2" ).sortable({
                     cursor: 'grabbing',
                     revert: 50,
                     helper: 'clone',
                     axis: 'y',
-                    containment: 'parent',
-                    tolerance: 'pointer'
-                });
+                    containment: '.col',
+                    tolerance: 'pointer',
+                    connectWith: ".list-group"
+                }).disableSelection();
 
-                $("#sortable1 li").on("click", function() {
+                $("#sortable1 li, #sortable2 li").on("click", function() {
                     showMoreInfo(this.id);
                 });
             });
         </script>
 
-        <ul id="sortable1" class="list-group">
+        <ul id="sortable1" class="list-group" style="min-height: 100px;">
             {% for group in choices %}
             <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
                 <div class="d-flex w-100 justify-content-between">
@@ -37,6 +38,10 @@
                 <small class="text-muted">{{ spaces }}</small>
             </li>
             {% endfor %}
+        </ul>
+        <br>
+        <hr style="color: white; border-top: 8px solid">
+        <ul id="sortable2" class="list-group">
         </ul>
 
         <div id="submitExists" style="display: none;">
