@@ -32,3 +32,4 @@
 * Update sprint backlog if needed
 * Add your daily hours to the [Tuntikirjanpito file](https://docs.google.com/spreadsheets/d/1rd8avaP7OGhgrX-mo4E5-mgfgCE71X50_aM8jR2hNEc/edit#gid=1189482618)
 * Set yourself inactive in Slack
+
