@@ -1,9 +1,8 @@
-name: Deploy to staging
+name: Deploy to production
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 jobs:
 
@@ -18,7 +17,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: pienryhmien-optimointi
-          tags: staging ${{ github.sha }}
+          tags: production ${{ github.sha }}
           containerfiles: |
             ./Dockerfile
 
