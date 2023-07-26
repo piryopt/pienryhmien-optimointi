@@ -3,13 +3,15 @@ window.onload = function() {
 };
 
 function submit(resubmit) {
-    var choiceIDs = $("#sortable1").sortable("toArray");
-    var forbiddenIDs = $("#sortable2").sortable("toArray");
+    var neutralIDs = $("#sortable-neutral").sortable("toArray");
+    var goodIDs = $("#sortable-good").sortable("toArray");
+    var badIDs = $("#sortable-bad").sortable("toArray");
     var surveyID = document.getElementById("survey_id").value;
 
     var IDs = {
-        "choiceIDs": choiceIDs,
-        "forbiddenIDs": forbiddenIDs
+        "neutralIDs": neutralIDs,
+        "goodIDs": goodIDs,
+        "badIDs": badIDs
     }
 
     $.ajax({

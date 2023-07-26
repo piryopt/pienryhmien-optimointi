@@ -127,8 +127,16 @@ def delete_submission(survey_id):
 def get_choices(survey_id):
     '''Save the ranking to the database.'''
     raw_data = request.get_json()
-    ranking = convert_to_string(raw_data["choiceIDs"])
-    forbidden = raw_data["forbiddenIDs"]
+
+    # list of ids of choices not put in either of the boxes
+    neutral_ids = raw_data["neutralIDs"]
+
+    # list of ids of choices put in red box
+    bad_ids = raw_data["badIDs"]
+
+    #list of ids of choices put in green box converted to str
+    ranking = convert_to_string(raw_data["goodIDs"])
+
     user_id = session.get("user_id",0)
     submission = user_rankings_service.add_user_ranking(survey_id, ranking, user_id)
     response = {"status":"1","msg":"Tallennus onnistui."}
