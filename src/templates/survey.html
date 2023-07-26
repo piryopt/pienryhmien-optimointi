@@ -29,15 +29,15 @@
                         });
                     });
                 </script>
-                <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 100px; border-color: green;">
+                <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green;">
                 </ul>
-                <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 100px; border-color: red">
+                <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: red">
                 </ul>
                 
             </div>
         
             <div class="col-sm">
-                <ul id="sortable-neutral" class="list-group" style="min-height: 100px; border-style: solid; border-color: gray;">
+                <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray;">
                     {% for group in choices %}
                     <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
                         <div class="d-flex w-100 justify-content-between">

@@ -134,8 +134,11 @@ def get_choices(survey_id):
     # list of ids of choices put in red box
     bad_ids = raw_data["badIDs"]
 
-    #list of ids of choices put in green box converted to str
-    ranking = convert_to_string(raw_data["goodIDs"])
+    #list of ids of choices put in green box
+    good_ids = raw_data["goodIDs"]
+
+    #list of all ids
+    ranking = convert_to_string(raw_data["allIDs"])
 
     user_id = session.get("user_id",0)
     submission = user_rankings_service.add_user_ranking(survey_id, ranking, user_id)

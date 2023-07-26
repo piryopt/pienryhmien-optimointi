@@ -11,7 +11,8 @@ function submit(resubmit) {
     var IDs = {
         "neutralIDs": neutralIDs,
         "goodIDs": goodIDs,
-        "badIDs": badIDs
+        "badIDs": badIDs,
+        "allIDs": neutralIDs.concat(goodIDs,badIDs)
     }
 
     $.ajax({
