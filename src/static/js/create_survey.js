@@ -12,6 +12,32 @@ function parseObjFromRow(row, headers) {
 }
 
 function createNewSurvey() {
+    // Front-end Validatation of fields
+        // First remove old validation classes
+    var elementsToWipe = document.querySelectorAll(".active-warning")
+    elementsToWipe.forEach(toWipe => {
+        toWipe.classList.remove("active-warning")
+    })
+
+        // Do new validation
+    var elementsToValidate = document.querySelectorAll("[validation-regex]")
+    console.log(elementsToValidate)
+    elementsToValidate.forEach(elem =>{
+        var pattern = new RegExp(elem.getAttribute("validation-regex"))
+        var value = elem.value
+        var result = pattern.test(value)
+        console.log(pattern, value, result)
+        if(!result) {
+            elem.classList.add("active-warning")
+            var fieldName = elem.getAttribute("name")
+            console.log(`#${fieldName}-validation-warning`)
+            var warningText = document.querySelector(`#${fieldName}-validation-warning`)
+            console.log(warningText)
+            warningText.innerText = elem.getAttribute("validation-text")
+            warningText.classList.add("active-warning")
+        }
+    })
+
     // Get column names from the choice table
     var tableHeaders = Array.from(document.querySelectorAll("#table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
     console.log(tableHeaders)
@@ -22,8 +48,14 @@ function createNewSurvey() {
     var requestData = {
         surveyGroupname: $("#groupname").val(),
         choices: rowsAsJson,
-        surveyInformation: document.getElementById("survey-information").value
+        surveyInformation: document.getElementById("survey-information").value,
+        startdate: document.getElementById("start-date").value,
+        starttime: document.getElementById("starttime").value,
+        enddate: document.getElementById("end-date").value,
+        endtime: document.getElementById("endtime").value 
     }
+
+    console.log("requestData", requestData)
 
     $.ajax({
     type: "POST",
@@ -48,6 +80,7 @@ function addRow() {
     for (var i = 0; i < headersCount; i++) {
         // create an empty cell and attach event listener to it
         var newEmptyCell = document.createElement("td")
+        newEmptyCell.classList.add("empty")
         newEmptyCell.innerHTML = emptyCellText
         newRow.appendChild(newEmptyCell).addEventListener("click", editCell)
     }      
@@ -58,8 +91,8 @@ function editCell(event) {
     editableField.setAttribute('type', 'text');
 
     // if edited cell is not the "add new column" header, edit the current content 
-    // special case for "add new column" header to not keep old value
-    if (event.target.id !== "add-column-header") {
+    // special cases for "add new column" header and empty cell to not keep old value
+    if (event.target.id !== "add-column-header" && !event.target.classList.contains("empty")) {
         editableField.value = event.target.innerText    
     }
 
@@ -113,6 +146,7 @@ function submitNewColumn(event) {
     var rows = document.getElementById("choiceTable").getElementsByTagName("tr")
     for (var row of rows) {
         var newCell = document.createElement("td")
+        newCell.classList.add("empty")
         newCell.innerText = emptyCellText
         row.appendChild(newCell)
         newCell.addEventListener("click", editCell)
@@ -122,9 +156,20 @@ function submitNewColumn(event) {
 function submitCell(event) {
     var newValue = event.target.value
     var editedCell = event.target.parentNode
+    var wasEmpty = editedCell.classList.contains("empty")
     editedCell.classList.remove("edited")
     editedCell.innerHTML = ""
-    editedCell.innerText = newValue
+    
+    if (newValue === '' && !wasEmpty) {
+        editedCell.innerText = emptyCellText
+        editedCell.classList.add("empty")
+    } else {
+        editedCell.innerText = newValue
+        if (wasEmpty) {
+            editedCell.classList.remove("empty")
+        }
+    }
+    
 
 }
 
@@ -195,7 +240,7 @@ function setUploadedTableValues(table) {
     var headers = Object.keys(table[0]).filter(header => header !== 'name' && header !== 'spaces')
 
     for(var header of headers) {
-        headersRow.insertBefore(createElementWithText('th', header), document.getElementById('add-column-header'))
+        headersRow.insertBefore(createElementWithText('th', header, clickHandler=editCell), document.getElementById('add-column-header'))
         
     }
 
@@ -206,19 +251,24 @@ function setUploadedTableValues(table) {
     for(var row of table) {
         var rowElement = document.createElement('tr')
         // set constant column variables
-        rowElement.appendChild(createElementWithText('td', row['name']))
-        rowElement.appendChild(createElementWithText('td', row['spaces']))
+        rowElement.appendChild(createElementWithText('td', row['name'], clickHandler=editCell))
+        rowElement.appendChild(createElementWithText('td', row['spaces'], clickHandler=editCell))
 
         // set variable column variables
         for(var cellHeader of headers) {
-            rowElement.appendChild(createElementWithText('td', row[cellHeader]))
+            rowElement.appendChild(createElementWithText('td', row[cellHeader], clickHandler=editCell))
         }
         tableBody.append(rowElement)
     }
 }
 
-function createElementWithText(type, content) {
+function createElementWithText(type, content, clickHandler=null) {
     var element = document.createElement(type)
     element.innerText = content
+
+    if(clickHandler) {
+        element.addEventListener("click", clickHandler)
+    }
+
     return element
 }

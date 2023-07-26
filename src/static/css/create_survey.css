@@ -1,9 +1,15 @@
+/* Styles for general page layout */
 section {
     margin-bottom: 40px;
 }
 
+/* Styles for choice table */
 .variable-header:hover {
     cursor: pointer;
+}
+
+.constant-header {
+    min-width: 12em;
 }
 
 .constant-header:hover {
@@ -12,6 +18,10 @@ section {
 
 th:hover, td:hover {
     background-color: #99999b;
+}
+
+#table-headers {
+    white-space: nowrap;
 }
 
 th input, td input{
@@ -38,3 +48,74 @@ th.edited:after, td.edited:after {
     bottom: 0; left: 0;
     border: 2px solid #99999b;
 }
+
+/* Styles for start- and end-time fields */
+.datetime-input-field {
+    padding: .375rem .75rem;
+    line-height: 1.5;
+    color:#212529;
+    border-radius: .25rem;
+}
+
+.time-label {
+    margin-left: .75rem;
+    margin-right: .25rem;
+}
+
+
+/* Styles for JQuery datepicker */
+.ui-datepicker {
+    background-color: #99999b;
+    padding: 1rem;
+    display:none;
+}
+
+.ui-icon {
+    padding: .25rem;
+    border: 1px solid black;
+    background-color: #b9b9bb;
+    border-radius: .25rem;
+    color: black;
+}
+
+    
+.ui-corner-all {
+        text-decoration: none;
+}
+
+.ui-datepicker-prev {
+    margin-right: .5rem;
+}
+
+.ui-datepicker-calendar a{
+    text-decoration: none;
+    color: black;
+}
+
+.ui-datepicker-title {
+    margin-top: 1rem;
+    margin-bottom: .5rem;
+}
+
+.ui-datepicker-calendar th,.ui-datepicker-calendar tr,.ui-datepicker-calendar td{
+    width: 3rem;
+    text-align: center;
+}
+
+.ui-datepicker-calendar tr,td{
+    border: 1px solid black;
+    background-color: #b9b9bb;
+}
+
+.choice-table-main {
+    width: auto;
+}
+
+input.active-warning {
+    border: 2px solid red;
+}
+
+.input-validation-warning.active-warning {
+    color: red;
+}
+
