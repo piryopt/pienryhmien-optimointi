@@ -8,12 +8,20 @@ section {
     cursor: pointer;
 }
 
+.constant-header {
+    min-width: 12em;
+}
+
 .constant-header:hover {
     cursor: not-allowed;
 }
 
 th:hover, td:hover {
     background-color: #99999b;
+}
+
+#table-headers {
+    white-space: nowrap;
 }
 
 th input, td input{
@@ -59,6 +67,7 @@ th.edited:after, td.edited:after {
 .ui-datepicker {
     background-color: #99999b;
     padding: 1rem;
+    display:none;
 }
 
 .ui-icon {
@@ -88,7 +97,7 @@ th.edited:after, td.edited:after {
     margin-bottom: .5rem;
 }
 
-.ui-datepicker-calendar th,tr,td{
+.ui-datepicker-calendar th,.ui-datepicker-calendar tr,.ui-datepicker-calendar td{
     width: 3rem;
     text-align: center;
 }
@@ -97,3 +106,16 @@ th.edited:after, td.edited:after {
     border: 1px solid black;
     background-color: #b9b9bb;
 }
+
+.choice-table-main {
+    width: auto;
+}
+
+input.active-warning {
+    border: 2px solid red;
+}
+
+.input-validation-warning.active-warning {
+    color: red;
+}
+
