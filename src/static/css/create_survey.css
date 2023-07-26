@@ -119,3 +119,12 @@ input.active-warning {
     color: red;
 }
 
+.validation-warnings-list {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.hidden {
+    display: none;
+}

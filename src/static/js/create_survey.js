@@ -11,32 +11,71 @@ function parseObjFromRow(row, headers) {
     return obj
 }
 
+function fieldIsValid(elem) {
+    console.log("Testing field validity")
+    var pattern = new RegExp(elem.getAttribute("validation-regex"))
+    var value = elem.value
+    var result = pattern.test(value)
+    if(!result) {
+        setValidationErrorMsg(elem)
+        return false
+    }
+
+    if (elem.classList.contains('active-warning')) {
+        removeValidationErrorMsg(elem)
+    }
+
+    return true
+}
+
+function removeValidationErrorMsg(elem) {
+    elem.classList.remove("active-warning")
+    var fieldName = elem.getAttribute('name')
+    var warningTextElement = document.querySelector(`#${fieldName}-validation-warning`)
+    warningTextElement.classList.add("hidden")
+    warningTextElement.parentElement.parentElement.classList.add("hidden")
+}
+
+function setValidationErrorMsg(elem) {
+    // Expects that every field that can raise validation error has a corresponding
+    // span element with id matching "#${fieldName}-validation-warning" -scheme
+    elem.classList.add("active-warning")
+    elem.classList.remove("hidden")
+    var fieldName = elem.getAttribute("name")
+    
+    var alertMsg = elem.getAttribute("validation-text") ? elem.getAttribute("validation-text") : "Jokin meni pieleen! Tarkasta kenttien sisältö"
+    var warningTextContainer = document.querySelector(`#${fieldName}-validation-warning`)
+    
+    if(!warningTextContainer) {
+        showAlert({msg: alertMsg, color:"red"})
+    }
+
+    warningTextContainer.innerText = alertMsg
+    warningTextContainer.classList.add("active-warning")
+    warningTextContainer.classList.remove("hidden")
+    warningTextContainer.parentElement.parentElement.classList.remove('hidden')
+}
+
 function createNewSurvey() {
     // Front-end Validatation of fields
-        // First remove old validation classes
-    var elementsToWipe = document.querySelectorAll(".active-warning")
-    elementsToWipe.forEach(toWipe => {
-        toWipe.classList.remove("active-warning")
-    })
 
         // Do new validation
     var elementsToValidate = document.querySelectorAll("[validation-regex]")
-    console.log(elementsToValidate)
-    elementsToValidate.forEach(elem =>{
-        var pattern = new RegExp(elem.getAttribute("validation-regex"))
-        var value = elem.value
-        var result = pattern.test(value)
-        console.log(pattern, value, result)
-        if(!result) {
-            elem.classList.add("active-warning")
-            var fieldName = elem.getAttribute("name")
-            console.log(`#${fieldName}-validation-warning`)
-            var warningText = document.querySelector(`#${fieldName}-validation-warning`)
-            console.log(warningText)
-            warningText.innerText = elem.getAttribute("validation-text")
-            warningText.classList.add("active-warning")
+    var validContent = true
+
+    elementsToValidate.forEach(elem => {
+        if(!fieldIsValid(elem)) {
+            validContent = false
         }
     })
+
+    if (!validContent) {
+        // Not valid, won't try to post
+        console.log("Form contents not valid, won't post")
+        return;
+    }
+
+    //Valid content, continue to post
 
     // Get column names from the choice table
     var tableHeaders = Array.from(document.querySelectorAll("#table-headers th:not(:last-of-type)")).map(elem => elem.innerText)

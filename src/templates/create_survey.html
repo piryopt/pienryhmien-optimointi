@@ -39,12 +39,21 @@
 
     <section>
       <h2>Kyselyn nimi</h2>
-      <input type="text" class="form-control" id="groupname" name="groupname" validation-regex=".{5,}" validation-text="Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"
-        {% if survey.surveyname %}
-          value="{{survey.surveyname}}"
-        {% endif %}
+      <input
+          type="text"
+          class="form-control"
+          id="groupname" name="groupname"
+          validation-regex=".{5,}"
+          validation-text="Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"
+          onchange="fieldIsValid(this)"
+          {% if survey.surveyname %}
+            value="{{survey.surveyname}}"
+          {% endif %}
       />
-      <span class="input-validation-warning" id="groupname-validation-warning"></span>
+      <ul class="validation-warnings-list hidden">
+        <li><span class="input-validation-warning" id="groupname-validation-warning"></span></li>
+      </ul>
+      
     </section>
 
     <section>
@@ -54,14 +63,14 @@
       <input data-role="date" type="text" id="start-date" class="datetime-input-field" name="startdate" validation-regex="\d\d\.\d\d\.\d\d\d\d" validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy">
       <label for="starttime" class="time-label">Kello:</label><input type="time" name="starttime" id="starttime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm"/>
       <br/>
-      <ul class="validation-warnings-list">
+      <ul class="validation-warnings-list hidden">
         <li><span class="input-validation-warning" id="startdate-validation-warning"></span></li>
         <li><span class="input-validation-warning" id="starttime-validation-warning"></span></li>
       </ul>
       <label>Vastausaika päättyy:</label><br />
       <input data-role="date" type="text" id="end-date" class="datetime-input-field" name="enddate" validation-regex="\d\d\.\d\d\.\d\d\d\d" validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy">
       <label for="endtime" class="time-label">Kello:</label><input type="time" name="endtime" id="endtime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm"/>
-      <ul class="validation-warnings-list">
+      <ul class="validation-warnings-list hidden">
         <li><span class="input-validation-warning" id="enddate-validation-warning"></span></li>
         <li><span class="input-validation-warning" id="endtime-validation-warning"></span></li>
       </ul>
