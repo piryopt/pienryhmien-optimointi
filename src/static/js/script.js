@@ -4,12 +4,18 @@ window.onload = function() {
 
 function submit(resubmit) {
     var choiceIDs = $("#sortable1").sortable("toArray");
+    var forbiddenIDs = $("#sortable2").sortable("toArray");
     var surveyID = document.getElementById("survey_id").value;
+
+    var IDs = {
+        "choiceIDs": choiceIDs,
+        "forbiddenIDs": forbiddenIDs
+    }
 
     $.ajax({
     type: "POST",
     url: "/get_choices/" + surveyID,
-    data: JSON.stringify(choiceIDs),
+    data: JSON.stringify(IDs),
     contentType: "application/json",
     dataType: "json",
     success: function(result) {
