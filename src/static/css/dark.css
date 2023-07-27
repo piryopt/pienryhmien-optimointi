@@ -30,7 +30,7 @@ b, small {
     margin: 3px 0;
 }
 
-#sortable1, #sortable2 {
+#sortable-bad, #sortable-good, #sortable-neutral {
     min-height: 20px;
     min-width: 100%;
     list-style-type: none;
@@ -41,7 +41,7 @@ b, small {
     color: #fff;
 }
 
-#sortable1 li, #sortable2 li {
+#sortable-bad li, #sortable-good li, #sortable-neutral li {
     border-radius: 5px;
     text-align: left;
     margin: 0 5px 5px 5px;

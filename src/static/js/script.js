@@ -3,13 +3,22 @@ window.onload = function() {
 };
 
 function submit(resubmit) {
-    var choiceIDs = $("#sortable1").sortable("toArray");
+    var neutralIDs = $("#sortable-neutral").sortable("toArray");
+    var goodIDs = $("#sortable-good").sortable("toArray");
+    var badIDs = $("#sortable-bad").sortable("toArray");
     var surveyID = document.getElementById("survey_id").value;
+
+    var IDs = {
+        "neutralIDs": neutralIDs,
+        "goodIDs": goodIDs,
+        "badIDs": badIDs,
+        "allIDs": neutralIDs.concat(goodIDs,badIDs)
+    }
 
     $.ajax({
     type: "POST",
     url: "/get_choices/" + surveyID,
-    data: JSON.stringify(choiceIDs),
+    data: JSON.stringify(IDs),
     contentType: "application/json",
     dataType: "json",
     success: function(result) {
