@@ -28,16 +28,16 @@ function submit(resubmit) {
         }
         if (result.status === "1") {
             alertMsg.color = "#6F0";
+            if (resubmit === 1) {
+                $("#submitExists").toggle();
+                $("#submitDoesntExist").toggle();
+                $("#deleteContainer").toggle();
+            }
         }
         if (result.status === "0") {
             alertMsg.color = "red";
         }
-        showAlert(alertMsg);
-        if (resubmit === 1) {
-            $("#submitExists").toggle();
-            $("#submitDoesntExist").toggle();
-            $("#deleteContainer").toggle();
-        }        
+        showAlert(alertMsg);   
     }
     });
 }
