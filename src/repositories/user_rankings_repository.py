@@ -10,7 +10,7 @@ class UserRankingsRepository:
                 ON CONFLICT (user_id, survey_id) 
                 DO UPDATE SET ranking=:ranking, rejections=:rejections, deleted=:deleted
                 """
-            db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking, "reejctions":rejections, "deleted":False})
+            db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking, "rejections":rejections, "deleted":False})
             db.session.commit()
         except Exception as e: # pylint: disable=W0718
             print(e)

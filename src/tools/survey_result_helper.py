@@ -16,7 +16,9 @@ def convert_users_students(user_rankings):
         name = user_service.get_name(user_id)
         ranking = convert_to_list(user_ranking[1])
         int_ranking = [int(i) for i in ranking]
-        students[user_id] = Student(user_id, name, int_ranking, [])
+        rejections = convert_to_list(user_ranking[2])
+        int_rejections = [int(i) for i in rejections]
+        students[user_id] = Student(user_id, name, int_ranking, int_rejections)
     return students
 
 def get_happiness(survey_choice_id, user_ranking):

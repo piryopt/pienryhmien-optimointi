@@ -67,8 +67,14 @@ class Hungarian:
 
         #Note! if multiple preferences allowed, it might be better to write a class to
         #process n preference lists per student
-
-        return [list(student.selections) for key, student in self.students.items()]
+        prefs = []
+        for key, student in self.students.items():
+            #print(student.selections)
+            #print(student.rejections)
+            group_id_list = student.selections + student.rejections
+            #print(group_id_list)
+            prefs.append(group_id_list)
+        return prefs
 
     def create_group_dict(self):
         """
@@ -83,13 +89,15 @@ class Hungarian:
         the rows. Keys for students in the index_to_student_dict match matrix row ids
         Fills the matrix with profit numbers based on student's group preferences.
         """
+        print(self.prefs)
         matrix = []
-        for student_prefs in self.prefs:
-            # row = [self.weights[student_prefs.index(v) if v in student_prefs else None] for k,v in self.index_to_group_dict.items()]
+        for key, student in self.students.items():
             row = []
             for k,v in self.index_to_group_dict.items():
-                if v in student_prefs:
-                    row.append(self.weights[student_prefs.index(v)])
+                if v in student.selections:
+                    row.append(self.weights[student.selections.index(v)])
+                elif v in student.rejections:
+                    row.append(0)
                 else:
                     row.append(None)
             matrix.append(row)
@@ -99,7 +107,6 @@ class Hungarian:
         """
         Makes the matrix square if necessary by padding with zeroes. 
         """
-
         rows, cols = np.shape(self.matrix)
         if cols > rows:
             self.matrix = np.pad(self.matrix,[(0,cols-rows),(0,0)],mode="constant", constant_values=self.weights[-1])
