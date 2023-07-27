@@ -30,8 +30,24 @@
                     });
                 </script>
                 <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green;">
+                    {% for group in good_survey_choices %}
+                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ group[2] }}</h5>
+                        </div>
+                        <small class="text-muted">{{ spaces }}</small>
+                    </li>
+                    {% endfor %}
                 </ul>
                 <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: red">
+                    {% for group in bad_survey_choices %}
+                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ group[2] }}</h5>
+                        </div>
+                        <small class="text-muted">{{ spaces }}</small>
+                    </li>
+                    {% endfor %}
                 </ul>
                 
             </div>
