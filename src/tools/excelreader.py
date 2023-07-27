@@ -32,6 +32,6 @@ def create_students(groups):
             for group_id in groups:
                 if groups[group_id].name == selection:
                     selection_list.append(groups[group_id].id)
-        students[i] = Student(i, 'opiskelija' + str(i), selection_list)
+        students[i] = Student(i, 'opiskelija' + str(i), selection_list, [])
         i += 1
     return students

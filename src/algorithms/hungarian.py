@@ -85,7 +85,13 @@ class Hungarian:
         """
         matrix = []
         for student_prefs in self.prefs:
-            row = [self.weights[student_prefs.index(v) if v in student_prefs else None] for k,v in self.index_to_group_dict.items()]
+            # row = [self.weights[student_prefs.index(v) if v in student_prefs else None] for k,v in self.index_to_group_dict.items()]
+            row = []
+            for k,v in self.index_to_group_dict.items():
+                if v in student_prefs:
+                    row.append(self.weights[student_prefs.index(v)])
+                else:
+                    row.append(None)
             matrix.append(row)
         return np.array(matrix)
 
