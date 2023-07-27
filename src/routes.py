@@ -99,7 +99,6 @@ def surveys(survey_id):
         rejections = user_survey_ranking[4]
 
         list_of_good_survey_choice_id = convert_to_list(user_rankings)
-        list_of_bad_survey_choice_id = convert_to_list(rejections)
 
         good_survey_choices = []
         for survey_choice_id in list_of_good_survey_choice_id:
@@ -110,14 +109,16 @@ def surveys(survey_id):
             survey_choices.remove(survey_choice)
 
         bad_survey_choices = []
-        for survey_choice_id in list_of_bad_survey_choice_id:
-            survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
-            if not survey_choice:
-                continue
-            bad_survey_choices.append(survey_choice)
-            survey_choices.remove(survey_choice)
+        if len(rejections) > 0:
+            list_of_bad_survey_choice_id = convert_to_list(rejections)
+            for survey_choice_id in list_of_bad_survey_choice_id:
+                survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+                if not survey_choice:
+                    continue
+                bad_survey_choices.append(survey_choice)
+                survey_choices.remove(survey_choice)
         if closed:
-            return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
+            return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc,
                             bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices)
