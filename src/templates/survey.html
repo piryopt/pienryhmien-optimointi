@@ -13,6 +13,13 @@
     <div class="col">
         <div class="row">
             <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <input id="searchChoices" type="text" placeholder="Etsi...">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
                 <script>
                     $( function() {
                         $( "#sortable-neutral, #sortable-good, #sortable-bad" ).sortable({
@@ -117,6 +124,14 @@
             $("#submitDoesntExist").hide();
         }
 
+    });
+    $( document ).ready(function() {
+        $("#searchChoices").on("keyup", function() {
+            var keyword = $( this ).val().toLowerCase();
+            $("#sortable-neutral li").filter(function() {
+                $( this ).toggle($(this).text().toLowerCase().indexOf(keyword) > -1)
+            });
+        });
     });
 </script>
 {% endblock %}
