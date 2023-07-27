@@ -129,7 +129,7 @@ def get_choices(survey_id):
     raw_data = request.get_json()
     ranking = convert_to_string(raw_data)
     user_id = session.get("user_id",0)
-    submission = user_rankings_service.add_user_ranking(survey_id, ranking, user_id)
+    submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking)
     response = {"status":"1","msg":"Tallennus onnistui."}
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}

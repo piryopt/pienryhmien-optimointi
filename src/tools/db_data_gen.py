@@ -49,7 +49,8 @@ class DbDataGen:
         for user in db_users:
             shuffle(choice_ids)
             ranking = ','.join(choice_ids)
-            urr.add_user_ranking(user[0], survey_id, ranking)
+            rejections = ""
+            urr.add_user_ranking(user[0], survey_id, ranking, rejections)
 
     def generate_survey(self, user_id):
         name = "PÄIVÄKOTIKYSELY"
