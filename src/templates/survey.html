@@ -129,7 +129,7 @@
         $("#searchChoices").on("keyup", function() {
             var keyword = $( this ).val().toLowerCase();
             $("#sortable-neutral li").filter(function() {
-                $( this ).toggle($(this).text().toLowerCase().indexOf(keyword) > -1)
+                $( this ).toggle($(this.querySelector("h5")).text().toLowerCase().indexOf(keyword) > -1)
             });
         });
     });
