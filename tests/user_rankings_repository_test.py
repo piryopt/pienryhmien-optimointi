@@ -37,7 +37,7 @@ class TestUserRankingsRepository(unittest.TestCase):
     def test_get_user_ranking(self):
         survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio")
         ranking = "2,3,5,4,1,6"
-        urr.add_user_ranking(self.user_id, survey_id, ranking)
+        urr.add_user_ranking(self.user_id, survey_id, ranking, "")
         db_ranking = urr.get_user_ranking(self.user_id, survey_id).ranking
         self.assertEqual(db_ranking, ranking)
 
@@ -48,8 +48,16 @@ class TestUserRankingsRepository(unittest.TestCase):
     def test_delete_user_ranking(self):
         survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio")
         ranking = "2,3,5,4,1,6"
-        urr.add_user_ranking(self.user_id, survey_id, ranking)
+        urr.add_user_ranking(self.user_id, survey_id, ranking, "")
         deleted = urr.get_user_ranking(self.user_id, survey_id).ranking
         urr.delete_user_ranking(self.user_id, survey_id)
         deleted = urr.get_user_ranking(self.user_id, survey_id)
         self.assertEqual(deleted, False)
+
+    def test_user_ranking_rejections(self):
+        survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio")
+        ranking = "2,3,5,4,1,6"
+        rejections = "9,8"
+        urr.add_user_ranking(self.user_id, survey_id, ranking, rejections)
+        db_rejections = urr.get_user_ranking(self.user_id, survey_id).rejections
+        self.assertEqual(db_rejections, rejections)

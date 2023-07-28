@@ -14,9 +14,9 @@ class TestHungarian(unittest.TestCase):
         the algorithm while saving some of the preliminary data structures for tests
         """
         self.groups = {22:Group(22,'Ducks',2), 14:Group(14,'Geese',1), 55:Group(55,'Mallards',1)}
-        self.students = {114:Student(114, 'Jane', [22,14,55]),
-                        367:Student(367, 'Joe', [22,55,14]),
-                        847:Student(847, 'Janet', [55,22,14])}
+        self.students = {114:Student(114, 'Jane', [22,14,55], []),
+                        367:Student(367, 'Joe', [22,55,14], []),
+                        847:Student(847, 'Janet', [55,22,14], [])}
         self.weights = Weights(len(self.groups), len(self.students)).get_weights()
         self.h = Hungarian(self.groups, self.students, self.weights)
         self.original_matrix = self.h.matrix
@@ -173,8 +173,8 @@ class TestHungarian(unittest.TestCase):
         Checks that last column has only one unique value that is equal to weights
         value for key -1
         """
-        self.students[999] = Student(999, 'Bob', [22,14,55])
-        self.students[654] = Student(654, "Ginny", [14,22,55])
+        self.students[999] = Student(999, 'Bob', [22,14,55], [])
+        self.students[654] = Student(654, "Ginny", [14,22,55], [])
         weights = Weights(len(self.groups), len(self.students)).get_weights()
         h = Hungarian(self.groups, self.students, weights)
         h.reshape_matrix()
@@ -186,7 +186,7 @@ class TestHungarian(unittest.TestCase):
         Adds one student so that available spots is equal to number of students
         and matrix should not be padded
         """
-        self.students[999] = Student(999, 'Bob', [22,14,55])
+        self.students[999] = Student(999, 'Bob', [22,14,55], [])
         weights = Weights(len(self.groups), len(self.students)).get_weights()
         h = Hungarian(self.groups, self.students, weights)
         ref = h.matrix
