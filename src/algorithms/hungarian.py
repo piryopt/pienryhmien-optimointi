@@ -78,7 +78,7 @@ class Hungarian:
                 elif v in student.rejections:
                     row.append(0)
                 else:
-                    row.append(None)
+                    row.append(self.weights[-1])
             matrix.append(row)
         return np.array(matrix)
 
