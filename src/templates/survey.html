@@ -76,7 +76,7 @@
         <div id="submitExists" style="display: none;">
             <input type="submit" value="Päivitä valinnat" onclick="submit(0)">
         </div>
-        <div id="submitDoesntExist">
+        <div id="submitDoesntExist" style="display: none">
             <input type="submit" value="Lähetä valinnat" onclick="submit(1)">
         </div>
         <input type="hidden" id="survey_id" value="{{ survey_id }}">
@@ -122,6 +122,8 @@
             $("#deleteContainer").show();
             $("#submitExists").show();
             $("#submitDoesntExist").hide();
+        } else {
+            $("#submitDoesntExist").show();
         }
 
     });
