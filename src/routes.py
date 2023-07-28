@@ -189,7 +189,7 @@ def new_survey_post():
     minchoices = data["minchoices"]
 
     try:
-        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description)
+        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices)
         response = {"msg":"Uusi kysely luotu!"}
         return jsonify(response)
     except: 

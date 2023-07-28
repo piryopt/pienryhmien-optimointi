@@ -56,13 +56,13 @@ def parser_elomake_csv_to_dict(file):
     return ret_dict
 
 
-def parser_dict_to_survey(survey_choices, survey_name, user_id, description):
+def parser_dict_to_survey(survey_choices, survey_name, user_id, description, minchoices):
     '''
     Parses a dictionary and creates a survey, its choices and their additional infos
     RETURNS created survey's id
     '''
 
-    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
+    survey_id = survey_repository.create_new_survey(survey_name, user_id, minchoices, description)
 
     for choice in survey_choices:
 
