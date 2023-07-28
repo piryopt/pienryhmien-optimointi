@@ -35,14 +35,14 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.app_context.pop()
 
     def test_find_survey_choices(self):
-        survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         scr.create_new_survey_choice(survey_id, "choice 1", 10)
         scr.create_new_survey_choice(survey_id, "choice 2", 10)
         choice_list = scr.find_survey_choices(survey_id)
         self.assertEqual(2, len(choice_list))
 
     def test_get_choice(self):
-        survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         choice_id = scr.create_new_survey_choice(survey_id, "choice 1", 10)
         choice = scr.get_survey_choice(choice_id)
         self.assertEqual(choice.name, "choice 1")
@@ -52,7 +52,7 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.assertEqual(choice, False)
 
     def test_get_choice_info(self):
-        survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         choice_id = scr.create_new_survey_choice(survey_id, "choice 1", 10)
         scr.create_new_choice_info(choice_id, "Moti", "Vaatio")
         info = scr.get_choice_additional_infos(choice_id)

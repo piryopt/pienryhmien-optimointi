@@ -37,7 +37,7 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Create new survey and test if it exists and also test if the surveyname exists
         """
-        test_survey1_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio")
+        test_survey1_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         survey = sr.get_survey(test_survey1_id)
         self.assertEqual(survey[0], test_survey1_id)
 
@@ -61,8 +61,8 @@ class TestSurveyRepository(unittest.TestCase):
         Test that the number of created surveys is correct
         """
 
-        sr.create_new_survey("Test survey 3", self.user_id2, 10, "Motivaatio")
-        sr.create_new_survey("Test survey 4", self.user_id2, 10, "Motivaatio")
+        sr.create_new_survey("Test survey 3", self.user_id2, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        sr.create_new_survey("Test survey 4", self.user_id2, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         count = sr.count_created_surveys(self.user_id2)
         self.assertEqual(2, count)
 
@@ -70,7 +70,7 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that closing a survey works
         """
-        survey_id = sr.create_new_survey("Test survey 5", self.user_id2, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 5", self.user_id2, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         sr.close_survey(survey_id, self.user_id2)
 
         closed = sr.get_survey(survey_id).closed
@@ -80,7 +80,7 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that getting a list of active surveys works
         """
-        sr.create_new_survey("Test survey 6", self.user_id2, 10, "Motivaatio")
+        sr.create_new_survey("Test survey 6", self.user_id2, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         active_list = sr.get_active_surveys(self.user_id2)
         self.assertEqual(1, len(active_list))
 
@@ -88,7 +88,7 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that getting a list of closed surveys works
         """
-        survey_id = sr.create_new_survey("Test survey 7", self.user_id2, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 7", self.user_id2, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         sr.close_survey(survey_id, self.user_id2)
         closed_list = sr.get_closed_surveys(self.user_id2)
         self.assertEqual(1, len(closed_list))
@@ -97,7 +97,7 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that closing a survey works
         """
-        survey_id = sr.create_new_survey("Test survey 8", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 8", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         sr.close_survey(survey_id, self.user_id)
 
         closed = sr.get_survey(survey_id).closed
@@ -108,7 +108,7 @@ class TestSurveyRepository(unittest.TestCase):
         self.assertEqual(False, opened)
 
     def test_survey_name_exists(self):
-        sr.create_new_survey("Test survey 9", self.user_id, 10, "Motivaatio")
+        sr.create_new_survey("Test survey 9", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         exists = sr.survey_name_exists("Test survey 9", self.user_id)
         self.assertEqual(True, exists)
 
@@ -121,12 +121,12 @@ class TestSurveyRepository(unittest.TestCase):
         self.assertEqual(False, exists)
 
     def test_survey_description(self):
-        survey_id = sr.create_new_survey("Test survey 10", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 10", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         desc = sr.get_survey_description(survey_id)
         self.assertEqual("Motivaatio", desc)
 
     def test_survey_answered(self):
-        survey_id = sr.create_new_survey("Test survey 11", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 11", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         sr.update_survey_answered(survey_id)
         answered = sr.get_survey(survey_id).results_saved
         self.assertEqual(True, answered)
