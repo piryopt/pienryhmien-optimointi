@@ -114,5 +114,29 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def get_survey_time_begin(self, survey_id):
+        '''
+        RETURNS date and time as datetime.datetime(year, month, day, hour, minute)
+        '''
+        try:
+            sql = "SELECT time_begin FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+
+    def get_survey_time_end(self, survey_id):
+        '''
+        RETURNS date and time as datetime.datetime(year, month, day, hour, minute)
+        '''
+        try:
+            sql = "SELECT time_end FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 survey_repository = SurveyRepository()

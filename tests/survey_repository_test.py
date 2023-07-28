@@ -7,6 +7,7 @@ from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_repository import user_repository as ur
 from src.entities.user import User
 from src.tools.db_tools import clear_database
+import datetime
 
 class TestSurveyRepository(unittest.TestCase):
     def setUp(self):
@@ -130,3 +131,15 @@ class TestSurveyRepository(unittest.TestCase):
         sr.update_survey_answered(survey_id)
         answered = sr.get_survey(survey_id).results_saved
         self.assertEqual(True, answered)
+
+    def test_survey_time_begin_correct(self):
+        survey_id = sr.create_new_survey("Test survey 666", self.user_id, 10, "Ei motivaatiota", "2023-01-01 02:03", "2024-01-01 02:02")
+        time = sr.get_survey_time_begin(survey_id)
+
+        self.assertEqual(time, datetime.datetime(2023, 1, 1, 2, 3))
+
+    def test_survey_time_end_correct(self):
+        survey_id = sr.create_new_survey("Test survey 666", self.user_id, 10, "Ei motivaatiota", "2023-10-02 13:01", "2024-06-19 12:01")
+        time = sr.get_survey_time_end(survey_id)
+
+        self.assertEqual(time, datetime.datetime(2024, 6, 19, 12, 1))
