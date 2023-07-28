@@ -91,15 +91,15 @@ class SurveyRepository:
             print(e)
             return False
 
-    def create_new_survey(self, surveyname, user_id, min_choices, description):
+    def create_new_survey(self, surveyname, user_id, min_choices, description, begindate, enddate):
         '''
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
         '''
         try:
-            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description)"\
-                " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc) RETURNING id"
-            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description})
+            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
+                " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
+            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718

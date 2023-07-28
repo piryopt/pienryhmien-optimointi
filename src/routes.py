@@ -188,8 +188,17 @@ def new_survey_post():
     survey_choices = data["choices"]
     minchoices = data["minchoices"]
 
+    date_begin = data["startdate"]
+    time_begin = data["starttime"]
+
+    date_end = data["enddate"]
+    time_end = data["endtime"]
+
+    print("Alkaa", date_begin, time_begin)
+    print("Alkaa", date_end, time_end)
+
     try:
-        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices)
+        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
         response = {"msg":"Uusi kysely luotu!"}
         return jsonify(response)
     except: 
