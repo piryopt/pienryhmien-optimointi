@@ -19,8 +19,6 @@ class Hungarian:
             self.students: dictionary of Student objects, id as key
             self.index_to_student_dict: dictionary of Student objects with matrix row id as key
             self.weights: dictionary of weights for group order
-            self.prefs: list of lists, each sublist has a student's list
-            of group preferences in order
             self.index_to_group_dict: Maps matrix column to group id
             self.matrix: NxN 2D numpy array where students are represented on rows
             and groups on columns
@@ -34,7 +32,6 @@ class Hungarian:
         self.students = students
         self.index_to_student_dict = self.map_student_to_index()
         self.weights = weights
-        self.prefs = self.student_preferences()
         self.index_to_group_dict = self.create_group_dict()
         self.matrix = self.create_matrix()
         self.assigned_groups = {key:[] for key, group in self.groups.items()}
@@ -58,20 +55,6 @@ class Hungarian:
         """
         ids = [key for key, student in self.students.items()]
         return dict(zip(list(range(len(ids))), ids))
-
-    def student_preferences(self):
-        """
-        Creates a list of lists of group IDs from the student's preferences.
-        Preferences are in the same order as students in the index_to_students_dict
-        """
-
-        #Note! if multiple preferences allowed, it might be better to write a class to
-        #process n preference lists per student
-        prefs = []
-        for key, student in self.students.items():
-            group_id_list = student.selections + student.rejections
-            prefs.append(group_id_list)
-        return prefs
 
     def create_group_dict(self):
         """
@@ -139,8 +122,13 @@ class Hungarian:
         """
         for i in range(len(self.students)):
             assigned_group = self.index_to_group_dict[col_id[i]]
-            self.assigned_groups[assigned_group].append(self.index_to_student_dict[i])
-            self.student_happiness[i] = [self.index_to_student_dict[i], self.prefs[i].index(assigned_group)+1]
+            student_id = self.index_to_student_dict[i]
+            self.assigned_groups[assigned_group].append(student_id)
+            if assigned_group in self.students[student_id].selections:
+                happiness = self.students[student_id].selections.index(assigned_group)+1
+            else:
+                happiness = len(self.weights)
+            self.student_happiness[i] = [student_id, happiness]
 
     def get_data(self):
         """
