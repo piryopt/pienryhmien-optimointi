@@ -188,16 +188,16 @@ def new_survey_post():
     survey_choices = data["choices"]
     minchoices = data["minchoices"]
 
-    print("Min choices:", minchoices)
-
-    survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description)
-
-    response = {"msg":"Uusi kysely luotu!"}
-    return jsonify(response)
+    try:
+        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description)
+        response = {"msg":"Uusi kysely luotu!"}
+        return jsonify(response)
+    except: 
+        return (jsonify({"msg": "Tuntematon virhe palvelimella"}), 500)
+    
 
 @app.route("/create_survey/import", methods = ["POST"])
 def import_survey_choices():
-    print("IMPORT")
     data = request.get_json()
     return jsonify(parser_elomake_csv_to_dict(data['uploadedFileContent'])["choices"])
 

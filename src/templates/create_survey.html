@@ -102,7 +102,7 @@
 
     <section>
       <h2>Priorisoitavat ryhmät</h2>
-      <p>Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää sarake".</p>
+      <p>Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää tietokenttä".</p>
       <input id="choiceFileInput" type="file" style="display: none;" onchange="handleFileUpload()"/>
       <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">Tuo valinnat CSV-tiedostosta</button>
       <table class="table table-dark table-striped table-hover choice-table-main">
@@ -116,7 +116,7 @@
               <th>{{info.info_key}}</th>
             {% endfor %}
           {% endif %}
-            <th class="variable-header" id="add-column-header">+ Lisää sarake</th>
+            <th class="variable-header" id="add-column-header">+ Lisää tietokenttä</th>
           </tr>
         </thead>
         <tbody id="choiceTable" class="">
@@ -151,7 +151,7 @@
       </table>
       <span class="input-validation-warning" for="choice-table-main"></span>
 
-      <button onclick="addRow()" class="new-row-input btn btn-secondary" name="addchoice">+ Lisää rivi</button>
+      <button onclick="addRow()" class="new-row-input btn btn-secondary" name="addchoice">+ Lisää vaihtoehto</button>
     </section>
 
     <section>
