@@ -106,7 +106,15 @@ function createNewSurvey() {
     contentType: "application/json",
     dataType: "json",
     success: function(result) {
-        console.log(result)
+        showAlert({msg: result.msg, color:"green"})
+    },
+    error: function(result) {
+        if (result.responseJSON.msg) {
+            showAlert({msg: result.status + ": " + result.responseJSON.msg, color: "red"})
+        } else {
+            showAlert({msg: `Jokin meni vikaan, palvelimeen ei saatu yhteyttä`, color: "red"})
+        }
+        
     }
     }); 
 }
