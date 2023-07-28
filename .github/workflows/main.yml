@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["dont_put_me_there_lmao"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
