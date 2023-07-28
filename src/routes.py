@@ -186,6 +186,9 @@ def new_survey_post():
     description = data["surveyInformation"]
     user_id = session.get("user_id",0)
     survey_choices = data["choices"]
+    minchoices = data["minchoices"]
+
+    print("Min choices:", minchoices)
 
     survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description)
 

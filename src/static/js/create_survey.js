@@ -16,6 +16,8 @@ function fieldIsValid(elem) {
     var pattern = new RegExp(elem.getAttribute("validation-regex"))
     var value = elem.value
     var result = pattern.test(value)
+    console.log("pattern:", pattern)
+    console.log("result:",result)
     if(!result) {
         setValidationErrorMsg(elem)
         return false
@@ -91,7 +93,8 @@ function createNewSurvey() {
         startdate: document.getElementById("start-date").value,
         starttime: document.getElementById("starttime").value,
         enddate: document.getElementById("end-date").value,
-        endtime: document.getElementById("endtime").value 
+        endtime: document.getElementById("endtime").value,
+        minchoices: Number(document.getElementById("minchoices").value)
     }
 
     console.log("requestData", requestData)
