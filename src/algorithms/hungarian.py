@@ -69,10 +69,7 @@ class Hungarian:
         #process n preference lists per student
         prefs = []
         for key, student in self.students.items():
-            #print(student.selections)
-            #print(student.rejections)
             group_id_list = student.selections + student.rejections
-            #print(group_id_list)
             prefs.append(group_id_list)
         return prefs
 
@@ -89,7 +86,6 @@ class Hungarian:
         the rows. Keys for students in the index_to_student_dict match matrix row ids
         Fills the matrix with profit numbers based on student's group preferences.
         """
-        print(self.prefs)
         matrix = []
         for key, student in self.students.items():
             row = []
