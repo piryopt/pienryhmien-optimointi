@@ -56,9 +56,13 @@
                     </li>
                     {% endfor %}
                 </ul>
-                
+
+                <div class="form-group">
+                    <label for="reasons">Perustelut</label>
+                    <textarea class="form-control" id="reasons" name="reasons" rows="3"></textarea>
+                </div>
+
             </div>
-        
             <div class="col-sm">
                 <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray;">
                     {% for group in choices %}

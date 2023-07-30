@@ -7,12 +7,14 @@ function submit(resubmit) {
     var goodIDs = $("#sortable-good").sortable("toArray");
     var badIDs = $("#sortable-bad").sortable("toArray");
     var surveyID = document.getElementById("survey_id").value;
+    var reasons = document.getElementById("reasons").value;
 
     var IDs = {
         "neutralIDs": neutralIDs,
         "goodIDs": goodIDs,
         "badIDs": badIDs,
-        "allIDs": neutralIDs.concat(goodIDs,badIDs)
+        "allIDs": neutralIDs.concat(goodIDs,badIDs),
+        "reasons": reasons
     }
 
     $.ajax({
@@ -121,4 +123,8 @@ function showMoreInfo(choiceID) {
 function exitMoreInfo() {
     document.getElementById("info-container").innerHTML = "";
     $('input[id="currently_selected"]').val("");
+}
+
+function filterResults(keyword) {
+    
 }
