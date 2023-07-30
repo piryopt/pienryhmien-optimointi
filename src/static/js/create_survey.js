@@ -11,6 +11,21 @@ function parseObjFromRow(row, headers) {
     return obj
 }
 
+function validateChoiceTable() {
+    // Get the validator regex for each column to an array where the index matches
+    // The columns index
+    var headersRow = document.querySelector('#table-headers')
+    var validators = Array.from(headersRow.children).map(child => child.getAttribute('col-validation-regex'))
+    console.log(validators)
+
+    // Iterate over table content rows and cells, if the header corresponding
+    // to cell index has a validator string, validate cell value against that
+    var choiceTableRows = document.querySelector('#choiceTable').children
+    choiceTableRows.forEach(row => {
+        console.log(row)
+    })
+}
+
 function fieldIsValid(elem) {
     console.log("Testing field validity")
     var pattern = new RegExp(elem.getAttribute("validation-regex"))
@@ -60,8 +75,10 @@ function setValidationErrorMsg(elem) {
 
 function createNewSurvey() {
     // Front-end Validatation of fields
+        // Validate choice table
+        validateChoiceTable()
 
-        // Do new validation
+        // Validate single fields
     var elementsToValidate = document.querySelectorAll("[validation-regex]")
     var validContent = true
 
@@ -109,7 +126,7 @@ function createNewSurvey() {
         showAlert({msg: result.msg, color:"green"})
     },
     error: function(result) {
-        if (result.responseJSON.msg) {
+        if (result.responseJSON) {
             showAlert({msg: result.status + ": " + result.responseJSON.msg, color: "red"})
         } else {
             showAlert({msg: `Jokin meni vikaan, palvelimeen ei saatu yhteyttä`, color: "red"})
