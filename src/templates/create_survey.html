@@ -107,6 +107,10 @@
       <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">Tuo valinnat CSV-tiedostosta</button>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
+          <tr id="column-delete-btns">
+            <td></td>
+            <td></td>
+          </tr>
           <tr id="choice-table-headers">
             <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
             <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>

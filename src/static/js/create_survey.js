@@ -184,6 +184,7 @@ function addCellEventListeners(cellElem) {
     cellElem.addEventListener("keydown", enterKeypressOnFocucedCell)
 }
 
+
 function enterKeypressOnFocucedCell(event) {
     if(event.key === "Enter" && $(event.target).is(":focus")) {
         editCell(event)
@@ -191,9 +192,54 @@ function enterKeypressOnFocucedCell(event) {
 }
 
 function enterKeyPressOnEditedCell(event) {
-    if(event.key === "Enter") {
+    var parent_tag = event.target.parentNode.tagName
+    if(event.key === "Enter" && parent_tag === "TD") {
         submitCell(event)
+    } else if (event.key === "Enter" && parent_tag === "TH") {
+        submitNewColumn(event)
     }
+}
+
+function showDeleteColumnIconOnHover(event){
+    var columnIndex = event.target.cellIndex
+    if(columnIndex > 1) {
+        var columnDeleteBtn = document.querySelector(`#column-delete-btns td:nth-child(${columnIndex + 1})`)
+        columnDeleteBtn.classList.add("visible")
+        columnDeleteBtn.querySelector(".delete-col-btn").classList.add("delete-col-btn-visible")
+    }
+    
+}
+
+async function hideColumnIcon(event) {
+    var columnIndex = event.target.cellIndex
+    if(columnIndex > 1) {
+        var columnDeleteBtn = document.querySelector(`#column-delete-btns td:nth-child(${columnIndex + 1})`)
+        wait(150).then(_ => {
+            columnDeleteBtn.classList.remove("visible")
+            columnDeleteBtn.querySelector(".delete-col-btn").classList.remove("delete-col-btn-visible")
+            }
+        )
+        
+    }
+}
+
+let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+function createDeleteColumnCell() {
+    var cell = document.createElement('td')
+    var btn = document.createElement('div')
+    btn.classList.add('delete-col-btn')
+    cell.appendChild(btn)
+    btn.addEventListener("click", removeColumn)
+    return cell
+}
+
+function removeColumn(event) {
+    var cellIndex = event.target.parentElement.cellIndex
+    var rows = document.querySelector(".choice-table-main").querySelectorAll("tr")
+    Array.from(rows).forEach(row => {
+        row.querySelector(`td:nth-child(${cellIndex + 1}), th:nth-child(${cellIndex + 1})`).remove()
+    })
 }
 
 function createEmptyInputCell() {
@@ -276,6 +322,11 @@ function submitNewColumn(event) {
     //  -->: Set header value to what was given to the input field
     editedCell.innerHTML = ""
     editedCell.innerText = newValue
+    editedCell.addEventListener("mouseover",showDeleteColumnIconOnHover)
+    editedCell.addEventListener("mouseleave",hideColumnIcon)
+
+    //add delete button for new column
+    document.querySelector("#column-delete-btns").appendChild(createDeleteColumnCell())
 
     // -->: Create new "Add new column" header to the table
     document.getElementById("choice-table-headers").appendChild(createAddColumnHeader())
@@ -380,8 +431,14 @@ function setUploadedTableValues(table) {
     var headers = Object.keys(table[0])
     var headers = Object.keys(table[0]).filter(header => header !== 'name' && header !== 'spaces')
 
+    var deleteColRow = document.getElementById("column-delete-btns")
+
     for(var header of headers) {
-        headersRow.insertBefore(createElementWithText('th', header, clickHandler=editCell), document.getElementById('add-column-header'))
+        deleteColRow.appendChild(createDeleteColumnCell())
+        var newHeader = createElementWithText('th', header, clickHandler=editCell)
+        newHeader.addEventListener("mouseover",showDeleteColumnIconOnHover)
+        newHeader.addEventListener("mouseleave",hideColumnIcon)
+        headersRow.insertBefore(newHeader, document.getElementById('add-column-header'))
         
     }
 
@@ -398,6 +455,7 @@ function setUploadedTableValues(table) {
                 addCellEventListeners(rowElement.appendChild(createElementWithText('td', row[header])))
             }   
         )
+        rowElement.appendChild(createDeleteRowCell())
         tableBody.append(rowElement)
     })
 }
