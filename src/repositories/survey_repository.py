@@ -73,7 +73,7 @@ class SurveyRepository:
 
     def get_closed_surveys(self, teacher_id):
         try:
-            sql = "SELECT id, surveyname, closed, results_saved FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
+            sql = "SELECT id, surveyname, closed, results_saved, time_end FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
             surveys = result.fetchall()
             return surveys

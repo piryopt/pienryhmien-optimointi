@@ -56,7 +56,7 @@ class DbDataGen:
         exists = sr.survey_name_exists(name, user_id)
         if exists:
             return
-        survey_id = sr.create_new_survey(name, user_id, 10, "AUTOMAATTISESTI GENEROITU!")
+        survey_id = sr.create_new_survey(name, user_id, 10, "AUTOMAATTISESTI GENEROITU!", "2020-01-01 02:03", "2025-01-01 02:02")
         choice_name1 =  "Päiväkoti Aurinkoleikki"
         choice_name2 =  "Päiväkoti Pikku Käpälät"
         choice_name3 =  "Päiväkoti Taikametsä"

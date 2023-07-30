@@ -94,5 +94,8 @@ class SurveyService:
 
     def get_survey_description(self, survey_id):
         return self._survey_repository.get_survey_description(survey_id)
+    
+    def get_survey_enddate(self, survey_id):
+        return self._survey_repository.get_survey_time_end(survey_id)
 
 survey_service = SurveyService()
