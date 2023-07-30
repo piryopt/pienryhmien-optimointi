@@ -13,7 +13,9 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	min_choices INTEGER,
 	closed BOOLEAN,
 	results_saved BOOLEAN,
-	survey_description TEXT
+	survey_description TEXT,
+	time_begin timestamp,
+	time_end timestamp
 );
 
 CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä

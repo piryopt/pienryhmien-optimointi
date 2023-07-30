@@ -38,7 +38,7 @@ def hello_world() -> str:
         survey_answers = SurveyTools.fetch_survey_responses(survey_id)
         participants = len(survey_answers)
         # VAIHDA TÄMÄ OIKEESEEN PÄIVÄMÄÄRÄÄN KUN SAADAAN TOIMINNALLISUUS!!
-        survey_ending_date = "31.8.2023"
+        survey_ending_date = survey_service.get_survey_enddate(survey_id)
         data.append([survey_id, surveyname, participants, survey_ending_date])
 
     return render_template('index.html', surveys_created = surveys_created, exists = True, data = data, error_statement = "DOES THIS WORK?")
@@ -91,6 +91,7 @@ def surveys(survey_id):
     existing = "0"
     user_id = session.get("user_id", 0)
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
+    enddate = survey_service.get_survey_enddate(survey_id)
 
     # If a ranking exists, display the choices in the order that the student chose them.
     if user_survey_ranking:
@@ -112,7 +113,7 @@ def surveys(survey_id):
         return render_template("closedsurvey.html", survey_name = survey_name)
 
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc)
+                            survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc, enddate = enddate)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -188,8 +189,17 @@ def new_survey_post():
     survey_choices = data["choices"]
     minchoices = data["minchoices"]
 
+    date_begin = data["startdate"]
+    time_begin = data["starttime"]
+
+    date_end = data["enddate"]
+    time_end = data["endtime"]
+
+    print("Alkaa", date_begin, time_begin)
+    print("Alkaa", date_end, time_end)
+
     try:
-        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description)
+        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
         response = {"msg":"Uusi kysely luotu!"}
         return jsonify(response)
     except: 
