@@ -12,28 +12,60 @@ function parseObjFromRow(row, headers) {
 }
 
 function validateChoiceTable() {
-    // Get the validator regex for each column to an array where the index matches
-    // The columns index
-    var headersRow = document.querySelector('#table-headers')
-    var validators = Array.from(headersRow.children).map(child => child.getAttribute('col-validation-regex'))
-    console.log(validators)
-
-    // Iterate over table content rows and cells, if the header corresponding
-    // to cell index has a validator string, validate cell value against that
-    var choiceTableRows = document.querySelector('#choiceTable').children
-    choiceTableRows.forEach(row => {
-        console.log(row)
+    Array.from(document.querySelectorAll("#choiceTable td")).forEach( cell => {
+        cellIsValid(cell)
     })
 }
 
+
+
+function cellIsValid(elem) {
+    var cellIndex = elem.cellIndex
+    var colHeader = document.querySelector(`#choice-table-headers th:nth-child(${cellIndex + 1})`)
+    var pattern = colHeader.getAttribute("col-validation-regex")
+    if(!pattern) { return true }
+
+    var cellText = elem.classList.contains("empty") ? "": elem.innerText
+    var colWarningItemId = `col-${cellIndex}-validation-warning`
+    var warningsList = document.getElementById("choicetable-validation-warnings")
+
+    if (!isExactMatch(pattern, cellText)){
+        elem.classList.add("active-warning")
+        if(!document.getElementById(colWarningItemId)) {
+            var newWarning = document.createElement("li")
+            newWarning.setAttribute("id", colWarningItemId)
+            newWarning.classList.add("input-validation-warning")
+            newWarning.innerText = `Sarakkeen "${colHeader.innerText}" arvojen tulee olla ${colHeader.getAttribute("validation-text")}`
+            warningsList.appendChild(newWarning)
+            
+            warningsList.classList.remove("hidden")
+        }
+        return false
+    } else {
+        var warningItem = document.getElementById(colWarningItemId)
+        if(warningItem !== null) {
+            warningItem.remove()
+            if(!warningsList.hasChildNodes) {
+                warningsList.classList.add("hidden")
+            }
+        }
+    }
+}
+
+
+function toggleClass(elem, classname) {
+    if(elem.classList.contains(classname)) { elem.classList.remove(classname)}
+    else {elem.classList.add(classname)}
+}
+
+
+function isExactMatch(pattern, string) {
+    var regexMatches = string.match(new RegExp(pattern))
+    return !regexMatches ?  false : regexMatches[0] === string
+}
+
 function fieldIsValid(elem) {
-    console.log("Testing field validity")
-    var pattern = new RegExp(elem.getAttribute("validation-regex"))
-    var value = elem.value
-    var result = pattern.test(value)
-    console.log("pattern:", pattern)
-    console.log("result:",result)
-    if(!result) {
+    if(!isExactMatch(elem.getAttribute("validation-regex"), elem.value)) {
         setValidationErrorMsg(elem)
         return false
     }
@@ -97,7 +129,7 @@ function createNewSurvey() {
     //Valid content, continue to post
 
     // Get column names from the choice table
-    var tableHeaders = Array.from(document.querySelectorAll("#table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
+    var tableHeaders = Array.from(document.querySelectorAll("#choice-table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
     console.log(tableHeaders)
 
     var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
@@ -137,21 +169,64 @@ function createNewSurvey() {
 }
 
 function addRow() {
-    var choiceTable = document.getElementById("choiceTable")
-    var newRow = choiceTable.insertRow(choiceTable.rows.length)
+    var newRow = document.getElementById("choiceTable").insertRow()
 
-    // Getting the number of columns in the table,
-    // Last header is subtracted, it is the add new column one
-    headersCount = (document.getElementById("table-headers").getElementsByTagName("th").length) - 1
-    
-    for (var i = 0; i < headersCount; i++) {
-        // create an empty cell and attach event listener to it
-        var newEmptyCell = document.createElement("td")
-        newEmptyCell.classList.add("empty")
-        newEmptyCell.innerHTML = emptyCellText
-        newRow.appendChild(newEmptyCell).addEventListener("click", editCell)
-    }      
+    headers = document.querySelectorAll("#choice-table-headers th:not(#add-column-header)")
+    headers.forEach( _ => {
+        newRow.appendChild(createEmptyInputCell())
+    })
+
+    newRow.appendChild(createDeleteRowCell())
 }
+
+function addCellEventListeners(cellElem) {
+    cellElem.addEventListener("click", editCell)
+    cellElem.addEventListener("keydown", enterKeypressOnFocucedCell)
+}
+
+function enterKeypressOnFocucedCell(event) {
+    if(event.key === "Enter" && $(event.target).is(":focus")) {
+        editCell(event)
+    }
+}
+
+function enterKeyPressOnEditedCell(event) {
+    if(event.key === "Enter") {
+        submitCell(event)
+    }
+}
+
+function createEmptyInputCell() {
+    var newEmptyCell = document.createElement("td")
+    newEmptyCell.classList.add("empty")
+    newEmptyCell.setAttribute("tabindex", "0")
+    newEmptyCell.innerHTML = emptyCellText
+    addCellEventListeners(newEmptyCell)
+
+    return newEmptyCell
+}
+
+function createDeleteRowCell() {
+    var actionCell = document.createElement("td")
+    actionCell.classList.add("action-cell")
+    var deleteBtn = document.createElement("div")
+    deleteBtn.classList.add("delete-row-btn")
+    actionCell.appendChild(deleteBtn)
+    deleteBtn.addEventListener("click", deleteRow)
+
+    return actionCell
+}
+
+
+function createAddColumnHeader() {
+
+    var newAddColumnHeader = createElementWithText("th", "+Lisää sarake", editCell)
+    newAddColumnHeader.setAttribute("id", "add-column-header")
+    newAddColumnHeader.setAttribute("class", "variable-header")
+
+    return newAddColumnHeader
+}
+
 
 function editCell(event) {
     var editableField = document.createElement("input");
@@ -170,8 +245,10 @@ function editCell(event) {
     // Special event handler for "add new column" header
     if (event.target.id !== "add-column-header") {
         editableField.addEventListener("focusout", submitCell)
+        editableField.addEventListener("keydown", enterKeyPressOnEditedCell)
     } else {
         editableField.addEventListener("focusout", submitNewColumn)
+        editableField.addEventListener("keydown", enterKeyPressOnEditedCell)
     }
 
 
@@ -201,24 +278,14 @@ function submitNewColumn(event) {
     editedCell.innerText = newValue
 
     // -->: Create new "Add new column" header to the table
-    var headers = document.getElementById("table-headers")
-    var newAddColumnHeader = document.createElement("th")
-    newAddColumnHeader.setAttribute("id", "add-column-header")
-    newAddColumnHeader.setAttribute("class", "variable-header")
-    newAddColumnHeader.innerText = "+ Lisää sarake"
-    headers.appendChild(newAddColumnHeader)
-    newAddColumnHeader.addEventListener("click", editCell)
+    document.getElementById("choice-table-headers").appendChild(createAddColumnHeader())
 
-    // -->: Add cell matching the header to all existing rows in the table
-    var rows = document.getElementById("choiceTable").getElementsByTagName("tr")
-    for (var row of rows) {
-        var newCell = document.createElement("td")
-        newCell.classList.add("empty")
-        newCell.innerText = emptyCellText
-        row.appendChild(newCell)
-        newCell.addEventListener("click", editCell)
-    }
+    // -->: Add a new cell matching the header to all existing rows in the table
+    Array.from(document.querySelectorAll('#choiceTable tr')).forEach(row => {
+        row.insertBefore(createEmptyInputCell(), row.querySelector(".action-cell"))
+    })
 }
+
 
 function submitCell(event) {
     var newValue = event.target.value
@@ -236,8 +303,11 @@ function submitCell(event) {
             editedCell.classList.remove("empty")
         }
     }
-    
+    cellIsValid(editedCell)
+}
 
+function deleteRow(event) {
+    event.target.closest('tr').remove()
 }
 
 function pageLoadActions() {
@@ -246,8 +316,14 @@ function pageLoadActions() {
     // Add onClick event to all regular table cells
     var cells = choiceTable.getElementsByTagName("td")
     for (var cell of cells) {
-        cell.addEventListener("click", editCell)
+        addCellEventListeners(cell)
     }
+
+    // add onClick event to all delete row-buttons
+    var deleteRowBtns = choiceTable.getElementsByClassName("delete-row-btn")
+    Array.from(deleteRowBtns).forEach(btn => {
+        btn.addEventListener("click", deleteRow)
+    })
 
     // Add onClick event to "add new column" -header
     var addColHeader = document.getElementById("add-column-header")
@@ -292,9 +368,7 @@ function handleFileUpload() {
 }
 
 function setUploadedTableValues(table) {
-    // set table headers
-    var headersRow = document.getElementById('table-headers')
-
+    var headersRow = document.getElementById('choice-table-headers')
     // Remove variable columns if they exist
     var begin = (headersRow.childElementCount-2)*-1
     var end = headersRow.childElementCount - 1
@@ -315,18 +389,17 @@ function setUploadedTableValues(table) {
     var tableBody = document.getElementById('choiceTable')
     tableBody.innerHTML = ''
     
-    for(var row of table) {
+    table.forEach(row => {
         var rowElement = document.createElement('tr')
-        // set constant column variables
-        rowElement.appendChild(createElementWithText('td', row['name'], clickHandler=editCell))
-        rowElement.appendChild(createElementWithText('td', row['spaces'], clickHandler=editCell))
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['name'])))
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['spaces'])))
 
-        // set variable column variables
-        for(var cellHeader of headers) {
-            rowElement.appendChild(createElementWithText('td', row[cellHeader], clickHandler=editCell))
-        }
+        headers.forEach( header => {
+                addCellEventListeners(rowElement.appendChild(createElementWithText('td', row[header])))
+            }   
+        )
         tableBody.append(rowElement)
-    }
+    })
 }
 
 function createElementWithText(type, content, clickHandler=null) {
