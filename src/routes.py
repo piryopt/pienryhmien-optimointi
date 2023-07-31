@@ -98,6 +98,7 @@ def surveys(survey_id):
         existing = "1"
         user_rankings = user_survey_ranking[3]
         rejections = user_survey_ranking[4]
+        reason = user_survey_ranking[5]
 
         list_of_good_survey_choice_id = convert_to_list(user_rankings)
 
@@ -122,7 +123,7 @@ def surveys(survey_id):
             return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc,
-                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices)
+                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason = reason)
         
         
 
@@ -160,7 +161,7 @@ def get_choices(survey_id):
     all_ids = raw_data["allIDs"]
 
     #value of textarea reasons
-    reasons = raw_data["reasons"]
+    reason = raw_data["reasons"]
 
     # Change this to len bad_ids + good_ids >= min_choices
     # Also check that there aren't to many rejections. 
@@ -174,9 +175,14 @@ def get_choices(survey_id):
 
     ranking = convert_to_string(good_ids)
     rejections = convert_to_string(bad_ids)
-
+    if len(bad_ids) == 0 and len(reason) > 0:
+        response = {"status":"0","msg":"Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."}
+        return jsonify(response)
+    if len(reason) > 300:
+        response = {"status":"0","msg":"Perustelu on liian pitkän. Merkkimäärä on <= 300. Tallennus epäonnistui."}
+        return jsonify(response)
     user_id = session.get("user_id",0)
-    submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking, rejections)
+    submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking, rejections, reason)
     response = {"status":"1","msg":"Tallennus onnistui."}
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
@@ -277,7 +283,7 @@ def survey_answers(survey_id):
     survey_answers = SurveyTools.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
-        choices_data.append([user_service.get_email(s[0]), s[1]])
+        choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
     survey_answers_amount = len(survey_answers)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)

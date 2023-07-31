@@ -10,8 +10,8 @@ class UserRankingsService:
         self._user_rankings_repository = user_rankings_repository
         self._survey_repository = survey_repository
 
-    def add_user_ranking(self, user_id, survey_id, ranking, rejections):
-        self._user_rankings_repository.add_user_ranking(user_id,survey_id,ranking, rejections)
+    def add_user_ranking(self, user_id, survey_id, ranking, rejections, reason):
+        self._user_rankings_repository.add_user_ranking(user_id,survey_id,ranking, rejections, reason)
         return True
 
     def user_ranking_exists(self, survey_id, user_id):

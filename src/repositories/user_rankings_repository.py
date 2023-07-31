@@ -2,15 +2,15 @@ from sqlalchemy import text # pylint: disable=R0401
 from src import db
 
 class UserRankingsRepository:
-    def add_user_ranking(self, user_id, survey_id, ranking, rejections):
+    def add_user_ranking(self, user_id, survey_id, ranking, rejections, reason):
         try:
             sql = """
-                INSERT INTO user_survey_rankings (user_id, survey_id, ranking, rejections, deleted) 
-                VALUES (:user_id, :survey_id, :ranking, :rejections, :deleted) 
+                INSERT INTO user_survey_rankings (user_id, survey_id, ranking, rejections, reason, deleted) 
+                VALUES (:user_id, :survey_id, :ranking, :rejections, :reason, :deleted) 
                 ON CONFLICT (user_id, survey_id) 
-                DO UPDATE SET ranking=:ranking, rejections=:rejections, deleted=:deleted
+                DO UPDATE SET ranking=:ranking, rejections=:rejections, reason=:reason, deleted=:deleted
                 """
-            db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking, "rejections":rejections, "deleted":False})
+            db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking, "rejections":rejections, "reason":reason, "deleted":False})
             db.session.commit()
         except Exception as e: # pylint: disable=W0718
             print(e)
