@@ -26,14 +26,15 @@ def home_decorator():
             # just do here everything what you need
             result = f(*args, **kwargs)
 
+            # Array of strings of user's roles
+            roles = request.headers.get('eduPersonAffiliation')
+            if roles == None:
+                return
+
             name = request.headers.get('cn')
             email = request.headers.get('mail')
             student_number = request.headers.get('hyPersonStudentId')
 
-            # Array of strings of user's roles
-            roles = request.headers.get('eduPersonAffiliation')
-            if roles == None:
-                roles = ["asd"] # to pass CI
 
             role_bool = True if "faculty" in roles or "staff" in roles else False
 
