@@ -164,8 +164,12 @@ def get_choices(survey_id):
 
     # Change this to len bad_ids + good_ids >= min_choices
     # Also check that there aren't to many rejections. 
-    if len(neutral_ids) > 0:
+    if len(neutral_ids) > 0 or len(good_ids) == 0:
         response = {"status":"0","msg":"Et ole tehnyt riittävän monta valintaa! Tallennus epäonnistui."}
+        return jsonify(response)
+    
+    if len(bad_ids) > 2:
+        response = {"status":"0","msg":"Liian monta hylkäystä! Tallennus epäonnistui."}
         return jsonify(response)
 
     ranking = convert_to_string(good_ids)
