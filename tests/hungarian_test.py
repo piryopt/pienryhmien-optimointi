@@ -14,9 +14,9 @@ class TestHungarian(unittest.TestCase):
         the algorithm while saving some of the preliminary data structures for tests
         """
         self.groups = {22:Group(22,'Ducks',2), 14:Group(14,'Geese',1), 55:Group(55,'Mallards',1), 19:Group(19, "Roided Harpy Eagles", 1)}
-        self.students = {114:Student(114, 'Jane', [22,14,55], [19]),
-                        367:Student(367, 'Joe', [22,55,14], [19]),
-                        847:Student(847, 'Janet', [55,22,14], [19])}
+        self.students = {114:Student(114, 'Jane', [22,14,55], []),
+                        367:Student(367, 'Joe', [22,55,14], []),
+                        847:Student(847, 'Janet', [55,22,14], [])}
         self.weights = Weights(len(self.groups), len(self.students)).get_weights()
         self.h = Hungarian(self.groups, self.students, self.weights)
         self.original_matrix = self.h.matrix
@@ -69,9 +69,9 @@ class TestHungarian(unittest.TestCase):
         Tests that matrix initially contains correct weights
         """
         np.testing.assert_array_equal(self.original_matrix,
-                                      np.array([[18, 18, 15, 12,  0],
-                                                [18, 18, 12, 15,  0],
-                                                [15, 15, 12, 18,  0]]))
+                                      np.array([[18, 18, 15, 12, 6],
+                                                [18, 18, 12, 15, 6],
+                                                [15, 15, 12, 18, 6]]))
 
     def test_that_assigned_groups_dict_has_correct_number_of_groups_initially(self):
         """
@@ -194,3 +194,19 @@ class TestHungarian(unittest.TestCase):
         ref = h.matrix
         h.reshape_matrix()
         np.testing.assert_array_equal(h.matrix, ref)
+
+    def test_correct_matrix_with_rejections(self):
+        """
+        Add students with rejections and check that the matrix contains the correct values.
+        """
+        self.students[999] = Student(999, 'Bob', [19,14,22], [55])
+        self.students[754] = Student(754, "Ronald", [55,22,14], [19])
+        h = Hungarian(self.groups, self.students, self.weights)
+        new_matrix = h.matrix
+        print(new_matrix)
+        np.testing.assert_array_equal(new_matrix,
+                                      np.array([[18, 18, 15, 12, 6],
+                                                [18, 18, 12, 15, 6],
+                                                [15, 15, 12, 18, 6],
+                                                [12, 12, 15, 0, 18],
+                                                [15, 15, 12, 18, 0]]))
