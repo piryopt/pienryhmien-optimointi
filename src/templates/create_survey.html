@@ -83,22 +83,44 @@
     </section>
 
     <section>
+      <h2>Priorisoitujen ryhmien vähimmäismäärä</h2>
+      <input
+          type="text"
+          class="form-control"
+          id="minchoices" name="minchoices"
+          validation-regex="\d+"
+          validation-text="Kentän tulee olla kokonaisluku"
+          onchange="fieldIsValid(this)"
+          {% if survey.minchoices %}
+            value="{{survey.minchoices}}"
+          {% endif %}
+        />
+        <ul class="validation-warnings-list hidden">
+          <li><span class="input-validation-warning" id="minchoices-validation-warning"></span></li>
+        </ul>
+    </section>
+
+    <section>
       <h2>Priorisoitavat ryhmät</h2>
-      <p>Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää sarake".</p>
+      <p>Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää tietokenttä".</p>
       <input id="choiceFileInput" type="file" style="display: none;" onchange="handleFileUpload()"/>
       <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">Tuo valinnat CSV-tiedostosta</button>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
-          <tr id="table-headers">
-            <th class="constant-header">Nimi</th>
-            <th class="constant-header">Enimmäispaikat</th>
+          <tr id="column-delete-btns">
+            <td></td>
+            <td></td>
+          </tr>
+          <tr id="choice-table-headers">
+            <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
+            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
           {# additional columns if template loaded with survey parameter present #}
           {% if survey is not none %}
             {% for info in survey.choices[0].info_columns %}
               <th>{{info.info_key}}</th>
             {% endfor %}
           {% endif %}
-            <th class="variable-header" id="add-column-header">+ Lisää sarake</th>
+            <th class="variable-header" id="add-column-header">+ Lisää tietokenttä</th>
           </tr>
         </thead>
         <tbody id="choiceTable" class="">
@@ -118,22 +140,25 @@
           {# If survey parameter is not set, create empty row with columns for constant values #}
           {% else %}
             <tr>
-              <td class="empty">tyhjä</td>
-              <td class="empty" validation-regex="\d*">tyhjä</td>
+              <td class="empty" tabindex="0">tyhjä</td>
+              <td class="empty" tabindex="0">tyhjä</td>
+              <td class="action-cell" tabindex="0"><span>ASD</span></td>
             </tr>
           {% endif %}
           {% else %}
             <tr>
-              <td class="empty">tyhjä</td>
-              <td class="empty">tyhjä</td>
+              <td class="empty" tabindex="0">tyhjä</td>
+              <td class="empty" tabindex="0">tyhjä</td>
+              <td class="action-cell" tabindex="0"><div class="delete-row-btn"></div></td>
             </tr>
         {% endif %}
           
         </tbody>
       </table>
-      <span class="input-validation-warning" for="choice-table-main"></span>
+      <ul class="validation-warnings-list hidden" id="choicetable-validation-warnings">
+      </ul>
 
-      <button onclick="addRow()" class="new-row-input btn btn-secondary" name="addchoice">+ Lisää rivi</button>
+      <button onclick="addRow()" class="new-row-input btn btn-secondary" name="addchoice">+ Lisää vaihtoehto</button>
     </section>
 
     <section>

@@ -35,7 +35,7 @@ class TestUserRankingsRepository(unittest.TestCase):
         self.app_context.pop()
 
     def test_get_user_ranking(self):
-        survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id, survey_id, ranking, "")
         db_ranking = urr.get_user_ranking(self.user_id, survey_id).ranking
@@ -46,7 +46,7 @@ class TestUserRankingsRepository(unittest.TestCase):
         self.assertEqual(exists, False)
 
     def test_delete_user_ranking(self):
-        survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id, survey_id, ranking, "")
         deleted = urr.get_user_ranking(self.user_id, survey_id).ranking

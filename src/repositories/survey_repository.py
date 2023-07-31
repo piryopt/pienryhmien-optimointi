@@ -73,7 +73,7 @@ class SurveyRepository:
 
     def get_closed_surveys(self, teacher_id):
         try:
-            sql = "SELECT id, surveyname, closed, results_saved FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
+            sql = "SELECT id, surveyname, closed, results_saved, time_end FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
             surveys = result.fetchall()
             return surveys
@@ -91,15 +91,15 @@ class SurveyRepository:
             print(e)
             return False
 
-    def create_new_survey(self, surveyname, user_id, min_choices, description):
+    def create_new_survey(self, surveyname, user_id, min_choices, description, begindate, enddate):
         '''
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
         '''
         try:
-            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description)"\
-                " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc) RETURNING id"
-            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description})
+            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
+                " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
+            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718
@@ -109,6 +109,30 @@ class SurveyRepository:
     def get_survey_description(self, survey_id):
         try:
             sql = "SELECT survey_description FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_survey_time_begin(self, survey_id):
+        '''
+        RETURNS date and time as datetime.datetime(year, month, day, hour, minute)
+        '''
+        try:
+            sql = "SELECT time_begin FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+
+    def get_survey_time_end(self, survey_id):
+        '''
+        RETURNS date and time as datetime.datetime(year, month, day, hour, minute)
+        '''
+        try:
+            sql = "SELECT time_end FROM surveys WHERE id=:id"
             result = db.session.execute(text(sql), {"id":survey_id})
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718
