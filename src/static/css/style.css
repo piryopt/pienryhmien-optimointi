@@ -119,3 +119,7 @@ body {background-color: rgb(24, 26, 27);}
     margin-top: 20px;
     margin-bottom: 40px;
 }
+
+td.empty {
+    color: #696969 !important;
+}
