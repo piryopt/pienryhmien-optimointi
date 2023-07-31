@@ -29,7 +29,7 @@ def home_decorator():
             # Array of strings of user's roles
             roles = request.headers.get('eduPersonAffiliation')
             if roles == None:
-                return
+                return result
 
             name = request.headers.get('cn')
             email = request.headers.get('mail')
