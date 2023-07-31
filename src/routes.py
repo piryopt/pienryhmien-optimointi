@@ -162,9 +162,10 @@ def get_choices(survey_id):
     #value of textarea reasons
     reasons = raw_data["reasons"]
 
-    # Change this later to be 
+    # Change this to len bad_ids + good_ids >= min_choices
+    # Also check that there aren't to many rejections. 
     if len(neutral_ids) > 0:
-        response = {"status":"0","msg":"BRUHHHHHHHHH"}
+        response = {"status":"0","msg":"Et ole tehnyt riittävän monta valintaa! Tallennus epäonnistui."}
         return jsonify(response)
 
     ranking = convert_to_string(good_ids)
