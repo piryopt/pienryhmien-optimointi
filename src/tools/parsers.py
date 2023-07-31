@@ -56,13 +56,16 @@ def parser_elomake_csv_to_dict(file):
     return ret_dict
 
 
-def parser_dict_to_survey(survey_choices, survey_name, user_id, description):
+def parser_dict_to_survey(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end):
     '''
     Parses a dictionary and creates a survey, its choices and their additional infos
     RETURNS created survey's id
     '''
 
-    survey_id = survey_repository.create_new_survey(survey_name, user_id, 1, description)
+    datetime_begin = date_to_sql_valid(date_begin) + " " +  time_begin
+    datetime_end = date_to_sql_valid(date_end) + " " +  time_end
+
+    survey_id = survey_repository.create_new_survey(survey_name, user_id, minchoices, description, datetime_begin, datetime_end)
 
     for choice in survey_choices:
 
@@ -85,3 +88,11 @@ def parser_dict_to_survey(survey_choices, survey_name, user_id, description):
             count += 1
 
     return survey_id
+
+def date_to_sql_valid(date):
+    '''
+    RETURNS SQL datetime valid date str
+    '''
+    date = date.split('.')
+
+    return date[2] + "-" + date[1] + "-" + date[0]

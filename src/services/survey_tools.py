@@ -7,7 +7,7 @@ class SurveyTools:
 
     def fetch_all_active_surveys(teacher_id):
         '''Returns a list of all surveys in the database'''
-        sql = text("SELECT id, surveyname, closed, results_saved FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)")
+        sql = text("SELECT id, surveyname, closed, results_saved, time_end FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)")
         result = db.session.execute(sql, {"teacher_id":teacher_id})
         all_surveys = result.fetchall()
         return all_surveys
