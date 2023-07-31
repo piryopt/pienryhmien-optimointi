@@ -55,7 +55,7 @@ class TestUserRankingsRepository(unittest.TestCase):
         self.assertEqual(deleted, False)
 
     def test_user_ranking_rejections(self):
-        survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio")
+        survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         ranking = "2,3,5,4,1,6"
         rejections = "9,8"
         urr.add_user_ranking(self.user_id, survey_id, ranking, rejections)
