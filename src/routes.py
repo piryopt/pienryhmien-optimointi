@@ -158,6 +158,9 @@ def get_choices(survey_id):
     #list of all ids
     all_ids = raw_data["allIDs"]
 
+    #value of textarea reasons
+    reasons = raw_data["reasons"]
+
     # Change this later to be 
     if len(neutral_ids) > 0:
         response = {"status":"0","msg":"BRUHHHHHHHHH"}

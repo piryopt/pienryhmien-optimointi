@@ -13,6 +13,13 @@
     <div class="col">
         <div class="row">
             <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <input id="searchChoices" type="text" placeholder="Etsi...">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
                 <script>
                     $( function() {
                         $( "#sortable-neutral, #sortable-good, #sortable-bad" ).sortable({
@@ -29,7 +36,7 @@
                         });
                     });
                 </script>
-                <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green;">
+                <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
                     {% for group in good_survey_choices %}
                     <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
                         <div class="d-flex w-100 justify-content-between">
@@ -39,7 +46,7 @@
                     </li>
                     {% endfor %}
                 </ul>
-                <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: red">
+                <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
                     {% for group in bad_survey_choices %}
                     <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
                         <div class="d-flex w-100 justify-content-between">
@@ -49,11 +56,15 @@
                     </li>
                     {% endfor %}
                 </ul>
-                
+
+                <div class="form-group">
+                    <label for="reasons">Perustelut</label>
+                    <textarea class="form-control" id="reasons" name="reasons" rows="3"></textarea>
+                </div>
+
             </div>
-        
             <div class="col-sm">
-                <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray;">
+                <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray; padding-right: 10px;">
                     {% for group in choices %}
                     <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
                         <div class="d-flex w-100 justify-content-between">
@@ -69,7 +80,7 @@
         <div id="submitExists" style="display: none;">
             <input type="submit" value="Päivitä valinnat" onclick="submit(0)">
         </div>
-        <div id="submitDoesntExist">
+        <div id="submitDoesntExist" style="display: none">
             <input type="submit" value="Lähetä valinnat" onclick="submit(1)">
         </div>
         <input type="hidden" id="survey_id" value="{{ survey_id }}">
@@ -115,8 +126,18 @@
             $("#deleteContainer").show();
             $("#submitExists").show();
             $("#submitDoesntExist").hide();
+        } else {
+            $("#submitDoesntExist").show();
         }
 
+    });
+    $( document ).ready(function() {
+        $("#searchChoices").on("keyup", function() {
+            var keyword = $( this ).val().toLowerCase();
+            $("#sortable-neutral li").filter(function() {
+                $( this ).toggle($(this.querySelector("h5")).text().toLowerCase().indexOf(keyword) > -1)
+            });
+        });
     });
 </script>
 {% endblock %}
