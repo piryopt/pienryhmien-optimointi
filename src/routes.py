@@ -17,47 +17,9 @@ from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
-from functools import wraps
 
-def home_decorator():
-    def _home_decorator(f):
-        @wraps(f)
-        def __home_decorator(*args, **kwargs):
-            # just do here everything what you need
-            result = f(*args, **kwargs)
-
-            # Array of strings of user's roles
-            roles = request.headers.get('eduPersonAffiliation')
-            if roles == None:
-                return result
-
-            name = request.headers.get('cn')
-            email = request.headers.get('mail')
-            student_number = request.headers.get('hyPersonStudentId')
-
-
-            role_bool = True if "faculty" in roles or "staff" in roles else False
-
-            print("Nimi", name)
-            print("Rooli", roles)
-            print("Sposti", email)
-            print("Numero", student_number)
-
-
-            uid = session.get("user_id", 0) # check if logged in already 
-            if uid == 0:
-                if not user_service.find_by_email(email): # account doesn't exist, register
-                    user_service.create_user(name, student_number, email, role_bool) # actual registration
-                if user_service.check_credentials(email): # log in, update session etc.
-                    if role_bool:
-                        user_service.make_user_teacher(email)
-
-            return result
-        return __home_decorator
-    return _home_decorator
 
 @app.route("/")
-@home_decorator()
 def hello_world() -> str:
     """
     Returns the rendered skeleton template
@@ -117,6 +79,7 @@ def surveys(survey_id):
     '''The answer page for surveys.'''
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    print(survey_choices)
     desc = survey_service.get_survey_description(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
@@ -162,7 +125,7 @@ def surveys(survey_id):
             return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc,
-                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason = reason)
+                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices)
         
         
 
