@@ -1,8 +1,7 @@
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	name TEXT,
- 	student_number TEXT, -- or int or not at all
-	email TEXT,
+	email TEXT UNIQUE,
 	isteacher BOOLEAN
 );
 
