@@ -17,8 +17,47 @@ from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
+from functools import wraps
+
+def home_decorator():
+    def _home_decorator(f):
+        @wraps(f)
+        def __home_decorator(*args, **kwargs):
+            # just do here everything what you need
+            result = f(*args, **kwargs)
+
+            # Array of strings of user's roles
+            roles = request.headers.get('eduPersonAffiliation')
+            if roles == None:
+                return result
+
+            name = request.headers.get('cn')
+            email = request.headers.get('mail')
+            student_number = request.headers.get('hyPersonStudentId')
+
+
+            role_bool = True if "faculty" in roles or "staff" in roles else False
+
+            print("Nimi", name)
+            print("Rooli", roles)
+            print("Sposti", email)
+            print("Numero", student_number)
+
+
+            uid = session.get("user_id", 0) # check if logged in already 
+            if uid == 0:
+                if not user_service.find_by_email(email): # account doesn't exist, register
+                    user_service.create_user(name, student_number, email, role_bool) # actual registration
+                if user_service.check_credentials(email): # log in, update session etc.
+                    if role_bool:
+                        user_service.make_user_teacher(email)
+
+            return result
+        return __home_decorator
+    return _home_decorator
 
 @app.route("/")
+@home_decorator()
 def hello_world() -> str:
     """
     Returns the rendered skeleton template
