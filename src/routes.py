@@ -78,7 +78,6 @@ def surveys(survey_id):
     '''The answer page for surveys.'''
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    print(survey_choices)
     desc = survey_service.get_survey_description(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
@@ -124,7 +123,7 @@ def surveys(survey_id):
             return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc,
-                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices)
+                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason = reason)
         
         
 
