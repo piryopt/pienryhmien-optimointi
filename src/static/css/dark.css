@@ -1,4 +1,4 @@
-h1, h2, h3, h4, h5, label {
+h1, h2, h3, h4, h5, label, p {
     color: rgb(255, 255, 255);
     opacity: 0.8;
 }
@@ -30,7 +30,7 @@ b, small {
     margin: 3px 0;
 }
 
-#sortable1, #sortable2 {
+#sortable-bad, #sortable-good, #sortable-neutral {
     min-height: 20px;
     min-width: 100%;
     list-style-type: none;
@@ -41,7 +41,7 @@ b, small {
     color: #fff;
 }
 
-#sortable1 li, #sortable2 li {
+#sortable-bad li, #sortable-good li, #sortable-neutral li {
     border-radius: 5px;
     text-align: left;
     margin: 0 5px 5px 5px;
@@ -113,7 +113,13 @@ body {background-color: rgb(24, 26, 27);}
 .dropdown-menu {
     min-width: 100%;
     text-align: left;
-  }
+    background-color: rgb(40, 45, 49);
+}
+
+.dropdown-item:hover {
+    background-color: rgb(28, 31, 33);
+    opacity: 0.5;
+}
 
 .page-title {
     margin-top: 20px;

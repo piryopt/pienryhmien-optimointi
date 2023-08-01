@@ -9,41 +9,79 @@
 </br>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}</h5>
-    <h5>Vastausaika päättyy {{ enddate }}</h5>
-    <h5>{{ desc }}</h5>
+    <label>Vastausaika päättyy {{ enddate }}</label></br></br>
+    <label>{{ desc }}</label>
     <div class="col">
-        <script>
-            $( function() {
-                $( "#sortable1" ).sortable({
-                    cursor: 'grabbing',
-                    revert: 50,
-                    helper: 'clone',
-                    axis: 'y',
-                    containment: 'parent',
-                    tolerance: 'pointer'
-                });
+        <div class="row">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+                <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <script>
+                    $( function() {
+                        $( "#sortable-neutral, #sortable-good, #sortable-bad" ).sortable({
+                            cursor: 'grabbing',
+                            revert: 50,
+                            helper: 'clone',
+                            containment: '.col',
+                            tolerance: 'pointer',
+                            connectWith: ".list-group"
+                        }).disableSelection();
 
-                $("#sortable1 li").on("click", function() {
-                    showMoreInfo(this.id);
-                });
-            });
-        </script>
+                        $("#sortable-neutral li, #sortable-bad li, #sortable-good li").on("click", function() {
+                            showMoreInfo(this.id);
+                        });
+                    });
+                </script>
+                <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
+                    {% for group in good_survey_choices %}
+                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ group[2] }}</h5>
+                        </div>
+                        <small class="text-muted">Ryhmän maksimikoko: {{ group[3] }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
+                    {% for group in bad_survey_choices %}
+                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ group[2] }}</h5>
+                        </div>
+                        <small class="text-muted">Ryhmän maksimikoko: {{ group[3] }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
 
-        <ul id="sortable1" class="list-group">
-            {% for group in choices %}
-            <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">{{ group[2] }}</h5>
+                <div class="form-group">
+                    <label for="reasons">Perustelut</label>
+                    <textarea class="form-control" id="reasons" name="reasons" rows="3">{{ reason }}</textarea>
                 </div>
-                <small class="text-muted">{{ spaces }}</small>
-            </li>
-            {% endfor %}
-        </ul>
 
+            </div>
+            <div class="col-sm">
+                <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray; padding-right: 10px;">
+                    {% for group in choices %}
+                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ group[2] }}</h5>
+                        </div>
+                        <small class="text-muted">Ryhmän maksimikoko: {{ group[3] }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                
+            </div>
+        </div>
         <div id="submitExists" style="display: none;">
             <input type="submit" value="Päivitä valinnat" onclick="submit(0)">
         </div>
-        <div id="submitDoesntExist">
+        <div id="submitDoesntExist" style="display: none">
             <input type="submit" value="Lähetä valinnat" onclick="submit(1)">
         </div>
         <input type="hidden" id="survey_id" value="{{ survey_id }}">
@@ -89,8 +127,18 @@
             $("#deleteContainer").show();
             $("#submitExists").show();
             $("#submitDoesntExist").hide();
+        } else {
+            $("#submitDoesntExist").show();
         }
 
+    });
+    $( document ).ready(function() {
+        $("#searchChoices").on("keyup", function() {
+            var keyword = $( this ).val().toLowerCase();
+            $("#sortable-neutral li").filter(function() {
+                $( this ).toggle($(this.querySelector("h5")).text().toLowerCase().indexOf(keyword) > -1)
+            });
+        });
     });
 </script>
 {% endblock %}

@@ -79,5 +79,8 @@ class UserService:
 
     def find_by_email(self, email):
         return self._user_repository.find_by_email(email)
+    
+    def make_user_teacher(self, email): # don't remove, needed later
+        self._user_repository.make_user_teacher(email)
 
 user_service = UserService()

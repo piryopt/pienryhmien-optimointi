@@ -18,6 +18,7 @@ from src.tools.survey_result_helper import convert_choices_groups, convert_users
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 
+
 @app.route("/")
 def hello_world() -> str:
     """
@@ -78,6 +79,7 @@ def surveys(survey_id):
     '''The answer page for surveys.'''
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    print(survey_choices)
     desc = survey_service.get_survey_description(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
@@ -97,23 +99,42 @@ def surveys(survey_id):
     if user_survey_ranking:
         existing = "1"
         user_rankings = user_survey_ranking[3]
-        list_of_survey_choice_id = convert_to_list(user_rankings)
+        rejections = user_survey_ranking[4]
+        reason = user_survey_ranking[5]
 
-        survey_choices = []
-        for survey_choice_id in list_of_survey_choice_id:
+        list_of_good_survey_choice_id = convert_to_list(user_rankings)
+
+        good_survey_choices = []
+        for survey_choice_id in list_of_good_survey_choice_id:
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
             if not survey_choice:
                 continue
-            survey_choices.append(survey_choice)
+            good_survey_choices.append(survey_choice)
+            survey_choices.remove(survey_choice)
+
+        bad_survey_choices = []
+        if len(rejections) > 0:
+            list_of_bad_survey_choice_id = convert_to_list(rejections)
+            for survey_choice_id in list_of_bad_survey_choice_id:
+                survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+                if not survey_choice:
+                    continue
+                bad_survey_choices.append(survey_choice)
+                survey_choices.remove(survey_choice)
+        if closed:
+            return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
+        return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
+                            survey_name = survey_name, existing = existing, desc = desc,
+                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason)
+        
+        
 
     # If the survey is closed, return a different page, where the student can view their answers.
     if closed:
-        if user_survey_ranking:
-            return render_template("closedsurvey.html", choices = survey_choices, survey_name = survey_name)
         return render_template("closedsurvey.html", survey_name = survey_name)
 
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, spaces = "Ryhmän maksimikoko: 10", desc = desc, enddate = enddate)
+                            survey_name = survey_name, existing = existing, desc = desc, enddate = enddate)
 
 @app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -128,9 +149,42 @@ def delete_submission(survey_id):
 def get_choices(survey_id):
     '''Save the ranking to the database.'''
     raw_data = request.get_json()
-    ranking = convert_to_string(raw_data)
+
+    # list of ids of choices not put in either of the boxes
+    neutral_ids = raw_data["neutralIDs"]
+
+    # list of ids of choices put in red box
+    bad_ids = raw_data["badIDs"]
+
+    #list of ids of choices put in green box
+    good_ids = raw_data["goodIDs"]
+
+    #list of all ids
+    all_ids = raw_data["allIDs"]
+
+    #value of textarea reasons
+    reason = raw_data["reasons"]
+
+    # Change this to len bad_ids + good_ids >= min_choices
+    # Also check that there aren't to many rejections. 
+    if len(neutral_ids) > 0 or len(good_ids) == 0:
+        response = {"status":"0","msg":"Et ole tehnyt riittävän monta valintaa! Tallennus epäonnistui."}
+        return jsonify(response)
+    
+    if len(bad_ids) > 2:
+        response = {"status":"0","msg":"Liian monta hylkäystä! Tallennus epäonnistui."}
+        return jsonify(response)
+
+    ranking = convert_to_string(good_ids)
+    rejections = convert_to_string(bad_ids)
+    if len(bad_ids) == 0 and len(reason) > 0:
+        response = {"status":"0","msg":"Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."}
+        return jsonify(response)
+    if len(reason) > 300:
+        response = {"status":"0","msg":"Perustelu on liian pitkän. Merkkimäärä on <= 300. Tallennus epäonnistui."}
+        return jsonify(response)
     user_id = session.get("user_id",0)
-    submission = user_rankings_service.add_user_ranking(survey_id, ranking, user_id)
+    submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking, rejections, reason)
     response = {"status":"1","msg":"Tallennus onnistui."}
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
@@ -231,7 +285,7 @@ def survey_answers(survey_id):
     survey_answers = SurveyTools.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
-        choices_data.append([user_service.get_email(s[0]), s[1]])
+        choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
     survey_answers_amount = len(survey_answers)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)

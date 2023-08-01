@@ -68,7 +68,7 @@ class TestSurveyChoicesService(unittest.TestCase):
         self.assertEqual(choice1_infos[1][1], "00790")
 
         self.assertEqual(choice2_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice2_infos[0][1], "äisimhi tunappat nelo")
+        self.assertEqual(choice2_infos[0][1], "äisimhi tunappat nelo") #bruh
         self.assertEqual(choice2_infos[1][0], "Postinumero")
         self.assertEqual(choice2_infos[1][1], "01820")
 

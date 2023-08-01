@@ -3,13 +3,24 @@ window.onload = function() {
 };
 
 function submit(resubmit) {
-    var choiceIDs = $("#sortable1").sortable("toArray");
+    var neutralIDs = $("#sortable-neutral").sortable("toArray");
+    var goodIDs = $("#sortable-good").sortable("toArray");
+    var badIDs = $("#sortable-bad").sortable("toArray");
     var surveyID = document.getElementById("survey_id").value;
+    var reasons = document.getElementById("reasons").value;
+
+    var IDs = {
+        "neutralIDs": neutralIDs,
+        "goodIDs": goodIDs,
+        "badIDs": badIDs,
+        "allIDs": neutralIDs.concat(goodIDs,badIDs),
+        "reasons": reasons
+    }
 
     $.ajax({
     type: "POST",
     url: "/get_choices/" + surveyID,
-    data: JSON.stringify(choiceIDs),
+    data: JSON.stringify(IDs),
     contentType: "application/json",
     dataType: "json",
     success: function(result) {
@@ -19,16 +30,16 @@ function submit(resubmit) {
         }
         if (result.status === "1") {
             alertMsg.color = "#6F0";
+            if (resubmit === 1) {
+                $("#submitExists").toggle();
+                $("#submitDoesntExist").toggle();
+                $("#deleteContainer").toggle();
+            }
         }
         if (result.status === "0") {
             alertMsg.color = "red";
         }
-        showAlert(alertMsg);
-        if (resubmit === 1) {
-            $("#submitExists").toggle();
-            $("#submitDoesntExist").toggle();
-            $("#deleteContainer").toggle();
-        }        
+        showAlert(alertMsg);   
     }
     });
 }
@@ -112,4 +123,8 @@ function showMoreInfo(choiceID) {
 function exitMoreInfo() {
     document.getElementById("info-container").innerHTML = "";
     $('input[id="currently_selected"]').val("");
+}
+
+function filterResults(keyword) {
+    
 }
