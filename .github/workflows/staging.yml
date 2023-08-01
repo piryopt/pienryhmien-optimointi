@@ -3,7 +3,7 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - dont_put_me_there_lmao
+      - main
 
 jobs:
 
