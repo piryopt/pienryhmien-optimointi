@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
   pull_request:
-    branches: ["ad_login"]
+    branches: ["main"]
 
 jobs:
   build:
