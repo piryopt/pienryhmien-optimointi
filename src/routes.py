@@ -10,7 +10,7 @@ from src.services.survey_service import survey_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.services.final_group_service import final_group_service
-from src.tools import data_gen, excelreader
+from src.tools import excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 from src.tools.db_data_gen import gen_data
@@ -262,7 +262,7 @@ def new_survey_form(survey=None):
     query_params = request.args.to_dict()
     if("fromTemplate" in query_params):
         survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
-        survey["variable_columns"] = [column for column in survey["choices"][0] if (column is not "name" and column is not "seats")]
+        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/create_survey", methods = ["POST"])
