@@ -157,9 +157,21 @@ class SurveyService:
         return parser_dict_to_survey(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
 
     def get_survey_description(self, survey_id):
+        """
+        Gets the description of the survey
+
+        args:
+            survey_id: The id of the survey
+        """
         return self._survey_repository.get_survey_description(survey_id)
     
     def get_survey_enddate(self, survey_id):
+        """
+        Gets the enddate of the survey
+
+        args:
+            survey_id: The id of the survey
+        """
         return self._survey_repository.get_survey_time_end(survey_id)
     
     def get_survey_as_dict(self, survey_id):
