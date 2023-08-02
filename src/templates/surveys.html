@@ -17,33 +17,36 @@
             <th scope="col"><p>Kyselyn tila</p> </th>
             <!--<th><p>Vastauksia yhteensä</p></th>--> 
             <th scope="col"><p>Ryhmät luotu</p></th>
+            <th scope="col"><p>Toiminnot</p></th>
             <th scope="col"><p>Vastausaika päättyy</p></th>
-            <th scope="col" colspan="4"></th>
         </tr>
       </thead>
       <tbody>
-        <!--The data is expected to be as a list ("results") containing lists-->
-        {% for row in active_surveys %}
         <tr>
+          <!--The data is expected to be as a list ("results") containing lists-->
+          {% for row in active_surveys %}
           <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
           <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
           <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
           <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
-          
+          <td>
+            <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a>
+          </td>
           <td>{{ row[4] }}</td>
-          <td class="action-btn-cell"><a href="/surveys/{{ row[0] }}/answers" class="btn btn-primary">Tulokset</a></td>
-          <td class="action-btn-cell"><a href="/surveys/{{ row[0] }}/edit" class="btn btn-warning disabled">Muokkaa</a></td>
-          <td class="action-btn-cell"><a href="/create_survey?fromTemplate={{ row[0] }}" class="btn btn-secondary">Kopioi</a></td>
-          <td class="action-btn-cell"><a href="/surveys/{{ row[0] }}/delete" class="btn btn-danger disabled">Poista</a></td>
+          
             <!--<button id="copy_survey">Kopioi kysely</button>--> 
             <!--<button id="close_survey">Sulje kysely</button></td>-->
 
         </tr>
         {% endfor %}
-        <tr class="spacer-row"><td colspan="8"></td></tr>  
-          <!--The data is expected to be as a list ("results") containing lists-->
-          {% for row in closed_surveys %}
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
           <tr>
+            <!--The data is expected to be as a list ("results") containing lists-->
+            {% for row in closed_surveys %}
             <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
             <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
             <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
