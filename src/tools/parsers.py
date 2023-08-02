@@ -89,6 +89,46 @@ def parser_dict_to_survey(survey_choices, survey_name, user_id, description, min
 
     return survey_id
 
+def parser_existing_survey_to_dict(survey_id):
+    '''
+    Parses existing survey, its choices and their infos into a dict
+    RETURNS dictionary of survey data
+    '''
+    survey_dict = {}
+
+    survey = survey_repository.get_survey(survey_id)
+
+    survey_dict["id"] = survey[0]
+    survey_dict["surveyname"] = survey[1]
+    survey_dict["teacher_id"] = survey[2]
+    survey_dict["min_choices"] = survey[3]
+    survey_dict["closed"] = survey[4]
+    survey_dict["results_saved"] = survey[5]
+    survey_dict["survey_description"] = survey[6]
+    survey_dict["time_begin"] = survey[7]
+    survey_dict["time_end"] = survey[8]
+
+    survey_choices = survey_choices_repository.find_survey_choices(survey_id)
+    survey_dict["choices"] = []
+
+    index = 0
+    for row in survey_choices:
+        survey_dict["choices"].append({})
+        survey_dict["choices"][index]["name"] = row[2]
+        survey_dict["choices"][index]["seats"] = row[3]
+
+        additional_infos = survey_choices_repository.get_choice_additional_infos(row[0])
+
+        for info in additional_infos:
+            survey_dict["choices"][index][info[0]] = info[1]
+
+        index += 1
+
+
+    print(survey_dict)
+
+    return survey_dict
+
 def date_to_sql_valid(date):
     '''
     RETURNS SQL datetime valid date str
