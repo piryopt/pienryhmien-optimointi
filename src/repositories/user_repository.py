@@ -26,16 +26,16 @@ class UserRepository:
         SQL code for adding a new user into the database
 
         args:
-            user: Contains all user data. Email, name, student number, and True/False if teacher/student
+            user: Contains all user data. Email, name, and True/False if teacher/student
         """
         existing_user = self.find_by_email(user.email)
         if existing_user:
             print(f"The user with the email {user.email} already exists!")
             return
         try:
-            sql = "INSERT INTO users (name, student_number, email, isteacher)" \
-                  "VALUES (:name, :student_number, :email, :isteacher)"
-            db.session.execute(text(sql), {"name":user.name,"student_number":user.student_number,
+            sql = "INSERT INTO users (name, email, isteacher)" \
+                  "VALUES (:name, :email, :isteacher)"
+            db.session.execute(text(sql), {"name":user.name,
                                             "email":user.email, "isteacher":user.isteacher})
             db.session.commit()
         except Exception as e: # pylint: disable=W0718
