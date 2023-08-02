@@ -15,7 +15,6 @@
         <tr>
             <th scope="col"><p>Nimi</p></th>
             <th scope="col"><p>Kyselyn tila</p> </th>
-            <!--<th><p>Vastauksia yhteensä</p></th>--> 
             <th scope="col"><p>Ryhmät luotu</p></th>
             <th scope="col"><p>Toiminnot</p></th>
             <th scope="col"><p>Vastausaika päättyy</p></th>
@@ -23,19 +22,16 @@
       </thead>
       <tbody>
         <tr>
-          <!--The data is expected to be as a list ("results") containing lists-->
           {% for row in active_surveys %}
           <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
-          <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
-          <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
+          <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>
           <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
           <td>
-            <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a>
+            <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a><br>
+            <a href="/create_survey?fromTemplate={{ row[0] }}">Kopioi kysely</a>
+
           </td>
           <td>{{ row[4] }}</td>
-          
-            <!--<button id="copy_survey">Kopioi kysely</button>--> 
-            <!--<button id="close_survey">Sulje kysely</button></td>-->
 
         </tr>
         {% endfor %}
@@ -45,19 +41,15 @@
           <td>---</td>
           <td>---</td>
           <tr>
-            <!--The data is expected to be as a list ("results") containing lists-->
             {% for row in closed_surveys %}
             <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
-            <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>            <!--survey status - functionality to be added later--> 
-            <!--<td>{{ row[3] }}</td>-->        <!--amount of answers - functionality to be added later--> 
+            <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>
             <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
             <td>
-              <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a>
+              <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a><br>
+              <a href="/create_survey?fromTemplate={{ row[0] }}">Kopioi kysely</a>
             </td>
             <td>{{ row[4] }}</td>
-  
-              <!--<button id="copy_survey">Kopioi kysely</button>--> 
-              <!--<button id="close_survey">Sulje kysely</button></td>-->
   
           </tr>
           {% endfor %}
