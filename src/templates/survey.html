@@ -65,17 +65,17 @@
                 <div class="row" style="padding-top: 10px">
                     <div class="col-sm">
                         <div id="submitExists" style="display: none;">
-                            <button type="submit" class="btn btn-primary" onclick="submit(0)">Päivitä valinnat</button>
+                            <button type="submit" class="btn btn-success" onclick="submit(0)">Päivitä valinnat</button>
                         </div>
                         <div id="submitDoesntExist" style="display: none">
-                            <button type="submit" class="btn btn-primary" onclick="submit(1)">Lähetä valinnat</button>
+                            <button type="submit" class="btn btn-success" onclick="submit(1)">Lähetä valinnat</button>
                         </div>
                     </div>
                     <input type="hidden" id="survey_id" value="{{ survey_id }}">
                     <input type="hidden" id="existing" value="{{ existing }}">
                     <div class="col-sm">
                         <div id="deleteContainer" style="display: none;">
-                            <button type="submit" id="deleteSubmission" class="btn btn-primary">Poista valinnat</button>
+                            <button type="submit" id="deleteSubmission" class="btn btn-danger">Poista valinnat</button>
                             <script>
                                 $("#deleteSubmission").click(function() {
                                     $("#submitExists").hide();
@@ -88,7 +88,7 @@
                     <div class="row" id="confirmContainer" style="display: none;">
                         <p>Oletko varma?</p>
                         <div class="col-sm">
-                            <button type="input" id="noDeletion" class="btn btn-primary">Peruuta</button>
+                            <button type="input" id="noDeletion" class="btn btn-success">Peruuta</button>
                             <script>
                                 $("#noDeletion").click(function() {
                                     $("#submitExists").show();
@@ -98,7 +98,7 @@
                             </script>
                         </div>
                         <div class="col-sm">
-                            <button type="submit" class="btn btn-primary" id="confirmDelete" onclick="deleteSubmission()">Poista</button>
+                            <button type="submit" class="btn btn-danger" id="confirmDelete" onclick="deleteSubmission()">Poista</button>
                         </div>
                     </div>
                 </div>
