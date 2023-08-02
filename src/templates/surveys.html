@@ -32,9 +32,9 @@
           
           <td>{{ row[4] }}</td>
           <td class="action-btn-cell"><a href="/surveys/{{ row[0] }}/answers" class="btn btn-primary">Tulokset</a></td>
-          <td class="action-btn-cell"><a href="/surveys/{{ row[0] }}/edit" class="btn btn-warning">Muokkaa</a></td>
-          <td class="action-btn-cell"><a href="/surveys/create_survey?fromTemplate={{ row[0] }}" class="btn btn-secondary">Kopioi</a></td>
-          <td class="action-btn-cell"><a href="/surveys/{{ row[0] }}/delete" class="btn btn-danger">Poista</a></td>
+          <td class="action-btn-cell"><a href="/surveys/{{ row[0] }}/edit" class="btn btn-warning disabled">Muokkaa</a></td>
+          <td class="action-btn-cell"><a href="/create_survey?fromTemplate={{ row[0] }}" class="btn btn-secondary">Kopioi</a></td>
+          <td class="action-btn-cell"><a href="/surveys/{{ row[0] }}/delete" class="btn btn-danger disabled">Poista</a></td>
             <!--<button id="copy_survey">Kopioi kysely</button>--> 
             <!--<button id="close_survey">Sulje kysely</button></td>-->
 
