@@ -8,6 +8,7 @@ from src.services.survey_choices_service import survey_choices_service as scs
 from src.repositories.user_repository import user_repository as ur
 from src.entities.user import User
 from src.tools.db_tools import clear_database
+import datetime
 import json
 
 class TestSurveyService(unittest.TestCase):
@@ -259,3 +260,37 @@ class TestSurveyService(unittest.TestCase):
 
         answered = ss.check_if_survey_results_saved(survey_id)
         self.assertEqual(answered, True)
+
+    def test_get_survey_as_dict(self):
+        '''
+        Tests that survey service parser dict correctly
+        '''
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+
+        survey_dict = ss.get_survey_as_dict(survey_id)
+
+        # table surveys data
+        self.assertEqual(survey_dict["id"], survey_id)
+        self.assertEqual(survey_dict["surveyname"], json_object["surveyGroupname"])
+        self.assertEqual(survey_dict["teacher_id"], self.user_id)
+        self.assertEqual(survey_dict["min_choices"], 2)
+        self.assertEqual(survey_dict["closed"], False)
+        self.assertEqual(survey_dict["results_saved"], False)
+        self.assertEqual(survey_dict["survey_description"], json_object["surveyInformation"])
+        self.assertEqual(survey_dict["time_begin"], datetime.datetime(2023, 1, 1, 1, 1))
+        self.assertEqual(survey_dict["time_end"], datetime.datetime(2024, 1, 1, 2, 2))
+
+        # table survey choices data
+        self.assertEqual(survey_dict["choices"][0]["name"], "Ensimmäinen choice")
+        self.assertEqual(survey_dict["choices"][0]["seats"], 8)
+        self.assertEqual(survey_dict["choices"][0]["Eka lisätieto"], "vaikeuksia csv testaamisessa")
+        self.assertEqual(survey_dict["choices"][0]["Postinumero"], "00790")
+
+        self.assertEqual(survey_dict["choices"][1]["name"], "Toinen choice")
+        self.assertEqual(survey_dict["choices"][1]["seats"], 6)
+        self.assertEqual(survey_dict["choices"][1]["Eka lisätieto"], "äisimhi tunappat nelo")
+        self.assertEqual(survey_dict["choices"][1]["Postinumero"], "01820")

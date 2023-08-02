@@ -1,7 +1,5 @@
-from src import db
 from src.repositories.survey_repository import survey_repository
 from src.repositories.survey_choices_repository import survey_choices_repository
-from sqlalchemy import text
 
 def parser_elomake_csv_to_dict(file):
     '''
@@ -39,7 +37,7 @@ def parser_elomake_csv_to_dict(file):
         name = ''.join(c for c in temp[2] if c.isprintable())
         spaces = ''.join(c for c in temp[3] if c.isprintable()).strip('"')
 
-        # update dict/JSON 
+        # update dict/JSON
         ret_dict["choices"].append({})
         ret_dict["choices"][index - 1]["name"] = name
         ret_dict["choices"][index - 1]["spaces"] = spaces
@@ -124,8 +122,6 @@ def parser_existing_survey_to_dict(survey_id):
 
         index += 1
 
-
-    print(survey_dict)
 
     return survey_dict
 
