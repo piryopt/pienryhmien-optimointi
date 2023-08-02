@@ -32,6 +32,9 @@ class TestFinalGroupsRepository(unittest.TestCase):
         self.user_id2 = ur.find_by_email(user2.email)[0]
 
     def test_save_result(self):
+        """
+        Test that the results are saved into the database
+        """
         survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio", "2023-01-01 01:01.00", "2024-01-01 01:01.00")
         choice_id1 = scr.create_new_survey_choice(survey_id, "choice 1", 10)
         choice_id2 = scr.create_new_survey_choice(survey_id, "choice 2", 10)

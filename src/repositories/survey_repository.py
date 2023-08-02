@@ -3,6 +3,12 @@ from src import db
 
 class SurveyRepository:
     def get_survey(self, survey_id):
+        """
+        SQL code for getting all data from a survey
+
+        args:
+            survey_id: The id of the survey
+        """
         try:
             sql = "SELECT * FROM surveys WHERE id=:survey_id"
             result = db.session.execute(text(sql), {"survey_id":survey_id})
@@ -15,6 +21,13 @@ class SurveyRepository:
             return False
 
     def survey_name_exists(self, surveyname, teacher_id):
+        """
+        SQL code for getting the id from a survey that has a certain name, is open and created by a certain user.
+
+        args:
+            surveyname: The name of the survey
+            teacher_id: The id of the user
+        """
         try:
             sql = "SELECT id FROM surveys WHERE (surveyname=:surveyname AND teacher_id=:teacher_id AND closed=False)"
             result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":teacher_id})
@@ -27,6 +40,12 @@ class SurveyRepository:
             return False
 
     def count_created_surveys(self, user_id):
+        """
+        SQL code for getting the length of created surveys
+
+        args:
+            user_id: The id of the user
+        """
         # Do we want to diplay all surveys created or only the active ones?
         try:
             sql = "SELECT * FROM surveys WHERE teacher_id=:user_id"
@@ -40,6 +59,13 @@ class SurveyRepository:
             return False
 
     def close_survey(self, survey_id, teacher_id):
+        """
+        SQL code for closing a survey
+
+        args:
+            survey_id: The id of the survey
+            teacher_id: The id of the user
+        """
         try:
             sql = "UPDATE surveys SET closed = True WHERE (id=:survey_id and teacher_id=:teacher_id)"
             db.session.execute(text(sql), {"survey_id":survey_id, "teacher_id":teacher_id})
@@ -50,6 +76,13 @@ class SurveyRepository:
             return False
 
     def open_survey(self, survey_id, teacher_id):
+        """
+        SQL code for opening a survey
+
+        args:
+            survey_id: The id of the survey
+            teacher_id: The id of the user
+        """
         try:
             sql = "UPDATE surveys SET closed = False WHERE (id=:survey_id and teacher_id=:teacher_id)"
             db.session.execute(text(sql), {"survey_id":survey_id, "teacher_id":teacher_id})
@@ -60,6 +93,12 @@ class SurveyRepository:
             return False
 
     def get_active_surveys(self, teacher_id):
+        """
+        SQL code getting the list of all active surveys created by a user.
+
+        args:
+            teacher_id: The id of the user
+        """
         try:
             sql = "SELECT id, surveyname FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
@@ -72,6 +111,12 @@ class SurveyRepository:
             return False
 
     def get_closed_surveys(self, teacher_id):
+        """
+        SQL code getting the list of all closed surveys created by a user.
+
+        args:
+            teacher_id: The id of the user
+        """
         try:
             sql = "SELECT id, surveyname, closed, results_saved, time_end FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
@@ -82,6 +127,12 @@ class SurveyRepository:
             return False
 
     def update_survey_answered(self, survey_id):
+        """
+        SQL code for updating result_saved of the surveys table from False to True
+
+        args:
+            survey_id: The id of the survey
+        """
         try:
             sql = "UPDATE surveys SET results_saved = True WHERE id=:survey_id"
             db.session.execute(text(sql), {"survey_id":survey_id})
@@ -107,6 +158,12 @@ class SurveyRepository:
             return False
 
     def get_survey_description(self, survey_id):
+        """
+        SQL code for getting the desctiption of a survey
+
+        args:
+            survey_id: The id of the survey
+        """
         try:
             sql = "SELECT survey_description FROM surveys WHERE id=:id"
             result = db.session.execute(text(sql), {"id":survey_id})

@@ -3,6 +3,13 @@ from src import db
 
 class UserRepository:
     def find_by_email(self, email):
+        """
+        SQL code for getting all data from a user_survey_ranking entry
+
+        args:
+            user_id: The id of the user
+            survey_id: The id of the survey
+        """
         try:
             sql = "SELECT * FROM users WHERE email=:email"
             result = db.session.execute(text(sql), {"email":email})
@@ -15,6 +22,12 @@ class UserRepository:
             return False
 
     def register(self, user):
+        """
+        SQL code for adding a new user into the database
+
+        args:
+            user: Contains all user data. Email, name, student number, and True/False if teacher/student
+        """
         existing_user = self.find_by_email(user.email)
         if existing_user:
             print(f"The user with the email {user.email} already exists!")
@@ -31,6 +44,10 @@ class UserRepository:
         return user
 
     def get_all_users(self):
+        """
+        SQL code for getting a list of all users. Currently only used for data gen for testing purposes.
+        This should probably be deleted before production
+        """
         try:
             sql = "SELECT * FROM users"
             result = db.session.execute(text(sql))
@@ -43,6 +60,12 @@ class UserRepository:
             return False
 
     def get_user_data(self, user_id):
+        """
+        SQL code for getting all data from a user
+
+        args:
+            user_id: The id of a user
+        """
         try:
             sql = "SELECT * FROM users WHERE id=:id"
             result = db.session.execute(text(sql), {"id":user_id})
@@ -55,6 +78,12 @@ class UserRepository:
             return False
         
     def make_user_teacher(self, email): # don't remove, needed later
+        """
+        SQL code for giving a user teacher privileges
+
+        args:
+            email: The email of the user
+        """
         sql = "UPDATE users SET isteacher=true WHERE email=:email"
         db.session.execute(text(sql), {"email":email})
         db.session.commit()

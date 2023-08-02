@@ -35,6 +35,9 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.app_context.pop()
 
     def test_find_survey_choices(self):
+        """
+        Test that the list of survey choices for a survey is correct
+        """
         survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         scr.create_new_survey_choice(survey_id, "choice 1", 10)
         scr.create_new_survey_choice(survey_id, "choice 2", 10)
@@ -42,16 +45,25 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.assertEqual(2, len(choice_list))
 
     def test_get_choice(self):
+        """
+        Test that getting a survey choice works
+        """
         survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         choice_id = scr.create_new_survey_choice(survey_id, "choice 1", 10)
         choice = scr.get_survey_choice(choice_id)
         self.assertEqual(choice.name, "choice 1")
 
     def test_get_invalid_choice(self):
+        """
+        Test that getting an invalid survey choice behaves the correct way
+        """
         choice = scr.get_survey_choice(-1)
         self.assertEqual(choice, False)
 
     def test_get_choice_info(self):
+        """
+        Test that getting the info of a survey choice works
+        """
         survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         choice_id = scr.create_new_survey_choice(survey_id, "choice 1", 10)
         scr.create_new_choice_info(choice_id, "Moti", "Vaatio")
