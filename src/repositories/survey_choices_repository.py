@@ -3,6 +3,12 @@ from src import db
 
 class SurveyChoicesRepository:
     def find_survey_choices(self, survey_id):
+        """
+        SQL code for getting all survey choices for a survey
+
+        args:
+            survey_id: The id of the survey
+        """
         try:
             sql = "SELECT * FROM survey_choices WHERE survey_id=:survey_id"
             result = db.session.execute(text(sql), {"survey_id":survey_id})
@@ -13,6 +19,12 @@ class SurveyChoicesRepository:
             return False
 
     def get_survey_choice(self, choice_id):
+        """
+        SQL code for getting all data from a survey choice
+
+        args:
+            choice_id: The id of the survey choice
+        """
         try:
             sql = "SELECT * FROM survey_choices WHERE id=:id"
             result = db.session.execute(text(sql), {"id":choice_id})
