@@ -53,5 +53,10 @@ class UserRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def make_user_teacher(self, email): # don't remove, needed later
+        sql = "UPDATE users SET isteacher=true WHERE email=:email"
+        db.session.execute(text(sql), {"email":email})
+        db.session.commit()
 
 user_repository = UserRepository()

@@ -38,6 +38,7 @@ CREATE TABLE user_survey_rankings (
 	survey_id INTEGER REFERENCES surveys,
 	ranking TEXT, -- e.g 1,2,5,3,4, the id's of survey_choices
 	rejections TEXT, -- same format as ranking
+	reason TEXT,
 	deleted BOOLEAN
 );
 
