@@ -7,11 +7,11 @@ ${SERVER}  localhost:5000
 ${BROWSER}  headlessfirefox
 ${DELAY}  0.0 seconds
 ${HOME URL}  http://${SERVER}
-${REGISTER URL}  http://${SERVER}/register
-${LOGIN URL}  http://${SERVER}/login
-${CREATE SURVEY URL}  http://${SERVER}/create_survey
-${PREVIOUS SURVEYS URL}  http://${SERVER}/previous_surveys
-${LOGOUT URL}  http://${SERVER}/logout
+${REGISTER URL}  http://${SERVER}/auth/register
+${LOGIN URL}  http://${SERVER}/auth/login
+${CREATE SURVEY URL}  http://${SERVER}/surveys/create
+${PREVIOUS SURVEYS URL}  http://${SERVER}/surveys
+${LOGOUT URL}  http://${SERVER}/auth/logout
 ${EXCEL URL}  http://${SERVER}/excel
 ${TOY DATA FORM}  http://${SERVER}/input
 ${TOY DATA RESULTS URL}  http://${SERVER}/results

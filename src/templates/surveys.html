@@ -28,7 +28,7 @@
           <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
           <td>
             <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a><br>
-            <a href="/create_survey?fromTemplate={{ row[0] }}">Kopioi kysely</a>
+            <a href="/surveys/create?fromTemplate={{ row[0] }}">Kopioi kysely</a>
 
           </td>
           <td>{{ row[4] }}</td>
@@ -47,7 +47,7 @@
             <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
             <td>
               <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a><br>
-              <a href="/create_survey?fromTemplate={{ row[0] }}">Kopioi kysely</a>
+              <a href="/surveys/create?fromTemplate={{ row[0] }}">Kopioi kysely</a>
             </td>
             <td>{{ row[4] }}</td>
   

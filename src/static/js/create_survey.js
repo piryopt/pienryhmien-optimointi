@@ -150,7 +150,7 @@ function createNewSurvey() {
 
     $.ajax({
     type: "POST",
-    url: "/create_survey",
+    url: "/surveys/create",
     data: JSON.stringify(requestData),
     contentType: "application/json",
     dataType: "json",
@@ -415,7 +415,7 @@ function handleFileUpload() {
 
         $.ajax({
             type: "POST",
-            url: "/create_survey/import",
+            url: "/surveys/create/import",
             data: JSON.stringify(requestData),
             contentType: "application/json",
             dataType: "json",
