@@ -145,6 +145,16 @@ def delete_submission(survey_id):
         response = {"status":"1", "msg":"Valinnat poistettu"}
     return jsonify(response)
 
+@app.route("/surveys/<int:survey_id>/edit")
+def edit_survey(survey_id):
+    #TODO
+    ...
+
+@app.route("/surveys/<int:survey_id>/edit")
+def delete_survey(survey_id):
+    #TODO
+    ...
+
 @app.route("/get_choices/<int:survey_id>", methods=["POST"])
 def get_choices(survey_id):
     '''Save the ranking to the database.'''
@@ -232,6 +242,10 @@ def logout():
 
 @app.route("/create_survey", methods = ["GET"])
 def new_survey_form(survey=None):
+    query_params = request.args.to_dict()
+    if("fromTemplate" in query_params):
+        survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
+        survey["variable_columns"] = [column for column in survey["choices"][0] if (column is not "name" and column is not "seats")]
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/create_survey", methods = ["POST"])

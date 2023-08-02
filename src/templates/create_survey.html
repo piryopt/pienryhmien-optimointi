@@ -60,7 +60,17 @@
       <h2>Vastausaika</h2>
       <p>Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata.</p>
       <label>Vastausaika alkaa:</label><br />
-      <input data-role="date" type="text" id="start-date" class="datetime-input-field" name="startdate" validation-regex="\d\d\.\d\d\.\d\d\d\d" validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy">
+      <input
+        data-role="date"
+        type="text" id="start-date"
+        class="datetime-input-field"
+        name="startdate"
+        validation-regex="\d\d\.\d\d\.\d\d\d\d"
+        validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
+        {% if survey.startdate %}
+          value="{{survey.startdate}}"
+        {% endif %}
+        >
       <label for="starttime" class="time-label">Kello:</label><input type="time" name="starttime" id="starttime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm"/>
       <br/>
       <ul class="validation-warnings-list hidden">
@@ -91,8 +101,8 @@
           validation-regex="\d+"
           validation-text="Kentän tulee olla kokonaisluku"
           onchange="fieldIsValid(this)"
-          {% if survey.minchoices %}
-            value="{{survey.minchoices}}"
+          {% if survey.min_choices %}
+            value="{{survey.min_choices}}"
           {% endif %}
         />
         <ul class="validation-warnings-list hidden">
@@ -110,16 +120,27 @@
           <tr id="column-delete-btns">
             <td></td>
             <td></td>
+            {% if survey is not none %}
+              {% if survey.choices|length > 0 %}
+                {% for variable_column in survey.variable_columns %}
+                <td class=""><div class="delete-col-btn"></div></td>
+                {% endfor %}
+              {% endif %}  
+            {% endif %}
           </tr>
           <tr id="choice-table-headers">
             <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
             <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
           {# additional columns if template loaded with survey parameter present #}
+          
           {% if survey is not none %}
-            {% for info in survey.choices[0].info_columns %}
-              <th>{{info.info_key}}</th>
-            {% endfor %}
+            {% if survey.choices|length > 0 %}
+              {% for colname in survey.variable_columns %}
+                <th class="variable-header">{{colname}}</th>
+              {% endfor %}
+            {% endif %}
           {% endif %}
+
             <th class="variable-header" id="add-column-header">+ Lisää tietokenttä</th>
           </tr>
         </thead>
@@ -130,20 +151,15 @@
             {% for choice in survey.choices %}
               <tr>
                 <td>{{ choice.name }}</td>
-                <td>{{ choice.max_spaces }}</td>
-              {% for info in choice.info_columns %}
-                <td>{{info.info_value}}</td>
-              {% endfor %}
+                <td>{{ choice.seats }}</td>
+                {% for colname in survey.variable_columns %}
+                  <td>{{choice[colname]}}</td>
+                {% endfor %}
+                <td class="action-cell" tabindex="0"><div class="delete-row-btn"></div></td>
               </tr>
             {% endfor %}
 
           {# If survey parameter is not set, create empty row with columns for constant values #}
-          {% else %}
-            <tr>
-              <td class="empty" tabindex="0">tyhjä</td>
-              <td class="empty" tabindex="0">tyhjä</td>
-              <td class="action-cell" tabindex="0"><span>ASD</span></td>
-            </tr>
           {% endif %}
           {% else %}
             <tr>
