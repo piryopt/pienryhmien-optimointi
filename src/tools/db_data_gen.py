@@ -8,6 +8,16 @@ from src.repositories.user_rankings_repository import user_rankings_repository a
 
 class DbDataGen:
     def __init__(self):
+        """
+        Initalizes data gen for the database. This must be deleted before launching the app into production.
+        Only for testing purposes.
+
+        variables:
+            self.firstnames: A list of firstnames for creating authentic fake students
+            self.lastnames: A list of lastnames for creating authentic fake students
+            self.numbers: A list of numbers for generating authentic fake studentnumbers
+            self.users: Starts out as an empty array. The generated users are added to it before adding them into the database
+        """
         self.firstnames = ["James", "Robert", "John", "Michael", "David", "William", "Richard", "Joseph",
                            "Thomas", "Christopher", "Charles", "Daniel", "Matthew", "Anthony", "Mark",
                              "Donald", "Steven", "Andrew", "Paul", "Joshua", "Mary", "Patricia", "Jennifer",
@@ -24,6 +34,12 @@ class DbDataGen:
         self.users = []
 
     def generate_users(self, n):
+        """
+        Generates fake users berore they are added to the database
+
+        args:
+            n: The number of students that will be generated
+        """
         for i in range(n):
             firstname = choice(self.firstnames)
             lastname = choice(self.lastnames)
@@ -36,10 +52,19 @@ class DbDataGen:
             self.users.append(new_user)
 
     def add_generated_users_db(self):
+        """
+        Adds the generated users to the database
+        """
         for user in self.users:
             ur.register(user)
 
     def generate_rankings(self, survey_id):
+        """
+        Generates random rankings for all users for the specified survey
+
+        args:
+            survey_id: The id of the survey for which the rankings are created
+        """
         survey_choices = scr.find_survey_choices(survey_id)
         choice_ids = []
         for choice in survey_choices:
@@ -53,6 +78,12 @@ class DbDataGen:
             urr.add_user_ranking(user[0], survey_id, ranking, rejections, "")
 
     def generate_survey(self, user_id):
+        """
+        Generates a survey
+
+        args:
+            user_id: The id of the user who creates the survey
+        """
         name = "PÄIVÄKOTIKYSELY"
         exists = sr.survey_name_exists(name, user_id)
         if exists:
