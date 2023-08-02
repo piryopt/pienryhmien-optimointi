@@ -35,6 +35,9 @@ class TestUserRankingsRepository(unittest.TestCase):
         self.app_context.pop()
 
     def test_get_user_ranking(self):
+        """
+        Test that getting a user ranking from the database works
+        """
         survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id, survey_id, ranking, "", "")
@@ -42,10 +45,16 @@ class TestUserRankingsRepository(unittest.TestCase):
         self.assertEqual(db_ranking, ranking)
 
     def test_get_invalid_user_ranking(self):
+        """
+        Test that getting an invalid user ranking from the database works correctly
+        """
         exists = urr.get_user_ranking(self.user_id, -1)
         self.assertEqual(exists, False)
 
     def test_delete_user_ranking(self):
+        """
+        Test that deleting a user ranking works
+        """
         survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id, survey_id, ranking, "", "")
@@ -55,6 +64,9 @@ class TestUserRankingsRepository(unittest.TestCase):
         self.assertEqual(deleted, False)
 
     def test_user_ranking_rejections(self):
+        """
+        Test that rejections are correctly placed into the database, when a ranking contains them
+        """
         survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         ranking = "2,3,5,4,1,6"
         rejections = "9,8"

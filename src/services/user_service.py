@@ -83,4 +83,8 @@ class UserService:
     def make_user_teacher(self, email): # don't remove, needed later
         self._user_repository.make_user_teacher(email)
 
+    def check_if_teacher(self, user_id):
+        user = self._user_repository.get_user_data(user_id)
+        return user.isteacher
+
 user_service = UserService()

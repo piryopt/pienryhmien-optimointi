@@ -109,36 +109,57 @@ class TestSurveyRepository(unittest.TestCase):
         self.assertEqual(False, opened)
 
     def test_survey_name_exists(self):
+        """
+        Test that a survey name exists when a survey is added to the database
+        """
         sr.create_new_survey("Test survey 9", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         exists = sr.survey_name_exists("Test survey 9", self.user_id)
         self.assertEqual(True, exists)
 
     def test_count_created_surveys_invalid_id(self):
+        """
+        Test that the function behaves correctly when trying to get the list of all created surveys for an invalid user
+        """
         exists = sr.count_created_surveys(-1)
         self.assertEqual(False, exists)
 
     def test_count_active_surveys_invalid_id(self):
+        """
+        Test that the function behaves correctly when trying to get the list of active created surveys for an invalid user
+        """
         exists = sr.get_active_surveys(-1)
         self.assertEqual(False, exists)
 
     def test_survey_description(self):
+        """
+        Test that getting the description of a survey works
+        """
         survey_id = sr.create_new_survey("Test survey 10", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         desc = sr.get_survey_description(survey_id)
         self.assertEqual("Motivaatio", desc)
 
     def test_survey_answered(self):
+        """
+        Test that updating a survey so that it has its results saved works
+        """
         survey_id = sr.create_new_survey("Test survey 11", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         sr.update_survey_answered(survey_id)
         answered = sr.get_survey(survey_id).results_saved
         self.assertEqual(True, answered)
 
     def test_survey_time_begin_correct(self):
+        """
+        Test that the begin time of a created survey is correct
+        """
         survey_id = sr.create_new_survey("Test survey 666", self.user_id, 10, "Ei motivaatiota", "2023-01-01 02:03", "2024-01-01 02:02")
         time = sr.get_survey_time_begin(survey_id)
 
         self.assertEqual(time, datetime.datetime(2023, 1, 1, 2, 3))
 
     def test_survey_time_end_correct(self):
+        """
+        Test that the ending time of a created survey is correct
+        """
         survey_id = sr.create_new_survey("Test survey 666", self.user_id, 10, "Ei motivaatiota", "2023-10-02 13:01", "2024-06-19 12:01")
         time = sr.get_survey_time_end(survey_id)
 
