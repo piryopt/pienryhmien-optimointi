@@ -23,8 +23,8 @@ class TestSurveyRepository(unittest.TestCase):
         clear_database()
 
         self.ur = ur
-        user1 = User("Not on tren Testerr", 101010101, "feelsbadman@tester.com", True)
-        user2 = User("Not on anabolic", 101010101, "anabolic@tester.com", True)
+        user1 = User("Not on tren Testerr", "feelsbadman@tester.com", True)
+        user2 = User("Not on anabolic", "anabolic@tester.com", True)
         self.ur.register(user1)
         self.ur.register(user2)
         self.user_id = ur.find_by_email(user1.email)[0]
