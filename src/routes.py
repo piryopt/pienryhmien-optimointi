@@ -56,6 +56,7 @@ def home_decorator():
 FRONTPAGE:
 """
 @app.route("/")
+@home_decorator()
 def frontpage() -> str:
     """
     Returns the rendered skeleton template
@@ -351,47 +352,6 @@ def open_survey(survey_id):
 """
 /AUTH/* ROUTES:
 """
-@app.route("/auth/register", methods = ["GET", "POST"])
-def register():
-    """
-    Mock user registeration. DELETE BEFORE PRODUCTION!!!
-    """
-    if request.method == "GET":
-        return render_template("register.html")
-    email = request.form.get("email")
-    name = request.form.get("name")
-    student_number = request.form.get("student_number")
-    isteacher = request.form.get("isteacher")
-    teacher_priv = False
-    if isteacher == "teacher":
-        teacher_priv = True
-
-    new_user = user_service.create_user(name, student_number, email, teacher_priv)
-    if new_user is None:
-        return render_template("register.html")
-    return render_template("login.html")
-
-@app.route("/auth/login", methods = ["GET", "POST"])
-def login():
-    """
-    Mock user login. DELETE BEFORE PRODUCTION!!!
-    """
-    if request.method == "GET":
-        return render_template("login.html")
-    email = request.form.get("email")
-
-    logged_in = user_service.check_credentials(email)
-    if not logged_in:
-        return render_template("login.html")
-    return frontpage()
-
-@app.route("/auth/logout")
-def logout():
-    """
-    Mock user logout. DELETE BEFORE PRODUCTION?
-    """
-    user_service.logout()
-    return render_template("index.html")
 
 """
 ADMINTOOLS -ROUTES:
