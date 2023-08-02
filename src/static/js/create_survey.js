@@ -379,6 +379,16 @@ function pageLoadActions() {
     // Add onClick event to "add new column" -header
     var addColHeader = document.getElementById("add-column-header")
     addColHeader.addEventListener("click", editCell)
+
+    //Check for existing custom headers
+    var variableHeaders = document.querySelectorAll('#choice-table-headers th:not(.constant-header, #add-column-header)')
+    variableHeaders.forEach( header => {
+        header.addEventListener("mouseover",showDeleteColumnIconOnHover)
+        header.addEventListener("mouseleave",hideColumnIcon)
+    } )
+    document.querySelectorAll('.delete-col-btn').forEach(btn => {
+        btn.addEventListener("click", removeColumn)
+    })
 }
 
 document.addEventListener("DOMContentLoaded",function() {

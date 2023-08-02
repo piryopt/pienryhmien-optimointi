@@ -1,7 +1,7 @@
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
-from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey
+from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 
 class SurveyService:
     def __init__(self, survey_repositroy=default_survey_repository):
@@ -161,5 +161,12 @@ class SurveyService:
     
     def get_survey_enddate(self, survey_id):
         return self._survey_repository.get_survey_time_end(survey_id)
+    
+    def get_survey_as_dict(self, survey_id):
+        '''
+        Gets survey, its choices and their additional infos as dictionary
+        RETURNS dictionary
+        '''
+        return parser_existing_survey_to_dict(survey_id)
 
 survey_service = SurveyService()
