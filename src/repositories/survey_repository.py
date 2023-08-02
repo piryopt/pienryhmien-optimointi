@@ -114,7 +114,7 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
-        
+
     def get_survey_time_begin(self, survey_id):
         '''
         RETURNS date and time as datetime.datetime(year, month, day, hour, minute)
@@ -138,5 +138,21 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+
+
+    def fetch_all_active_surveys(self, teacher_id):
+        '''Returns a list of all surveys in the database'''
+        sql = text("SELECT id, surveyname, closed, results_saved, time_end FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)")
+        result = db.session.execute(sql, {"teacher_id":teacher_id})
+        all_surveys = result.fetchall()
+        return all_surveys
+
+    def fetch_survey_responses(self, survey):
+        '''Returns a list of answers submitted to a certain survey'''
+        sql = text ("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " +
+                    "WHERE survey_id=:survey AND deleted IS FALSE")
+        result = db.session.execute(sql, {"survey":survey})
+        responses = result.fetchall()
+        return responses
 
 survey_repository = SurveyRepository()
