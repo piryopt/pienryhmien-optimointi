@@ -1,9 +1,10 @@
 from pathlib import Path
-from sqlalchemy import text
 from random import shuffle
 from functools import wraps
+from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect, url_for
 from src import app,db
+from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
 from src.services.survey_choices_service import survey_choices_service
@@ -12,7 +13,6 @@ from src.services.final_group_service import final_group_service
 from src.tools import data_gen, excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
-from src.services.survey_tools import SurveyTools
 from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
@@ -36,7 +36,7 @@ def hello_world() -> str:
     for s in surveys:
         survey_id = s[0]
         surveyname = s[1]
-        survey_answers = SurveyTools.fetch_survey_responses(survey_id)
+        survey_answers = survey_repository.fetch_survey_responses(survey_id)
         participants = len(survey_answers)
         # VAIHDA TÄMÄ OIKEESEEN PÄIVÄMÄÄRÄÄN KUN SAADAAN TOIMINNALLISUUS!!
         survey_ending_date = survey_service.get_survey_enddate(survey_id)
@@ -126,8 +126,8 @@ def surveys(survey_id):
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc,
                             bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason)
-        
-        
+
+
 
     # If the survey is closed, return a different page, where the student can view their answers.
     if closed:
@@ -166,11 +166,11 @@ def get_choices(survey_id):
     reason = raw_data["reasons"]
 
     # Change this to len bad_ids + good_ids >= min_choices
-    # Also check that there aren't to many rejections. 
+    # Also check that there aren't to many rejections.
     if len(neutral_ids) > 0 or len(good_ids) == 0:
         response = {"status":"0","msg":"Et ole tehnyt riittävän monta valintaa! Tallennus epäonnistui."}
         return jsonify(response)
-    
+
     if len(bad_ids) > 2:
         response = {"status":"0","msg":"Liian monta hylkäystä! Tallennus epäonnistui."}
         return jsonify(response)
@@ -256,9 +256,9 @@ def new_survey_post():
         survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
         response = {"msg":"Uusi kysely luotu!"}
         return jsonify(response)
-    except: 
+    except:
         return (jsonify({"msg": "Tuntematon virhe palvelimella"}), 500)
-    
+
 
 @app.route("/create_survey/import", methods = ["POST"])
 def import_survey_choices():
@@ -271,7 +271,7 @@ def previous_surveys():
     user_id = session.get("user_id",0)
     if user_id == 0:
         return hello_world()
-    active_surveys = SurveyTools.fetch_all_active_surveys(user_id)
+    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
     closed_surveys = survey_service.get_list_closed_surveys(user_id)
     return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
 
@@ -282,7 +282,7 @@ def survey_answers(survey_id):
     if survey_service.check_if_survey_results_saved(survey_id):
         return survey_results(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
-    survey_answers = SurveyTools.fetch_survey_responses(survey_id)
+    survey_answers = survey_repository.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
         choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
@@ -315,7 +315,7 @@ def reset_database() -> str:
 def admin_gen_data():
     '''Page for generating users, a survey and user rankings.'''
     user_id = session.get("user_id",0)
-    surveys = SurveyTools.fetch_all_active_surveys(user_id)
+    surveys = survey_repository.fetch_all_active_surveys(user_id)
     if request.method == "GET":
         return render_template("/admintools/gen_data.html", surveys = surveys)
 
@@ -332,7 +332,7 @@ def admin_gen_rankings():
     survey_name = survey_service.get_survey_name(survey_id)
     gen_data.generate_rankings(survey_id)
 
-    survey_answers = SurveyTools.fetch_survey_responses(survey_id)
+    survey_answers = survey_repository.fetch_survey_responses(survey_id)
     survey_answers_amount = len(survey_answers)
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=survey_answers,
@@ -343,7 +343,7 @@ def admin_gen_survey():
     '''Generate a survey for testing.'''
     user_id = session.get("user_id",0)
     gen_data.generate_survey(user_id)
-    surveys = SurveyTools.fetch_all_active_surveys(user_id)
+    surveys = survey_repository.fetch_all_active_surveys(user_id)
     return render_template("/admintools/gen_data.html", surveys = surveys)
 
 @app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
@@ -358,7 +358,7 @@ def survey_results(survey_id):
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    user_rankings = SurveyTools.fetch_survey_responses(survey_id)
+    user_rankings = survey_repository.fetch_survey_responses(survey_id)
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
     weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
