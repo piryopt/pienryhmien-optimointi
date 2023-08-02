@@ -18,9 +18,11 @@ from src.tools.survey_result_helper import convert_choices_groups, convert_users
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 
-
+"""
+FRONTPAGE:
+"""
 @app.route("/")
-def hello_world() -> str:
+def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
@@ -44,21 +46,89 @@ def hello_world() -> str:
 
     return render_template('index.html', surveys_created = surveys_created, exists = True, data = data)
 
-@app.route("/excel")
-def excel():
+"""
+/SURVEYS/* ROUTES:
+"""
+@app.route("/surveys")
+def previous_surveys():
     """
-    Performance test for the Hungarian algortihm with real life data.
+    For fetching previous survey list from the database
     """
-    groups_dict = excelreader.create_groups()
-    students_dict = excelreader.create_students(groups_dict)
-    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
+    user_id = session.get("user_id",0)
+    if user_id == 0:
+        return frontpage()
+    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
+    closed_surveys = survey_service.get_list_closed_surveys(user_id)
+    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
 
-    sort = h.Hungarian(groups_dict, students_dict, weights)
-    sort.run()
-    output_data = sort.get_data()
-    return render_template("results.html", results = output_data[0],
-                           happiness_data = output_data[2], happiness = output_data[1])
+@app.route("/surveys/getinfo", methods=["POST"])
+def get_info():
+    """
+    When a choice is clicked, display choice info.
+    """
+    raw_id = request.get_json()
+    basic_info = survey_choices_service.get_choice_name_and_spaces(int(raw_id))
+    additional_info = survey_choices_service.get_choice_additional_infos(int(raw_id))
+    return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
+@app.route("/surveys/create", methods = ["GET"])
+def new_survey_form(survey=None):
+    """
+    Page for survey creation. Adds fields automatically if user chose to copy from template
+
+    args:
+        survey: By default, none. If user copied from template, the survey is the survey from the template
+    """
+    user_id = session.get("user_id",0)
+    if not user_service.check_if_teacher(user_id):
+        return frontpage()
+    query_params = request.args.to_dict()
+    if("fromTemplate" in query_params):
+        survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
+        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+    return render_template("create_survey.html", survey=survey)
+
+@app.route("/surveys/create", methods = ["POST"])
+def new_survey_post():
+    """
+    Post method for creating a new survey.
+    """
+    data = request.get_json()
+    survey_name = data["surveyGroupname"]
+    description = data["surveyInformation"]
+    user_id = session.get("user_id",0)
+    survey_choices = data["choices"]
+    minchoices = data["minchoices"]
+
+    date_begin = data["startdate"]
+    time_begin = data["starttime"]
+
+    date_end = data["enddate"]
+    time_end = data["endtime"]
+
+    #print("Alkaa", date_begin, time_begin)
+    #print("Alkaa", date_end, time_end)
+
+    try:
+        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
+        response = {"msg":"Uusi kysely luotu!"}
+        return jsonify(response)
+    except:
+        return (jsonify({"msg": "Tuntematon virhe palvelimella"}), 500)
+
+@app.route("/surveys/create/import", methods = ["POST"])
+def import_survey_choices():
+    """
+    Post method for creating a new survey when it uses data imported from a csv file.
+    """
+    data = request.get_json()
+    return jsonify(parser_elomake_csv_to_dict(data['uploadedFileContent'])["choices"])
+
+
+
+"""
+/SURVEYS/<SURVEY_ID>/* ROUTES:
+"""
 @app.route("/surveys/<int:survey_id>")
 def surveys(survey_id):
     """
@@ -70,7 +140,7 @@ def surveys(survey_id):
     desc = survey_service.get_survey_description(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
         print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
-        return hello_world()
+        return frontpage()
 
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
     shuffle(survey_choices)
@@ -144,176 +214,6 @@ def delete_survey(survey_id):
     #TODO
     ...
 
-@app.route("/get_choices/<int:survey_id>", methods=["POST"])
-def get_choices(survey_id):
-    """
-    Save the ranking to the database.
-    """
-    raw_data = request.get_json()
-
-    # list of ids of choices not put in either of the boxes
-    neutral_ids = raw_data["neutralIDs"]
-
-    # list of ids of choices put in red box
-    bad_ids = raw_data["badIDs"]
-
-    #list of ids of choices put in green box
-    good_ids = raw_data["goodIDs"]
-
-    #list of all ids
-    all_ids = raw_data["allIDs"]
-
-    #value of textarea reasons
-    reason = raw_data["reasons"]
-
-    # Change this to len bad_ids + good_ids >= min_choices
-    # Also check that there aren't to many rejections.
-    if len(neutral_ids) > 0 or len(good_ids) == 0:
-        response = {"status":"0","msg":"Et ole tehnyt riittävän monta valintaa! Tallennus epäonnistui."}
-        return jsonify(response)
-
-    if len(bad_ids) > 2:
-        response = {"status":"0","msg":"Liian monta hylkäystä! Tallennus epäonnistui."}
-        return jsonify(response)
-
-    ranking = convert_to_string(good_ids)
-    rejections = convert_to_string(bad_ids)
-
-    # Verify that if user has rejections, they have also added a reasoning for them.
-    if len(bad_ids) == 0 and len(reason) > 0:
-        response = {"status":"0","msg":"Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."}
-        return jsonify(response)
-
-    # Verify that the reasoning isn't too long.
-    if len(reason) > 300:
-        response = {"status":"0","msg":"Perustelu on liian pitkä. Merkkimäärä on <= 300. Pidemmissä tapauksissa ota yhteyttä vastuuopettajaan. Tallennus epäonnistui."}
-        return jsonify(response)
-
-    user_id = session.get("user_id",0)
-    submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking, rejections, reason)
-    response = {"status":"1","msg":"Tallennus onnistui."}
-    if not submission:
-        response = {"status":"0","msg":"Tallennus epäonnistui."}
-    return jsonify(response)
-
-@app.route("/surveys/getinfo", methods=["POST"])
-def get_info():
-    """
-    When a choice is clicked, display choice info.
-    """
-    raw_id = request.get_json()
-    basic_info = survey_choices_service.get_choice_name_and_spaces(int(raw_id))
-    additional_info = survey_choices_service.get_choice_additional_infos(int(raw_id))
-    return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
-
-@app.route("/register", methods = ["GET", "POST"])
-def register():
-    """
-    Mock user registeration. DELETE BEFORE PRODUCTION!!!
-    """
-    if request.method == "GET":
-        return render_template("register.html")
-    email = request.form.get("email")
-    name = request.form.get("name")
-    student_number = request.form.get("student_number")
-    isteacher = request.form.get("isteacher")
-    teacher_priv = False
-    if isteacher == "teacher":
-        teacher_priv = True
-
-    new_user = user_service.create_user(name, student_number, email, teacher_priv)
-    if new_user is None:
-        return render_template("register.html")
-    return render_template("login.html")
-
-@app.route("/login", methods = ["GET", "POST"])
-def login():
-    """
-    Mock user login. DELETE BEFORE PRODUCTION!!!
-    """
-    if request.method == "GET":
-        return render_template("login.html")
-    email = request.form.get("email")
-
-    logged_in = user_service.check_credentials(email)
-    if not logged_in:
-        return render_template("login.html")
-    return hello_world()
-
-@app.route("/logout")
-def logout():
-    """
-    Mock user logout. DELETE BEFORE PRODUCTION?
-    """
-    user_service.logout()
-    return render_template("index.html")
-
-@app.route("/create_survey", methods = ["GET"])
-def new_survey_form(survey=None):
-    """
-    Page for survey creation. Adds fields automatically if user chose to copy from template
-
-    args:
-        survey: By default, none. If user copied from template, the survey is the survey from the template
-    """
-    user_id = session.get("user_id",0)
-    if not user_service.check_if_teacher(user_id):
-        return hello_world()
-    query_params = request.args.to_dict()
-    if("fromTemplate" in query_params):
-        survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
-        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
-    return render_template("create_survey.html", survey=survey)
-
-@app.route("/create_survey", methods = ["POST"])
-def new_survey_post():
-    """
-    Post method for creating a new survey.
-    """
-    data = request.get_json()
-    survey_name = data["surveyGroupname"]
-    description = data["surveyInformation"]
-    user_id = session.get("user_id",0)
-    survey_choices = data["choices"]
-    minchoices = data["minchoices"]
-
-    date_begin = data["startdate"]
-    time_begin = data["starttime"]
-
-    date_end = data["enddate"]
-    time_end = data["endtime"]
-
-    #print("Alkaa", date_begin, time_begin)
-    #print("Alkaa", date_end, time_end)
-
-    try:
-        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
-        response = {"msg":"Uusi kysely luotu!"}
-        return jsonify(response)
-    except:
-        return (jsonify({"msg": "Tuntematon virhe palvelimella"}), 500)
-
-
-@app.route("/create_survey/import", methods = ["POST"])
-def import_survey_choices():
-    """
-    Post method for creating a new survey when it uses data imported from a csv file.
-    """
-    data = request.get_json()
-    return jsonify(parser_elomake_csv_to_dict(data['uploadedFileContent'])["choices"])
-
-@app.route("/previous_surveys")
-def previous_surveys():
-    """
-    For fetching previous survey list from the database
-    """
-    user_id = session.get("user_id",0)
-    if user_id == 0:
-        return hello_world()
-    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
-    closed_surveys = survey_service.get_list_closed_surveys(user_id)
-    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
-
 @app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
 def survey_answers(survey_id):
     """
@@ -337,69 +237,6 @@ def survey_answers(survey_id):
                            survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed,
                            answered = answers_saved)
 
-@app.route("/admintools/", methods = ["GET"])
-def admin_dashboard() -> str:
-    """
-    Admin page for resestting the database. DELETE BEFORE PRODUCTION!!!
-    """
-    return render_template('/admintools/dashboard.html')
-
-@app.route("/api/admintools/reset", methods = ["POST"])
-def reset_database() -> str:
-    """
-    Drop all database tables and recreate them based on the schema at project root. DELETE BEFORE PRODUCTION!!!
-    """
-    data = request.get_json()
-    print(data)
-    db.reflect()
-    db.drop_all()
-    create_clause = data["schema"]
-    for statement in create_clause.split(";")[:-1]:
-        db.session.execute(text(statement + ";"))
-        db.session.commit()
-    return "database reset"
-
-@app.route("/admintools/gen_data", methods = ["GET", "POST"])
-def admin_gen_data():
-    """
-    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
-    """
-    user_id = session.get("user_id",0)
-    surveys = survey_repository.fetch_all_active_surveys(user_id)
-    if request.method == "GET":
-        return render_template("/admintools/gen_data.html", surveys = surveys)
-
-    if request.method == "POST":
-        student_n = request.form.get("student_n")
-        gen_data.generate_users(int(student_n))
-        gen_data.add_generated_users_db()
-        return render_template("/admintools/gen_data.html", surveys = surveys)
-
-@app.route("/admintools/gen_data/rankings", methods = ["POST"])
-def admin_gen_rankings():
-    """
-    Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
-    """
-    survey_id = request.form.get("survey_list")
-    survey_name = survey_service.get_survey_name(survey_id)
-    gen_data.generate_rankings(survey_id)
-
-    survey_answers = survey_repository.fetch_survey_responses(survey_id)
-    survey_answers_amount = len(survey_answers)
-    return render_template("survey_answers.html",
-                           survey_name=survey_name, survey_answers=survey_answers,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id)
-
-@app.route("/admintools/gen_data/survey", methods = ["POST"])
-def admin_gen_survey():
-    """
-    Generate a survey for testing. DELETE BEFORE PRODUCTION!!!
-    """
-    user_id = session.get("user_id",0)
-    gen_data.generate_survey(user_id)
-    surveys = survey_repository.fetch_all_active_surveys(user_id)
-    return render_template("/admintools/gen_data.html", surveys = surveys)
-
 @app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
 def survey_results(survey_id):
     """
@@ -407,7 +244,7 @@ def survey_results(survey_id):
     """
     # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
-        return hello_world()
+        return frontpage()
     # Check if the answers are already saved to the database. This determines which operations are available to the teacher.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
@@ -475,3 +312,187 @@ def open_survey(survey_id):
         response = {"msg":"ERROR IN OPENING SURVEY"}
         return jsonify(response)
     return survey_answers(survey_id)
+
+
+"""
+/AUTH/* ROUTES:
+"""
+@app.route("/auth/register", methods = ["GET", "POST"])
+def register():
+    """
+    Mock user registeration. DELETE BEFORE PRODUCTION!!!
+    """
+    if request.method == "GET":
+        return render_template("register.html")
+    email = request.form.get("email")
+    name = request.form.get("name")
+    student_number = request.form.get("student_number")
+    isteacher = request.form.get("isteacher")
+    teacher_priv = False
+    if isteacher == "teacher":
+        teacher_priv = True
+
+    new_user = user_service.create_user(name, student_number, email, teacher_priv)
+    if new_user is None:
+        return render_template("register.html")
+    return render_template("login.html")
+
+@app.route("/auth/login", methods = ["GET", "POST"])
+def login():
+    """
+    Mock user login. DELETE BEFORE PRODUCTION!!!
+    """
+    if request.method == "GET":
+        return render_template("login.html")
+    email = request.form.get("email")
+
+    logged_in = user_service.check_credentials(email)
+    if not logged_in:
+        return render_template("login.html")
+    return frontpage()
+
+@app.route("/auth/logout")
+def logout():
+    """
+    Mock user logout. DELETE BEFORE PRODUCTION?
+    """
+    user_service.logout()
+    return render_template("index.html")
+
+"""
+ADMINTOOLS -ROUTES:
+"""
+@app.route("/admintools/", methods = ["GET"])
+def admin_dashboard() -> str:
+    """
+    Admin page for resestting the database. DELETE BEFORE PRODUCTION!!!
+    """
+    return render_template('/admintools/dashboard.html')
+
+@app.route("/api/admintools/reset", methods = ["POST"])
+def reset_database() -> str:
+    """
+    Drop all database tables and recreate them based on the schema at project root. DELETE BEFORE PRODUCTION!!!
+    """
+    data = request.get_json()
+    print(data)
+    db.reflect()
+    db.drop_all()
+    create_clause = data["schema"]
+    for statement in create_clause.split(";")[:-1]:
+        db.session.execute(text(statement + ";"))
+        db.session.commit()
+    return "database reset"
+
+@app.route("/admintools/gen_data", methods = ["GET", "POST"])
+def admin_gen_data():
+    """
+    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
+    """
+    user_id = session.get("user_id",0)
+    surveys = survey_repository.fetch_all_active_surveys(user_id)
+    if request.method == "GET":
+        return render_template("/admintools/gen_data.html", surveys = surveys)
+
+    if request.method == "POST":
+        student_n = request.form.get("student_n")
+        gen_data.generate_users(int(student_n))
+        gen_data.add_generated_users_db()
+        return render_template("/admintools/gen_data.html", surveys = surveys)
+
+@app.route("/admintools/gen_data/rankings", methods = ["POST"])
+def admin_gen_rankings():
+    """
+    Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
+    """
+    survey_id = request.form.get("survey_list")
+    survey_name = survey_service.get_survey_name(survey_id)
+    gen_data.generate_rankings(survey_id)
+
+    survey_answers = survey_repository.fetch_survey_responses(survey_id)
+    survey_answers_amount = len(survey_answers)
+    return render_template("survey_answers.html",
+                           survey_name=survey_name, survey_answers=survey_answers,
+                           survey_answers_amount=survey_answers_amount, survey_id = survey_id)
+
+@app.route("/admintools/gen_data/survey", methods = ["POST"])
+def admin_gen_survey():
+    """
+    Generate a survey for testing. DELETE BEFORE PRODUCTION!!!
+    """
+    user_id = session.get("user_id",0)
+    gen_data.generate_survey(user_id)
+    surveys = survey_repository.fetch_all_active_surveys(user_id)
+    return render_template("/admintools/gen_data.html", surveys = surveys)
+
+
+"""
+MISCELLANEOUS ROUTES:
+"""
+@app.route("/excel")
+def excel():
+    """
+    Performance test for the Hungarian algortihm with real life data.
+    """
+    groups_dict = excelreader.create_groups()
+    students_dict = excelreader.create_students(groups_dict)
+    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
+
+    sort = h.Hungarian(groups_dict, students_dict, weights)
+    sort.run()
+    output_data = sort.get_data()
+    return render_template("results.html", results = output_data[0],
+                           happiness_data = output_data[2], happiness = output_data[1])
+
+@app.route("/get_choices/<int:survey_id>", methods=["POST"])
+def get_choices(survey_id):
+    """
+    Save the ranking to the database.
+    """
+    raw_data = request.get_json()
+
+    # list of ids of choices not put in either of the boxes
+    neutral_ids = raw_data["neutralIDs"]
+
+    # list of ids of choices put in red box
+    bad_ids = raw_data["badIDs"]
+
+    #list of ids of choices put in green box
+    good_ids = raw_data["goodIDs"]
+
+    #list of all ids
+    all_ids = raw_data["allIDs"]
+
+    #value of textarea reasons
+    reason = raw_data["reasons"]
+
+    # Change this to len bad_ids + good_ids >= min_choices
+    # Also check that there aren't to many rejections.
+    if len(neutral_ids) > 0 or len(good_ids) == 0:
+        response = {"status":"0","msg":"Et ole tehnyt riittävän monta valintaa! Tallennus epäonnistui."}
+        return jsonify(response)
+
+    if len(bad_ids) > 2:
+        response = {"status":"0","msg":"Liian monta hylkäystä! Tallennus epäonnistui."}
+        return jsonify(response)
+
+    ranking = convert_to_string(good_ids)
+    rejections = convert_to_string(bad_ids)
+
+    # Verify that if user has rejections, they have also added a reasoning for them.
+    if len(bad_ids) == 0 and len(reason) > 0:
+        response = {"status":"0","msg":"Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."}
+        return jsonify(response)
+
+    # Verify that the reasoning isn't too long.
+    if len(reason) > 300:
+        response = {"status":"0","msg":"Perustelu on liian pitkä. Merkkimäärä on <= 300. Pidemmissä tapauksissa ota yhteyttä vastuuopettajaan. Tallennus epäonnistui."}
+        return jsonify(response)
+
+    user_id = session.get("user_id",0)
+    submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking, rejections, reason)
+    response = {"status":"1","msg":"Tallennus onnistui."}
+    if not submission:
+        response = {"status":"0","msg":"Tallennus epäonnistui."}
+    return jsonify(response)
+
