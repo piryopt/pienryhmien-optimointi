@@ -172,5 +172,29 @@ class SurveyService:
         RETURNS dictionary
         '''
         return parser_existing_survey_to_dict(survey_id)
+    
+    def get_list_active_answered(self, user_id):
+        """
+        Gets a list of active surveys that the user has answered.
+
+        args:
+            user_id: The id of the user
+        """
+        active = self._survey_repository.get_list_active_answered(user_id)
+        if not active:
+            return []
+        return active
+    
+    def get_list_closed_answered(self, user_id):
+        """
+        Gets a list of closed surveys that the user has answered.
+
+        args:
+            user_id: The id of the user
+        """
+        closed = self._survey_repository.get_list_closed_answered(user_id)
+        if not closed:
+            return []
+        return closed
 
 survey_service = SurveyService()
