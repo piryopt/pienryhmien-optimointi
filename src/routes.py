@@ -136,15 +136,13 @@ def surveys(survey_id):
     """
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    print(survey_choices)
-    desc = survey_service.get_survey_description(survey_id)
     if not survey_choices or session.get("user_id", 0) == 0:
-        print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
         return frontpage()
 
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
     shuffle(survey_choices)
 
+    desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
@@ -297,7 +295,7 @@ def close_survey(survey_id):
     user_id = session.get("user_id",0)
     closed = survey_service.close_survey(survey_id, user_id)
     if not closed:
-        response = {"msg":"ERROR IN CLOSING SURVEY"}
+        response = {"status":"0", "msg":"Kyselyn sulkeminen epäonnistui"}
         return jsonify(response)
     return survey_answers(survey_id)
 
@@ -309,7 +307,7 @@ def open_survey(survey_id):
     user_id = session.get("user_id",0)
     opened = survey_service.open_survey(survey_id, user_id)
     if not opened:
-        response = {"msg":"ERROR IN OPENING SURVEY"}
+        response = {"status":"0", "msg":"Kyselyn avaaminen epäonnistui"}
         return jsonify(response)
     return survey_answers(survey_id)
 
