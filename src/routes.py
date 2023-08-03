@@ -3,6 +3,8 @@ from random import shuffle
 from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect, url_for
+from dotenv import load_dotenv
+import os
 from src import app,db
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
@@ -20,33 +22,48 @@ from src.tools.parsers import parser_elomake_csv_to_dict
 from functools import wraps
 
 def home_decorator():
+    '''
+    This is pretty much all the AD-login code there is.
+    This function is called by some routes, 
+    by those marked by @home_decorator()
+    For more details see documentation
+    '''
     def _home_decorator(f):
         @wraps(f)
         def __home_decorator(*args, **kwargs):
-            # just do here everything what you need
             result = f(*args, **kwargs)
 
-            # Array of strings of user's roles
-            roles = request.headers.get('eduPersonAffiliation')
-            if roles == None:
+            # if logged in already do nothing
+            if session.get("user_id", 0) != 0:
                 return result
 
-            name = request.headers.get('cn')
-            email = request.headers.get('mail')
+            # define here because scope
+            name = email = role_bool = ""
 
-            role_bool = True if "faculty" in roles or "staff" in roles else False
+            # if in debug mode, get the values locally
+            # if not, get them from Shibboleth headers
+            if app.debug:
+                if os.getenv("LOGIN_MODE") == "1":
+                    name = "Outi Opettaja"
+                    email = "outi.opettaja@helsinki.fi"
+                    role_bool = True
+                elif os.getenv("LOGIN_MODE") == "0":
+                    name = "Olli Opiskelija"
+                    email = "olli.opiskelija@helsinki.fi"
+                    role_bool = False
+            else:
+                roles = request.headers.get('eduPersonAffiliation')
+                name = request.headers.get('cn')
+                email = request.headers.get('mail')
 
-            print("Nimi", name)
-            print("Rooli", roles)
-            print("Sposti", email)
+                role_bool = True if "faculty" in roles or "staff" in roles else False
 
-            uid = session.get("user_id", 0) # check if logged in already 
-            if uid == 0:
-                if not user_service.find_by_email(email): # account doesn't exist, register
-                    user_service.create_user(name, email, role_bool) # actual registration
-                if user_service.check_credentials(email): # log in, update session etc.
-                    if role_bool:
-                        user_service.make_user_teacher(email)
+
+            if not user_service.find_by_email(email): # account doesn't exist, register
+                user_service.create_user(name, email, role_bool) # actual registration
+            if user_service.check_credentials(email): # log in, update session etc.
+                if role_bool:
+                    user_service.make_user_teacher(email)
 
             return result
         return __home_decorator
@@ -61,6 +78,7 @@ def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
+    print(app.debug)
     #print(f'HEADERS:\n{request.headers["Connection"]}')
     user_id = session.get("user_id",0)
     surveys_created = survey_service.count_surveys_created(user_id)
