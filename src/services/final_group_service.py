@@ -36,14 +36,14 @@ class FinalGroupService:
             survey_id: The id of the survey in question
             choice_id: The id of the survey choice in question
         """
+        # If the ranking or survey doesn't exist, return False
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
-            print("SURVEY DOES NOT EXIST!")
             return False
         ranking = self._user_rankings_repository.get_user_ranking(user_id, survey_id)
         if not ranking:
-            print("USER RANKING FOR THIS USER DOES NOT EXIST!")
             return False
+
         saved = self._final_group_repository.save_result(user_id, survey_id, choice_id)
         return saved
 

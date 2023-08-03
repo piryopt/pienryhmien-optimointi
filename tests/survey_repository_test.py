@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from src import db
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_repository import user_repository as ur
+from src.repositories.user_rankings_repository import user_rankings_repository as urr
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 import datetime
@@ -25,10 +26,13 @@ class TestSurveyRepository(unittest.TestCase):
         self.ur = ur
         user1 = User("Not on tren Testerr", "feelsbadman@tester.com", True)
         user2 = User("Not on anabolic", "anabolic@tester.com", True)
+        user3 = User("trt enjoyer", "ttrt@tester.com", True)
         self.ur.register(user1)
         self.ur.register(user2)
+        self.ur.register(user3)
         self.user_id = ur.find_by_email(user1.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
+        self.user_id3 = ur.find_by_email(user3.email)[0]
 
     def tearDown(self):
         db.drop_all()
@@ -164,3 +168,26 @@ class TestSurveyRepository(unittest.TestCase):
         time = sr.get_survey_time_end(survey_id)
 
         self.assertEqual(time, datetime.datetime(2024, 6, 19, 12, 1))
+
+    def test_get_list_active_answered(self):
+        survey_id = sr.create_new_survey("Test survey 12", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        ranking = "2,3,5,4,1,6"
+        urr.add_user_ranking(self.user_id3, survey_id, ranking, "", "")
+        active_answered = sr.get_list_active_answered(self.user_id3)
+        self.assertEqual(1, len(active_answered))
+
+    def test_get_list_closed_answered(self):
+        survey_id = sr.create_new_survey("Test survey 13", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        ranking = "2,3,5,4,1,6"
+        urr.add_user_ranking(self.user_id3, survey_id, ranking, "", "")
+        sr.close_survey(survey_id, self.user_id)
+        closed_answered = sr.get_list_closed_answered(self.user_id3)
+        self.assertEqual(1, len(closed_answered))
+
+    def test_get_list_active_answered_invalid(self):
+        active_answered = sr.get_list_active_answered(-1)
+        self.assertEqual(active_answered, False)
+
+    def test_get_list_closed_answered_invalid(self):
+        closed_answered = sr.get_list_closed_answered(-1)
+        self.assertEqual(closed_answered, False)

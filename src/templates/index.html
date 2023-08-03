@@ -9,19 +9,33 @@
   </br>
   <h2>Tervetuloa</h2></br>
   <div class="list-group">
-    <a href="/surveys/create" class="list-group-item list-group-item-action flex-column align-items-start">
-      <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1"><img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  Luo uusi kysely</h5>
-      </div>
-      <small class="text-muted">Just wanted to get the gang together early in my tenure to say uh....yo.</small>
-    </a></br>
-
-    <a href="/surveys" class="list-group-item list-group-item-action flex-column align-items-start">
-      <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1"><img src="{{ url_for('static', filename='images/list_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  Näytä vanhat kyselyt</h5>
-      </div>
-      <small class="text-muted">Luotuja kyselyitä: {{ surveys_created }} kpl</small>
-    </a></br>
+    <table>
+      <tr>
+        {% if is_teacher %}
+        <td>
+          <a href="/surveys/create" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1"><img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  Luo uusi kysely</h5>
+            </div>
+            <small class="text-muted">Just wanted to get the gang together early in my tenure to say uh....yo.</small>
+          </a>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        {% endif %}
+        <td>
+          <a href="/surveys" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1"><img src="{{ url_for('static', filename='images/list_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  Näytä vanhat kyselyt</h5>
+            </div>
+            <small class="text-muted">{% if is_teacher %}Luotuja kyselyitä: {{ surveys_created }} kpl {% else %} Tarkastele käynnissä olevia kyselyitä ja vanhoja vastauksia {% endif %}</small>
+          </a>
+        </td>
+      </tr>
+    </table>
+    </br>
 
     {% if exists %}
     </br><label>Käynnissä olevat kyselyt</label></br>
