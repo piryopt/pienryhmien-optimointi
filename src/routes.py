@@ -42,7 +42,9 @@ def home_decorator():
 
             # if in debug mode, get the values locally
             # if not, get them from Shibboleth headers
+            print(app.debug)
             if app.debug:
+                print(os.getenv("LOGIN_MODE"))
                 if os.getenv("LOGIN_MODE") == "1":
                     name = "Outi Opettaja"
                     email = "outi.opettaja@helsinki.fi"
