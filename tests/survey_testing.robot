@@ -2,13 +2,30 @@
 Resource  resource.robot
 Suite Setup  Open And Configure Browser
 Suite Teardown  Close Browser
+Library  Dialogs
 
 *** Variables ***
-${REGISTERBUTTON}    xpath=//button[@type='submit' and contains(text(),'Luo tunnus')]
-${LOGINBUTTON}    xpath=//button[@type='submit' and contains(text(),'Kirjaudu')]
-${NEWSURVEY}    xpath=//button[@type='submit' and contains(text(),'Luo kysely')]
+${MOCK_LOGIN_BUTTON}    xpath=//button[@type='submit' and contains(text(),'Kirjaudu sisään')]
 
 *** Test Cases ***
+Open Main Page As Teacher Test
+    Go To Logout Page
+    Go To Login Page
+    Set Name  TestiOpettaja
+    Set Email  opettaja.testi@helsinki.fi
+    Set Role Number  1
+    Click Element  ${MOCK_LOGIN_BUTTON}
+    Page Should Contain  Luo uusi kysely
+
+Open Main Page As Student Test
+    Go To Logout Page
+    Go To Login Page
+    Set Name  TestiOpettaja
+    Set Email  opettaja.adsdsadsa@helsinki.fi
+    Set Role Number  0
+    Click Element  ${MOCK_LOGIN_BUTTON}
+    Page Should Not Contain  Luo uusi kysely
+    Page Should Contain  Näytä vanhat kyselyt
 
 
 *** Keywords ***
@@ -20,9 +37,9 @@ Set Name
     [Arguments]  ${name}
     Input Text  name  ${name}
 
-Set Student_number
+Set Role Number
     [Arguments]  ${student_number}
-    Input Text  student_number  ${student_number}
+    Input Text  role  ${student_number}
 
 Set Surveyname
     [Arguments]  ${groupname}

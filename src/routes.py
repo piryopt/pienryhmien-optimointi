@@ -32,33 +32,17 @@ def home_decorator():
         @wraps(f)
         def __home_decorator(*args, **kwargs):
             result = f(*args, **kwargs)
+            print(request.headers)
 
-            # if logged in already do nothing
-            if session.get("user_id", 0) != 0:
+            # if logged in already do nothing or in local use
+            if session.get("user_id", 0) != 0 or app.debug:
                 return result
 
-            # define here because scope
-            name = email = role_bool = ""
+            roles = request.headers.get('eduPersonAffiliation')
+            name = request.headers.get('cn')
+            email = request.headers.get('mail')
 
-            # if in debug mode, get the values locally
-            # if not, get them from Shibboleth headers
-            print(app.debug)
-            if app.debug:
-                print(os.getenv("LOGIN_MODE"))
-                if os.getenv("LOGIN_MODE") == "1":
-                    name = "Outi Opettaja"
-                    email = "outi.opettaja@helsinki.fi"
-                    role_bool = True
-                elif os.getenv("LOGIN_MODE") == "0":
-                    name = "Olli Opiskelija"
-                    email = "olli.opiskelija@helsinki.fi"
-                    role_bool = False
-            else:
-                roles = request.headers.get('eduPersonAffiliation')
-                name = request.headers.get('cn')
-                email = request.headers.get('mail')
-
-                role_bool = True if "faculty" in roles or "staff" in roles else False
+            role_bool = True if "faculty" in roles or "staff" in roles else False
 
 
             if not user_service.find_by_email(email): # account doesn't exist, register
@@ -71,6 +55,7 @@ def home_decorator():
         return __home_decorator
     return _home_decorator
 
+
 """
 FRONTPAGE:
 """
@@ -80,6 +65,9 @@ def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
+    # used in local use
+    if app.debug and session.get("user_id", 0) == 0:
+        return redirect("/auth/login")
     user_id = session.get("user_id",0)
     if user_id == 0:
         return render_template('index.html')
@@ -388,6 +376,35 @@ def open_survey(survey_id):
 """
 /AUTH/* ROUTES:
 """
+@app.route("/auth/login", methods = ["GET", "POST"])
+def login():
+    if not app.debug:
+        return redirect("/")
+    
+    if request.method == "GET":
+        return render_template("mock_ad.html")
+    if request.method == "POST":
+
+        email = request.form["email"]
+        name = request.form["name"]
+        role_bool = True if request.form["role"] == "1" else False
+
+        if not user_service.find_by_email(email): # account doesn't exist, register
+            user_service.create_user(name, email, role_bool) # actual registration
+        if user_service.check_credentials(email): # log in, update session etc.
+            if role_bool:
+                user_service.make_user_teacher(email)
+
+        return redirect("/")
+        
+
+@app.route("/auth/logout")
+def logout():
+    if app.debug:
+        user_service.logout()
+        return redirect("/auth/login")
+    
+    return redirect("/")
 
 """
 ADMINTOOLS -ROUTES:
