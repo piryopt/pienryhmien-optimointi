@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["remove_student_number"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
