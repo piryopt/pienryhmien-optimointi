@@ -6,6 +6,7 @@ from src import db
 from src.services.survey_service import survey_service as ss
 from src.services.survey_choices_service import survey_choices_service as scs
 from src.repositories.user_repository import user_repository as ur
+from src.repositories.user_rankings_repository import user_rankings_repository as urr
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 import datetime
@@ -26,10 +27,13 @@ class TestSurveyService(unittest.TestCase):
 
         user = User("Not on tren Testerr", 101010101, "tren4lyfe@tester.com", True)
         user2 = User("Hashtag natty", 101010101, "anabolics4lyfe@tester.com", True)
+        user3 = User("trt enjoyer", 101010101, "ttrt@tester.com", True)
         ur.register(user)
         ur.register(user2)
+        ur.register(user3)
         self.user_id = ur.find_by_email(user.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
+        self.user_id3 = ur.find_by_email(user3.email)[0]
 
 
     def tearDown(self):
@@ -294,3 +298,34 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(survey_dict["choices"][1]["seats"], 6)
         self.assertEqual(survey_dict["choices"][1]["Eka lisätieto"], "äisimhi tunappat nelo")
         self.assertEqual(survey_dict["choices"][1]["Postinumero"], "01820")
+
+    def test_get_list_active_answered_invalid(self):
+        active_list = ss.get_list_active_answered(-1)
+        self.assertEqual(active_list, [])
+
+    def test_get_list_closed_answered_invalid(self):
+        closed_list = ss.get_list_closed_answered(-1)
+        self.assertEqual(closed_list, [])
+
+    def test_get_list_active_answered(self):
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        ranking = "2,3,5,4,1,6"
+        urr.add_user_ranking(self.user_id3, survey_id, ranking, "", "")
+        active_list = ss.get_list_active_answered(self.user_id3)
+        self.assertEqual(1, len(active_list))
+
+    def test_get_list_closed_answered(self):
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        ranking = "2,3,5,4,1,6"
+        urr.add_user_ranking(self.user_id3, survey_id, ranking, "", "")
+        ss.close_survey(survey_id, self.user_id)
+        closed_list = ss.get_list_closed_answered(self.user_id3)
+        self.assertEqual(1, len(closed_list))
