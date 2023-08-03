@@ -65,5 +65,5 @@ jobs:
           cd ../
       - name: Run student robot tests
         run: |
-          poetry run flask run --debug &
+          poetry run flask run --debug -p 420 &
           poetry run robot tests/student_testing.robot
