@@ -61,7 +61,7 @@ class UserService:
         """
         if not name:
             print("All fields are required!")
-        if not name or not student_number:
+        if not name:
             return False
         if len(name) < 1:
             return False
