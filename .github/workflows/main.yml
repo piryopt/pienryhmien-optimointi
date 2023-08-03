@@ -50,7 +50,7 @@ jobs:
           cd src
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
           echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env
-          echo "LOGIN_MODE=1"
+          echo "LOGIN_MODE=1" >> .env
           cd ../
       - name: Run teacher robot tests
         run: |
@@ -61,7 +61,7 @@ jobs:
           cd src
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
           echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env
-          echo "LOGIN_MODE=0"
+          echo "LOGIN_MODE=0" >> .env
           cd ../
       - name: Run student robot tests
         run: |
