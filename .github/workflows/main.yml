@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["remove_student_number"]
   pull_request:
     branches: ["main"]
 
@@ -45,7 +45,25 @@ jobs:
         run: poetry run coverage run --branch -m pytest
       - name: lint
         run: poetry run pylint src/
-      - name: Run robot tests
+      - name: Update .env for teacher robot tests
         run: |
-          poetry run flask run &
-          poetry run robot tests
+          cd src
+          echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
+          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env
+          echo "LOGIN_MODE"=1
+          cd ../
+      - name: Run teacher robot tests
+        run: |
+          poetry run flask run --debug &
+          poetry run robot tests/teacher_testing.robot
+      - name: Update .env for student robot tests
+        run: |
+          cd src
+          echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
+          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env
+          echo "LOGIN_MODE"=0
+          cd ../
+      - name: Run student robot tests
+        run: |
+          poetry run flask run --debug &
+          poetry run robot tests/student_testing.robot
