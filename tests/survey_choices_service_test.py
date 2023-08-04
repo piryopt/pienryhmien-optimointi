@@ -41,7 +41,7 @@ class TestSurveyChoicesService(unittest.TestCase):
         '''
 
         # first non existant case
-        ret = scs.get_list_of_survey_choices("ITSNOTREAL")
+        ret = scs.get_list_of_survey_choices(-1)
         self.assertEqual(ret, False)
 
         with open("tests/test_files/test_survey1.json", 'r') as openfile:
@@ -77,7 +77,7 @@ class TestSurveyChoicesService(unittest.TestCase):
         Test function get_survey_choice()
         '''
         # first non existant case
-        ret = scs.get_survey_choice("ITSNOTREAL")
+        ret = scs.get_survey_choice(-1)
         self.assertEqual(ret, False)
 
         with open("tests/test_files/test_survey1.json", 'r') as openfile:
