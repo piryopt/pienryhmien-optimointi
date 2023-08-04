@@ -44,7 +44,7 @@ class TestSurveyService(unittest.TestCase):
         """
         Test that no survey name is returned for an invalid survey id
         """
-        name = ss.get_survey_name(-1)
+        name = ss.get_survey_name("ITSNOTREAL")
         self.assertEqual(name, False)
 
     def test_elomake_csv_to_dict_parsing_case_normal(self):
@@ -145,10 +145,10 @@ class TestSurveyService(unittest.TestCase):
         Test survey service functions close_survey() and check_if_survey_closed() non existing cases
         doesn't differentiate between non-existing and closed, might be a problem
         '''
-        ret = ss.close_survey(-1, self.user_id)
+        ret = ss.close_survey("ITSNOTREAL", self.user_id)
         self.assertEqual(ret, False)
 
-        ret = ss.check_if_survey_closed(-1)
+        ret = ss.check_if_survey_closed("ITSNOTREAL")
         self.assertEqual(ret, False)
 
     def test_wrong_teacher_cant_close_survey(self):
@@ -223,7 +223,7 @@ class TestSurveyService(unittest.TestCase):
 
     def test_open_survey_non_existant(self):
 
-        ret = ss.open_survey(-1, self.user_id)
+        ret = ss.open_survey("ITSNOTREAL", self.user_id)
         self.assertEqual(ret, False)
 
     def test_open_survey_wrong_teacher(self):
@@ -246,9 +246,9 @@ class TestSurveyService(unittest.TestCase):
         '''
 
         # first check non existant case
-        ret = ss.check_if_survey_results_saved(-1)
+        ret = ss.check_if_survey_results_saved("ITSNOTREAL")
         self.assertEqual(ret, False)
-        ret = ss.update_survey_answered(-1)
+        ret = ss.update_survey_answered("ITSNOTREAL")
         self.assertEqual(ret, False)
 
         with open("tests/test_files/test_survey1.json", 'r') as openfile:
@@ -300,11 +300,11 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(survey_dict["choices"][1]["Postinumero"], "01820")
 
     def test_get_list_active_answered_invalid(self):
-        active_list = ss.get_list_active_answered(-1)
+        active_list = ss.get_list_active_answered("ITSNOTREAL")
         self.assertEqual(active_list, [])
 
     def test_get_list_closed_answered_invalid(self):
-        closed_list = ss.get_list_closed_answered(-1)
+        closed_list = ss.get_list_closed_answered("ITSNOTREAL")
         self.assertEqual(closed_list, [])
 
     def test_get_list_active_answered(self):

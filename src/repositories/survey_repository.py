@@ -1,5 +1,6 @@
 from sqlalchemy import text
 from src import db
+from src.tools.db_tools import generate_unique_id
 
 class SurveyRepository:
     def get_survey(self, survey_id):
@@ -148,9 +149,14 @@ class SurveyRepository:
         RETURNS created survey's id
         '''
         try:
-            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
-                " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
-            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
+            id = generate_unique_id(10)
+            while(self.get_survey(id)):
+                id = generate_unique_id(10)
+
+            sql = "INSERT INTO surveys (id, surveyname, teacher_id, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
+                " VALUES (:id, :surveyname, :teacher_id, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
+            
+            result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718
