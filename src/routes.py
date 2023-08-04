@@ -422,6 +422,7 @@ def logout():
 
     user_service.logout()
     logout_url = os.getenv("LOGOUT_URL")
+    print("LOGOUT_URL", logout_url)
     return redirect(str(logout_url))
     
 
