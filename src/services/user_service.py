@@ -24,11 +24,9 @@ class UserService:
             email: The email address of the user trying to log in
         """
         if not email:
-            print("Email is required!")
             return False
         user = self._user_repository.find_by_email(email)
         if not user:
-            print("Invalid email!")
             return False
         session["email"] = user.email
         session["user_id"] = user.id
@@ -64,10 +62,8 @@ class UserService:
             student_number: the student number of the user
         """
         if not name or not student_number:
-            print("All fields are required!")
             return False
         if len(name) < 1:
-            print("Name is too short!")
             return False
         return True
 
@@ -79,7 +75,6 @@ class UserService:
             user_id: The id of the user
         """
         if not id:
-            print("user_id required!")
             return False
         user = self._user_repository.get_user_data(user_id)
         if not user:
@@ -95,7 +90,6 @@ class UserService:
             user_id: The id of the user
         """
         if not id:
-            print("user_id required!")
             return False
         user = self._user_repository.get_user_data(user_id)
         if not user:
@@ -111,7 +105,6 @@ class UserService:
             user_id: The id of the user
         """
         if not id:
-            print("user_id required!")
             return False
         user = self._user_repository.get_user_data(user_id)
         if not user:

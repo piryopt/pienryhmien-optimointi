@@ -211,5 +211,43 @@ class SurveyRepository:
         result = db.session.execute(sql, {"survey":survey})
         responses = result.fetchall()
         return responses
+    
+    def get_list_active_answered(self, user_id):
+        """
+        SQL code for getting a list of surveys that are active, that have been answered by the user
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, user_survey_rankings r"\
+                "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = False AND r.deleted = False)"
+            result = db.session.execute(text(sql), {"user_id":user_id})
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_list_closed_answered(self, user_id):
+        """
+        SQL code for getting a list of surveys that are closed, that have been answered by the user
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, user_survey_rankings r"\
+                "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = True AND r.deleted = False)"
+            result = db.session.execute(text(sql), {"user_id":user_id})
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 survey_repository = SurveyRepository()
