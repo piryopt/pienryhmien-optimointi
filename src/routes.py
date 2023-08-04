@@ -269,6 +269,18 @@ def delete_submission(survey_id):
         response = {"status":"1", "msg":"Valinnat poistettu"}
     return jsonify(response)
 
+@app.route("/delete_input", methods=["POST"])
+def teacher_deletes_submission():
+    '''
+    Teacher (survey author) can delete a single rankinging from the survey for
+    e.g. if a student has dropped the course.
+    '''
+    user_data = user_service.find_by_email(request.form["student_email"])
+    user_id = user_data.id
+    survey_id = request.form["survey_id"]  
+    user_rankings_service.delete_ranking(survey_id, user_id)
+    return redirect(f'/surveys/{survey_id}/answers')
+
 @app.route("/surveys/<int:survey_id>/edit")
 @teachers_only
 def edit_survey(survey_id):
