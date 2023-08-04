@@ -25,9 +25,9 @@ class TestSurveyService(unittest.TestCase):
 
         clear_database()
 
-        user = User("Not on tren Testerr", 101010101, "tren4lyfe@tester.com", True)
-        user2 = User("Hashtag natty", 101010101, "anabolics4lyfe@tester.com", True)
-        user3 = User("trt enjoyer", 101010101, "ttrt@tester.com", True)
+        user = User("Not on tren Testerr", "tren4lyfe@tester.com", True)
+        user2 = User("Hashtag natty", "anabolics4lyfe@tester.com", True)
+        user3 = User("trt enjoyer", "ttrt@tester.com", True)
         ur.register(user)
         ur.register(user2)
         ur.register(user3)

@@ -38,7 +38,7 @@
     <thead class="table-dark">
         <tr>
             <th><p>Nimi</p></th>
-            <th><p>Opiskelijanumero</p></th>
+            <th><p>Sähköposti</p></th>
             <th><p>Ryhmä</p></th>
             <th><p>Monesko valinta</p></th>
         </tr>
@@ -48,7 +48,7 @@
     <tr>
         {% for row in results %}
         <td><p>{{ row[0][1] }}</p></td>       <!--name--> 
-        <td><p>{{ row[1] }}</p></td>       <!--student ID--> 
+        <td><p>{{ row[1] }}</p></td>       <!--email--> 
         <td><p>{{ row[2][1] }}</p></td>       <!--assigned group--> 
         <td><p>{{ row[3] }}</p></td>       <!--Which choice--> 
         

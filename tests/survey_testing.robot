@@ -2,68 +2,31 @@
 Resource  resource.robot
 Suite Setup  Open And Configure Browser
 Suite Teardown  Close Browser
+Library  Dialogs
 
 *** Variables ***
-${REGISTERBUTTON}    xpath=//button[@type='submit' and contains(text(),'Luo tunnus')]
-${LOGINBUTTON}    xpath=//button[@type='submit' and contains(text(),'Kirjaudu')]
-${NEWSURVEY}    xpath=//button[@type='submit' and contains(text(),'Luo kysely')]
+${MOCK_LOGIN_BUTTON}    xpath=//button[@type='submit' and contains(text(),'Kirjaudu sisään')]
 
 *** Test Cases ***
-Open Main Page Test
-    Go To Main Page
-    Main Page Should Be Open
-
-Open Register Page Test
-    Go To Register Page
-    Register Page Should Be Open
-
-Open Login Page Test
-    Go To Login Page
-    Login Page Should Be Open
-
-Register New Student Test
-    Go To Register Page
-    Register Page Should Be Open
-    Set Email  studenttrobot@robot.com
-    Set Name  Robot McRobot
-    Set Student_number  010101010
-    Select From List By Value  name:isteacher  student
-    Click Element  ${REGISTERBUTTON}
-    Login Page Should Be Open
-
-Register New Teacher Test
-    Go To Register Page
-    Register Page Should Be Open
-    Set Email  testtrobot@robot.com
-    Set Name  Roboty McRobotface
-    Set Student_number  010101011
-    Select From List By Value  name:isteacher  teacher
-    Click Element  ${REGISTERBUTTON}
-    Login Page Should Be Open
-
-Login With Incorrect Credentials Test
-    Go To Login Page
-    Login Page Should Be Open
-    Set Email  norobott@robot.com
-    Click Element  ${LOGINBUTTON}
-    Login Page Should Be Open
-
-Login Teacher Test
-    Go To Login Page
-    Login Page Should Be Open
-    Set Email  testtrobot@robot.com
-    Click Element  ${LOGINBUTTON}
-    Main Page Should Be Open
-
-Open Previous Surveys Page Test
-    Go To Previous Surveys Page
-    Previous Surveys Page Should Be Open
-
-Logout Works Test
-    Go To Main Page
-    Main Page Should Be Open
+Open Main Page As Teacher Test
     Go To Logout Page
-    Main Page Should Be Open
+    Go To Login Page
+    Set Name  TestiOpettaja
+    Set Email  opettaja.testi@helsinki.fi
+    Set Role Number  1
+    Click Element  ${MOCK_LOGIN_BUTTON}
+    Page Should Contain  Luo uusi kysely
+
+Open Main Page As Student Test
+    Go To Logout Page
+    Go To Login Page
+    Set Name  TestiOpettaja
+    Set Email  opettaja.adsdsadsa@helsinki.fi
+    Set Role Number  0
+    Click Element  ${MOCK_LOGIN_BUTTON}
+    Page Should Not Contain  Luo uusi kysely
+    Page Should Contain  Näytä vanhat kyselyt
+
 
 *** Keywords ***
 Set Email
@@ -74,9 +37,9 @@ Set Name
     [Arguments]  ${name}
     Input Text  name  ${name}
 
-Set Student_number
+Set Role Number
     [Arguments]  ${student_number}
-    Input Text  student_number  ${student_number}
+    Input Text  role  ${student_number}
 
 Set Surveyname
     [Arguments]  ${groupname}
