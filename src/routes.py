@@ -32,7 +32,6 @@ def home_decorator():
         @wraps(f)
         def __home_decorator(*args, **kwargs):
             result = f(*args, **kwargs)
-            print(request.headers)
 
             # if logged in already do nothing or in local use
             if session.get("user_id", 0) != 0 or app.debug:
