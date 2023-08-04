@@ -196,7 +196,7 @@ def import_survey_choices():
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
-@app.route("/surveys/<int:survey_id>")
+@app.route("/surveys/<string:survey_id>")
 def surveys(survey_id):
     """
     The answer page for surveys.
@@ -258,7 +258,7 @@ def surveys(survey_id):
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, enddate = enddate)
 
-@app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
+@app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
     """
     Delete the current ranking of the student.
@@ -269,19 +269,19 @@ def delete_submission(survey_id):
         response = {"status":"1", "msg":"Valinnat poistettu"}
     return jsonify(response)
 
-@app.route("/surveys/<int:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/edit")
 @teachers_only
 def edit_survey(survey_id):
     #TODO
     ...
 
-@app.route("/surveys/<int:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/edit")
 @teachers_only
 def delete_survey(survey_id):
     #TODO
     ...
 
-@app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
+@app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
 @teachers_only
 def survey_answers(survey_id):
     """
@@ -305,7 +305,7 @@ def survey_answers(survey_id):
                            survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed,
                            answered = answers_saved)
 
-@app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
+@app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
 @teachers_only
 def survey_results(survey_id):
     """
@@ -358,7 +358,7 @@ def survey_results(survey_id):
             return jsonify(response)
     return redirect('/surveys')
 
-@app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
+@app.route("/surveys/<string:survey_id>/close", methods = ["POST"])
 @teachers_only
 def close_survey(survey_id):
     """
@@ -371,7 +371,7 @@ def close_survey(survey_id):
         return jsonify(response)
     return redirect(f'/surveys/{survey_id}/answers')
 
-@app.route("/surveys/<int:survey_id>/open", methods = ["POST"])
+@app.route("/surveys/<string:survey_id>/open", methods = ["POST"])
 @teachers_only
 def open_survey(survey_id):
     """
@@ -501,7 +501,7 @@ def excel():
     return render_template("results.html", results = output_data[0],
                            happiness_data = output_data[2], happiness = output_data[1])
 
-@app.route("/get_choices/<int:survey_id>", methods=["POST"])
+@app.route("/get_choices/<string:survey_id>", methods=["POST"])
 def get_choices(survey_id):
     """
     Save the ranking to the database.
