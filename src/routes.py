@@ -3,6 +3,8 @@ from random import shuffle
 from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect, url_for
+from dotenv import load_dotenv
+import os
 from src import app,db
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
@@ -17,6 +19,41 @@ from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
+from functools import wraps
+
+def home_decorator():
+    '''
+    This is pretty much all the AD-login code there is.
+    This function is called by some routes, 
+    by those marked by @home_decorator()
+    For more details see documentation
+    '''
+    def _home_decorator(f):
+        @wraps(f)
+        def __home_decorator(*args, **kwargs):
+            result = f(*args, **kwargs)
+
+            # if logged in already do nothing or in local use
+            if session.get("user_id", 0) != 0 or app.debug:
+                return result
+
+            roles = request.headers.get('eduPersonAffiliation')
+            name = request.headers.get('cn')
+            email = request.headers.get('mail')
+
+            role_bool = True if "faculty" in roles or "staff" in roles else False
+
+
+            if not user_service.find_by_email(email): # account doesn't exist, register
+                user_service.create_user(name, email, role_bool) # actual registration
+            if user_service.check_credentials(email): # log in, update session etc.
+                if role_bool:
+                    user_service.make_user_teacher(email)
+
+            return result
+        return __home_decorator
+    return _home_decorator
+
 
 """
 DECORATORS:
@@ -38,10 +75,14 @@ def teachers_only(f):
 FRONTPAGE:
 """
 @app.route("/")
+@home_decorator()
 def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
+    # used in local use
+    if app.debug and session.get("user_id", 0) == 0:
+        return redirect("/auth/login")
     user_id = session.get("user_id",0)
     if user_id == 0:
         return render_template('index.html')
@@ -155,7 +196,7 @@ def import_survey_choices():
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
-@app.route("/surveys/<int:survey_id>")
+@app.route("/surveys/<string:survey_id>")
 def surveys(survey_id):
     """
     The answer page for surveys.
@@ -217,7 +258,7 @@ def surveys(survey_id):
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, enddate = enddate)
 
-@app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
+@app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
     """
     Delete the current ranking of the student.
@@ -228,19 +269,19 @@ def delete_submission(survey_id):
         response = {"status":"1", "msg":"Valinnat poistettu"}
     return jsonify(response)
 
-@app.route("/surveys/<int:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/edit")
 @teachers_only
 def edit_survey(survey_id):
     #TODO
     ...
 
-@app.route("/surveys/<int:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/edit")
 @teachers_only
 def delete_survey(survey_id):
     #TODO
     ...
 
-@app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
+@app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
 @teachers_only
 def survey_answers(survey_id):
     """
@@ -265,7 +306,7 @@ def survey_answers(survey_id):
                            survey_answers_amount=survey_answers_amount, available_spaces = available_spaces,
                            survey_id = survey_id, closed = closed, answered = answers_saved)
 
-@app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
+@app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
 @teachers_only
 def survey_results(survey_id):
     """
@@ -318,7 +359,7 @@ def survey_results(survey_id):
             return jsonify(response)
     return redirect('/surveys')
 
-@app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
+@app.route("/surveys/<string:survey_id>/close", methods = ["POST"])
 @teachers_only
 def close_survey(survey_id):
     """
@@ -331,7 +372,7 @@ def close_survey(survey_id):
         return jsonify(response)
     return redirect(f'/surveys/{survey_id}/answers')
 
-@app.route("/surveys/<int:survey_id>/open", methods = ["POST"])
+@app.route("/surveys/<string:survey_id>/open", methods = ["POST"])
 @teachers_only
 def open_survey(survey_id):
     """
@@ -347,46 +388,34 @@ def open_survey(survey_id):
 """
 /AUTH/* ROUTES:
 """
-@app.route("/auth/register", methods = ["GET", "POST"])
-def register():
-    """
-    Mock user registeration. DELETE BEFORE PRODUCTION!!!
-    """
-    if request.method == "GET":
-        return render_template("register.html")
-    email = request.form.get("email")
-    name = request.form.get("name")
-    student_number = request.form.get("student_number")
-    isteacher = request.form.get("isteacher")
-    teacher_priv = False
-    if isteacher == "teacher":
-        teacher_priv = True
-
-    new_user = user_service.create_user(name, student_number, email, teacher_priv)
-    if new_user is None:
-        return redirect("/auth/register")
-    return redirect("/auth/login")
-
 @app.route("/auth/login", methods = ["GET", "POST"])
 def login():
-    """
-    Mock user login. DELETE BEFORE PRODUCTION!!!
-    """
+    if not app.debug:
+        return redirect("/")
+    
     if request.method == "GET":
-        return render_template("login.html")
-    email = request.form.get("email")
+        return render_template("mock_ad.html")
+    if request.method == "POST":
 
-    logged_in = user_service.check_credentials(email)
-    if not logged_in:
-        return redirect("/auth/login")
-    return redirect("/")
+        email = request.form["email"]
+        name = request.form["name"]
+        role_bool = True if request.form["role"] == "1" else False
+
+        if not user_service.find_by_email(email): # account doesn't exist, register
+            user_service.create_user(name, email, role_bool) # actual registration
+        if user_service.check_credentials(email): # log in, update session etc.
+            if role_bool:
+                user_service.make_user_teacher(email)
+
+        return redirect("/")
+        
 
 @app.route("/auth/logout")
 def logout():
-    """
-    Mock user logout. DELETE BEFORE PRODUCTION?
-    """
-    user_service.logout()
+    if app.debug:
+        user_service.logout()
+        return redirect("/auth/login")
+    
     return redirect("/")
 
 """
@@ -473,7 +502,7 @@ def excel():
     return render_template("results.html", results = output_data[0],
                            happiness_data = output_data[2], happiness = output_data[1])
 
-@app.route("/get_choices/<int:survey_id>", methods=["POST"])
+@app.route("/get_choices/<string:survey_id>", methods=["POST"])
 def get_choices(survey_id):
     """
     Save the ranking to the database.

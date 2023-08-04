@@ -24,9 +24,9 @@ class TestSurveyRepository(unittest.TestCase):
         clear_database()
 
         self.ur = ur
-        user1 = User("Not on tren Testerr", 101010101, "feelsbadman@tester.com", True)
-        user2 = User("Not on anabolic", 101010101, "anabolic@tester.com", True)
-        user3 = User("trt enjoyer", 101010101, "ttrt@tester.com", True)
+        user1 = User("Not on tren Testerr", "feelsbadman@tester.com", True)
+        user2 = User("Not on anabolic", "anabolic@tester.com", True)
+        user3 = User("trt enjoyer", "ttrt@tester.com", True)
         self.ur.register(user1)
         self.ur.register(user2)
         self.ur.register(user3)
@@ -50,7 +50,7 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that survey with invalid id doesn't exist
         """
-        exists = sr.get_survey(-1)
+        exists = sr.get_survey("ITSNOTREAL")
         self.assertEqual(False, exists)
 
     def test_survey_name_doesnt_exist(self):
