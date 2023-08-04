@@ -421,9 +421,13 @@ def login():
 def logout():
 
     user_service.logout()
-    logout_url = os.getenv("LOGOUT_URL")
-    print("LOGOUT_URL", logout_url)
-    return redirect(str(logout_url))
+
+    # stupid, but Openshift getenv() can't find Openshift secrets,
+    # so here we are
+    if app.debug:
+        return redirect("/")
+    else:
+        return redirect("/Shibboleth.sso/Logout")
     
 
 """
