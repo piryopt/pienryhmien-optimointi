@@ -393,7 +393,8 @@ def login():
     if not app.debug:
         return redirect("/")
     
-    users = [User("outi1", "testi.opettaja@helsinki.fi", True)]
+    users = [User("outi1", "testi.opettaja@helsinki.fi", True),
+             User("olli1", "testi.opiskelija@helsinki.fi", False)]
     
     if request.method == "GET":
         return render_template("mock_ad.html")
