@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["remove_student_number"]
   pull_request:
-    branches: ["main"]
+    branches: ["remove_student_number"]
 
 jobs:
   build:
