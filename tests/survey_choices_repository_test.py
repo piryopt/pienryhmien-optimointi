@@ -57,7 +57,7 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that getting an invalid survey choice behaves the correct way
         """
-        choice = scr.get_survey_choice(-1)
+        choice = scr.get_survey_choice("ITSNOTREAL")
         self.assertEqual(choice, False)
 
     def test_get_choice_info(self):
