@@ -112,6 +112,7 @@ def frontpage() -> str:
 /SURVEYS/* ROUTES:
 """
 @app.route("/surveys")
+@home_decorator()
 def previous_surveys():
     """
     For fetching previous survey list from the database
@@ -142,6 +143,7 @@ def get_info():
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/surveys/create", methods = ["GET"])
+@home_decorator()
 @teachers_only
 def new_survey_form(survey=None):
     """
@@ -198,6 +200,7 @@ def import_survey_choices():
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
 @app.route("/surveys/<string:survey_id>")
+@home_decorator()
 def surveys(survey_id):
     """
     The answer page for surveys.
@@ -295,6 +298,7 @@ def delete_survey(survey_id):
     ...
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
+@home_decorator()
 @teachers_only
 def survey_answers(survey_id):
     """
@@ -319,6 +323,7 @@ def survey_answers(survey_id):
                            answered = answers_saved)
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
+@home_decorator()
 @teachers_only
 def survey_results(survey_id):
     """
