@@ -57,6 +57,22 @@ def home_decorator():
 
 
 """
+DECORATORS:
+"""
+def teachers_only(f):
+    """
+    Decorator for verifying that the user trying to access the page is a teacher. Students get redirected to the frontpage.
+    """
+    @wraps(f)
+    def _teachers_only(*args, **kwargs):
+        # Only teachers permitted
+        user_id = session.get("user_id",0)
+        if not user_service.check_if_teacher(user_id):
+            return redirect("/")
+        return f(*args, **kwargs)
+    return _teachers_only
+
+"""
 FRONTPAGE:
 """
 @app.route("/")
@@ -126,6 +142,7 @@ def get_info():
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/surveys/create", methods = ["GET"])
+@teachers_only
 def new_survey_form(survey=None):
     """
     Page for survey creation. Adds fields automatically if user chose to copy from template
@@ -133,9 +150,6 @@ def new_survey_form(survey=None):
     args:
         survey: By default, none. If user copied from template, the survey is the survey from the template
     """
-    user_id = session.get("user_id",0)
-    if not user_service.check_if_teacher(user_id):
-        return redirect("/")
     query_params = request.args.to_dict()
     if("fromTemplate" in query_params):
         survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
@@ -143,6 +157,7 @@ def new_survey_form(survey=None):
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/surveys/create", methods = ["POST"])
+@teachers_only
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -171,6 +186,7 @@ def new_survey_post():
         return (jsonify({"msg": "Tuntematon virhe palvelimella"}), 500)
 
 @app.route("/surveys/create/import", methods = ["POST"])
+@teachers_only
 def import_survey_choices():
     """
     Post method for creating a new survey when it uses data imported from a csv file.
@@ -186,9 +202,10 @@ def surveys(survey_id):
     """
     The answer page for surveys.
     """
+    user_id = session.get("user_id",0)
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    if not survey_choices or session.get("user_id", 0) == 0:
+    if not survey_choices or user_id == 0:
         return redirect("/")
 
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
@@ -198,7 +215,6 @@ def surveys(survey_id):
     closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
-    user_id = session.get("user_id", 0)
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     enddate = survey_service.get_survey_enddate(survey_id)
 
@@ -255,25 +271,23 @@ def delete_submission(survey_id):
     return jsonify(response)
 
 @app.route("/surveys/<int:survey_id>/edit")
+@teachers_only
 def edit_survey(survey_id):
     #TODO
     ...
 
 @app.route("/surveys/<int:survey_id>/edit")
+@teachers_only
 def delete_survey(survey_id):
     #TODO
     ...
 
 @app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
+@teachers_only
 def survey_answers(survey_id):
     """
     For displaying the answers of a survey
     """
-    # Only teachers permitted
-    user_id = session.get("user_id",0)
-    if not user_service.check_if_teacher(user_id):
-        return redirect("/")
-
     # If the results have been saved, redirect to the results page
     if survey_service.check_if_survey_results_saved(survey_id):
         return survey_results(survey_id)
@@ -293,15 +307,11 @@ def survey_answers(survey_id):
                            answered = answers_saved)
 
 @app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
+@teachers_only
 def survey_results(survey_id):
     """
     Display survey results. For the post request, the answers are saved to the database.
     """
-    # Only teachers permitted
-    user_id = session.get("user_id",0)
-    if not user_service.check_if_teacher(user_id):
-        return redirect("/")
-
     # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
         return redirect('/')
@@ -350,6 +360,7 @@ def survey_results(survey_id):
     return redirect('/surveys')
 
 @app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
+@teachers_only
 def close_survey(survey_id):
     """
     Close survey, so that no more answers can be submitted
@@ -362,6 +373,7 @@ def close_survey(survey_id):
     return redirect(f'/surveys/{survey_id}/answers')
 
 @app.route("/surveys/<int:survey_id>/open", methods = ["POST"])
+@teachers_only
 def open_survey(survey_id):
     """
     Open survey back up so that students can submit answers
@@ -530,9 +542,12 @@ def get_choices(survey_id):
         response = {"status":"0","msg":"Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."}
         return jsonify(response)
 
-    # Verify that the reasoning isn't too long.
+    # Verify that the reasoning isn't too long or short.
     if len(reason) > 300:
-        response = {"status":"0","msg":"Perustelu on liian pitkä. Merkkimäärä on <= 300. Pidemmissä tapauksissa ota yhteyttä vastuuopettajaan. Tallennus epäonnistui."}
+        response = {"status":"0","msg":"Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."}
+        return jsonify(response)
+    if len(reason) < 10 and len(bad_ids) > 0:
+        response = {"status":"0","msg":"Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10."}
         return jsonify(response)
 
     user_id = session.get("user_id",0)
