@@ -50,7 +50,7 @@ class TestSurveyRepository(unittest.TestCase):
         """
         Test that survey with invalid id doesn't exist
         """
-        exists = sr.get_survey(-1)
+        exists = sr.get_survey("ITSNOTREAL")
         self.assertEqual(False, exists)
 
     def test_survey_name_doesnt_exist(self):

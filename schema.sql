@@ -6,7 +6,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE surveys ( -- yksittäinen kysely
-	id SERIAL PRIMARY KEY,
+	id VARCHAR(10) UNIQUE PRIMARY KEY,
 	surveyname TEXT,
 	teacher_id INTEGER REFERENCES users,
 	min_choices INTEGER,
@@ -19,7 +19,7 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 
 CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
 	id SERIAL PRIMARY KEY,
-	survey_id INTEGER REFERENCES surveys,
+	survey_id VARCHAR(10) REFERENCES surveys,
 	name TEXT,
 	max_spaces INTEGER
 );
@@ -34,7 +34,7 @@ CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices
 CREATE TABLE user_survey_rankings (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users,
-	survey_id INTEGER REFERENCES surveys,
+	survey_id VARCHAR(10) REFERENCES surveys,
 	ranking TEXT, -- e.g 1,2,5,3,4, the id's of survey_choices
 	rejections TEXT, -- same format as ranking
 	reason TEXT,
@@ -44,7 +44,7 @@ CREATE TABLE user_survey_rankings (
 CREATE TABLE final_group ( -- lopullinen sijoitus
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users,
-	survey_id INTEGER REFERENCES surveys,
+	survey_id VARCHAR(10) REFERENCES surveys,
 	choice_id INTEGER REFERENCES survey_choices
 );
 
