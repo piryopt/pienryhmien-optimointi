@@ -8,7 +8,10 @@
 {% block content %}
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
 <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
-
+<i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
+{% if survey_answers_amount > available_spaces%}
+<h4>Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
+{% endif %}
 
 {% if closed %}
 <a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
