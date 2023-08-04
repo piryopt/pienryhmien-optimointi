@@ -3,7 +3,6 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - remove_student_number
       - main
 
 jobs:
