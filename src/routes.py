@@ -514,10 +514,10 @@ def get_choices(survey_id):
 
     # Verify that the reasoning isn't too long or short.
     if len(reason) > 300:
-        response = {"status":"0","msg":"Perustelu on liian pitkä. Merkkimäärä on <= 300. Pidemmissä tapauksissa ota yhteyttä vastuuopettajaan. Tallennus epäonnistui."}
+        response = {"status":"0","msg":"Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."}
         return jsonify(response)
     if len(reason) < 10 and len(bad_ids) > 0:
-        response = {"status":"0","msg":"Perustelu on liian lyhyt. Merkkimäärä on >= 10. Tallennus epäonnistui."}
+        response = {"status":"0","msg":"Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10."}
         return jsonify(response)
 
     user_id = session.get("user_id",0)
