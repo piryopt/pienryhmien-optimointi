@@ -84,6 +84,29 @@ function deleteSubmission() {
     });
 }
 
+function add_teacher() {
+    var surveyID = document.getElementById("survey_id").value;
+    var teacherEmail = document.getElementById("teacher_email").value
+
+    $.ajax({
+        type: "POST",
+        url: "/surveys/" + surveyID + "/edit/add_teacher/" + teacherEmail,
+        success: function(result) {
+            var alertMsg = {
+                msg: result.msg,
+                color: ""
+            }
+            if (result.status === "1") {
+                alertMsg.color = "#6F0";
+            }
+            if (result.status === "0") {
+                alertMsg.color = "red";
+            }
+            showAlert(alertMsg);
+        }
+    });
+}
+
 function showMoreInfo(choiceID) {
     var infoContainer = document.getElementById("info-container");
     var currentlySelected = document.getElementById("currently_selected").value;

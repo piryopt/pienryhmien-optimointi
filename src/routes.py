@@ -298,6 +298,20 @@ def delete_survey(survey_id):
     #TODO
     ...
 
+@app.route("/surveys/<string:survey_id>/edit/add_teacher/<string:teacher_email>", methods=["POST"])
+@teachers_only
+def add_teacher(survey_id, teacher_email):
+    print(teacher_email)
+    if not teacher_email:
+        response = {"status":"0","msg":"Sähköpostiosoite puuttuu!"}
+        return jsonify(response)
+    (success, message) = survey_teachers_service.add_teacher_to_survey(survey_id, teacher_email)
+    if not success:
+        response = {"status":"0","msg":message}
+        return jsonify(response)
+    response = {"status":"1","msg":message}
+    return jsonify(response)
+
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
 @teachers_only
 def survey_answers(survey_id):
