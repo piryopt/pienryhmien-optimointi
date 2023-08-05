@@ -4,6 +4,7 @@ from src.repositories.user_repository import user_repository as ur
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.survey_choices_repository import survey_choices_repository as scr
 from src.repositories.user_rankings_repository import user_rankings_repository as urr
+from src.repositories.survey_teachers_repository import survey_teachers_repository as st
 
 
 class DbDataGen:
@@ -48,7 +49,7 @@ class DbDataGen:
             for i in range(7):
                 student_number += str(choice(self.numbers))
             email = firstname.lower() + "." + lastname.lower() + "@test.com"
-            new_user = User(name, student_number, email, False)
+            new_user = User(name, email, False)
             self.users.append(new_user)
 
     def add_generated_users_db(self):
@@ -88,7 +89,9 @@ class DbDataGen:
         exists = sr.survey_name_exists(name, user_id)
         if exists:
             return
-        survey_id = sr.create_new_survey(name, user_id, 10, "AUTOMAATTISESTI GENEROITU!", "2020-01-01 02:03", "2025-01-01 02:02")
+        survey_id = sr.create_new_survey(name, 10, "AUTOMAATTISESTI GENEROITU!", "2020-01-01 02:03", "2025-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, user_id)
+
         choice_name1 =  "Päiväkoti Aurinkoleikki"
         choice_name2 =  "Päiväkoti Pikku Käpälät"
         choice_name3 =  "Päiväkoti Taikametsä"

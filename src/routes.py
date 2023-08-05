@@ -12,6 +12,7 @@ from src.services.survey_service import survey_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.services.final_group_service import final_group_service
+from src.services.survey_teachers_service import survey_teachers_service
 from src.tools import excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
@@ -176,13 +177,17 @@ def new_survey_post():
 
     #print("Alkaa", date_begin, time_begin)
     #print("Alkaa", date_end, time_end)
-
-    try:
-        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
-        response = {"msg":"Uusi kysely luotu!"}
+    survey_id = survey_service.create_new_survey_manual(survey_choices, user_id, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end)
+    if not survey_id:
+        response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
         return jsonify(response)
-    except:
-        return (jsonify({"msg": "Tuntematon virhe palvelimella"}), 500)
+    teacher_email = user_service.get_email(user_id)
+    (success, message) = survey_teachers_service.add_teacher_to_survey(survey_id, teacher_email)
+    if not success:
+        response = {"status":"0", "msg":message}
+        return jsonify(response)
+    response = {"msg":"Uusi kysely luotu!"}
+    return jsonify(response)
 
 @app.route("/surveys/create/import", methods = ["POST"])
 @teachers_only
@@ -270,6 +275,7 @@ def delete_submission(survey_id):
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
+@teachers_only
 def teacher_deletes_submission(survey_id):
     '''
     Teacher (survey author) can delete a single rankinging from the survey for
