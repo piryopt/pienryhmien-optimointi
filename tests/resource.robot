@@ -1,12 +1,13 @@
 *** Settings ***
 Documentation  Testing
 Library  SeleniumLibrary
+Library  OperatingSystem
 
 
 *** Keywords ***
 Open And Configure Browser
     Open Browser  browser=${BROWSER}
-    Set Window Size  1920  1080
+    Maximize Browser Window
     Set Selenium Speed  ${DELAY}
 
 Main Page Should Be Open

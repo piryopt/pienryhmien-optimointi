@@ -5,8 +5,8 @@ Suite Teardown  Close Browser
 
 *** Variables ***
 ${SERVER}  127.0.0.1:5000
-${BROWSER}  chrome
-${DELAY}  0.1 seconds
+${BROWSER}  headlesschrome
+${DELAY}  0.0 seconds
 ${HOME_URL}  http://${SERVER}/
 ${LOGOUT URL}  http://${SERVER}/auth/logout
 ${CREATE SURVEY URL}  http://${SERVER}/surveys/create
