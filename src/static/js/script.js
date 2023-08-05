@@ -115,16 +115,11 @@ function showMoreInfo(choiceID) {
             }
         });
     } else {
-        infoContainer.innerHTML = "";
-        $('input[id="currently_selected"]').val("");
+        exitMoreInfo();
     }
 }
 
 function exitMoreInfo() {
-    document.getElementById("info-container").innerHTML = "";
+    document.getElementById("info-container").innerHTML = "<p>Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</p>";
     $('input[id="currently_selected"]').val("");
-}
-
-function filterResults(keyword) {
-    
 }
