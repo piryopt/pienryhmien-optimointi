@@ -41,7 +41,6 @@ class SurveyChoicesService:
         """
         survey_choice = self._survey_choices_repository.get_survey_choice(survey_choice_id)
         if not survey_choice:
-            print("SURVEY CHOICE NOT FOUND!")
             return False
         return survey_choice
 

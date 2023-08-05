@@ -1,5 +1,6 @@
 from sqlalchemy import text
 from src import db
+from src.tools.db_tools import generate_unique_id
 
 class SurveyRepository:
     def get_survey(self, survey_id):
@@ -148,9 +149,14 @@ class SurveyRepository:
         RETURNS created survey's id
         '''
         try:
-            sql = "INSERT INTO surveys (surveyname, teacher_id, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
-                " VALUES (:surveyname, :teacher_id, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
-            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
+            id = generate_unique_id(10)
+            while(self.get_survey(id)):
+                id = generate_unique_id(10)
+
+            sql = "INSERT INTO surveys (id, surveyname, teacher_id, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
+                " VALUES (:id, :surveyname, :teacher_id, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
+            
+            result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718
@@ -211,5 +217,43 @@ class SurveyRepository:
         result = db.session.execute(sql, {"survey":survey})
         responses = result.fetchall()
         return responses
+    
+    def get_list_active_answered(self, user_id):
+        """
+        SQL code for getting a list of surveys that are active, that have been answered by the user
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, user_survey_rankings r"\
+                "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = False AND r.deleted = False)"
+            result = db.session.execute(text(sql), {"user_id":user_id})
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_list_closed_answered(self, user_id):
+        """
+        SQL code for getting a list of surveys that are closed, that have been answered by the user
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, user_survey_rankings r"\
+                "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = True AND r.deleted = False)"
+            result = db.session.execute(text(sql), {"user_id":user_id})
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 survey_repository = SurveyRepository()

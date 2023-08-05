@@ -23,8 +23,8 @@ class TestSurveyChoicesService(unittest.TestCase):
 
         clear_database()
 
-        user = User("Not on tren Testerr", 101010101, "tren4lyfe@tester.com", True)
-        user2 = User("Hashtag natty", 101010101, "anabolics4lyfe@tester.com", True)
+        user = User("Not on tren Testerr", "tren4lyfe@tester.com", True)
+        user2 = User("Hashtag natty", "anabolics4lyfe@tester.com", True)
         ur.register(user)
         ur.register(user2)
         self.user_id = ur.find_by_email(user.email)[0]
@@ -41,7 +41,7 @@ class TestSurveyChoicesService(unittest.TestCase):
         '''
 
         # first non existant case
-        ret = scs.get_list_of_survey_choices(-1)
+        ret = scs.get_list_of_survey_choices("ITSNOTREAL")
         self.assertEqual(ret, False)
 
         with open("tests/test_files/test_survey1.json", 'r') as openfile:

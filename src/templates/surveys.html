@@ -16,7 +16,7 @@
             <th scope="col"><p>Nimi</p></th>
             <th scope="col"><p>Kyselyn tila</p> </th>
             <th scope="col"><p>Ryhmät luotu</p></th>
-            <th scope="col"><p>Toiminnot</p></th>
+            {% if is_teacher %}<th scope="col"><p>Toiminnot</p></th>{% endif %}
             <th scope="col"><p>Vastausaika päättyy</p></th>
         </tr>
       </thead>
@@ -26,11 +26,12 @@
           <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
           <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>
           <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
+          {% if is_teacher %}
           <td>
             <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a><br>
             <a href="/surveys/create?fromTemplate={{ row[0] }}">Kopioi kysely</a>
-
           </td>
+          {% endif %}
           <td>{{ row[4] }}</td>
 
         </tr>
@@ -38,17 +39,19 @@
           <td>---</td>
           <td>---</td>
           <td>---</td>
-          <td>---</td>
+          {% if is_teacher %}<td>---</td>{% endif %}
           <td>---</td>
           <tr>
             {% for row in closed_surveys %}
             <td><a href="/surveys/{{ row[0] }}">{{ row[1] }}</a></td>       <!--survey name--> 
             <td><p>{% if row[2] %} Suljettu {% else %} Avoin {% endif %}</p></td>
             <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
+            {% if is_teacher %}
             <td>
               <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a><br>
               <a href="/surveys/create?fromTemplate={{ row[0] }}">Kopioi kysely</a>
             </td>
+            {% endif %}
             <td>{{ row[4] }}</td>
   
           </tr>

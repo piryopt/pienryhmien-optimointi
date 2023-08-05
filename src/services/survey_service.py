@@ -24,7 +24,6 @@ class SurveyService:
         """
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
-            print("SURVEY DOES NOT EXIST!")
             return False
         return survey[1]
 
@@ -50,10 +49,9 @@ class SurveyService:
         """
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
-            print("SURVEY DOES NOT EXIST!")
             return False
+        # Only the teacher who created the survey can close it
         if survey.teacher_id != teacher_id:
-            print("YOU DID NOT CREATE THIS SURVEY. YOU CANNOT CLOSE IT")
             return False
         return self._survey_repository.close_survey(survey_id, teacher_id)
 
@@ -67,13 +65,11 @@ class SurveyService:
         """
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
-            print("SURVEY DOES NOT EXIST!")
             return False
+        # Only the teacher who created the survey can open it
         if survey.teacher_id != teacher_id:
-            print("YOU DID NOT CREATE THIS SURVEY. YOU CANNOT OPEN IT")
             return False
         if self._survey_repository.survey_name_exists(survey.surveyname, teacher_id):
-            print("A SURVEY WITH THIS NAME ALREADY EXISTS!")
             return False
         return self._survey_repository.open_survey(survey_id, teacher_id)
 
@@ -86,7 +82,6 @@ class SurveyService:
         """
         surveys = self._survey_repository.get_active_surveys(teacher_id)
         if not surveys:
-            print("THIS USER HAS NOT CREATED ANY SURVEYS!")
             return False
         return surveys
 
@@ -99,7 +94,6 @@ class SurveyService:
         """
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
-            print("SURVEY DOES NOT EXIST!")
             return False
         closed = survey.closed
         return closed
@@ -123,7 +117,6 @@ class SurveyService:
         """
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
-            print("SURVEY DOES NOT EXIST!")
             return False
         saved = self._survey_repository.update_survey_answered(survey_id)
         return saved
@@ -137,7 +130,6 @@ class SurveyService:
         """
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
-            print("SURVEY DOES NOT EXIST!")
             return False
         return survey.results_saved
 
@@ -180,5 +172,29 @@ class SurveyService:
         RETURNS dictionary
         '''
         return parser_existing_survey_to_dict(survey_id)
+    
+    def get_list_active_answered(self, user_id):
+        """
+        Gets a list of active surveys that the user has answered.
+
+        args:
+            user_id: The id of the user
+        """
+        active = self._survey_repository.get_list_active_answered(user_id)
+        if not active:
+            return []
+        return active
+    
+    def get_list_closed_answered(self, user_id):
+        """
+        Gets a list of closed surveys that the user has answered.
+
+        args:
+            user_id: The id of the user
+        """
+        closed = self._survey_repository.get_list_closed_answered(user_id)
+        if not closed:
+            return []
+        return closed
 
 survey_service = SurveyService()

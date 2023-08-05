@@ -55,7 +55,6 @@ class UserRankingsService:
         """
         ranking = self._user_rankings_repository.get_user_ranking(current_user_id, survey_id)
         if not ranking:
-            print("NO RANKING FOR THIS SURVEY!")
             return False
         self._user_rankings_repository.delete_user_ranking(current_user_id, survey_id)
         return True
@@ -69,8 +68,6 @@ class UserRankingsService:
             user_id: The id of the user
         """
         ranking = self._user_rankings_repository.get_user_ranking(user_id, survey_id)
-        if not ranking:
-            print("No ranking for this user!")
         return ranking.ranking
 
 user_rankings_service = UserRankingsService()

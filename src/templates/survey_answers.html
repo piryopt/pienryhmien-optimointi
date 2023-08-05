@@ -32,6 +32,7 @@
             <th>Valinnat</th>
             <th>Hylkäykset</th>
             <th>Perustelut</th>
+            <th>Vastauksen poistaminen</th>
         </tr>
       </thead>
       <tbody>
@@ -41,6 +42,13 @@
           <td><p>{{ row[1] }}</p></td>
           <td><p>{{ row[2] }}</p></td>
           <td><p>{{ row[3] }}</p></td>
+          <td>
+            <form action="/surveys/{{ survey_id }}/answers/delete" method="POST" onsubmit="return confirm ('Haluatko varmasti poistaa tämän vastauksen?')">
+              <button type="submit"  class="btn btn-danger btn-sm" name="delete_input" style="float: left;" onclick="">Poista tämä vastaus</button>
+              <input type="hidden" name="student_email" value="{{ row[0] }}">
+            </form>
+          </td>
+
         </tr>
         {% endfor %}
       </tbody>

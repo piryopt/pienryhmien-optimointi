@@ -3,6 +3,8 @@ from random import shuffle
 from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect, url_for
+from dotenv import load_dotenv
+import os
 from src import app,db
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
@@ -17,24 +19,84 @@ from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
+from src.entities.user import User
+from functools import wraps
+
+def home_decorator():
+    '''
+    This is pretty much all the AD-login code there is.
+    This function is called by some routes, 
+    by those marked by @home_decorator()
+    For more details see documentation
+    '''
+    def _home_decorator(f):
+        @wraps(f)
+        def __home_decorator(*args, **kwargs):
+            result = f(*args, **kwargs)
+
+            # if logged in already do nothing or in local use
+            if session.get("user_id", 0) != 0 or app.debug:
+                return result
+
+            roles = request.headers.get('eduPersonAffiliation')
+            name = request.headers.get('cn')
+            email = request.headers.get('mail')
+
+            role_bool = True if "faculty" in roles or "staff" in roles else False
+
+
+            if not user_service.find_by_email(email): # account doesn't exist, register
+                user_service.create_user(name, email, role_bool) # actual registration
+            if user_service.check_credentials(email): # log in, update session etc.
+                if role_bool:
+                    user_service.make_user_teacher(email)
+
+            return result
+        return __home_decorator
+    return _home_decorator
+
+
+"""
+DECORATORS:
+"""
+def teachers_only(f):
+    """
+    Decorator for verifying that the user trying to access the page is a teacher. Students get redirected to the frontpage.
+    """
+    @wraps(f)
+    def _teachers_only(*args, **kwargs):
+        # Only teachers permitted
+        user_id = session.get("user_id",0)
+        if not user_service.check_if_teacher(user_id):
+            return redirect("/")
+        return f(*args, **kwargs)
+    return _teachers_only
 
 """
 FRONTPAGE:
 """
 @app.route("/")
+@home_decorator()
 def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
-    #print(f'HEADERS:\n{request.headers["Connection"]}')
+    # used in local use
+    if app.debug and session.get("user_id", 0) == 0:
+        return redirect("/auth/login")
     user_id = session.get("user_id",0)
+    if user_id == 0:
+        return render_template('index.html')
+    is_teacher = user_service.check_if_teacher(user_id)
+    if not is_teacher:
+         return render_template('index.html', exists = False, is_teacher = is_teacher)
     surveys_created = survey_service.count_surveys_created(user_id)
     # If 0 surveys created, return the base home page.
     if surveys_created == 0:
-        return render_template('index.html', surveys_created = 0, exists = False)
+        return render_template('index.html', surveys_created = 0, exists = False, is_teacher = is_teacher)
     surveys = survey_service.get_active_surveys(user_id)
     if not surveys:
-        return render_template('index.html', surveys_created = surveys_created, exists = False)
+        return render_template('index.html', surveys_created = surveys_created, exists = False, is_teacher = is_teacher)
     data = []
     for s in surveys:
         survey_id = s[0]
@@ -44,22 +106,31 @@ def frontpage() -> str:
         survey_ending_date = survey_service.get_survey_enddate(survey_id)
         data.append([survey_id, surveyname, participants, survey_ending_date])
 
-    return render_template('index.html', surveys_created = surveys_created, exists = True, data = data)
+    return render_template('index.html', surveys_created = surveys_created, exists = True, data = data, is_teacher = is_teacher)
 
 """
 /SURVEYS/* ROUTES:
 """
 @app.route("/surveys")
+@home_decorator()
 def previous_surveys():
     """
     For fetching previous survey list from the database
     """
     user_id = session.get("user_id",0)
     if user_id == 0:
-        return frontpage()
-    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
-    closed_surveys = survey_service.get_list_closed_surveys(user_id)
-    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
+        return redirect('/')
+    is_teacher = user_service.check_if_teacher(user_id)
+    active_surveys = []
+    closed_surveys = []
+    if is_teacher:
+        active_surveys = survey_repository.fetch_all_active_surveys(user_id)
+        closed_surveys = survey_service.get_list_closed_surveys(user_id)
+    else:
+        active_surveys = survey_service.get_list_active_answered(user_id)
+        closed_surveys = survey_service.get_list_closed_answered(user_id)
+
+    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys, is_teacher = is_teacher)
 
 @app.route("/surveys/getinfo", methods=["POST"])
 def get_info():
@@ -72,6 +143,8 @@ def get_info():
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/surveys/create", methods = ["GET"])
+@home_decorator()
+@teachers_only
 def new_survey_form(survey=None):
     """
     Page for survey creation. Adds fields automatically if user chose to copy from template
@@ -79,9 +152,6 @@ def new_survey_form(survey=None):
     args:
         survey: By default, none. If user copied from template, the survey is the survey from the template
     """
-    user_id = session.get("user_id",0)
-    if not user_service.check_if_teacher(user_id):
-        return frontpage()
     query_params = request.args.to_dict()
     if("fromTemplate" in query_params):
         survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
@@ -89,6 +159,7 @@ def new_survey_form(survey=None):
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/surveys/create", methods = ["POST"])
+@teachers_only
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -117,6 +188,7 @@ def new_survey_post():
         return (jsonify({"msg": "Tuntematon virhe palvelimella"}), 500)
 
 @app.route("/surveys/create/import", methods = ["POST"])
+@teachers_only
 def import_survey_choices():
     """
     Post method for creating a new survey when it uses data imported from a csv file.
@@ -124,31 +196,28 @@ def import_survey_choices():
     data = request.get_json()
     return jsonify(parser_elomake_csv_to_dict(data['uploadedFileContent'])["choices"])
 
-
-
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
-@app.route("/surveys/<int:survey_id>")
+@app.route("/surveys/<string:survey_id>")
+@home_decorator()
 def surveys(survey_id):
     """
     The answer page for surveys.
     """
+    user_id = session.get("user_id",0)
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    print(survey_choices)
-    desc = survey_service.get_survey_description(survey_id)
-    if not survey_choices or session.get("user_id", 0) == 0:
-        print("SURVEY DOES NOT EXIST OR NOT LOGGED IN!")
-        return frontpage()
+    if not survey_choices or user_id == 0:
+        return redirect("/")
 
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
     shuffle(survey_choices)
 
+    desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
-    user_id = session.get("user_id", 0)
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     enddate = survey_service.get_survey_enddate(survey_id)
 
@@ -193,7 +262,7 @@ def surveys(survey_id):
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, enddate = enddate)
 
-@app.route("/surveys/<int:survey_id>/deletesubmission", methods=["POST"])
+@app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
     """
     Delete the current ranking of the student.
@@ -204,17 +273,32 @@ def delete_submission(survey_id):
         response = {"status":"1", "msg":"Valinnat poistettu"}
     return jsonify(response)
 
+@app.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
+def teacher_deletes_submission(survey_id):
+    '''
+    Teacher (survey author) can delete a single rankinging from the survey for
+    e.g. if a student has dropped the course.
+    '''
+    user_data = user_service.find_by_email(request.form["student_email"])
+    user_id = user_data.id
+    user_rankings_service.delete_ranking(survey_id, user_id)
+    return redirect(f'/surveys/{survey_id}/answers')
+
 @app.route("/surveys/<int:survey_id>/edit")
+@teachers_only
 def edit_survey(survey_id):
     #TODO
     ...
 
-@app.route("/surveys/<int:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/edit")
+@teachers_only
 def delete_survey(survey_id):
     #TODO
     ...
 
-@app.route("/surveys/<int:survey_id>/answers", methods = ["GET"])
+@app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
+@home_decorator()
+@teachers_only
 def survey_answers(survey_id):
     """
     For displaying the answers of a survey
@@ -237,14 +321,16 @@ def survey_answers(survey_id):
                            survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed,
                            answered = answers_saved)
 
-@app.route("/surveys/<int:survey_id>/results", methods = ["GET", "POST"])
+@app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
+@home_decorator()
+@teachers_only
 def survey_results(survey_id):
     """
     Display survey results. For the post request, the answers are saved to the database.
     """
     # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
-        return frontpage()
+        return redirect('/')
     # Check if the answers are already saved to the database. This determines which operations are available to the teacher.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
@@ -272,12 +358,12 @@ def survey_results(survey_id):
 
     # If the request is post, check if results have been saved. If they have, redirect to previous_surveys page.
     if saved_result_exists:
-        return previous_surveys()
+        return redirect('/surveys')
 
     # Update the database entry for the survey, so that result_saved = True.
     survey_answered = survey_service.update_survey_answered(survey_id)
     if not survey_answered:
-        return previous_surveys()
+        return redirect('/surveys')
 
     # Create new database entrys for final groups of the sorted students.
     for results in output_data[0]:
@@ -287,9 +373,10 @@ def survey_results(survey_id):
         if not saved:
             response = {"msg":f"ERROR IN SAVING {results[0][1]} RESULTS!"}
             return jsonify(response)
-    return previous_surveys()
+    return redirect('/surveys')
 
-@app.route("/surveys/<int:survey_id>/close", methods = ["POST"])
+@app.route("/surveys/<string:survey_id>/close", methods = ["POST"])
+@teachers_only
 def close_survey(survey_id):
     """
     Close survey, so that no more answers can be submitted
@@ -297,11 +384,12 @@ def close_survey(survey_id):
     user_id = session.get("user_id",0)
     closed = survey_service.close_survey(survey_id, user_id)
     if not closed:
-        response = {"msg":"ERROR IN CLOSING SURVEY"}
+        response = {"status":"0", "msg":"Kyselyn sulkeminen epäonnistui"}
         return jsonify(response)
-    return survey_answers(survey_id)
+    return redirect(f'/surveys/{survey_id}/answers')
 
-@app.route("/surveys/<int:survey_id>/open", methods = ["POST"])
+@app.route("/surveys/<string:survey_id>/open", methods = ["POST"])
+@teachers_only
 def open_survey(survey_id):
     """
     Open survey back up so that students can submit answers
@@ -309,55 +397,55 @@ def open_survey(survey_id):
     user_id = session.get("user_id",0)
     opened = survey_service.open_survey(survey_id, user_id)
     if not opened:
-        response = {"msg":"ERROR IN OPENING SURVEY"}
+        response = {"status":"0", "msg":"Kyselyn avaaminen epäonnistui"}
         return jsonify(response)
-    return survey_answers(survey_id)
-
+    return redirect(f'/surveys/{survey_id}/answers')
 
 """
 /AUTH/* ROUTES:
 """
-@app.route("/auth/register", methods = ["GET", "POST"])
-def register():
-    """
-    Mock user registeration. DELETE BEFORE PRODUCTION!!!
-    """
-    if request.method == "GET":
-        return render_template("register.html")
-    email = request.form.get("email")
-    name = request.form.get("name")
-    student_number = request.form.get("student_number")
-    isteacher = request.form.get("isteacher")
-    teacher_priv = False
-    if isteacher == "teacher":
-        teacher_priv = True
-
-    new_user = user_service.create_user(name, student_number, email, teacher_priv)
-    if new_user is None:
-        return render_template("register.html")
-    return render_template("login.html")
-
 @app.route("/auth/login", methods = ["GET", "POST"])
 def login():
-    """
-    Mock user login. DELETE BEFORE PRODUCTION!!!
-    """
+    if not app.debug:
+        return redirect("/")
+    
+    users = [User("outi1", "testi.opettaja@helsinki.fi", True),
+             User("olli1", "testi.opiskelija@helsinki.fi", False)]
+    
     if request.method == "GET":
-        return render_template("login.html")
-    email = request.form.get("email")
+        return render_template("mock_ad.html")
+    if request.method == "POST":
+        username = request.form["username"]
 
-    logged_in = user_service.check_credentials(email)
-    if not logged_in:
-        return render_template("login.html")
-    return frontpage()
+        email = name = role_bool = ""
+
+        for user in users:
+            if user.name == username:
+                email = user.email
+                name = user.name
+                role_bool = user.isteacher
+
+        if not user_service.find_by_email(email): # account doesn't exist, register
+            user_service.create_user(name, email, role_bool) # actual registration
+        if user_service.check_credentials(email): # log in, update session etc.
+            if role_bool:
+                user_service.make_user_teacher(email)
+
+        return redirect("/")
+        
 
 @app.route("/auth/logout")
 def logout():
-    """
-    Mock user logout. DELETE BEFORE PRODUCTION?
-    """
+
     user_service.logout()
-    return render_template("index.html")
+
+    # stupid, but Openshift getenv() can't find Openshift secrets,
+    # so here we are
+    if app.debug:
+        return redirect("/")
+    else:
+        return redirect("/Shibboleth.sso/Logout")
+    
 
 """
 ADMINTOOLS -ROUTES:
@@ -425,7 +513,6 @@ def admin_gen_survey():
     surveys = survey_repository.fetch_all_active_surveys(user_id)
     return render_template("/admintools/gen_data.html", surveys = surveys)
 
-
 """
 MISCELLANEOUS ROUTES:
 """
@@ -444,7 +531,7 @@ def excel():
     return render_template("results.html", results = output_data[0],
                            happiness_data = output_data[2], happiness = output_data[1])
 
-@app.route("/get_choices/<int:survey_id>", methods=["POST"])
+@app.route("/get_choices/<string:survey_id>", methods=["POST"])
 def get_choices(survey_id):
     """
     Save the ranking to the database.
@@ -484,9 +571,12 @@ def get_choices(survey_id):
         response = {"status":"0","msg":"Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."}
         return jsonify(response)
 
-    # Verify that the reasoning isn't too long.
+    # Verify that the reasoning isn't too long or short.
     if len(reason) > 300:
-        response = {"status":"0","msg":"Perustelu on liian pitkä. Merkkimäärä on <= 300. Pidemmissä tapauksissa ota yhteyttä vastuuopettajaan. Tallennus epäonnistui."}
+        response = {"status":"0","msg":"Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."}
+        return jsonify(response)
+    if len(reason) < 10 and len(bad_ids) > 0:
+        response = {"status":"0","msg":"Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10."}
         return jsonify(response)
 
     user_id = session.get("user_id",0)
@@ -495,4 +585,3 @@ def get_choices(survey_id):
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)
-

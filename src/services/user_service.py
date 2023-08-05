@@ -24,11 +24,9 @@ class UserService:
             email: The email address of the user trying to log in
         """
         if not email:
-            print("Email is required!")
             return False
         user = self._user_repository.find_by_email(email)
         if not user:
-            print("Invalid email!")
             return False
         session["email"] = user.email
         session["user_id"] = user.id
@@ -39,53 +37,35 @@ class UserService:
             session["role"] = "Opiskelija"
         return True
 
-    def create_user(self, name, student_number, email, isteacher):
+    def create_user(self, name, email, isteacher):
         """
-        Creates a user with the provided data. Delete before production!
+        Creates a user with the provided data.
 
         args:
             name: The name of the user
-            student_number: the student number of the user
             email: The email address of the user
             isteacher: True/False depending on if the user is a teacher/student
         """
-        if not self.validate(name, student_number):
+        if not self.validate(name):
             return False
-        new_user = User(name, student_number, email, isteacher)
+        new_user = User(name, email, isteacher)
         user = self._user_repository.register(new_user)
         return user
 
-    def validate(self, name, student_number):
+    def validate(self, name):
         """
-        Validate that name and student number are correct. They cannot be empty values
+        Validate that name is correct. They cannot be empty values
 
         args:
             name: The name of the user
-            student_number: the student number of the user
         """
-        if not name or not student_number:
+        if not name:
             print("All fields are required!")
+        if not name:
             return False
         if len(name) < 1:
-            print("Name is too short!")
             return False
         return True
-
-    def get_student_number(self, user_id):
-        """
-        Get the student number of a user
-
-        args:
-            user_id: The id of the user
-        """
-        if not id:
-            print("user_id required!")
-            return False
-        user = self._user_repository.get_user_data(user_id)
-        if not user:
-            return False
-        student_number = user.student_number
-        return student_number
 
     def get_email(self, user_id):
         """
@@ -95,7 +75,6 @@ class UserService:
             user_id: The id of the user
         """
         if not id:
-            print("user_id required!")
             return False
         user = self._user_repository.get_user_data(user_id)
         if not user:
@@ -111,7 +90,6 @@ class UserService:
             user_id: The id of the user
         """
         if not id:
-            print("user_id required!")
             return False
         user = self._user_repository.get_user_data(user_id)
         if not user:
