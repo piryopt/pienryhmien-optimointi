@@ -2,17 +2,6 @@
 Documentation  Testing
 Library  SeleniumLibrary
 
-*** Variables ***
-${SERVER}  localhost:5000
-${BROWSER}  headlessfirefox
-${DELAY}  0.0 seconds
-${HOME URL}  http://${SERVER}
-${REGISTER URL}  http://${SERVER}/auth/register
-${LOGIN URL}  http://${SERVER}/auth/login
-${CREATE SURVEY URL}  http://${SERVER}/surveys/create
-${PREVIOUS SURVEYS URL}  http://${SERVER}/surveys
-${LOGOUT URL}  http://${SERVER}/auth/logout
-
 
 *** Keywords ***
 Open And Configure Browser
@@ -56,14 +45,25 @@ Toy Data Input Page Should Be Open
     Page Should Contain  Ryhmien lukumäärä
     Page Should Contain  Ryhmien maksimikoko
 
+
+# NEW
+
+Input Login Credentials
+    [Arguments]  ${username}  ${password}
+    Input Text  username  ${username}
+    Input Text  password  ${password}
+    Click Element  ${AD_LOGIN_BUTTON}
+
+Logout And Go To Login
+    [Documentation]  Call when changing user
+    Go To Logout Page
+    Go To Main Page
+    
 Go To Main Page
     Go To  ${HOME URL}
 
 Go To Register Page
     Go To  ${REGISTER URL}
-
-Go To Login Page
-    Go To  ${LOGIN URL}
 
 Go To Create Survey Page
     Go To  ${CREATE SURVEY URL}
@@ -73,3 +73,27 @@ Go To Previous Surveys Page
 
 Go To Logout Page
     Go To  ${LOGOUT URL}
+
+Set Email
+    [Arguments]  ${email}
+    Input Text  email  ${email}
+
+Set Name
+    [Arguments]  ${name}
+    Input Text  name  ${name}
+
+Set Role Number
+    [Arguments]  ${student_number}
+    Input Text  role  ${student_number}
+
+Set Surveyname
+    [Arguments]  ${groupname}
+    Input Text  groupname  ${groupname}
+
+Set Choicename
+    [Arguments]  ${choicename}
+    Input Text  choiceName  ${choiceName}
+
+Set Choicemaxspaces
+    [Arguments]  ${choiceMaxSpaces}
+    Input Text  choiceMaxSpaces  ${choiceMaxSpaces}

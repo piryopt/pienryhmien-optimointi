@@ -410,7 +410,9 @@ def login():
         return redirect("/")
     
     users = [User("outi1", "testi.opettaja@helsinki.fi", True),
-             User("olli1", "testi.opiskelija@helsinki.fi", False)]
+             User("olli1", "testi.opiskelija@helsinki.fi", False),
+             User("robottiStudent", "robotti.student@helsinki.fi", False),
+             User("robottiTeacher", "robotti.teacher@helsinki.fi", True)]
     
     if request.method == "GET":
         return render_template("mock_ad.html")

@@ -1,7 +1,6 @@
 *** Settings ***
-Documentation  Testing
-Library  SeleniumLibrary
-Suite Setup  Open And Configure Browser S
+Resource  resource.robot
+Suite Setup  Open And Configure Browser
 Suite Teardown  Close Browser
 
 *** Variables ***
@@ -10,17 +9,19 @@ ${BROWSER}  headlessfirefox
 ${DELAY}  0.0 seconds
 ${HOME_URL}  https://${SERVER}
 ${LOGOUT URL}  http://${SERVER}/auth/logout
+${CREATE SURVEY URL}  http://${SERVER}/surveys/create
 
 ${AD_LOGIN_BUTTON}  xpath=//button[@type='submit' and contains(text(),'Login')]
+${FIRST_TIME_LOGIN_ACCEPT}  xpath=//button[@type='submit' and contains(text(),'Accept')]
 
 *** Test Cases ***
 Login As Teacher
     [Documentation]  Wait Until because AD login redirects, home url isn't opened instantly. Times out after 5s and fails if not opened
-    Go To Logout Page
-    Go To Main Page
-    Input Text  username  outi1
-    Input Text  password  moi123
-    Click Element  ${AD_LOGIN_BUTTON}
+    Logout And Go To Login
+    Input Login Credentials  robottiTeacher  moi123
+    # first time logging in real AD login asks the do you consent
+    # to disclosing this information etc. this clicks that button
+    Run Keyword And Ignore Error  Click Element  ${FIRST_TIME_LOGIN_ACCEPT}
     Wait Until Location Is  ${HOME_URL}
     Go To Main Page
     Page Should Contain  Näytä vanhat kyselyt
@@ -28,24 +29,15 @@ Login As Teacher
 
 Login As Student
     [Documentation]  Wait Until because AD login redirects, home url isn't opened instantly. Times out after 5s and fails if not opened
-    Go To Logout Page
-    Go To Main Page
-    Input Text  username  olli1
-    Input Text  password  moi123
-    Click Element  ${AD_LOGIN_BUTTON}
+    Logout And Go To Login
+    Input Login Credentials  robottiStudent  moi123
+    Run Keyword And Ignore Error  Click Element  ${FIRST_TIME_LOGIN_ACCEPT}
     Wait Until Location Is  ${HOME_URL}
     Go To Main Page
     Page Should Contain  Näytä vanhat kyselyt
     Page Should Not Contain  Luo uusi kysely
 
-*** Keywords ***
-Go To Main Page
-    Go To  ${HOME_URL}
-
-Go To Logout Page
-    Go To  ${LOGOUT URL}
-
-Open And Configure Browser S
-    Open Browser  browser=${BROWSER}
-    Set Window Size  1920  1080
-    Set Selenium Speed  ${DELAY}
+Go To Create Survey Page As Student
+    Go To Create Survey Page
+    Page Should Contain  Näytä vanhat kyselyt
+    Page Should Not Contain  Luo uusi kysely
