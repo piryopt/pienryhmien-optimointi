@@ -208,11 +208,30 @@ def surveys(survey_id):
     user_id = session.get("user_id",0)
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
+
     if not survey_choices or user_id == 0:
         return redirect("/")
 
+    survey_all_info = {}
+    for row in survey_choices_info:
+        if row[0] not in survey_all_info:
+            survey_all_info[row[0]] = {"infos": [{row[1]:row[2]}]}
+            survey_all_info[row[0]]["search"] = row[2]
+        else:
+            survey_all_info[row[0]]["infos"].append({row[1]:row[2]})
+            survey_all_info[row[0]]["search"] += " " + row[2]
+
+    for row in survey_choices:
+        survey_all_info[row[0]]["name"] = row[2]
+        survey_all_info[row[0]]["slots"] = row[3]
+        survey_all_info[row[0]]["id"] = row[0]
+
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
-    shuffle(survey_choices)
+    
+    temp = list(survey_all_info.items())
+    shuffle(temp)
+    shuffled_choices = [v for k,v in dict(temp).items()]
 
     desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
@@ -250,7 +269,7 @@ def surveys(survey_id):
         if closed:
             return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc,
+                            survey_name = survey_name, existing = existing, desc = desc, choices_info=survey_all_info,
                             bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason)
 
 
@@ -259,7 +278,7 @@ def surveys(survey_id):
     if closed:
         return render_template("closedsurvey.html", survey_name = survey_name)
 
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
+    return render_template("survey.html", choices = shuffled_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, enddate = enddate)
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])

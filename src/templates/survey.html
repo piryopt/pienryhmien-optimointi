@@ -108,11 +108,12 @@
             <div class="col-sm">
                 <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray; padding-right: 10px;">
                     {% for group in choices %}
-                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ group[2] }}</h5>
+                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
+                        <div class="d-flex w-100 justify-content-between" id="search">
+                            <h5 class="mb-1">{{ group.name }}</h5>
+                            <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                         </div>
-                        <small class="text-muted">Ryhmän maksimikoko: {{ group[3] }}</small>
+                        <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
                     </li>
                     {% endfor %}
                 </ul>
@@ -144,7 +145,7 @@
         $("#searchChoices").on("keyup", function() {
             var keyword = $( this ).val().toLowerCase();
             $("#sortable-neutral li").filter(function() {
-                $( this ).toggle($(this.querySelector("h5")).text().toLowerCase().indexOf(keyword) > -1)
+                $( this ).toggle($(this.querySelector("#search")).text().toLowerCase().indexOf(keyword) > -1)
             });
         });
     });
