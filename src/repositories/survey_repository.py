@@ -23,14 +23,14 @@ class SurveyRepository:
 
     def survey_name_exists(self, surveyname, teacher_id):
         """
-        SQL code for getting the id from a survey that has a certain name, is open and created by a certain user.
+        SQL code for getting the id from a survey that has a certain name, is open has access to by a certain user.
 
         args:
             surveyname: The name of the survey
             teacher_id: The id of the user
         """
         try:
-            sql = "SELECT id FROM surveys WHERE (surveyname=:surveyname AND teacher_id=:teacher_id AND closed=False)"
+            sql = "SELECT s.id FROM surveys s, survey_teachers t WHERE (s.surveyname=:surveyname AND t.teacher_id=:teacher_id AND s.closed=False AND t.survey_id=s.id)"
             result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":teacher_id})
             survey = result.fetchone()
             if not survey:
@@ -42,14 +42,14 @@ class SurveyRepository:
 
     def count_created_surveys(self, user_id):
         """
-        SQL code for getting the length of created surveys
+        SQL code for getting the number of surveys the teacher has access to
 
         args:
             user_id: The id of the user
         """
         # Do we want to diplay all surveys created or only the active ones?
         try:
-            sql = "SELECT * FROM surveys WHERE teacher_id=:user_id"
+            sql = "SELECT s.id FROM surveys s, survey_teachers t WHERE (t.teacher_id=:user_id AND t.survey_id=s.id)"
             result = db.session.execute(text(sql), {"user_id":user_id})
             survey_list = result.fetchall()
             if not survey_list:
@@ -59,34 +59,32 @@ class SurveyRepository:
             print(e)
             return False
 
-    def close_survey(self, survey_id, teacher_id):
+    def close_survey(self, survey_id):
         """
         SQL code for closing a survey
 
         args:
             survey_id: The id of the survey
-            teacher_id: The id of the user
         """
         try:
-            sql = "UPDATE surveys SET closed = True WHERE (id=:survey_id and teacher_id=:teacher_id)"
-            db.session.execute(text(sql), {"survey_id":survey_id, "teacher_id":teacher_id})
+            sql = "UPDATE surveys SET closed = True WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id":survey_id})
             db.session.commit()
             return True
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
 
-    def open_survey(self, survey_id, teacher_id):
+    def open_survey(self, survey_id):
         """
         SQL code for opening a survey
 
         args:
             survey_id: The id of the survey
-            teacher_id: The id of the user
         """
         try:
-            sql = "UPDATE surveys SET closed = False WHERE (id=:survey_id and teacher_id=:teacher_id)"
-            db.session.execute(text(sql), {"survey_id":survey_id, "teacher_id":teacher_id})
+            sql = "UPDATE surveys SET closed = False WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id":survey_id})
             db.session.commit()
             return True
         except Exception as e: # pylint: disable=W0718
@@ -95,13 +93,13 @@ class SurveyRepository:
 
     def get_active_surveys(self, teacher_id):
         """
-        SQL code getting the list of all active surveys created by a user.
+        SQL code getting the list of all active surveys for which the teacher has access to.
 
         args:
             teacher_id: The id of the user
         """
         try:
-            sql = "SELECT id, surveyname FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)"
+            sql = "SELECT s.id, s.surveyname FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND closed=False AND s.id=t.survey_id)"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
             surveys = result.fetchall()
             if not surveys:
@@ -113,13 +111,13 @@ class SurveyRepository:
 
     def get_closed_surveys(self, teacher_id):
         """
-        SQL code getting the list of all closed surveys created by a user.
+        SQL code getting the list of all closed surveys for which the teacher has access to.
 
         args:
             teacher_id: The id of the user
         """
         try:
-            sql = "SELECT id, surveyname, closed, results_saved, time_end FROM surveys WHERE (teacher_id=:teacher_id AND closed=True) ORDER BY id ASC"
+            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=True AND t.survey_id = s.id) ORDER BY s.id ASC"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
             surveys = result.fetchall()
             return surveys
@@ -143,7 +141,7 @@ class SurveyRepository:
             print(e)
             return False
 
-    def create_new_survey(self, surveyname, user_id, min_choices, description, begindate, enddate):
+    def create_new_survey(self, surveyname, min_choices, description, begindate, enddate):
         '''
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
@@ -153,10 +151,10 @@ class SurveyRepository:
             while(self.get_survey(id)):
                 id = generate_unique_id(10)
 
-            sql = "INSERT INTO surveys (id, surveyname, teacher_id, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
-                " VALUES (:id, :surveyname, :teacher_id, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
+            sql = "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
+                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
             
-            result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "teacher_id":user_id, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
+            result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718
@@ -205,16 +203,16 @@ class SurveyRepository:
 
     def fetch_all_active_surveys(self, teacher_id):
         '''Returns a list of all surveys in the database'''
-        sql = text("SELECT id, surveyname, closed, results_saved, time_end FROM surveys WHERE (teacher_id=:teacher_id AND closed=False)")
+        sql = text("SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=False AND s.id=t.survey_id)")
         result = db.session.execute(sql, {"teacher_id":teacher_id})
         all_surveys = result.fetchall()
         return all_surveys
 
-    def fetch_survey_responses(self, survey):
+    def fetch_survey_responses(self, survey_id):
         '''Returns a list of answers submitted to a certain survey'''
         sql = text ("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " +
-                    "WHERE survey_id=:survey AND deleted IS FALSE")
-        result = db.session.execute(sql, {"survey":survey})
+                    "WHERE survey_id=:survey_id AND deleted IS FALSE")
+        result = db.session.execute(sql, {"survey_id":survey_id})
         responses = result.fetchall()
         return responses
     
