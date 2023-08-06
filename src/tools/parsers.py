@@ -54,7 +54,7 @@ def parser_elomake_csv_to_dict(file):
     return ret_dict
 
 
-def parser_dict_to_survey(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end):
+def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end):
     '''
     Parses a dictionary and creates a survey, its choices and their additional infos
     RETURNS created survey's id
@@ -63,7 +63,7 @@ def parser_dict_to_survey(survey_choices, survey_name, user_id, description, min
     datetime_begin = date_to_sql_valid(date_begin) + " " +  time_begin
     datetime_end = date_to_sql_valid(date_end) + " " +  time_end
 
-    survey_id = survey_repository.create_new_survey(survey_name, user_id, minchoices, description, datetime_begin, datetime_end)
+    survey_id = survey_repository.create_new_survey(survey_name, minchoices, description, datetime_begin, datetime_end)
 
     for choice in survey_choices:
 
@@ -98,13 +98,12 @@ def parser_existing_survey_to_dict(survey_id):
 
     survey_dict["id"] = survey[0]
     survey_dict["surveyname"] = survey[1]
-    survey_dict["teacher_id"] = survey[2]
-    survey_dict["min_choices"] = survey[3]
-    survey_dict["closed"] = survey[4]
-    survey_dict["results_saved"] = survey[5]
-    survey_dict["survey_description"] = survey[6]
-    survey_dict["time_begin"] = survey[7]
-    survey_dict["time_end"] = survey[8]
+    survey_dict["min_choices"] = survey[2]
+    survey_dict["closed"] = survey[3]
+    survey_dict["results_saved"] = survey[4]
+    survey_dict["survey_description"] = survey[5]
+    survey_dict["time_begin"] = survey[6]
+    survey_dict["time_end"] = survey[7]
 
     survey_choices = survey_choices_repository.find_survey_choices(survey_id)
     survey_dict["choices"] = []

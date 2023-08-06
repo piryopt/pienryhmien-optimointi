@@ -7,10 +7,14 @@
 
 {% block content %}
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
-<i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
+<i>Vastauksia: {{ survey_answers_amount }} kpl</i><br><br>
+<input type="hidden" id="survey_id" value="{{ survey_id }}">
+<input type="email" name="teacher_email" id="teacher_email"><br><br>
+<button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button>
 
 
 {% if closed %}
+<br><br>
 <a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
@@ -29,10 +33,10 @@
       <thead class="table-dark">
         <tr>
             <th><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Sähköposti</th>
-            <th>Valinnat</th>
-            <th>Hylkäykset</th>
-            <th>Perustelut</th>
-            <th>Vastauksen poistaminen</th>
+            <th><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Valinnat</th>
+            <th><img src="{{ url_for('static', filename='images/close_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Hylkäykset</th>
+            <th><img src="{{ url_for('static', filename='images/question_answer_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Perustelut</th>
+            <th><img src="{{ url_for('static', filename='images/person_off_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Vastauksen poistaminen</th>
         </tr>
       </thead>
       <tbody>

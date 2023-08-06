@@ -8,13 +8,18 @@ CREATE TABLE users (
 CREATE TABLE surveys ( -- yksittäinen kysely
 	id VARCHAR(10) UNIQUE PRIMARY KEY,
 	surveyname TEXT,
-	teacher_id INTEGER REFERENCES users,
 	min_choices INTEGER,
 	closed BOOLEAN,
 	results_saved BOOLEAN,
 	survey_description TEXT,
 	time_begin timestamp,
 	time_end timestamp
+);
+
+CREATE TABLE survey_teachers (
+	id SERIAL PRIMARY KEY,
+	survey_id VARCHAR(10) REFERENCES surveys,
+	teacher_id INTEGER REFERENCES users
 );
 
 CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä

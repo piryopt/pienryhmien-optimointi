@@ -6,6 +6,7 @@ from src import db
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_rankings_repository import user_rankings_repository as urr
 from src.repositories.user_repository import user_repository as ur
+from src.repositories.survey_teachers_repository import survey_teachers_repository as st
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
@@ -38,7 +39,8 @@ class TestUserRankingsRepository(unittest.TestCase):
         """
         Test that getting a user ranking from the database works
         """
-        survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, self.user_id)
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id, survey_id, ranking, "", "")
         db_ranking = urr.get_user_ranking(self.user_id, survey_id).ranking
@@ -55,7 +57,8 @@ class TestUserRankingsRepository(unittest.TestCase):
         """
         Test that deleting a user ranking works
         """
-        survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        survey_id = sr.create_new_survey("Test survey 2", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, self.user_id)
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id, survey_id, ranking, "", "")
         deleted = urr.get_user_ranking(self.user_id, survey_id).ranking
@@ -67,7 +70,8 @@ class TestUserRankingsRepository(unittest.TestCase):
         """
         Test that rejections are correctly placed into the database, when a ranking contains them
         """
-        survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        survey_id = sr.create_new_survey("Test survey 3", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, self.user_id)
         ranking = "2,3,5,4,1,6"
         rejections = "9,8"
         reason = "Because seven ate nine"
