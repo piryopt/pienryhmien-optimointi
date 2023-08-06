@@ -45,9 +45,6 @@ class DbDataGen:
             firstname = choice(self.firstnames)
             lastname = choice(self.lastnames)
             name = firstname + " " + lastname
-            student_number = "01"
-            for i in range(7):
-                student_number += str(choice(self.numbers))
             email = firstname.lower() + "." + lastname.lower() + "@test.com"
             new_user = User(name, email, False)
             self.users.append(new_user)
