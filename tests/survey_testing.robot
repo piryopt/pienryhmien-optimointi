@@ -43,6 +43,7 @@ Create Survey As Teacher Manually
     Set Focus To Element  id:minchoices
     Input Text  minchoices  2
     Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey1.csv
+    Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
     Go To  ${SURVEYS URL}
