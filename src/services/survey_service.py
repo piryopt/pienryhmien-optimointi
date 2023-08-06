@@ -146,7 +146,7 @@ class SurveyService:
         '''
         return parser_elomake_csv_to_dict(file) # in tools
     
-    def create_new_survey_manual(self, survey_choices, user_id, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end):
+    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end):
         '''
         Calls tools.parsers dictionary to survey parser
         that creates the survey, its choices and their additional infos
