@@ -177,7 +177,7 @@ def new_survey_post():
 
     #print("Alkaa", date_begin, time_begin)
     #print("Alkaa", date_end, time_end)
-    survey_id = survey_service.create_new_survey_manual(survey_choices, user_id, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end)
+    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
         return jsonify(response)
@@ -301,7 +301,6 @@ def delete_survey(survey_id):
 @app.route("/surveys/<string:survey_id>/edit/add_teacher/<string:teacher_email>", methods=["POST"])
 @teachers_only
 def add_teacher(survey_id, teacher_email):
-    print(teacher_email)
     if not teacher_email:
         response = {"status":"0","msg":"Sähköpostiosoite puuttuu!"}
         return jsonify(response)
