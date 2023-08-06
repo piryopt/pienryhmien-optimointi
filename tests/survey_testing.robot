@@ -5,7 +5,7 @@ Suite Teardown  Close Browser
 
 *** Variables ***
 ${SERVER}  127.0.0.1:5000
-${BROWSER}  chrome
+${BROWSER}  firefox
 ${DELAY}  0.1 seconds
 ${HOME_URL}  http://${SERVER}/
 ${LOGOUT URL}  http://${SERVER}/auth/logout
@@ -35,10 +35,11 @@ Create Survey As Teacher Manually
     Title Should Be  Luo uusi kysely - Jakaja
     Input Text  groupname  Robot created test
     Input Text  startdate  01.08.2023
-    Input Text  starttime  01.01
+    Input Text  starttime  01:01
     Input Text  enddate  01.08.2024
-    Input Text  endtime  02.02
+    Input Text  endtime  02:02
     # no description because reasons
+    Set Focus To Element  id:minchoices
     Input Text  minchoices  2
     Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey1.csv
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
