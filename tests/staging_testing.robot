@@ -41,6 +41,7 @@ Create Survey As Teacher Manually
     Input Text  enddate  01.08.2024
     Input Text  endtime  02.02
     # no description because reasons
+    Set Focus To Element  id:minchoices
     Input Text  minchoices  2
     Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey1.csv
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
@@ -57,22 +58,6 @@ Login As Student
     Go To Main Page
     Page Should Contain  Näytä vanhat kyselyt
     Page Should Not Contain  Luo uusi kysely
-
-Create Survey As Teacher Manually
-    Go To Create Survey Page
-    Title Should Be  Luo uusi kysely - Jakaja
-    Input Text  groupname  Robot created test
-    Input Text  startdate  01.08.2023
-    Input Text  starttime  01.01
-    Input Text  enddate  01.08.2024
-    Input Text  endtime  02.02
-    # no description because reasons
-    Input Text  minchoices  2
-    Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey1.csv
-    Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
-    Click Element  ${CREATE_NEW_SURVEY_BUTTON}
-    Go To  ${SURVEYS URL}
-    Page Should Contain  Robot created test
 
 Go To Create Survey Page As Student
     Go To Create Survey Page
