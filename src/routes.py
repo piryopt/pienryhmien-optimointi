@@ -1,9 +1,7 @@
-from pathlib import Path
 from random import shuffle
 from functools import wraps
 from sqlalchemy import text
-from flask import render_template, request, session, jsonify, redirect, url_for
-from dotenv import load_dotenv
+from flask import render_template, request, session, jsonify, redirect
 import os
 from src import app,db
 from src.repositories.survey_repository import survey_repository
@@ -22,6 +20,9 @@ from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from functools import wraps
 
+"""
+DECORATORS:
+"""
 def home_decorator():
     '''
     This is pretty much all the AD-login code there is.
@@ -55,10 +56,6 @@ def home_decorator():
         return __home_decorator
     return _home_decorator
 
-
-"""
-DECORATORS:
-"""
 def teachers_only(f):
     """
     Decorator for verifying that the user trying to access the page is a teacher. Students get redirected to the frontpage.
