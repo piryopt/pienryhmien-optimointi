@@ -29,7 +29,7 @@ function submit(resubmit) {
             color: ""
         }
         if (result.status === "1") {
-            alertMsg.color = "#6F0";
+            alertMsg.color = "#216620";
             if (resubmit === 1) {
                 $("#submitExists").toggle();
                 $("#submitDoesntExist").toggle();
@@ -37,7 +37,7 @@ function submit(resubmit) {
             }
         }
         if (result.status === "0") {
-            alertMsg.color = "red";
+            alertMsg.color = "#9c2b2e";
         }
         showAlert(alertMsg);   
     }
@@ -69,10 +69,10 @@ function deleteSubmission() {
                 color: ""
             }
             if (result.status === "1") {
-                alertMsg.color = "#6F0";
+                alertMsg.color = "#216620";
             }
             if (result.status === "0") {
-                alertMsg.color = "red";
+                alertMsg.color = "#9c2b2e";
             }
             showAlert(alertMsg);
             $("#submitExists").hide();
@@ -97,10 +97,10 @@ function add_teacher() {
                 color: ""
             }
             if (result.status === "1") {
-                alertMsg.color = "#6F0";
+                alertMsg.color = "#216620";
             }
             if (result.status === "0") {
-                alertMsg.color = "red";
+                alertMsg.color = "#9c2b2e";
             }
             showAlert(alertMsg);
         }
