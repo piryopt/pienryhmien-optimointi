@@ -5,8 +5,8 @@ Suite Teardown  Close Browser
 
 *** Variables ***
 ${SERVER}  127.0.0.1:5000
-${BROWSER}  firefox
-${DELAY}  0.1 seconds
+${BROWSER}  headlessfirefox
+${DELAY}  0.0 seconds
 ${HOME_URL}  http://${SERVER}/
 ${LOGOUT URL}  http://${SERVER}/auth/logout
 ${CREATE SURVEY URL}  http://${SERVER}/surveys/create
@@ -20,6 +20,7 @@ ${CREATE_NEW_SURVEY_BUTTON}  xpath=//button[@type='submit' and contains(text(),'
 
 *** Test Cases ***
 Login As Teacher
+    [Documentation]  Wait Until because AD login redirects, home url isn't opened instantly. Times out after 5s and fails if not opened
     Logout And Go To Login
     Input Login Credentials  robottiTeacher  moi123
     # first time logging in real AD login asks the do you consent
@@ -35,10 +36,11 @@ Create Survey As Teacher Manually
     Title Should Be  Luo uusi kysely - Jakaja
     Input Text  groupname  Robot created test
     Input Text  startdate  01.08.2023
-    Input Text  starttime  01.01
+    Input Text  starttime  01:01
     Input Text  enddate  01.08.2024
-    Input Text  endtime  02.02
+    Input Text  endtime  02:02
     # no description because reasons
+    Set Focus To Element  id:minchoices
     Input Text  minchoices  2
     Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey1.csv
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
@@ -46,8 +48,8 @@ Create Survey As Teacher Manually
     Go To  ${SURVEYS URL}
     Page Should Contain  Robot created test
 
-  
 Login As Student
+    [Documentation]  Wait Until because AD login redirects, home url isn't opened instantly. Times out after 5s and fails if not opened
     Logout And Go To Login
     Input Login Credentials  robottiStudent  moi123
     Run Keyword And Ignore Error  Click Element  ${FIRST_TIME_LOGIN_ACCEPT}
