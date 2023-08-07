@@ -235,6 +235,9 @@ def surveys(survey_id):
     shuffle(temp)
     shuffled_choices = [v for k,v in dict(temp).items()]
 
+    for k,v in survey_all_info.items():
+        print(k,v)
+
     desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
@@ -254,9 +257,14 @@ def surveys(survey_id):
         good_survey_choices = []
         for survey_choice_id in list_of_good_survey_choice_id:
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+            good_choice = {}
+            good_choice["name"] = survey_choice[2]
+            good_choice["id"] = survey_choice[0]
+            good_choice["slots"] = survey_choice[3]
+            good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
             if not survey_choice:
                 continue
-            good_survey_choices.append(survey_choice)
+            good_survey_choices.append(good_choice)
             survey_choices.remove(survey_choice)
 
         bad_survey_choices = []
@@ -264,9 +272,14 @@ def surveys(survey_id):
             list_of_bad_survey_choice_id = convert_to_list(rejections)
             for survey_choice_id in list_of_bad_survey_choice_id:
                 survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+                bad_choice = {}
+                bad_choice["name"] = survey_choice[2]
+                bad_choice["id"] = survey_choice[0]
+                bad_choice["slots"] = survey_choice[3]
+                bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
                 if not survey_choice:
                     continue
-                bad_survey_choices.append(survey_choice)
+                bad_survey_choices.append(bad_choice)
                 survey_choices.remove(survey_choice)
         if closed:
             return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
