@@ -5,27 +5,37 @@ Suite Teardown  Close Browser
 Library  Dialogs
 
 *** Variables ***
-${MOCK_LOGIN_BUTTON}    xpath=//button[@type='submit' and contains(text(),'Kirjaudu sisään')]
+${SERVER}  127.0.0.1:5000/
+${BROWSER}  headlessfirefox
+${DELAY}  0.0 seconds
+${HOME_URL}  http://${SERVER}
+
+${AD_LOGIN_BUTTON}    xpath=//button[@type='submit' and contains(text(),'Login')]
 
 *** Test Cases ***
-Open Main Page As Teacher Test
+Login As Teacher
     Go To Logout Page
-    Go To Login Page
-    Set Name  TestiOpettaja
-    Set Email  opettaja.testi@helsinki.fi
-    Set Role Number  1
-    Click Element  ${MOCK_LOGIN_BUTTON}
+    Go To Main Page
+    Input Text  username  outi1
+    Input Text  password  moi123
+    Click Element  ${AD_LOGIN_BUTTON}
+    Wait Until Location Is  ${HOME_URL}
+    Go To Main Page
+    Page Should Contain  Näytä vanhat kyselyt
     Page Should Contain  Luo uusi kysely
 
-Open Main Page As Student Test
+Login As Student
     Go To Logout Page
-    Go To Login Page
-    Set Name  TestiOpettaja
-    Set Email  opettaja.adsdsadsa@helsinki.fi
-    Set Role Number  0
-    Click Element  ${MOCK_LOGIN_BUTTON}
-    Page Should Not Contain  Luo uusi kysely
+    Go To Main Page
+    Input Text  username  olli1
+    Input Text  password  moi123
+    Click Element  ${AD_LOGIN_BUTTON}
+    Wait Until Location Is  ${HOME_URL}
+    Go To Main Page
     Page Should Contain  Näytä vanhat kyselyt
+    Page Should Not Contain  Luo uusi kysely
+
+
 
 
 *** Keywords ***
@@ -52,11 +62,3 @@ Set Choicename
 Set Choicemaxspaces
     [Arguments]  ${choiceMaxSpaces}
     Input Text  choiceMaxSpaces  ${choiceMaxSpaces}
-
-Set Info1
-    [Arguments]  ${choiceInfo1}
-    Input Text  choiceInfo1  ${choiceInfo1}
-
-Set Info2
-    [Arguments]  ${choiceInfo2}
-    Input Text  choiceInfo2  ${choiceInfo2}
