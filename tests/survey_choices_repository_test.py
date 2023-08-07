@@ -6,6 +6,7 @@ from src import db
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.survey_choices_repository import survey_choices_repository as scr
 from src.repositories.user_repository import user_repository as ur
+from src.repositories.survey_teachers_repository import survey_teachers_repository as st
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
@@ -38,7 +39,8 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that the list of survey choices for a survey is correct
         """
-        survey_id = sr.create_new_survey("Test survey 1", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, self.user_id)
         scr.create_new_survey_choice(survey_id, "choice 1", 10)
         scr.create_new_survey_choice(survey_id, "choice 2", 10)
         choice_list = scr.find_survey_choices(survey_id)
@@ -48,7 +50,8 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that getting a survey choice works
         """
-        survey_id = sr.create_new_survey("Test survey 2", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        survey_id = sr.create_new_survey("Test survey 2", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, self.user_id)
         choice_id = scr.create_new_survey_choice(survey_id, "choice 1", 10)
         choice = scr.get_survey_choice(choice_id)
         self.assertEqual(choice.name, "choice 1")
@@ -64,7 +67,8 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that getting the info of a survey choice works
         """
-        survey_id = sr.create_new_survey("Test survey 3", self.user_id, 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        survey_id = sr.create_new_survey("Test survey 3", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, self.user_id)
         choice_id = scr.create_new_survey_choice(survey_id, "choice 1", 10)
         scr.create_new_choice_info(choice_id, "Moti", "Vaatio")
         info = scr.get_choice_additional_infos(choice_id)

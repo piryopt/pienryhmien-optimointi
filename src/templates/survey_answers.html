@@ -11,9 +11,13 @@
 <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
 {% if survey_answers_amount > available_spaces%}
 <h4>Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
-{% endif %}
+{% endif %}<br>
+<input type="hidden" id="survey_id" value="{{ survey_id }}">
+<input type="email" name="teacher_email" id="teacher_email"><br><br>
+<button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button>
 
 {% if closed %}
+<br><br>
 <a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
@@ -32,9 +36,10 @@
       <thead class="table-dark">
         <tr>
             <th><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Sähköposti</th>
-            <th>Valinnat</th>
-            <th>Hylkäykset</th>
-            <th>Perustelut</th>
+            <th><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Valinnat</th>
+            <th><img src="{{ url_for('static', filename='images/close_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Hylkäykset</th>
+            <th><img src="{{ url_for('static', filename='images/question_answer_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Perustelut</th>
+            <th><img src="{{ url_for('static', filename='images/person_off_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Vastauksen poistaminen</th>
         </tr>
       </thead>
       <tbody>
@@ -44,6 +49,13 @@
           <td><p>{{ row[1] }}</p></td>
           <td><p>{{ row[2] }}</p></td>
           <td><p>{{ row[3] }}</p></td>
+          <td>
+            <form action="/surveys/{{ survey_id }}/answers/delete" method="POST" onsubmit="return confirm ('Haluatko varmasti poistaa tämän vastauksen?')">
+              <button type="submit"  class="btn btn-danger btn-sm" name="delete_input" style="float: left;" onclick="">Poista tämä vastaus</button>
+              <input type="hidden" name="student_email" value="{{ row[0] }}">
+            </form>
+          </td>
+
         </tr>
         {% endfor %}
       </tbody>

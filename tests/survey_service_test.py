@@ -7,6 +7,7 @@ from src.services.survey_service import survey_service as ss
 from src.services.survey_choices_service import survey_choices_service as scs
 from src.repositories.user_repository import user_repository as ur
 from src.repositories.user_rankings_repository import user_rankings_repository as urr
+from src.services.survey_teachers_service import survey_teachers_service as sts
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 import datetime
@@ -34,6 +35,7 @@ class TestSurveyService(unittest.TestCase):
         self.user_id = ur.find_by_email(user.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
         self.user_id3 = ur.find_by_email(user3.email)[0]
+        self.user_email = user.email
 
 
     def tearDown(self):
@@ -79,6 +81,7 @@ class TestSurveyService(unittest.TestCase):
             json_object = json.load(openfile)
 
         survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
 
         # check surveys tables information
         survey_name = ss.get_survey_name(survey_id)
@@ -118,8 +121,8 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
         count = ss.count_surveys_created(self.user_id)
         self.assertEqual(count, 1)
 
@@ -131,7 +134,8 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
 
         closed = ss.check_if_survey_closed(survey_id)
         self.assertEqual(closed, False)
@@ -159,7 +163,8 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 3", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
 
         ret = ss.close_survey(survey_id, self.user_id2)
 
@@ -173,8 +178,10 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        closed_id = ss.create_new_survey_manual(json_object["choices"], "Suljettu", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        open_id = ss.create_new_survey_manual(json_object["choices"], "Avoin", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        closed_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 4", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(closed_id, self.user_email)
+        open_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 5", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(open_id, self.user_email)
 
         ss.close_survey(closed_id, self.user_id)
 
@@ -196,8 +203,10 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        closed_id = ss.create_new_survey_manual(json_object["choices"], "Suljettu", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        open_id = ss.create_new_survey_manual(json_object["choices"], "Avoin", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        closed_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 6", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(closed_id, self.user_email)
+        open_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 7", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(open_id, self.user_email)
 
         ss.close_survey(closed_id, self.user_id)
 
@@ -211,7 +220,8 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 8", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
 
         ss.close_survey(survey_id, self.user_id)
         closed = ss.check_if_survey_closed(survey_id)
@@ -222,7 +232,6 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(closed, False)
 
     def test_open_survey_non_existant(self):
-
         ret = ss.open_survey("ITSNOTREAL", self.user_id)
         self.assertEqual(ret, False)
 
@@ -231,7 +240,8 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 9", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
 
         ss.close_survey(survey_id, self.user_id)
         ret = ss.open_survey(survey_id, self.user_id2)
@@ -255,7 +265,8 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 10", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
 
         answered = ss.check_if_survey_results_saved(survey_id)
         self.assertEqual(answered, False)
@@ -273,14 +284,14 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 11", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
 
         survey_dict = ss.get_survey_as_dict(survey_id)
 
         # table surveys data
         self.assertEqual(survey_dict["id"], survey_id)
-        self.assertEqual(survey_dict["surveyname"], json_object["surveyGroupname"])
-        self.assertEqual(survey_dict["teacher_id"], self.user_id)
+        self.assertEqual(survey_dict["surveyname"], "Test survey 11")
         self.assertEqual(survey_dict["min_choices"], 2)
         self.assertEqual(survey_dict["closed"], False)
         self.assertEqual(survey_dict["results_saved"], False)
@@ -312,7 +323,8 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 12", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id3, survey_id, ranking, "", "")
         active_list = ss.get_list_active_answered(self.user_id3)
@@ -323,7 +335,8 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 12", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id3, survey_id, ranking, "", "")
         ss.close_survey(survey_id, self.user_id)

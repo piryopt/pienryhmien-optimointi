@@ -12,9 +12,7 @@ ${LOGIN URL}  http://${SERVER}/auth/login
 ${CREATE SURVEY URL}  http://${SERVER}/surveys/create
 ${PREVIOUS SURVEYS URL}  http://${SERVER}/surveys
 ${LOGOUT URL}  http://${SERVER}/auth/logout
-${EXCEL URL}  http://${SERVER}/excel
-${TOY DATA FORM}  http://${SERVER}/input
-${TOY DATA RESULTS URL}  http://${SERVER}/results
+
 
 *** Keywords ***
 Open And Configure Browser
@@ -75,12 +73,3 @@ Go To Previous Surveys Page
 
 Go To Logout Page
     Go To  ${LOGOUT URL}
-
-Go To Excel Page
-    Go To  ${EXCEL URL}
-
-Go To Toy Data Input Page
-    Go To  ${TOY DATA FORM}
-
-Go To Toy Data Results Page
-    Go To  ${TOY DATA RESULTS URL}
