@@ -3,11 +3,17 @@ window.onload = function() {
 };
 
 function submit(resubmit) {
+    var min_choices = document.getElementById("min_choices").value;
+    var surveyID = document.getElementById("survey_id").value;
     var neutralIDs = $("#sortable-neutral").sortable("toArray");
     var goodIDs = $("#sortable-good").sortable("toArray");
-    var badIDs = $("#sortable-bad").sortable("toArray");
-    var surveyID = document.getElementById("survey_id").value;
-    var reasons = document.getElementById("reasons").value;
+    var badIDs = [];
+    var reasons = "";
+
+    if (min_choices > 0) {
+        var badIDs = $("#sortable-bad").sortable("toArray");
+        var reasons = document.getElementById("reasons").value;
+    }
 
     var IDs = {
         "neutralIDs": neutralIDs,
