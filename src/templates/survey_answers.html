@@ -7,14 +7,14 @@
 
 {% block content %}
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
+<input type="hidden" id="survey_id" value="{{ survey_id }}">
+<input type="email" name="teacher_email" id="teacher_email"><br><br>
+<button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button><br><br>
 <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
 <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
 {% if survey_answers_amount > available_spaces%}
-<h4>Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
+<h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
 {% endif %}<br>
-<input type="hidden" id="survey_id" value="{{ survey_id }}">
-<input type="email" name="teacher_email" id="teacher_email"><br><br>
-<button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button>
 
 {% if closed %}
 <br><br>
