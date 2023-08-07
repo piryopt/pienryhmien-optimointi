@@ -29,7 +29,7 @@ function submit(resubmit) {
             color: ""
         }
         if (result.status === "1") {
-            alertMsg.color = "#6F0";
+            alertMsg.color = "#216620";
             if (resubmit === 1) {
                 $("#submitExists").toggle();
                 $("#submitDoesntExist").toggle();
@@ -37,7 +37,7 @@ function submit(resubmit) {
             }
         }
         if (result.status === "0") {
-            alertMsg.color = "red";
+            alertMsg.color = "#9c2b2e";
         }
         showAlert(alertMsg);   
     }
@@ -69,10 +69,10 @@ function deleteSubmission() {
                 color: ""
             }
             if (result.status === "1") {
-                alertMsg.color = "#6F0";
+                alertMsg.color = "#216620";
             }
             if (result.status === "0") {
-                alertMsg.color = "red";
+                alertMsg.color = "#9c2b2e";
             }
             showAlert(alertMsg);
             $("#submitExists").hide();
@@ -80,6 +80,29 @@ function deleteSubmission() {
             $("#deleteContainer").hide()
             $("#confirmContainer").hide()
             
+        }
+    });
+}
+
+function add_teacher() {
+    var surveyID = document.getElementById("survey_id").value;
+    var teacherEmail = document.getElementById("teacher_email").value
+
+    $.ajax({
+        type: "POST",
+        url: "/surveys/" + surveyID + "/edit/add_teacher/" + teacherEmail,
+        success: function(result) {
+            var alertMsg = {
+                msg: result.msg,
+                color: ""
+            }
+            if (result.status === "1") {
+                alertMsg.color = "#216620";
+            }
+            if (result.status === "0") {
+                alertMsg.color = "#9c2b2e";
+            }
+            showAlert(alertMsg);
         }
     });
 }

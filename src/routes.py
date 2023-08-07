@@ -1,9 +1,7 @@
-from pathlib import Path
 from random import shuffle
 from functools import wraps
 from sqlalchemy import text
-from flask import render_template, request, session, jsonify, redirect, url_for
-from dotenv import load_dotenv
+from flask import render_template, request, session, jsonify, redirect
 import os
 from src import app,db
 from src.repositories.survey_repository import survey_repository
@@ -12,6 +10,7 @@ from src.services.survey_service import survey_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.services.final_group_service import final_group_service
+from src.services.survey_teachers_service import survey_teachers_service
 from src.tools import excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
@@ -22,6 +21,9 @@ from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 from functools import wraps
 
+"""
+DECORATORS:
+"""
 def home_decorator():
     '''
     This is pretty much all the AD-login code there is.
@@ -55,10 +57,6 @@ def home_decorator():
         return __home_decorator
     return _home_decorator
 
-
-"""
-DECORATORS:
-"""
 def teachers_only(f):
     """
     Decorator for verifying that the user trying to access the page is a teacher. Students get redirected to the frontpage.
@@ -179,13 +177,17 @@ def new_survey_post():
 
     #print("Alkaa", date_begin, time_begin)
     #print("Alkaa", date_end, time_end)
-
-    try:
-        survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
-        response = {"msg":"Uusi kysely luotu!"}
+    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
+    if not survey_id:
+        response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
         return jsonify(response)
-    except:
-        return (jsonify({"msg": "Tuntematon virhe palvelimella"}), 500)
+    teacher_email = user_service.get_email(user_id)
+    (success, message) = survey_teachers_service.add_teacher_to_survey(survey_id, teacher_email)
+    if not success:
+        response = {"status":"0", "msg":message}
+        return jsonify(response)
+    response = {"msg":"Uusi kysely luotu!"}
+    return jsonify(response)
 
 @app.route("/surveys/create/import", methods = ["POST"])
 @teachers_only
@@ -293,6 +295,7 @@ def delete_submission(survey_id):
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
+@teachers_only
 def teacher_deletes_submission(survey_id):
     '''
     Teacher (survey author) can delete a single rankinging from the survey for
@@ -314,6 +317,19 @@ def edit_survey(survey_id):
 def delete_survey(survey_id):
     #TODO
     ...
+
+@app.route("/surveys/<string:survey_id>/edit/add_teacher/<string:teacher_email>", methods=["POST"])
+@teachers_only
+def add_teacher(survey_id, teacher_email):
+    if not teacher_email:
+        response = {"status":"0","msg":"Sähköpostiosoite puuttuu!"}
+        return jsonify(response)
+    (success, message) = survey_teachers_service.add_teacher_to_survey(survey_id, teacher_email)
+    if not success:
+        response = {"status":"0","msg":message}
+        return jsonify(response)
+    response = {"status":"1","msg":message}
+    return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
 @home_decorator()
