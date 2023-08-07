@@ -13,6 +13,10 @@ import json
 
 class TestSurveyChoicesService(unittest.TestCase):
     def setUp(self):
+        """
+        Creates environment, test users and imports a test survey from json
+        """
+
         load_dotenv()
         self.app = Flask(__name__)
         self.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -32,6 +36,13 @@ class TestSurveyChoicesService(unittest.TestCase):
         self.user_id2 = ur.find_by_email(user2.email)[0]
         self.user_email = user.email
 
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        self.survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(self.survey_id, self.user_email)
+
     def tearDown(self):
         db.drop_all()
         self.app_context.pop()
@@ -45,16 +56,10 @@ class TestSurveyChoicesService(unittest.TestCase):
         ret = scs.get_list_of_survey_choices("ITSNOTREAL")
         self.assertEqual(ret, False)
 
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        sts.add_teacher_to_survey(survey_id, self.user_email)
-        choices = scs.get_list_of_survey_choices(survey_id)
+        choices = scs.get_list_of_survey_choices(self.survey_id)
 
         # check choice mandatory informations
-        choices = scs.get_list_of_survey_choices(survey_id)
+        choices = scs.get_list_of_survey_choices(self.survey_id)
         self.assertEqual(choices[0][2], "Esimerkkipäiväkoti 1")
         self.assertEqual(choices[0][3], 8)
         self.assertEqual(choices[1][2], "Esimerkkipäiväkoti 2")
@@ -81,14 +86,7 @@ class TestSurveyChoicesService(unittest.TestCase):
         ret = scs.get_survey_choice(-1)
         self.assertEqual(ret, False)
 
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        sts.add_teacher_to_survey(survey_id, self.user_email)
-
-        choices = scs.get_list_of_survey_choices(survey_id)
+        choices = scs.get_list_of_survey_choices(self.survey_id)
 
         choice1 = scs.get_survey_choice(choices[0][0])
         choice2 = scs.get_survey_choice(choices[1][0])
@@ -101,14 +99,8 @@ class TestSurveyChoicesService(unittest.TestCase):
         self.assertEqual(choice2[3], 6)
 
     def test_get_choice_name_and_spaces(self):
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        sts.add_teacher_to_survey(survey_id, self.user_email)
-
-        choices = scs.get_list_of_survey_choices(survey_id)
+        choices = scs.get_list_of_survey_choices(self.survey_id)
 
         choice = scs.get_choice_name_and_spaces(choices[0][0])
 
