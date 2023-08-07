@@ -78,6 +78,14 @@ class TestSurveyChoicesService(unittest.TestCase):
         self.assertEqual(choices[0][2]+" "+choices[1][2],
                          "Esimerkkipäiväkoti 1 Esimerkkipäiväkoti 2")
 
+    def test_get_survey_choice_returns_false_if_survey_not_found(self):
+        '''
+        Tests that function get_survey_choice() returns false if no
+        choice found with the id used as input, uses a string as input
+        when ids should be int
+        '''
+        self.assertEqual(scs.get_survey_choice('Not an id'), False)
+
     def test_get_survey_choice_gets_correct_choice(self):
         '''
         Fetches all choices with get_list_of_survey_choices() and inputs
@@ -113,4 +121,9 @@ class TestSurveyChoicesService(unittest.TestCase):
         self.assertEqual(choice_infos[0][1]+" "+choice_infos[1][1],
                          "Keijukaistenpolku 14 00820")
 
-
+    def test_count_number_of_available_spaces(self):
+        '''
+        Tests that function count_number_of_available_spaces returns the
+        correct number
+        '''
+        self.assertEqual(scs.count_number_of_available_spaces(self.survey_id),14)
