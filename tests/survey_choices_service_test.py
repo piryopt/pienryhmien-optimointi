@@ -24,8 +24,8 @@ class TestSurveyChoicesService(unittest.TestCase):
 
         clear_database()
 
-        user = User("Not on tren Testerr", "tren4lyfe@tester.com", True)
-        user2 = User("Hashtag natty", "anabolics4lyfe@tester.com", True)
+        user = User("Maija Mallikas", "maija@tester.com", True)
+        user2 = User("Tero Testaaja", "tero@tester.com", True)
         ur.register(user)
         ur.register(user2)
         self.user_id = ur.find_by_email(user.email)[0]
@@ -55,23 +55,23 @@ class TestSurveyChoicesService(unittest.TestCase):
 
         # check choice mandatory informations
         choices = scs.get_list_of_survey_choices(survey_id)
-        self.assertEqual(choices[0][2], "Ensimmäinen choice")
+        self.assertEqual(choices[0][2], "Esimerkkipäiväkoti 1")
         self.assertEqual(choices[0][3], 8)
-        self.assertEqual(choices[1][2], "Toinen choice")
+        self.assertEqual(choices[1][2], "Esimerkkipäiväkoti 2")
         self.assertEqual(choices[1][3], 6)
 
         # check choice additional infos
         choice1_infos = scs.get_choice_additional_infos(choices[0][0])
         choice2_infos = scs.get_choice_additional_infos(choices[1][0])
-        self.assertEqual(choice1_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice1_infos[0][1], "vaikeuksia csv testaamisessa")
+        self.assertEqual(choice1_infos[0][0], "Osoite")
+        self.assertEqual(choice1_infos[0][1], "Keijukaistenpolku 14")
         self.assertEqual(choice1_infos[1][0], "Postinumero")
-        self.assertEqual(choice1_infos[1][1], "00790")
+        self.assertEqual(choice1_infos[1][1], "00820")
 
-        self.assertEqual(choice2_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice2_infos[0][1], "äisimhi tunappat nelo") #bruh
+        self.assertEqual(choice2_infos[0][0], "Osoite")
+        self.assertEqual(choice2_infos[0][1], "Hattulantie 2")
         self.assertEqual(choice2_infos[1][0], "Postinumero")
-        self.assertEqual(choice2_infos[1][1], "01820")
+        self.assertEqual(choice2_infos[1][1], "00550")
 
     def test_get_survey_choice(self):
         '''
@@ -94,10 +94,10 @@ class TestSurveyChoicesService(unittest.TestCase):
         choice2 = scs.get_survey_choice(choices[1][0])
 
         self.assertEqual(choice1[0], choices[0][0]) # id
-        self.assertEqual(choice1[2], "Ensimmäinen choice")
+        self.assertEqual(choice1[2], "Esimerkkipäiväkoti 1")
         self.assertEqual(choice1[3], 8)
         self.assertEqual(choice2[0], choices[1][0]) # id
-        self.assertEqual(choice2[2], "Toinen choice")
+        self.assertEqual(choice2[2], "Esimerkkipäiväkoti 2")
         self.assertEqual(choice2[3], 6)
 
     def test_get_choice_name_and_spaces(self):
@@ -112,5 +112,5 @@ class TestSurveyChoicesService(unittest.TestCase):
 
         choice = scs.get_choice_name_and_spaces(choices[0][0])
 
-        self.assertEqual(choice[1], "Ensimmäinen choice")
+        self.assertEqual(choice[1], "Esimerkkipäiväkoti 1")
         self.assertEqual(choice[2], 8)
