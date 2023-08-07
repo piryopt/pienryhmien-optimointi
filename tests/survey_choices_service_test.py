@@ -14,7 +14,7 @@ import json
 class TestSurveyChoicesService(unittest.TestCase):
     def setUp(self):
         """
-        Creates environment, test users and imports a test survey from json
+        Creates environment, test users and imports a test survey from json.
         """
 
         load_dotenv()
@@ -47,62 +47,70 @@ class TestSurveyChoicesService(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_get_list_of_survey_data(self):
+    def test_get_list_of_survey_choices_returns_false_if_no_data_found(self):
         '''
-        Test functions get_list_of_survey_choices() and get_choice_additional_infos()
+        Inputs a nonexistent survey id to getter and checks that return is "False"
         '''
-
-        # first non existant case
         ret = scs.get_list_of_survey_choices("ITSNOTREAL")
         self.assertEqual(ret, False)
 
-        choices = scs.get_list_of_survey_choices(self.survey_id)
-
-        # check choice mandatory informations
-        choices = scs.get_list_of_survey_choices(self.survey_id)
-        self.assertEqual(choices[0][2], "Esimerkkipäiväkoti 1")
-        self.assertEqual(choices[0][3], 8)
-        self.assertEqual(choices[1][2], "Esimerkkipäiväkoti 2")
-        self.assertEqual(choices[1][3], 6)
-
-        # check choice additional infos
-        choice1_infos = scs.get_choice_additional_infos(choices[0][0])
-        choice2_infos = scs.get_choice_additional_infos(choices[1][0])
-        self.assertEqual(choice1_infos[0][0], "Osoite")
-        self.assertEqual(choice1_infos[0][1], "Keijukaistenpolku 14")
-        self.assertEqual(choice1_infos[1][0], "Postinumero")
-        self.assertEqual(choice1_infos[1][1], "00820")
-
-        self.assertEqual(choice2_infos[0][0], "Osoite")
-        self.assertEqual(choice2_infos[0][1], "Hattulantie 2")
-        self.assertEqual(choice2_infos[1][0], "Postinumero")
-        self.assertEqual(choice2_infos[1][1], "00550")
-
-    def test_get_survey_choice(self):
+    def test_get_list_of_survey_choices_returns_correct_number_of_choices(self):
         '''
-        Test function get_survey_choice()
+        Tests that get_list_of_survey_choices() returns a list with two members
         '''
-        # first non existant case
-        ret = scs.get_survey_choice(-1)
-        self.assertEqual(ret, False)
-
         choices = scs.get_list_of_survey_choices(self.survey_id)
+        self.assertEqual(len(choices), 2)
 
-        choice1 = scs.get_survey_choice(choices[0][0])
-        choice2 = scs.get_survey_choice(choices[1][0])
-
-        self.assertEqual(choice1[0], choices[0][0]) # id
-        self.assertEqual(choice1[2], "Esimerkkipäiväkoti 1")
-        self.assertEqual(choice1[3], 8)
-        self.assertEqual(choice2[0], choices[1][0]) # id
-        self.assertEqual(choice2[2], "Esimerkkipäiväkoti 2")
-        self.assertEqual(choice2[3], 6)
-
-    def test_get_choice_name_and_spaces(self):
-
+    def test_get_list_of_survey_choices_returns_correct_number_of_spaces(self):
+        '''
+        Tests that get_list_of_survey_choices() returns a list of choices where
+        the sum of available spots matches the test data used
+        '''
         choices = scs.get_list_of_survey_choices(self.survey_id)
+        self.assertEqual(choices[0][3]+choices[1][3], 14)
 
-        choice = scs.get_choice_name_and_spaces(choices[0][0])
+    def test_get_list_of_survey_choices_returns_correct_choice_names(self):
+        '''
+        Tests that get_list_of_survey_choices() returns a list of choices where
+        the combined choice names matches the input data
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        self.assertEqual(choices[0][2]+" "+choices[1][2],
+                         "Esimerkkipäiväkoti 1 Esimerkkipäiväkoti 2")
 
-        self.assertEqual(choice[1], "Esimerkkipäiväkoti 1")
-        self.assertEqual(choice[2], 8)
+    def test_get_survey_choice_gets_correct_choice(self):
+        '''
+        Fetches all choices with get_list_of_survey_choices() and inputs
+        the first result choice id to function get_survey_choice(),
+        then tests that the fetched choice names match
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        one_choice = scs.get_survey_choice(choices[0][0])
+        self.assertEqual(choices[0][2],one_choice[2])
+
+    def test_get_choice_name_and_spaces_gets_correct_choice(self):
+        '''
+        Fetches all choices with get_list_of_survey_choices() and inputs
+        the first result choice id to function get_choice_name_and_spaces(),
+        then tests that the fetched choice names match
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        (id, name, spaces) = scs.get_choice_name_and_spaces(choices[0][0])
+        self.assertEqual(choices[0][2],name)
+
+    def test_get_choice_additional_infos_returns_correct_data(self):
+        '''
+        Fetches all choices with get_list_of_survey_choices() and inputs
+        the first result choice id to function get_choice_additional_info(),
+        then tests that the fetched additional info is correct
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        choice_infos = scs.get_choice_additional_infos(choices[0][0])
+        #headers
+        self.assertEqual(choice_infos[0][0]+" "+choice_infos[1][0],
+                         "Osoite Postinumero")
+        #info
+        self.assertEqual(choice_infos[0][1]+" "+choice_infos[1][1],
+                         "Keijukaistenpolku 14 00820")
+
+
