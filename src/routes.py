@@ -433,7 +433,7 @@ def login():
     if request.method == "GET":
         return render_template("mock_ad.html")
     if request.method == "POST":
-        username = request.form.get("name")
+        username = request.form.get("username")
 
         email = name = role_bool = ""
 
