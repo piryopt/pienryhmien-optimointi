@@ -7,6 +7,11 @@
 
 {% block content %}
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
+<i>Vastauksia: {{ survey_answers_amount }} kpl</i><br><br>
+
+<a href="/surveys">Palaa kyselylistaan</a>
+<br><br>
+
 <input type="hidden" id="survey_id" value="{{ survey_id }}">
 <input type="email" name="teacher_email" id="teacher_email"><br><br>
 <button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button><br><br>
@@ -15,9 +20,15 @@
 {% if survey_answers_amount > available_spaces%}
 <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
 {% endif %}<br>
+<br><br><br>
+<p>
+  <i>Hae yksittäistä vastausta kirjoittamalla tähän kenttään <br>
+    vastaajan email tai osa siitä.</i><br>
+  <input type="email" name="search_email" id="search_email">
+</p>
+
 
 {% if closed %}
-<br><br>
 <a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
@@ -29,10 +40,8 @@
 {% endif %}
 <br>
 
-<a href="/surveys">Palaa kyselylistaan</a>
-
   <BR><BR>
-    <table id="answers_table" cellspacing="10" class="table table-striped">
+    <table cellspacing="10" class="table table-striped">
       <thead class="table-dark">
         <tr>
             <th><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Sähköposti</th>
@@ -42,10 +51,10 @@
             <th><img src="{{ url_for('static', filename='images/person_off_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Vastauksen poistaminen</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
+      <tbody id="answers_table" >
+        <tr id="row_search_email">
         {% for row in survey_answers %}
-          <td><p>{{ row[0] }}</p></td>
+          <td id="email_search"><p>{{ row[0] }}</p></td>
           <td><p>{{ row[1] }}</p></td>
           <td><p>{{ row[2] }}</p></td>
           <td><p>{{ row[3] }}</p></td>
@@ -60,4 +69,17 @@
         {% endfor %}
       </tbody>
     </table>
+  
+<script>
+  $( document ).ready(function() {
+        $("#search_email").on("keyup", function() {
+            var keyword = $( this ).val().toLowerCase();
+            $("#answers_table tr").filter(function() {
+                $( this ).toggle($(this.querySelector("#email_search")).text().toLowerCase().indexOf(keyword) > -1)
+            });
+        });
+    });
+</script>
+  
 {% endblock %}
+
