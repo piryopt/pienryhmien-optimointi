@@ -14,7 +14,7 @@ ${SURVEYS URL}  http://${SERVER}/surveys
 
 ${FILE_UPLOAD_BUTTON}  css=[type='file']
 
-${SURVEY NAME}  Robotiiii
+${SURVEY NAME}  Testikysely paskaaaaaa
 
 ${AD_LOGIN_BUTTON}    xpath=//button[@type='submit' and contains(text(),'Login')]
 ${FIRST_TIME_LOGIN_ACCEPT}  xpath=//button[@type='submit' and contains(text(),'Accept')]
@@ -33,11 +33,14 @@ Create Survey As Teacher From CSV
     Title Should Be  Luo uusi kysely - Jakaja
     Set Create Survey Mandatory Fields  ${SURVEY NAME}  01.08.2023  01:01  01.08.2024  02:02  2
     Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey1.csv
+    Wait Until Page Contains  Päiväkoti Gehenna
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
     Go To  ${SURVEYS URL}
     Page Should Contain  ${SURVEY NAME}
+    Wait Until Page Contains Element  ${SURVEY HREF}
+    Set Focus To Element  ${SURVEY HREF}
     Click Element  ${SURVEY HREF}
     Page Should Contain  Päiväkoti Toivo
     Page Should Contain  Päiväkoti Gehenna
