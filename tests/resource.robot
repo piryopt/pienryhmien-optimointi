@@ -59,6 +59,25 @@ Logout And Go To Login
     [Documentation]  Call when changing user
     Go To Logout Page
     Go To Main Page
+
+Login And Go To Main Page
+    [Arguments]  ${username}  ${password}
+    Logout And Go To Login
+    Input Login Credentials  ${username}  ${password}
+    Run Keyword And Ignore Error  Click Element  ${FIRST_TIME_LOGIN_ACCEPT}
+    Wait Until Location Is  ${HOME_URL}
+    Go To Main Page
+
+Set Create Survey Mandatory Fields
+    [Documentation]  Call when in create survey page
+    [Arguments]  ${surveyname}  ${startdate}  ${starttime}  ${enddate}  ${endtime}  ${minchoices}
+    Input Text  groupname  ${surveyname}
+    Input Text  startdate  ${startdate}
+    Input Text  starttime  ${starttime}
+    Input Text  enddate  ${enddate}
+    Input Text  endtime  ${endtime}
+    Set Focus To Element  id:minchoices
+    Input Text  minchoices  ${minchoices}
     
 Go To Main Page
     Go To  ${HOME URL}
@@ -74,27 +93,3 @@ Go To Previous Surveys Page
 
 Go To Logout Page
     Go To  ${LOGOUT URL}
-
-Set Email
-    [Arguments]  ${email}
-    Input Text  email  ${email}
-
-Set Name
-    [Arguments]  ${name}
-    Input Text  name  ${name}
-
-Set Role Number
-    [Arguments]  ${student_number}
-    Input Text  role  ${student_number}
-
-Set Surveyname
-    [Arguments]  ${groupname}
-    Input Text  groupname  ${groupname}
-
-Set Choicename
-    [Arguments]  ${choicename}
-    Input Text  choiceName  ${choiceName}
-
-Set Choicemaxspaces
-    [Arguments]  ${choiceMaxSpaces}
-    Input Text  choiceMaxSpaces  ${choiceMaxSpaces}
