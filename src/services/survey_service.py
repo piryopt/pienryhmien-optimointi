@@ -5,6 +5,8 @@ from src.repositories.survey_teachers_repository import (
     survey_teachers_repository as default_survey_teachers_repository
 )
 from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
+from src.tools.date_converter import time_to_close
+from datetime import datetime
 
 class SurveyService:
     def __init__(self, survey_repositroy=default_survey_repository, survey_teachers_repository = default_survey_teachers_repository):
@@ -205,5 +207,25 @@ class SurveyService:
         if not closed:
             return []
         return closed
+    
+    def check_for_surveys_to_close(self):
+        """
+        Gets a list of all active surveys and closes them if closing time has arrived
+        """
+        # Fetch the list of all active surveys
+        surveys = self._survey_repository.get_all_active_surveys()
+        # If the list is empty or it doesn't exist, return
+        if not surveys:
+            return False
+        if len(surveys) == 0:
+            return False
+        for survey in surveys:
+            survey_id = survey.id
+            survey_time_end = self._survey_repository.get_survey_time_end(survey_id)
+            closin_time = time_to_close(survey_time_end)
+            if closin_time:
+                #print(f"Closing survey {survey.surveyname}")
+                self._survey_repository.close_survey(survey_id)
+                #print(f"Closed survey {survey.surveyname}")
 
 survey_service = SurveyService()

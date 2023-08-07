@@ -1,11 +1,9 @@
-from pathlib import Path
 from random import shuffle
 from functools import wraps
 from sqlalchemy import text
-from flask import render_template, request, session, jsonify, redirect, url_for
-from dotenv import load_dotenv
+from flask import render_template, request, session, jsonify, redirect
 import os
-from src import app,db
+from src import app,db,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -20,8 +18,14 @@ from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
+from src.entities.user import User
 from functools import wraps
+from datetime import datetime
+from src.tools.date_converter import get_time_helsinki
 
+"""
+DECORATORS:
+"""
 def home_decorator():
     '''
     This is pretty much all the AD-login code there is.
@@ -55,10 +59,6 @@ def home_decorator():
         return __home_decorator
     return _home_decorator
 
-
-"""
-DECORATORS:
-"""
 def teachers_only(f):
     """
     Decorator for verifying that the user trying to access the page is a teacher. Students get redirected to the frontpage.
@@ -112,6 +112,7 @@ def frontpage() -> str:
 /SURVEYS/* ROUTES:
 """
 @app.route("/surveys")
+@home_decorator()
 def previous_surveys():
     """
     For fetching previous survey list from the database
@@ -142,6 +143,7 @@ def get_info():
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/surveys/create", methods = ["GET"])
+@home_decorator()
 @teachers_only
 def new_survey_form(survey=None):
     """
@@ -202,6 +204,7 @@ def import_survey_choices():
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
 @app.route("/surveys/<string:survey_id>")
+@home_decorator()
 def surveys(survey_id):
     """
     The answer page for surveys.
@@ -312,6 +315,7 @@ def add_teacher(survey_id, teacher_email):
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
+@home_decorator()
 @teachers_only
 def survey_answers(survey_id):
     """
@@ -336,6 +340,7 @@ def survey_answers(survey_id):
                            answered = answers_saved)
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
+@home_decorator()
 @teachers_only
 def survey_results(survey_id):
     """
@@ -422,13 +427,21 @@ def login():
     if not app.debug:
         return redirect("/")
     
+    users = [User("outi1", "testi.opettaja@helsinki.fi", True),
+             User("olli1", "testi.opiskelija@helsinki.fi", False)]
+    
     if request.method == "GET":
         return render_template("mock_ad.html")
     if request.method == "POST":
+        username = request.form.get("name")
 
-        email = request.form["email"]
-        name = request.form["name"]
-        role_bool = True if request.form["role"] == "1" else False
+        email = name = role_bool = ""
+
+        for user in users:
+            if user.name == username:
+                email = user.email
+                name = user.name
+                role_bool = user.isteacher
 
         if not user_service.find_by_email(email): # account doesn't exist, register
             user_service.create_user(name, email, role_bool) # actual registration
@@ -441,11 +454,16 @@ def login():
 
 @app.route("/auth/logout")
 def logout():
+
+    user_service.logout()
+
+    # stupid, but Openshift getenv() can't find Openshift secrets,
+    # so here we are
     if app.debug:
-        user_service.logout()
-        return redirect("/auth/login")
+        return redirect("/")
+    else:
+        return redirect("/Shibboleth.sso/Logout")
     
-    return redirect("/")
 
 """
 ADMINTOOLS -ROUTES:
@@ -585,3 +603,14 @@ def get_choices(survey_id):
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)
+
+"""
+TASKS:
+"""
+@scheduler.task('cron', id='do_job_1', hour='*')
+def job1():
+    """
+    Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
+    """
+    with app.app_context():
+        survey_service.check_for_surveys_to_close()
