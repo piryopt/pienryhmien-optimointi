@@ -7,7 +7,7 @@ Library  OperatingSystem
 *** Keywords ***
 Open And Configure Browser
     Open Browser  browser=${BROWSER}
-    Maximize Browser Window
+    Set Window Size  1920  1080
     Set Selenium Speed  ${DELAY}
 
 Main Page Should Be Open
@@ -78,6 +78,12 @@ Set Create Survey Mandatory Fields
     Input Text  endtime  ${endtime}
     Set Focus To Element  id:minchoices
     Input Text  minchoices  ${minchoices}
+
+Drag To Top Of Choices
+    [Arguments]  ${choice}
+    ${temp}=  Get Vertical Position  ${choice}
+    ${y cord}=  Evaluate  (-1) * (${temp} - 100)
+    Drag And Drop By Offset  ${choice}  -300  ${y cord}
     
 Go To Main Page
     Go To  ${HOME URL}
