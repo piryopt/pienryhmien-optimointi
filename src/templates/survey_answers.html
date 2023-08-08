@@ -8,7 +8,6 @@
 {% block content %}
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
 <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
-<i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
 <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
 {% if survey_answers_amount > available_spaces%}
 <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
