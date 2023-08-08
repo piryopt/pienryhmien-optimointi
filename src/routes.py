@@ -222,6 +222,7 @@ def surveys(survey_id):
     existing = "0"
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     enddate = survey_service.get_survey_enddate(survey_id)
+    min_choices = survey_service.get_survey_min_choices(survey_id)
 
     # If a ranking exists, display the choices and the reasoning in the order that the student chose them.
     if user_survey_ranking:
@@ -262,7 +263,8 @@ def surveys(survey_id):
         return render_template("closedsurvey.html", survey_name = survey_name)
 
     return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc, enddate = enddate)
+                            survey_name = survey_name, existing = existing, desc = desc,
+                            enddate = enddate, min_choices=min_choices)
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
