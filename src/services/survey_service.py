@@ -174,7 +174,16 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.get_survey_time_end(survey_id)
-    
+
+    def get_survey_min_choices(self, survey_id):
+        """
+        Returns the amount of minumum answers required in the survey.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.get_survey_min_choices(survey_id)
+
     def get_survey_as_dict(self, survey_id):
         '''
         Gets survey, its choices and their additional infos as dictionary

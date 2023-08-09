@@ -200,6 +200,21 @@ class SurveyRepository:
             print(e)
             return False
 
+    def get_survey_min_choices(self, survey_id):
+        """
+        Returns the amount of minumum answers required in the survey.
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "SELECT min_choices FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e: 
+            print(e)
+            return False
+        
 
     def fetch_all_active_surveys(self, teacher_id):
         '''Returns a list of all surveys in the database'''
