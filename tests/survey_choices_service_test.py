@@ -13,6 +13,10 @@ import json
 
 class TestSurveyChoicesService(unittest.TestCase):
     def setUp(self):
+        """
+        Creates environment, test users and imports a test survey from json.
+        """
+
         load_dotenv()
         self.app = Flask(__name__)
         self.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -24,93 +28,102 @@ class TestSurveyChoicesService(unittest.TestCase):
 
         clear_database()
 
-        user = User("Not on tren Testerr", "tren4lyfe@tester.com", True)
-        user2 = User("Hashtag natty", "anabolics4lyfe@tester.com", True)
+        user = User("Maija Mallikas", "maija@tester.com", True)
+        user2 = User("Tero Testaaja", "tero@tester.com", True)
         ur.register(user)
         ur.register(user2)
         self.user_id = ur.find_by_email(user.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
         self.user_email = user.email
 
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        self.survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(self.survey_id, self.user_email)
+
     def tearDown(self):
         db.drop_all()
         self.app_context.pop()
 
-    def test_get_list_of_survey_data(self):
+    def test_get_list_of_survey_choices_returns_false_if_no_data_found(self):
         '''
-        Test functions get_list_of_survey_choices() and get_choice_additional_infos()
+        Inputs a nonexistent survey id to getter and checks that return is "False"
         '''
-
-        # first non existant case
         ret = scs.get_list_of_survey_choices("ITSNOTREAL")
         self.assertEqual(ret, False)
 
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        sts.add_teacher_to_survey(survey_id, self.user_email)
-        choices = scs.get_list_of_survey_choices(survey_id)
-
-        # check choice mandatory informations
-        choices = scs.get_list_of_survey_choices(survey_id)
-        self.assertEqual(choices[0][2], "Ensimmäinen choice")
-        self.assertEqual(choices[0][3], 8)
-        self.assertEqual(choices[1][2], "Toinen choice")
-        self.assertEqual(choices[1][3], 6)
-
-        # check choice additional infos
-        choice1_infos = scs.get_choice_additional_infos(choices[0][0])
-        choice2_infos = scs.get_choice_additional_infos(choices[1][0])
-        self.assertEqual(choice1_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice1_infos[0][1], "vaikeuksia csv testaamisessa")
-        self.assertEqual(choice1_infos[1][0], "Postinumero")
-        self.assertEqual(choice1_infos[1][1], "00790")
-
-        self.assertEqual(choice2_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice2_infos[0][1], "äisimhi tunappat nelo") #bruh
-        self.assertEqual(choice2_infos[1][0], "Postinumero")
-        self.assertEqual(choice2_infos[1][1], "01820")
-
-    def test_get_survey_choice(self):
+    def test_get_list_of_survey_choices_returns_correct_number_of_choices(self):
         '''
-        Test function get_survey_choice()
+        Tests that get_list_of_survey_choices() returns a list with two members
         '''
-        # first non existant case
-        ret = scs.get_survey_choice(-1)
-        self.assertEqual(ret, False)
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        self.assertEqual(len(choices), 2)
 
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
+    def test_get_list_of_survey_choices_returns_correct_number_of_spaces(self):
+        '''
+        Tests that get_list_of_survey_choices() returns a list of choices where
+        the sum of available spots matches the test data used
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        self.assertEqual(choices[0][3]+choices[1][3], 14)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        sts.add_teacher_to_survey(survey_id, self.user_email)
+    def test_get_list_of_survey_choices_returns_correct_choice_names(self):
+        '''
+        Tests that get_list_of_survey_choices() returns a list of choices where
+        the combined choice names matches the input data
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        self.assertEqual(choices[0][2]+" "+choices[1][2],
+                         "Esimerkkipäiväkoti 1 Esimerkkipäiväkoti 2")
 
-        choices = scs.get_list_of_survey_choices(survey_id)
+    def test_get_survey_choice_returns_false_if_survey_not_found(self):
+        '''
+        Tests that function get_survey_choice() returns false if no
+        choice found with the id used as input, uses a string as input
+        when ids should be int
+        '''
+        self.assertEqual(scs.get_survey_choice('Not an id'), False)
 
-        choice1 = scs.get_survey_choice(choices[0][0])
-        choice2 = scs.get_survey_choice(choices[1][0])
+    def test_get_survey_choice_gets_correct_choice(self):
+        '''
+        Fetches all choices with get_list_of_survey_choices() and inputs
+        the first result choice id to function get_survey_choice(),
+        then tests that the fetched choice names match
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        one_choice = scs.get_survey_choice(choices[0][0])
+        self.assertEqual(choices[0][2],one_choice[2])
 
-        self.assertEqual(choice1[0], choices[0][0]) # id
-        self.assertEqual(choice1[2], "Ensimmäinen choice")
-        self.assertEqual(choice1[3], 8)
-        self.assertEqual(choice2[0], choices[1][0]) # id
-        self.assertEqual(choice2[2], "Toinen choice")
-        self.assertEqual(choice2[3], 6)
+    def test_get_choice_name_and_spaces_gets_correct_choice(self):
+        '''
+        Fetches all choices with get_list_of_survey_choices() and inputs
+        the first result choice id to function get_choice_name_and_spaces(),
+        then tests that the fetched choice names match
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        (id, name, spaces) = scs.get_choice_name_and_spaces(choices[0][0])
+        self.assertEqual(choices[0][2],name)
 
-    def test_get_choice_name_and_spaces(self):
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
+    def test_get_choice_additional_infos_returns_correct_data(self):
+        '''
+        Fetches all choices with get_list_of_survey_choices() and inputs
+        the first result choice id to function get_choice_additional_info(),
+        then tests that the fetched additional info is correct
+        '''
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        choice_infos = scs.get_choice_additional_infos(choices[0][0])
+        #headers
+        self.assertEqual(choice_infos[0][0]+" "+choice_infos[1][0],
+                         "Osoite Postinumero")
+        #info
+        self.assertEqual(choice_infos[0][1]+" "+choice_infos[1][1],
+                         "Keijukaistenpolku 14 00820")
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        sts.add_teacher_to_survey(survey_id, self.user_email)
-
-        choices = scs.get_list_of_survey_choices(survey_id)
-
-        choice = scs.get_choice_name_and_spaces(choices[0][0])
-
-        self.assertEqual(choice[1], "Ensimmäinen choice")
-        self.assertEqual(choice[2], 8)
+    def test_count_number_of_available_spaces(self):
+        '''
+        Tests that function count_number_of_available_spaces returns the
+        correct number
+        '''
+        self.assertEqual(scs.count_number_of_available_spaces(self.survey_id),14)

@@ -330,12 +330,13 @@ def survey_answers(survey_id):
         choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
 
     survey_answers_amount = len(survey_answers)
+    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=choices_data,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed,
-                           answered = answers_saved)
+                           survey_answers_amount=survey_answers_amount, available_spaces = available_spaces,
+                           survey_id = survey_id, closed = closed, answered = answers_saved)
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
 @home_decorator()

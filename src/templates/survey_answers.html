@@ -7,16 +7,18 @@
 
 {% block content %}
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
-<i>Vastauksia: {{ survey_answers_amount }} kpl</i><br><br>
-
+<i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
+<i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
+{% if survey_answers_amount > available_spaces%}
+<h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
+<br><br>
+{% endif %}<br>
 <a href="/surveys">Palaa kyselylistaan</a>
 <br><br>
-
 <input type="hidden" id="survey_id" value="{{ survey_id }}">
 <input type="email" name="teacher_email" id="teacher_email"><br><br>
 <button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button>
-
-<br><br><br>
+<br><br>
 <p>
   <i>Hae yksittäistä vastausta kirjoittamalla tähän kenttään <br>
     vastaajan email tai osa siitä.</i><br>
