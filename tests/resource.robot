@@ -79,11 +79,17 @@ Set Create Survey Mandatory Fields
     Set Focus To Element  id:minchoices
     Input Text  minchoices  ${minchoices}
 
-Drag To Top Of Choices
-    [Arguments]  ${choice}
-    ${temp}=  Get Vertical Position  ${choice}
-    ${y cord}=  Evaluate  (-1) * (${temp} - 100)
+Drag To Green Box Bottom
+    [Arguments]  ${choice}  ${green box}
+    ${choice y}=  Get Vertical Position  ${choice}
+
+    ${y cord}=  Evaluate  ${green box} - ${choice y}
+
     Drag And Drop By Offset  ${choice}  -300  ${y cord}
+
+    ${green box}=  Get Vertical Position  ${choice}
+    ${green box}=  Evaluate  ${green box} + 55
+    [Return]  ${green box}
     
 Go To Main Page
     Go To  ${HOME URL}
