@@ -1,5 +1,8 @@
 # Jakaja-sovelluksen käyttöohje opettajalle
 
+## Yleiskatsaus sovellukseen
+TODO
+
 
 ## 1. Sisäänkirjautuminen
 
@@ -44,7 +47,12 @@ Kyselyn luominen alkaa etusivun "Luo uusi kysely" -nappia painamalla. Sovellus a
 - Voit lisätä vaihtoehdot manuaalisesti käsin kirjoittamalla tai tuomalla ne suoraan csv-tiedostosta. 
 
 **5.1 Ryhmien tuominen csv-tiedostosta**
+
 TODO
+- CSV on tiedostomuoto, jossa taulukkomuodossa oleva tieto on tallennettu tekstitiedostoksi niin, että eri solujen arvot on eroteltu pilkulla ([Wikipedia-linkki](https://fi.wikipedia.org/wiki/CSV))
+linkki elomake-pohjaan
+linkki elomakkeen yleiseen 
+Mahdolliset ongelmatilanteet
 
 **5.2. Ryhmien lisääminen käsin**
 - Kirjoita nimi-kenttään vaihtoehdon nimi (esimerkiksi ryhmän aihe, harjoittelupäiväkodin nimi) ja enimmäispaikat-kenttään tieto siitä, kuinka monta opiskelijaa voidaan valita tähän vaihtoehtoon.
@@ -67,10 +75,13 @@ Jos jakopaikkoja on vähemmän kuin kyselyyn vastanneita
 TODO
 
 ## Kuinka jakoalgoritmi toimii
-TODO
+TODO (linkki?)
 
 ## Mahdolliset ongelmatilanteet
 TODO
+Kyselylinkki ei toimi
+En ole tyytyväinen lajitteluun
+
 
 ## Tuki
 TODO
