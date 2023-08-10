@@ -9,7 +9,7 @@
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
 <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
 <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
-{% if survey_answers_amount > available_spaces%}
+{% if survey_answers_amount > available_spaces %}
 <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
 <br><br>
 {% endif %}<br>
@@ -27,7 +27,10 @@
 
 
 {% if closed %}
-<a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time" onclick="create_groups()">Jaa ryhmiin</button></a>
+<a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
+{% if survey_answers_amount > available_spaces %}
+<br><small style="color: orangered;">{{error_message}}</small>
+{% endif %}
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
 </form>
