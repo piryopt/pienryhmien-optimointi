@@ -27,7 +27,7 @@
 
 
 {% if closed %}
-<a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
+<a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time" onclick="create_groups()">Jaa ryhmiin</button></a>
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
 </form>

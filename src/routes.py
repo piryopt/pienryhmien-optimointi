@@ -353,6 +353,16 @@ def survey_results(survey_id):
     # Check if the answers are already saved to the database. This determines which operations are available to the teacher.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
+    # Check if there are more rankings than available slots
+    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
+    survey_answers = survey_repository.fetch_survey_responses(survey_id)
+    survey_answers_amount = len(survey_answers)
+
+    if (survey_answers_amount > available_spaces):
+        message = "Ei voida luoda ryhmittelyä, koska vastauksia on enmmän kuin jaettavia paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus sivulta."
+        response = {"status":"0","msg":message}
+        return jsonify(response)
+
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     user_rankings = survey_repository.fetch_survey_responses(survey_id)
