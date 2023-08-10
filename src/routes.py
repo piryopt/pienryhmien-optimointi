@@ -244,6 +244,7 @@ def surveys(survey_id):
     existing = "0"
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     enddate = survey_service.get_survey_enddate(survey_id)
+    min_choices = survey_service.get_survey_min_choices(survey_id)
 
     # If a ranking exists, display the choices and the reasoning in the order that the student chose them.
     if user_survey_ranking:
@@ -363,12 +364,13 @@ def survey_answers(survey_id):
         choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
 
     survey_answers_amount = len(survey_answers)
+    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=choices_data,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed,
-                           answered = answers_saved)
+                           survey_answers_amount=survey_answers_amount, available_spaces = available_spaces,
+                           survey_id = survey_id, closed = closed, answered = answers_saved)
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
 @home_decorator()
@@ -535,7 +537,7 @@ def admin_gen_data():
         student_n = request.form.get("student_n")
         gen_data.generate_users(int(student_n))
         gen_data.add_generated_users_db()
-        return render_template("/admintools/gen_data.html", surveys = surveys)
+        return redirect("/admintools/gen_data")
 
 @app.route("/admintools/gen_data/rankings", methods = ["POST"])
 def admin_gen_rankings():
@@ -543,14 +545,9 @@ def admin_gen_rankings():
     Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
     """
     survey_id = request.form.get("survey_list")
-    survey_name = survey_service.get_survey_name(survey_id)
     gen_data.generate_rankings(survey_id)
 
-    survey_answers = survey_repository.fetch_survey_responses(survey_id)
-    survey_answers_amount = len(survey_answers)
-    return render_template("survey_answers.html",
-                           survey_name=survey_name, survey_answers=survey_answers,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id)
+    return redirect(f"/surveys/{survey_id}/answers")
 
 @app.route("/admintools/gen_data/survey", methods = ["POST"])
 def admin_gen_survey():

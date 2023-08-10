@@ -39,6 +39,9 @@
         <div class="row">
             <div class="col">
                 <div class="col-sm">
+                    <p>
+                        <i>Raahaa oikean reunan listasta vähintään {{ min_choices }} vaihtoehtoa vihreään laatikkoon.</i>
+                    </p>
                     <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
                         {% for group in good_survey_choices %}
                         <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">

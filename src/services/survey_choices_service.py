@@ -19,7 +19,7 @@ class SurveyChoicesService:
         self._survey_choices_repository = survey_choices_repository
         self._survey_repository = survey_repository
 
-    def get_list_of_survey_choices(self, survey_id):
+    def get_list_of_survey_choices(self, survey_id:str):
         """
         Returns a list of survey choices from a survey
 
@@ -32,7 +32,7 @@ class SurveyChoicesService:
         survey_choices = self._survey_choices_repository.find_survey_choices(survey_id)
         return survey_choices
 
-    def get_survey_choice(self, survey_choice_id):
+    def get_survey_choice(self, survey_choice_id:int):
         """
         Returns the data of a survey choice
 
@@ -44,7 +44,7 @@ class SurveyChoicesService:
             return False
         return survey_choice
 
-    def get_choice_name_and_spaces(self, choice_id):
+    def get_choice_name_and_spaces(self, choice_id:int):
         """
         Get the name and spaces from a survey choice
 
@@ -55,7 +55,7 @@ class SurveyChoicesService:
         data = self._survey_choices_repository.get_survey_choice(choice_id)
         return (data[0],data[2], data[3])
 
-    def get_choice_additional_infos(self, choice_id):
+    def get_choice_additional_infos(self, choice_id:int):
         """
         Get all info of a survey choice except name and spaces
 
@@ -72,5 +72,18 @@ class SurveyChoicesService:
             survey_id: The id of the survey
         """
         return self._survey_choices_repository.get_all_additional_infos(survey_id)
+        
+    def count_number_of_available_spaces(self, survey_id: str):
+        """
+        Returns int of the total number of available space in the groups of a survey
+
+        Args:
+            survey_id (str): id for the survey
+        """
+        choices = self.get_list_of_survey_choices(survey_id)
+        tally = 0
+        for (id, survey_id, name, spaces) in choices:
+            tally += spaces
+        return tally
 
 survey_choices_service = SurveyChoicesService()
