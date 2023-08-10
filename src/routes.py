@@ -289,13 +289,24 @@ def teacher_deletes_submission(survey_id):
     user_rankings_service.delete_ranking(survey_id, user_id)
     return redirect(f'/surveys/{survey_id}/answers')
 
-@app.route("/surveys/<int:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/edit", methods = ["POST", "GET"])
 @teachers_only
 def edit_survey(survey_id):
-    #TODO
-    ...
+    """
+    Page for editing survey. Fields are filled automatically based on the original survey.
+    The fields that can be edited depend on wether there are answers to the survey or not
 
-@app.route("/surveys/<string:survey_id>/edit")
+    args:
+        survey_id: id of the survey to be edited
+    """
+
+    survey = survey_service.get_survey_as_dict(survey_id)
+    #survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+    #print(survey["variable_columns"])
+    #return render_template("edit_survey.html", survey=survey)
+    return render_template("edit_survey.html")
+
+@app.route("/surveys/<string:survey_id>/delete")
 @teachers_only
 def delete_survey(survey_id):
     #TODO
@@ -345,7 +356,8 @@ def survey_answers(survey_id):
 @teachers_only
 def survey_results(survey_id):
     """
-    Display survey results. For the post request, the answers are saved to the database.
+    Display results of sorting students to groups.
+    For the post request, the answers are saved to the database.
     """
     # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
