@@ -54,7 +54,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                {% if min_choices != 0 %}
+                {% if max_bad_choices != 0 %}
                 <div class="col-sm">
                     <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
                         {% for group in bad_survey_choices %}

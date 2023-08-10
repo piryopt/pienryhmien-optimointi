@@ -236,7 +236,7 @@ def surveys(survey_id):
     shuffled_choices = [v for k,v in dict(temp).items()]
 
     # Placeholder value, get correct value from database.
-    min_choices = 1
+    max_bad_choices = 1
 
     desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
@@ -287,7 +287,8 @@ def surveys(survey_id):
                                  survey_name = survey_name, min_choices=min_choices)
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, choices_info=survey_all_info,
-                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason, min_choices=min_choices)
+                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason,
+                            min_choices=min_choices, max_bad_choices=max_bad_choices)
 
 
 
@@ -296,7 +297,8 @@ def surveys(survey_id):
         return render_template("closedsurvey.html", survey_name = survey_name)
 
     return render_template("survey.html", choices = shuffled_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc, enddate = enddate, min_choices=min_choices)
+                            survey_name = survey_name, existing = existing, desc = desc, enddate = enddate,
+                            min_choices=min_choices, max_bad_choices=max_bad_choices)
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
