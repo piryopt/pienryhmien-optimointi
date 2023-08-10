@@ -514,7 +514,7 @@ def admin_gen_data():
         student_n = request.form.get("student_n")
         gen_data.generate_users(int(student_n))
         gen_data.add_generated_users_db()
-        return render_template("/admintools/gen_data.html", surveys = surveys)
+        return redirect("/admintools/gen_data")
 
 @app.route("/admintools/gen_data/rankings", methods = ["POST"])
 def admin_gen_rankings():
@@ -522,14 +522,9 @@ def admin_gen_rankings():
     Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
     """
     survey_id = request.form.get("survey_list")
-    survey_name = survey_service.get_survey_name(survey_id)
     gen_data.generate_rankings(survey_id)
 
-    survey_answers = survey_repository.fetch_survey_responses(survey_id)
-    survey_answers_amount = len(survey_answers)
-    return render_template("survey_answers.html",
-                           survey_name=survey_name, survey_answers=survey_answers,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id)
+    return redirect(f"/surveys/{survey_id}/answers")
 
 @app.route("/admintools/gen_data/survey", methods = ["POST"])
 def admin_gen_survey():
