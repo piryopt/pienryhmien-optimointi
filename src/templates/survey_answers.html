@@ -35,9 +35,7 @@
 <form action="/surveys/{{ survey_id }}/close" method="POST" onsubmit="return confirm ('Haluatko varmasti sulkea kyselyn?')">
   <button type="submit" class="btn btn-danger" name="closin_time" style="float: right;" onclick="">Sulje kysely</button>
 </form>
-<form action="/surveys/{{ survey_id }}/edit" method="POST">
-  <button type="submit" class="btn btn-primary" name="edit_button" style="float: right; margin-right: 60px" onclick="">Muokkaa kyselyä</button>
-</form>
+<a href="/surveys/{{ survey_id }}/edit" class="btn btn-primary" style="float: right; margin-right: 60px">Muokkaa kyselyä</a>
 {% endif %}
 <br>
 

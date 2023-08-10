@@ -175,8 +175,6 @@ def new_survey_post():
     date_end = data["enddate"]
     time_end = data["endtime"]
 
-    #print("Alkaa", date_begin, time_begin)
-    #print("Alkaa", date_end, time_end)
     survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
@@ -289,7 +287,7 @@ def teacher_deletes_submission(survey_id):
     user_rankings_service.delete_ranking(survey_id, user_id)
     return redirect(f'/surveys/{survey_id}/answers')
 
-@app.route("/surveys/<string:survey_id>/edit", methods = ["POST", "GET"])
+@app.route("/surveys/<string:survey_id>/edit", methods = ["GET"])
 @teachers_only
 def edit_survey(survey_id):
     """
@@ -301,10 +299,9 @@ def edit_survey(survey_id):
     """
 
     survey = survey_service.get_survey_as_dict(survey_id)
-    #survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
-    #print(survey["variable_columns"])
-    #return render_template("edit_survey.html", survey=survey)
-    return render_template("edit_survey.html")
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+    return render_template("edit_survey.html", survey=survey)
+
 
 @app.route("/surveys/<string:survey_id>/delete")
 @teachers_only
