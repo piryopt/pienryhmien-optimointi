@@ -52,7 +52,7 @@
     validation-regex="\d\d\.\d\d\.\d\d\d\d"
     validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
     {% if survey.startdate %}
-      value="{{survey.startdate}}"
+      value="{{survey.time_begin}}"
     {% endif %}
     >
   <label for="starttime"class="time-label">Kello:</label><input type="time" name="starttime" id="starttime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm"/>
@@ -71,7 +71,7 @@
     validation-regex="\d\d\.\d\d\.\d\d\d\d"
     validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
     {% if survey.enddate %}
-      value="{{survey.enddate}}"
+      value="{{survey.time_end}}"
     {% endif %}
     >
   <label for="endtime" class="time-label">Kello:</label><input type="time" name="endtime" id="endtime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm"/>
@@ -173,5 +173,5 @@
 
 <section>
 <button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveEdit()" name="save_edit">Tallenna muutokset</button>
-</section>
+</section> <!--TODO function saveEdit-->
 {% endblock %}
