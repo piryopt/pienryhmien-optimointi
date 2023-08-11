@@ -91,27 +91,27 @@ class TestSurveyService(unittest.TestCase):
         survey_name = ss.get_survey_name(survey_id)
         survey_desc = ss.get_survey_description(survey_id)
         self.assertEqual(survey_name, "Testikysely JSON")
-        self.assertEqual(survey_desc, "Tällä testataan manuaalista luomista")
+        self.assertEqual(survey_desc, "Tällä testataan kyselyn manuaalista luomista")
 
         # check choice mandatory informations
         choices = scs.get_list_of_survey_choices(survey_id)
-        self.assertEqual(choices[0][2], "Ensimmäinen choice")
+        self.assertEqual(choices[0][2], "Esimerkkipäiväkoti 1")
         self.assertEqual(choices[0][3], 8)
-        self.assertEqual(choices[1][2], "Toinen choice")
+        self.assertEqual(choices[1][2], "Esimerkkipäiväkoti 2")
         self.assertEqual(choices[1][3], 6)
 
         # check choice additional infos
         choice1_infos = scs.get_choice_additional_infos(choices[0][0])
         choice2_infos = scs.get_choice_additional_infos(choices[1][0])
-        self.assertEqual(choice1_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice1_infos[0][1], "vaikeuksia csv testaamisessa")
+        self.assertEqual(choice1_infos[0][0], "Osoite")
+        self.assertEqual(choice1_infos[0][1], "Keijukaistenpolku 14")
         self.assertEqual(choice1_infos[1][0], "Postinumero")
-        self.assertEqual(choice1_infos[1][1], "00790")
+        self.assertEqual(choice1_infos[1][1], "00820")
 
-        self.assertEqual(choice2_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice2_infos[0][1], "äisimhi tunappat nelo")
+        self.assertEqual(choice2_infos[0][0], "Osoite")
+        self.assertEqual(choice2_infos[0][1], "Hattulantie 2")
         self.assertEqual(choice2_infos[1][0], "Postinumero")
-        self.assertEqual(choice2_infos[1][1], "01820")
+        self.assertEqual(choice2_infos[1][1], "00550")
 
     def test_count_surveys_created(self):
         '''
@@ -304,15 +304,15 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(survey_dict["time_end"], datetime.datetime(2024, 1, 1, 2, 2))
 
         # table survey choices data
-        self.assertEqual(survey_dict["choices"][0]["name"], "Ensimmäinen choice")
+        self.assertEqual(survey_dict["choices"][0]["name"], "Esimerkkipäiväkoti 1")
         self.assertEqual(survey_dict["choices"][0]["seats"], 8)
-        self.assertEqual(survey_dict["choices"][0]["Eka lisätieto"], "vaikeuksia csv testaamisessa")
-        self.assertEqual(survey_dict["choices"][0]["Postinumero"], "00790")
+        self.assertEqual(survey_dict["choices"][0]["Osoite"], "Keijukaistenpolku 14")
+        self.assertEqual(survey_dict["choices"][0]["Postinumero"], "00820")
 
-        self.assertEqual(survey_dict["choices"][1]["name"], "Toinen choice")
+        self.assertEqual(survey_dict["choices"][1]["name"], "Esimerkkipäiväkoti 2")
         self.assertEqual(survey_dict["choices"][1]["seats"], 6)
-        self.assertEqual(survey_dict["choices"][1]["Eka lisätieto"], "äisimhi tunappat nelo")
-        self.assertEqual(survey_dict["choices"][1]["Postinumero"], "01820")
+        self.assertEqual(survey_dict["choices"][1]["Osoite"], "Hattulantie 2")
+        self.assertEqual(survey_dict["choices"][1]["Postinumero"], "00550")
 
     def test_get_list_active_answered_invalid(self):
         active_list = ss.get_list_active_answered("ITSNOTREAL")

@@ -176,7 +176,16 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.get_survey_time_end(survey_id)
-    
+
+    def get_survey_min_choices(self, survey_id):
+        """
+        Returns the amount of minumum answers required in the survey.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.get_survey_min_choices(survey_id)
+
     def get_survey_as_dict(self, survey_id):
         '''
         Gets survey, its choices and their additional infos as dictionary
@@ -227,5 +236,17 @@ class SurveyService:
                 #print(f"Closing survey {survey.surveyname}")
                 self._survey_repository.close_survey(survey_id)
                 #print(f"Closed survey {survey.surveyname}")
+
+    def fetch_survey_responses(self, survey_id):
+        """
+        Gets a list of user_survey_rankings for the survey
+        
+        args:
+            survey_id: The id of the survey
+        """
+        rankings = self._survey_repository.fetch_survey_responses(survey_id)
+        if not rankings:
+            return []
+        return rankings
 
 survey_service = SurveyService()
