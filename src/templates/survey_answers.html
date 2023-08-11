@@ -10,13 +10,18 @@
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
 <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
 <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
+<input type="hidden" id="survey_id" value="{{ survey_id }}">
+<input type="email" name="teacher_email" id="teacher_email"><br><br>
+<button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button>
+<br><br>
+{% if closed %}
 {% if survey_answers_amount > available_spaces %}
 <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
 <p>Voidaksesi jakaa opiskelijat ryhmiin, on paikkoja riitettävä kaikille opiskelijoille</p>
 <p>Suositeltu järjestys käsitellä tilanne</p>
 <p>1. Poista ylimääräiset vastaukset: Poista kyselystä vastaajat, jotka ovat ilmoittaneet jättävänsä
-   kuitenkin osallistumatta, tai joiden ei kuuluisi olla mukana ryhmäjaossa (esim. jos olet itse 
-   kokeillut kuselyyn vastaamista poista oma vastauksesi kyselystä)</p>
+   kuitenkin osallistumatta, tai joiden ei kuuluisi muusta syystä olla mukana ryhmäjaossa (esim. jos
+   olet itse kokeillut kyselyyn vastaamista, poista oma vastauksesi)</p>
 <p>2. Lisää paikkoja: Tarkastele ryhmiä, joihin vastaajat jaetaan. Lisää paikkoja niihin ryhmiin,
    joihin se on mahdollista tehdä.</p>
 <!--<p>3. Jos vastauksia on edelleen liikaa <i>JOKO</i> suorita jako niin, että algoritmi jakaa ryhmät mahdollisimman
@@ -24,15 +29,9 @@
     <i>TAI</i> valitse käsin se osa opiskelijoista, jotka jätetään ryhmäjaon ulkopuolelle.</p>-->
 <br><br>
 {% endif %}
-<input type="hidden" id="survey_id" value="{{ survey_id }}">
-<input type="email" name="teacher_email" id="teacher_email"><br><br>
-<button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button>
-<br><br>
+{% endif %}
 {% if closed %}
 <a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
-  {% if survey_answers_amount > available_spaces %}
-  <br><small style="color: orangered;">{{error_message}}</small>
-  {% endif %}
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
 </form>
