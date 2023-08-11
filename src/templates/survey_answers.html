@@ -12,6 +12,17 @@
 <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
 {% if survey_answers_amount > available_spaces %}
 <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
+<p>Voidaksesi jakaa opiskelijat ryhmiin, on paikkoja riitettävä kaikille opiskelijoille</p>
+<p>Suositeltu järjestys käsitellä tilanne</p>
+<p>1. Poista ylimääräiset vastaukset: Poista kyselystä vastaajat, jotka ovat ilmoittaneet jättävänsä
+   kuitenkin osallistumatta, tai joiden ei kuuluisi olla mukana ryhmäjaossa (esim. jos olet itse 
+   kokeillut kuselyyn vastaamista poista oma vastauksesi kyselystä)</p>
+<p>2. Lisää paikkoja: Tarkastele ryhmiä, joihin vastaajat jaetaan. Lisää paikkoja niihin ryhmiin,
+   joihin se on mahdollista tehdä.</p>
+<!--<p>3. Jos vastauksia on edelleen liikaa <i>JOKO</i> suorita jako niin, että algoritmi jakaa ryhmät mahdollisimman
+   hyvin opiskelijoiden toiveita vastaavaksi ja ryhmäjaon ulkopuolelle jäävät tulostetaan omaan listaan
+    <i>TAI</i> valitse käsin se osa opiskelijoista, jotka jätetään ryhmäjaon ulkopuolelle.</p>-->
+<br><br>
 {% endif %}
 <input type="hidden" id="survey_id" value="{{ survey_id }}">
 <input type="email" name="teacher_email" id="teacher_email"><br><br>
