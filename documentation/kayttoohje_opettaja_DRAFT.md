@@ -1,12 +1,23 @@
 # Jakaja-sovelluksen käyttöohje opettajalle
 
-## Yleiskatsaus sovellukseen
-TODO
+## Sisällys
+1. Sisäänkirjautuminen
+2. Käyttöoikeudet
+3. Uuden kyselyn luominen
+6. Kyselyn sulkeminen
+7. Kyselyn muokkaaminen
+8. Ryhmiin jakaminen ja tulosten käsittely
+9. Kyselyn käyttöoikeuksien jakaminen toiselle opettajalle
+10. Kuinka lajittelu algoritmi toimii
+11. Mahdolliset ongelmatilanteet
+12. Tuki
 
 
 ## 1. Sisäänkirjautuminen
 
-Sovelluksen käyttämiseen tarvitseen Helsingin yliopiston käyttäjätunnukset. 
+Kirjaudu sovellukseen sisään osoitteessa [TBA].
+
+Käyttäjä tarvitsee sovelluksen käyttämiseen Helsingin yliopiston käyttäjätunnukset. [Lisätietoa käyttätunnuksista](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/kayttajatunnus/kayttajatunnukset)
 
 
 ## 2. Käyttöoikeudet
@@ -15,7 +26,14 @@ Jakaja-sovellus tunnistaa kahdenlaisia käyttäjiä:
 - opettaja
 - oppilas
 
-Sovellus tunnistaa käyttäjätason automaattisesti sisäänkirjautumisen yhteydessä. Opettaja-tason oikeudet saavat kaikki sellaiset käyttäjät, jotka kuuluvat Helsingin yliopiston opetushenkilökuntaan. Oppilaskäyttäjiä ovat kaikki muut HY-kirjautumista käyttävät henkilöt.
+Sovellus tunnistaa käyttäjätason automaattisesti sisäänkirjautumisen yhteydessä. Opettaja-tason oikeudet saavat kaikki sellaiset käyttäjät, jotka kuuluvat Helsingin yliopiston opetushenkilökuntaan. Kaikki muut käyttäjät ovat opiskelijakäyttäjiä.
+
+Opettajakäyttäjän oikeuksiin kuuluu:
+- uuden kyselyn luominen
+- oman kyselyn muokkaaminen
+- kyselyn sulkeminen
+- lajittelutoiminto (ryhmiin jakaminen)
+- yksittäisten vastausten poistaminen kyselystä (esim. jos joku peruu osallistumisensa kurssille)
 
 
 ## 3. Uuden kyselyn luominen
@@ -59,29 +77,31 @@ Mahdolliset ongelmatilanteet
 - "+ Lisää tietokenttä" -nappia painamalla voit lisätä vaihtoehdolle lisätietoja, esimerkiksi harjoittelupaikkakyselyssä tähän kenttään voi lisätä päiväkodin osoitteen, lapsiryhmän kuvauksen tai muuta oleellista tietoa. Kyselyä täyttäessään opiskelija näkee nämä lisätiedot kun klikkaa vaihtoehtoa. Lisätietokenttiä voi olla useita.
 ****
 
-## Kyselyn sulkeminen
+## 6. Kyselyn sulkeminen
 TODO
 
-## Kyselyn avaaminen uudelleen
+## 7. Kyselyn muokkaaminen
 TODO
+7.1. Auki olevan kyselyn muokkaaminen
+7.2. Suljetun kyselyn avaaminen uudelleen
 
-## Ryhmiin jakaminen
+## 8. Ryhmiin jakaminen ja tulosten käsittely
 TODO
 
 Perustilanne
 Jos jakopaikkoja on vähemmän kuin kyselyyn vastanneita
 
-## Kyselyn käyttöoikeuksien jakaminen toiselle opettajalle
+## 9. Kyselyn käyttöoikeuksien jakaminen toiselle opettajalle
 TODO
 
-## Kuinka jakoalgoritmi toimii
+## 10. Kuinka jakoalgoritmi toimii
 TODO (linkki?)
 
-## Mahdolliset ongelmatilanteet
+## 11. Mahdolliset ongelmatilanteet
 TODO
 Kyselylinkki ei toimi
 En ole tyytyväinen lajitteluun
 
 
-## Tuki
+## 12. Tuki
 TODO
