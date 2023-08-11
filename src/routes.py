@@ -289,7 +289,7 @@ def teacher_deletes_submission(survey_id):
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["GET"])
 @teachers_only
-def edit_survey(survey_id):
+def edit_survey_form(survey_id):
     """
     Page for editing survey. Fields are filled automatically based on the original survey.
     The fields that can be edited depend on wether there are answers to the survey or not
@@ -302,6 +302,25 @@ def edit_survey(survey_id):
     survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
     return render_template("edit_survey.html", survey=survey)
 
+@app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
+@teachers_only
+def edit_survey_post():
+    """
+    Post method for saving edits to a survey.
+    """
+    data = request.get_json()
+    survey_name = data["surveyGroupname"]
+    description = data["surveyInformation"]
+    user_id = session.get("user_id",0)
+    survey_choices = data["choices"]
+    minchoices = data["minchoices"]
+
+    date_begin = data["startdate"]
+    time_begin = data["starttime"]
+
+    date_end = data["enddate"]
+    time_end = data["endtime"]
+    #TODO
 
 @app.route("/surveys/<string:survey_id>/delete")
 @teachers_only
