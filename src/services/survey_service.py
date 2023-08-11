@@ -214,5 +214,17 @@ class SurveyService:
         if not closed:
             return []
         return closed
+    
+    def fetch_survey_responses(self, survey_id):
+        """
+        Gets a list of user_survey_rankings for the survey
+        
+        args:
+            survey_id: The id of the survey
+        """
+        rankings = self._survey_repository.fetch_survey_responses(survey_id)
+        if not rankings:
+            return []
+        return rankings
 
 survey_service = SurveyService()
