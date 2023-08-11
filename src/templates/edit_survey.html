@@ -51,11 +51,9 @@
     name="startdate"
     validation-regex="\d\d\.\d\d\.\d\d\d\d"
     validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
-    {% if survey.startdate %}
-      value="{{survey.time_begin}}"
-    {% endif %}
+    value="{{survey.start_date}}"
     >
-  <label for="starttime"class="time-label">Kello:</label><input type="time" name="starttime" id="starttime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm"/>
+  <label for="starttime"class="time-label">Kello:</label><input type="time" name="starttime" id="starttime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm" value="{{ survey.start_time }}"/>
   <br/>
   <ul class="validation-warnings-list hidden">
     <li><span class="input-validation-warning" id="startdate-validation-warning"></span></li>
@@ -70,11 +68,9 @@
     name="enddate"
     validation-regex="\d\d\.\d\d\.\d\d\d\d"
     validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
-    {% if survey.enddate %}
-      value="{{survey.time_end}}"
-    {% endif %}
+    value="{{survey.end_date}}"
     >
-  <label for="endtime" class="time-label">Kello:</label><input type="time" name="endtime" id="endtime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm"/>
+  <label for="endtime" class="time-label">Kello:</label><input type="time" name="endtime" id="endtime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm" value="{{ survey.end_time }}"/>
   <ul class="validation-warnings-list hidden">
     <li><span class="input-validation-warning" id="enddate-validation-warning"></span></li>
     <li><span class="input-validation-warning" id="endtime-validation-warning"></span></li>

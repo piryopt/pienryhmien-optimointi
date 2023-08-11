@@ -15,11 +15,12 @@ from src.tools import excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 from src.tools.db_data_gen import gen_data
-from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
+from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness, convert_date, convert_time
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 from functools import wraps
+from datetime import datetime
 
 """
 DECORATORS:
@@ -170,6 +171,7 @@ def new_survey_post():
     minchoices = data["minchoices"]
 
     date_begin = data["startdate"]
+    print(date_begin)
     time_begin = data["starttime"]
 
     date_end = data["enddate"]
@@ -300,6 +302,20 @@ def edit_survey_form(survey_id):
 
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+
+    # Convert datetime.datetime(year, month, day, hour, minute) to date (dd.mm.yyyy) and time (hh:mm)
+    start_date_data = survey["time_begin"]
+    end_date_data = survey["time_end"]
+    start_date = convert_date(start_date_data)
+    end_date = convert_date(end_date_data)
+    start_time = convert_time(start_date_data)
+    end_time = convert_time(end_date_data)
+
+    survey["start_time"] = start_time
+    survey["end_time"] = end_time
+    survey["start_date"] = start_date
+    survey["end_date"] = end_date
+
     return render_template("edit_survey.html", survey=survey)
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
