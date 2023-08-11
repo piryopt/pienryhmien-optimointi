@@ -22,15 +22,14 @@
 <p>1. Poista ylimääräiset vastaukset: Poista kyselystä vastaajat, jotka ovat ilmoittaneet jättävänsä
    kuitenkin osallistumatta, tai joiden ei kuuluisi muusta syystä olla mukana ryhmäjaossa (esim. jos
    olet itse kokeillut kyselyyn vastaamista, poista oma vastauksesi)</p>
-<p>2. Lisää paikkoja: Tarkastele ryhmiä, joihin vastaajat jaetaan. Lisää paikkoja niihin ryhmiin,
+<p>2. Muokkaa ryhmäkokoja: Tarkastele ryhmiä, joihin vastaajat jaetaan. Lisää paikkoja niihin ryhmiin,
    joihin se on mahdollista tehdä.</p>
 <!--<p>3. Jos vastauksia on edelleen liikaa <i>JOKO</i> suorita jako niin, että algoritmi jakaa ryhmät mahdollisimman
    hyvin opiskelijoiden toiveita vastaavaksi ja ryhmäjaon ulkopuolelle jäävät tulostetaan omaan listaan
-    <i>TAI</i> valitse käsin se osa opiskelijoista, jotka jätetään ryhmäjaon ulkopuolelle.</p>-->
-<br><br>
+    <i>TAI</i> valitse käsin se osa opiskelijoista, jotka jätetään ryhmäjaon ulkopuolelle. Esimerkiksi jos halutaan antaa
+   etua kyselyyn ajoissa vastanneille opiskelijoille, valitse myöhässä vastanneet</p>-->
+<a href="/surveys/{{ survey_id }}/group_sizes" class="btn btn-primary" style="float: left">Muokkaa ryhmäkokoja</a><br><br><br>
 {% endif %}
-{% endif %}
-{% if closed %}
 <a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
