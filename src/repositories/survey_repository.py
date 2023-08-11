@@ -225,11 +225,17 @@ class SurveyRepository:
 
     def fetch_survey_responses(self, survey_id):
         '''Returns a list of answers submitted to a certain survey'''
-        sql = text ("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " +
-                    "WHERE survey_id=:survey_id AND deleted IS FALSE")
-        result = db.session.execute(sql, {"survey_id":survey_id})
-        responses = result.fetchall()
-        return responses
+        try:
+            sql = text ("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " +
+                        "WHERE survey_id=:survey_id AND deleted IS FALSE")
+            result = db.session.execute(sql, {"survey_id":survey_id})
+            responses = result.fetchall()
+            if not responses:
+                return False
+            return responses
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
     
     def get_list_active_answered(self, user_id):
         """
