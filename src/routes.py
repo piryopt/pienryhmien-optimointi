@@ -20,7 +20,6 @@ from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 from functools import wraps
-from datetime import datetime
 
 """
 DECORATORS:
@@ -171,7 +170,6 @@ def new_survey_post():
     minchoices = data["minchoices"]
 
     date_begin = data["startdate"]
-    print(date_begin)
     time_begin = data["starttime"]
 
     date_end = data["enddate"]

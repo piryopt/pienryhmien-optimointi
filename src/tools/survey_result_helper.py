@@ -54,6 +54,12 @@ def get_happiness(survey_choice_id, user_ranking):
     return happiness
     
 def convert_date(data):
+    """
+    Convert a datetime object to a dd.mm.yyyy string
+
+    args:
+        data: The datetime object
+    """
     day = check_if_zero_needed(str(data.day))
     month = check_if_zero_needed(str(data.month))
     year = str(data.year)
@@ -61,12 +67,24 @@ def convert_date(data):
     return date
     
 def convert_time(data):
+    """
+    Convert a datetime object to a hh:mm string
+
+    args:
+        data: The datetime object
+    """
     time_hour = check_if_zero_needed(str(data.hour))
     time_minute = check_if_zero_needed(str(data.minute))
     time = time_hour + ":" + time_minute
     return time
 
 def check_if_zero_needed(unit):
+    """
+    Add a 0 to the start of the unit if it's length is 1.
+
+    args:
+        unit: hour/minute/day/month of a datetime object
+    """
     if len(unit) == 1:
         unit = "0"+ unit
     return unit
