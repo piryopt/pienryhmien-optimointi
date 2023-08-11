@@ -17,7 +17,7 @@
 
 Kirjaudu sovellukseen sisään osoitteessa [TBA].
 
-Käyttäjä tarvitsee sovelluksen käyttämiseen Helsingin yliopiston käyttäjätunnukset. [Lisätietoa käyttätunnuksista](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/kayttajatunnus/kayttajatunnukset)
+Käyttäjä tarvitsee sovelluksen käyttämiseen Helsingin yliopiston käyttäjätunnukset [lisätietoa käyttätunnuksista](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/kayttajatunnus/kayttajatunnukset).
 
 
 ## 2. Käyttöoikeudet
@@ -67,35 +67,58 @@ Kyselyn luominen alkaa etusivun "Luo uusi kysely" -nappia painamalla. Sovellus a
 **5.1 Ryhmien tuominen csv-tiedostosta**
 
 TODO
-- CSV on tiedostomuoto, jossa taulukkomuodossa oleva tieto on tallennettu tekstitiedostoksi niin, että eri solujen arvot on eroteltu pilkulla ([Wikipedia-linkki](https://fi.wikipedia.org/wiki/CSV))
+- CSV on tiedostomuoto, jossa taulukkomuodossa oleva tieto on tallennettu tekstitiedostoksi niin, että eri solujen arvot on eroteltu pilkulla ([Wikipedia-linkki](https://fi.wikipedia.org/wiki/CSV)). 
+
 linkki elomake-pohjaan
-linkki elomakkeen yleiseen 
+linkki elomakkeen yleiseen ohjeeseen
 Mahdolliset ongelmatilanteet
 
 **5.2. Ryhmien lisääminen käsin**
 - Kirjoita nimi-kenttään vaihtoehdon nimi (esimerkiksi ryhmän aihe, harjoittelupäiväkodin nimi) ja enimmäispaikat-kenttään tieto siitä, kuinka monta opiskelijaa voidaan valita tähän vaihtoehtoon.
 - "+ Lisää tietokenttä" -nappia painamalla voit lisätä vaihtoehdolle lisätietoja, esimerkiksi harjoittelupaikkakyselyssä tähän kenttään voi lisätä päiväkodin osoitteen, lapsiryhmän kuvauksen tai muuta oleellista tietoa. Kyselyä täyttäessään opiskelija näkee nämä lisätiedot kun klikkaa vaihtoehtoa. Lisätietokenttiä voi olla useita.
-****
+
+**Valmiin lomakkeen tarkastelu ja opiskelijoille lähetettävän linkin kopiointi**
+
+TODO
+
 
 ## 6. Kyselyn sulkeminen
-TODO
+
+Klikkaa kyselyn nimeä etusivun listasta otsikon "Käynnissä olevat kyselyt" alta. Näet yhteenvedon kyselyn vastaustilanteesta. Sulje kysely klikkaamalla sivun oikeassa reunassa olevaa "Sulje kysely" -nappia. Sovellus varmistaa valinnan kysymällä "Haluatko varmasti sulkea kyselyn?". Klikkaa pop-up-ikkunasta vaihtoehtoa "OK".
+
+Kysely on nyt suljettu eikä siihen voi syöttää uusia vastauksia. Jos haluat avata kyselyn uudelleen, katso tämän ohjeen kohta 7.2. Jos haluat jakaa kyselyyn vastanneet opiskelijat ryhmiin käyttäen sovelluksen lajittelualgoritmia, katso kohta 8.
+
 
 ## 7. Kyselyn muokkaaminen
 TODO
-7.1. Auki olevan kyselyn muokkaaminen
-7.2. Suljetun kyselyn avaaminen uudelleen
+
+**7.1. Auki olevan kyselyn muokkaaminen**
+
+**7.2. Suljetun kyselyn avaaminen uudelleen ja lomakkeen muokkaaminen**
+
 
 ## 8. Ryhmiin jakaminen ja tulosten käsittely
-TODO
 
-Perustilanne
-Jos jakopaikkoja on vähemmän kuin kyselyyn vastanneita
+
+Siirry kyselyn yhteenvetosivulle sovelluksen etusivulta klikkaamalla ensin "Näytä vanhat kyselyt" -nappia ja valitse sitten haluamasi kysely klikkaamalla kyselyn kohdalla olevaa "Tarkastele tuloksia" -linkkiä.
+
+Jos kyselyä ei ole vielä suljettu, tee se ensin (ks. kohta 6). Kyselyn sulkeuduttua kyselyn yhteenvetosivulle ilmestyy sininen nappi "Jaa ryhmiin". 
+
+Sivun yläreunassa lukee kyselyn nimi ja sen alla näet vastausten määrän sekä jaettavien paikkojen määrän. Jos vastauksia on enemmän kuin paikkoja, on tehtävä muutoksia ennen kuin voit tehdä ryhmiin jakamisen.
+
+Tarkista ensin vastaukset. Jos siellä on mukana vastauksia sellaisilta opiskelijoilta, jotka ovat peruneet kurssille osallistumisensa, voit poistaa nuo vastaukset klikkaamalla vastauksen kohdalla olevaa nappia "Poista tämä vastaus". 
+
+**Ylimääräisten paikkojen lisääminen ryhmiin - TBA**
+
 
 ## 9. Kyselyn käyttöoikeuksien jakaminen toiselle opettajalle
 TODO
 
+Kyselyn yhteenvetosivulla on vihreä nappi "Lisää opettaja". Syötä sen yläpuolella olevaan tekstikenttään toisen opettajan HY-sähköpostiosoite ja klikkaa nappia. Oikeudet on nyt jaettu ja sovellukseen kirjautuessaan kollegasi näkee kyselyn vanhojen kyselyjen listassaan. Hän ei saa tästä erikseen ilmoitusta, joten voi olla hyvä idea lähettää hänelle sähköposti asiasta.
+
+
 ## 10. Kuinka jakoalgoritmi toimii
-TODO (linkki?)
+TODO (linkki selitykseen?)
 
 ## 11. Mahdolliset ongelmatilanteet
 TODO
