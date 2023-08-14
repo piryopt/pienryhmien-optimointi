@@ -23,7 +23,7 @@
       $( document ).ready(function() {
         $("#start-date").datepicker({
           dateFormat: "dd.mm.yy"
-        });
+        }).datepicker("setDate", new Date());
         $("#end-date").datepicker({
           dateFormat: "dd.mm.yy"
         });
@@ -93,21 +93,55 @@
     </section>
 
     <section>
-      <h2>Priorisoitujen ryhmien vähimmäismäärä</h2>
-      <input
-          type="text"
-          class="form-control"
-          id="minchoices" name="minchoices"
-          validation-regex="\d+"
-          validation-text="Kentän tulee olla kokonaisluku"
-          onchange="fieldIsValid(this)"
-          {% if survey.min_choices %}
-            value="{{survey.min_choices}}"
-          {% endif %}
-        />
-        <ul class="validation-warnings-list hidden">
-          <li><span class="input-validation-warning" id="minchoices-validation-warning"></span></li>
-        </ul>
+      <div>
+        <h3>Vaaditaanko kaikkien ryhmien järjestämistä?</h3>
+        <input type="radio" name="min-choices-setting" value="hide" id="min-choices-all" data-dependant-class="min-choices-section" onclick="visibilityToggleRadioClick(event);" checked/>
+        <label for="min-choices-all">Kyllä</label>
+        <input type="radio" name="min-choices-setting" value="show" id="min-choices-custom" data-dependant-class="min-choices-section" onclick="visibilityToggleRadioClick(event);"/>
+        <label for="min-choices-custom">Ei</label>
+      </div>
+      <div class="min-choices-section hidden">
+        <label for="minchoices">Priorisoitujen ryhmien vähimmäismäärä</label>
+        <input
+            type="text"
+            class="form-control min-choices-section hidden"
+            id="minchoices" name="minchoices"
+            validation-regex="\d+"
+            validation-text="Kentän tulee olla kokonaisluku"
+            onchange="fieldIsValid(this)"
+            {% if survey.min_choices %}
+              value="{{survey.min_choices}}"
+            {% endif %}
+          />
+          <ul class="validation-warnings-list hidden">
+            <li><span class="input-validation-warning" id="minchoices-validation-warning"></span></li>
+          </ul>
+      </div>
+
+      <div>
+        <h3>Sallitaanko valintojen kieltäminen?</h3>
+        <input type="radio" name="deny-choices-setting" value="show" id="deny-choices-yes" data-dependant-class="deny-choices-section" onclick="visibilityToggleRadioClick(event);" checked/>
+        <label for="min-choices-all">Kyllä</label>
+        <input type="radio" name="deny-choices-setting" value="hide" id="min-choices-no" data-dependant-class="deny-choices-section" onclick="visibilityToggleRadioClick(event);"/>
+        <label for="min-choices-custom">Ei</label>
+      </div>
+      <div class="deny-choices-section">
+        <label for="denied-choices-count">Sallittu kiellettyjen ryhmien määrä</label>
+        <input
+            type="text"
+            class="form-control deny-choices-section"
+            id="denied-choices-count" name="denied-choices-count"
+            validation-regex="\d+"
+            validation-text="Kentän tulee olla kokonaisluku"
+            onchange="fieldIsValid(this)"
+            {% if survey.deny_choices %}
+              value="{{survey.min_choices}}"
+            {% endif %}
+          />
+          <ul class="validation-warnings-list hidden">
+            <li><span class="input-validation-warning" id="denied-choices-count-validation-warning"></span></li>
+          </ul>
+      </div>
     </section>
 
     <section>
