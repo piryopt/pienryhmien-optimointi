@@ -225,11 +225,17 @@ class SurveyRepository:
 
     def fetch_survey_responses(self, survey_id):
         '''Returns a list of answers submitted to a certain survey'''
-        sql = text ("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " +
-                    "WHERE survey_id=:survey_id AND deleted IS FALSE")
-        result = db.session.execute(sql, {"survey_id":survey_id})
-        responses = result.fetchall()
-        return responses
+        try:
+            sql = text ("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " +
+                        "WHERE survey_id=:survey_id AND deleted IS FALSE")
+            result = db.session.execute(sql, {"survey_id":survey_id})
+            responses = result.fetchall()
+            if not responses:
+                return False
+            return responses
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
     
     def get_list_active_answered(self, user_id):
         """
@@ -261,6 +267,21 @@ class SurveyRepository:
             sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, user_survey_rankings r"\
                 "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = True AND r.deleted = False)"
             result = db.session.execute(text(sql), {"user_id":user_id})
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_all_active_surveys(self):
+        """
+        SQL code for getting all active surveys. Needed for automatic closing which will be checked every hour. 
+        """
+        try:
+            sql = "SELECT * FROM surveys WHERE closed=False"
+            result = db.session.execute(text(sql))
             surveys = result.fetchall()
             if not surveys:
                 return False

@@ -3,7 +3,7 @@ from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect
 import os
-from src import app,db
+from src import app,db,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -20,6 +20,8 @@ from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 from functools import wraps
+from datetime import datetime
+from src.tools.date_converter import get_time_helsinki
 
 """
 DECORATORS:
@@ -99,7 +101,7 @@ def frontpage() -> str:
     for s in surveys:
         survey_id = s[0]
         surveyname = s[1]
-        survey_answers = survey_repository.fetch_survey_responses(survey_id)
+        survey_answers = survey_service.fetch_survey_responses(survey_id)
         participants = len(survey_answers)
         survey_ending_date = survey_service.get_survey_enddate(survey_id)
         data.append([survey_id, surveyname, participants, survey_ending_date])
@@ -360,7 +362,7 @@ def survey_answers(survey_id):
         return survey_results(survey_id)
 
     survey_name = survey_service.get_survey_name(survey_id)
-    survey_answers = survey_repository.fetch_survey_responses(survey_id)
+    survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
         choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
@@ -369,10 +371,11 @@ def survey_answers(survey_id):
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
+    error_message = "Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus sivulta."
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=choices_data,
                            survey_answers_amount=survey_answers_amount, available_spaces = available_spaces,
-                           survey_id = survey_id, closed = closed, answered = answers_saved)
+                           survey_id = survey_id, closed = closed, answered = answers_saved, error_message = error_message)
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
 @home_decorator()
@@ -387,9 +390,19 @@ def survey_results(survey_id):
     # Check if the answers are already saved to the database. This determines which operations are available to the teacher.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
+    # Check if there are more rankings than available slots
+    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
+    user_rankings = survey_service.fetch_survey_responses(survey_id)
+
+    if not user_rankings:
+        return redirect(f"/surveys/{survey_id}/answers")
+    survey_answers_amount = len(user_rankings)
+
+    if (survey_answers_amount > available_spaces):
+        return redirect(f"/surveys/{survey_id}/answers")
+
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    user_rankings = survey_repository.fetch_survey_responses(survey_id)
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
     weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
@@ -468,7 +481,7 @@ def login():
     if request.method == "GET":
         return render_template("mock_ad.html")
     if request.method == "POST":
-        username = request.form["username"]
+        username = request.form.get("username")
 
         email = name = role_bool = ""
 
@@ -633,3 +646,14 @@ def get_choices(survey_id):
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)
+
+"""
+TASKS:
+"""
+@scheduler.task('cron', id='do_job_1', hour='*')
+def job1():
+    """
+    Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
+    """
+    with app.app_context():
+        survey_service.check_for_surveys_to_close()
