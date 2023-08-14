@@ -1,3 +1,4 @@
+from datetime import datetime
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
@@ -214,5 +215,26 @@ class SurveyService:
         if not closed:
             return []
         return closed
+
+    def validate_created_survey(self, survey_dict):
+        print("VALIDATING")
+        print(survey_dict)
+
+        # Name length
+        if len(survey_dict["surveyGroupname"]) < 5:
+            return {"success": False, "message": {"status":"0", "msg":"Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"}}
+        
+        # Min choices is a number
+        if not isinstance(survey_dict["minchoices"], int):
+            return {"success": False, "message": {"status":"0", "msg":"Priorisoitavien ryhmien vähimmäismäärän tulee olla numero"}}
+
+        # End date is not earlier than start date
+        st  = datetime.strptime(f'{survey_dict["startdate"]} {survey_dict["starttime"]}', "%d.%m.%Y %H:%M")
+        et = datetime.strptime(f'{survey_dict["enddate"]} {survey_dict["endtime"]}', "%d.%m.%Y %H:%M")
+        if et <= st:
+            return {"success": False, "message": {"status":"0", "msg":"Kyselyn sulkemispäivämäärä ei voi olla aikaisempi tai sama kuin aloituspäivämäärä"}}
+        
+        return {"success": True}
+
 
 survey_service = SurveyService()
