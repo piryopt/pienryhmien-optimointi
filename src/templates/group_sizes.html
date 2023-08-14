@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Muokkaa ryhmäkokoja{% endblock %}
+
+{% block head %}
+  <script src="{{ url_for('static', filename='js/create_survey.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/create_survey.css') }}">
+{% endblock %}
+
+{% block content %}
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+  </script>
+    <h1 class="page-title">
+      <img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}"
+           alt=""
+           class="d-inline-block align-text-middle"
+      >
+      Muokkaa ryhmäkokoja
+    </h1>
+
+    <section>
+      <h2>{{ survey.surveyname }}</h2>
+    </section>
+    <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
+    <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
+    {% if survey_answers_amount > available_spaces %}
+    <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
+    {% endif %}
+    <br><br>
+    <section>
+      <h2>Priorisoitavat ryhmät</h2>
+      <table class="table table-dark table-striped table-hover choice-table-main">
+        <thead class="">
+          <tr id="column-delete-btns">
+            <td></td>
+            <td></td>
+            {% if survey is not none %}
+              {% if survey.choices|length > 0 %}
+                {% for variable_column in survey.variable_columns %}
+                <td class=""><div class="delete-col-btn"></div></td>
+                {% endfor %}
+              {% endif %}  
+            {% endif %}
+          </tr>
+          <tr id="choice-table-headers">
+            <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
+            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
+          {# additional columns if template loaded with survey parameter present #}
+          
+          {% if survey is not none %}
+            {% if survey.choices|length > 0 %}
+              {% for colname in survey.variable_columns %}
+                <th class="variable-header">{{colname}}</th>
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+          </tr>
+        </thead>
+        <tbody id="choiceTable" class="">
+        {# If survey parameter is present, create rows for each choice #}
+        {% if survey is not none %}
+          {% if survey.choices|length > 0 %}
+            {% for choice in survey.choices %}
+              <tr>
+                <td>{{ choice.name }}</td>
+                <td>{{ choice.seats }}</td>
+              </tr>
+            {% endfor %}
+
+          {# If survey parameter is not set, create empty row with columns for constant values #}
+          {% endif %}
+          {% else %}
+            <tr>
+              <td class="empty" tabindex="0">tyhjä</td>
+              <td class="empty" tabindex="0">tyhjä</td>
+            </tr>
+        {% endif %}
+          
+        </tbody>
+      </table>
+      <ul class="validation-warnings-list hidden" id="choicetable-validation-warnings">
+      </ul>
+    </section>
+
+    <section>
+      <button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveGroupSizes()" name="savegroupsizes">Tallenna muutokset</button>
+    </section>
+{% endblock %}
