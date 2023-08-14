@@ -274,5 +274,20 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def get_all_active_surveys(self):
+        """
+        SQL code for getting all active surveys. Needed for automatic closing which will be checked every hour. 
+        """
+        try:
+            sql = "SELECT * FROM surveys WHERE closed=False"
+            result = db.session.execute(text(sql))
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 survey_repository = SurveyRepository()
