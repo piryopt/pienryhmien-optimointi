@@ -3,14 +3,14 @@ window.onload = function() {
 };
 
 function submit(resubmit) {
-    var min_choices = document.getElementById("min_choices").value;
+    var maxBadChoices = document.getElementById("max_bad_choices").value;
     var surveyID = document.getElementById("survey_id").value;
     var neutralIDs = $("#sortable-neutral").sortable("toArray");
     var goodIDs = $("#sortable-good").sortable("toArray");
     var badIDs = [];
     var reasons = "";
 
-    if (min_choices > 0) {
+    if (maxBadChoices > 0) {
         var badIDs = $("#sortable-bad").sortable("toArray");
         var reasons = document.getElementById("reasons").value;
     }
