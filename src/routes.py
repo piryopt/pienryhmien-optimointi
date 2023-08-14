@@ -165,7 +165,6 @@ def new_survey_post():
     data = request.get_json()
 
     validation = survey_service.validate_created_survey(data)
-    print(validation)
     if not validation["success"]:
         return jsonify(validation["message"]), 400
 
