@@ -314,6 +314,21 @@ def add_teacher(survey_id, teacher_email):
     response = {"status":"1","msg":message}
     return jsonify(response)
 
+@app.route("/surveys/<string:survey_id>/group_sizes", methods=["GET"])
+@teachers_only
+def edit_group_sizes(survey_id):
+    """
+    Edit group sizes in a survey and display total number of spaces vs answers
+    Args:
+        survey_id (int): id of the survey
+    """
+    survey = survey_service.get_survey_as_dict(survey_id)
+    survey_answers = survey_service.fetch_survey_responses(survey_id)
+    survey_answers_amount = len(survey_answers)
+    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
+    return render_template("group_sizes.html", survey=survey,
+                            survey_answers_amount=survey_answers_amount, available_spaces=available_spaces)
+
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
 @home_decorator()
 @teachers_only
