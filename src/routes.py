@@ -242,9 +242,7 @@ def surveys(survey_id):
     shuffle(temp)
     shuffled_choices = [v for k,v in dict(temp).items()]
 
-    # Placeholder value, get correct value from database.
-    max_bad_choices = 1
-
+    max_bad_choices = survey_service.get_survey_max_denied_choices(survey_id)
     desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
