@@ -323,8 +323,6 @@ def edit_survey_form(survey_id):
     survey["start_date"] = start_date
     survey["end_date"] = end_date
 
-    print(survey_id)
-
     return render_template("edit_survey.html", survey=survey, survey_id = survey_id)
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
@@ -345,14 +343,6 @@ def edit_survey_post(survey_id):
 
     date_end = data["enddate"]
     time_end = data["endtime"]
-    '''print(survey_name)
-    print(description)
-    print(survey_choices)
-    print(minchoices)
-    print(date_begin)
-    print(time_begin)
-    print(date_end)
-    print(time_end)'''
     # Check survey_teachers_service for more details on tuple
     (success, message) = (False, "Kyselyn muokkaus epäonnistui!")
     if not success:
