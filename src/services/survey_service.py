@@ -1,3 +1,4 @@
+from datetime import datetime
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
@@ -148,7 +149,7 @@ class SurveyService:
         '''
         return parser_elomake_csv_to_dict(file) # in tools
     
-    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end):
+    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices=0):
         '''
         Calls tools.parsers dictionary to survey parser
         that creates the survey, its choices and their additional infos
@@ -157,7 +158,7 @@ class SurveyService:
         if self._survey_repository.survey_name_exists(survey_name, user_id):
             return False
 
-        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end)
+        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
 
     def get_survey_description(self, survey_id):
         """
@@ -248,5 +249,26 @@ class SurveyService:
         if not rankings:
             return []
         return rankings
+
+    def validate_created_survey(self, survey_dict):
+        print("VALIDATING")
+        print(survey_dict)
+
+        # Name length
+        if len(survey_dict["surveyGroupname"]) < 5:
+            return {"success": False, "message": {"status":"0", "msg":"Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"}}
+        
+        # Min choices is a number
+        if not isinstance(survey_dict["minchoices"], int):
+            return {"success": False, "message": {"status":"0", "msg":"Priorisoitavien ryhmien vähimmäismäärän tulee olla numero"}}
+
+        # End date is not earlier than start date
+        st  = datetime.strptime(f'{survey_dict["startdate"]} {survey_dict["starttime"]}', "%d.%m.%Y %H:%M")
+        et = datetime.strptime(f'{survey_dict["enddate"]} {survey_dict["endtime"]}', "%d.%m.%Y %H:%M")
+        if et <= st:
+            return {"success": False, "message": {"status":"0", "msg":"Kyselyn sulkemispäivämäärä ei voi olla aikaisempi tai sama kuin aloituspäivämäärä"}}
+        
+        return {"success": True}
+
 
 survey_service = SurveyService()

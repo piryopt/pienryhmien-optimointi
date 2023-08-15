@@ -196,4 +196,6 @@ div.delete-col-btn-visible {
     background-repeat: no-repeat;
 }
 
-
+section div {
+    margin-bottom: 40px;
+}

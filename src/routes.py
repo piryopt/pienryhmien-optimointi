@@ -165,6 +165,11 @@ def new_survey_post():
     Post method for creating a new survey.
     """
     data = request.get_json()
+
+    validation = survey_service.validate_created_survey(data)
+    if not validation["success"]:
+        return jsonify(validation["message"]), 400
+
     survey_name = data["surveyGroupname"]
     description = data["surveyInformation"]
     user_id = session.get("user_id",0)
@@ -177,8 +182,8 @@ def new_survey_post():
     date_end = data["enddate"]
     time_end = data["endtime"]
 
-    #print("Alkaa", date_begin, time_begin)
-    #print("Alkaa", date_end, time_end)
+    allowed_denied_choices = data["allowedDeniedChoices"]
+
     survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
