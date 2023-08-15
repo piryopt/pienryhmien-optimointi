@@ -170,5 +170,8 @@
 <section>
 <input type="hidden" value="{{survey_id}}" id="survey_id">
 <button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveEdit()" name="save_edit">Tallenna muutokset</button>
-</section> <!--TODO function saveEdit-->
+</section>
+<section>
+  <a href="/surveys/{{ survey_id }}/answers" class="btn btn-primary">Palaa kyselyn vastauksiin</a>
+</section>
 {% endblock %}
