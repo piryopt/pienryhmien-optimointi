@@ -26,16 +26,20 @@ class TestSurveyService(unittest.TestCase):
 
         clear_database()
 
-        user = User("Not on tren Testerr", "tren4lyfe@tester.com", True)
-        user2 = User("Hashtag natty", "anabolics4lyfe@tester.com", True)
+        self.setup_users()
+
+    def setup_users(self):
+        self.ur = ur
+        user1 = User("Not on tren Testerr", "feelsbadman@tester.com", True)
+        user2 = User("Not on anabolic", "anabolic@tester.com", True)
         user3 = User("trt enjoyer", "ttrt@tester.com", True)
-        ur.register(user)
-        ur.register(user2)
-        ur.register(user3)
-        self.user_id = ur.find_by_email(user.email)[0]
+        self.ur.register(user1)
+        self.ur.register(user2)
+        self.ur.register(user3)
+        self.user_id = ur.find_by_email(user1.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
         self.user_id3 = ur.find_by_email(user3.email)[0]
-        self.user_email = user.email
+        self.user_email = user1.email
 
 
     def tearDown(self):
@@ -342,3 +346,25 @@ class TestSurveyService(unittest.TestCase):
         ss.close_survey(survey_id, self.user_id)
         closed_list = ss.get_list_closed_answered(self.user_id3)
         self.assertEqual(1, len(closed_list))
+
+    def test_check_surveys_to_close_empty(self):
+        """
+        Test that the function works when no open surveys
+        """
+        clear_database()
+        self.setup_users()
+        surveys = ss.check_for_surveys_to_close()
+        self.assertEqual(False, surveys)
+
+    def test_check_surveys_to_close(self):
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 13", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
+        survey_id2 = ss.create_new_survey_manual(json_object["choices"], "Test survey 14", self.user_id, json_object["surveyInformation"], 2, "01.01.1998", "01:01", "01.01.1999", "02:02")
+        sts.add_teacher_to_survey(survey_id2, self.user_email)
+        surveys = ss.check_for_surveys_to_close()
+        closed = ss.check_if_survey_closed(survey_id2)
+        self.assertEqual(True, closed)

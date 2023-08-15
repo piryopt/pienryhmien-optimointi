@@ -3,7 +3,7 @@ from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect
 import os
-from src import app,db
+from src import app,db,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -20,6 +20,8 @@ from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 from functools import wraps
+from datetime import datetime
+from src.tools.date_converter import get_time_helsinki
 
 """
 DECORATORS:
@@ -163,6 +165,11 @@ def new_survey_post():
     Post method for creating a new survey.
     """
     data = request.get_json()
+
+    validation = survey_service.validate_created_survey(data)
+    if not validation["success"]:
+        return jsonify(validation["message"]), 400
+
     survey_name = data["surveyGroupname"]
     description = data["surveyInformation"]
     user_id = session.get("user_id",0)
@@ -175,8 +182,8 @@ def new_survey_post():
     date_end = data["enddate"]
     time_end = data["endtime"]
 
-    #print("Alkaa", date_begin, time_begin)
-    #print("Alkaa", date_end, time_end)
+    allowed_denied_choices = data["allowedDeniedChoices"]
+
     survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
@@ -445,7 +452,7 @@ def login():
     if request.method == "GET":
         return render_template("mock_ad.html")
     if request.method == "POST":
-        username = request.form["username"]
+        username = request.form.get("username")
 
         email = name = role_bool = ""
 
@@ -610,3 +617,14 @@ def get_choices(survey_id):
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)
+
+"""
+TASKS:
+"""
+@scheduler.task('cron', id='do_job_1', hour='*')
+def job1():
+    """
+    Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
+    """
+    with app.app_context():
+        survey_service.check_for_surveys_to_close()

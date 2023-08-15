@@ -141,7 +141,7 @@ class SurveyRepository:
             print(e)
             return False
 
-    def create_new_survey(self, surveyname, min_choices, description, begindate, enddate):
+    def create_new_survey(self, surveyname, min_choices, description, begindate, enddate, allowed_denied_choices=0):
         '''
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
@@ -151,10 +151,10 @@ class SurveyRepository:
             while(self.get_survey(id)):
                 id = generate_unique_id(10)
 
-            sql = "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_begin, time_end)"\
-                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_b, :t_e) RETURNING id"
+            sql = "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_begin, time_end, allowed_denied_choices)"\
+                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_b, :t_e, :a_d_c) RETURNING id"
             
-            result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate})
+            result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate, "a_d_c": allowed_denied_choices})
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718
@@ -267,6 +267,21 @@ class SurveyRepository:
             sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, user_survey_rankings r"\
                 "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = True AND r.deleted = False)"
             result = db.session.execute(text(sql), {"user_id":user_id})
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_all_active_surveys(self):
+        """
+        SQL code for getting all active surveys. Needed for automatic closing which will be checked every hour. 
+        """
+        try:
+            sql = "SELECT * FROM surveys WHERE closed=False"
+            result = db.session.execute(text(sql))
             surveys = result.fetchall()
             if not surveys:
                 return False
