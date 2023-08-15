@@ -184,7 +184,7 @@ def new_survey_post():
 
     allowed_denied_choices = data["allowedDeniedChoices"]
 
-    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
+    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
         return jsonify(response)
