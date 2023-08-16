@@ -232,9 +232,14 @@ def surveys(survey_id):
             survey_all_info[row[0]]["search"] += " " + row[2]
 
     for row in survey_choices:
-        survey_all_info[row[0]]["name"] = row[2]
-        survey_all_info[row[0]]["slots"] = row[3]
-        survey_all_info[row[0]]["id"] = row[0]
+        if row[0] not in survey_all_info:
+            survey_all_info[row[0]] = {"name": row[2]}
+            survey_all_info[row[0]]["slots"] = row[3]
+            survey_all_info[row[0]]["id"] = row[0]
+        else:
+            survey_all_info[row[0]]["name"] = row[2]
+            survey_all_info[row[0]]["slots"] = row[3]
+            survey_all_info[row[0]]["id"] = row[0]
 
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
     
