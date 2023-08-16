@@ -160,6 +160,23 @@ class SurveyService:
 
         return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
 
+    def save_survey_edit(self, survey_id:str, edit_dict:dict):
+        '''
+        Function to save edited survey data
+        Edit page might not return every data field for survey so function first
+        gets survey data as dictionary and replaces applicaple fields with edited fields
+        Then inputs data to service that saves edis
+        args:
+            survey_id (str): ID of the survey being edited
+            edict_dict (dict): Dictionary of values returned by save edit
+        '''
+        #TODO
+        #print(edit_dict)
+        #print(parser_existing_survey_to_dict(survey_id))
+        #parse choices
+        return((False, "TODO"))
+        #return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
+
     def get_survey_description(self, survey_id):
         """
         Gets the description of the survey
