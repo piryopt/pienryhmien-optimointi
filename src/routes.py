@@ -186,7 +186,7 @@ def new_survey_post():
 
     survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
     if not survey_id:
-        response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
+        response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!"}
         return jsonify(response)
     teacher_email = user_service.get_email(user_id)
     (success, message) = survey_teachers_service.add_teacher_to_survey(survey_id, teacher_email)
@@ -335,6 +335,26 @@ def edit_group_sizes(survey_id):
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template("group_sizes.html", survey=survey,
                             survey_answers_amount=survey_answers_amount, available_spaces=available_spaces)
+
+@app.route("/surveys/<string:survey_id>/group_sizes", methods=["POST"])
+@teachers_only
+def post_group_sizes(survey_id):
+    """
+    Post method for editing group sizes in the survey
+    Args:
+        survey_id (int): id of the survey
+    """
+    data = request.get_json()
+    print(data)
+
+    survey_id = False
+    #survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
+    if not survey_id:
+        response = {"status":"0", "msg":"Tallennus ei onnistunut! Häiriö tietokantayhteydessä"}
+        return jsonify(response)
+
+    response = {"msg":"Ryhmäkoot päivitetty!"}
+    return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
 @home_decorator()

@@ -189,6 +189,65 @@ function createNewSurvey() {
     }); 
 }
 
+function saveGroupSizes() {
+    //post method for group size edit page
+        // Validate choice table
+        validateChoiceTable()
+
+        // Validate single fields
+        var elementsToValidate = document.querySelectorAll("input[validation-regex]:not(.hidden)")
+        var validContent = true
+
+        elementsToValidate.forEach(elem => {
+            console.log(elem)
+            if(!fieldIsValid(elem)) {
+                validContent = false
+            }
+        })
+
+        if (!validContent) {
+            // Not valid, won't try to post
+            console.log("Form contents not valid, won't post")
+            return;
+        }
+
+    //Valid content, continue to post
+
+    // Get column names from the choice table
+    var tableHeaders = Array.from(document.querySelectorAll("#choice-table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
+    console.log(tableHeaders)
+
+    var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
+    var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
+
+    var requestData = {
+        surveyGroupname: $("#groupname").val(),
+        choices: rowsAsJson,
+        surveyInformation: document.getElementById("survey-information").value
+    }
+
+    console.log("requestData", requestData)
+
+    $.ajax({
+    type: "POST",
+    url: "/surveys/<string:survey_id>/group_sizes",
+    data: JSON.stringify(requestData),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(result) {
+        showAlert({msg: result.msg, color:"green"})
+    },
+    error: function(result) {
+        if (result.responseJSON) {
+            showAlert({msg: result.status + ": " + result.responseJSON.msg, color: "red"})
+        } else {
+            showAlert({msg: `Jokin meni vikaan, palvelimeen ei saatu yhteyttä`, color: "red"})
+        }
+        
+    }
+    }); 
+}
+
 function addRow() {
     var newRow = document.getElementById("choiceTable").insertRow()
 
