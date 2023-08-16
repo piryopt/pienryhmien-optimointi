@@ -86,4 +86,15 @@ class SurveyChoicesService:
             tally += spaces
         return tally
 
+    def add_empty_survey_choice(self, survey_id: str, spaces: int):
+        """
+        If a survey has more answers than availeble spaces, the teacher can choose
+        to add a non-choice where students who can't fit in their choice will be put
+        Args:
+            survey_id (str): ID of the survey
+            spaces (int): Number of spaces needed in the group, equal to extra answers
+            in the survey
+        """
+        return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces)
+
 survey_choices_service = SurveyChoicesService()
