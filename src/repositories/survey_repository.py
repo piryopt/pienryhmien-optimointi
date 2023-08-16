@@ -214,7 +214,22 @@ class SurveyRepository:
         except Exception as e: 
             print(e)
             return False
-        
+
+    def get_survey_max_denied_choices(self, survey_id):
+        """
+        Returns the maximum amount of denied choices the survey allows.
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "SELECT allowed_denied_choices FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e:
+            print(e)
+            return False
+
 
     def fetch_all_active_surveys(self, teacher_id):
         '''Returns a list of all surveys in the database'''

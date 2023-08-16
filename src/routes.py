@@ -184,7 +184,7 @@ def new_survey_post():
 
     allowed_denied_choices = data["allowedDeniedChoices"]
 
-    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
+    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
         return jsonify(response)
@@ -217,12 +217,32 @@ def surveys(survey_id):
     user_id = session.get("user_id",0)
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
+
     if not survey_choices or user_id == 0:
         return redirect("/")
 
-    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
-    shuffle(survey_choices)
+    survey_all_info = {}
+    for row in survey_choices_info:
+        if row[0] not in survey_all_info:
+            survey_all_info[row[0]] = {"infos": [{row[1]:row[2]}]}
+            survey_all_info[row[0]]["search"] = row[2]
+        else:
+            survey_all_info[row[0]]["infos"].append({row[1]:row[2]})
+            survey_all_info[row[0]]["search"] += " " + row[2]
 
+    for row in survey_choices:
+        survey_all_info[row[0]]["name"] = row[2]
+        survey_all_info[row[0]]["slots"] = row[3]
+        survey_all_info[row[0]]["id"] = row[0]
+
+    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
+    
+    temp = list(survey_all_info.items())
+    shuffle(temp)
+    shuffled_choices = [v for k,v in dict(temp).items()]
+
+    max_bad_choices = survey_service.get_survey_max_denied_choices(survey_id)
     desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
@@ -243,9 +263,14 @@ def surveys(survey_id):
         good_survey_choices = []
         for survey_choice_id in list_of_good_survey_choice_id:
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+            good_choice = {}
+            good_choice["name"] = survey_choice[2]
+            good_choice["id"] = survey_choice[0]
+            good_choice["slots"] = survey_choice[3]
+            good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
             if not survey_choice:
                 continue
-            good_survey_choices.append(survey_choice)
+            good_survey_choices.append(good_choice)
             survey_choices.remove(survey_choice)
 
         bad_survey_choices = []
@@ -253,15 +278,22 @@ def surveys(survey_id):
             list_of_bad_survey_choice_id = convert_to_list(rejections)
             for survey_choice_id in list_of_bad_survey_choice_id:
                 survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+                bad_choice = {}
+                bad_choice["name"] = survey_choice[2]
+                bad_choice["id"] = survey_choice[0]
+                bad_choice["slots"] = survey_choice[3]
+                bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
                 if not survey_choice:
                     continue
-                bad_survey_choices.append(survey_choice)
+                bad_survey_choices.append(bad_choice)
                 survey_choices.remove(survey_choice)
         if closed:
-            return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
+            return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices,
+                                 survey_name = survey_name, min_choices=min_choices)
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc,
-                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason)
+                            survey_name = survey_name, existing = existing, desc = desc, choices_info=survey_all_info,
+                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason,
+                            min_choices=min_choices, max_bad_choices=max_bad_choices)
 
 
 
@@ -269,9 +301,9 @@ def surveys(survey_id):
     if closed:
         return render_template("closedsurvey.html", survey_name = survey_name)
 
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc,
-                            enddate = enddate, min_choices=min_choices)
+    return render_template("survey.html", choices = shuffled_choices, survey_id = survey_id,
+                            survey_name = survey_name, existing = existing, desc = desc, enddate = enddate,
+                            min_choices=min_choices, max_bad_choices=max_bad_choices)
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
