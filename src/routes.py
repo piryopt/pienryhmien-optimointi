@@ -310,6 +310,8 @@ def edit_survey_form(survey_id):
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
 
+    print(survey)
+
     # Convert datetime.datetime(year, month, day, hour, minute) to date (dd.mm.yyyy) and time (hh:mm)
     start_date_data = survey["time_begin"]
     end_date_data = survey["time_end"]
@@ -331,20 +333,11 @@ def edit_survey_post(survey_id):
     """
     Post method for saving edits to a survey.
     """
-    data = request.get_json()
-    survey_name = data["surveyGroupname"]
-    description = data["surveyInformation"]
-    user_id = session.get("user_id",0)
-    survey_choices = data["choices"]
-    minchoices = data["minchoices"]
+    edit_dict = request.get_json()
 
-    date_begin = data["startdate"]
-    time_begin = data["starttime"]
-
-    date_end = data["enddate"]
-    time_end = data["endtime"]
     # Check survey_teachers_service for more details on tuple
-    (success, message) = (False, "Kyselyn muokkaus epäonnistui!")
+    #save_survey_edit() function is not ready
+    (success, message) = survey_service.save_survey_edit(survey_id, edit_dict)
     if not success:
         response = {"status":"0", "msg":message}
         return jsonify(response)
