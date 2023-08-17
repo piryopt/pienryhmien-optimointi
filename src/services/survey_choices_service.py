@@ -64,6 +64,15 @@ class SurveyChoicesService:
         """
         return self._survey_choices_repository.get_choice_additional_infos(choice_id)
 
+    def survey_all_additional_infos(self, survey_id):
+        """
+        Get additional info on all choices of a given survey.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_choices_repository.get_all_additional_infos(survey_id)
+        
     def count_number_of_available_spaces(self, survey_id: str):
         """
         Returns int of the total number of available space in the groups of a survey

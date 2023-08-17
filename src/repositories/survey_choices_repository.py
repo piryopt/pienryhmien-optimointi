@@ -76,4 +76,21 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
+    def get_all_additional_infos(self, survey_id):
+        '''
+        Gets a list of all additional info on choices in a single survey.
+        '''
+        try:
+            sql = """
+                SELECT I.choice_id, I.info_key, I.info_value
+                FROM choice_infos I JOIN survey_choices S
+                ON I.choice_id = S.id
+                WHERE S.survey_id =:survey_id
+                """
+            result = db.session.execute(text(sql), {"survey_id": survey_id})
+            return result.fetchall()
+        except Exception as e:
+            print(e)
+            return False
+
 survey_choices_repository = SurveyChoicesRepository()
