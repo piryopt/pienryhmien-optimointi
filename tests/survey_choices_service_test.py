@@ -127,3 +127,14 @@ class TestSurveyChoicesService(unittest.TestCase):
         correct number
         '''
         self.assertEqual(scs.count_number_of_available_spaces(self.survey_id),14)
+
+    def test_add_empty_survey_choice(self):
+        """
+        Tests that function add_empty_survey_choice() adds an empty choice
+        with the name "Tyhjä" and the number of seats given when the 
+        function was called
+        """
+        scs.add_empty_survey_choice(self.survey_id, 3)
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        self.assertEqual(choices[2][2], "Tyhjä")
+        self.assertEqual(choices[2][3], 3)

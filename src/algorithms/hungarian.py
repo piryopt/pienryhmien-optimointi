@@ -68,6 +68,11 @@ class Hungarian:
         Creates a matrix which has spots in the groups as columns and students as
         the rows. Keys for students in the index_to_student_dict match matrix row ids
         Fills the matrix with profit numbers based on student's group preferences.
+
+        If the group is not in student preferences or rejections it is filled with
+        default weight that is >0. This is important for cases where not all groups
+        are ranked or when a non-group is added to choices (more answers than
+        available spaces)
         """
         matrix = []
         for key, student in self.students.items():
@@ -84,7 +89,9 @@ class Hungarian:
 
     def reshape_matrix(self):
         """
-        Makes the matrix square if necessary by padding with zeroes. 
+        Makes the matrix square if necessary by padding with zeroes.
+        Padding by adding columns is technically unnescessary as the app should
+        check that there are not more students than available spaces 
         """
         rows, cols = np.shape(self.matrix)
         if cols > rows:

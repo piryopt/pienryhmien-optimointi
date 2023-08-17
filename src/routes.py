@@ -339,7 +339,7 @@ def edit_survey(survey_id):
     #TODO
     ...
 
-@app.route("/surveys/<string:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/delete")
 @teachers_only
 def delete_survey(survey_id):
     #TODO
@@ -406,8 +406,12 @@ def survey_results(survey_id):
         return redirect(f"/surveys/{survey_id}/answers")
     survey_answers_amount = len(user_rankings)
 
+    #if more rankings than available slots add a non-group
     if (survey_answers_amount > available_spaces):
-        return redirect(f"/surveys/{survey_id}/answers")
+        added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-available_spaces)
+        if not added_group:
+            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
+            return jsonify(response)
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
