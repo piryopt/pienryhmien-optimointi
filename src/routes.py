@@ -528,28 +528,6 @@ def logout():
 """
 ADMINTOOLS -ROUTES:
 """
-@app.route("/admintools/", methods = ["GET"])
-def admin_dashboard() -> str:
-    """
-    Admin page for resestting the database. DELETE BEFORE PRODUCTION!!!
-    """
-    return render_template('/admintools/dashboard.html')
-
-@app.route("/api/admintools/reset", methods = ["POST"])
-def reset_database() -> str:
-    """
-    Drop all database tables and recreate them based on the schema at project root. DELETE BEFORE PRODUCTION!!!
-    """
-    data = request.get_json()
-    print(data)
-    db.reflect()
-    db.drop_all()
-    create_clause = data["schema"]
-    for statement in create_clause.split(";")[:-1]:
-        db.session.execute(text(statement + ";"))
-        db.session.commit()
-    return "database reset"
-
 @app.route("/admintools/gen_data", methods = ["GET", "POST"])
 def admin_gen_data():
     """
