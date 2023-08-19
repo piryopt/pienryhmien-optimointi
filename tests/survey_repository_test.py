@@ -24,6 +24,9 @@ class TestSurveyRepository(unittest.TestCase):
 
         clear_database()
 
+        self.setup_users()
+
+    def setup_users(self):
         self.ur = ur
         user1 = User("Not on tren Testerr", "feelsbadman@tester.com", True)
         user2 = User("Not on anabolic", "anabolic@tester.com", True)
@@ -183,6 +186,9 @@ class TestSurveyRepository(unittest.TestCase):
         self.assertEqual(time, datetime.datetime(2024, 6, 19, 12, 1))
 
     def test_get_list_active_answered(self):
+        """
+        Test that the list of active surveys which the student has answered is the correct length
+        """
         survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         st.add_teacher_to_survey(survey_id, self.user_id)
         ranking = "2,3,5,4,1,6"
@@ -191,6 +197,9 @@ class TestSurveyRepository(unittest.TestCase):
         self.assertEqual(1, len(active_answered))
 
     def test_get_list_closed_answered(self):
+        """
+        Test that the list of closed surveys which the student has answered is the correct length
+        """
         survey_id = sr.create_new_survey("Test survey 15", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         st.add_teacher_to_survey(survey_id, self.user_id)
         ranking = "2,3,5,4,1,6"
@@ -200,9 +209,31 @@ class TestSurveyRepository(unittest.TestCase):
         self.assertEqual(1, len(closed_answered))
 
     def test_get_list_active_answered_invalid(self):
+        """
+        Test that getting the list of active surveys of an invalid account works
+        """
         active_answered = sr.get_list_active_answered(-1)
         self.assertEqual(active_answered, False)
 
     def test_get_list_closed_answered_invalid(self):
+        """
+        Test that getting the list of closed surveys of an invalid account works
+        """
         closed_answered = sr.get_list_closed_answered(-1)
         self.assertEqual(closed_answered, False)
+
+    def test_get_list_all_open_surveys(self):
+        """
+        Test that the amount of all open surveys is correct. The database is emptied before the test
+        """
+        clear_database()
+        self.setup_users()
+        survey_id1 = sr.create_new_survey("Test survey 15", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id1, self.user_id)
+        survey_id2 = sr.create_new_survey("Test survey 16", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id2, self.user_id2)
+        survey_id3 = sr.create_new_survey("Test survey 17", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id3, self.user_id)
+        sr.close_survey(survey_id3)
+        all_open_surveys =sr.get_all_active_surveys()
+        self.assertEqual(2, len(all_open_surveys))

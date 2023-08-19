@@ -7,112 +7,124 @@
 
 {% block content %}
 </br>
+<script>
+    $( function() {
+        $( "#sortable-neutral, #sortable-good, #sortable-bad" ).sortable({
+            cursor: 'grabbing',
+            revert: 50,
+            helper: 'clone',
+            containment: '.col',
+            tolerance: 'pointer',
+            connectWith: ".list-group"
+        }).disableSelection();
+
+        $("#sortable-neutral li, #sortable-bad li, #sortable-good li").on("click", function() {
+            showMoreInfo(this.id);
+        });
+    });
+</script>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}</h5>
     <label>Vastausaika päättyy {{ enddate }}</label></br></br>
     <label>{{ desc }}</label>
+    <input type="hidden" id="max_bad_choices" value="{{ max_bad_choices }}">
     <div class="col">
         <div class="row">
             <div class="col-sm">
+                <p>
+                    <i>Raahaa oikean reunan listasta vähintään {{ min_choices }} vaihtoehtoa vihreään laatikkoon.</i>
+                </p>
             </div>
             <div class="col-sm">
                 <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm">
-                <script>
-                    $( function() {
-                        $( "#sortable-neutral, #sortable-good, #sortable-bad" ).sortable({
-                            cursor: 'grabbing',
-                            revert: 50,
-                            helper: 'clone',
-                            containment: '.col',
-                            tolerance: 'pointer',
-                            connectWith: ".list-group"
-                        }).disableSelection();
-
-                        $("#sortable-neutral li, #sortable-bad li, #sortable-good li").on("click", function() {
-                            showMoreInfo(this.id);
-                        });
-                    });
-                </script>
-                <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
-                    {% for group in good_survey_choices %}
-                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ group[2] }}</h5>
-                        </div>
-                        <small class="text-muted">Ryhmän maksimikoko: {{ group[3] }}</small>
-                    </li>
-                    {% endfor %}
-                </ul>
-                <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
-                    {% for group in bad_survey_choices %}
-                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ group[2] }}</h5>
-                        </div>
-                        <small class="text-muted">Ryhmän maksimikoko: {{ group[3] }}</small>
-                    </li>
-                    {% endfor %}
-                </ul>
-
-                <div class="form-group">
-                    <label for="reasons">Perustelut</label>
-                    <textarea class="form-control" id="reasons" name="reasons" rows="3">{{ reason }}</textarea>
+            <div class="col">
+                <div class="col-sm">
+                    <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
+                        {% for group in good_survey_choices %}
+                        <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
+                            <div class="d-flex w-100 justify-content-between" id="search">
+                                <h5 class="mb-1">{{ group.name }}</h5>
+                                <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
+                            </div>
+                            <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                <div class="row" style="padding-top: 10px">
-                    <div class="col-sm">
-                        <div id="submitExists" style="display: none;">
-                            <button type="submit" class="btn btn-success" onclick="submit(0)">Päivitä valinnat</button>
-                        </div>
-                        <div id="submitDoesntExist" style="display: none">
-                            <button type="submit" class="btn btn-success" onclick="submit(1)">Lähetä valinnat</button>
-                        </div>
-                    </div>
-                    <input type="hidden" id="survey_id" value="{{ survey_id }}">
-                    <input type="hidden" id="existing" value="{{ existing }}">
-                    <div class="col-sm">
-                        <div id="deleteContainer" style="display: none;">
-                            <button type="submit" id="deleteSubmission" class="btn btn-danger">Poista valinnat</button>
-                            <script>
-                                $("#deleteSubmission").click(function() {
-                                    $("#submitExists").hide();
-                                    $("#deleteContainer").hide();
-                                    $("#confirmContainer").show();
-                                });
-                            </script>
-                        </div>
-                    </div>
-                    <div class="row" id="confirmContainer" style="display: none;">
-                        <div class="col-sm">
-                            <button type="input" id="noDeletion" class="btn btn-success">Peruuta</button>
-                            <script>
-                                $("#noDeletion").click(function() {
-                                    $("#submitExists").show();
-                                    $("#deleteContainer").show();
-                                    $("#confirmContainer").hide();
-                                });
-                            </script>
-                        </div>
-                        <div class="col-sm">
-                            <button type="submit" class="btn btn-danger" id="confirmDelete" onclick="deleteSubmission()">Poista</button>
-                        </div>
-                        <div class="col-sm"><p>Oletko varma?</p></div>
+                {% if max_bad_choices != 0 %}
+                <div class="col-sm">
+                    <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
+                        {% for group in bad_survey_choices %}
+                        <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
+                            <div class="d-flex w-100 justify-content-between" id="search">
+                                <h5 class="mb-1">{{ group.name }}</h5>
+                                <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
+                            </div>
+                            <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="form-group">
+                        <label for="reasons">Perustelut</label>
+                        <textarea class="form-control" id="reasons" name="reasons" rows="3">{{ reason }}</textarea>
                     </div>
                 </div>
-                
-
+                {% endif %}
+                <div class="col-sm">
+                    <div class="row" style="padding-top: 10px">
+                        <div class="col-sm">
+                            <div id="submitExists" style="display: none;">
+                                <button type="submit" class="btn btn-success" onclick="submit(0)">Päivitä valinnat</button>
+                            </div>
+                            <div id="submitDoesntExist" style="display: none">
+                                <button type="submit" class="btn btn-success" onclick="submit(1)">Lähetä valinnat</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="survey_id" value="{{ survey_id }}">
+                        <input type="hidden" id="existing" value="{{ existing }}">
+                        <div class="col-sm">
+                            <div id="deleteContainer" style="display: none;">
+                                <button type="submit" id="deleteSubmission" class="btn btn-danger">Poista valinnat</button>
+                                <script>
+                                    $("#deleteSubmission").click(function() {
+                                        $("#submitExists").hide();
+                                        $("#deleteContainer").hide();
+                                        $("#confirmContainer").show();
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <div class="row" id="confirmContainer" style="display: none;">
+                            <div class="col-sm">
+                                <button type="input" id="noDeletion" class="btn btn-success">Peruuta</button>
+                                <script>
+                                    $("#noDeletion").click(function() {
+                                        $("#submitExists").show();
+                                        $("#deleteContainer").show();
+                                        $("#confirmContainer").hide();
+                                    });
+                                </script>
+                            </div>
+                            <div class="col-sm">
+                                <button type="submit" class="btn btn-danger" id="confirmDelete" onclick="deleteSubmission()">Poista</button>
+                            </div>
+                            <div class="col-sm"><p>Oletko varma?</p></div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-sm">
                 <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray; padding-right: 10px;">
                     {% for group in choices %}
-                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ group[2] }}</h5>
+                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
+                        <div class="d-flex w-100 justify-content-between" id="search">
+                            <h5 class="mb-1">{{ group.name }}</h5>
+                            <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                         </div>
-                        <small class="text-muted">Ryhmän maksimikoko: {{ group[3] }}</small>
+                        <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
                     </li>
                     {% endfor %}
                 </ul>
@@ -121,7 +133,9 @@
         </div>
     </div>
     <div class="col" id="info-container">
-
+        <p>
+            Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.
+        </p>
     </div>
     <input type="hidden" id="currently_selected" value="">
 </div>
@@ -142,7 +156,7 @@
         $("#searchChoices").on("keyup", function() {
             var keyword = $( this ).val().toLowerCase();
             $("#sortable-neutral li").filter(function() {
-                $( this ).toggle($(this.querySelector("h5")).text().toLowerCase().indexOf(keyword) > -1)
+                $( this ).toggle($(this.querySelector("#search")).text().toLowerCase().indexOf(keyword) > -1)
             });
         });
     });

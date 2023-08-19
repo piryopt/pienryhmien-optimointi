@@ -2,17 +2,17 @@
     "surveyGroupname": "Testikysely JSON",
     "choices": [
       {
-        "Nimi": "Ensimmäinen choice",
+        "Nimi": "Esimerkkipäiväkoti 1",
         "Enimmäispaikat": "8",
-        "Eka lisätieto": "vaikeuksia csv testaamisessa",
-        "Postinumero": "00790"
+        "Osoite": "Keijukaistenpolku 14",
+        "Postinumero": "00820"
       },
       {
-        "Nimi": "Toinen choice",
+        "Nimi": "Esimerkkipäiväkoti 2",
         "Enimmäispaikat": "6",
-        "Eka lisätieto": "äisimhi tunappat nelo",
-        "Postinumero": "01820"
+        "Osoite": "Hattulantie 2",
+        "Postinumero": "00550"
       }
     ],
-    "surveyInformation": "Tällä testataan manuaalista luomista"
+    "surveyInformation": "Tällä testataan kyselyn manuaalista luomista"
   }

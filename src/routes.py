@@ -3,7 +3,7 @@ from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect
 import os
-from src import app,db
+from src import app,db,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -20,6 +20,8 @@ from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 from functools import wraps
+from datetime import datetime
+from src.tools.date_converter import get_time_helsinki
 
 """
 DECORATORS:
@@ -99,7 +101,7 @@ def frontpage() -> str:
     for s in surveys:
         survey_id = s[0]
         surveyname = s[1]
-        survey_answers = survey_repository.fetch_survey_responses(survey_id)
+        survey_answers = survey_service.fetch_survey_responses(survey_id)
         participants = len(survey_answers)
         survey_ending_date = survey_service.get_survey_enddate(survey_id)
         data.append([survey_id, surveyname, participants, survey_ending_date])
@@ -163,6 +165,11 @@ def new_survey_post():
     Post method for creating a new survey.
     """
     data = request.get_json()
+
+    validation = survey_service.validate_created_survey(data)
+    if not validation["success"]:
+        return jsonify(validation["message"]), 400
+
     survey_name = data["surveyGroupname"]
     description = data["surveyInformation"]
     user_id = session.get("user_id",0)
@@ -175,9 +182,9 @@ def new_survey_post():
     date_end = data["enddate"]
     time_end = data["endtime"]
 
-    #print("Alkaa", date_begin, time_begin)
-    #print("Alkaa", date_end, time_end)
-    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
+    allowed_denied_choices = data["allowedDeniedChoices"]
+
+    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
         return jsonify(response)
@@ -210,18 +217,44 @@ def surveys(survey_id):
     user_id = session.get("user_id",0)
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
+
     if not survey_choices or user_id == 0:
         return redirect("/")
 
-    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
-    shuffle(survey_choices)
+    survey_all_info = {}
+    for row in survey_choices_info:
+        if row[0] not in survey_all_info:
+            survey_all_info[row[0]] = {"infos": [{row[1]:row[2]}]}
+            survey_all_info[row[0]]["search"] = row[2]
+        else:
+            survey_all_info[row[0]]["infos"].append({row[1]:row[2]})
+            survey_all_info[row[0]]["search"] += " " + row[2]
 
+    for row in survey_choices:
+        if row[0] not in survey_all_info:
+            survey_all_info[row[0]] = {"name": row[2]}
+            survey_all_info[row[0]]["slots"] = row[3]
+            survey_all_info[row[0]]["id"] = row[0]
+        else:
+            survey_all_info[row[0]]["name"] = row[2]
+            survey_all_info[row[0]]["slots"] = row[3]
+            survey_all_info[row[0]]["id"] = row[0]
+
+    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
+    
+    temp = list(survey_all_info.items())
+    shuffle(temp)
+    shuffled_choices = [v for k,v in dict(temp).items()]
+
+    max_bad_choices = survey_service.get_survey_max_denied_choices(survey_id)
     desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
     existing = "0"
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     enddate = survey_service.get_survey_enddate(survey_id)
+    min_choices = survey_service.get_survey_min_choices(survey_id)
 
     # If a ranking exists, display the choices and the reasoning in the order that the student chose them.
     if user_survey_ranking:
@@ -235,9 +268,14 @@ def surveys(survey_id):
         good_survey_choices = []
         for survey_choice_id in list_of_good_survey_choice_id:
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+            good_choice = {}
+            good_choice["name"] = survey_choice[2]
+            good_choice["id"] = survey_choice[0]
+            good_choice["slots"] = survey_choice[3]
+            good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
             if not survey_choice:
                 continue
-            good_survey_choices.append(survey_choice)
+            good_survey_choices.append(good_choice)
             survey_choices.remove(survey_choice)
 
         bad_survey_choices = []
@@ -245,15 +283,22 @@ def surveys(survey_id):
             list_of_bad_survey_choice_id = convert_to_list(rejections)
             for survey_choice_id in list_of_bad_survey_choice_id:
                 survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+                bad_choice = {}
+                bad_choice["name"] = survey_choice[2]
+                bad_choice["id"] = survey_choice[0]
+                bad_choice["slots"] = survey_choice[3]
+                bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
                 if not survey_choice:
                     continue
-                bad_survey_choices.append(survey_choice)
+                bad_survey_choices.append(bad_choice)
                 survey_choices.remove(survey_choice)
         if closed:
-            return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
+            return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices,
+                                 survey_name = survey_name, min_choices=min_choices)
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc,
-                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason)
+                            survey_name = survey_name, existing = existing, desc = desc, choices_info=survey_all_info,
+                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason,
+                            min_choices=min_choices, max_bad_choices=max_bad_choices)
 
 
 
@@ -261,8 +306,9 @@ def surveys(survey_id):
     if closed:
         return render_template("closedsurvey.html", survey_name = survey_name)
 
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc, enddate = enddate)
+    return render_template("survey.html", choices = shuffled_choices, survey_id = survey_id,
+                            survey_name = survey_name, existing = existing, desc = desc, enddate = enddate,
+                            min_choices=min_choices, max_bad_choices=max_bad_choices)
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -293,7 +339,7 @@ def edit_survey(survey_id):
     #TODO
     ...
 
-@app.route("/surveys/<string:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/delete")
 @teachers_only
 def delete_survey(survey_id):
     #TODO
@@ -324,18 +370,20 @@ def survey_answers(survey_id):
         return survey_results(survey_id)
 
     survey_name = survey_service.get_survey_name(survey_id)
-    survey_answers = survey_repository.fetch_survey_responses(survey_id)
+    survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
         choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
 
     survey_answers_amount = len(survey_answers)
+    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
+    error_message = "Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus sivulta."
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=choices_data,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id, closed = closed,
-                           answered = answers_saved)
+                           survey_answers_amount=survey_answers_amount, available_spaces = available_spaces,
+                           survey_id = survey_id, closed = closed, answered = answers_saved, error_message = error_message)
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
 @home_decorator()
@@ -350,9 +398,23 @@ def survey_results(survey_id):
     # Check if the answers are already saved to the database. This determines which operations are available to the teacher.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
+    # Check if there are more rankings than available slots
+    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
+    user_rankings = survey_service.fetch_survey_responses(survey_id)
+
+    if not user_rankings:
+        return redirect(f"/surveys/{survey_id}/answers")
+    survey_answers_amount = len(user_rankings)
+
+    #if more rankings than available slots add a non-group
+    if (survey_answers_amount > available_spaces):
+        added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-available_spaces)
+        if not added_group:
+            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
+            return jsonify(response)
+
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    user_rankings = survey_repository.fetch_survey_responses(survey_id)
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
     weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
@@ -433,7 +495,7 @@ def login():
     if request.method == "GET":
         return render_template("mock_ad.html")
     if request.method == "POST":
-        username = request.form["username"]
+        username = request.form.get("username")
 
         email = name = role_bool = ""
 
@@ -468,28 +530,6 @@ def logout():
 """
 ADMINTOOLS -ROUTES:
 """
-@app.route("/admintools/", methods = ["GET"])
-def admin_dashboard() -> str:
-    """
-    Admin page for resestting the database. DELETE BEFORE PRODUCTION!!!
-    """
-    return render_template('/admintools/dashboard.html')
-
-@app.route("/api/admintools/reset", methods = ["POST"])
-def reset_database() -> str:
-    """
-    Drop all database tables and recreate them based on the schema at project root. DELETE BEFORE PRODUCTION!!!
-    """
-    data = request.get_json()
-    print(data)
-    db.reflect()
-    db.drop_all()
-    create_clause = data["schema"]
-    for statement in create_clause.split(";")[:-1]:
-        db.session.execute(text(statement + ";"))
-        db.session.commit()
-    return "database reset"
-
 @app.route("/admintools/gen_data", methods = ["GET", "POST"])
 def admin_gen_data():
     """
@@ -504,7 +544,7 @@ def admin_gen_data():
         student_n = request.form.get("student_n")
         gen_data.generate_users(int(student_n))
         gen_data.add_generated_users_db()
-        return render_template("/admintools/gen_data.html", surveys = surveys)
+        return redirect("/admintools/gen_data")
 
 @app.route("/admintools/gen_data/rankings", methods = ["POST"])
 def admin_gen_rankings():
@@ -512,14 +552,9 @@ def admin_gen_rankings():
     Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
     """
     survey_id = request.form.get("survey_list")
-    survey_name = survey_service.get_survey_name(survey_id)
     gen_data.generate_rankings(survey_id)
 
-    survey_answers = survey_repository.fetch_survey_responses(survey_id)
-    survey_answers_amount = len(survey_answers)
-    return render_template("survey_answers.html",
-                           survey_name=survey_name, survey_answers=survey_answers,
-                           survey_answers_amount=survey_answers_amount, survey_id = survey_id)
+    return redirect(f"/surveys/{survey_id}/answers")
 
 @app.route("/admintools/gen_data/survey", methods = ["POST"])
 def admin_gen_survey():
@@ -603,3 +638,14 @@ def get_choices(survey_id):
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
     return jsonify(response)
+
+"""
+TASKS:
+"""
+@scheduler.task('cron', id='do_job_1', hour='*')
+def job1():
+    """
+    Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
+    """
+    with app.app_context():
+        survey_service.check_for_surveys_to_close()

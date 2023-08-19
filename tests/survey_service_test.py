@@ -26,16 +26,20 @@ class TestSurveyService(unittest.TestCase):
 
         clear_database()
 
-        user = User("Not on tren Testerr", "tren4lyfe@tester.com", True)
-        user2 = User("Hashtag natty", "anabolics4lyfe@tester.com", True)
+        self.setup_users()
+
+    def setup_users(self):
+        self.ur = ur
+        user1 = User("Not on tren Testerr", "feelsbadman@tester.com", True)
+        user2 = User("Not on anabolic", "anabolic@tester.com", True)
         user3 = User("trt enjoyer", "ttrt@tester.com", True)
-        ur.register(user)
-        ur.register(user2)
-        ur.register(user3)
-        self.user_id = ur.find_by_email(user.email)[0]
+        self.ur.register(user1)
+        self.ur.register(user2)
+        self.ur.register(user3)
+        self.user_id = ur.find_by_email(user1.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
         self.user_id3 = ur.find_by_email(user3.email)[0]
-        self.user_email = user.email
+        self.user_email = user1.email
 
 
     def tearDown(self):
@@ -87,27 +91,27 @@ class TestSurveyService(unittest.TestCase):
         survey_name = ss.get_survey_name(survey_id)
         survey_desc = ss.get_survey_description(survey_id)
         self.assertEqual(survey_name, "Testikysely JSON")
-        self.assertEqual(survey_desc, "Tällä testataan manuaalista luomista")
+        self.assertEqual(survey_desc, "Tällä testataan kyselyn manuaalista luomista")
 
         # check choice mandatory informations
         choices = scs.get_list_of_survey_choices(survey_id)
-        self.assertEqual(choices[0][2], "Ensimmäinen choice")
+        self.assertEqual(choices[0][2], "Esimerkkipäiväkoti 1")
         self.assertEqual(choices[0][3], 8)
-        self.assertEqual(choices[1][2], "Toinen choice")
+        self.assertEqual(choices[1][2], "Esimerkkipäiväkoti 2")
         self.assertEqual(choices[1][3], 6)
 
         # check choice additional infos
         choice1_infos = scs.get_choice_additional_infos(choices[0][0])
         choice2_infos = scs.get_choice_additional_infos(choices[1][0])
-        self.assertEqual(choice1_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice1_infos[0][1], "vaikeuksia csv testaamisessa")
+        self.assertEqual(choice1_infos[0][0], "Osoite")
+        self.assertEqual(choice1_infos[0][1], "Keijukaistenpolku 14")
         self.assertEqual(choice1_infos[1][0], "Postinumero")
-        self.assertEqual(choice1_infos[1][1], "00790")
+        self.assertEqual(choice1_infos[1][1], "00820")
 
-        self.assertEqual(choice2_infos[0][0], "Eka lisätieto")
-        self.assertEqual(choice2_infos[0][1], "äisimhi tunappat nelo")
+        self.assertEqual(choice2_infos[0][0], "Osoite")
+        self.assertEqual(choice2_infos[0][1], "Hattulantie 2")
         self.assertEqual(choice2_infos[1][0], "Postinumero")
-        self.assertEqual(choice2_infos[1][1], "01820")
+        self.assertEqual(choice2_infos[1][1], "00550")
 
     def test_count_surveys_created(self):
         '''
@@ -300,15 +304,15 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(survey_dict["time_end"], datetime.datetime(2024, 1, 1, 2, 2))
 
         # table survey choices data
-        self.assertEqual(survey_dict["choices"][0]["name"], "Ensimmäinen choice")
+        self.assertEqual(survey_dict["choices"][0]["name"], "Esimerkkipäiväkoti 1")
         self.assertEqual(survey_dict["choices"][0]["seats"], 8)
-        self.assertEqual(survey_dict["choices"][0]["Eka lisätieto"], "vaikeuksia csv testaamisessa")
-        self.assertEqual(survey_dict["choices"][0]["Postinumero"], "00790")
+        self.assertEqual(survey_dict["choices"][0]["Osoite"], "Keijukaistenpolku 14")
+        self.assertEqual(survey_dict["choices"][0]["Postinumero"], "00820")
 
-        self.assertEqual(survey_dict["choices"][1]["name"], "Toinen choice")
+        self.assertEqual(survey_dict["choices"][1]["name"], "Esimerkkipäiväkoti 2")
         self.assertEqual(survey_dict["choices"][1]["seats"], 6)
-        self.assertEqual(survey_dict["choices"][1]["Eka lisätieto"], "äisimhi tunappat nelo")
-        self.assertEqual(survey_dict["choices"][1]["Postinumero"], "01820")
+        self.assertEqual(survey_dict["choices"][1]["Osoite"], "Hattulantie 2")
+        self.assertEqual(survey_dict["choices"][1]["Postinumero"], "00550")
 
     def test_get_list_active_answered_invalid(self):
         active_list = ss.get_list_active_answered("ITSNOTREAL")
@@ -342,3 +346,25 @@ class TestSurveyService(unittest.TestCase):
         ss.close_survey(survey_id, self.user_id)
         closed_list = ss.get_list_closed_answered(self.user_id3)
         self.assertEqual(1, len(closed_list))
+
+    def test_check_surveys_to_close_empty(self):
+        """
+        Test that the function works when no open surveys
+        """
+        clear_database()
+        self.setup_users()
+        surveys = ss.check_for_surveys_to_close()
+        self.assertEqual(False, surveys)
+
+    def test_check_surveys_to_close(self):
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 13", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        sts.add_teacher_to_survey(survey_id, self.user_email)
+        survey_id2 = ss.create_new_survey_manual(json_object["choices"], "Test survey 14", self.user_id, json_object["surveyInformation"], 2, "01.01.1998", "01:01", "01.01.1999", "02:02")
+        sts.add_teacher_to_survey(survey_id2, self.user_email)
+        surveys = ss.check_for_surveys_to_close()
+        closed = ss.check_if_survey_closed(survey_id2)
+        self.assertEqual(True, closed)

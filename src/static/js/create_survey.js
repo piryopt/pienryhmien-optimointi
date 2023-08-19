@@ -111,10 +111,11 @@ function createNewSurvey() {
         validateChoiceTable()
 
         // Validate single fields
-    var elementsToValidate = document.querySelectorAll("[validation-regex]")
+    var elementsToValidate = document.querySelectorAll("input[validation-regex]:not(.hidden)")
     var validContent = true
 
     elementsToValidate.forEach(elem => {
+        console.log(elem)
         if(!fieldIsValid(elem)) {
             validContent = false
         }
@@ -126,6 +127,7 @@ function createNewSurvey() {
         return;
     }
 
+
     //Valid content, continue to post
 
     // Get column names from the choice table
@@ -134,6 +136,24 @@ function createNewSurvey() {
 
     var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
     var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
+    var minChoicesElement = document.getElementById("minchoices")
+    var allowedDeniedChoices = document.getElementById("denied-choices-count")
+
+    var startDateParts = document.getElementById("start-date").value.split(".")
+    var endDateParts = document.getElementById("end-date").value.split(".")
+    var endDate = new Date(Number(endDateParts[2]), Number(endDateParts[1]-1), Number(endDateParts[0]))
+    var startDate = new Date(Number(startDateParts[2]), Number(startDateParts[1]-1), Number(startDateParts[0]))
+    
+    if(endDate < startDate) {
+        showAlert({msg: "Vastausaika ei saa päättyä ennen vastausajan alkua", color: "red"})
+        return;
+    }
+    var today = new Date()
+    var todaysEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59)
+    if(endDate <= todaysEnd) {
+        showAlert({msg: "Vastausajan päättymispäivä ei saa olla kuluva päivä tai menneisyydessä", color: "red"})
+        return;
+    }
 
     var requestData = {
         surveyGroupname: $("#groupname").val(),
@@ -143,7 +163,8 @@ function createNewSurvey() {
         starttime: document.getElementById("starttime").value,
         enddate: document.getElementById("end-date").value,
         endtime: document.getElementById("endtime").value,
-        minchoices: Number(document.getElementById("minchoices").value)
+        minchoices: minChoicesElement.classList.contains("hidden") ? rowsAsJson.length : Number(minChoicesElement.value),
+        allowedDeniedChoices: allowedDeniedChoices.classList.contains("hidden") ? 0 : Number(allowedDeniedChoices.value)
     }
 
     console.log("requestData", requestData)
@@ -426,6 +447,19 @@ function handleFileUpload() {
 
     }
     
+}
+
+function visibilityToggleRadioClick(event) {
+    if(event.target.value === "show") {
+        Array.from(document.querySelectorAll(`.${event.target.getAttribute("data-dependant-class")}`)).forEach(element => {
+            element.classList.remove("hidden")
+        })
+    } else if(event.target.value === "hide") {
+        Array.from(document.querySelectorAll(`.${event.target.getAttribute("data-dependant-class")}`)).forEach(element => {
+            element.classList.add("hidden")
+        })
+    }
+
 }
 
 function setUploadedTableValues(table) {

@@ -10,3 +10,4 @@ robotframework
 robotframework-seleniumlibrary 
 matplotlib
 scipy
+Flask-APScheduler
