@@ -68,18 +68,17 @@ Login And Go To Main Page
     Wait Until Location Is  ${HOME_URL}
     Go To Main Page
 
-Set Create Survey Mandatory Fields
+Set Create Survey Time Fields
     [Documentation]  Call when in create survey page
-    [Arguments]  ${surveyname}  ${startdate}  ${starttime}  ${enddate}  ${endtime}  ${minchoices}
-    Input Text  groupname  ${surveyname}
+    [Arguments]  ${startdate}  ${starttime}  ${enddate}  ${endtime} 
     Input Text  startdate  ${startdate}
     Input Text  starttime  ${starttime}
     Input Text  enddate  ${enddate}
     Input Text  endtime  ${endtime}
-    Set Focus To Element  id:minchoices
-    Input Text  minchoices  ${minchoices}
+
 
 Drag To Green Box Bottom
+    # Probably not needed anymore
     [Arguments]  ${choice}  ${green box}
     ${choice y}=  Get Vertical Position  ${choice}
 
@@ -90,6 +89,10 @@ Drag To Green Box Bottom
     ${green box}=  Get Vertical Position  ${choice}
     ${green box}=  Evaluate  ${green box} + 55
     [Return]  ${green box}
+
+Go To Survey Answers Page
+    [Arguments]  ${survey url}
+    Go To  ${survey url}/answers
     
 Go To Main Page
     Go To  ${HOME URL}
