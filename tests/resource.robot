@@ -2,6 +2,7 @@
 Documentation  Testing
 Library  SeleniumLibrary
 Library  OperatingSystem
+Library  String
 
 
 *** Keywords ***

@@ -214,6 +214,11 @@ Create Survey As Teacher Case 4
     ${SURVEY 4 URL}=  Get Location
     Set Suite Variable  ${SURVEY 4 URL}
 
+    # Extract survey id from the url
+    ${SURVEY 4 ID}=  Fetch From Right  ${SURVEY 4 URL}  /
+    Set Suite Variable  ${SURVEY 4 ID}
+    Log To Console  ${SURVEY 4 ID}
+
 Test Survey Case 4
     Go To  ${SURVEY 4 URL}
     Page Should Contain  Case not all mandatory, no rejecting choices
@@ -234,7 +239,6 @@ Test Survey Case 4
     Page Should Contain  Tallennus onnistui
 
 Test Survey Choice Search
-    [Tags]  asd
 
     # Wait Until Page Contains Element  id:deleteSubmission
     # Set Focus To Element  id:deleteSubmission
@@ -255,8 +259,43 @@ Test Survey Choice Search
     Element Should Not Be Visible  xpath=//h5[contains(text(),'Päiväkoti Kotikallio')]
     Element Should Not Be Visible  xpath=//h5[contains(text(),'Päiväkoti Floora')]
 
-Give Another Teacher Rights
+Test Survey Copying
     [Tags]  asd
+    [Documentation]  Test that all the data is copied correctly
+    Go To  ${SURVEYS URL}
+
+    Go To  http://127.0.0.1:5000/surveys/create?fromTemplate=${SURVEY 4 ID}
+
+    Element Attribute Value Should Be  id:groupname  value  Case not all mandatory, no rejecting choices
+
+    # can't get headers checking to work
+
+    # check column by column
+    # names
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[1]/td[1]  Päiväkoti Toivo
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[2]/td[1]  Päiväkoti Floora
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[3]/td[1]  Päiväkoti Kotikallio
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[4]/td[1]  Päiväkoti Nalli
+
+    # seats
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[1]/td[2]  4
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[2]/td[2]  2
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[3]/td[2]  3
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[4]/td[2]  5
+
+    # additional info 1
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[1]/td[3]  Apteekkarinraitti 3
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[2]/td[3]  Syyriankatu 1
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[3]/td[3]  Saarenkatu 4
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[4]/td[3]  Nallitie 3
+
+    # additional info 2
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[1]/td[4]  00790
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[2]/td[4]  00560
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[3]/td[4]  00550
+    Element Should Contain  xpath=//*[@id="choiceTable"]/tr[4]/td[4]  00940
+
+Give Another Teacher Rights
     Go To Survey Answers Page  ${SURVEY 4 URL}
 
     Input Text  id:teacher_email  robotti.2.teacher@helsinki.fi
@@ -264,7 +303,6 @@ Give Another Teacher Rights
     Click Button  addin_teacher_time
 
 Login As Teacher Another Teacher
-    [Tags]  asd
     [Documentation]  Wait Until because AD login redirects, home url isn't opened instantly. Times out after 5s and fails if not opened
     Login And Go To Main Page  robottiTeacher2  moi123
     Page Should Contain  Näytä vanhat kyselyt
