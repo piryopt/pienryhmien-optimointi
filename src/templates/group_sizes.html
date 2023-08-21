@@ -33,55 +33,25 @@
       <h2>Priorisoitavat ryhmät</h2>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
-          <tr id="column-delete-btns">
-            <td></td>
-            <td></td>
-            {% if survey is not none %}
-              {% if survey.choices|length > 0 %}
-                {% for variable_column in survey.variable_columns %}
-                <td class=""><div class="delete-col-btn"></div></td>
-                {% endfor %}
-              {% endif %}  
-            {% endif %}
-          </tr>
           <tr id="choice-table-headers">
             <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
             <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
-          {# additional columns if template loaded with survey parameter present #}
           
-          {% if survey is not none %}
-            {% if survey.choices|length > 0 %}
-              {% for colname in survey.variable_columns %}
-                <th class="variable-header">{{colname}}</th>
-              {% endfor %}
-            {% endif %}
-          {% endif %}
+          {% for colname in survey.variable_columns %}
+            <th class="variable-header">{{colname}}</th>
+          {% endfor %}
           </tr>
         </thead>
         <tbody id="choiceTable" class="">
-        {# If survey parameter is present, create rows for each choice #}
-        {% if survey is not none %}
-          {% if survey.choices|length > 0 %}
-            {% for choice in survey.choices %}
-              <tr>
-                <td>{{ choice.name }}</td>
-                <td>{{ choice.seats }}</td>
-              </tr>
-            {% endfor %}
-
-          {# If survey parameter is not set, create empty row with columns for constant values #}
-          {% endif %}
-          {% else %}
-            <tr>
-              <td class="empty" tabindex="0">tyhjä</td>
-              <td class="empty" tabindex="0">tyhjä</td>
-            </tr>
-        {% endif %}
+        {% for choice in survey.choices %}
+          <tr>
+            <td>{{ choice.name }}</td>
+            <td>{{ choice.seats }}</td>
+          </tr>
+        {% endfor %}
           
         </tbody>
       </table>
-      <ul class="validation-warnings-list hidden" id="choicetable-validation-warnings">
-      </ul>
     </section>
 
     <section>
