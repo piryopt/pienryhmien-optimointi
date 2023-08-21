@@ -39,16 +39,19 @@ def ad_login(f):
         result = f(*args, **kwargs)
         # if logged in already do nothing or in local use
         if session.get("user_id", 0) != 0 or app.debug:
+
             return result
         roles = request.headers.get('eduPersonAffiliation')
         name = request.headers.get('cn')
         email = request.headers.get('mail')
         role_bool = True if "faculty" in roles or "staff" in roles else False
-        if not user_service.find_by_email(email): # account doesn't exist, register
+        email_exists = user_service.find_by_email(email) # account doesn't exist, register
+        if not email_exists:
             user_service.create_user(name, email, role_bool) # actual registration
         logged_in = user_service.check_credentials(email) # log in, update session etc.
-        if not logged_in:
-            return redirect("/")
+        print(logged_in)
+        if logged_in and role_bool:
+            user_service.make_user_teacher(email)
         return result
     return _ad_login
 
