@@ -78,6 +78,10 @@ def frontpage() -> str:
     # used in local use
     if app.debug and session.get("user_id", 0) == 0:
         return redirect("/auth/login")
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect("/")
     user_id = session.get("user_id",0)
     if user_id == 0:
         return render_template('index.html')
@@ -111,6 +115,10 @@ def previous_surveys():
     """
     For fetching previous survey list from the database
     """
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect("/surveys")
     user_id = session.get("user_id",0)
     if user_id == 0:
         return redirect('/')
@@ -208,6 +216,10 @@ def surveys(survey_id):
     """
     The answer page for surveys.
     """
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect(f"/surveys/{survey_id}")
     user_id = session.get("user_id",0)
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
