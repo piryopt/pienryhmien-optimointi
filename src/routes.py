@@ -46,9 +46,9 @@ def ad_login(f):
         role_bool = True if "faculty" in roles or "staff" in roles else False
         if not user_service.find_by_email(email): # account doesn't exist, register
             user_service.create_user(name, email, role_bool) # actual registration
-        if user_service.check_credentials(email): # log in, update session etc.
-            if role_bool:
-                user_service.make_user_teacher(email)
+        logged_in = user_service.check_credentials(email) # log in, update session etc.
+        if not logged_in:
+            return redirect("/")
         return result
     return _ad_login
 
@@ -61,7 +61,7 @@ def teachers_only(f):
         # Only teachers permitted
         user_id = session.get("user_id",0)
         if not user_service.check_if_teacher(user_id):
-            return redirect("/surveys")
+            return redirect("/")
         return f(*args, **kwargs)
     return _teachers_only
 
@@ -212,7 +212,7 @@ def surveys(survey_id):
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
 
-    if not survey_choices or user_id == 0:
+    if not survey_choices:
         return redirect("/")
 
     survey_all_info = {}
