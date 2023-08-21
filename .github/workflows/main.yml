@@ -45,7 +45,7 @@ jobs:
         run: poetry run coverage run --branch -m pytest
       - name: lint
         run: poetry run pylint src/
-      - name: Run robot tests
+      - name: Run robot tests/survey_testing.robot
         run: |
           poetry run flask run --debug &
           poetry run robot tests
