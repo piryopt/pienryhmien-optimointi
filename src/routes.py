@@ -39,7 +39,6 @@ def ad_login(f):
         result = f(*args, **kwargs)
         # if logged in already do nothing or in local use
         if session.get("user_id", 0) != 0 or app.debug:
-
             return result
         roles = request.headers.get('eduPersonAffiliation')
         name = request.headers.get('cn')

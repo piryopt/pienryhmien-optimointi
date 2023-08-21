@@ -31,9 +31,6 @@ class UserService:
         session["email"] = user.email
         session["user_id"] = user.id
         session["full_name"] = user.name
-        print(session.get("email",0))
-        print(session.get("user_id",0))
-        print(session.get("full_name",0))
         if user.isteacher:
             session["role"] = "Opettaja"
         else:
