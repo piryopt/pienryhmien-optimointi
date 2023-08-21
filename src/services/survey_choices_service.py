@@ -64,6 +64,15 @@ class SurveyChoicesService:
         """
         return self._survey_choices_repository.get_choice_additional_infos(choice_id)
 
+    def survey_all_additional_infos(self, survey_id):
+        """
+        Get additional info on all choices of a given survey.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_choices_repository.get_all_additional_infos(survey_id)
+        
     def count_number_of_available_spaces(self, survey_id: str):
         """
         Returns int of the total number of available space in the groups of a survey
@@ -76,5 +85,16 @@ class SurveyChoicesService:
         for (id, survey_id, name, spaces) in choices:
             tally += spaces
         return tally
+
+    def add_empty_survey_choice(self, survey_id: str, spaces: int):
+        """
+        If a survey has more answers than availeble spaces, the teacher can choose
+        to add a non-choice where students who can't fit in their choice will be put
+        Args:
+            survey_id (str): ID of the survey
+            spaces (int): Number of spaces needed in the group, equal to extra answers
+            in the survey
+        """
+        return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces)
 
 survey_choices_service = SurveyChoicesService()

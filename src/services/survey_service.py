@@ -187,6 +187,15 @@ class SurveyService:
         """
         return self._survey_repository.get_survey_min_choices(survey_id)
 
+    def get_survey_max_denied_choices(self, survey_id):
+        """
+        Returns the amount of denied choices the survey allows.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.get_survey_max_denied_choices(survey_id)
+
     def get_survey_as_dict(self, survey_id):
         '''
         Gets survey, its choices and their additional infos as dictionary

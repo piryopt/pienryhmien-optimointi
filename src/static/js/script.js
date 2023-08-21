@@ -3,11 +3,17 @@ window.onload = function() {
 };
 
 function submit(resubmit) {
+    var maxBadChoices = document.getElementById("max_bad_choices").value;
+    var surveyID = document.getElementById("survey_id").value;
     var neutralIDs = $("#sortable-neutral").sortable("toArray");
     var goodIDs = $("#sortable-good").sortable("toArray");
-    var badIDs = $("#sortable-bad").sortable("toArray");
-    var surveyID = document.getElementById("survey_id").value;
-    var reasons = document.getElementById("reasons").value;
+    var badIDs = [];
+    var reasons = "";
+
+    if (maxBadChoices > 0) {
+        var badIDs = $("#sortable-bad").sortable("toArray");
+        var reasons = document.getElementById("reasons").value;
+    }
 
     var IDs = {
         "neutralIDs": neutralIDs,
@@ -138,16 +144,11 @@ function showMoreInfo(choiceID) {
             }
         });
     } else {
-        infoContainer.innerHTML = "";
-        $('input[id="currently_selected"]').val("");
+        exitMoreInfo();
     }
 }
 
 function exitMoreInfo() {
-    document.getElementById("info-container").innerHTML = "";
+    document.getElementById("info-container").innerHTML = "<p>Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</p>";
     $('input[id="currently_selected"]').val("");
-}
-
-function filterResults(keyword) {
-    
 }
