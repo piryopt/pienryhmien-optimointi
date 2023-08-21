@@ -29,13 +29,15 @@
     <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
     {% endif %}
     <br><br>
+    <i>Vaihtoehdon suosittuus kuvaa sitä, kuinka moni vastaaja on valinnut sen ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä</i>
     <section>
       <h2>Priorisoitavat ryhmät</h2>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
           <tr id="choice-table-headers">
-            <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
-            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
+            <th class="constant-header">Nimi</th>
+            <th class="constant-header">Enimmäispaikat</th>
+            <th class="constant-header">Suosittuus</th>
           
           {% for colname in survey.variable_columns %}
             <th class="variable-header">{{colname}}</th>
