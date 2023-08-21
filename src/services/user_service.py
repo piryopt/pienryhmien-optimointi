@@ -29,11 +29,11 @@ class UserService:
         if not user:
             return False
         session["email"] = user.email
-        print(user.email)
         session["user_id"] = user.id
-        print(user.id)
         session["full_name"] = user.name
-        print(user.name)
+        print(session.get("email",0))
+        print(session.get("user_id",0))
+        print(session.get("full_name",0))
         if user.isteacher:
             session["role"] = "Opettaja"
         else:

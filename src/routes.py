@@ -49,7 +49,6 @@ def ad_login(f):
         if not email_exists:
             user_service.create_user(name, email, role_bool) # actual registration
         logged_in = user_service.check_credentials(email) # log in, update session etc.
-        print(logged_in)
         if logged_in and role_bool:
             user_service.make_user_teacher(email)
         return result
