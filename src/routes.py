@@ -26,38 +26,32 @@ from src.tools.date_converter import get_time_helsinki
 """
 DECORATORS:
 """
-def home_decorator():
+
+def ad_login(f):
     '''
     This is pretty much all the AD-login code there is.
     This function is called by some routes, 
     by those marked by @home_decorator()
     For more details see documentation
     '''
-    def _home_decorator(f):
-        @wraps(f)
-        def __home_decorator(*args, **kwargs):
-            result = f(*args, **kwargs)
-
-            # if logged in already do nothing or in local use
-            if session.get("user_id", 0) != 0 or app.debug:
-                return result
-
-            roles = request.headers.get('eduPersonAffiliation')
-            name = request.headers.get('cn')
-            email = request.headers.get('mail')
-
-            role_bool = True if "faculty" in roles or "staff" in roles else False
-
-
-            if not user_service.find_by_email(email): # account doesn't exist, register
-                user_service.create_user(name, email, role_bool) # actual registration
-            if user_service.check_credentials(email): # log in, update session etc.
-                if role_bool:
-                    user_service.make_user_teacher(email)
-
+    @wraps(f)
+    def _ad_login(*args, **kwargs):
+        result = f(*args, **kwargs)
+        # if logged in already do nothing or in local use
+        if session.get("user_id", 0) != 0 or app.debug:
             return result
-        return __home_decorator
-    return _home_decorator
+        roles = request.headers.get('eduPersonAffiliation')
+        name = request.headers.get('cn')
+        email = request.headers.get('mail')
+        role_bool = True if "faculty" in roles or "staff" in roles else False
+        email_exists = user_service.find_by_email(email) # account doesn't exist, register
+        if not email_exists:
+            user_service.create_user(name, email, role_bool) # actual registration
+        logged_in = user_service.check_credentials(email) # log in, update session etc.
+        if logged_in and role_bool:
+            user_service.make_user_teacher(email)
+        return result
+    return _ad_login
 
 def teachers_only(f):
     """
@@ -76,7 +70,7 @@ def teachers_only(f):
 FRONTPAGE:
 """
 @app.route("/")
-@home_decorator()
+@ad_login
 def frontpage() -> str:
     """
     Returns the rendered skeleton template
@@ -84,6 +78,10 @@ def frontpage() -> str:
     # used in local use
     if app.debug and session.get("user_id", 0) == 0:
         return redirect("/auth/login")
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect("/")
     user_id = session.get("user_id",0)
     if user_id == 0:
         return render_template('index.html')
@@ -112,11 +110,15 @@ def frontpage() -> str:
 /SURVEYS/* ROUTES:
 """
 @app.route("/surveys")
-@home_decorator()
+@ad_login
 def previous_surveys():
     """
     For fetching previous survey list from the database
     """
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect("/surveys")
     user_id = session.get("user_id",0)
     if user_id == 0:
         return redirect('/')
@@ -143,7 +145,7 @@ def get_info():
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/surveys/create", methods = ["GET"])
-@home_decorator()
+@ad_login
 @teachers_only
 def new_survey_form(survey=None):
     """
@@ -209,17 +211,21 @@ def import_survey_choices():
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
 @app.route("/surveys/<string:survey_id>")
-@home_decorator()
+@ad_login
 def surveys(survey_id):
     """
     The answer page for surveys.
     """
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect(f"/surveys/{survey_id}")
     user_id = session.get("user_id",0)
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
 
-    if not survey_choices or user_id == 0:
+    if not survey_choices:
         return redirect("/")
 
     survey_all_info = {}
@@ -359,7 +365,7 @@ def add_teacher(survey_id, teacher_email):
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
-@home_decorator()
+@ad_login
 @teachers_only
 def survey_answers(survey_id):
     """
@@ -386,7 +392,7 @@ def survey_answers(survey_id):
                            survey_id = survey_id, closed = closed, answered = answers_saved, error_message = error_message)
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
-@home_decorator()
+@ad_login
 @teachers_only
 def survey_results(survey_id):
     """
