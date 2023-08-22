@@ -185,6 +185,7 @@ def new_survey_post():
     time_end = data["endtime"]
 
     allowed_denied_choices = data["allowedDeniedChoices"]
+    allow_search_visibility = data["allowSearchVisibility"]
 
     survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
     if not survey_id:

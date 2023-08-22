@@ -15,7 +15,7 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	time_begin timestamp,
 	time_end timestamp,
 	allowed_denied_choices INTEGER,
-	allow_search BOOLEAN
+	allow_search_visibility BOOLEAN
 );
 
 CREATE TABLE survey_teachers (
