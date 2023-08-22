@@ -11,3 +11,4 @@ robotframework-seleniumlibrary
 matplotlib
 scipy
 Flask-APScheduler
+markdown
