@@ -243,6 +243,8 @@ def surveys(survey_id):
             survey_all_info[row[0]] = {"name": row[2]}
             survey_all_info[row[0]]["slots"] = row[3]
             survey_all_info[row[0]]["id"] = row[0]
+            survey_all_info[row[0]]["search"] = row[2]
+            survey_all_info[row[0]]["infos"] = []
         else:
             survey_all_info[row[0]]["name"] = row[2]
             survey_all_info[row[0]]["slots"] = row[3]
@@ -278,7 +280,7 @@ def surveys(survey_id):
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
             good_choice = {}
             good_choice["name"] = survey_choice[2]
-            good_choice["id"] = survey_choice[0]
+            good_choice["id"] = survey_choice[1]
             good_choice["slots"] = survey_choice[3]
             good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
             if not survey_choice:
