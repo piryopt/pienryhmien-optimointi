@@ -5,8 +5,8 @@ Suite Teardown  Close Browser
 
 *** Variables ***
 ${SERVER}  127.0.0.1:5000
-${BROWSER}  headlessfirefox
-${DELAY}  0.0 seconds
+${BROWSER}  firefox
+${DELAY}  0.1 seconds
 ${HOME_URL}  http://${SERVER}/
 ${LOGOUT URL}  http://${SERVER}/auth/logout
 ${CREATE SURVEY URL}  http://${SERVER}/surveys/create
@@ -104,6 +104,8 @@ Test Survey Case 1
 
 
 Create Survey As Teacher Case 2
+    Go To Main Page
+    Sleep  3s
 
     # Create case 2: all mandatory, no rejecting choices
     Go To Create Survey Page
@@ -143,7 +145,8 @@ Test Survey Case 2
     Page Should Contain  Tallennus onnistui
 
 Create Survey As Teacher Case 3
-    
+    Go To Main Page
+    Sleep  3s
 
     # Create case 3: not all mandatory, yes rejecting choices
     Go To Create Survey Page
@@ -198,6 +201,8 @@ Test Survey Case 3
 
 Create Survey As Teacher Case 4
     [Tags]  asd
+    Go To Main Page
+    Sleep  3s
     # Create case 4: not all mandatory, no rejecting choices
     Go To Create Survey Page
     Set Create Survey Time Fields  01.08.2023  01:01  01.08.2024  02:02
@@ -207,6 +212,8 @@ Create Survey As Teacher Case 4
     Input Text  minchoices  2
     Set Focus To Element  id:min-choices-no
     Click Element  id:min-choices-no
+    Set Focus To Element  id:search-visibility-no
+    Click Element  id:search-visibility-no
     Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey2.csv
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
@@ -226,6 +233,7 @@ Test Survey Case 4
     Go To  ${SURVEY 4 URL}
     Page Should Contain  Case not all mandatory, no rejecting choices
     Page Should Not Contain Element  id:sortable-bad
+    Page Should Not Contain Element  id:searchChoices
 
     # minchoices is set to 2, one isn't enough
     Go To  ${SURVEY 4 URL}
@@ -243,15 +251,11 @@ Test Survey Case 4
 
 Test Survey Choice Search
 
-    # Wait Until Page Contains Element  id:deleteSubmission
-    # Set Focus To Element  id:deleteSubmission
-    # Click Button  id:deleteSubmission
+    Go To  ${SURVEY 3 URL}
 
-    # Wait Until Page Contains Element  id:confirmDelete
-    # Set Focus To Element  id:confirmDelete
-    # Click Button  id:confirmDelete
+    Delete Own Survey Answer
 
-    Go To  ${SURVEY 4 URL}
+    Go To  ${SURVEY 3 URL}
 
     Input Text  id:searchChoices  00790
     
@@ -263,7 +267,6 @@ Test Survey Choice Search
     Element Should Not Be Visible  xpath=//h5[contains(text(),'Päiväkoti Floora')]
 
 Test Survey Copying
-    [Tags]  asd
     [Documentation]  Test that all the data is copied correctly
     Go To  ${SURVEYS URL}
 
@@ -304,6 +307,31 @@ Give Another Teacher Rights
     Input Text  id:teacher_email  robotti.2.teacher@helsinki.fi
 
     Click Button  addin_teacher_time
+
+Close Survey Test
+    Go To Main Page
+    Sleep  3s
+
+    Click Element  xpath=//h5[contains(text(), '${SURVEY 4 NAME}')]
+    Location Should Be  ${SURVEYS URL}/${SURVEY 4 ID}/answers
+
+    Click Button  closin_time
+    Handle Alert
+
+    Go To  ${SURVEYS URL}/${SURVEY 4 ID}
+    Page Should Contain  Kysely on suljettu
+    Page Should Not Contain Element  id:sortable-good
+    Page Should Not Contain Element  id:sortable-neutral
+
+Open Survey Test
+    Go To  ${SURVEYS URL}/${SURVEY 4 ID}/answers
+
+    Click Button  openin_time
+    Handle Alert
+
+    Go To  ${SURVEYS URL}/${SURVEY 4 ID}
+    Page Should Contain Element  id:sortable-good
+    Page Should Contain Element  id:sortable-neutral
 
 Login As Teacher Another Teacher
     [Documentation]  Wait Until because AD login redirects, home url isn't opened instantly. Times out after 5s and fails if not opened

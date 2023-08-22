@@ -3,6 +3,7 @@ Documentation  Testing
 Library  SeleniumLibrary
 Library  OperatingSystem
 Library  String
+Library  Dialogs
 
 
 *** Keywords ***
@@ -94,6 +95,17 @@ Drag To Green Box Bottom
 Go To Survey Answers Page
     [Arguments]  ${survey url}
     Go To  ${survey url}/answers
+
+Delete Own Survey Answer
+    [Documentation]  Deletes your own survey answer on the answering page
+
+    Wait Until Page Contains Element  id:deleteSubmission
+    Set Focus To Element  id:deleteSubmission
+    Click Element  id:deleteSubmission
+
+    Wait Until Page Contains Element  id:confirmDelete
+    Set Focus To Element  id:confirmDelete
+    Click Element  id:confirmDelete
     
 Go To Main Page
     Go To  ${HOME URL}
