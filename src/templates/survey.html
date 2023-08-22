@@ -35,9 +35,12 @@
                     <i>Raahaa oikean reunan listasta vähintään {{ min_choices }} vaihtoehtoa vihreään laatikkoon.</i>
                 </p>
             </div>
+            {% if allow_search_visibility is sameas true %}
             <div class="col-sm">
                 <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
             </div>
+            {% endif %}
+            
         </div>
         <div class="row">
             <div class="col">

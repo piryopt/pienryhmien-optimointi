@@ -229,6 +229,21 @@ class SurveyRepository:
         except Exception as e:
             print(e)
             return False
+        
+    def get_survey_search_visibility(self, survey_id):
+        """
+        Returns the search visibility preference of the survey.
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "SELECT allow_search_visibility FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e:
+            print(e)
+            return False
 
 
     def fetch_all_active_surveys(self, teacher_id):

@@ -195,6 +195,15 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.get_survey_max_denied_choices(survey_id)
+    
+    def get_survey_search_visibility(self, survey_id):
+        """
+        Returns the set preference of showing a choice filtering search bar in the response view of the form.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.get_survey_search_visibility(survey_id)
 
     def get_survey_as_dict(self, survey_id):
         '''

@@ -262,6 +262,7 @@ def surveys(survey_id):
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     enddate = survey_service.get_survey_enddate(survey_id)
     min_choices = survey_service.get_survey_min_choices(survey_id)
+    allow_search_visibility = survey_service.get_survey_search_visibility(survey_id)
 
     # If a ranking exists, display the choices and the reasoning in the order that the student chose them.
     if user_survey_ranking:
@@ -302,10 +303,11 @@ def surveys(survey_id):
         if closed:
             return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices,
                                  survey_name = survey_name, min_choices=min_choices)
+        
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, choices_info=survey_all_info,
                             bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason,
-                            min_choices=min_choices, max_bad_choices=max_bad_choices)
+                            min_choices=min_choices, max_bad_choices=max_bad_choices, allow_search_visibility=allow_search_visibility)
 
 
 
@@ -315,7 +317,7 @@ def surveys(survey_id):
 
     return render_template("survey.html", choices = shuffled_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, enddate = enddate,
-                            min_choices=min_choices, max_bad_choices=max_bad_choices)
+                            min_choices=min_choices, max_bad_choices=max_bad_choices, allow_search_visibility=allow_search_visibility)
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
