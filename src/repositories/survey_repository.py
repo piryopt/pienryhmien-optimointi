@@ -141,7 +141,7 @@ class SurveyRepository:
             print(e)
             return False
 
-    def create_new_survey(self, surveyname, min_choices, description, begindate, enddate, allowed_denied_choices=0):
+    def create_new_survey(self, surveyname, min_choices, description, begindate, enddate, allowed_denied_choices=0, allow_search_visibility=True):
         '''
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
@@ -151,10 +151,10 @@ class SurveyRepository:
             while(self.get_survey(id)):
                 id = generate_unique_id(10)
 
-            sql = "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_begin, time_end, allowed_denied_choices)"\
-                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_b, :t_e, :a_d_c) RETURNING id"
+            sql = "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_begin, time_end, allowed_denied_choices, allow_search_visibility)"\
+                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_b, :t_e, :a_d_c, :a_s_v) RETURNING id"
             
-            result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate, "a_d_c": allowed_denied_choices})
+            result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate, "a_d_c": allowed_denied_choices, "a_s_v": allow_search_visibility})
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718
@@ -224,6 +224,21 @@ class SurveyRepository:
         """
         try:
             sql = "SELECT allowed_denied_choices FROM surveys WHERE id=:id"
+            result = db.session.execute(text(sql), {"id":survey_id})
+            return result.fetchone()[0]
+        except Exception as e:
+            print(e)
+            return False
+        
+    def get_survey_search_visibility(self, survey_id):
+        """
+        Returns the search visibility preference of the survey.
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "SELECT allow_search_visibility FROM surveys WHERE id=:id"
             result = db.session.execute(text(sql), {"id":survey_id})
             return result.fetchone()[0]
         except Exception as e:
