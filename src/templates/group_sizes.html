@@ -31,23 +31,17 @@
     {% endif %}
     <br>
     <!--<i>Vaihtoehdon suosittuus kuvaa sitä, kuinka moni vastaaja on valinnut sen ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä</i><br>-->
-    {% for colname in survey.variable_columns %}
-      <p>{{colname}}</p>
-    {% endfor %}
     <section>
       <h2>Priorisoitavat ryhmät</h2>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
           <tr id="choice-table-headers">
-            <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
+            <th class="constant-header">Nimi</th>
             <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
-          {# additional columns if template loaded with survey parameter present #}
           
-          {% if survey.choices|length > 0 %}
-            {% for colname in survey.variable_columns %}
-              <th class="variable-header">{{colname}}</th>
-            {% endfor %}
-          {% endif %}
+          {% for colname in survey.variable_columns %}
+            <th class="variable-header">{{colname}}</th>
+          {% endfor %}
           </tr>
         </thead>
         <tbody id="choiceTable" class="">
@@ -60,7 +54,6 @@
             {% endfor %}
           </tr>
         {% endfor %}
-          
         </tbody>
       </table>
     </section>
