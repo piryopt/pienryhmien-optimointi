@@ -55,7 +55,7 @@ class UserRankingsRepository:
             survey_id: The id of the survey
         """
         try:
-            sql = "UPDATE user_survey_rankings SET deleted = True WHERE (user_id=:user_id AND survey_id=survey_id)"
+            sql = "UPDATE user_survey_rankings SET deleted = True WHERE (user_id=:user_id AND survey_id=:survey_id)"
             db.session.execute(text(sql), {"user_id":user_id, "survey_id":survey_id})
             db.session.commit()
             return True
