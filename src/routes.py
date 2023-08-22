@@ -278,9 +278,10 @@ def surveys(survey_id):
         good_survey_choices = []
         for survey_choice_id in list_of_good_survey_choice_id:
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+            print(survey_choice)
             good_choice = {}
             good_choice["name"] = survey_choice[2]
-            good_choice["id"] = survey_choice[1]
+            good_choice["id"] = survey_choice[0]
             good_choice["slots"] = survey_choice[3]
             good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
             if not survey_choice:
