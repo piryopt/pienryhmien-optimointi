@@ -3,6 +3,9 @@ from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect
 import os
+import markdown
+from pathlib import Path
+
 from src import app,db,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
@@ -573,6 +576,18 @@ def admin_gen_survey():
 """
 MISCELLANEOUS ROUTES:
 """
+@app.route("/privacy-policy")
+def privacy_policy():
+    privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'Tietosuojaseloste.md'
+    content = open(privacy_policy_file, 'r', encoding='utf-8').read()
+    return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
+
+@app.route("/faq")
+def faq():
+    faq_file = Path(__file__).parents[0] / 'static' / 'content' / 'faq.md'
+    content = open(faq_file, 'r', encoding='utf-8').read()
+    return render_template("content-page.html", content=markdown.markdown(content), title="UKK")
+
 @app.route("/excel")
 def excel():
     """
