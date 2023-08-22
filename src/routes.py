@@ -613,14 +613,20 @@ def get_choices(survey_id):
     #value of textarea reasons
     reason = raw_data["reasons"]
 
+    #minimum number of choices in the green box
+    min_choices = int(raw_data["minChoices"])
+
+    #maximum number of choices in the red box
+    allowed_denied_choices = int(raw_data["maxBadChoices"])
+
     # Change this to len bad_ids + good_ids >= min_choices
     # Also check that there aren't to many rejections.
-    if len(neutral_ids) > 0 or len(good_ids) == 0:
-        response = {"status":"0","msg":"Et ole tehnyt riittävän monta valintaa! Tallennus epäonnistui."}
+    if len(good_ids) < min_choices:
+        response = {"status":"0","msg":f"Valitse vähintään {min_choices} vaihtoehtoa. Tallennus epäonnistui."}
         return jsonify(response)
 
-    if len(bad_ids) > 2:
-        response = {"status":"0","msg":"Liian monta hylkäystä! Tallennus epäonnistui."}
+    if len(bad_ids) > allowed_denied_choices:
+        response = {"status":"0","msg":f"Voit hylätä korkeintaan {allowed_denied_choices} vaihtoehtoa. Tallennus epäonnistui."}
         return jsonify(response)
 
     ranking = convert_to_string(good_ids)

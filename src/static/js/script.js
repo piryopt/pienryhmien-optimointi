@@ -4,6 +4,7 @@ window.onload = function() {
 
 function submit(resubmit) {
     var maxBadChoices = document.getElementById("max_bad_choices").value;
+    var minChoices = document.getElementById("min_choices").value;
     var surveyID = document.getElementById("survey_id").value;
     var neutralIDs = $("#sortable-neutral").sortable("toArray");
     var goodIDs = $("#sortable-good").sortable("toArray");
@@ -20,6 +21,8 @@ function submit(resubmit) {
         "goodIDs": goodIDs,
         "badIDs": badIDs,
         "allIDs": neutralIDs.concat(goodIDs,badIDs),
+        "minChoices": minChoices,
+        "maxBadChoices": maxBadChoices,
         "reasons": reasons
     }
 
