@@ -578,12 +578,18 @@ MISCELLANEOUS ROUTES:
 """
 @app.route("/privacy-policy")
 def privacy_policy():
+    """
+    Route returns the Privacy Policy -page linked in the footer
+    """
     privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'Tietosuojaseloste.md'
     content = open(privacy_policy_file, 'r', encoding='utf-8').read()
     return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
 
 @app.route("/faq")
 def faq():
+    """
+    Route returns the Frequently Asked Questions -page linked in the footer
+    """
     faq_file = Path(__file__).parents[0] / 'static' / 'content' / 'faq.md'
     content = open(faq_file, 'r', encoding='utf-8').read()
     return render_template("content-page.html", content=markdown.markdown(content), title="UKK")
