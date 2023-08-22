@@ -104,6 +104,7 @@ def parser_existing_survey_to_dict(survey_id):
     survey_dict["survey_description"] = survey[5]
     survey_dict["time_begin"] = survey[6]
     survey_dict["time_end"] = survey[7]
+    survey_dict["allow_search_visibility"] = survey[9]
 
     survey_choices = survey_choices_repository.find_survey_choices(survey_id)
     survey_dict["choices"] = []

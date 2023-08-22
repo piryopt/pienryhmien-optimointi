@@ -151,9 +151,25 @@
           Suositeltavaa sallia kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää,
            ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää
         </p>
-        <input type="radio" name="allow-search-visibility" value="show" id="search-visibility-yes" checked/>
+        <input 
+          type="radio"
+          name="allow-search-visibility"
+          value="show"
+          id="search-visibility-yes"
+          {% if survey.allow_search_visibility is not defined or survey.allow_search_visibility is sameas true %}
+          checked
+          {% endif %}
+        />
         <label for="min-choices-all">Kyllä</label>
-        <input type="radio" name="allow-search-visibility" value="hide" id="search-visibility-no"/>
+        <input 
+          type="radio"
+          name="allow-search-visibility"
+          value="hide"
+          id="search-visibility-no"
+          {% if survey.allow_search_visibility is defined and survey.allow_search_visibility is sameas false %}
+          checked
+          {% endif %}
+        />
         <label for="min-choices-custom">Ei</label>
       </div>
     </section>
