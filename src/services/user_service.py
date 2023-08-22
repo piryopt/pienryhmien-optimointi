@@ -31,6 +31,8 @@ class UserService:
         session["email"] = user.email
         session["user_id"] = user.id
         session["full_name"] = user.name
+        # Needed for fixing the AD-login session bug
+        session["reloaded"] = False
         if user.isteacher:
             session["role"] = "Opettaja"
         else:
@@ -105,6 +107,7 @@ class UserService:
         del session["user_id"]
         del session["full_name"]
         del session["role"]
+        del session["reloaded"]
 
     def find_by_email(self, email):
         """

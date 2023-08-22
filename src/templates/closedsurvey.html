@@ -7,26 +7,50 @@
 
 {% block content %}
 </br>
-<h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }} (Vastausaika on loppunut)</h5>
-<label>Valinnat:</label>
-<ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green;">
-    {% for group in good_survey_choices %}
-    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ group[2] }}</h5>
-        </div>
-        <small class="text-muted">{{ spaces }}</small>
-    </li>
-    {% endfor %}
-</ul>
-<ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: red">
-    {% for group in bad_survey_choices %}
-    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group[0] }}">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ group[2] }}</h5>
-        </div>
-        <small class="text-muted">{{ spaces }}</small>
-    </li>
-    {% endfor %}
-</ul>
+<h1>
+    <img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-middle">
+    {{ survey_name }}
+</h1>
+<div class="closed-survey-notifier">
+    <div class="closed-survey-icon">
+        <img src="{{ url_for('static', filename='images/warning_amber_white_36dp.svg') }}" alt="" width="100%" height="100%" class="d-inline-block align-text-middle">
+    </div>
+    <div class="closed-survey-content">
+        <h2>Kysely on suljettu.</h2>
+        <p>
+            Tämä kysely on suljettu eikä siihen voi enää vastata.
+            {% if good_survey_choices|length %}
+            Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta.
+            {% else %}
+            Et ole vastannut tähän kyselyyn.
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+{% if good_survey_choices|length %}
+<section>
+    <h2>Tehdyt valinnat:</h2>
+
+    <strong>Valitut ryhmät mielekkyysjärjestyksessä:</strong>
+    <div class="choices-container border-green">
+        <ol>
+            {% for group in good_survey_choices %}
+            <li>{{group.name}}</li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    {% if bad_survey_choices|length %}
+    <strong>Ryhmät joihin osallistumiseen on este:</strong>
+    <div class="choices-container border-red">
+        <ol>
+            {% for group in bad_survey_choices %}
+            <li>{{group.name}}</li>
+            {% endfor %}
+        </ol>
+    </div>
+    {% endif %}
+</section>
+{% endif %}
 {% endblock %}
