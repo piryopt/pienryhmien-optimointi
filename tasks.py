@@ -11,7 +11,7 @@ def headless(ctx, db_name):
 
 @task
 def staging(ctx):
-    ctx.run("robot -d logs tests/staging_testing.robot", pty=True)
+    ctx.run("poetry run invoke clear && robot -d logs tests/staging_testing.robot", pty=True)
 
 @task
 def clear(ctx):

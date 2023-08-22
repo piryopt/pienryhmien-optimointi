@@ -37,7 +37,7 @@ Create Secondary Teacher Account
     Login And Go To Main Page  robottiTeacher2  moi123
 
 Login As Teacher
-    [Tags]  asd
+    [Tags]  asd  qwe
     [Documentation]  Wait Until because AD login redirects, home url isn't opened instantly. Times out after 5s and fails if not opened
     Login And Go To Main Page  robottiTeacher  moi123
     Page Should Contain  Näytä vanhat kyselyt
@@ -45,6 +45,7 @@ Login As Teacher
 
 
 Create Survey As Teacher Case 1
+    [Tags]  asd  qwe
     # Create case 1: all mandatory, yes rejecting choices
     Go To Create Survey Page
     Set Create Survey Time Fields  01.08.2023  01:01  01.08.2024  02:02
@@ -55,6 +56,7 @@ Create Survey As Teacher Case 1
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
+    Page Should Contain   Uusi kysely luotu!
 
     Go To  ${SURVEYS URL}
     Click Element  ${SURVEY 1 HREF}
@@ -103,6 +105,7 @@ Test Survey Case 1
 
 
 Create Survey As Teacher Case 2
+    [Tags]  qwe
 
     # Create case 2: all mandatory, no rejecting choices
     Go To Create Survey Page
@@ -112,10 +115,9 @@ Create Survey As Teacher Case 2
     Click Element  id:min-choices-no
     Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey2.csv
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
-    Capture Page Screenshot
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
-    Capture Page Screenshot
+    Page Should Contain   Uusi kysely luotu!
 
     Go To  ${SURVEYS URL}
     Click Element  ${SURVEY 2 HREF}
@@ -158,6 +160,7 @@ Create Survey As Teacher Case 3
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
+    Page Should Contain   Uusi kysely luotu!
 
     Go To  ${SURVEYS URL}
     Click Element  ${SURVEY 3 HREF}
@@ -210,6 +213,7 @@ Create Survey As Teacher Case 4
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
+    Page Should Contain   Uusi kysely luotu!
 
     Go To  ${SURVEYS URL}
     Click Element  ${SURVEY 4 HREF}

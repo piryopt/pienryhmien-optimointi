@@ -55,6 +55,7 @@ Create Survey As Teacher Case 1
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
+    Page Should Contain   Uusi kysely luotu!
 
     Go To  ${SURVEYS URL}
     Click Element  ${SURVEY 1 HREF}
@@ -114,6 +115,7 @@ Create Survey As Teacher Case 2
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
+    Page Should Contain   Uusi kysely luotu!
 
     Go To  ${SURVEYS URL}
     Click Element  ${SURVEY 2 HREF}
@@ -156,6 +158,7 @@ Create Survey As Teacher Case 3
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
+    Page Should Contain   Uusi kysely luotu!
 
     Go To  ${SURVEYS URL}
     Click Element  ${SURVEY 3 HREF}
@@ -208,6 +211,7 @@ Create Survey As Teacher Case 4
     Wait Until Page Contains Element  ${CREATE_NEW_SURVEY_BUTTON}
     Set Focus To Element  ${CREATE_NEW_SURVEY_BUTTON}
     Click Element  ${CREATE_NEW_SURVEY_BUTTON}
+    Page Should Contain   Uusi kysely luotu!
 
     Go To  ${SURVEYS URL}
     Click Element  ${SURVEY 4 HREF}
@@ -217,7 +221,6 @@ Create Survey As Teacher Case 4
     # Extract survey id from the url
     ${SURVEY 4 ID}=  Fetch From Right  ${SURVEY 4 URL}  /
     Set Suite Variable  ${SURVEY 4 ID}
-    Log To Console  ${SURVEY 4 ID}
 
 Test Survey Case 4
     Go To  ${SURVEY 4 URL}
