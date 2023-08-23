@@ -159,7 +159,7 @@ def new_survey_form(survey=None):
     query_params = request.args.to_dict()
     if("fromTemplate" in query_params):
         survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
-        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id")]
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/surveys/create", methods = ["POST"])
@@ -378,7 +378,7 @@ def edit_group_sizes(survey_id):
         survey_id (int): id of the survey
     """
     survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id")]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     print(choice_popularities)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
