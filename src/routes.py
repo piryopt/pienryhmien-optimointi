@@ -3,6 +3,9 @@ from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect
 import os
+import markdown
+from pathlib import Path
+
 from src import app,db,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
@@ -26,38 +29,32 @@ from src.tools.date_converter import get_time_helsinki
 """
 DECORATORS:
 """
-def home_decorator():
+
+def ad_login(f):
     '''
     This is pretty much all the AD-login code there is.
     This function is called by some routes, 
     by those marked by @home_decorator()
     For more details see documentation
     '''
-    def _home_decorator(f):
-        @wraps(f)
-        def __home_decorator(*args, **kwargs):
-            result = f(*args, **kwargs)
-
-            # if logged in already do nothing or in local use
-            if session.get("user_id", 0) != 0 or app.debug:
-                return result
-
-            roles = request.headers.get('eduPersonAffiliation')
-            name = request.headers.get('cn')
-            email = request.headers.get('mail')
-
-            role_bool = True if "faculty" in roles or "staff" in roles else False
-
-
-            if not user_service.find_by_email(email): # account doesn't exist, register
-                user_service.create_user(name, email, role_bool) # actual registration
-            if user_service.check_credentials(email): # log in, update session etc.
-                if role_bool:
-                    user_service.make_user_teacher(email)
-
+    @wraps(f)
+    def _ad_login(*args, **kwargs):
+        result = f(*args, **kwargs)
+        # if logged in already do nothing or in local use
+        if session.get("user_id", 0) != 0 or app.debug:
             return result
-        return __home_decorator
-    return _home_decorator
+        roles = request.headers.get('eduPersonAffiliation')
+        name = request.headers.get('cn')
+        email = request.headers.get('mail')
+        role_bool = True if "faculty" in roles or "staff" in roles else False
+        email_exists = user_service.find_by_email(email) # account doesn't exist, register
+        if not email_exists:
+            user_service.create_user(name, email, role_bool) # actual registration
+        logged_in = user_service.check_credentials(email) # log in, update session etc.
+        if logged_in and role_bool:
+            user_service.make_user_teacher(email)
+        return result
+    return _ad_login
 
 def teachers_only(f):
     """
@@ -76,7 +73,7 @@ def teachers_only(f):
 FRONTPAGE:
 """
 @app.route("/")
-@home_decorator()
+@ad_login
 def frontpage() -> str:
     """
     Returns the rendered skeleton template
@@ -84,6 +81,10 @@ def frontpage() -> str:
     # used in local use
     if app.debug and session.get("user_id", 0) == 0:
         return redirect("/auth/login")
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect("/")
     user_id = session.get("user_id",0)
     if user_id == 0:
         return render_template('index.html')
@@ -112,11 +113,15 @@ def frontpage() -> str:
 /SURVEYS/* ROUTES:
 """
 @app.route("/surveys")
-@home_decorator()
+@ad_login
 def previous_surveys():
     """
     For fetching previous survey list from the database
     """
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect("/surveys")
     user_id = session.get("user_id",0)
     if user_id == 0:
         return redirect('/')
@@ -143,7 +148,7 @@ def get_info():
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/surveys/create", methods = ["GET"])
-@home_decorator()
+@ad_login
 @teachers_only
 def new_survey_form(survey=None):
     """
@@ -183,8 +188,9 @@ def new_survey_post():
     time_end = data["endtime"]
 
     allowed_denied_choices = data["allowedDeniedChoices"]
+    allow_search_visibility = data["allowSearchVisibility"]
 
-    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
+    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
         return jsonify(response)
@@ -209,20 +215,49 @@ def import_survey_choices():
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
 @app.route("/surveys/<string:survey_id>")
-@home_decorator()
+@ad_login
 def surveys(survey_id):
     """
     The answer page for surveys.
     """
+    reloaded = session.get("reloaded",0)
+    if not reloaded:
+        session["reloaded"] = True
+        return redirect(f"/surveys/{survey_id}")
     user_id = session.get("user_id",0)
     # If the survey has no choices, redirect to home page.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    if not survey_choices or user_id == 0:
+    survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
+
+    if not survey_choices:
         return redirect("/")
 
-    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
-    shuffle(survey_choices)
+    survey_all_info = {}
+    for row in survey_choices_info:
+        if row[0] not in survey_all_info:
+            survey_all_info[row[0]] = {"infos": [{row[1]:row[2]}]}
+            survey_all_info[row[0]]["search"] = row[2]
+        else:
+            survey_all_info[row[0]]["infos"].append({row[1]:row[2]})
+            survey_all_info[row[0]]["search"] += " " + row[2]
 
+    for row in survey_choices:
+        if row[0] not in survey_all_info:
+            survey_all_info[row[0]] = {"name": row[2]}
+            survey_all_info[row[0]]["slots"] = row[3]
+            survey_all_info[row[0]]["id"] = row[0]
+        else:
+            survey_all_info[row[0]]["name"] = row[2]
+            survey_all_info[row[0]]["slots"] = row[3]
+            survey_all_info[row[0]]["id"] = row[0]
+
+    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
+    
+    temp = list(survey_all_info.items())
+    shuffle(temp)
+    shuffled_choices = [v for k,v in dict(temp).items()]
+
+    max_bad_choices = survey_service.get_survey_max_denied_choices(survey_id)
     desc = survey_service.get_survey_description(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     survey_name = survey_service.get_survey_name(survey_id)
@@ -230,6 +265,7 @@ def surveys(survey_id):
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     enddate = survey_service.get_survey_enddate(survey_id)
     min_choices = survey_service.get_survey_min_choices(survey_id)
+    allow_search_visibility = survey_service.get_survey_search_visibility(survey_id)
 
     # If a ranking exists, display the choices and the reasoning in the order that the student chose them.
     if user_survey_ranking:
@@ -243,9 +279,14 @@ def surveys(survey_id):
         good_survey_choices = []
         for survey_choice_id in list_of_good_survey_choice_id:
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+            good_choice = {}
+            good_choice["name"] = survey_choice[2]
+            good_choice["id"] = survey_choice[0]
+            good_choice["slots"] = survey_choice[3]
+            good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
             if not survey_choice:
                 continue
-            good_survey_choices.append(survey_choice)
+            good_survey_choices.append(good_choice)
             survey_choices.remove(survey_choice)
 
         bad_survey_choices = []
@@ -253,15 +294,23 @@ def surveys(survey_id):
             list_of_bad_survey_choice_id = convert_to_list(rejections)
             for survey_choice_id in list_of_bad_survey_choice_id:
                 survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
+                bad_choice = {}
+                bad_choice["name"] = survey_choice[2]
+                bad_choice["id"] = survey_choice[0]
+                bad_choice["slots"] = survey_choice[3]
+                bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
                 if not survey_choice:
                     continue
-                bad_survey_choices.append(survey_choice)
+                bad_survey_choices.append(bad_choice)
                 survey_choices.remove(survey_choice)
         if closed:
-            return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, survey_name = survey_name)
+            return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices,
+                                 survey_name = survey_name, min_choices=min_choices)
+        
         return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc,
-                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason)
+                            survey_name = survey_name, existing = existing, desc = desc, choices_info=survey_all_info,
+                            bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason,
+                            min_choices=min_choices, max_bad_choices=max_bad_choices, allow_search_visibility=allow_search_visibility)
 
 
 
@@ -269,9 +318,9 @@ def surveys(survey_id):
     if closed:
         return render_template("closedsurvey.html", survey_name = survey_name)
 
-    return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
-                            survey_name = survey_name, existing = existing, desc = desc,
-                            enddate = enddate, min_choices=min_choices)
+    return render_template("survey.html", choices = shuffled_choices, survey_id = survey_id,
+                            survey_name = survey_name, existing = existing, desc = desc, enddate = enddate,
+                            min_choices=min_choices, max_bad_choices=max_bad_choices, allow_search_visibility=allow_search_visibility)
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -365,7 +414,7 @@ def add_teacher(survey_id, teacher_email):
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
-@home_decorator()
+@ad_login
 @teachers_only
 def survey_answers(survey_id):
     """
@@ -392,7 +441,7 @@ def survey_answers(survey_id):
                            survey_id = survey_id, closed = closed, answered = answers_saved, error_message = error_message)
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
-@home_decorator()
+@ad_login
 @teachers_only
 def survey_results(survey_id):
     """
@@ -413,8 +462,12 @@ def survey_results(survey_id):
         return redirect(f"/surveys/{survey_id}/answers")
     survey_answers_amount = len(user_rankings)
 
+    #if more rankings than available slots add a non-group
     if (survey_answers_amount > available_spaces):
-        return redirect(f"/surveys/{survey_id}/answers")
+        added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-available_spaces)
+        if not added_group:
+            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
+            return jsonify(response)
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
@@ -531,28 +584,6 @@ def logout():
 """
 ADMINTOOLS -ROUTES:
 """
-@app.route("/admintools/", methods = ["GET"])
-def admin_dashboard() -> str:
-    """
-    Admin page for resestting the database. DELETE BEFORE PRODUCTION!!!
-    """
-    return render_template('/admintools/dashboard.html')
-
-@app.route("/api/admintools/reset", methods = ["POST"])
-def reset_database() -> str:
-    """
-    Drop all database tables and recreate them based on the schema at project root. DELETE BEFORE PRODUCTION!!!
-    """
-    data = request.get_json()
-    print(data)
-    db.reflect()
-    db.drop_all()
-    create_clause = data["schema"]
-    for statement in create_clause.split(";")[:-1]:
-        db.session.execute(text(statement + ";"))
-        db.session.commit()
-    return "database reset"
-
 @app.route("/admintools/gen_data", methods = ["GET", "POST"])
 def admin_gen_data():
     """
@@ -592,6 +623,24 @@ def admin_gen_survey():
 """
 MISCELLANEOUS ROUTES:
 """
+@app.route("/privacy-policy")
+def privacy_policy():
+    """
+    Route returns the Privacy Policy -page linked in the footer
+    """
+    privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'Tietosuojaseloste.md'
+    content = open(privacy_policy_file, 'r', encoding='utf-8').read()
+    return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
+
+@app.route("/faq")
+def faq():
+    """
+    Route returns the Frequently Asked Questions -page linked in the footer
+    """
+    faq_file = Path(__file__).parents[0] / 'static' / 'content' / 'faq.md'
+    content = open(faq_file, 'r', encoding='utf-8').read()
+    return render_template("content-page.html", content=markdown.markdown(content), title="UKK")
+
 @app.route("/excel")
 def excel():
     """

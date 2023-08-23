@@ -145,6 +145,36 @@
     </section>
 
     <section>
+      <div>
+        <h3>Näytetäänkö vastaajalle hakupalkki?</h3>
+        <p>Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. 
+          Suositeltavaa sallia kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää,
+           ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää
+        </p>
+        <input 
+          type="radio"
+          name="allow-search-visibility"
+          value="show"
+          id="search-visibility-yes"
+          {% if survey.allow_search_visibility is not defined or survey.allow_search_visibility is sameas true %}
+          checked
+          {% endif %}
+        />
+        <label for="min-choices-all">Kyllä</label>
+        <input 
+          type="radio"
+          name="allow-search-visibility"
+          value="hide"
+          id="search-visibility-no"
+          {% if survey.allow_search_visibility is defined and survey.allow_search_visibility is sameas false %}
+          checked
+          {% endif %}
+        />
+        <label for="min-choices-custom">Ei</label>
+      </div>
+    </section>
+
+    <section>
       <h2>Priorisoitavat ryhmät</h2>
       <p>Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää tietokenttä".</p>
       <input id="choiceFileInput" type="file" style="display: none;" onchange="handleFileUpload()"/>

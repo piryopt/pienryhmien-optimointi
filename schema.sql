@@ -2,7 +2,8 @@ CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	name TEXT,
 	email TEXT UNIQUE,
-	isteacher BOOLEAN
+	isteacher BOOLEAN,
+	admin BOOLEAN
 );
 
 CREATE TABLE surveys ( -- yksittäinen kysely
@@ -14,7 +15,9 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	survey_description TEXT,
 	time_begin timestamp,
 	time_end timestamp,
-	allowed_denied_choices INTEGER
+	allowed_denied_choices INTEGER,
+	allow_search_visibility BOOLEAN,
+	deleted BOOLEAN
 );
 
 CREATE TABLE survey_teachers (
@@ -27,7 +30,8 @@ CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
 	id SERIAL PRIMARY KEY,
 	survey_id VARCHAR(10) REFERENCES surveys,
 	name TEXT,
-	max_spaces INTEGER
+	max_spaces INTEGER,
+	deleted BOOLEAN
 );
 
 CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices
@@ -52,6 +56,14 @@ CREATE TABLE final_group ( -- lopullinen sijoitus
 	user_id INTEGER REFERENCES users,
 	survey_id VARCHAR(10) REFERENCES surveys,
 	choice_id INTEGER REFERENCES survey_choices
+);
+
+CREATE TABLE feedback (
+	id SERIAL PRIMARY KEY,
+	user_id INTEGER REFERENCES users,
+	title TEXT,
+	content TEXT,
+	solved BOOLEAN
 );
 
 CREATE UNIQUE INDEX idx_user_survey_rankings_user_id_survey_id on user_survey_rankings (user_id,survey_id);

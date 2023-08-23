@@ -1,6 +1,12 @@
-h1, h2, h3, h4, h5, label, p {
+h1, h2, h3, h4, h5, label, p, i, strong, li  {
     color: rgb(255, 255, 255);
     opacity: 0.8;
+
+}
+
+h1, h2, h3, h4, h5 {
+    margin-top: 1em;
+    margin-bottom: .5em;
 }
 
 b, small {
@@ -68,10 +74,6 @@ b, small {
     box-shadow: 0px 1px 7px 4px rgba(0,0,0,0.75);
 }
 
-p, i {
-    color: rgb(255, 255, 255);
-    opacity: 0.8;
-}
 
 .navbar {
     -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
@@ -141,4 +143,82 @@ td.empty {
     height: 3rem;
     background-color: #1f2226;
     border: none !important;
+}
+
+/* Closed survey page - notification block */
+.closed-survey-notifier {
+    background-color: #2a2b2c;
+    padding: 20px;
+    border: 3px solid #fff;
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.closed-survey-content {
+    padding: 20px;
+    flex: 5;
+}
+
+.closed-survey-icon {
+    flex: 1;
+}
+
+/* Closed survey page - choice listings*/
+.choices-container {
+    border: 3px solid;
+    padding: 3px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.choices-container ol {
+    margin: 0 0 0 0;
+    padding-left: 0;
+}
+
+.choices-container li {
+    color: #fff;
+    padding: 7px;
+    list-style-position: inside;
+}
+.choices-container li:nth-child(odd) {
+    background-color: #2a2b2c;
+}
+
+.choices-container li:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.border-green {
+    border-color: green;
+}
+
+.border-red {
+    border-color: red;
+}
+
+/* Footer */
+.footer .container {
+    display: flex;
+}
+
+.footer .container * {
+    flex: 1;
+}
+
+.footer .container a {
+    text-decoration: none;
+    text-align: center;
+}
+
+.footer .container a:hover {
+    text-decoration: underline;
+}
+
+main>div.container {
+    margin-top: 40px;
+    margin-bottom: 120px;
 }

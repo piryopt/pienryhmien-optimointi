@@ -164,7 +164,8 @@ function createNewSurvey() {
         enddate: document.getElementById("end-date").value,
         endtime: document.getElementById("endtime").value,
         minchoices: minChoicesElement.classList.contains("hidden") ? rowsAsJson.length : Number(minChoicesElement.value),
-        allowedDeniedChoices: allowedDeniedChoices.classList.contains("hidden") ? 0 : Number(allowedDeniedChoices.value)
+        allowedDeniedChoices: allowedDeniedChoices.classList.contains("hidden") ? 0 : Number(allowedDeniedChoices.value),
+        allowSearchVisibility: document.getElementById("search-visibility-yes").checked
     }
 
     console.log("requestData", requestData)

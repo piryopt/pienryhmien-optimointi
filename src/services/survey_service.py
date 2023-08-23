@@ -149,7 +149,7 @@ class SurveyService:
         '''
         return parser_elomake_csv_to_dict(file) # in tools
     
-    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices=0):
+    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices=0, allow_search_visibility=True):
         '''
         Calls tools.parsers dictionary to survey parser
         that creates the survey, its choices and their additional infos
@@ -158,7 +158,7 @@ class SurveyService:
         if self._survey_repository.survey_name_exists(survey_name, user_id):
             return False
 
-        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
+        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
 
     def save_survey_edit(self, survey_id:str, edit_dict:dict):
         '''
@@ -203,6 +203,24 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.get_survey_min_choices(survey_id)
+
+    def get_survey_max_denied_choices(self, survey_id):
+        """
+        Returns the amount of denied choices the survey allows.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.get_survey_max_denied_choices(survey_id)
+    
+    def get_survey_search_visibility(self, survey_id):
+        """
+        Returns the set preference of showing a choice filtering search bar in the response view of the form.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.get_survey_search_visibility(survey_id)
 
     def get_survey_as_dict(self, survey_id):
         '''
