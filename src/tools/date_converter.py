@@ -24,3 +24,12 @@ def time_to_close(time_to_close):
         return True
     return False
 
+def format_datestring(input_datetime):
+    output_format = "%d.%m.%Y %H:%M"
+    try:
+        return datetime.strftime(input_datetime, output_format)
+    except:
+        # To prevent crashing in case a non datetime input is given 
+        return input_datetime
+
+
