@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - working_with_times_and_dates
 jobs:
 
   build-and-push:
