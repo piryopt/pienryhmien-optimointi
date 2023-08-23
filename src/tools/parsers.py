@@ -112,7 +112,7 @@ def parser_existing_survey_to_dict(survey_id):
     index = 0
     for row in survey_choices:
         survey_dict["choices"].append({})
-        survey_dict["choices"][index]["id"] = row[1]
+        survey_dict["choices"][index]["id"] = row[0]
         survey_dict["choices"][index]["name"] = row[2]
         survey_dict["choices"][index]["seats"] = row[3]
 

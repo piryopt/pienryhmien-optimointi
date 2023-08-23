@@ -287,10 +287,10 @@ class SurveyService:
         for response in responses:
             ranking = response[1].split()
             for i in range(min(3,len(ranking))):
-                if ranking[i] in popularities:
-                    popularities[ranking[i]] += 1
+                if int(ranking[i]) in popularities:
+                    popularities[int(ranking[i])] += 1
                 else:
-                    popularities[ranking[i]] = 1
+                    popularities[int(ranking[i])] = 1
         return (answers, popularities)
 
     def validate_created_survey(self, survey_dict):
