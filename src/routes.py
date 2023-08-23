@@ -278,7 +278,6 @@ def surveys(survey_id):
         good_survey_choices = []
         for survey_choice_id in list_of_good_survey_choice_id:
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
-            print(survey_choice)
             good_choice = {}
             good_choice["name"] = survey_choice[2]
             good_choice["id"] = survey_choice[0]
@@ -306,8 +305,16 @@ def surveys(survey_id):
         if closed:
             return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices,
                                  survey_name = survey_name, min_choices=min_choices)
-        
-        return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
+        neutral_choices = []
+        for survey_choice in survey_choices:
+            neutral_choice = {}
+            neutral_choice["name"] = survey_choice[2]
+            neutral_choice["id"] = survey_choice[0]
+            neutral_choice["slots"] = survey_choice[3]
+            neutral_choice["search"] = survey_all_info[int(survey_choice[0])]["search"]
+            neutral_choices.append(neutral_choice)
+
+        return render_template("survey.html", choices = neutral_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, choices_info=survey_all_info,
                             bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason,
                             min_choices=min_choices, max_bad_choices=max_bad_choices, allow_search_visibility=allow_search_visibility)
