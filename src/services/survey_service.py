@@ -250,6 +250,7 @@ class SurveyService:
         for survey in surveys:
             survey_id = survey.id
             survey_time_end = self._survey_repository.get_survey_time_end(survey_id)
+            print(f'Survey id {survey_id}, closes at {survey_time_end}')
             closin_time = time_to_close(survey_time_end)
             if closin_time:
                 #print(f"Closing survey {survey.surveyname}")

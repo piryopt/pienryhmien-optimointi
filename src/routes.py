@@ -670,10 +670,11 @@ def get_choices(survey_id):
 """
 TASKS:
 """
-@scheduler.task('cron', id='do_job_1', hour='*')
+@scheduler.task('cron', id='do_job_1', hour='*', minute="*", second="*")
 def job1():
     """
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """
+    print(f"Checking for surveys to close: {datetime.now()}")
     with app.app_context():
         survey_service.check_for_surveys_to_close()

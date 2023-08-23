@@ -1,5 +1,9 @@
 FROM registry.access.redhat.com/ubi8/python-39
 
+# Set timezone
+ENV TZ=Europe/Helsinki
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 WORKDIR /usr/src/app
 
 COPY ./src .
