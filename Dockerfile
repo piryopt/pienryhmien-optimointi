@@ -1,8 +1,10 @@
 FROM registry.access.redhat.com/ubi8/python-39
 
 # Set timezone
-ENV TZ=Europe/Helsinki
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get update && \
+    apt-get install -yq tzdata && \
+    ln -fs /usr/share/zoneinfo/Europe/Helsinki /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
 WORKDIR /usr/src/app
 
