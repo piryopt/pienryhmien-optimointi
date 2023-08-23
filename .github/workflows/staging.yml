@@ -3,7 +3,6 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - working_with_times_and_dates
       - main
 
 jobs:
