@@ -268,6 +268,31 @@ class SurveyService:
             return []
         return rankings
 
+    def get_choice_popularities(self, survey_id:str):
+        """
+        Calls repository function fetch_survey_responses() to get user rankings
+        for the choices in the survey and from this data calculates how many
+        times each choice has been ranked in top three choices.
+
+        Returns a tuple. First element is number of answers and second is
+        a dictionary where key is choice id and value number of times a choice
+        has been valued in top three by a student
+
+        Args:
+            survey_id (str): the id of the survey
+        """
+        responses = self._survey_repository.fetch_survey_responses(survey_id)
+        answers = len(responses)
+        popularities = {}
+        for response in responses:
+            ranking = response[1].split()
+            for i in range(min(3,len(ranking))):
+                if ranking[i] in popularities:
+                    popularities[ranking[i]] += 1
+                else:
+                    popularities[ranking[i]] = 1
+        return (answers, popularities)
+
     def validate_created_survey(self, survey_dict):
         print("VALIDATING")
         print(survey_dict)

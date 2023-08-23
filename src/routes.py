@@ -377,11 +377,11 @@ def edit_group_sizes(survey_id):
     """
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
-    survey_answers = survey_service.fetch_survey_responses(survey_id)
-    survey_answers_amount = len(survey_answers)
+    (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
+    print(choice_popularities)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
-    return render_template("group_sizes.html", survey=survey,
-                            survey_answers_amount=survey_answers_amount, available_spaces=available_spaces)
+    return render_template("group_sizes.html", survey=survey, survey_answers_amount=survey_answers_amount,
+                            available_spaces=available_spaces, popularities = choice_popularities)
 
 @app.route("/surveys/<string:survey_id>/group_sizes", methods=["POST"])
 @teachers_only
