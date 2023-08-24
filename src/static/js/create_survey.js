@@ -214,17 +214,16 @@ function saveEdit() {
     //Valid content, continue to post
 
     // Get column names from the choice table
-    var tableHeaders = Array.from(document.querySelectorAll("#choice-table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
+    //var tableHeaders = Array.from(document.querySelectorAll("#choice-table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
 
-    var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
-    var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
-    console.log(rowsAsJson)
+    //var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
+    //var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
 
     var surveyID = document.getElementById("survey_id").value;
 
     var requestData = {
         surveyGroupname: $("#groupname").val(),
-        choices: rowsAsJson,
+        //choices: rowsAsJson,
         surveyInformation: document.getElementById("survey-information").value,
         startdate: document.getElementById("start-date").value,
         starttime: document.getElementById("starttime").value,

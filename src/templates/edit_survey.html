@@ -21,9 +21,11 @@
     });
   });
 </script>
-
 <section>
-  <h2>Lisää opettaja kyselyyn</h2>
+  <h2>Kyselyn muokkaus</h2>
+</section>
+<section>
+  <h4>Lisää opettaja kyselyyn</h4>
   <label>Syötä opettajan sähköpostiosoite.</label><br><br>
   <input type="email" name="teacher_email" id="teacher_email"><br><br>
 <button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button>
@@ -31,7 +33,7 @@
 </section>
 
 <section>
-  <h2>Kyselyn nimi</h2>
+  <h4>Kyselyn nimi</h4>
   <input
       type="text"
       class="form-control"
@@ -49,7 +51,7 @@
 </section>
 
 <section>
-  <h2>Vastausaika</h2>
+  <h4>Vastausaika</h4>
   <p>Voit pidentää tai lyhentää aikaväliä, jolloin kyselyyn on mahdollista vastata.</p>
   <label>Vastausaika alkaa:</label><br />
   <input
@@ -61,7 +63,33 @@
     validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
     value="{{survey.start_date}}"
     >
-  <label for="starttime"class="time-label">Kello:</label><input type="time" name="starttime" id="starttime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm" value="{{ survey.start_time }}"/>
+  <label for="starttime" class="time-label">Kello:</label>
+      <select name="starttime" id="starttime" class="datetime-input-field" value="{{survey.start_time}}">
+        <option value="00:00" {% if survey.start_time == "00:00" %}selected{% endif %}>00:00</option>
+        <option value="01:00" {% if survey.start_time == "01:00" %}selected{% endif %}>01:00</option>
+        <option value="02:00" {% if survey.start_time == "02:00" %}selected{% endif %}>02:00</option>
+        <option value="03:00" {% if survey.start_time == "03:00" %}selected{% endif %}>03:00</option>
+        <option value="04:00" {% if survey.start_time == "04:00" %}selected{% endif %}>04:00</option>
+        <option value="05:00" {% if survey.start_time == "05:00" %}selected{% endif %}>05:00</option>
+        <option value="06:00" {% if survey.start_time == "06:00" %}selected{% endif %}>06:00</option>
+        <option value="07:00" {% if survey.start_time == "07:00" %}selected{% endif %}>07:00</option>
+        <option value="08:00" {% if survey.start_time == "08:00" %}selected{% endif %}>08:00</option>
+        <option value="09:00" {% if survey.start_time == "09:00" %}selected{% endif %}>09:00</option>
+        <option value="10:00" {% if survey.start_time == "10:00" %}selected{% endif %}>10:00</option>
+        <option value="11:00" {% if survey.start_time == "11:00" %}selected{% endif %}>11:00</option>
+        <option value="12:00" {% if survey.start_time == "12:00" %}selected{% endif %}>12:00</option>
+        <option value="13:00" {% if survey.start_time == "13:00" %}selected{% endif %}>13:00</option>
+        <option value="14:00" {% if survey.start_time == "14:00" %}selected{% endif %}>14:00</option>
+        <option value="15:00" {% if survey.start_time == "15:00" %}selected{% endif %}>15:00</option>
+        <option value="16:00" {% if survey.start_time == "16:00" %}selected{% endif %}>16:00</option>
+        <option value="17:00" {% if survey.start_time == "17:00" %}selected{% endif %}>17:00</option>
+        <option value="18:00" {% if survey.start_time == "18:00" %}selected{% endif %}>18:00</option>
+        <option value="19:00" {% if survey.start_time == "19:00" %}selected{% endif %}>19:00</option>
+        <option value="20:00" {% if survey.start_time == "20:00" %}selected{% endif %}>20:00</option>
+        <option value="21:00" {% if survey.start_time == "21:00" %}selected{% endif %}>21:00</option>
+        <option value="22:00" {% if survey.start_time == "22:00" %}selected{% endif %}>22:00</option>
+        <option value="23:00" {% if survey.start_time == "23:00" %}selected{% endif %}>23:00</option>
+      </select>
   <br/>
   <ul class="validation-warnings-list hidden">
     <li><span class="input-validation-warning" id="startdate-validation-warning"></span></li>
@@ -78,7 +106,33 @@
     validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
     value="{{survey.end_date}}"
     >
-  <label for="endtime" class="time-label">Kello:</label><input type="time" name="endtime" id="endtime" class="datetime-input-field" validation-regex="\d\d\:\d\d" validation-text="Ajan tulee olla muodossa hh.mm" value="{{ survey.end_time }}"/>
+  <label for="endtime" class="time-label">Kello:</label>
+      <select name="endtime" id="endtime" class="datetime-input-field">
+        <option value="00:00" {% if survey.end_time == "00:00" %}selected{% endif %}>00:00</option>
+        <option value="01:00" {% if survey.end_time == "01:00" %}selected{% endif %}>01:00</option>
+        <option value="02:00" {% if survey.end_time == "02:00" %}selected{% endif %}>02:00</option>
+        <option value="03:00" {% if survey.end_time == "03:00" %}selected{% endif %}>03:00</option>
+        <option value="04:00" {% if survey.end_time == "04:00" %}selected{% endif %}>04:00</option>
+        <option value="05:00" {% if survey.end_time == "05:00" %}selected{% endif %}>05:00</option>
+        <option value="06:00" {% if survey.end_time == "06:00" %}selected{% endif %}>06:00</option>
+        <option value="07:00" {% if survey.end_time == "07:00" %}selected{% endif %}>07:00</option>
+        <option value="08:00" {% if survey.end_time == "08:00" %}selected{% endif %}>08:00</option>
+        <option value="09:00" {% if survey.end_time == "09:00" %}selected{% endif %}>09:00</option>
+        <option value="10:00" {% if survey.end_time == "10:00" %}selected{% endif %}>10:00</option>
+        <option value="11:00" {% if survey.end_time == "11:00" %}selected{% endif %}>11:00</option>
+        <option value="12:00" {% if survey.end_time == "12:00" %}selected{% endif %}>12:00</option>
+        <option value="13:00" {% if survey.end_time == "13:00" %}selected{% endif %}>13:00</option>
+        <option value="14:00" {% if survey.end_time == "14:00" %}selected{% endif %}>14:00</option>
+        <option value="15:00" {% if survey.end_time == "15:00" %}selected{% endif %}>15:00</option>
+        <option value="16:00" {% if survey.end_time == "16:00" %}selected{% endif %}>16:00</option>
+        <option value="17:00" {% if survey.end_time == "17:00" %}selected{% endif %}>17:00</option>
+        <option value="18:00" {% if survey.end_time == "18:00" %}selected{% endif %}>18:00</option>
+        <option value="19:00" {% if survey.end_time == "19:00" %}selected{% endif %}>19:00</option>
+        <option value="20:00" {% if survey.end_time == "20:00" %}selected{% endif %}>20:00</option>
+        <option value="21:00" {% if survey.end_time == "21:00" %}selected{% endif %}>21:00</option>
+        <option value="22:00" {% if survey.end_time == "22:00" %}selected{% endif %}>22:00</option>
+        <option value="23:00" {% if survey.end_time == "23:00" %}selected{% endif %}>23:00</option>
+      </select>
   <ul class="validation-warnings-list hidden">
     <li><span class="input-validation-warning" id="enddate-validation-warning"></span></li>
     <li><span class="input-validation-warning" id="endtime-validation-warning"></span></li>
@@ -86,12 +140,12 @@
 </section>
 
 <section>
-  <h2>Kyselyn kuvaus</h2>
+  <h4>Kyselyn kuvaus</h4>
   <p>Voit muokata kyselyn kuvausta</p>
   <textarea id="survey-information" class="form-control">{% if survey.surveyname %}{{survey.survey_description}}{% endif %}</textarea>
 </section>
 
-
+<!-- TBC
 <section>
   <h2>Priorisoitavat ryhmät</h2>
   <p style="color:orangered">Ryhmien muokkaus on toistaiseksi pois käytöstä!</p>
@@ -158,6 +212,7 @@
 
 <button onclick="addRow()" class="new-row-input btn btn-secondary" name="addchoice">+ Lisää vaihtoehto</button>
 </section>
+-->
 <input type="hidden" id="edit_choices" value="{{edit_choices}}">
 <section>
 <input type="hidden" value="{{survey_id}}" id="survey_id">
@@ -166,4 +221,5 @@
 <section>
   <a href="/surveys/{{ survey_id }}/answers" class="btn btn-primary">Palaa kyselyn vastauksiin</a>
 </section>
+
 {% endblock %}
