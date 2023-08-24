@@ -359,7 +359,11 @@ def edit_survey_form(survey_id):
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
 
-    print(survey)
+    # Check if the survey has answers. If it has, survey choices cannot be edited.
+    survey_answers = survey_service.fetch_survey_responses(survey_id)
+    edit_choices = True
+    if len(survey_answers) > 0:
+        edit_choices = False
 
     # Convert datetime.datetime(year, month, day, hour, minute) to date (dd.mm.yyyy) and time (hh:mm)
     start_date_data = survey["time_begin"]
@@ -374,7 +378,9 @@ def edit_survey_form(survey_id):
     survey["start_date"] = start_date
     survey["end_date"] = end_date
 
-    return render_template("edit_survey.html", survey=survey, survey_id = survey_id)
+
+
+    return render_template("edit_survey.html", survey=survey, survey_id = survey_id, edit_choices = edit_choices)
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
 @teachers_only
@@ -383,14 +389,15 @@ def edit_survey_post(survey_id):
     Post method for saving edits to a survey.
     """
     edit_dict = request.get_json()
+    validation = survey_service.validate_created_survey(edit_dict, edited = True)
+    if not validation["success"]:
+        return jsonify(validation["message"]), 400
 
-    # Check survey_teachers_service for more details on tuple
-    #save_survey_edit() function is not ready
     (success, message) = survey_service.save_survey_edit(survey_id, edit_dict)
     if not success:
         response = {"status":"0", "msg":message}
         return jsonify(response)
-    response = {"status":"1", "msg":"Kyselyn muokkaus onnistui!"}
+    response = {"status":"1", "msg":message}
     return jsonify(response)
 
 

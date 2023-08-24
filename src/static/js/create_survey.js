@@ -218,6 +218,7 @@ function saveEdit() {
 
     var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
     var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
+    console.log(rowsAsJson)
 
     var surveyID = document.getElementById("survey_id").value;
 
@@ -229,7 +230,6 @@ function saveEdit() {
         starttime: document.getElementById("starttime").value,
         enddate: document.getElementById("end-date").value,
         endtime: document.getElementById("endtime").value,
-        minchoices: Number(document.getElementById("minchoices").value)
     }
 
     console.log("requestData", requestData)

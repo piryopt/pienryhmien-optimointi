@@ -319,5 +319,19 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def save_survey_edit(self, survey_id, surveyname, survey_description, time_begin, time_end):
+        """
+        SQL code for updating the values of a survey
+        """
+        try:
+            sql = "UPDATE surveys SET surveyname=:surveyname, survey_description=:survey_description, time_begin=:time_begin, time_end=:time_end WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id":survey_id, "surveyname":surveyname, "survey_description":survey_description, "time_begin":time_begin, "time_end":time_end})
+            db.session.commit()
+            return True
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+
 
 survey_repository = SurveyRepository()
