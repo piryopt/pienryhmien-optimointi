@@ -302,7 +302,12 @@ class SurveyService:
             edict_dict (dict): Dictionary of values returned by save edit
         '''
         surveyname = edit_dict["surveyGroupname"]
-        if self._survey_repository.survey_name_exists(surveyname, user_id):
+
+        name_changed = False
+        name = self._survey_repository.get_survey(survey_id).surveyname
+        if name != surveyname:
+            name_changed = True
+        if self._survey_repository.survey_name_exists(surveyname, user_id) and name_changed:
             message = "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"
             return (False, message)
 
