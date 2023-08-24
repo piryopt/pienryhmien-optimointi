@@ -8,6 +8,7 @@ from src.repositories.survey_teachers_repository import (
 from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 from src.tools.date_converter import time_to_close
 from datetime import datetime
+from src.tools.parsers import date_to_sql_valid
 
 class SurveyService:
     def __init__(self, survey_repositroy=default_survey_repository, survey_teachers_repository = default_survey_teachers_repository):
@@ -160,6 +161,7 @@ class SurveyService:
 
         return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
 
+
     def get_survey_description(self, survey_id):
         """
         Gets the description of the survey
@@ -268,17 +270,18 @@ class SurveyService:
             return []
         return rankings
 
-    def validate_created_survey(self, survey_dict):
-        print("VALIDATING")
-        print(survey_dict)
+    def validate_created_survey(self, survey_dict, edited = False):
+        #print("VALIDATING")
+        #print(survey_dict)
 
         # Name length
         if len(survey_dict["surveyGroupname"]) < 5:
             return {"success": False, "message": {"status":"0", "msg":"Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"}}
         
         # Min choices is a number
-        if not isinstance(survey_dict["minchoices"], int):
-            return {"success": False, "message": {"status":"0", "msg":"Priorisoitavien ryhmien vähimmäismäärän tulee olla numero"}}
+        if not edited:
+            if not isinstance(survey_dict["minchoices"], int):
+                return {"success": False, "message": {"status":"0", "msg":"Priorisoitavien ryhmien vähimmäismäärän tulee olla numero"}}
 
         # End date is not earlier than start date
         st  = datetime.strptime(f'{survey_dict["startdate"]} {survey_dict["starttime"]}', "%d.%m.%Y %H:%M")
@@ -287,6 +290,48 @@ class SurveyService:
             return {"success": False, "message": {"status":"0", "msg":"Kyselyn sulkemispäivämäärä ei voi olla aikaisempi tai sama kuin aloituspäivämäärä"}}
         
         return {"success": True}
+    
+    def save_survey_edit(self, survey_id, edit_dict, user_id):
+        '''
+        Function to save edited survey data
+        Edit page might not return every data field for survey so function first
+        gets survey data as dictionary and replaces applicaple fields with edited fields
+        Then inputs data to service that saves edis
+        args:
+            survey_id (str): ID of the survey being edited
+            edict_dict (dict): Dictionary of values returned by save edit
+        '''
+        surveyname = edit_dict["surveyGroupname"]
+
+        name_changed = False
+        name = self._survey_repository.get_survey(survey_id).surveyname
+        if name != surveyname:
+            name_changed = True
+        if self._survey_repository.survey_name_exists(surveyname, user_id) and name_changed:
+            message = "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"
+            return (False, message)
+
+        description = edit_dict["surveyInformation"]
+        date_begin = edit_dict["startdate"]
+        time_begin = edit_dict["starttime"]
+        date_end = edit_dict["enddate"]
+        time_end = edit_dict["endtime"]
+
+        datetime_begin = date_to_sql_valid(date_begin) + " " +  time_begin
+        datetime_end = date_to_sql_valid(date_end) + " " +  time_end
+
+        saved = self._survey_repository.save_survey_edit(survey_id, surveyname, description, datetime_begin, datetime_end)
+
+        # ADD FUNCTIONALITY FOR EDITING SURVEY CHOICES!
+
+        if not saved:
+            message = "Ei voitu tallentaa muutoksia tietokantaan!"
+            return (False, message)
+        message = "Muutokset tallennettu!"
+        return (True, message)
+
+
+
 
 
 survey_service = SurveyService()

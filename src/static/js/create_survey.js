@@ -190,6 +190,71 @@ function createNewSurvey() {
     }); 
 }
 
+function saveEdit() {
+    // Front-end Validatation of fields
+        // Validate choice table
+        validateChoiceTable()
+
+        // Validate single fields
+    var elementsToValidate = document.querySelectorAll("[validation-regex]")
+    var validContent = true
+
+    elementsToValidate.forEach(elem => {
+        if(!fieldIsValid(elem)) {
+            validContent = false
+        }
+    })
+
+    if (!validContent) {
+        // Not valid, won't try to post
+        console.log("Form contents not valid, won't post")
+        return;
+    }
+
+    //Valid content, continue to post
+
+    // Get column names from the choice table
+    //var tableHeaders = Array.from(document.querySelectorAll("#choice-table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
+
+    //var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
+    //var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
+
+    var surveyID = document.getElementById("survey_id").value;
+
+    var requestData = {
+        surveyGroupname: $("#groupname").val(),
+        //choices: rowsAsJson,
+        surveyInformation: document.getElementById("survey-information").value,
+        startdate: document.getElementById("start-date").value,
+        starttime: document.getElementById("starttime").value,
+        enddate: document.getElementById("end-date").value,
+        endtime: document.getElementById("endtime").value,
+    }
+
+    console.log("requestData", requestData)
+
+    $.ajax({
+    type: "POST",
+    url: "/surveys/" + surveyID + "/edit",
+    data: JSON.stringify(requestData),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(result) {
+        var alertMsg = {
+            msg: result.msg,
+            color: ""
+        }
+        if (result.status === "1") {
+            alertMsg.color = "#216620";
+        }
+        if (result.status === "0") {
+            alertMsg.color = "#9c2b2e";
+        }
+        showAlert(alertMsg);
+    }
+    }); 
+}
+
 function addRow() {
     var newRow = document.getElementById("choiceTable").insertRow()
 

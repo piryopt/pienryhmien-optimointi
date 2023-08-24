@@ -82,7 +82,7 @@ class SurveyChoicesService:
         """
         choices = self.get_list_of_survey_choices(survey_id)
         tally = 0
-        for (id, survey_id, name, spaces) in choices:
+        for (id, survey_id, name, spaces, deleted) in choices:
             tally += spaces
         return tally
 
