@@ -392,16 +392,20 @@ def post_group_sizes(survey_id):
     Args:
         survey_id (int): id of the survey
     """
+    #TODO
     data = request.get_json()
-    print(data)
+    survey_choices = data["choices"]
 
-    survey_id = False
-    #survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end)
-    if not survey_id:
-        response = {"status":"0", "msg":"Tallennus ei onnistunut! Häiriö tietokantayhteydessä"}
+    #validation would be here
+    #if not validation["success"]:
+    #    return jsonify(validation["message"]), 400
+
+    #update_survey_group_sizes works when survey_choices is a list of dictionaries
+    #just like what is used in create survey
+    response = survey_service.update_survey_group_sizes(survey_id, survey_choices)
+    if not response["success"]:
         return jsonify(response)
 
-    response = {"msg":"Ryhmäkoot päivitetty!"}
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
