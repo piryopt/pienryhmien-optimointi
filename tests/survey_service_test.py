@@ -27,6 +27,15 @@ class TestSurveyService(unittest.TestCase):
         clear_database()
 
         self.setup_users()
+        # Remember to add survey choices later (Must be relevant names or tests will fail D:)
+        self.edit_dict = {
+            "surveyGroupname": "Safest (most dangerous lmao) PED's",
+            "surveyInformation": "No way in hell will these have long term affects on your body, mind and soul.",
+            "startdate": "01.07.2023",
+            "starttime": "00:00",
+            "enddate": "31.12.2077",
+            "endtime": "00:00",
+        }
 
     def setup_users(self):
         self.ur = ur
@@ -368,3 +377,17 @@ class TestSurveyService(unittest.TestCase):
         surveys = ss.check_for_surveys_to_close()
         closed = ss.check_if_survey_closed(survey_id2)
         self.assertEqual(True, closed)
+
+    def test_save_survey_edit(self):
+        """
+        Test that editing a survey works
+        """
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 15", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        ss.save_survey_edit(survey_id, self.edit_dict, self.user_id)
+        name = ss.get_survey_name(survey_id)
+        self.assertEqual(name, "Safest (most dangerous lmao) PED's")
+        desc = ss.get_survey_description(survey_id)
+        self.assertEqual(desc, "No way in hell will these have long term affects on your body, mind and soul.")

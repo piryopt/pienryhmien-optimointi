@@ -3,6 +3,9 @@ from functools import wraps
 from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect
 import os
+import markdown
+from pathlib import Path
+
 from src import app,db,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
@@ -15,13 +18,12 @@ from src.tools import excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 from src.tools.db_data_gen import gen_data
-from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness
+from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness, convert_date, convert_time
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 from functools import wraps
 from datetime import datetime
-from src.tools.date_converter import get_time_helsinki
 
 """
 DECORATORS:
@@ -352,11 +354,60 @@ def teacher_deletes_submission(survey_id):
     user_rankings_service.delete_ranking(survey_id, user_id)
     return redirect(f'/surveys/{survey_id}/answers')
 
-@app.route("/surveys/<int:survey_id>/edit")
+@app.route("/surveys/<string:survey_id>/edit", methods = ["GET"])
 @teachers_only
-def edit_survey(survey_id):
-    #TODO
-    ...
+def edit_survey_form(survey_id):
+    """
+    Page for editing survey. Fields are filled automatically based on the original survey.
+    The fields that can be edited depend on wether there are answers to the survey or not
+
+    args:
+        survey_id: id of the survey to be edited
+    """
+
+    survey = survey_service.get_survey_as_dict(survey_id)
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+
+    # Check if the survey has answers. If it has, survey choices cannot be edited.
+    survey_answers = survey_service.fetch_survey_responses(survey_id)
+    edit_choices = True
+    if len(survey_answers) > 0:
+        edit_choices = False
+
+    # Convert datetime.datetime(year, month, day, hour, minute) to date (dd.mm.yyyy) and time (hh:mm)
+    start_date_data = survey["time_begin"]
+    end_date_data = survey["time_end"]
+    start_date = convert_date(start_date_data)
+    end_date = convert_date(end_date_data)
+    start_time = convert_time(start_date_data)
+    end_time = convert_time(end_date_data)
+
+    survey["start_time"] = start_time
+    survey["end_time"] = end_time
+    survey["start_date"] = start_date
+    survey["end_date"] = end_date
+ 
+    return render_template("edit_survey.html", survey=survey, survey_id = survey_id, edit_choices = edit_choices)
+
+@app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
+@teachers_only
+def edit_survey_post(survey_id):
+    """
+    Post method for saving edits to a survey.
+    """
+    edit_dict = request.get_json()
+    validation = survey_service.validate_created_survey(edit_dict, edited = True)
+    if not validation["success"]:
+        return jsonify(validation["message"]), 400
+
+    user_id = session.get("user_id", 0)
+    (success, message) = survey_service.save_survey_edit(survey_id, edit_dict, user_id)
+    if not success:
+        response = {"status":"0", "msg":message}
+        return jsonify(response)
+    response = {"status":"1", "msg":message}
+    return jsonify(response)
+
 
 @app.route("/surveys/<string:survey_id>/delete")
 @teachers_only
@@ -409,7 +460,8 @@ def survey_answers(survey_id):
 @teachers_only
 def survey_results(survey_id):
     """
-    Display survey results. For the post request, the answers are saved to the database.
+    Display results of sorting students to groups.
+    For the post request, the answers are saved to the database.
     """
     # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
@@ -586,6 +638,24 @@ def admin_gen_survey():
 """
 MISCELLANEOUS ROUTES:
 """
+@app.route("/privacy-policy")
+def privacy_policy():
+    """
+    Route returns the Privacy Policy -page linked in the footer
+    """
+    privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'Tietosuojaseloste.md'
+    content = open(privacy_policy_file, 'r', encoding='utf-8').read()
+    return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
+
+@app.route("/faq")
+def faq():
+    """
+    Route returns the Frequently Asked Questions -page linked in the footer
+    """
+    faq_file = Path(__file__).parents[0] / 'static' / 'content' / 'faq.md'
+    content = open(faq_file, 'r', encoding='utf-8').read()
+    return render_template("content-page.html", content=markdown.markdown(content), title="UKK")
+
 @app.route("/excel")
 def excel():
     """

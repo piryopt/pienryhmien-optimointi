@@ -237,3 +237,14 @@ class TestSurveyRepository(unittest.TestCase):
         sr.close_survey(survey_id3)
         all_open_surveys =sr.get_all_active_surveys()
         self.assertEqual(2, len(all_open_surveys))
+
+    def test_save_survey_edit(self):
+        """
+        Test that editing a survey works
+        """
+        survey_id = sr.create_new_survey("Test survey 15", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, self.user_id)
+        sr.save_survey_edit(survey_id, "Edited survey", "moti", "2023-01-01 01:01", "2024-01-01 02:02")
+        survey = sr.get_survey(survey_id)
+        self.assertEqual(survey.surveyname, "Edited survey")
+        self.assertEqual(survey.survey_description, "moti")

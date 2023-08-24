@@ -25,7 +25,7 @@
 </script>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}</h5>
-    <label>Vastausaika päättyy {{ enddate }}</label></br></br>
+    <label>Vastausaika päättyy {{ format_datestring(enddate) }}</label></br></br>
     <label>{{ desc }}</label>
     <input type="hidden" id="max_bad_choices" value="{{ max_bad_choices }}">
     <input type="hidden" id="min_choices" value="{{ min_choices }}">
@@ -41,7 +41,6 @@
                 <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
             </div>
             {% endif %}
-            
         </div>
         <div class="row">
             <div class="col">

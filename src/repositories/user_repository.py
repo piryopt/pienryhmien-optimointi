@@ -33,8 +33,8 @@ class UserRepository:
             print(f"The user with the email {user.email} already exists!")
             return
         try:
-            sql = "INSERT INTO users (name, email, isteacher)" \
-                  "VALUES (:name, :email, :isteacher)"
+            sql = "INSERT INTO users (name, email, isteacher, admin)" \
+                  "VALUES (:name, :email, :isteacher, False)"
             db.session.execute(text(sql), {"name":user.name,
                                             "email":user.email, "isteacher":user.isteacher})
             db.session.commit()
