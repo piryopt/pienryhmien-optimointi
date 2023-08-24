@@ -2,6 +2,7 @@ from src.entities.group import Group
 from src.entities.student import Student
 from src.services.user_service import user_service
 from src.tools.rankings_converter import convert_to_list
+from datetime import datetime
 
 def convert_choices_groups(survey_choices):
     """
@@ -52,3 +53,38 @@ def get_happiness(survey_choice_id, user_ranking):
             break
     return happiness
     
+def convert_date(data):
+    """
+    Convert a datetime object to a dd.mm.yyyy string
+
+    args:
+        data: The datetime object
+    """
+    day = check_if_zero_needed(str(data.day))
+    month = check_if_zero_needed(str(data.month))
+    year = str(data.year)
+    date = day + "." + month + "." + year
+    return date
+    
+def convert_time(data):
+    """
+    Convert a datetime object to a hh:mm string
+
+    args:
+        data: The datetime object
+    """
+    time_hour = check_if_zero_needed(str(data.hour))
+    time_minute = check_if_zero_needed(str(data.minute))
+    time = time_hour + ":" + time_minute
+    return time
+
+def check_if_zero_needed(unit):
+    """
+    Add a 0 to the start of the unit if it's length is 1.
+
+    args:
+        unit: hour/minute/day/month of a datetime object
+    """
+    if len(unit) == 1:
+        unit = "0"+ unit
+    return unit

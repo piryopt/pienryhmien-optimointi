@@ -25,9 +25,10 @@
 </script>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}</h5>
-    <label>Vastausaika päättyy {{ enddate }}</label></br></br>
+    <label>Vastausaika päättyy {{ format_datestring(enddate) }}</label></br></br>
     <label>{{ desc }}</label>
     <input type="hidden" id="max_bad_choices" value="{{ max_bad_choices }}">
+    <input type="hidden" id="min_choices" value="{{ min_choices }}">
     <div class="col">
         <div class="row">
             <div class="col-sm">
@@ -40,12 +41,11 @@
                 <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
             </div>
             {% endif %}
-            
         </div>
         <div class="row">
             <div class="col">
                 <div class="col-sm">
-                    <ul id="sortable-good" class="list-group" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
+                    <ol id="sortable-good" class="list-group list-group-numbered" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
                         {% for group in good_survey_choices %}
                         <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
                             <div class="d-flex w-100 justify-content-between" id="search">
@@ -55,7 +55,7 @@
                             <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
                         </li>
                         {% endfor %}
-                    </ul>
+                    </ol>
                 </div>
                 {% if max_bad_choices != 0 %}
                 <div class="col-sm">

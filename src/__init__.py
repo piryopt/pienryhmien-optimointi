@@ -22,4 +22,8 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
 
+# make format_datestring accessible from jinja templates
+from src.tools.date_converter import format_datestring
+app.jinja_env.globals.update(format_datestring=format_datestring)
+
 from src import routes

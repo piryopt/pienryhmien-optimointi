@@ -10,7 +10,7 @@ class SurveyChoicesRepository:
             survey_id: The id of the survey
         """
         try:
-            sql = "SELECT * FROM survey_choices WHERE survey_id=:survey_id"
+            sql = "SELECT * FROM survey_choices WHERE (survey_id=:survey_id AND deleted=False)"
             result = db.session.execute(text(sql), {"survey_id":survey_id})
             survey_choices = result.fetchall()
             return survey_choices
@@ -26,7 +26,7 @@ class SurveyChoicesRepository:
             choice_id: The id of the survey choice
         """
         try:
-            sql = "SELECT * FROM survey_choices WHERE id=:id"
+            sql = "SELECT * FROM survey_choices WHERE (id=:id AND deleted=False)"
             result = db.session.execute(text(sql), {"id":choice_id})
             ranking = result.fetchone()
             if not ranking:
@@ -42,8 +42,8 @@ class SurveyChoicesRepository:
         RETURNS created choice's id
         '''
         try:
-            sql = "INSERT INTO survey_choices (survey_id, name, max_spaces)"\
-                " VALUES (:survey_id, :name, :max_spaces) RETURNING id"
+            sql = "INSERT INTO survey_choices (survey_id, name, max_spaces, deleted)"\
+                " VALUES (:survey_id, :name, :max_spaces, False) RETURNING id"
             result = db.session.execute(text(sql), {"survey_id":survey_id, "name":name, "max_spaces":seats})
             db.session.commit()
             return result.fetchone()[0]
@@ -85,7 +85,7 @@ class SurveyChoicesRepository:
                 SELECT I.choice_id, I.info_key, I.info_value
                 FROM choice_infos I JOIN survey_choices S
                 ON I.choice_id = S.id
-                WHERE S.survey_id =:survey_id
+                WHERE (S.survey_id =:survey_id AND S.deleted = False)
                 """
             result = db.session.execute(text(sql), {"survey_id": survey_id})
             return result.fetchall()

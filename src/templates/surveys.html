@@ -29,10 +29,11 @@
           {% if is_teacher %}
           <td>
             <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a><br>
+            <a href="/surveys/{{ row[0] }}/edit">Muokkaa kyselyä</a><br>
             <a href="/surveys/create?fromTemplate={{ row[0] }}">Kopioi kysely</a>
           </td>
           {% endif %}
-          <td>{{ row[4] }}</td>
+          <td>{{ format_datestring(row[4]) }}</td>
 
         </tr>
         {% endfor %}
@@ -49,6 +50,7 @@
             {% if is_teacher %}
             <td>
               <a href="/surveys/{{ row[0] }}/answers">Tarkastele tuloksia</a><br>
+              <a href="/surveys/{{ row[0] }}/edit">Muokkaa kyselyä</a><br>
               <a href="/surveys/create?fromTemplate={{ row[0] }}">Kopioi kysely</a>
             </td>
             {% endif %}

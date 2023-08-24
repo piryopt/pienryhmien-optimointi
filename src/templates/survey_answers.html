@@ -6,15 +6,13 @@
 {% endblock %}
 
 {% block content %}
-<a href="/surveys" style="float: right;">Palaa kyselylistaan</a>
 </br><h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}  {% if answered %} (Ryhmänjako tallennettu) {% endif %}</h5>
 <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
-<i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
+<i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br><br>
 <input type="hidden" id="survey_id" value="{{ survey_id }}">
-<input type="email" name="teacher_email" id="teacher_email"><br><br>
-<button type="submit" class="btn btn-success btn-sm" name="addin_teacher_time" onclick="add_teacher()">Lisää opettaja</button>
-<br><br>
 {% if closed %}
+<a href="/surveys" class="btn btn-primary" style="float: right">Palaa kyselylistaan</a>
+<br><br>
 {% if survey_answers_amount > available_spaces %}
 <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
 <p>Suositeltu järjestys käsitellä tilanne</p>
@@ -32,9 +30,12 @@
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
 </form>
 {% else %}
+<a href="/surveys" class="btn btn-primary" style="float: right">Palaa kyselylistaan</a>
+<br><br>
 <form action="/surveys/{{ survey_id }}/close" method="POST" onsubmit="return confirm ('Haluatko varmasti sulkea kyselyn?')">
   <button type="submit" class="btn btn-danger" name="closin_time" style="float: right;" onclick="">Sulje kysely</button>
 </form>
+<a href="/surveys/{{ survey_id }}/edit" class="btn btn-primary" style="float: right; margin-right: 60px">Muokkaa kyselyä</a>
 {% endif %}
 <br>
 <p>
