@@ -19,6 +19,7 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
 - Application logic (TBA)
 - Privacy statement (TBA)
 - Licensing information (TBA)
+- [Testing](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Testing.md)
 - [1st demo](https://youtu.be/z548R3cHm54) (30.6.2023, after the 1st half of the project)
 
 
