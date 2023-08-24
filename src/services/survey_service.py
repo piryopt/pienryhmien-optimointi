@@ -5,12 +5,15 @@ from src.repositories.survey_repository import (
 from src.repositories.survey_teachers_repository import (
     survey_teachers_repository as default_survey_teachers_repository
 )
+from src.repositories.survey_choices_repository import (
+    survey_choices_repository as default_survey_choices_repository
+)
 from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 from src.tools.date_converter import time_to_close
 from datetime import datetime
 
 class SurveyService:
-    def __init__(self, survey_repositroy=default_survey_repository, survey_teachers_repository = default_survey_teachers_repository):
+    def __init__(self, survey_repositroy=default_survey_repository, survey_teachers_repository = default_survey_teachers_repository, choices_repository = default_survey_choices_repository):
         """
         Initalizes the service for surveys with the repositories needed. The purpose of this class is to handle what happens after the SQL code in the
         corresponding repository
@@ -21,6 +24,7 @@ class SurveyService:
         """
         self._survey_repository = survey_repositroy
         self._survey_teachers_repository = survey_teachers_repository
+        self._choices_repository = choices_repository
 
     def get_survey_name(self, survey_id):
         """
@@ -313,5 +317,16 @@ class SurveyService:
         
         return {"success": True}
 
+    def update_survey_group_sizes(self, survey_id, choices):
+        count = 0
+        for choice in choices:
+            success = self._choices_repository.edit_choice_group_size(survey_id, choice['Nimi'], choice['Enimmäispaikat'])
+            if not success:
+                if count > 0:
+                    return {"success": False, "message": {"status":"0", "msg":"Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut"}}
+                else:
+                    return {"success": False, "message": {"status":"0", "msg":"Häiriö. Ryhmäkokojen päivitys ei onnistunut"}}
+            count += 1
+        return {"success": True, "message": {"msg":"Ryhmäkoot päivitetty"}}
 
 survey_service = SurveyService()

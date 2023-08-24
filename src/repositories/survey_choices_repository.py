@@ -51,15 +51,15 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
-    def edit_choice_group_size(self, choice_id, seats):
+    def edit_choice_group_size(self, survey_id:str, choice_name:str, seats:int):
         '''
-        Takes a choice id and number of seats, updates this number of
-        seats to the choice
+        Takes survey id, choice name and number of seats, updates this number of
+        seats to the choice. (Choice id would be ideal but it's not used on the form)
         RETURNS True if managed, False if there's an error
         '''
         try:
-            sql = "UPDATE survey_choices SET max_spaces = :max_spaces WHERE id = :choice_id"
-            result = db.session.execute(text(sql), {"choice_id":choice_id, "max_spaces":seats})
+            sql = "UPDATE survey_choices SET max_spaces = :max_spaces WHERE survey_id = :survey_id AND name = :choice_name"
+            result = db.session.execute(text(sql), {"survey_id":survey_id, "choice_name":choice_name, "max_spaces":seats})
             db.session.commit()
             return True
         except Exception as e: # pylint: disable=W0718
