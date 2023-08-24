@@ -161,22 +161,6 @@ class SurveyService:
 
         return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
 
-    def save_survey_edit(self, survey_id:str, edit_dict:dict):
-        '''
-        Function to save edited survey data
-        Edit page might not return every data field for survey so function first
-        gets survey data as dictionary and replaces applicaple fields with edited fields
-        Then inputs data to service that saves edis
-        args:
-            survey_id (str): ID of the survey being edited
-            edict_dict (dict): Dictionary of values returned by save edit
-        '''
-        #TODO
-        #print(edit_dict)
-        #print(parser_existing_survey_to_dict(survey_id))
-        #parse choices
-        return((False, "TODO"))
-        #return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices)
 
     def get_survey_description(self, survey_id):
         """
@@ -307,11 +291,21 @@ class SurveyService:
         
         return {"success": True}
     
-    def save_survey_edit(self, survey_id, edit_dict):
-        """
-        Save the edited survey into the database. Editing survey choices is on hold for now.
-        """
+    def save_survey_edit(self, survey_id, edit_dict, user_id):
+        '''
+        Function to save edited survey data
+        Edit page might not return every data field for survey so function first
+        gets survey data as dictionary and replaces applicaple fields with edited fields
+        Then inputs data to service that saves edis
+        args:
+            survey_id (str): ID of the survey being edited
+            edict_dict (dict): Dictionary of values returned by save edit
+        '''
         surveyname = edit_dict["surveyGroupname"]
+        if self._survey_repository.survey_name_exists(surveyname, user_id):
+            message = "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"
+            return (False, message)
+
         description = edit_dict["surveyInformation"]
         date_begin = edit_dict["startdate"]
         time_begin = edit_dict["starttime"]

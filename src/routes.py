@@ -376,9 +376,7 @@ def edit_survey_form(survey_id):
     survey["end_time"] = end_time
     survey["start_date"] = start_date
     survey["end_date"] = end_date
-
-
-
+ 
     return render_template("edit_survey.html", survey=survey, survey_id = survey_id, edit_choices = edit_choices)
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
@@ -392,7 +390,8 @@ def edit_survey_post(survey_id):
     if not validation["success"]:
         return jsonify(validation["message"]), 400
 
-    (success, message) = survey_service.save_survey_edit(survey_id, edit_dict)
+    user_id = session.get("user_id", 0)
+    (success, message) = survey_service.save_survey_edit(survey_id, edit_dict, user_id)
     if not success:
         response = {"status":"0", "msg":message}
         return jsonify(response)
