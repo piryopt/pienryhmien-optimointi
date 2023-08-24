@@ -33,7 +33,7 @@
             <a href="/surveys/create?fromTemplate={{ row[0] }}">Kopioi kysely</a>
           </td>
           {% endif %}
-          <td>{{ row[4] }}</td>
+          <td>{{ format_datestring(row[4]) }}</td>
 
         </tr>
         {% endfor %}

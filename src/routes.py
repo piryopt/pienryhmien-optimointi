@@ -24,7 +24,6 @@ from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 from functools import wraps
 from datetime import datetime
-from src.tools.date_converter import get_time_helsinki
 
 """
 DECORATORS:
