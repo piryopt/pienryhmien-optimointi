@@ -30,7 +30,7 @@ class SurveyRepository:
             teacher_id: The id of the user
         """
         try:
-            sql = "SELECT s.id FROM surveys s, survey_teachers t WHERE (s.surveyname=:surveyname AND t.teacher_id=:teacher_id AND s.closed=False AND t.survey_id=s.id)"
+            sql = "SELECT s.id FROM surveys s, survey_teachers t WHERE (s.surveyname=:surveyname AND t.teacher_id=:teacher_id AND s.closed=False AND t.survey_id=s.id AND s.deleted=False)"
             result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":teacher_id})
             survey = result.fetchone()
             if not survey:
@@ -99,7 +99,7 @@ class SurveyRepository:
             teacher_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND closed=False AND s.id=t.survey_id)"
+            sql = "SELECT s.id, s.surveyname FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND closed=False AND s.id=t.survey_id AND s.deleted=False)"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
             surveys = result.fetchall()
             if not surveys:
@@ -117,7 +117,7 @@ class SurveyRepository:
             teacher_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=True AND t.survey_id = s.id) ORDER BY s.id ASC"
+            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=True AND t.survey_id = s.id AND s.deleted=False) ORDER BY s.id ASC"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
             surveys = result.fetchall()
             return surveys
@@ -151,8 +151,8 @@ class SurveyRepository:
             while(self.get_survey(id)):
                 id = generate_unique_id(10)
 
-            sql = "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_begin, time_end, allowed_denied_choices, allow_search_visibility)"\
-                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_b, :t_e, :a_d_c, :a_s_v) RETURNING id"
+            sql = "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_begin, time_end, allowed_denied_choices, allow_search_visibility, deleted)"\
+                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_b, :t_e, :a_d_c, :a_s_v, False) RETURNING id"
             
             result = db.session.execute(text(sql), {"id":id, "surveyname":surveyname, "min_choices":min_choices, "closed":False, "saved":False, "desc":description, "t_b":begindate, "t_e":enddate, "a_d_c": allowed_denied_choices, "a_s_v": allow_search_visibility})
             db.session.commit()
@@ -248,7 +248,7 @@ class SurveyRepository:
 
     def fetch_all_active_surveys(self, teacher_id):
         '''Returns a list of all surveys in the database'''
-        sql = text("SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=False AND s.id=t.survey_id)")
+        sql = text("SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=False AND s.id=t.survey_id AND s.deleted=False)")
         result = db.session.execute(sql, {"teacher_id":teacher_id})
         all_surveys = result.fetchall()
         return all_surveys
@@ -276,7 +276,7 @@ class SurveyRepository:
         """
         try:
             sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, user_survey_rankings r"\
-                "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = False AND r.deleted = False)"
+                "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = False AND r.deleted = False AND s.deleted=False)"
             result = db.session.execute(text(sql), {"user_id":user_id})
             surveys = result.fetchall()
             if not surveys:
@@ -295,7 +295,7 @@ class SurveyRepository:
         """
         try:
             sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, user_survey_rankings r"\
-                "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = True AND r.deleted = False)"
+                "  WHERE (r.survey_id=s.id AND r.user_id=:user_id AND s.closed = True AND r.deleted = False AND s.deleted=False)"
             result = db.session.execute(text(sql), {"user_id":user_id})
             surveys = result.fetchall()
             if not surveys:
@@ -310,7 +310,7 @@ class SurveyRepository:
         SQL code for getting all active surveys. Needed for automatic closing which will be checked every hour. 
         """
         try:
-            sql = "SELECT * FROM surveys WHERE closed=False"
+            sql = "SELECT * FROM surveys WHERE (closed=False AND deleted=False)"
             result = db.session.execute(text(sql))
             surveys = result.fetchall()
             if not surveys:

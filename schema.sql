@@ -62,6 +62,7 @@ CREATE TABLE feedback (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users,
 	title TEXT,
+	type TEXT,
 	content TEXT,
 	solved BOOLEAN
 );
