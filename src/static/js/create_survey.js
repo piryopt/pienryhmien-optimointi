@@ -323,7 +323,7 @@ function createDeleteRowCell() {
 
 function createAddColumnHeader() {
 
-    var newAddColumnHeader = createElementWithText("th", "+Lisää sarake", editCell)
+    var newAddColumnHeader = createElementWithText("th", "+ Lisää tietokenttä", editCell)
     newAddColumnHeader.setAttribute("id", "add-column-header")
     newAddColumnHeader.setAttribute("class", "variable-header")
 
@@ -368,7 +368,7 @@ function submitNewColumn(event) {
     //  -->: No new column will be added
     if (event.target.value === "") {
         editedCell.innerHTML = ""
-        editedCell.innerText = "+ Lisää sarake"
+        editedCell.innerText = "+ Lisää tietokenttä"
         return
     }
 
@@ -385,13 +385,18 @@ function submitNewColumn(event) {
     //add delete button for new column
     document.querySelector("#column-delete-btns").appendChild(createDeleteColumnCell())
 
-    // -->: Create new "Add new column" header to the table
-    document.getElementById("choice-table-headers").appendChild(createAddColumnHeader())
+    
+    
+    if (!document.getElementById("add-column-header")){
+        // -->: Create new "Add new column" header to the table if it does not exist anymore
+        document.getElementById("choice-table-headers").appendChild(createAddColumnHeader())
 
-    // -->: Add a new cell matching the header to all existing rows in the table
-    Array.from(document.querySelectorAll('#choiceTable tr')).forEach(row => {
-        row.insertBefore(createEmptyInputCell(), row.querySelector(".action-cell"))
-    })
+        // -->: Add a new cell matching the header to all existing rows in the table
+        Array.from(document.querySelectorAll('#choiceTable tr')).forEach(row => {
+            row.insertBefore(createEmptyInputCell(), row.querySelector(".action-cell"))
+        })
+    }
+    
 }
 
 
