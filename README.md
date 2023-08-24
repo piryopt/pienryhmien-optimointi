@@ -22,6 +22,10 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
 - [1st demo](https://youtu.be/z548R3cHm54) (30.6.2023, after the 1st half of the project)
 
 
+### Testing
+- [App testing instructions](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Testing_instructions.md)
+- Test report - TBA
+
 ### Project practicalities and documentation
 
 - [The course instructions and requirements](https://github.com/HY-TKTL/TKT20007-Ohjelmistotuotantoprojekti) - in Finnish
