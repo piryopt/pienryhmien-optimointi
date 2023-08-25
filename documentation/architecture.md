@@ -8,10 +8,16 @@ Faculty of Educational Sciences, University of Helsinki
 
 ## Introduction
 
+The Jakaja application is designed for the Faculty of Educational Sciences of the University of Helsinki. The customers challenge is assigning large numbers of students into groups. In the past the group assignment was handled manually with Excel sheets, being slow and tedious. Freely available application solutions are not suitable for large groups and it's difficult to take exceptions into account. The jakaja application is designed to fix the issue.
 
+## Languages
 
-## Used technologies
-
+Python 
+HTML
+JavaScript
+CSS
+RobotFramework
+Dockerfile
 
 
 ## Libraries and dependencies
@@ -166,14 +172,11 @@ Faculty of Educational Sciences, University of Helsinki
 
 ## Database
 
-
-
-## Database schema
-
+TBA: lyhyt kuvaus
+TBA: kuva tietokantaskeemakaaviosta
 
 ## Application logic
 
-
-##
-
+TBA: lyhyt kuvaus
+TBA: kuva kaaviosta
 
