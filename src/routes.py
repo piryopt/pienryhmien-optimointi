@@ -656,6 +656,15 @@ def faq():
     content = open(faq_file, 'r', encoding='utf-8').read()
     return render_template("content-page.html", content=markdown.markdown(content), title="UKK")
 
+@app.route("/csv-instructions")
+def csv_instructions():
+    """
+    Route returns the Privacy Policy -page linked in the footer
+    """
+    csv_file = Path(__file__).parents[0] / 'static' / 'content' / 'csv-instructions.md'
+    content = open(csv_file, 'r', encoding='utf-8').read()
+    return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
+
 @app.route("/excel")
 def excel():
     """
