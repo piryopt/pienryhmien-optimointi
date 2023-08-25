@@ -365,10 +365,13 @@ class SurveyService:
             success = self._choices_repository.edit_choice_group_size(survey_id, choice['Nimi'], choice['Enimmäispaikat'])
             if not success:
                 if count > 0:
-                    return {"success": False, "message": {"status":"0", "msg":"Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut"}}
+                    message = "Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut"
+                    return (False, message)
                 else:
-                    return {"success": False, "message": {"status":"0", "msg":"Häiriö. Ryhmäkokojen päivitys ei onnistunut"}}
+                    message = "Häiriö. Ryhmäkokojen päivitys ei onnistunut"
+                    return (False, message)
             count += 1
-        return {"success": True, "message": {"status":"0","msg":"Ryhmäkoot päivitetty"}}
+        message = "Ryhmäkoot päivitetty"
+        return (True, message)
 
 survey_service = SurveyService()
