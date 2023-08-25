@@ -463,7 +463,7 @@ def post_group_sizes(survey_id):
     response = {}
     if db_response[0] is True:
         response["status"] = "1"
-        response["msg"] = "Tallennus onnistui."
+        response["msg"] = "Tallennus onnistui. Päivitä sivu nähdäksesi tilanne"
     else:
         response["status"] = "0"
         response["msg"] = "Tallennus epäonnistui."
