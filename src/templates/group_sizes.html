@@ -61,6 +61,7 @@
     </section>
 
     <section>
-      <button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveGroupSizes(survey_id)" name="savegroupsizes">Tallenna muutokset</button>
+      <input type="hidden" value="{{survey_id}}" id="survey_id">
+      <button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveGroupSizes()" name="savegroupsizes">Tallenna muutokset</button>
     </section>
 {% endblock %}

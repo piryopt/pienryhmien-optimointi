@@ -255,12 +255,13 @@ function saveEdit() {
     }); 
 }
 
-function saveGroupSizes(survey_id) {
+function saveGroupSizes() {
 
     // Get column names from the choice table
     var tableHeaders = Array.from(document.querySelectorAll("#choice-table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
     console.log(tableHeaders)
 
+    var surveyID = document.getElementById("survey_id").value
     var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
     var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
     var requestData = {
@@ -272,7 +273,7 @@ function saveGroupSizes(survey_id) {
 
     $.ajax({
     type: "POST",
-    url: "/surveys/"+survey_id+"/group_sizes",
+    url: "/surveys/"+surveyID+"/group_sizes",
     data: JSON.stringify(requestData),
     contentType: "application/json",
     dataType: "json",
