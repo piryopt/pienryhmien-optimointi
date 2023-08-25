@@ -30,9 +30,11 @@
     <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
     {% endif %}
     <br>
-    <i>Vaihtoehdon suosittuus kuvaa sitä, kuinka moni vastaaja on valinnut sen ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä</i><br>
+    
     <section>
       <h2>Priorisoitavat ryhmät</h2>
+      <p>Vaihtoehdon suosittuus kuvaa sitä, kuinka moni vastaaja on valinnut sen ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä</p>
+      <p><b>HUOM!</b> Jos muokkaat ryhmän nimeä, ei ryhmäkoon muokkaus tallennu</p>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
           <tr id="choice-table-headers">
@@ -61,7 +63,7 @@
     </section>
 
     <section>
-      <input type="hidden" value="{{survey_id}}" id="survey_id">
+      <input type="hidden" value={{survey_id}} id="survey_id">
       <button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveGroupSizes()" name="savegroupsizes">Tallenna muutokset</button>
     </section>
 {% endblock %}

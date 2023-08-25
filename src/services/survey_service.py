@@ -359,9 +359,6 @@ class SurveyService:
         message = "Muutokset tallennettu!"
         return (True, message)
 
-
-
-
     def update_survey_group_sizes(self, survey_id, choices):
         count = 0
         for choice in choices:
@@ -372,6 +369,6 @@ class SurveyService:
                 else:
                     return {"success": False, "message": {"status":"0", "msg":"Häiriö. Ryhmäkokojen päivitys ei onnistunut"}}
             count += 1
-        return {"success": True, "message": {"msg":"Ryhmäkoot päivitetty"}}
+        return {"success": True, "message": {"status":"0","msg":"Ryhmäkoot päivitetty"}}
 
 survey_service = SurveyService()

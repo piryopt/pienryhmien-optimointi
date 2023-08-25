@@ -451,9 +451,7 @@ def post_group_sizes(survey_id):
     Args:
         survey_id (int): id of the survey
     """
-    #TODO
     data = request.get_json()
-    survey_choices = data["choices"]
 
     #validation would be here
     #if not validation["success"]:
@@ -461,7 +459,8 @@ def post_group_sizes(survey_id):
 
     #update_survey_group_sizes works when survey_choices is a list of dictionaries
     #just like what is used in create survey
-    response = survey_service.update_survey_group_sizes(survey_id, survey_choices)
+    response = survey_service.update_survey_group_sizes(survey_id, data["choices"])
+    print(response)
     if not response["success"]:
         return jsonify(response)
 
