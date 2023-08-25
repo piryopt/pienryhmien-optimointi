@@ -278,7 +278,17 @@ function saveGroupSizes() {
     contentType: "application/json",
     dataType: "json",
     success: function(result) {
-        showAlert({msg: result.msg, color:"green"})
+        var alertMsg = {
+            msg: result.msg,
+            color: ""
+        }
+        if (result.status === "1") {
+            alertMsg.color = "#216620";
+        }
+        if (result.status === "0") {
+            alertMsg.color = "#9c2b2e";
+        }
+        showAlert(alertMsg);
     },
     error: function(result) {
         if (result.responseJSON) {

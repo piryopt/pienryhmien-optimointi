@@ -459,10 +459,14 @@ def post_group_sizes(survey_id):
 
     #update_survey_group_sizes works when survey_choices is a list of dictionaries
     #just like what is used in create survey
-    response = survey_service.update_survey_group_sizes(survey_id, data["choices"])
-    print(response)
-    if not response["success"]:
-        return jsonify(response)
+    db_response = survey_service.update_survey_group_sizes(survey_id, data["choices"])
+    response = {}
+    if db_response[0] is True:
+        response["status"] = "1"
+        response["msg"] = "Tallennus onnistui."
+    else:
+        response["status"] = "0"
+        response["msg"] = "Tallennus epäonnistui."
 
     return jsonify(response)
 
