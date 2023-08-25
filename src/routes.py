@@ -245,6 +245,8 @@ def surveys(survey_id):
             survey_all_info[row[0]] = {"name": row[2]}
             survey_all_info[row[0]]["slots"] = row[3]
             survey_all_info[row[0]]["id"] = row[0]
+            survey_all_info[row[0]]["search"] = row[2]
+            survey_all_info[row[0]]["infos"] = []
         else:
             survey_all_info[row[0]]["name"] = row[2]
             survey_all_info[row[0]]["slots"] = row[3]
@@ -305,8 +307,16 @@ def surveys(survey_id):
         if closed:
             return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices,
                                  survey_name = survey_name, min_choices=min_choices)
-        
-        return render_template("survey.html", choices = survey_choices, survey_id = survey_id,
+        neutral_choices = []
+        for survey_choice in survey_choices:
+            neutral_choice = {}
+            neutral_choice["name"] = survey_choice[2]
+            neutral_choice["id"] = survey_choice[0]
+            neutral_choice["slots"] = survey_choice[3]
+            neutral_choice["search"] = survey_all_info[int(survey_choice[0])]["search"]
+            neutral_choices.append(neutral_choice)
+
+        return render_template("survey.html", choices = neutral_choices, survey_id = survey_id,
                             survey_name = survey_name, existing = existing, desc = desc, choices_info=survey_all_info,
                             bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason,
                             min_choices=min_choices, max_bad_choices=max_bad_choices, allow_search_visibility=allow_search_visibility)
@@ -683,14 +693,20 @@ def get_choices(survey_id):
     #value of textarea reasons
     reason = raw_data["reasons"]
 
+    #minimum number of choices in the green box
+    min_choices = int(raw_data["minChoices"])
+
+    #maximum number of choices in the red box
+    allowed_denied_choices = int(raw_data["maxBadChoices"])
+
     # Change this to len bad_ids + good_ids >= min_choices
     # Also check that there aren't to many rejections.
-    if len(neutral_ids) > 0 or len(good_ids) == 0:
-        response = {"status":"0","msg":"Et ole tehnyt riittävän monta valintaa! Tallennus epäonnistui."}
+    if len(good_ids) < min_choices:
+        response = {"status":"0","msg":f"Valitse vähintään {min_choices} vaihtoehtoa. Tallennus epäonnistui."}
         return jsonify(response)
 
-    if len(bad_ids) > 2:
-        response = {"status":"0","msg":"Liian monta hylkäystä! Tallennus epäonnistui."}
+    if len(bad_ids) > allowed_denied_choices:
+        response = {"status":"0","msg":f"Voit hylätä korkeintaan {allowed_denied_choices} vaihtoehtoa. Tallennus epäonnistui."}
         return jsonify(response)
 
     ranking = convert_to_string(good_ids)
