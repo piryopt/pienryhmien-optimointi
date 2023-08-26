@@ -183,7 +183,25 @@ The application dabase consists of 8 tables.
 
 TBA: kuvaus
 
-TBA: kuva kaaviosta
+TBA: kuva logiikkakaaviosta
 
 TBA: pakkaukset
 
+
+## Accessibility
+
+The Jakaja application follows [Web COntent Accessibility Guidelines reguirements](https://www.saavutettavuusvaatimukset.fi/digipalvelulain-vaatimukset/wcag-2-1/) to make it accessible for popele with different disabilities.
+
+| **Qualities for WCAG Compliance**               | **Description**                                                                                                |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------|
+| Perceivable Content                           | Present information with alternatives like alt text and captions.   |
+| Operable User Interface                       | Provide navigation options for keyboard, mouse, and touch inputs. Ensure clear navigation and manageable time limits. |
+| Understandable Information                    | Use clear language, avoid jargon, provide comprehensible error messages, and maintain a consistent layout.       |
+| Robust Compatibility                          | Design the app to work well with current technologies, including assistive tools.                  |
+| Keyboard Accessibility                        | Ensure all features are usable via keyboard navigation alone.       |             |
+| Contrast and Color                            | Maintain sufficient contrast between text and background, and avoid conveying information solely through color. |
+| Readable Fonts and Layouts                    | Use of legible and resizable fonts, and design layouts that adapt to different screen sizes and orientations.    |
+| Focus and Navigation                          | Clearly indicate keyboard focus and ensure smooth navigation through interactive elements.                   |
+| No Keyboard Traps                             | Prevent users from getting stuck in keyboard traps where they can't navigate away using keyboard alone.     |
+| Consistent and Predictable Navigation         | Maintain consistent user interface elements for predictable navigation across different sections and pages.  |
+| Accessible Forms                              | Design forms with clear labels, proper grouping, and instructions for accurate user input.                 |
