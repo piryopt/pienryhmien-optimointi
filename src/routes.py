@@ -159,7 +159,7 @@ def new_survey_form(survey=None):
     query_params = request.args.to_dict()
     if("fromTemplate" in query_params):
         survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
-        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id")]
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/surveys/create", methods = ["POST"])
@@ -191,7 +191,7 @@ def new_survey_post():
 
     survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
     if not survey_id:
-        response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"}
+        response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!"}
         return jsonify(response)
     teacher_email = user_service.get_email(user_id)
     (success, message) = survey_teachers_service.add_teacher_to_survey(survey_id, teacher_email)
@@ -426,6 +426,48 @@ def add_teacher(survey_id, teacher_email):
         response = {"status":"0","msg":message}
         return jsonify(response)
     response = {"status":"1","msg":message}
+    return jsonify(response)
+
+@app.route("/surveys/<string:survey_id>/group_sizes", methods=["GET"])
+@teachers_only
+def edit_group_sizes(survey_id):
+    """
+    Edit group sizes in a survey and display total number of spaces vs answers
+    Args:
+        survey_id (int): id of the survey
+    """
+    survey = survey_service.get_survey_as_dict(survey_id)
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id")]
+    (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
+    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
+    return render_template("group_sizes.html", survey_id=survey_id, survey=survey, survey_answers_amount=survey_answers_amount,
+                            available_spaces=available_spaces, popularities = choice_popularities)
+
+@app.route("/surveys/<string:survey_id>/group_sizes", methods=["POST"])
+@teachers_only
+def post_group_sizes(survey_id):
+    """
+    Post method for editing group sizes in the survey
+    Args:
+        survey_id (int): id of the survey
+    """
+    data = request.get_json()
+
+    #validation would be here
+    #if not validation["success"]:
+    #    return jsonify(validation["message"]), 400
+
+    #update_survey_group_sizes works when survey_choices is a list of dictionaries
+    #just like what is used in create survey
+    db_response = survey_service.update_survey_group_sizes(survey_id, data["choices"])
+    response = {}
+    if db_response[0] is True:
+        response["status"] = "1"
+        response["msg"] = "Tallennus onnistui. Päivitä sivu nähdäksesi tilanne"
+    else:
+        response["status"] = "0"
+        response["msg"] = "Tallennus epäonnistui."
+
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
