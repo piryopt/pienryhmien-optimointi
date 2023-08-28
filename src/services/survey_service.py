@@ -291,7 +291,7 @@ class SurveyService:
         answers = len(responses)
         popularities = {}
         for response in responses:
-            ranking = response[1].split()
+            ranking = response[1].split(",")
             for i in range(min(3,len(ranking))):
                 if int(ranking[i]) in popularities:
                     popularities[int(ranking[i])] += 1
