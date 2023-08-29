@@ -4,11 +4,11 @@
 Faculty of Educational Sciences, University of Helsinki
 
 **Source code and documentation:**
-[](https://github.com/piryopt/pienryhmien-optimointi)
+[Github repository](https://github.com/piryopt/pienryhmien-optimointi)
 
 ## Introduction
 
-The Jakaja application is designed for the Faculty of Educational Sciences of the University of Helsinki. The customers challenge is assigning large numbers of students into groups. In the past the group assignment was handled manually with Excel sheets, being slow and tedious. Freely available application solutions are not suitable for large groups and it's difficult to take exceptions into account. The jakaja application is designed to fix the issue.
+The Jakaja application is designed for the Faculty of Educational Sciences of the University of Helsinki. The customer's challenge is assigning large numbers of students into groups. In the past the group assignment was handled manually with Excel sheets, being slow and tedious. Freely available application solutions are not suitable for large groups and it's difficult to take exceptions into account. The Jakaja application is designed to fix the issue.
 
 ## Languages and techniques
 
@@ -190,7 +190,7 @@ TBA: pakkaukset
 
 ## Accessibility
 
-The Jakaja application follows [Web COntent Accessibility Guidelines reguirements](https://www.saavutettavuusvaatimukset.fi/digipalvelulain-vaatimukset/wcag-2-1/) to make it accessible for popele with different disabilities.
+The Jakaja application follows [Web COntent Accessibility Guidelines reguirements](https://www.saavutettavuusvaatimukset.fi/digipalvelulain-vaatimukset/wcag-2-1/) to make it more accessible.
 
 | **Qualities for WCAG Compliance**               | **Description**                                                                                                |
 |-----------------------------------------------|----------------------------------------------------------------------------------------------------------------|
