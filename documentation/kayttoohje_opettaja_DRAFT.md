@@ -42,84 +42,109 @@ Vain opettajakäyttäjä voi luoda uusia kyselyjä.
 
 Kyselyn luominen alkaa etusivun "Luo uusi kysely" -nappia painamalla. Sovellus avaa lomakkeen, joka täytetään seuraavasti:
 
-**1. Kyselyn nimi**
+**3.1. Kyselyn nimi**
 - Anna kyselylle selkeä, kuvaava nimi. Nimen tulee olla vähintään 5 merkkiä pitkä (sisältäen välilyönnit).
 - Nimen tulee olla uniikki, joten jos kysely toistuu vuosittain, voi olla hyvä idea lisätä nimen perään lukuvuosi ja/tai opetusperiodi. 
 
-**2. Vastausaika**
-- Anna kyselylle alku- ja päättymisaika. Sovellus ehdottaa alkamisajaksi kuluvaa päivää ja asettaa sen valmiiksi, mutta voit halutessasi muuttaa sitä. Klikkaa kenttää ja valitse päivämäärä kalenterista tai kirjoita se muodossa pp.kk.vvvv. Aseta kellonaika muodossa hh:mm. Huom: kyselyn päättymisaika ei voi olla menneisyydessä.
-- Sovellus sulkee kyselyn sen sulkeutumisaikana. Tarvittaessa voit avata kyselyn uudelleen (ks. kohta x).
+**3.2. Vastausaika**
+- Anna kyselylle alku- ja päättymisaika. Klikkaa kenttää ja valitse päivämäärä kalenterista tai kirjoita se muodossa pp.kk.vvvv. Aseta kellonaika muodossa hh:mm.
+- Sovellus ehdottaa alkamisajaksi kuluvaa päivää ja asettaa sen valmiiksi, mutta voit halutessasi muuttaa sitä.
+- **Huom:** kyselyn päättymisaika ei voi olla menneisyydessä.
+- Sovellus sulkee kyselyn sen sulkeutumisaikana. Tarvittaessa voit avata kyselyn uudelleen (ks. kohta 6.).
 
-**3. Kyselyn kuvaus**
-- Kirjoita tähän kenttään lyhyt kuvaus kyselyn tarkoituksesta ja ohje käyttäjälle. Tämä kenttä ei ole pakollinen, mutta on suositeltavaa käyttää sitä.
+**3.3. Kyselyn kuvaus**
+- Kirjoita tähän kenttään lyhyt kuvaus kyselyn tarkoituksesta ja ohje käyttäjälle. Tämä kenttä ei ole pakollinen, mutta sitä on suositeltavaa käyttää.
 - Kerro, onko opiskelijan asetettava kaikki vaihtoehtot mielekkyysjärjestykseen (vihreä laatikko), vai riittääkö esim. 5 vaihtoehtoa. 
-- Kerro myös, jos opiskelijalla on mahdollisuus lisätä vaihtoehtoja ei-listalle (punainen laatikko), esimerkiksi jos hänellä on vaikka oma lapsi tietyssä päiväkodissa. Ei-listalle lisääminen vaatii aina perustelut ja tämä on hyvä mainita myös kuvauksessa.
+- Kerro myös, jos opiskelijalla on mahdollisuus lisätä vaihtoehtoja ei-listalle (punainen laatikko, ks. kohta 3.5 valintojen kieltämisestä), jolloin häntä ei jostakin painavasta syystä voi sijoittaa näihin ryhmiin. Ei-listalle lisääminen vaatii aina perustelun vastaajalta ja tämä on hyvä mainita myös kuvauksessa.
 
-**4. Vaaditaanko kaikkien ryhmien järjestämistä?**
+**3.4. Vaaditaanko kaikkien ryhmien järjestämistä?**
 - Valitse "kyllä", jos haluat, että opiskelijan on asetettava kaikki kyselyn vaihtoehdot toivejärjestykseensä. 
-- Valitse "ei", jos riittää, että opiskelija laittaa järjestykseen vain osan vaihtoehdoista. Tässä tapauksessa avautuu uusi kenttä " Priorisoitujen ryhmien vähimmäismäärä", johon sinun tulee määritellä kokonaislukuna tuo vähimmäismäärä. 
+- Valitse "ei", jos riittää, että opiskelija laittaa järjestykseen vain osan vaihtoehdoista. Tässä tapauksessa avautuu uusi kenttä " Priorisoitujen ryhmien vähimmäismäärä", johon sinun tulee määritellä kokonaislukuna tuo vähimmäismäärä.
 - Jos vaihtoehtoja on valittavana paljon (20+), kuten esimerkiksi harjoituspaikkakyselyssä, on suositeltavaa antaa opiskelijalle koko määrää pienempi määrä, esimerkiksi 5 tai 10 valintaa. 
+- **HUOM** Ryhmäjaon onnistumisen kannalta on tärkeää saada kyselyn vastaajilta riittävästi tietoa ryhmien kiinnostavuudesta. Jos pakollisia valintoja on esimerkiksi vain yksi, algoritmi suosii jonkin verran vain yhden paikan valinneita kun heitä verrataan kaikki valinnat kiinnostusjärjestykseen laittaneisiin. Kannattaa vaatia vähintään 3-5 paikan järjestämistä riippuen vaihtoehtojen lukumäärästä.
 
-**5. Sallitaanko valintojen kieltäminen?**
+**3.5. Sallitaanko valintojen kieltäminen?**
 - Joissakin kyselyissä on perustultua antaa opiskelijan kertoa, jos jokin kyselyn vaihtoehdoista ei ollenkaan sovi hänelle. Valitse kyllä, jos haluat sallia tämän. Kun opiskelija käyttää tätä mahdollisuutta kyselyyn vastatessaan, perustelut-kenttä kyselylomakkeella muuttuu pakolliseksi ja näet perustelut yhteenvedosta.
 
-**6. Priorisoitavat ryhmät**
+**3.6. Näytetäänkö vastaajalle hakupalkki?**
+- Hakupalkin avulla kyselyyn vastaaja voi etsiä vastausvaihtoehtoja nimen tai vastausvaihtoehdon lisätietojen perusteella
+- Hakupalkki kannattaa näyttää kun vaihtoehtoja on paljon, mutta sen voi halutessaan piilottaa, esimerkiksi jos kyselyssä on vähän vaihtoehtoja jotka pitää kaikki järjestää
+
+**3.7. Priorisoitavat ryhmät**
 - Priorisoitavat ryhmät ovat vaihtoehtoja, joista opiskelijat voivat kertoa toiveensa, ja joihin sovellus jakaa heidät kyselyn päätyttyä. 
 - Voit lisätä vaihtoehdot manuaalisesti käsin kirjoittamalla tai tuomalla ne suoraan csv-tiedostosta. 
 
-**6.1 Ryhmien tuominen csv-tiedostosta**
+**3.7.1 Ryhmien tuominen csv-tiedostosta**
 
-TODO
-- CSV on tiedostomuoto, jossa taulukkomuodossa oleva tieto on tallennettu tekstitiedostoksi niin, että eri solujen arvot on eroteltu pilkulla ([Wikipedia-linkki](https://fi.wikipedia.org/wiki/CSV)). 
+- CSV on tiedostomuoto, jossa taulukkomuodossa oleva tieto on tallennettu tekstitiedostoksi niin, että eri solujen arvot on eroteltu pilkulla. ([Lisätietoa Wikipediassa](https://fi.wikipedia.org/wiki/CSV)). 
 
 linkki elomake-pohjaan (TBA)
 [linkki elomakkeen yleiseen ohjeeseen](https://helpdesk.it.helsinki.fi/help/11144)
 Mahdolliset ongelmatilanteet (TBA)
 
-**6.2. Ryhmien lisääminen käsin**
+**3.7.2. Ryhmien lisääminen käsin**
 - Kirjoita nimi-kenttään vaihtoehdon nimi (esim. ryhmän aihe, harjoittelupäiväkodin nimi) ja enimmäispaikat-kenttään tieto siitä, kuinka monta opiskelijaa voidaan valita tähän vaihtoehtoon.
 - "+ Lisää tietokenttä" -nappia painamalla voit lisätä vaihtoehdolle lisätietoja, esimerkiksi harjoittelupaikkakyselyssä tähän kenttään voi lisätä päiväkodin osoitteen, lapsiryhmän kuvauksen tai muuta oleellista tietoa. Kyselyä täyttäessään opiskelija näkee nämä lisätiedot kun klikkaa vaihtoehtoa. Lisätietokenttiä voi olla useita.
 
-**Valmiin kyselylomakkeen tarkastelu ja opiskelijoille lähetettävän linkin kopiointi**
+**3.8 Luo kysely**
+- Klikatessasi kyselyn luomisnappia saat alapalkkiin tiedon kyselyn luomisen onnistumisesta tai täydennystarpeesta
+- Kun kysely on luotu, jää sivu edelleen kyselyn luomiseen. Jos täydennät tai muokkaat kyselyyn annettuja tietoja ja painat uudelleen "Luo kysely" nappia luodaan uusi kysely päivitetyillä tiedoilla
 
-TODO
+## 4. Valmiin kyselylomakkeen tarkastelu ja opiskelijoille lähetettävän linkin kopiointi
+- Kun olet luonut kyselyn, se ilmestyy "Näytä vanhat kyselyt" listaukseen, johon on linkki etusivulla. Mikäli kyselyn vastausaika on alkanut, se näkyy sinulle myös Jakajan etusivulla "Käynnissä olevat kyselyt" otsikon alla
+- Mene "Näytä vanhat kyselyt"-listaukseen ja klikkaa kyselyn nimeä, jolloin sinulle avautuu kyselyn vastaussivu
+- Kopioimalla selaimen osoiterivin saat linkin, jolla voit jakaa kyselyn
+- Voit tällä sivulla myös kokeilla kyselyyn vastaamista
 
+## 5. Kyselyn sulkeminen
+- Klikkaa kyselyn nimeä etusivun listasta otsikon "Käynnissä olevat kyselyt" alta tai "Aiemmat kyselyt" listauksesta kyselyn kohdalta "Tarkastele tuloksia" linkkiä. Näet yhteenvedon kyselyn vastaustilanteesta.
+- Sulje kysely klikkaamalla sivun oikeassa reunassa olevaa "Sulje kysely" -nappia. Sovellus varmistaa valinnan kysymällä "Haluatko varmasti sulkea kyselyn?". Klikkaa pop-up-ikkunasta vaihtoehtoa "OK".
+- Kysely on nyt suljettu eikä siihen voi syöttää uusia vastauksia. Jos haluat avata kyselyn uudelleen, katso tämän ohjeen kohta 6. Jos haluat jakaa kyselyyn vastanneet opiskelijat ryhmiin käyttäen sovelluksen lajittelualgoritmia, katso kohta 8.
 
-## 7. Kyselyn sulkeminen
+## 6. Suljetun kyselyn avaaminen uudelleen
+- Klikkaa "Aiemmat kyselyt" listauksesta kyselyn kohdalta "Tarkastele tuloksia" linkkiä. Näet yhteenvedon kyselyn vastaustilanteesta.
+- Avaa kysely uudestaan klikkaamalla sivun oikeassa reunassa näkyvää keltaista "Avaa kysely uudestaan"-nappia. Sovellus varmistaa valinnan kysymällä "Haluatko varmasti avata kyselyn?". Klikkaa pop-up-ikkunasta vaihtoehtoa "OK".
+- Kysely on nyt auki ja siihen voi vastata.
 
-Klikkaa kyselyn nimeä etusivun listasta otsikon "Käynnissä olevat kyselyt" alta. Näet yhteenvedon kyselyn vastaustilanteesta. Sulje kysely klikkaamalla sivun oikeassa reunassa olevaa "Sulje kysely" -nappia. Sovellus varmistaa valinnan kysymällä "Haluatko varmasti sulkea kyselyn?". Klikkaa pop-up-ikkunasta vaihtoehtoa "OK".
+## 7. Kyselyn muokkaaminen
+- Kyselyn muokkaukseen pääset "Aiemmat kyselyt" listauksesta klikkaamalla kyselyn kohdalla "Muokkaa kyselyä" 
+- Voit muokata esimerkiksi kyselyn nimeä, kyselyn kuvausta ja vastausaikaa
 
-Kysely on nyt suljettu eikä siihen voi syöttää uusia vastauksia. Jos haluat avata kyselyn uudelleen, katso tämän ohjeen kohta 7.2. Jos haluat jakaa kyselyyn vastanneet opiskelijat ryhmiin käyttäen sovelluksen lajittelualgoritmia, katso kohta 8.
+**7.1 Kyselyn käyttöoikeuksien jakaminen toiselle opettajalle**
+- Muokkauslomakkeen alussa voit lisätä toiselle opettajalle oikeudet kyselyyn kirjoittamalla hänen helsinki.fi sähköpostiosoitteensa kenttään ja painamalla "Lisää opettaja"-nappia
+- Tällöin lisätyllä opettajalla on yhtäläiset oikeudet kyselyyn kuin sinulla. Hän voi esimerkiksi muokata kyselyä, tarkastella sen tuloksia, sulkea kyselyn ja tehdä ryhmäjaon.
 
+**7.2 Kyselyn vastausvaihtoehtojen muokkaaminen**
+- Kyselyn vastausvaihtoehtoja ei voi tällä hetkellä muokata
+- Kyselyn voi kopioida uudeksi kyselyksi, jolloin vaihtoehtojen vapaa muokkaaminen on mahdollista (ks. kohta 9.), mutta tällöin menetetään kaikki kyselyssä jo mahdollisesti olevat vastaukset
+- Kyselyssä olemassaolevien vaihtoehtojen paikkamäärää voi muokata mikäli paikkoja on vähemmän kuin kyselyssä vastauksia (ks. kohta 8.1)
 
-## 8. Kyselyn muokkaaminen
-TODO
+## 8. Ryhmiin jakaminen ja tulosten käsittely
+- Siirry kyselyn yhteenvetosivulle sovelluksen etusivulta klikkaamalla ensin "Näytä vanhat kyselyt" -nappia ja valitse sitten haluamasi kysely klikkaamalla kyselyn kohdalla olevaa "Tarkastele tuloksia" -linkkiä.
+- Jos kyselyä ei ole vielä suljettu, tee se ensin (ks. kohta 5). Kyselyn sulkeuduttua kyselyn yhteenvetosivulle ilmestyy sininen nappi "Jaa ryhmiin". Mikäli kyselyssä ei ole enemmän vastauksia kuin paikkoja, voit suorittaa ryhmiin jaon suoraan.
+- Sivun yläreunassa lukee kyselyn nimi ja sen alla näet vastausten määrän sekä jaettavien paikkojen määrän. Jos vastauksia on enemmän kuin paikkoja,sovellus varoittaa siitä. Siinä tapauksessa sinun on tehtävä muutoksia ennen kuin voit tehdä ryhmiin jakamisen (ks. kohta 8.1).
+- Tarkista ensin vastaukset. Jos siellä on mukana ylimääräisiä vastauksia, esimerkiksi sellaisilta opiskelijoilta, jotka ovat peruneet kurssille osallistumisensa, voit poistaa nuo vastaukset klikkaamalla vastauksen kohdalla olevaa nappia "Poista tämä vastaus". 
 
-**8.1. Auki olevan kyselyn muokkaaminen**
+**8.1 Ryhmäkokojen muokkaus**
+- Jos vastauksia on enemmän kuin paikkoja, ohjeistaa sovellus muokkaamaan ryhmäkokoja ylimääräisten vastausten poiston jälkeen
+- Klikkaa ohjeistuksen alla olevaa "Muokkaa ryhmäkokoja"-nappia, jolloin pääset ryhmäkokojen muokkaukseen
+- Sivulla näet yläkulmassa vastausten ja paikkojen kokonaismäärän, sekä ryhmät
+- Ryhmien kohdalla näet sekä paikkamäärän että ryhmän suosittuuden, suosittuus kertoo kuinka moni on sijoittanut kyseisen ryhmän top 3 vaihtoehtoihinsa
+- Ryhmäkokoja muokatessa älä muokkaa ryhmän nimeä tai muokkaus ei tallennu
+- Mikäli ylimääräiset vastaajat on mahdollista sijoittaa ryhmiin lisäämällä ryhmäkokoja, on se kannattava vaihtoehto
+- Jos on tarve luoda kokonaan uusi ryhmä, katso ohjeistus kohdasta 8.2 ja varmista, että ylimääräiseen ryhmään jää riittävästi opiskelijoita. Jos siis ylimääräisten vastausten määrä on pienempi kuin haluttu ryhmäkoko, kannattaa vähentää olemassaolevissa ryhmissä ryhmäkokoa niin, että yli jäävien opiskelijoiden määrä on sopiva. Tällöin uuteen ryhmään sijoitetut opiskelijat valitaan algoritmilla mahdollisimman reilusti
 
-**8.2. Suljetun kyselyn avaaminen uudelleen ja lomakkeen muokkaaminen**
+**8.2 Ryhmiin jako kun vastauksia on liikaa**
+- Jos vastauksia on edelleen liikaa ylimääräisten vastausten poistamisen ja ryhmäkokojen muokkaamisen jälkeen, voit silti jakaa opiskelijat ryhmiin
+- Tällöin kyselyyn luodaan ryhmä "Tyhjä", jossa on yhtä monta paikkaa kuin ylimääräisiä vastauksia
+- Kyselyyn vastanneet sijoitetaan toivoidensa mukaan ryhmiin sillä erotuksella, että nyt osa jää ryhmien ulkopuolelle ja näkyvät ryhmässä "Tyhjä" ryhmäjaon tuloksia tarkasteltaessa
 
+**8.3 Tulosten käsittely**
 
-## 9. Ryhmiin jakaminen ja tulosten käsittely
+## 9. Kyselyn kopiointi uudeksi kyselyksi
+TBA
 
-
-Siirry kyselyn yhteenvetosivulle sovelluksen etusivulta klikkaamalla ensin "Näytä vanhat kyselyt" -nappia ja valitse sitten haluamasi kysely klikkaamalla kyselyn kohdalla olevaa "Tarkastele tuloksia" -linkkiä.
-
-Jos kyselyä ei ole vielä suljettu, tee se ensin (ks. kohta 6). Kyselyn sulkeuduttua kyselyn yhteenvetosivulle ilmestyy sininen nappi "Jaa ryhmiin". 
-
-Sivun yläreunassa lukee kyselyn nimi ja sen alla näet vastausten määrän sekä jaettavien paikkojen määrän. Jos vastauksia on enemmän kuin paikkoja,sovellus varoittaa siitä. Siinä tapauksessa sinun on tehtävä muutoksia ennen kuin voit tehdä ryhmiin jakamisen.
-
-Tarkista ensin vastaukset. Jos siellä on mukana vastauksia sellaisilta opiskelijoilta, jotka ovat peruneet kurssille osallistumisensa, voit poistaa nuo vastaukset klikkaamalla vastauksen kohdalla olevaa nappia "Poista tämä vastaus". 
-
-**Ylimääräisten paikkojen lisääminen ryhmiin - TBA**
-
-
-## 10. Kyselyn käyttöoikeuksien jakaminen toiselle opettajalle
-
-Kyselyn yhteenvetosivulla on vihreä nappi "Lisää opettaja". Syötä sen yläpuolella olevaan tekstikenttään toisen opettajan HY-sähköpostiosoite ja klikkaa nappia. Oikeudet on nyt jaettu ja sovellukseen kirjautuessaan kollegasi näkee kyselyn vanhojen kyselyjen listassaan. Hän ei saa tästä erikseen ilmoitusta, joten voi olla hyvä idea lähettää hänelle sähköposti asiasta.
-
-
-## 11. Mahdolliset ongelmatilanteet
+## 10. Mahdolliset ongelmatilanteet
 
 **Kyselylinkki ei toimi**
 Onhan kyselylomake varmasti avoinna? Tarkista, että kyselyä ei ole suljettu manuaaliseksi ja että kyselyn sulkeutumisajankohta on tulevaisuudessa.
@@ -135,6 +160,6 @@ Tarkista seuraavat:
 - Onhan kyselyn jokaiselle vaihtoehdolle määritelty vähimmäismäärä, joka on kokonaisluku ja suurempi kuin 0?
 
 
-## 13. Tuki
+## 10. Tuki
 
 TODO
