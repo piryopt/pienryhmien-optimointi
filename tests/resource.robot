@@ -72,11 +72,9 @@ Login And Go To Main Page
 
 Set Create Survey Time Fields
     [Documentation]  Call when in create survey page
-    [Arguments]  ${startdate}  ${starttime}  ${enddate}  ${endtime} 
+    [Arguments]  ${startdate}  ${enddate}
     Input Text  startdate  ${startdate}
-    Input Text  starttime  ${starttime}
     Input Text  enddate  ${enddate}
-    Input Text  endtime  ${endtime}
 
 
 Drag To Green Box Bottom

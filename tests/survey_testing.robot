@@ -5,8 +5,8 @@ Suite Teardown  Close Browser
 
 *** Variables ***
 ${SERVER}  127.0.0.1:5000
-${BROWSER}  firefox
-${DELAY}  0.1 seconds
+${BROWSER}  headlessfirefox
+${DELAY}  0.0 seconds
 ${HOME_URL}  http://${SERVER}/
 ${LOGOUT URL}  http://${SERVER}/auth/logout
 ${CREATE SURVEY URL}  http://${SERVER}/surveys/create
@@ -47,7 +47,7 @@ Login As Teacher
 Create Survey As Teacher Case 1
     # Create case 1: all mandatory, yes rejecting choices
     Go To Create Survey Page
-    Set Create Survey Time Fields  01.08.2023  01:01  01.08.2024  02:02
+    Set Create Survey Time Fields  01.08.2023  01.08.2024
     Input Text  groupname  ${SURVEY 1 NAME}
     Set Focus To Element  denied-choices-count
     Input Text  denied-choices-count  1
@@ -76,7 +76,7 @@ Test Survey Case 1
     Wait Until Page Contains Element  ${SURVEY SUBMIT ANSWER}
     Set Focus To Element  ${SURVEY SUBMIT ANSWER}
     Click Button  ${SURVEY SUBMIT ANSWER}
-    Page Should Contain  Et voi hylätä näin montaa vaihtoehtoa
+    Page Should Contain  Voit hylätä korkeintaan 1 vaihtoehtoa
 
     # dragging one isn't enough
     Go To  ${SURVEY 1 URL}
@@ -105,11 +105,10 @@ Test Survey Case 1
 
 Create Survey As Teacher Case 2
     Go To Main Page
-    Sleep  3s
 
     # Create case 2: all mandatory, no rejecting choices
     Go To Create Survey Page
-    Set Create Survey Time Fields  01.08.2023  01:01  01.08.2024  02:02
+    Set Create Survey Time Fields  01.08.2023  01.08.2024
     Set Focus To Element  groupname
     Input Text  groupname  ${SURVEY 2 NAME}
     Click Element  id:min-choices-no
@@ -135,7 +134,7 @@ Test Survey Case 2
     Wait Until Page Contains Element  ${SURVEY SUBMIT ANSWER}
     Set Focus To Element  ${SURVEY SUBMIT ANSWER}
     Click Button  ${SURVEY SUBMIT ANSWER}
-    Page Should Contain  Et ole tehnyt riittävän monta valintaa!
+    Page Should Contain  Valitse vähintään 4 vaihtoehtoa
 
     Drag And Drop  xpath=//h5[contains(text(),'Päiväkoti Floora')]  id:sortable-good
     Drag And Drop  xpath=//h5[contains(text(),'Päiväkoti Toivo')]  id:sortable-good
@@ -146,11 +145,10 @@ Test Survey Case 2
 
 Create Survey As Teacher Case 3
     Go To Main Page
-    Sleep  3s
 
     # Create case 3: not all mandatory, yes rejecting choices
     Go To Create Survey Page
-    Set Create Survey Time Fields  01.08.2023  01:01  01.08.2024  02:02
+    Set Create Survey Time Fields  01.08.2023  01.08.2024
     Set Focus To Element  groupname
     Input Text  groupname  ${SURVEY 3 NAME}
     Set Focus To Element  denied-choices-count
@@ -182,7 +180,7 @@ Test Survey Case 3
     Wait Until Page Contains Element  ${SURVEY SUBMIT ANSWER}
     Set Focus To Element  ${SURVEY SUBMIT ANSWER}
     Click Button  ${SURVEY SUBMIT ANSWER}
-    Page Should Contain  Et voi hylätä näin montaa vaihtoehtoa
+    Page Should Contain  Voit hylätä korkeintaan 1 vaihtoehtoa
 
     # minchoices is set to 2, one isn't enough
     Go To  ${SURVEY 3 URL}
@@ -190,7 +188,7 @@ Test Survey Case 3
     Wait Until Page Contains Element  ${SURVEY SUBMIT ANSWER}
     Set Focus To Element  ${SURVEY SUBMIT ANSWER}
     Click Button  ${SURVEY SUBMIT ANSWER}
-    Page Should Contain  Sinun pitää valita enemmän vaihtoehtoja
+    Page Should Contain  Valitse vähintään 2 vaihtoehtoa
 
     Drag And Drop  xpath=//h5[contains(text(),'Päiväkoti Nalli')]  id:sortable-good
     Wait Until Page Contains Element  ${SURVEY SUBMIT ANSWER}
@@ -202,10 +200,9 @@ Test Survey Case 3
 Create Survey As Teacher Case 4
     [Tags]  asd
     Go To Main Page
-    Sleep  3s
     # Create case 4: not all mandatory, no rejecting choices
     Go To Create Survey Page
-    Set Create Survey Time Fields  01.08.2023  01:01  01.08.2024  02:02
+    Set Create Survey Time Fields  01.08.2023  01.08.2024
     Set Focus To Element  groupname
     Input Text  groupname  ${SURVEY 4 NAME}
     Click Element  id:min-choices-custom
@@ -241,7 +238,7 @@ Test Survey Case 4
     Wait Until Page Contains Element  ${SURVEY SUBMIT ANSWER}
     Set Focus To Element  ${SURVEY SUBMIT ANSWER}
     Click Button  ${SURVEY SUBMIT ANSWER}
-    Page Should Contain  Sinun pitää valita enemmän vaihtoehtoja
+    Page Should Contain  Valitse vähintään 2 vaihtoehtoa
 
     Drag And Drop  xpath=//h5[contains(text(),'Päiväkoti Nalli')]  id:sortable-good
     Wait Until Page Contains Element  ${SURVEY SUBMIT ANSWER}
@@ -270,7 +267,7 @@ Test Survey Copying
     [Documentation]  Test that all the data is copied correctly
     Go To  ${SURVEYS URL}
 
-    Go To  http://127.0.0.1:5000/surveys/create?fromTemplate=${SURVEY 4 ID}
+    Go To  ${HOME URL}/surveys/create?fromTemplate=${SURVEY 4 ID}
 
     Element Attribute Value Should Be  id:groupname  value  Case not all mandatory, no rejecting choices
 
@@ -302,7 +299,7 @@ Test Survey Copying
     Element Should Contain  xpath=//*[@id="choiceTable"]/tr[4]/td[4]  00940
 
 Give Another Teacher Rights
-    Go To Survey Answers Page  ${SURVEY 4 URL}
+    Go To  ${SURVEYS URL}/${SURVEY 4 ID}/edit
 
     Input Text  id:teacher_email  robotti.2.teacher@helsinki.fi
 
@@ -310,7 +307,6 @@ Give Another Teacher Rights
 
 Close Survey Test
     Go To Main Page
-    Sleep  3s
 
     Click Element  xpath=//h5[contains(text(), '${SURVEY 4 NAME}')]
     Location Should Be  ${SURVEYS URL}/${SURVEY 4 ID}/answers
