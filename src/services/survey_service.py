@@ -5,13 +5,16 @@ from src.repositories.survey_repository import (
 from src.repositories.survey_teachers_repository import (
     survey_teachers_repository as default_survey_teachers_repository
 )
+from src.repositories.survey_choices_repository import (
+    survey_choices_repository as default_survey_choices_repository
+)
 from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 from src.tools.date_converter import time_to_close
 from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
 
 class SurveyService:
-    def __init__(self, survey_repositroy=default_survey_repository, survey_teachers_repository = default_survey_teachers_repository):
+    def __init__(self, survey_repositroy=default_survey_repository, survey_teachers_repository = default_survey_teachers_repository, choices_repository = default_survey_choices_repository):
         """
         Initalizes the service for surveys with the repositories needed. The purpose of this class is to handle what happens after the SQL code in the
         corresponding repository
@@ -22,6 +25,7 @@ class SurveyService:
         """
         self._survey_repository = survey_repositroy
         self._survey_teachers_repository = survey_teachers_repository
+        self._choices_repository = choices_repository
 
     def get_survey_name(self, survey_id):
         """
@@ -270,6 +274,31 @@ class SurveyService:
             return []
         return rankings
 
+    def get_choice_popularities(self, survey_id:str):
+        """
+        Calls repository function fetch_survey_responses() to get user rankings
+        for the choices in the survey and from this data calculates how many
+        times each choice has been ranked in top three choices.
+
+        Returns a tuple. First element is number of answers and second is
+        a dictionary where key is choice id and value number of times a choice
+        has been valued in top three by a student
+
+        Args:
+            survey_id (str): the id of the survey
+        """
+        responses = self._survey_repository.fetch_survey_responses(survey_id)
+        answers = len(responses)
+        popularities = {}
+        for response in responses:
+            ranking = response[1].split(",")
+            for i in range(min(3,len(ranking))):
+                if int(ranking[i]) in popularities:
+                    popularities[int(ranking[i])] += 1
+                else:
+                    popularities[int(ranking[i])] = 1
+        return (answers, popularities)
+
     def validate_created_survey(self, survey_dict, edited = False):
         #print("VALIDATING")
         #print(survey_dict)
@@ -330,8 +359,19 @@ class SurveyService:
         message = "Muutokset tallennettu!"
         return (True, message)
 
-
-
-
+    def update_survey_group_sizes(self, survey_id, choices):
+        count = 0
+        for choice in choices:
+            success = self._choices_repository.edit_choice_group_size(survey_id, choice['Nimi'], choice['Enimmäispaikat'])
+            if not success:
+                if count > 0:
+                    message = "Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut"
+                    return (False, message)
+                else:
+                    message = "Häiriö. Ryhmäkokojen päivitys ei onnistunut"
+                    return (False, message)
+            count += 1
+        message = "Ryhmäkoot päivitetty"
+        return (True, message)
 
 survey_service = SurveyService()

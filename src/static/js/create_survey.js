@@ -255,6 +255,52 @@ function saveEdit() {
     }); 
 }
 
+function saveGroupSizes() {
+
+    // Get column names from the choice table
+    var tableHeaders = Array.from(document.querySelectorAll("#choice-table-headers th:not(:last-of-type)")).map(elem => elem.innerText)
+    console.log(tableHeaders)
+
+    var surveyID = document.getElementById("survey_id").value
+    var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"))
+    var rowsAsJson = tableRows.map(function(x) { return parseObjFromRow(x, tableHeaders) })
+    var requestData = {
+        surveyGroupname: $("#groupname").val(),
+        choices: rowsAsJson,
+    }
+
+    console.log("requestData", requestData)
+
+    $.ajax({
+    type: "POST",
+    url: "/surveys/"+surveyID+"/group_sizes",
+    data: JSON.stringify(requestData),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(result) {
+        var alertMsg = {
+            msg: result.msg,
+            color: ""
+        }
+        if (result.status === "1") {
+            alertMsg.color = "#216620";
+        }
+        if (result.status === "0") {
+            alertMsg.color = "#9c2b2e";
+        }
+        showAlert(alertMsg);
+    },
+    error: function(result) {
+        if (result.responseJSON) {
+            showAlert({msg: result.status + ": " + result.responseJSON.msg, color: "red"})
+        } else {
+            showAlert({msg: `Jokin meni vikaan, palvelimeen ei saatu yhteyttä`, color: "red"})
+        }
+    
+    }
+    }); 
+}
+
 function addRow() {
     var newRow = document.getElementById("choiceTable").insertRow()
 
