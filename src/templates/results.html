@@ -25,6 +25,7 @@
 <button type="submit" class="btn btn-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button></br></br>
 {% if not answered %}
 <form action="/surveys/{{ survey_id }}/results" method="POST" onsubmit="return confirm ('Haluatko varmasti tallentaa tulokset?')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <button type="submit" class="btn btn-success" name="savin_time">Tallenna tulokset</button>
 </form>
 </br>
