@@ -12,3 +12,4 @@ matplotlib
 scipy
 Flask-APScheduler
 markdown
+Flask-WTF
