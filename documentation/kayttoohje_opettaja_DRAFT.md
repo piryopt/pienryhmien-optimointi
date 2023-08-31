@@ -15,14 +15,20 @@
 
 ## 1. Sisäänkirjautuminen
 
-Kirjaudu sovellukseen osoitteessa [jakaja.it.helsinki.fi](jakaja.it.helsinki.fi)Helsingin yliopiston käyttäjätunnuksillasi [lisätietoa käyttätunnuksista](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/kayttajatunnus/kayttajatunnukset).
+Kirjaudu sovellukseen osoitteessa [jakaja.it.helsinki.fi](jakaja.it.helsinki.fi) Helsingin yliopiston käyttäjätunnuksillasi.
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/kirjautumissivu.png">
+</kbd>
+
+[lisätietoa käyttätunnuksista](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/kayttajatunnus/kayttajatunnukset).
 
 
 ## 2. Käyttöoikeudet
 
 Jakaja-sovelluksessa on kahdenlaisia käyttäjiä:
 - opettaja
-- oppilas
+- opiskelija
 
 Sovellus tunnistaa käyttäjätason automaattisesti sisäänkirjautumisen yhteydessä. Opettaja-tason oikeudet saavat kaikki sellaiset käyttäjät, jotka kuuluvat Helsingin yliopiston opetushenkilökuntaan. Kaikki muut käyttäjät ovat opiskelijakäyttäjiä.
 
@@ -35,10 +41,27 @@ Opettajakäyttäjän oikeuksiin kuuluu:
 - kyselyn kopioiminen pohjaksi uudelle kyselylle
 - kyselyn oikeuksien jakaminen toiselle opettajalle
 
+Opettajan etusivu näyttää tältä:
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/etusivu.png">
+</kbd>
+
+Toimintopainikkeet:
+- Luo uusi kysely
+- Näytä vanhat kyselyt
+
+Niiden alla näkyy listana omat, käynnissä olevat kyselyt.
+
+
 
 ## 3. Uuden kyselyn luominen
 
 Vain opettajakäyttäjä voi luoda uusia kyselyjä.
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/luo_kysely.png">
+</kbd>
 
 Kyselyn luominen alkaa etusivun "Luo uusi kysely" -nappia painamalla. Sovellus avaa lomakkeen, joka täytetään seuraavasti:
 
@@ -52,6 +75,14 @@ Kyselyn luominen alkaa etusivun "Luo uusi kysely" -nappia painamalla. Sovellus a
 - **Huom:** kyselyn päättymisaika ei voi olla menneisyydessä.
 - Sovellus sulkee kyselyn sen sulkeutumisaikana. Tarvittaessa voit avata kyselyn uudelleen (ks. kohta 6.).
 
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/pvm_asetus.png">
+</kbd>
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/kellonaika.png">
+</kbd>
+
 **3.3. Kyselyn kuvaus**
 - Kirjoita tähän kenttään lyhyt kuvaus kyselyn tarkoituksesta ja ohje käyttäjälle. Tämä kenttä ei ole pakollinen, mutta sitä on suositeltavaa käyttää.
 - Kerro, onko opiskelijan asetettava kaikki vaihtoehtot mielekkyysjärjestykseen (vihreä laatikko), vai riittääkö esim. 5 vaihtoehtoa. 
@@ -59,20 +90,44 @@ Kyselyn luominen alkaa etusivun "Luo uusi kysely" -nappia painamalla. Sovellus a
 
 **3.4. Vaaditaanko kaikkien ryhmien järjestämistä?**
 - Valitse "kyllä", jos haluat, että opiskelijan on asetettava kaikki kyselyn vaihtoehdot toivejärjestykseensä. 
-- Valitse "ei", jos riittää, että opiskelija laittaa järjestykseen vain osan vaihtoehdoista. Tässä tapauksessa avautuu uusi kenttä " Priorisoitujen ryhmien vähimmäismäärä", johon sinun tulee määritellä kokonaislukuna tuo vähimmäismäärä.
+- Valitse "ei", jos riittää, että opiskelija laittaa järjestykseen vain osan vaihtoehdoista. Tässä tapauksessa avautuu uusi kenttä "Priorisoitujen ryhmien vähimmäismäärä", johon sinun tulee määritellä kokonaislukuna tuo vähimmäismäärä. Jos opiskelija valitsee liian vähän vaihtoehtoja, sovellus huomauttaa siitä:
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/vastauslomake_liian_vahan_valintoja.png">
+</kbd>
+
 - Jos vaihtoehtoja on valittavana paljon (20+), kuten esimerkiksi harjoituspaikkakyselyssä, on suositeltavaa antaa opiskelijalle koko määrää pienempi määrä, esimerkiksi 5 tai 10 valintaa. 
 - **HUOM** Ryhmäjaon onnistumisen kannalta on tärkeää saada kyselyn vastaajilta riittävästi tietoa ryhmien kiinnostavuudesta. Jos pakollisia valintoja on esimerkiksi vain yksi, algoritmi suosii jonkin verran vain yhden paikan valinneita kun heitä verrataan kaikki valinnat kiinnostusjärjestykseen laittaneisiin. Kannattaa vaatia vähintään 3-5 paikan järjestämistä riippuen vaihtoehtojen lukumäärästä.
 
 **3.5. Sallitaanko valintojen kieltäminen?**
-- Joissakin kyselyissä on perustultua antaa opiskelijan kertoa, jos jokin kyselyn vaihtoehdoista ei ollenkaan sovi hänelle. Valitse kyllä, jos haluat sallia tämän. Kun opiskelija käyttää tätä mahdollisuutta kyselyyn vastatessaan, perustelut-kenttä kyselylomakkeella muuttuu pakolliseksi ja näet perustelut yhteenvedosta.
+- Joissakin kyselyissä on perustultua antaa opiskelijan kertoa, jos jokin kyselyn vaihtoehdoista ei ollenkaan sovi hänelle. Valitse kyllä, jos haluat sallia tämän. Kun opiskelija käyttää tätä mahdollisuutta kyselyyn vastatessaan, perustelut-kenttä kyselylomakkeella muuttuu pakolliseksi ja näet perustelut yhteenvedosta. 
+- Sovellus huomauttaa opiskelijalle, jos perustelut puuttuvat:
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/vastauslomake_perustelu.png">
+</kbd>
 
 **3.6. Näytetäänkö vastaajalle hakupalkki?**
 - Hakupalkin avulla kyselyyn vastaaja voi etsiä vastausvaihtoehtoja nimen tai vastausvaihtoehdon lisätietojen perusteella
 - Hakupalkki kannattaa näyttää kun vaihtoehtoja on paljon, mutta sen voi halutessaan piilottaa, esimerkiksi jos kyselyssä on vähän vaihtoehtoja jotka pitää kaikki järjestää
 
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/vastauslomake_.haku.png">
+</kbd>
+
 **3.7. Priorisoitavat ryhmät**
 - Priorisoitavat ryhmät ovat vaihtoehtoja, joista opiskelijat voivat kertoa toiveensa, ja joihin sovellus jakaa heidät kyselyn päätyttyä. 
-- Voit lisätä vaihtoehdot manuaalisesti käsin kirjoittamalla tai tuomalla ne suoraan csv-tiedostosta. 
+- Voit lisätä vaihtoehdot manuaalisesti käsin kirjoittamalla tai tuomalla ne suoraan csv-tiedostosta. Opiskelijan avatessa lomakkeen vaihtoehdot näkyvät seuraavasti:
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/vastauslomake_tyhja.png">
+</kbd>
+
+- Vaihtoehdoille voi lisätä lisätietoja, jotka tulevat vastaajale näkyviin vaihtoehto klikatessa:
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/vastauslomake_lisatieto.png">
+</kbd>
 
 **3.7.1 Ryhmien tuominen csv-tiedostosta**
 
@@ -82,9 +137,17 @@ linkki elomake-pohjaan (TBA)
 [linkki elomakkeen yleiseen ohjeeseen](https://helpdesk.it.helsinki.fi/help/11144)
 Mahdolliset ongelmatilanteet (TBA)
 
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/csv.png">
+</kbd>
+
 **3.7.2. Ryhmien lisääminen käsin**
 - Kirjoita nimi-kenttään vaihtoehdon nimi (esim. ryhmän aihe, harjoittelupäiväkodin nimi) ja enimmäispaikat-kenttään tieto siitä, kuinka monta opiskelijaa voidaan valita tähän vaihtoehtoon.
 - "+ Lisää tietokenttä" -nappia painamalla voit lisätä vaihtoehdolle lisätietoja, esimerkiksi harjoittelupaikkakyselyssä tähän kenttään voi lisätä päiväkodin osoitteen, lapsiryhmän kuvauksen tai muuta oleellista tietoa. Kyselyä täyttäessään opiskelija näkee nämä lisätiedot kun klikkaa vaihtoehtoa. Lisätietokenttiä voi olla useita.
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/lisatietokentta.png">
+</kbd>
 
 **3.8 Luo kysely**
 - Klikatessasi kyselyn luomisnappia saat alapalkkiin tiedon kyselyn luomisen onnistumisesta tai täydennystarpeesta
@@ -99,6 +162,15 @@ Mahdolliset ongelmatilanteet (TBA)
 ## 5. Kyselyn sulkeminen
 - Klikkaa kyselyn nimeä etusivun listasta otsikon "Käynnissä olevat kyselyt" alta tai "Aiemmat kyselyt" listauksesta kyselyn kohdalta "Tarkastele tuloksia" linkkiä. Näet yhteenvedon kyselyn vastaustilanteesta.
 - Sulje kysely klikkaamalla sivun oikeassa reunassa olevaa "Sulje kysely" -nappia. Sovellus varmistaa valinnan kysymällä "Haluatko varmasti sulkea kyselyn?". Klikkaa pop-up-ikkunasta vaihtoehtoa "OK".
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/kyselyn_sulku_popup.png">
+</kbd>
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/suljettu_kysely.png">
+</kbd>
+
 - Kysely on nyt suljettu eikä siihen voi syöttää uusia vastauksia. Jos haluat avata kyselyn uudelleen, katso tämän ohjeen kohta 6. Jos haluat jakaa kyselyyn vastanneet opiskelijat ryhmiin käyttäen sovelluksen lajittelualgoritmia, katso kohta 8.
 
 ## 6. Suljetun kyselyn avaaminen uudelleen
@@ -123,6 +195,11 @@ Mahdolliset ongelmatilanteet (TBA)
 - Siirry kyselyn yhteenvetosivulle sovelluksen etusivulta klikkaamalla ensin "Näytä vanhat kyselyt" -nappia ja valitse sitten haluamasi kysely klikkaamalla kyselyn kohdalla olevaa "Tarkastele tuloksia" -linkkiä.
 - Jos kyselyä ei ole vielä suljettu, tee se ensin (ks. kohta 5). Kyselyn sulkeuduttua kyselyn yhteenvetosivulle ilmestyy sininen nappi "Jaa ryhmiin". Mikäli kyselyssä ei ole enemmän vastauksia kuin paikkoja, voit suorittaa ryhmiin jaon suoraan.
 - Sivun yläreunassa lukee kyselyn nimi ja sen alla näet vastausten määrän sekä jaettavien paikkojen määrän. Jos vastauksia on enemmän kuin paikkoja,sovellus varoittaa siitä. Siinä tapauksessa sinun on tehtävä muutoksia ennen kuin voit tehdä ryhmiin jakamisen (ks. kohta 8.1).
+
+<kbd>
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/kyselylista.png">
+</kbd>
+
 - Tarkista ensin vastaukset. Jos siellä on mukana ylimääräisiä vastauksia, esimerkiksi sellaisilta opiskelijoilta, jotka ovat peruneet kurssille osallistumisensa, voit poistaa nuo vastaukset klikkaamalla vastauksen kohdalla olevaa nappia "Poista tämä vastaus". 
 
 **8.1 Ryhmäkokojen muokkaus**
@@ -170,4 +247,4 @@ Tarkista seuraavat:
 
 ## 10. Tuki
 
-TODO
+TBA
