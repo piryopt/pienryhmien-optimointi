@@ -30,6 +30,10 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.ur.register(user2)
         self.user_id = ur.find_by_email(user1.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
+        self.survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(self.survey_id, self.user_id)
+        self.choice_id = scr.create_new_survey_choice(self.survey_id, "choice 1", 10)
+        scr.create_new_survey_choice(self.survey_id, "choice 2", 10)
 
     def tearDown(self):
         db.drop_all()
@@ -39,21 +43,14 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that the list of survey choices for a survey is correct
         """
-        survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        st.add_teacher_to_survey(survey_id, self.user_id)
-        scr.create_new_survey_choice(survey_id, "choice 1", 10)
-        scr.create_new_survey_choice(survey_id, "choice 2", 10)
-        choice_list = scr.find_survey_choices(survey_id)
+        choice_list = scr.find_survey_choices(self.survey_id)
         self.assertEqual(2, len(choice_list))
 
     def test_get_choice(self):
         """
         Test that getting a survey choice works
         """
-        survey_id = sr.create_new_survey("Test survey 2", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        st.add_teacher_to_survey(survey_id, self.user_id)
-        choice_id = scr.create_new_survey_choice(survey_id, "choice 1", 10)
-        choice = scr.get_survey_choice(choice_id)
+        choice = scr.get_survey_choice(self.choice_id)
         self.assertEqual(choice.name, "choice 1")
 
     def test_get_invalid_choice(self):
@@ -67,10 +64,7 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that getting the info of a survey choice works
         """
-        survey_id = sr.create_new_survey("Test survey 3", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        st.add_teacher_to_survey(survey_id, self.user_id)
-        choice_id = scr.create_new_survey_choice(survey_id, "choice 1", 10)
-        scr.create_new_choice_info(choice_id, "Moti", "Vaatio")
-        info = scr.get_choice_additional_infos(choice_id)
+        scr.create_new_choice_info(self.choice_id, "Moti", "Vaatio")
+        info = scr.get_choice_additional_infos(self.choice_id)
         self.assertEqual(info[0].info_key, "Moti")
         self.assertEqual(info[0].info_value, "Vaatio")
