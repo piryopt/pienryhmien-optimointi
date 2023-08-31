@@ -33,7 +33,7 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
         st.add_teacher_to_survey(self.survey_id, self.user_id)
         self.choice_id = scr.create_new_survey_choice(self.survey_id, "choice 1", 10)
-        scr.create_new_survey_choice(self.survey_id, "choice 2", 10)
+        self.choice_id2 = scr.create_new_survey_choice(self.survey_id, "choice 2", 10)
 
     def tearDown(self):
         db.drop_all()
@@ -41,17 +41,32 @@ class TestSurveyChoicesRepository(unittest.TestCase):
 
     def test_find_survey_choices(self):
         """
-        Test that the list of survey choices for a survey is correct
+        Test that the lenght of a list of survey choices for a survey is correct
         """
         choice_list = scr.find_survey_choices(self.survey_id)
         self.assertEqual(2, len(choice_list))
 
-    def test_get_choice(self):
+    def test_get_survey_choice(self):
         """
         Test that getting a survey choice works
         """
         choice = scr.get_survey_choice(self.choice_id)
         self.assertEqual(choice.name, "choice 1")
+
+    def test_get_survey_choice_returns_false_forn_nonexistant_choice(self):
+        """
+        Test that getting a survey choice returns False if choice doesn't exist
+        """
+        choice = scr.get_survey_choice(self.choice_id+12)
+        self.assertEqual(choice, False)
+
+    def test_create_new_survey_choice_returns_false_for_exception(self):
+        """
+        Test that a survey choice is not added if there's an error in survey id
+        and that return is False
+        """
+        success = scr.create_new_survey_choice("not a survey", "choice 1", 10)
+        self.assertEqual(success, False)
 
     def test_get_invalid_choice(self):
         """
@@ -60,11 +75,44 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         choice = scr.get_survey_choice("ITSNOTREAL")
         self.assertEqual(choice, False)
 
-    def test_get_choice_info(self):
+    def test_edit_choice_group_size(self):
         """
-        Test that getting the info of a survey choice works
+        Tests that group size is edited and the correct group size saved
+        """
+        success = scr.edit_choice_group_size(self.survey_id, "choice 1", 5)
+        self.assertEqual(success, True)
+        new_size = scr.get_survey_choice(self.choice_id)
+        self.assertEqual(new_size.max_spaces, 5)
+
+    def test_create_new_choice_info(self):
+        """
+        Test that create_new_choice_info() works and returns True
+        """
+        success = scr.create_new_choice_info(self.choice_id, "Priority", "5")
+        self.assertEqual(success, True)
+
+    def test_create_new_choice_info_not_working_with_false_choice_id(self):
+        """
+        Test that create_new_choice_info() works and returns True
+        """
+        success = scr.create_new_choice_info(self.choice_id+56, "Priority", "0")
+        self.assertEqual(success, False)
+
+    def test_get_choice_additional_infos(self):
+        """
+        Test that getting the additional info of a survey choice works
         """
         scr.create_new_choice_info(self.choice_id, "Moti", "Vaatio")
         info = scr.get_choice_additional_infos(self.choice_id)
         self.assertEqual(info[0].info_key, "Moti")
         self.assertEqual(info[0].info_value, "Vaatio")
+
+    def test_get_all_additional_infos(self):
+        """
+        Adds additional info on two choices and checks that returned
+        number of infos is correct
+        """
+        scr.create_new_choice_info(self.choice_id, "Priority", "4")
+        scr.create_new_choice_info(self.choice_id2, "Priority", "11")
+        info = scr.get_all_additional_infos(self.survey_id)
+        self.assertEqual(len(info), 2)
