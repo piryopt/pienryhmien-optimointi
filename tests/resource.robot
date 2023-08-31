@@ -1,17 +1,9 @@
 *** Settings ***
 Documentation  Testing
 Library  SeleniumLibrary
-
-*** Variables ***
-${SERVER}  localhost:5000
-${BROWSER}  headlessfirefox
-${DELAY}  0.0 seconds
-${HOME URL}  http://${SERVER}
-${REGISTER URL}  http://${SERVER}/auth/register
-${LOGIN URL}  http://${SERVER}/auth/login
-${CREATE SURVEY URL}  http://${SERVER}/surveys/create
-${PREVIOUS SURVEYS URL}  http://${SERVER}/surveys
-${LOGOUT URL}  http://${SERVER}/auth/logout
+Library  OperatingSystem
+Library  String
+Library  Dialogs
 
 
 *** Keywords ***
@@ -56,14 +48,68 @@ Toy Data Input Page Should Be Open
     Page Should Contain  Ryhmien lukumäärä
     Page Should Contain  Ryhmien maksimikoko
 
+
+# NEW
+
+Input Login Credentials
+    [Arguments]  ${username}  ${password}
+    Input Text  username  ${username}
+    Input Text  password  ${password}
+    Click Element  ${AD_LOGIN_BUTTON}
+
+Logout And Go To Login
+    [Documentation]  Call when changing user
+    Go To Logout Page
+    Go To Main Page
+
+Login And Go To Main Page
+    [Arguments]  ${username}  ${password}
+    Logout And Go To Login
+    Input Login Credentials  ${username}  ${password}
+    Run Keyword And Ignore Error  Click Element  ${FIRST_TIME_LOGIN_ACCEPT}
+    Wait Until Location Is  ${HOME_URL}
+    Go To Main Page
+
+Set Create Survey Time Fields
+    [Documentation]  Call when in create survey page
+    [Arguments]  ${startdate}  ${enddate}
+    Input Text  startdate  ${startdate}
+    Input Text  enddate  ${enddate}
+
+
+Drag To Green Box Bottom
+    # Probably not needed anymore
+    [Arguments]  ${choice}  ${green box}
+    ${choice y}=  Get Vertical Position  ${choice}
+
+    ${y cord}=  Evaluate  ${green box} - ${choice y}
+
+    Drag And Drop By Offset  ${choice}  -300  ${y cord}
+
+    ${green box}=  Get Vertical Position  ${choice}
+    ${green box}=  Evaluate  ${green box} + 55
+    [Return]  ${green box}
+
+Go To Survey Answers Page
+    [Arguments]  ${survey url}
+    Go To  ${survey url}/answers
+
+Delete Own Survey Answer
+    [Documentation]  Deletes your own survey answer on the answering page
+
+    Wait Until Page Contains Element  id:deleteSubmission
+    Set Focus To Element  id:deleteSubmission
+    Click Element  id:deleteSubmission
+
+    Wait Until Page Contains Element  id:confirmDelete
+    Set Focus To Element  id:confirmDelete
+    Click Element  id:confirmDelete
+    
 Go To Main Page
     Go To  ${HOME URL}
 
 Go To Register Page
     Go To  ${REGISTER URL}
-
-Go To Login Page
-    Go To  ${LOGIN URL}
 
 Go To Create Survey Page
     Go To  ${CREATE SURVEY URL}

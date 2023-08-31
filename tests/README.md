@@ -29,3 +29,8 @@ In poetry shell
 ```
 coverage run --branch -m pytest; coverage html
 ```
+
+- name: Run robot tests
+        run: |
+          poetry run flask run --debug &
+          poetry run robot tests/survey_testing.robot
