@@ -140,9 +140,17 @@ Mahdolliset ongelmatilanteet (TBA)
 - Kyselyyn vastanneet sijoitetaan toivoidensa mukaan ryhmiin sillä erotuksella, että nyt osa jää ryhmien ulkopuolelle ja näkyvät ryhmässä "Tyhjä" ryhmäjaon tuloksia tarkasteltaessa
 
 **8.3 Tulosten käsittely**
+- Kun ryhmäjako on tehty painamalla nappia "Jaa ryhmiin", voit tallentaa tehdyn ryhmäjaon painamalla nappia "Tallenna tulokset", jolloin ryhmäjako tallentuu sovellukseen. Muuten poistuessasi sivulta unohtaa sovellus tehdyn ryhmäjaon ja voit jakaa opiskelijat uudelleen ryhmiin.
+- Tuloksessa voi olla ryhmäjakokertojen välillä eroa mikäli kovin monella opiskelijalla on samat valinnat kyselyssä, sillä ryhmäjakoa tehdessä opiskelijoiden järjestys satunnaistetaan ja algoritmi suosii listassa ensimmäisenä olevaa henkilöä joilla on samat valinnat.
+- Kun ryhmäjaon tulokset on tallennettu _et voi enää avata kyselyä uudestaan_ mutta sitä voi käyttää pohjana uudelle kyselylle
+- Ryhmäjaon tulokset voi tallentaa Excel-taulukkoon klikkaamalla "Vie tulokset Excel-taulukkoon"-nappia
 
 ## 9. Kyselyn kopiointi uudeksi kyselyksi
-TBA
+- Mene "Aiemmat kyselyt listaukseen"
+- Valitse haluamasi kyselyn riviltä "Kopioi kysely"-linkki
+- Avautuu kyselynluontipohja, jossa on esisyötettynä vanhan kyselyn tiedot
+- Voit päivittää kaikkia kyselyyn liittyviä kenttiä samoin kuin uuden kyselyn luonnissa (ks. kohta 3. uuden kyselyn luominen)
+- Mikäli kopioimasi kysely on edelleen käynnissä, täytyy kopioidulla kyselyllä olla eri nimi ennen kuin sen voi tallentaa
 
 ## 10. Mahdolliset ongelmatilanteet
 
