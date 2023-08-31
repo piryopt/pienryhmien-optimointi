@@ -44,4 +44,12 @@ class TestFinalGroupsRepository(unittest.TestCase):
         success = fgr.save_result(self.user_id, survey_id, choice_id2)
         self.assertEqual(success, True)
 
+    def test_result_not_saved_if_user_not_found(self):
+        survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01.00", "2024-01-01 01:01.00")
+        st.add_teacher_to_survey(survey_id, self.user_id)
+        choice_id1 = scr.create_new_survey_choice(survey_id, "choice 1", 10)
+        choice_id2 = scr.create_new_survey_choice(survey_id, "choice 2", 10)
+        
+        success = fgr.save_result(self.user_id+12, survey_id, choice_id2)
+        self.assertEqual(success, False)
     
