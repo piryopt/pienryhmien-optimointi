@@ -165,7 +165,7 @@ Mahdolliset ongelmatilanteet (TBA)
 - Klikkaa kyselyn nimeä etusivun listasta otsikon "Käynnissä olevat kyselyt" alta tai "Aiemmat kyselyt" listauksesta kyselyn kohdalta "Tarkastele tuloksia" linkkiä. Näet yhteenvedon kyselyn vastaustilanteesta.
 - Sulje kysely klikkaamalla sivun oikeassa reunassa olevaa "Sulje kysely" -nappia. Sovellus varmistaa valinnan kysymällä "Haluatko varmasti sulkea kyselyn?". Klikkaa pop-up-ikkunasta vaihtoehtoa "OK".
 
-<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/kyselyn_sulku_popup.png" width="60%" height="60%">
+<img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/kyselyn_sulku_popup.png" width="55%" height="55%">
 </kbd>
 
 <img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/suljettu_kysely.png" width="70%" height="70%">
