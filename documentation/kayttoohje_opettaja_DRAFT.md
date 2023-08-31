@@ -21,7 +21,7 @@ Kirjaudu sovellukseen osoitteessa [jakaja.it.helsinki.fi](jakaja.it.helsinki.fi)
 <img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/kirjautumissivu.png" width="70%" height="70%">
 </kbd>
 
-[lisätietoa käyttätunnuksista](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/kayttajatunnus/kayttajatunnukset).
+_[lisätietoa käyttätunnuksista](https://helpdesk.it.helsinki.fi/kirjautuminen-ja-yhteydet/kayttajatunnus/kayttajatunnukset)_
 
 
 ## 2. Käyttöoikeudet
@@ -45,7 +45,7 @@ Opettajan etusivu näyttää tältä:
 
 <img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/etusivu.png" width="70%" height="70%">
 
-Toimintopainikkeet:
+Etusivun toimintopainikkeet:
 - Luo uusi kysely
 - Näytä vanhat kyselyt
 
@@ -55,11 +55,12 @@ Niiden alla näkyy listana omat, käynnissä olevat kyselyt.
 
 ## 3. Uuden kyselyn luominen
 
-Vain opettajakäyttäjä voi luoda uusia kyselyjä.
-
 <img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/luo_kysely.png" width="70%" height="70%">
 
+Vain opettajakäyttäjä voi luoda uusia kyselyjä.
+
 Kyselyn luominen alkaa etusivun "Luo uusi kysely" -nappia painamalla. Sovellus avaa lomakkeen, joka täytetään seuraavasti:
+
 
 **3.1. Kyselyn nimi**
 
@@ -72,7 +73,7 @@ Kyselyn luominen alkaa etusivun "Luo uusi kysely" -nappia painamalla. Sovellus a
 - Anna kyselylle alku- ja päättymisaika. Klikkaa kenttää ja valitse päivämäärä kalenterista tai kirjoita se muodossa pp.kk.vvvv. Aseta kellonaika muodossa hh:mm.
 - Sovellus ehdottaa alkamisajaksi kuluvaa päivää ja asettaa sen valmiiksi, mutta voit halutessasi muuttaa sitä.
 - **Huom:** kyselyn päättymisaika ei voi olla menneisyydessä.
-- Sovellus sulkee kyselyn sen sulkeutumisaikana. Tarvittaessa voit avata kyselyn uudelleen (ks. kohta 6.).
+- Sovellus sulkee kyselyn sen sulkeutumisaikana. Tarvittaessa voit avata kyselyn uudelleen ([ks. kohta 6.](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/kayttoohje_opettaja_DRAFT.md#6-suljetun-kyselyn-avaaminen-uudelleen)).
 
 <img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/pvm_asetus.png" width="70%" height="70%">
 
@@ -196,13 +197,13 @@ Mahdolliset ongelmatilanteet (TBA)
 
 - Kyselyn vastausvaihtoehtoja ei voi tällä hetkellä muokata
 - Kyselyn voi kopioida uudeksi kyselyksi, jolloin vaihtoehtojen vapaa muokkaaminen on mahdollista (ks. kohta 9.), mutta tällöin menetetään kaikki kyselyssä jo mahdollisesti olevat vastaukset
-- Kyselyssä olemassaolevien vaihtoehtojen paikkamäärää voi muokata mikäli paikkoja on vähemmän kuin kyselyssä vastauksia (ks. kohta 8.1)
+- Kyselyssä olemassaolevien vaihtoehtojen paikkamäärää voi muokata mikäli paikkoja on vähemmän kuin kyselyssä vastauksia ([ks. kohta 8.1](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/kayttoohje_opettaja_DRAFT.md#9-kyselyn-kopiointi-uudeksi-kyselyksi))
 
 
 ## 8. Ryhmiin jakaminen ja tulosten käsittely
 
 - Siirry kyselyn yhteenvetosivulle sovelluksen etusivulta klikkaamalla ensin "Näytä vanhat kyselyt" -nappia ja valitse sitten haluamasi kysely klikkaamalla kyselyn kohdalla olevaa "Tarkastele tuloksia" -linkkiä.
-- Jos kyselyä ei ole vielä suljettu, tee se ensin (ks. kohta 5). Kyselyn sulkeuduttua kyselyn yhteenvetosivulle ilmestyy sininen nappi "Jaa ryhmiin". Mikäli kyselyssä ei ole enemmän vastauksia kuin paikkoja, voit suorittaa ryhmiin jaon suoraan.
+- Jos kyselyä ei ole vielä suljettu, tee se ensin ([ks. kohta 5](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/kayttoohje_opettaja_DRAFT.md#5-kyselyn-sulkeminen)). Kyselyn sulkeuduttua kyselyn yhteenvetosivulle ilmestyy sininen nappi "Jaa ryhmiin". Mikäli kyselyssä ei ole enemmän vastauksia kuin paikkoja, voit suorittaa ryhmiin jaon suoraan.
 
 <img src="https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/vastaukset_ennen_lajittelua.png" width="70%" height="70%">
 
@@ -249,7 +250,7 @@ Mahdolliset ongelmatilanteet (TBA)
 - Mene "Aiemmat kyselyt listaukseen"
 - Valitse haluamasi kyselyn riviltä "Kopioi kysely"-linkki
 - Avautuu kyselynluontipohja, jossa on esisyötettynä vanhan kyselyn tiedot
-- Voit päivittää kaikkia kyselyyn liittyviä kenttiä samoin kuin uuden kyselyn luonnissa (ks. kohta 3. uuden kyselyn luominen)
+- Voit päivittää kaikkia kyselyyn liittyviä kenttiä samoin kuin uuden kyselyn luonnissa (k[s. kohta 3. uuden kyselyn luominen](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/kayttoohje_opettaja_DRAFT.md#3-uuden-kyselyn-luominen))
 - Mikäli kopioimasi kysely on edelleen käynnissä, täytyy kopioidulla kyselyllä olla eri nimi ennen kuin sen voi tallentaa
 
 
