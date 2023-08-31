@@ -6,7 +6,11 @@ function submit(resubmit) {
     var maxBadChoices = document.getElementById("max_bad_choices").value;
     var minChoices = document.getElementById("min_choices").value;
     var surveyID = document.getElementById("survey_id").value;
-    var neutralIDs = $("#sortable-neutral").sortable("toArray");
+    var neutralSortables = document.getElementById("sortable-neutral");
+    var neutralIDs = []
+    if (neutralSortables) {
+        neutralIDs = $("#sortable-neutral").sortable("toArray");
+    };
     var goodIDs = $("#sortable-good").sortable("toArray");
     var badIDs = [];
     var reasons = "";

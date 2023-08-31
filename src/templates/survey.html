@@ -32,14 +32,22 @@
     <div class="col">
         <div class="row">
             <div class="col-sm">
+                {% if min_choices == choices_amt and max_bad_choices == 0 %}
+                <p>
+                    <i>Raahaa vaihtoehdot mieleiseesi järjestykseen.</i>
+                </p>
+                {% else %}
                 <p>
                     <i>Raahaa oikean reunan listasta vähintään {{ min_choices }} vaihtoehtoa vihreään laatikkoon.</i>
                 </p>
+                {% endif %}
             </div>
+            {% if min_choices == choices_amt and max_bad_choices == 0 %}
             {% if allow_search_visibility is sameas true %}
             <div class="col-sm">
                 <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
             </div>
+            {% endif %}
             {% endif %}
         </div>
         <div class="row">
@@ -119,6 +127,7 @@
                     </div>
                 </div>
             </div>
+    {% if min_choices != choices_amt or max_bad_choices != 0 %}
             <div class="col-sm">
                 <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray; padding-right: 10px;">
                     {% for group in choices %}
@@ -131,7 +140,6 @@
                     </li>
                     {% endfor %}
                 </ul>
-                
             </div>
         </div>
     </div>
@@ -141,6 +149,7 @@
         </p>
     </div>
     <input type="hidden" id="currently_selected" value="">
+    {% endif %}
 </div>
 <script>
     $( document ).ready(function() {
