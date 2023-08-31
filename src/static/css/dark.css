@@ -4,7 +4,7 @@ h1, h2, h3, h4, h5, label, p, i, strong, li  {
 
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3 {
     margin-top: 1em;
     margin-bottom: .5em;
 }
