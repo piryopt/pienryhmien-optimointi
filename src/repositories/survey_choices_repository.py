@@ -75,6 +75,7 @@ class SurveyChoicesRepository:
                 " VALUES (:c_id, :i_key, :i_value)"
             db.session.execute(text(sql), {"c_id":choice_id, "i_key":info_key, "i_value":info_value})
             db.session.commit()
+            return True
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
