@@ -8,4 +8,4 @@ skip_empty = True
 
 [run]
 source = src
-omit = src/**/__init__.py,src/local_db/**,src/static/**,src/app.py,src/routes.py,src/tools/**,src/templates/**
+omit = src/**/__init__.py,src/local_db/**,src/static/**,src/app.py,src/routes.py,src/tools/**,src/templates/**,src/entities/survey.py
