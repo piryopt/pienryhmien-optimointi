@@ -123,6 +123,9 @@ class Hungarian:
         the group.
         Updates student happiness array where each row represents a student
         and the number of their group preference where 1 is best.
+        If student is placed in a group outside of their group preference
+        their happiness is set to len(self.weights)-1, which is equal to
+        number of possible choices + 1
         Args:
             col_id (list): list of col id's where students assigned
             in order by row id
@@ -134,7 +137,7 @@ class Hungarian:
             if assigned_group in self.students[student_id].selections:
                 happiness = self.students[student_id].selections.index(assigned_group)+1
             else:
-                happiness = len(self.weights)
+                happiness = len(self.weights)-1
             self.student_happiness[i] = [student_id, happiness]
 
     def get_data(self):

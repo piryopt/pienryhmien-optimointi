@@ -203,10 +203,26 @@ class TestHungarian(unittest.TestCase):
         self.students[754] = Student(754, "Ronald", [55,22,14], [19])
         h = Hungarian(self.groups, self.students, self.weights)
         new_matrix = h.matrix
-        print(new_matrix)
         np.testing.assert_array_equal(new_matrix,
                                       np.array([[18, 18, 15, 12, 6],
                                                 [18, 18, 12, 15, 6],
                                                 [15, 15, 12, 18, 6],
                                                 [12, 12, 15, 0, 18],
                                                 [15, 15, 12, 18, 0]]))
+
+    def test_happiness_number_correct_fors_student_placed_outside_their_preference(self):
+        """
+        Adds students with identical choices and tests that for the student
+        placed outside of their preference list the happiness score is
+        number of choices + 1
+        There's 5 students and 5 spaces but no student chose group with id 19
+        so we find the student assigned to 19 and check that they are sufficiently
+        not happy
+        """
+        self.students[334] = Student(334, 'Bob', [22,14,55], [])
+        self.students[324] = Student(324, 'Ronald', [22,14,55], [])
+        h = Hungarian(self.groups, self.students, self.weights)
+        h.run()
+        student = h.assigned_groups[19][0]
+        happiness = int(h.student_happiness[h.student_happiness[:,0] == student][0][1])
+        self.assertEqual(happiness, 5)
