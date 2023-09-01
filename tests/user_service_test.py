@@ -41,6 +41,20 @@ class TestUserService(unittest.TestCase):
         result = us.create_user("Etunimi Sukunimi", "tiina.testiope@email.com", True)
         self.assertIsNone(result)
 
+    def test_create_user_returns_false_if_not_validate(self):
+        """
+        Test that create_user() returns False if validate() returns false
+        """
+        result = us.create_user("", "tiina.testiope@email.com", True)
+        self.assertEqual(result, False)
+
+    def test_validate(self):
+        """
+        Test that validate returns true if name valid
+        """
+        result = us.validate("Testi Opettaja")
+        self.assertEqual(result, True)
+
     def test_check_credentials_empty_email(self):
         '''
         Tests that check_credentials() function checks emails

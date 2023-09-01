@@ -30,21 +30,28 @@ class TestUserRankingsRepository(unittest.TestCase):
         self.ur.register(user2)
         self.user_id = ur.find_by_email(user1.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
+        self.survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(self.survey_id, self.user_id)
+        self.ranking = "2,3,5,4,1,6"
+        urr.add_user_ranking(self.user_id, self.survey_id, self.ranking, "", "")
 
     def tearDown(self):
         db.drop_all()
         self.app_context.pop()
 
+    def test_add_user_ranking_returns_false_if_user_id_not_correct(self):
+        """
+        Tests that add_user_ranking() returns false if adding ranking fails
+        """
+        success = urr.add_user_ranking(self.user_id+12, self.survey_id, self.ranking, "", "")
+        self.assertEqual(success, False)
+
     def test_get_user_ranking(self):
         """
         Test that getting a user ranking from the database works
         """
-        survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        st.add_teacher_to_survey(survey_id, self.user_id)
-        ranking = "2,3,5,4,1,6"
-        urr.add_user_ranking(self.user_id, survey_id, ranking, "", "")
-        db_ranking = urr.get_user_ranking(self.user_id, survey_id).ranking
-        self.assertEqual(db_ranking, ranking)
+        db_ranking = urr.get_user_ranking(self.user_id, self.survey_id).ranking
+        self.assertEqual(db_ranking, self.ranking)
 
     def test_get_invalid_user_ranking(self):
         """
@@ -57,24 +64,17 @@ class TestUserRankingsRepository(unittest.TestCase):
         """
         Test that deleting a user ranking works
         """
-        survey_id = sr.create_new_survey("Test survey 2", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        st.add_teacher_to_survey(survey_id, self.user_id)
-        ranking = "2,3,5,4,1,6"
-        urr.add_user_ranking(self.user_id, survey_id, ranking, "", "")
-        deleted = urr.get_user_ranking(self.user_id, survey_id).ranking
-        urr.delete_user_ranking(self.user_id, survey_id)
-        deleted = urr.get_user_ranking(self.user_id, survey_id)
+        urr.delete_user_ranking(self.user_id, self.survey_id)
+        deleted = urr.get_user_ranking(self.user_id, self.survey_id)
         self.assertEqual(deleted, False)
 
     def test_user_ranking_rejections(self):
         """
         Test that rejections are correctly placed into the database, when a ranking contains them
         """
-        survey_id = sr.create_new_survey("Test survey 3", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        st.add_teacher_to_survey(survey_id, self.user_id)
         ranking = "2,3,5,4,1,6"
         rejections = "9,8"
         reason = "Because seven ate nine"
-        urr.add_user_ranking(self.user_id, survey_id, ranking, rejections, reason)
-        db_rejections = urr.get_user_ranking(self.user_id, survey_id).rejections
+        urr.add_user_ranking(self.user_id2, self.survey_id, ranking, rejections, reason)
+        db_rejections = urr.get_user_ranking(self.user_id2, self.survey_id).rejections
         self.assertEqual(db_rejections, rejections)
