@@ -12,12 +12,12 @@ The Jakaja application is designed for the Faculty of Educational Sciences of th
 
 ## Languages and techniques
 
-Python 
-HTML
-JavaScript
-CSS
-RobotFramework
-Dockerfile
+- Python 
+- HTML
+- JavaScript
+- CSS
+- RobotFramework
+- Dockerfile
 
 
 ## Libraries and dependencies
@@ -181,16 +181,12 @@ The application dabase consists of 8 tables.
 
 ## Application logic
 
-TBA: kuvaus
-
-TBA: kuva logiikkakaaviosta
-
-TBA: pakkaukset
+[Application logic flow chart](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/process_flow_chart.md)
 
 
 ## Accessibility
 
-The Jakaja application follows [Web COntent Accessibility Guidelines reguirements](https://www.saavutettavuusvaatimukset.fi/digipalvelulain-vaatimukset/wcag-2-1/) to make it more accessible.
+The Jakaja application follows [Web Content Accessibility Guidelines reguirements](https://www.saavutettavuusvaatimukset.fi/digipalvelulain-vaatimukset/wcag-2-1/) to make it more accessible.
 
 | **Qualities for WCAG Compliance**               | **Description**                                                                                                |
 |-----------------------------------------------|----------------------------------------------------------------------------------------------------------------|
