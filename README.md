@@ -3,7 +3,7 @@
 
 ### Project description
 
-This is the repository of the final product of the [Software Engineering Lab course](https://studies.helsinki.fi/courses/cur/otm-96ddc0a9-a15b-4717-bfdc-23872092b730) (the department of Computer Science in University of Helsinki): the **Jakaja** application.
+This is the repository of the final product of the [Software Engineering Lab course](https://studies.helsinki.fi/courses/cur/otm-96ddc0a9-a15b-4717-bfdc-23872092b730) (the department of Computer Science in University of Helsinki): [the **Jakaja** application](https://jakaja.it.helsinki.fi/).
 
 The Jakaja application is designed for the Faculty of Educational Sciences of the University of Helsinki. The customers challenge is assigning large numbers of students into groups. In the past the group assignment was handled manually with Excel sheets, being slow and tedious. Freely available application solutions are not suitable for large groups and it's difficult to take exceptions into account. The jakaja application is designed to fix the issue. 
 
@@ -12,15 +12,17 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
 
 ### Product documentation
 
+- [Application architecture](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/architecture.md)
+- [Application logic](https://github.com/piryopt/pienryhmien-optimointi/blob/doc_changes/documentation/process_flow_chart.pdf)
 - [The hungarian Algorithm description](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md)
 - [Database documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/database_docs/)
-- [User guide](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/user_guide.md)
-- Application architecture (TBA)
-- Application logic (TBA)
-- Privacy statement (TBA)
+- [User guide for local testing](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/user_guide.md)
+- [User guide for teachers, in Finnish](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/kayttoohje_opettaja_DRAFT.md)
+- [Privacy statement](https://piryopt.ext.ocp-prod-0.k8s.it.helsinki.fi/privacy-policy)
 - Licensing information (TBA)
 - [Testing](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Testing.md)
 - [1st demo](https://youtu.be/z548R3cHm54) (30.6.2023, after the 1st half of the project)
+- [Final demo](https://youtu.be/MJJqFB_mtdY) (1.9.2023)
 
 
 ### Project practicalities and documentation
@@ -37,6 +39,7 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
   - [Sprint 4](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=1803644692)
   - [Sprint 5](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=453913023)
   - [Sprint 6](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=530975876)
+  - [Final week](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=257246197)
 - [Workflow guide](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/workflow_guide.md)
 - [Working hours](https://docs.google.com/spreadsheets/d/1rd8avaP7OGhgrX-mo4E5-mgfgCE71X50_aM8jR2hNEc/edit#gid=1189482618)
 

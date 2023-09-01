@@ -1,5 +1,6 @@
 <title>Web Login Service</title>
 <form action="/auth/login" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <label for="name">Käyttäjätunnus:</label><br>
     <input type="text" id="nameid" name="username"><br>
     <label for="emailid">Salasana (laita mitä vaan):</label><br>
