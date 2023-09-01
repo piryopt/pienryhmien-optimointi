@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask_apscheduler import APScheduler
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,6 +11,7 @@ class Config:
     SCHEDULER_API_ENABLED = True
 
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 app.config.from_object(Config())
 
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
