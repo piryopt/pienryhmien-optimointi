@@ -42,6 +42,7 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
   - [Final week](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=257246197)
 - [Workflow guide](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/workflow_guide.md)
 - [Working hours](https://docs.google.com/spreadsheets/d/1rd8avaP7OGhgrX-mo4E5-mgfgCE71X50_aM8jR2hNEc/edit#gid=1189482618)
+- [Sprint retrospective memo](https://helsinkifi-my.sharepoint.com/:w:/g/personal/kvintus_ad_helsinki_fi/ESr_fS3hEUVMsg00DHP5vWEBpPcCFS8eZlOT8pXTcdTooA?e=kuOmxE) 
 
 
 ### Project team communication
