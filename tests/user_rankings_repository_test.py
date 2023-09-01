@@ -39,6 +39,13 @@ class TestUserRankingsRepository(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
+    def test_add_user_ranking_returns_false_if_user_id_not_correct(self):
+        """
+        Tests that add_user_ranking() returns false if adding ranking fails
+        """
+        success = urr.add_user_ranking(self.user_id+12, self.survey_id, self.ranking, "", "")
+        self.assertEqual(success, False)
+
     def test_get_user_ranking(self):
         """
         Test that getting a user ranking from the database works
