@@ -6,7 +6,7 @@ import os
 import markdown
 from pathlib import Path
 
-from src import app,db,scheduler
+from src import app,db,scheduler,csrf
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -22,7 +22,7 @@ from src.tools.survey_result_helper import convert_choices_groups, convert_users
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
-from functools import wraps
+from functools import wraps 
 from datetime import datetime
 
 """
@@ -164,6 +164,7 @@ def new_survey_form(survey=None):
 
 @app.route("/surveys/create", methods = ["POST"])
 @teachers_only
+@csrf.exempt
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -203,6 +204,7 @@ def new_survey_post():
 
 @app.route("/surveys/create/import", methods = ["POST"])
 @teachers_only
+@csrf.exempt
 def import_survey_choices():
     """
     Post method for creating a new survey when it uses data imported from a csv file.
