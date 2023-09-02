@@ -102,43 +102,43 @@ class DbDataGen:
 
         #Info generated with ChatGPT :D
         choice_id1 = scr.create_new_survey_choice(survey_id, choice_name1, 11)
-        scr.create_new_choice_info(choice_id1, "Opettaja", "Leena Nieminen")
-        scr.create_new_choice_info(choice_id1, "Osoite", "Kirkkokatu 8, Tampere")
+        scr.create_new_choice_info(choice_id1, "Opettaja", "Leena Nieminen", False)
+        scr.create_new_choice_info(choice_id1, "Osoite", "Kirkkokatu 8, Tampere", False)
 
         choice_id2 = scr.create_new_survey_choice(survey_id, choice_name2, 11)
-        scr.create_new_choice_info(choice_id2, "Opettaja", "Juha Virtanen")
-        scr.create_new_choice_info(choice_id2, "Osoite", "Peltolantie 12, Vantaa")
+        scr.create_new_choice_info(choice_id2, "Opettaja", "Juha Virtanen", False)
+        scr.create_new_choice_info(choice_id2, "Osoite", "Peltolantie 12, Vantaa", False)
 
         choice_id3 = scr.create_new_survey_choice(survey_id, choice_name3, 11)
-        scr.create_new_choice_info(choice_id3, "Opettaja", "Anna Koskinen")
-        scr.create_new_choice_info(choice_id3, "Osoite", "Mannerheimintie 15, Helsinki")
+        scr.create_new_choice_info(choice_id3, "Opettaja", "Anna Koskinen", False)
+        scr.create_new_choice_info(choice_id3, "Osoite", "Mannerheimintie 15, Helsinki", False)
 
         choice_id4 = scr.create_new_survey_choice(survey_id, choice_name4, 11)
-        scr.create_new_choice_info(choice_id4, "Opettaja", "Markus Järvinen")
-        scr.create_new_choice_info(choice_id4, "Osoite", "Saaristokatu 6, Turku")
+        scr.create_new_choice_info(choice_id4, "Opettaja", "Markus Järvinen", False)
+        scr.create_new_choice_info(choice_id4, "Osoite", "Saaristokatu 6, Turku", False)
 
         choice_id5 = scr.create_new_survey_choice(survey_id, choice_name5, 11)
-        scr.create_new_choice_info(choice_id5, "Opettaja", "Riikka Kallio")
-        scr.create_new_choice_info(choice_id5, "Osoite", "Puistokatu 3, Jyväskylä")
+        scr.create_new_choice_info(choice_id5, "Opettaja", "Riikka Kallio", False)
+        scr.create_new_choice_info(choice_id5, "Osoite", "Puistokatu 3, Jyväskylä", False)
 
         choice_id6 = scr.create_new_survey_choice(survey_id, choice_name6, 11)
-        scr.create_new_choice_info(choice_id6, "Opettaja", "Mikko Rantanen")
-        scr.create_new_choice_info(choice_id6, "Osoite", "Pohjoinen Rautatiekatu 20, Oulu")
+        scr.create_new_choice_info(choice_id6, "Opettaja", "Mikko Rantanen", False)
+        scr.create_new_choice_info(choice_id6, "Osoite", "Pohjoinen Rautatiekatu 20, Oulu", False)
 
         choice_id7 = scr.create_new_survey_choice(survey_id, choice_name7, 11)
-        scr.create_new_choice_info(choice_id7, "Opettaja", "Satu Laine")
-        scr.create_new_choice_info(choice_id7, "Osoite", "Kauppakatu 2, Kuopio")
+        scr.create_new_choice_info(choice_id7, "Opettaja", "Satu Laine", False)
+        scr.create_new_choice_info(choice_id7, "Osoite", "Kauppakatu 2, Kuopio", False)
 
         choice_id8 = scr.create_new_survey_choice(survey_id, choice_name8, 11)
-        scr.create_new_choice_info(choice_id8, "Opettaja", "Jari Korhonen")
-        scr.create_new_choice_info(choice_id8, "Osoite", "Aleksanterinkatu 14, Lahti")
+        scr.create_new_choice_info(choice_id8, "Opettaja", "Jari Korhonen", False)
+        scr.create_new_choice_info(choice_id8, "Osoite", "Aleksanterinkatu 14, Lahti", False)
 
         choice_id9 = scr.create_new_survey_choice(survey_id, choice_name9, 11)
-        scr.create_new_choice_info(choice_id9, "Opettaja", "Maria Virtanen")
-        scr.create_new_choice_info(choice_id9, "Osoite", "Rantakatu 5, Joensuu")
+        scr.create_new_choice_info(choice_id9, "Opettaja", "Maria Virtanen", False)
+        scr.create_new_choice_info(choice_id9, "Osoite", "Rantakatu 5, Joensuu", False)
 
         choice_id10 = scr.create_new_survey_choice(survey_id, choice_name10, 11)
-        scr.create_new_choice_info(choice_id10, "Opettaja", "Antti Jokinen")
-        scr.create_new_choice_info(choice_id10, "Osoite", "Rauhankatu 6, Hämeenlinna")
+        scr.create_new_choice_info(choice_id10, "Opettaja", "Antti Jokinen", False)
+        scr.create_new_choice_info(choice_id10, "Osoite", "Rauhankatu 6, Hämeenlinna", False)
 
 gen_data = DbDataGen()

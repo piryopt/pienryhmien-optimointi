@@ -88,21 +88,21 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that create_new_choice_info() works and returns True
         """
-        success = scr.create_new_choice_info(self.choice_id, "Priority", "5")
+        success = scr.create_new_choice_info(self.choice_id, "Priority", "5", False)
         self.assertEqual(success, True)
 
     def test_create_new_choice_info_not_working_with_false_choice_id(self):
         """
         Test that create_new_choice_info() works and returns True
         """
-        success = scr.create_new_choice_info(self.choice_id+56, "Priority", "0")
+        success = scr.create_new_choice_info(self.choice_id+56, "Priority", "0", False)
         self.assertEqual(success, False)
 
     def test_get_choice_additional_infos(self):
         """
         Test that getting the additional info of a survey choice works
         """
-        scr.create_new_choice_info(self.choice_id, "Moti", "Vaatio")
+        scr.create_new_choice_info(self.choice_id, "Moti", "Vaatio", False)
         info = scr.get_choice_additional_infos(self.choice_id)
         self.assertEqual(info[0].info_key, "Moti")
         self.assertEqual(info[0].info_value, "Vaatio")
@@ -112,7 +112,20 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         Adds additional info on two choices and checks that returned
         number of infos is correct
         """
-        scr.create_new_choice_info(self.choice_id, "Priority", "4")
-        scr.create_new_choice_info(self.choice_id2, "Priority", "11")
+        scr.create_new_choice_info(self.choice_id, "Priority", "4", False)
+        scr.create_new_choice_info(self.choice_id2, "Priority", "11", False)
         info = scr.get_all_additional_infos(self.survey_id)
         self.assertEqual(len(info), 2)
+
+    def test_get_all_additional_infos_not_hidden(self):
+        """
+        Adds additional info on two choices and checks that returned
+        number of infos is correct
+        """
+        scr.create_new_choice_info(self.choice_id, "Osoite", "Kakkakuja 4", False)
+        scr.create_new_choice_info(self.choice_id, "Kaupunki", "Helsinki", True)
+        info = scr.get_choice_additional_infos_not_hidden(self.choice_id)
+
+        self.assertEqual(len(info), 1)
+        self.assertEqual(info[0][0], "Osoite")
+        self.assertEqual(info[0][1], "Kakkakuja 4")

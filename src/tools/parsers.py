@@ -82,7 +82,12 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
                 choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, spaces)
                 continue
 
-            survey_choices_repository.create_new_choice_info(choice_id, pair, choice[pair])
+            hidden = False
+
+            if pair[-1] == '*':
+                hidden = True
+
+            survey_choices_repository.create_new_choice_info(choice_id, pair, choice[pair], hidden)
             count += 1
 
     return survey_id

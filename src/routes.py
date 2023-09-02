@@ -6,7 +6,7 @@ import os
 import markdown
 from pathlib import Path
 
-from src import app,db,scheduler
+from src import app,db,scheduler,csrf
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -22,7 +22,7 @@ from src.tools.survey_result_helper import convert_choices_groups, convert_users
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
-from functools import wraps
+from functools import wraps 
 from datetime import datetime
 
 """
@@ -143,7 +143,7 @@ def get_info():
     """
     raw_id = request.get_json()
     basic_info = survey_choices_service.get_choice_name_and_spaces(int(raw_id))
-    additional_info = survey_choices_service.get_choice_additional_infos(int(raw_id))
+    additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(int(raw_id))
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/surveys/create", methods = ["GET"])
@@ -164,6 +164,7 @@ def new_survey_form(survey=None):
 
 @app.route("/surveys/create", methods = ["POST"])
 @teachers_only
+@csrf.exempt
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -203,6 +204,7 @@ def new_survey_post():
 
 @app.route("/surveys/create/import", methods = ["POST"])
 @teachers_only
+@csrf.exempt
 def import_survey_choices():
     """
     Post method for creating a new survey when it uses data imported from a csv file.
@@ -535,6 +537,15 @@ def survey_results(survey_id):
     sort.run()
     output_data = sort.get_data()
 
+    # create an dict which contains choice's additional info as list
+    additional_infos = {}
+    for row in survey_choices:
+        additional_infos[str(row[0])] = []
+        
+        cinfos = survey_choices_service.get_choice_additional_infos(row[0])
+        for i in cinfos:
+            additional_infos[str(row[0])].append(i[1])
+
     # Add to data the number of the choice the user got
     for results in output_data[0]:
         user_id = results[0][0]
@@ -545,7 +556,8 @@ def survey_results(survey_id):
 
     if request.method == "GET":
         return render_template("results.html", survey_id = survey_id, results = output_data[0],
-                            happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists)
+                            happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists,
+                            infos=additional_infos, sc=cinfos)
 
     # If the request is post, check if results have been saved. If they have, redirect to previous_surveys page.
     if saved_result_exists:

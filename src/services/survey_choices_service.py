@@ -63,6 +63,15 @@ class SurveyChoicesService:
             choice_id: The id of the survey choice
         """
         return self._survey_choices_repository.get_choice_additional_infos(choice_id)
+    
+    def get_choice_additional_infos_not_hidden(self, choice_id:int):
+        """
+        Get all info of a survey choice except name and spaces
+
+        args:
+            choice_id: The id of the survey choice
+        """
+        return self._survey_choices_repository.get_choice_additional_infos_not_hidden(choice_id)
 
     def survey_all_additional_infos(self, survey_id):
         """

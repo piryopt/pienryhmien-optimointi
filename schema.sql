@@ -38,7 +38,8 @@ CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices
 	id SERIAL PRIMARY KEY,
 	choice_id INTEGER REFERENCES survey_choices,
 	info_key TEXT,
-	info_value TEXT
+	info_value TEXT,
+	hidden BOOLEAN
 );
 
 CREATE TABLE user_survey_rankings (

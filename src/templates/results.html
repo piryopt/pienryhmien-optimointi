@@ -42,6 +42,9 @@
             <th><p>Sähköposti</p></th>
             <th><p>Ryhmä</p></th>
             <th><p>Monesko valinta</p></th>
+            {% for s in sc %}
+            <th style="display:none">{{s[0]}}</th>
+            {% endfor %}
         </tr>
     </thead>
     <tr></tr>
@@ -52,6 +55,10 @@
         <td><p>{{ row[1] }}</p></td>       <!--email--> 
         <td><p>{{ row[2][1] }}</p></td>       <!--assigned group--> 
         <td><p>{{ row[3] }}</p></td>       <!--Which choice--> 
+
+        {% for info in infos[row[2][0]|string] %}
+        <td style="display:none;">{{ info }}</td>
+        {% endfor %}
         
     </tr>
     {% endfor %}
