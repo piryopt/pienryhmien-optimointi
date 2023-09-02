@@ -539,15 +539,12 @@ def survey_results(survey_id):
 
     # create an dict which contains choice's additional info as list
     additional_infos = {}
-    callableinfos = []
     for row in survey_choices:
         additional_infos[str(row[0])] = []
         
         cinfos = survey_choices_service.get_choice_additional_infos(row[0])
         for i in cinfos:
             additional_infos[str(row[0])].append(i[1])
-
-    print(cinfos)
 
     # Add to data the number of the choice the user got
     for results in output_data[0]:
