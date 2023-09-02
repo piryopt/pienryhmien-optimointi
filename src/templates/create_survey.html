@@ -223,7 +223,8 @@
       <p>Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää tietokenttä".</p>
       <a href="/csv-instructions" class="text-muted">CSV-ohje</a><br>
       <input id="choiceFileInput" type="file" style="display: none;" onchange="handleFileUpload()"/>
-      <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">Tuo valinnat CSV-tiedostosta</button>
+      <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">Tuo valinnat CSV-tiedostosta</button><br><br>
+      <p>Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *</p>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
           <tr id="column-delete-btns">

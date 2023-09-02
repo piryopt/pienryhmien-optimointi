@@ -66,14 +66,14 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
-    def create_new_choice_info(self, choice_id, info_key, info_value):
+    def create_new_choice_info(self, choice_id, info_key, info_value, hidden):
         '''
         Adds an additional to existing survey choice, updates choice_infos table
         '''
         try:
-            sql = "INSERT INTO choice_infos (choice_id, info_key, info_value)"\
-                " VALUES (:c_id, :i_key, :i_value)"
-            db.session.execute(text(sql), {"c_id":choice_id, "i_key":info_key, "i_value":info_value})
+            sql = "INSERT INTO choice_infos (choice_id, info_key, info_value, hidden)"\
+                " VALUES (:c_id, :i_key, :i_value, :hidden)"
+            db.session.execute(text(sql), {"c_id":choice_id, "i_key":info_key, "i_value":info_value, "hidden":hidden})
             db.session.commit()
             return True
         except Exception as e: # pylint: disable=W0718
@@ -86,6 +86,18 @@ class SurveyChoicesRepository:
         '''
         try:
             sql = "SELECT info_key, info_value FROM choice_infos WHERE choice_id=:choice_id"
+            result = db.session.execute(text(sql), {"choice_id":choice_id})
+            return result.fetchall()
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def get_choice_additional_infos_not_hidden(self, choice_id):
+        '''
+        Gets a list of non-hidden key-value pairs based on choice_id from choice_infos tables
+        '''
+        try:
+            sql = "SELECT info_key, info_value FROM choice_infos WHERE choice_id=:choice_id AND hidden=false"
             result = db.session.execute(text(sql), {"choice_id":choice_id})
             return result.fetchall()
         except Exception as e: # pylint: disable=W0718

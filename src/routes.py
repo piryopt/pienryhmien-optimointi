@@ -143,7 +143,7 @@ def get_info():
     """
     raw_id = request.get_json()
     basic_info = survey_choices_service.get_choice_name_and_spaces(int(raw_id))
-    additional_info = survey_choices_service.get_choice_additional_infos(int(raw_id))
+    additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(int(raw_id))
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
 @app.route("/surveys/create", methods = ["GET"])
@@ -535,6 +535,18 @@ def survey_results(survey_id):
     sort.run()
     output_data = sort.get_data()
 
+    # create an dict which contains choice's additional info as list
+    additional_infos = {}
+    callableinfos = []
+    for row in survey_choices:
+        additional_infos[str(row[0])] = []
+        
+        cinfos = survey_choices_service.get_choice_additional_infos(row[0])
+        for i in cinfos:
+            additional_infos[str(row[0])].append(i[1])
+
+    print(cinfos)
+
     # Add to data the number of the choice the user got
     for results in output_data[0]:
         user_id = results[0][0]
@@ -545,7 +557,8 @@ def survey_results(survey_id):
 
     if request.method == "GET":
         return render_template("results.html", survey_id = survey_id, results = output_data[0],
-                            happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists)
+                            happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists,
+                            infos=additional_infos, sc=cinfos)
 
     # If the request is post, check if results have been saved. If they have, redirect to previous_surveys page.
     if saved_result_exists:
