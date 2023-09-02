@@ -17,7 +17,9 @@ The app has both unit tests and UI tests. Ui testing is done with [Robot Framewo
 
 ## Test coverage
 
-TBA: Final test coverage report
+The test coverage was 75 %.
+
+[](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Pictures/coverage_report.png)
 
 
 ## Outside testing scope
