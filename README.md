@@ -9,6 +9,11 @@ The Jakaja application is designed for the Faculty of Educational Sciences of th
 
 The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm) to assign students into optional groups. A teacher user can create a survey with different options and a student user can fill their answer into that survey. After the survey closes a teacher user handles exceptions and uses the algorithm to assign groups. The results are shown as a table and can be exported to an Excel sheet. The goal is a fast, efficient and optimal group assignment for the whole group.
 
+### Demos
+
+- [1st demo](https://youtu.be/z548R3cHm54) (30.6.2023)
+- [Final demo](https://youtu.be/MJJqFB_mtdY) (1.9.2023)
+
 
 ### Product documentation
 
@@ -17,12 +22,10 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
 - [The hungarian Algorithm description](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md)
 - [Database documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/database_docs/)
 - [User guide for local testing](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/user_guide.md)
-- [User guide for teachers, in Finnish](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/kayttoohje_opettaja_DRAFT.md)
+- [User guide for teachers](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/kayttoohje_opettaja_DRAFT.md) - in Finnish
 - [Privacy statement](https://piryopt.ext.ocp-prod-0.k8s.it.helsinki.fi/privacy-policy)
-- Licensing information (TBA)
-- [Testing](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Testing.md)
-- [1st demo](https://youtu.be/z548R3cHm54) (30.6.2023, after the 1st half of the project)
-- [Final demo](https://youtu.be/MJJqFB_mtdY) (1.9.2023)
+- [License](https://github.com/piryopt/pienryhmien-optimointi/blob/main/LICENSE)
+- [Testing documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/Testing.md)
 
 
 ### Project practicalities and documentation
@@ -42,6 +45,7 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
   - [Final week](https://docs.google.com/spreadsheets/d/19JN28VdVESQVGfSUTVLsMB2tkSZfw3HZhc6R9kpa-ng/edit#gid=257246197)
 - [Workflow guide](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/workflow_guide.md)
 - [Working hours](https://docs.google.com/spreadsheets/d/1rd8avaP7OGhgrX-mo4E5-mgfgCE71X50_aM8jR2hNEc/edit#gid=1189482618)
+- [Sprint retrospective memo](https://helsinkifi-my.sharepoint.com/:w:/g/personal/kvintus_ad_helsinki_fi/ESr_fS3hEUVMsg00DHP5vWEBpPcCFS8eZlOT8pXTcdTooA?e=kuOmxE) 
 
 
 ### Project team communication
