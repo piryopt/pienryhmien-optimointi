@@ -332,6 +332,21 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def get_all_surveys(self):
+        """
+        SQL code for getting all surveys. 
+        """
+        try:
+            sql = "SELECT * FROM surveys"
+            result = db.session.execute(text(sql))
+            surveys = result.fetchall()
+            if not surveys:
+                return False
+            return surveys
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 
 survey_repository = SurveyRepository()

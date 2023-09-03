@@ -45,8 +45,7 @@ class UserRepository:
 
     def get_all_users(self):
         """
-        SQL code for getting a list of all users. Currently only used for data gen for testing purposes.
-        This should probably be deleted before production
+        SQL code for getting a list of all users. Used for analytics in the admin page.
         """
         try:
             sql = "SELECT * FROM users"
