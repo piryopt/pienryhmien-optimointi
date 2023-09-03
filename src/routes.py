@@ -394,6 +394,7 @@ def edit_survey_form(survey_id):
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
 @teachers_only
+@csrf.exempt
 def edit_survey_post(survey_id):
     """
     Post method for saving edits to a survey.
@@ -420,6 +421,7 @@ def delete_survey(survey_id):
 
 @app.route("/surveys/<string:survey_id>/edit/add_teacher/<string:teacher_email>", methods=["POST"])
 @teachers_only
+@csrf.exempt
 def add_teacher(survey_id, teacher_email):
     if not teacher_email:
         response = {"status":"0","msg":"Sähköpostiosoite puuttuu!"}
