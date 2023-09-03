@@ -67,12 +67,13 @@ class TestFeedbackRepository(unittest.TestCase):
         """
         Test that the list of unsolved feedback is the correct size
         """
+        fr.new_feedback(self.user_id, "Testi palaute 5", "bugi", "Toimiiko 5. testi?")
         unsolved_list = fr.get_unsolved_feedback()
-        self.assertEqual(2, len(unsolved_list))
+        self.assertEqual(1, len(unsolved_list))
 
     def test_mark_feedback_solved(self):
         """
-        Test that closing a feedback works
+        Test that closing a feedback works and that the list of solved feedback is the correct size
         """
         fr.new_feedback(self.user_id, "Testi palaute 3", "bugi", "Toimiiko kolmas testi?")
         feedback_id = ""
@@ -84,11 +85,6 @@ class TestFeedbackRepository(unittest.TestCase):
         self.assertTrue(success)
         feedback = fr.get_feedback(feedback_id)
         self.assertTrue(feedback.solved)
-
-    def test_get_solved_feedback(self):
-        """
-        Test that the list of solved feedback is the correct size
-        """
         unsolved_list = fr.get_solved_feedback()
         self.assertEqual(1, len(unsolved_list))
 
@@ -98,4 +94,3 @@ class TestFeedbackRepository(unittest.TestCase):
         fr.new_feedback(self.user_id, "Testi palaute 4", "bugi", "Toimiiko 4. testi?")
         success = fr.check_unsolved_title_doesnt_exist(self.user_id, "Testi palaute 4")
         self.assertFalse(success)
-        
