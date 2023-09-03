@@ -23,14 +23,8 @@ class TestFeedbackRepository(unittest.TestCase):
 
         self.ur = ur
         user1 = User("Not on tren Testerr", "feelsbadman@tester.com", True)
-        user2 = User("Not on anabolic", "anabolic@tester.com", True)
-        user3 = User("trt enjoyer", "ttrt@tester.com", True)
         self.ur.register(user1)
-        self.ur.register(user2)
-        self.ur.register(user3)
         self.user_id = ur.find_by_email(user1.email)[0]
-        self.user_id2 = ur.find_by_email(user2.email)[0]
-        self.user_id3 = ur.find_by_email(user3.email)[0]
 
     def tearDown(self):
         db.drop_all()
