@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Tilastot{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  </br>
+  <h2>Tilastot</h2></br>
+  <table cellspacing="10" class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+          <th>Luodut kyselyt</th>
+          <th>Käynnissä olevat kyselyt</th>
+          <th>Rekisteröityneet käyttäjät</th>
+          <th>Vastauksia luotu</th>
+      </tr>
+    </thead>
+    <tbody>
+        <td><p>{{ data[0] }}</p></td>
+        <td><p>{{ data[1] }}</p></td>
+        <td><p>{{ data[2] }}</p></td>
+        <td><p>{{ data[3] }}</p></td>
+    </tbody>
+  </table>
+{% endblock %}
