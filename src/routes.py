@@ -14,6 +14,7 @@ from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.services.final_group_service import final_group_service
 from src.services.survey_teachers_service import survey_teachers_service
+from src.services.feedback_service import feedback_service
 from src.tools import excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
@@ -644,41 +645,63 @@ def logout():
 """
 ADMINTOOLS -ROUTES:
 """
-@app.route("/admintools/gen_data", methods = ["GET", "POST"])
-def admin_gen_data():
-    """
-    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
-    """
+@app.route("/admintools/analytics")
+def admin_analytics():
+    # Only admins permitted!
     user_id = session.get("user_id",0)
-    surveys = survey_repository.fetch_all_active_surveys(user_id)
-    if request.method == "GET":
-        return render_template("/admintools/gen_data.html", surveys = surveys)
+    admin = user_service.check_if_admin(user_id)
+    if not admin:
+        return redirect("/")
 
-    if request.method == "POST":
-        student_n = request.form.get("student_n")
-        gen_data.generate_users(int(student_n))
-        gen_data.add_generated_users_db()
-        return redirect("/admintools/gen_data")
+    data = []
+    all_created_surveys = survey_service.len_all_surveys()
+    all_active_surveys = survey_service.len_active_surveys()
+    all_students = user_service.len_all_users()
+    all_student_rankings = user_rankings_service.len_all_rankings()
 
-@app.route("/admintools/gen_data/rankings", methods = ["POST"])
-def admin_gen_rankings():
-    """
-    Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
-    """
-    survey_id = request.form.get("survey_list")
-    gen_data.generate_rankings(survey_id)
+    data.append(all_created_surveys)
+    data.append(all_active_surveys)
+    data.append(all_students)
+    data.append(all_student_rankings)
 
-    return redirect(f"/surveys/{survey_id}/answers")
+    return render_template("admintools/admin_analytics.html", data = data)
 
-@app.route("/admintools/gen_data/survey", methods = ["POST"])
-def admin_gen_survey():
-    """
-    Generate a survey for testing. DELETE BEFORE PRODUCTION!!!
-    """
+@app.route("/admintools/feedback")
+def admin_feedback():
+    # Only admins permitted!
     user_id = session.get("user_id",0)
-    gen_data.generate_survey(user_id)
-    surveys = survey_repository.fetch_all_active_surveys(user_id)
-    return render_template("/admintools/gen_data.html", surveys = surveys)
+    admin = user_service.check_if_admin(user_id)
+    if not admin:
+        return redirect("/")
+
+    data = feedback_service.get_unsolved_feedback()
+
+    return render_template("admintools/admin_feedback.html", data = data)
+
+@app.route("/admintools/feedback/<int:feedback_id>")
+def admin_feedback_data(feedback_id):
+    # Only admins permitted!
+    user_id = session.get("user_id",0)
+    admin = user_service.check_if_admin(user_id)
+    if not admin:
+        return redirect("/")
+
+    feedback = feedback_service.get_feedback(feedback_id)
+    if not feedback:
+        return redirect("/")
+    return render_template("admintools/admin_feedback_data.html", feedback = feedback)
+
+@app.route("/admintools/feedback/<int:feedback_id>/close", methods = ["POST"])
+def admin_feedback_close_feedback(feedback_id):
+    # Only admins permitted!
+    user_id = session.get("user_id",0)
+    admin = user_service.check_if_admin(user_id)
+    if not admin:
+        return redirect("/")
+    success = feedback_service.mark_feedback_solved(feedback_id)
+    if not success:
+        return redirect("/")
+    return redirect("/admintools/feedback")
 
 """
 MISCELLANEOUS ROUTES:
@@ -784,6 +807,18 @@ def get_choices(survey_id):
     response = {"status":"1","msg":"Tallennus onnistui."}
     if not submission:
         response = {"status":"0","msg":"Tallennus epäonnistui."}
+    return jsonify(response)
+
+@app.route("/feedback", methods = ["GET", "POST"])
+def feedback():
+    if request.method == "GET":
+        return render_template("feedback.html")
+    user_id = session.get("user_id",0)
+    data = request.get_json()
+    (success, message) = feedback_service.new_feedback(user_id, data)
+    response = {"status":"1","msg":message}
+    if not success:
+        response = {"status":"0","msg":message}
     return jsonify(response)
 
 """

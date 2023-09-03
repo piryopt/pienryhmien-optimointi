@@ -116,6 +116,40 @@ function add_teacher() {
     });
 }
 
+function add_feedback() {
+    var title = document.getElementById("title").value;
+    var type = document.getElementById("type").value;
+    var content = document.getElementById("content").value;
+    console.log(title, type, content)
+
+    var data = {
+        "title": title,
+        "type":type,
+        "content":content
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/feedback",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "json",
+        success: function(result) {
+            var alertMsg = {
+                msg: result.msg,
+                color: ""
+            }
+            if (result.status === "1") {
+                alertMsg.color = "#216620";
+            }
+            if (result.status === "0") {
+                alertMsg.color = "#9c2b2e";
+            }
+            showAlert(alertMsg);
+        }
+    });
+}
+
 function showMoreInfo(choiceID) {
     var infoContainer = document.getElementById("info-container");
     var currentlySelected = document.getElementById("currently_selected").value;

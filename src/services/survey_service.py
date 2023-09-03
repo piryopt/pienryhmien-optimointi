@@ -360,6 +360,10 @@ class SurveyService:
         return (True, message)
 
     def update_survey_group_sizes(self, survey_id, choices):
+        """
+        Updates the group sizes of survey choices. A teacher only gets to use this fucntion if the amount of students that have answered the
+        survey is greater than the sum of all group sizes.
+        """
         count = 0
         for choice in choices:
             success = self._choices_repository.edit_choice_group_size(survey_id, choice['Nimi'], choice['Enimmäispaikat'])
@@ -373,5 +377,23 @@ class SurveyService:
             count += 1
         message = "Ryhmäkoot päivitetty"
         return (True, message)
+    
+    def len_active_surveys(self):
+        """
+        Gets the size of all active surveys. Used for analytics in the admin page.
+        """
+        surveys = self._survey_repository.get_all_active_surveys()
+        if not surveys:
+            return 0
+        return len(surveys)
+    
+    def len_all_surveys(self):
+        """
+        Gets the size of all surveys. Used for analytics in the admin page.
+        """
+        surveys = self._survey_repository.get_all_surveys()
+        if not surveys:
+            return 0
+        return len(surveys)
 
 survey_service = SurveyService()
