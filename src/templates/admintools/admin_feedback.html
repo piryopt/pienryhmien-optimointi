@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Palaute{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  </br>
+  <h2>Palaute</h2></br>
+  <table cellspacing="10" class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+          <th>Otsikko</th>
+          <th>Tyyppi</th>
+          <th>Sähköposti</th>
+          <th>Tarkastele</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for feedback in data %}
+        <tr>
+            <td><p>{{ feedback[1] }}</p></td>
+            <td><p>{{ feedback[2] }}</p></td>
+            <td><p>{{ feedback[3] }}</p></td>
+            <td><a href="/admintools/feedback/{{feedback[0]}}">Lisää</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

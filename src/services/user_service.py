@@ -37,6 +37,10 @@ class UserService:
             session["role"] = "Opettaja"
         else:
             session["role"] = "Opiskelija"
+        if user.admin:
+            session["admin"] = True
+        else:
+            session["admin"] = False
         return True
 
     def create_user(self, name, email, isteacher):
@@ -107,6 +111,7 @@ class UserService:
         del session["full_name"]
         del session["role"]
         del session["reloaded"]
+        del session["admin"]
 
     def find_by_email(self, email):
         """
@@ -135,5 +140,24 @@ class UserService:
         """
         user = self._user_repository.get_user_data(user_id)
         return user.isteacher
+    
+    def check_if_admin(self, user_id):
+        """
+        Check if the user has admin privileges
+
+        args:
+            user_id: The id of the user
+        """
+        user = self._user_repository.get_user_data(user_id)
+        return user.admin
+    
+    def len_all_users(self):
+        """
+        Gets the number of users registered in Jakaja. Used for analytics in the admin page.
+        """
+        users = self._user_repository.get_all_users()
+        if not users:
+            return 0
+        return len(users)
 
 user_service = UserService()

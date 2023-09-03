@@ -34,6 +34,12 @@
                     <img src="{{ url_for('static', filename='images/hy_logo.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">
                     Jakaja
                     </a>
+                    {% if session.admin %}
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <a class="nav-link" href="/admintools/analytics"><small>Tilastot</small></a>
+                        <a class="nav-link" href="/admintools/feedback"><small>Palaute</small></a>
+                    </div>
+                    {% endif %}
                     <div class="d-flex">
                         <div class="dropdown">
                             <button class="btn dropdown btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -64,6 +70,7 @@
         <footer class="footer mt-auto py-3 bg-dark">
             <div class="container">
                 <a href="faq" class="text-muted">UKK</a>
+                <a href="/feedback" class="text-muted">Anna palautetta</a>
                 <a href="privacy-policy" class="text-muted">Tietosuojaseloste</a>
                 <a href="https://github.com/piryopt/pienryhmien-optimointi" class="github-logo"><img src="{{ url_for('static', filename='images/github-mark-white.png') }}" alt="Jakaja GitHubissa" width="30" height="30"></a>
             </div>

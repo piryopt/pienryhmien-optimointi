@@ -62,5 +62,20 @@ class UserRankingsRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def get_all_rankings(self):
+        """
+        SQL code for getting the amount of all rankings. Used for analytics in the admin page.
+        """
+        try:
+            sql = "SELECT * FROM user_survey_rankings"
+            result = db.session.execute(text(sql))
+            rankings = result.fetchall()
+            if not rankings:
+                return False
+            return rankings
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 user_rankings_repository = UserRankingsRepository()
