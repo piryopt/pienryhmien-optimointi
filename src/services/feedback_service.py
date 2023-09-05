@@ -86,6 +86,20 @@ class FeedbackService:
             feedback_list.append([f.id, f.title, f.type, email])
         return feedback_list
     
+    def get_solved_feedback(self):
+        """
+        Get a list of all feedback that has been solved.
+        """
+        feedback = self._feedback_repository.get_solved_feedback()
+        if not feedback:
+            return []
+        feedback_list = []
+        for f in feedback:
+            user_id = f.user_id
+            email = self._user_service.get_email(user_id)
+            feedback_list.append([f.id, f.title, f.type, email])
+        return feedback_list
+    
     def mark_feedback_solved(self, feedback_id):
         """
         Solve a feedback. It wont appear on the feedback page anymore.

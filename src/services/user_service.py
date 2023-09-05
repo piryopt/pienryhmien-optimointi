@@ -151,13 +151,22 @@ class UserService:
         user = self._user_repository.get_user_data(user_id)
         return user.admin
     
-    def len_all_users(self):
+    def len_all_students(self):
         """
-        Gets the number of users registered in Jakaja. Used for analytics in the admin page.
+        Gets the number of students registered in Jakaja. Used for analytics in the admin page.
         """
-        users = self._user_repository.get_all_users()
+        users = self._user_repository.get_all_students()
         if not users:
             return 0
         return len(users)
+    
+    def len_all_teachers(self):
+        """
+        Gets the number of teachers that have survey privileges in Jakaja. Used for analytics in the admin page.
+        """
+        teachers = self._user_repository.get_all_teachers()
+        if not teachers:
+            return 0
+        return len(teachers)
 
 user_service = UserService()

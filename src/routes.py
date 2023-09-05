@@ -670,13 +670,15 @@ def admin_analytics():
     data = []
     all_created_surveys = survey_service.len_all_surveys()
     all_active_surveys = survey_service.len_active_surveys()
-    all_students = user_service.len_all_users()
+    all_students = user_service.len_all_students()
     all_student_rankings = user_rankings_service.len_all_rankings()
+    all_teachers =user_service.len_all_teachers()
 
     data.append(all_created_surveys)
     data.append(all_active_surveys)
     data.append(all_students)
     data.append(all_student_rankings)
+    data.append(all_teachers)
 
     return render_template("admintools/admin_analytics.html", data = data)
 
@@ -691,6 +693,18 @@ def admin_feedback():
     data = feedback_service.get_unsolved_feedback()
 
     return render_template("admintools/admin_feedback.html", data = data)
+
+@app.route("/admintools/feedback/closed")
+def admin_closed_feedback():
+    # Only admins permitted!
+    user_id = session.get("user_id",0)
+    admin = user_service.check_if_admin(user_id)
+    if not admin:
+        return redirect("/")
+
+    data = feedback_service.get_solved_feedback()
+
+    return render_template("admintools/admin_closed_feedback.html", data = data)
 
 @app.route("/admintools/feedback/<int:feedback_id>")
 def admin_feedback_data(feedback_id):
@@ -838,8 +852,8 @@ def feedback():
 """
 TASKS:
 """
-@scheduler.task('cron', id='do_job_1', hour='*')
-def job1():
+@scheduler.task('cron', id='close_surveys', hour='*')
+def close_surveys():
     """
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """

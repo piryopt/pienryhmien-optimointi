@@ -43,12 +43,12 @@ class UserRepository:
             return False
         return user
 
-    def get_all_users(self):
+    def get_all_students(self):
         """
-        SQL code for getting a list of all users. Used for analytics in the admin page.
+        SQL code for getting a list of all students. Used for analytics in the admin page.
         """
         try:
-            sql = "SELECT * FROM users"
+            sql = "SELECT * FROM users WHERE isteacher=False"
             result = db.session.execute(text(sql))
             users = result.fetchall()
             if not users:
@@ -86,5 +86,23 @@ class UserRepository:
         sql = "UPDATE users SET isteacher=true WHERE email=:email"
         db.session.execute(text(sql), {"email":email})
         db.session.commit()
+
+    def get_all_teachers(self):
+        """
+        SQL code for getting all teachers
+
+        args:
+            user_id: The id of a user
+        """
+        try:
+            sql = "SELECT * FROM users WHERE isteacher=True"
+            result = db.session.execute(text(sql))
+            teachers = result.fetchall()
+            if not teachers:
+                return False
+            return teachers
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 user_repository = UserRepository()
