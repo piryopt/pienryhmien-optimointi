@@ -165,7 +165,6 @@ def new_survey_form(survey=None):
 
 @app.route("/surveys/create", methods = ["POST"])
 @teachers_only
-@csrf.exempt
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -205,7 +204,6 @@ def new_survey_post():
 
 @app.route("/surveys/create/import", methods = ["POST"])
 @teachers_only
-@csrf.exempt
 def import_survey_choices():
     """
     Post method for creating a new survey when it uses data imported from a csv file.
@@ -394,7 +392,6 @@ def edit_survey_form(survey_id):
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
 @teachers_only
-@csrf.exempt
 def edit_survey_post(survey_id):
     """
     Post method for saving edits to a survey.
@@ -421,7 +418,6 @@ def delete_survey(survey_id):
 
 @app.route("/surveys/<string:survey_id>/edit/add_teacher/<string:teacher_email>", methods=["POST"])
 @teachers_only
-@csrf.exempt
 def add_teacher(survey_id, teacher_email):
     if not teacher_email:
         response = {"status":"0","msg":"Sähköpostiosoite puuttuu!"}
@@ -670,13 +666,15 @@ def admin_analytics():
     data = []
     all_created_surveys = survey_service.len_all_surveys()
     all_active_surveys = survey_service.len_active_surveys()
-    all_students = user_service.len_all_users()
+    all_students = user_service.len_all_students()
     all_student_rankings = user_rankings_service.len_all_rankings()
+    all_teachers =user_service.len_all_teachers()
 
     data.append(all_created_surveys)
     data.append(all_active_surveys)
     data.append(all_students)
     data.append(all_student_rankings)
+    data.append(all_teachers)
 
     return render_template("admintools/admin_analytics.html", data = data)
 
@@ -691,6 +689,18 @@ def admin_feedback():
     data = feedback_service.get_unsolved_feedback()
 
     return render_template("admintools/admin_feedback.html", data = data)
+
+@app.route("/admintools/feedback/closed")
+def admin_closed_feedback():
+    # Only admins permitted!
+    user_id = session.get("user_id",0)
+    admin = user_service.check_if_admin(user_id)
+    if not admin:
+        return redirect("/")
+
+    data = feedback_service.get_solved_feedback()
+
+    return render_template("admintools/admin_closed_feedback.html", data = data)
 
 @app.route("/admintools/feedback/<int:feedback_id>")
 def admin_feedback_data(feedback_id):
@@ -838,8 +848,8 @@ def feedback():
 """
 TASKS:
 """
-@scheduler.task('cron', id='do_job_1', hour='*')
-def job1():
+@scheduler.task('cron', id='close_surveys', hour='*')
+def close_surveys():
     """
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """

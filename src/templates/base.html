@@ -13,14 +13,13 @@
         <script src="{{ url_for('static', filename='js/jquery.ui.touch-punch.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
         <script type="text/javascript">
-            var csrf_token = "{{ csrf_token() }}";
-        
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            $(document).ready(function () {
+                var csrf_token = "{{ csrf_token() }}";
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRFToken": csrf_token
                     }
-                }
+                });
             });
         </script>
         <title>{% block title %}{% endblock %} - Jakaja</title>
