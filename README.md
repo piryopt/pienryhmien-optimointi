@@ -64,5 +64,5 @@ Students:
 - Rasmus Salmela
 - Jerry Tammi
 
-Sponsor:
+Supervisor:
 - Tuukka Puonti
