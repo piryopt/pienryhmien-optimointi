@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Palaute{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+  </br>
+  <h2>Kyselyt</h2>
+  <a href="/admintools/feedback/closed"><small>Suljetut palautteet</small></a></br></br>
+  <table cellspacing="10" class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+          <th>Otsikko</th>
+          <th>Tyyppi</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for survey in data %}
+        <tr>
+            <td><p>{{ survey[1] }}</p></td>
+            <td><a href="/surveys/{{survey[0]}}">Linkki</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
