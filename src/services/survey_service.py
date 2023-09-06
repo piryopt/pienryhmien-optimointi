@@ -411,5 +411,15 @@ class SurveyService:
         if not surveys:
             return 0
         return len(surveys)
+    
+    def get_all_active_surveys(self):
+        """
+        Gets the list of all active surveys. Used for analytics in the admin page.
+        """
+        surveys = self._survey_repository.get_all_active_surveys()
+        if not surveys:
+            return False
+        return surveys
+
 
 survey_service = SurveyService()

@@ -18,7 +18,6 @@ from src.services.feedback_service import feedback_service
 from src.tools import excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
-from src.tools.db_data_gen import gen_data
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness, convert_date, convert_time
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
@@ -726,6 +725,18 @@ def admin_feedback_close_feedback(feedback_id):
     if not success:
         return redirect("/")
     return redirect("/admintools/feedback")
+
+@app.route("/admintools/surveys", methods = ["GET"])
+def admin_all_active_surveys():
+    # Only admins permitted!
+    user_id = session.get("user_id",0)
+    admin = user_service.check_if_admin(user_id)
+    if not admin:
+        return redirect("/")
+    data = survey_service.get_all_active_surveys()
+    if not data:
+        return redirect("/")
+    return render_template("/admintools/admin_survey_list.html", data = data)
 
 """
 MISCELLANEOUS ROUTES:
