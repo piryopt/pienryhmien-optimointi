@@ -12,14 +12,24 @@
   <table cellspacing="10" class="table table-striped">
     <thead class="table-dark">
       <tr>
-          <th>Otsikko</th>
-          <th>Tyyppi</th>
+          <th>Name</th>
+          <th>Min choices</th>
+          <th>closed</th>
+          <th>results saved</th>
+          <th>allowed denied choices</th>
+          <th>allow search visibility</th>
+          <th>Linkki</th>
       </tr>
     </thead>
     <tbody>
         {% for survey in data %}
         <tr>
             <td><p>{{ survey[1] }}</p></td>
+            <td><p>{{ survey[2] }}</p></td>
+            <td><p>{{ survey[3] }}</p></td>
+            <td><p>{{ survey[4] }}</p></td>
+            <td><p>{{ survey[8] }}</p></td>
+            <td><p>{{ survey[9] }}</p></td>
             <td><a href="/surveys/{{survey[0]}}">Linkki</a></td>
         </tr>
         {% endfor %}
