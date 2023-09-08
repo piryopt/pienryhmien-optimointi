@@ -329,14 +329,10 @@ def surveys_answer_exists(survey_id, survey_all_info):
     closed = survey_service.check_if_survey_closed(survey_id)
     if closed:
         return render_template("closedsurvey.html", bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices,
-                                 survey_name = survey[1], min_choices=survey[2])
+                                 survey_name = survey[1], min_choices = survey[2])
 
     return render_template("survey.html", choices = neutral_choices, existing = existing,
                         bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason, survey = survey)
-
-@app.route("/surveys/<string:survey_id>/closed")
-def closed_survey(survey_id):
-    return render_template("closedsurvey.html")
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
