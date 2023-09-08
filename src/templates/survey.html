@@ -33,7 +33,7 @@
         <div class="row">
             <div class="col-sm">
                 <p>
-                    <i>Raahaa oikean reunan listasta vähintään {{ survey[2] }} vaihtoehtoa vihreään laatikkoon.</i>
+                    <i>Raahaa oikean reunan listasta vähintään {{ survey[2] }} vaihtoehtoa vihreään laatikkoon. Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
                 </p>
             </div>
             {% if survey[9] %}
@@ -47,12 +47,14 @@
                 <div class="col-sm">
                     <ol id="sortable-good" class="list-group list-group-numbered" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
                         {% for group in good_survey_choices %}
-                        <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
+                        <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}" data-toggle="modal" data-target="#myModal">
                             <div class="d-flex w-100 justify-content-between" id="search">
                                 <h5 class="mb-1">{{ group.name }}</h5>
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                             </div>
                             <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                            <div id="info-container {{group.id}}">
+                            </div>
                         </li>
                         {% endfor %}
                     </ol>
@@ -67,6 +69,8 @@
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                             </div>
                             <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                            <div id="info-container {{group.id}}">
+                            </div>
                         </li>
                         {% endfor %}
                     </ul>
@@ -128,17 +132,14 @@
                             <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                         </div>
                         <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                        <div id="info-container {{group.id}}">
+                        </div>
                     </li>
                     {% endfor %}
                 </ul>
                 
             </div>
         </div>
-    </div>
-    <div class="col" id="info-container">
-        <p>
-            Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.
-        </p>
     </div>
     <input type="hidden" id="currently_selected" value="">
 </div>
