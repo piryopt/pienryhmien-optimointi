@@ -255,7 +255,9 @@ def surveys(survey_id):
             survey_all_info[row[0]]["slots"] = row[3]
             survey_all_info[row[0]]["id"] = row[0]
 
+    print("Print survey_all_info")
     print(survey_all_info)
+    print()
 
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     if user_survey_ranking:
@@ -268,10 +270,15 @@ def surveys(survey_id):
 
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
     temp = list(survey_all_info.items())
+    print("Print temp")
+    print(temp)
+    print()
     shuffle(temp)
     shuffled_choices = [v for k,v in dict(temp).items()]
 
+    print("Print shuffled_choices")
     print(shuffled_choices)
+    print()
 
     return render_template("survey.html", choices = shuffled_choices, survey = survey)
 
