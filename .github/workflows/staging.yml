@@ -3,7 +3,7 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - refactor_survey_page
+      - main
 jobs:
 
   build-and-push:
