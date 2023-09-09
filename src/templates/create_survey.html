@@ -164,16 +164,16 @@
 
       <div>
         <h3>Sallitaanko valintojen kieltäminen?</h3>
-        <input type="radio" name="deny-choices-setting" value="show" id="deny-choices-yes" data-dependant-class="deny-choices-section" onclick="visibilityToggleRadioClick(event);" checked/>
+        <input type="radio" name="deny-choices-setting" value="show" id="deny-choices-yes" data-dependant-class="deny-choices-section" onclick="visibilityToggleRadioClick(event);"/>
         <label for="min-choices-all">Kyllä</label>
-        <input type="radio" name="deny-choices-setting" value="hide" id="min-choices-no" data-dependant-class="deny-choices-section" onclick="visibilityToggleRadioClick(event);"/>
+        <input type="radio" name="deny-choices-setting" value="hide" id="min-choices-no" data-dependant-class="deny-choices-section" onclick="visibilityToggleRadioClick(event);" checked/>
         <label for="min-choices-custom">Ei</label>
       </div>
-      <div class="deny-choices-section">
+      <div class="deny-choices-section hidden">
         <label for="denied-choices-count">Sallittu kiellettyjen ryhmien määrä</label>
         <input
             type="text"
-            class="form-control deny-choices-section"
+            class="form-control deny-choices-section hidden"
             id="denied-choices-count" name="denied-choices-count"
             validation-regex="\d+"
             validation-text="Kentän tulee olla kokonaisluku"
@@ -213,6 +213,7 @@
           {% if survey.allow_search_visibility is defined and survey.allow_search_visibility is sameas false %}
           checked
           {% endif %}
+          checked
         />
         <label for="min-choices-custom">Ei</label>
       </div>

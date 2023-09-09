@@ -189,6 +189,10 @@ def new_survey_post():
     allowed_denied_choices = data["allowedDeniedChoices"]
     allow_search_visibility = data["allowSearchVisibility"]
 
+    if minchoices > len(survey_choices):
+        response = {"status":"0", "msg":"Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmiäismäärä! Kyselyn luominen epäonnistui!"}
+        return jsonify(response)
+
     survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!"}
@@ -198,7 +202,7 @@ def new_survey_post():
     if not success:
         response = {"status":"0", "msg":message}
         return jsonify(response)
-    response = {"msg":"Uusi kysely luotu!"}
+    response = {"status":"1", "msg":"Uusi kysely luotu!"}
     return jsonify(response)
 
 @app.route("/surveys/create/import", methods = ["POST"])
