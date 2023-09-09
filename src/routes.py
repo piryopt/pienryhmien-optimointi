@@ -255,6 +255,8 @@ def surveys(survey_id):
             survey_all_info[row[0]]["slots"] = row[3]
             survey_all_info[row[0]]["id"] = row[0]
 
+    print(survey_all_info)
+
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     if user_survey_ranking:
         return surveys_answer_exists(survey_id, survey_all_info)
@@ -268,6 +270,8 @@ def surveys(survey_id):
     temp = list(survey_all_info.items())
     shuffle(temp)
     shuffled_choices = [v for k,v in dict(temp).items()]
+
+    print(shuffled_choices)
 
     return render_template("survey.html", choices = shuffled_choices, survey = survey)
 
