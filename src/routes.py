@@ -234,6 +234,10 @@ def surveys(survey_id):
     survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
     survey = survey_service.get_survey(survey_id)
 
+    additional_info = False
+    if len(survey_choices_info) > 0:
+        additional_info = True
+
     # If the survey has no choices, either it is an invalid survey or it doesn't exist
     if not survey_choices:
         return redirect("/")
@@ -261,7 +265,7 @@ def surveys(survey_id):
 
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     if user_survey_ranking:
-        return surveys_answer_exists(survey_id, survey_all_info)
+        return surveys_answer_exists(survey_id, survey_all_info, additional_info)
     
     # If the survey is closed, return a different page, where the student can view their answers.
     closed = survey_service.check_if_survey_closed(survey_id)
@@ -273,10 +277,10 @@ def surveys(survey_id):
     shuffle(temp)
     shuffled_choices = [v for k,v in dict(temp).items()]
 
-    return render_template("survey.html", choices = shuffled_choices, survey = survey)
+    return render_template("survey.html", choices = shuffled_choices, survey = survey, additional_info = additional_info)
 
 @app.route("/surveys/<string:survey_id>/answered")
-def surveys_answer_exists(survey_id, survey_all_info):
+def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     """
     The answer page for surveys if an answer exists.
     """
@@ -336,7 +340,7 @@ def surveys_answer_exists(survey_id, survey_all_info):
                                  survey_name = survey[1], min_choices = survey[2])
 
     return render_template("survey.html", choices = neutral_choices, existing = existing,
-                        bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason, survey = survey)
+                        bad_survey_choices = bad_survey_choices, good_survey_choices=good_survey_choices, reason=reason, survey = survey, additional_info = additional_info)
 
 @app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):

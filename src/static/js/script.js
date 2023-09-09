@@ -154,6 +154,11 @@ function showMoreInfo(choiceID) {
     var name = "info-container " + choiceID
     var infoContainer = document.getElementById(name);
     var currentlySelected = document.getElementById("currently_selected").value;
+    var additional_info = document.getElementById("additional_info").value;
+
+    if (additional_info === "False") {
+        return
+    }
 
     if (currentlySelected === "") {
         $.ajax({
