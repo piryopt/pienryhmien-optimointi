@@ -4,7 +4,7 @@ Sovelluksessa on mahdollista tuoda valittavat vaihtoehdot Elomake CSV-tiedostost
 
 ## TÄRKEIN OSA
 
-Luodessasi kyselyä Elomakkeessa, sinun täytyy kysyä ensimmäisessä kentässä kohteen nimeä ja toisena kohteen paikkamäärää (positiivinen kokonaisluku), muuten kohteiden tuonti CSV-tiedostosta ei toimi. Vastausnäkymän pitäisi näyttää jotakuinkin tältä:
+Luodessasi kyselyä Elomakkeessa, sinun täytyy kysyä ensimmäisessä kentässä kohteen nimeä, toisena kohteen paikkamäärää (positiivinen kokonaisluku) ja kolmantena ryhmien minimikoko (positiivinen kokonaisluku), muuten kohteiden tuonti CSV-tiedostosta ei toimi. Vastausnäkymän pitäisi näyttää jotakuinkin tältä:
 
 Kyselyn vastausnäkymä, johon päiväkoti yms. täyttää oman tietonsa
 <img src="/static/images/csv-reply-view.png" alt="Vastausnäkymä käyttäjälle">
@@ -20,4 +20,4 @@ Kaksi ensimmäistä saraketta ovat turhia, mutta älä silti poista niitä, vaan
 
 ## Muuta
 
-Ainoat pakolliset kentät ovat kohteen nimi ja paikkamäärä. Ensimmäisessä esimerkkikuvassa on kaksi lisätietokenttää, mutta voit lisätä niitä lomakkeeseen haluamasi määrän, kunhan muistat laittaa nimen ja paikkamäärän ensimmäiseksi.
+Ainoat pakolliset kentät ovat kohteen nimi, paikkamäärä ja ryhmien minimikoko. Ensimmäisessä esimerkkikuvassa on kaksi lisätietokenttää, mutta voit lisätä niitä lomakkeeseen haluamasi määrän, kunhan muistat laittaa nimen ja paikkamäärän ensimmäiseksi.

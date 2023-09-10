@@ -36,13 +36,15 @@ def parser_elomake_csv_to_dict(file):
         temp = line.split('''","''')
         name = ''.join(c for c in temp[2] if c.isprintable())
         spaces = ''.join(c for c in temp[3] if c.isprintable()).strip('"')
+        min_size = ''.join(c for c in temp[4] if c.isprintable()).strip('"')
 
         # update dict/JSON
         ret_dict["choices"].append({})
         ret_dict["choices"][index - 1]["name"] = name
         ret_dict["choices"][index - 1]["spaces"] = spaces
+        ret_dict["choices"][index - 1]["min_size"] = min_size
 
-        i = 4
+        i = 5
         while i < col_count:
             temp_string = ''.join(c for c in temp[i] if c.isprintable())
             # update dict/JSON
@@ -79,7 +81,11 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
             if count == 1:
                 spaces = choice[pair]
                 count += 1
-                choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, spaces)
+                continue
+            if count == 2:
+                min_size = choice[pair]
+                count += 1
+                choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, spaces, min_size)
                 continue
 
             hidden = False
@@ -120,6 +126,7 @@ def parser_existing_survey_to_dict(survey_id):
         survey_dict["choices"][index]["id"] = row[0]
         survey_dict["choices"][index]["name"] = row[2]
         survey_dict["choices"][index]["seats"] = row[3]
+        survey_dict["choices"][index]["min_size"] = row[4]
 
         additional_infos = survey_choices_repository.get_choice_additional_infos(row[0])
 

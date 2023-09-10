@@ -36,15 +36,15 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
-    def create_new_survey_choice(self, survey_id, name, seats):
+    def create_new_survey_choice(self, survey_id, name, seats, min_size):
         '''
         Adds a new choice to existing survey, updates just survey_choices table
         RETURNS created choice's id
         '''
         try:
-            sql = "INSERT INTO survey_choices (survey_id, name, max_spaces, deleted)"\
-                " VALUES (:survey_id, :name, :max_spaces, False) RETURNING id"
-            result = db.session.execute(text(sql), {"survey_id":survey_id, "name":name, "max_spaces":seats})
+            sql = "INSERT INTO survey_choices (survey_id, name, max_spaces, deleted, min_size)"\
+                " VALUES (:survey_id, :name, :max_spaces, False, :min_size) RETURNING id"
+            result = db.session.execute(text(sql), {"survey_id":survey_id, "name":name, "max_spaces":seats, "min_size":min_size})
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e: # pylint: disable=W0718

@@ -27,6 +27,7 @@
 <a href="/surveys/{{ survey_id }}/group_sizes" class="btn btn-primary" style="float: left">Muokkaa ryhmäkokoja</a><br><br><br>
 {% endif %}
 <a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
+<a href="/surveys/{{ survey_id }}/results/drop_groups"><button type="submit" class="btn btn-warning" name="algoin_time_beta">Jaa ryhmiin (Minimikoko mukana)</button></a>
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>

@@ -31,7 +31,8 @@ CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
 	survey_id VARCHAR(10) REFERENCES surveys,
 	name TEXT,
 	max_spaces INTEGER,
-	deleted BOOLEAN
+	deleted BOOLEAN,
+	min_size INTEGER
 );
 
 CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices

@@ -226,6 +226,7 @@
       <input id="choiceFileInput" type="file" style="display: none;" onchange="handleFileUpload()"/>
       <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">Tuo valinnat CSV-tiedostosta</button><br><br>
       <p>Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *</p>
+      <p>Jos ryhmän minimikoolla ei ole väliä, syötä 0</p>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
           <tr id="column-delete-btns">
@@ -242,6 +243,7 @@
           <tr id="choice-table-headers">
             <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
             <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
+            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Ryhmän minimikoko</th>
           {# additional columns if template loaded with survey parameter present #}
           
           {% if survey is not none %}
@@ -263,6 +265,7 @@
               <tr>
                 <td>{{ choice.name }}</td>
                 <td>{{ choice.seats }}</td>
+                <td>{{ choice.min_size }}</td>
                 {% for colname in survey.variable_columns %}
                   <td>{{choice[colname]}}</td>
                 {% endfor %}
@@ -274,6 +277,7 @@
           {% endif %}
           {% else %}
             <tr>
+              <td class="empty" tabindex="0">tyhjä</td>
               <td class="empty" tabindex="0">tyhjä</td>
               <td class="empty" tabindex="0">tyhjä</td>
               <td class="action-cell" tabindex="0"><div class="delete-row-btn"></div></td>

@@ -43,6 +43,18 @@ class SurveyChoicesService:
         if not survey_choice:
             return False
         return survey_choice
+    
+    def get_survey_choice_min_size(self, survey_choice_id:int):
+        """
+        Returns the min_size of a survey choice
+
+        args:
+            survey_choice_id: The id of the survey choice
+        """
+        survey_choice = self._survey_choices_repository.get_survey_choice(survey_choice_id)
+        if not survey_choice:
+            return False
+        return survey_choice.min_size
 
     def get_choice_name_and_spaces(self, choice_id:int):
         """
@@ -91,7 +103,7 @@ class SurveyChoicesService:
         """
         choices = self.get_list_of_survey_choices(survey_id)
         tally = 0
-        for (id, survey_id, name, spaces, deleted) in choices:
+        for (id, survey_id, name, spaces, deleted, min_size) in choices:
             tally += spaces
         return tally
 
@@ -104,6 +116,6 @@ class SurveyChoicesService:
             spaces (int): Number of spaces needed in the group, equal to extra answers
             in the survey
         """
-        return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces)
+        return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces, 0)
 
 survey_choices_service = SurveyChoicesService()
