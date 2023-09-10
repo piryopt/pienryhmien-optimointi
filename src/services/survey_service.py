@@ -27,6 +27,15 @@ class SurveyService:
         self._survey_teachers_repository = survey_teachers_repository
         self._choices_repository = choices_repository
 
+    def get_survey(self, survey_id):
+        """
+        Get all data of a survey
+        """
+        survey = self._survey_repository.get_survey(survey_id)
+        if not survey:
+            return False
+        return survey
+
     def get_survey_name(self, survey_id):
         """
         Get the name of the survey

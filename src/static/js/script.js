@@ -151,8 +151,14 @@ function add_feedback() {
 }
 
 function showMoreInfo(choiceID) {
-    var infoContainer = document.getElementById("info-container");
+    var name = "info-container " + choiceID
+    var infoContainer = document.getElementById(name);
     var currentlySelected = document.getElementById("currently_selected").value;
+    var additional_info = document.getElementById("additional_info").value;
+
+    if (additional_info === "False") {
+        return
+    }
 
     if (currentlySelected === "") {
         $.ajax({
@@ -181,11 +187,12 @@ function showMoreInfo(choiceID) {
             }
         });
     } else {
-        exitMoreInfo();
+        exitMoreInfo(choiceID);
     }
 }
 
-function exitMoreInfo() {
-    document.getElementById("info-container").innerHTML = "<p>Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</p>";
+function exitMoreInfo(choiceID) {
+    var name = "info-container " + choiceID
+    document.getElementById(name).innerHTML = "";
     $('input[id="currently_selected"]').val("");
 }

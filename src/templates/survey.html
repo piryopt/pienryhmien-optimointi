@@ -24,19 +24,20 @@
     });
 </script>
 <div class="row">
-    <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey_name }}</h5>
-    <label>Vastausaika päättyy {{ format_datestring(enddate) }}</label></br></br>
-    <label>{{ desc }}</label>
-    <input type="hidden" id="max_bad_choices" value="{{ max_bad_choices }}">
-    <input type="hidden" id="min_choices" value="{{ min_choices }}">
+    <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey[1] }}</h5>
+    <label>Vastausaika päättyy {{ format_datestring(survey[7]) }}</label></br></br>
+    <label>{{ survey[5] }}</label>
+    <input type="hidden" id="max_bad_choices" value="{{ survey[8] }}">
+    <input type="hidden" id="min_choices" value="{{ survey[2] }}">
+    <input type="hidden" id="additional_info" value="{{ additional_info }}">
     <div class="col">
         <div class="row">
             <div class="col-sm">
                 <p>
-                    <i>Raahaa oikean reunan listasta vähintään {{ min_choices }} vaihtoehtoa vihreään laatikkoon.</i>
+                    <i>Raahaa oikean reunan listasta vähintään {{ survey[2] }} vaihtoehtoa vihreään laatikkoon. {% if additional_info %}Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.{% endif %}</i>
                 </p>
             </div>
-            {% if allow_search_visibility is sameas true %}
+            {% if survey[9] %}
             <div class="col-sm">
                 <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
             </div>
@@ -47,17 +48,19 @@
                 <div class="col-sm">
                     <ol id="sortable-good" class="list-group list-group-numbered" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
                         {% for group in good_survey_choices %}
-                        <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
+                        <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}" data-toggle="modal" data-target="#myModal">
                             <div class="d-flex w-100 justify-content-between" id="search">
                                 <h5 class="mb-1">{{ group.name }}</h5>
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                             </div>
                             <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                            <div id="info-container {{group.id}}">
+                            </div>
                         </li>
                         {% endfor %}
                     </ol>
                 </div>
-                {% if max_bad_choices != 0 %}
+                {% if survey[8] != 0 %}
                 <div class="col-sm">
                     <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
                         {% for group in bad_survey_choices %}
@@ -67,6 +70,8 @@
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                             </div>
                             <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                            <div id="info-container {{group.id}}">
+                            </div>
                         </li>
                         {% endfor %}
                     </ul>
@@ -86,7 +91,7 @@
                                 <button type="submit" class="btn btn-success" onclick="submit(1)">Lähetä valinnat</button>
                             </div>
                         </div>
-                        <input type="hidden" id="survey_id" value="{{ survey_id }}">
+                        <input type="hidden" id="survey_id" value="{{ survey[0] }}">
                         <input type="hidden" id="existing" value="{{ existing }}">
                         <div class="col-sm">
                             <div id="deleteContainer" style="display: none;">
@@ -128,17 +133,14 @@
                             <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                         </div>
                         <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                        <div id="info-container {{group.id}}">
+                        </div>
                     </li>
                     {% endfor %}
                 </ul>
                 
             </div>
         </div>
-    </div>
-    <div class="col" id="info-container">
-        <p>
-            Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.
-        </p>
     </div>
     <input type="hidden" id="currently_selected" value="">
 </div>
