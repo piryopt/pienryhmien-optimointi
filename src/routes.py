@@ -602,7 +602,6 @@ def survey_results_beta(survey_id):
     loop = True
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
-    print(students_dict)
     while loop:
         weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
         sort = h.Hungarian(groups_dict, students_dict, weights)
@@ -641,8 +640,8 @@ def survey_results_beta(survey_id):
                 break
         if not violation:
             loop = False
-
-    # create an dict which contains choice's additional info as list
+    
+    # Create a dict which contains choice's additional info as list
     additional_infos = {}
     for row in survey_choices:
         additional_infos[str(row[0])] = []
@@ -651,13 +650,30 @@ def survey_results_beta(survey_id):
         for i in cinfos:
             additional_infos[str(row[0])].append(i[1])
 
-    # Add to data the number of the choice the user got
+    # Add to data the number of the choice that the user got. Also update happiness data displayed.
+    # All of this should be refactored into a separate function.
+    happiness_avg = 0
+    happiness_results = {}
     for results in output_data[0]:
         user_id = results[0][0]
         choice_id =  results[2][0]
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking)
+        happiness_avg += happiness
         results.append(happiness)
+        if happiness not in happiness_results:
+            happiness_results[happiness] = 1
+        else:
+            happiness_results[happiness] += 1
+    happiness_avg /= len(students_dict)
+    happiness_results_list = []
+    for k,v in happiness_results.items():
+        if v > 0:
+            happiness_results_list.append(f"{k}. valintaansa sijoitetut opiskelijat: {v} kpl")
+    
+    (x, y, z) = output_data
+    output_data = (x, happiness_avg, happiness_results_list)
+    
 
     if request.method == "GET":
         return render_template("results.html", survey_id = survey_id, results = output_data[0],
