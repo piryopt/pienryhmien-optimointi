@@ -584,7 +584,7 @@ function visibilityToggleRadioClick(event) {
 function setUploadedTableValues(table) {
     var headersRow = document.getElementById('choice-table-headers')
     // Remove variable columns if they exist
-    var begin = (headersRow.childElementCount-2)*-1
+    var begin = (headersRow.childElementCount-3)*-1
     var end = headersRow.childElementCount - 1
     var variableHeaders = Array.from(headersRow.children).slice(begin, end)
     variableHeaders.forEach(header => header.remove())
@@ -592,7 +592,7 @@ function setUploadedTableValues(table) {
     // Add new headers if they exist
     // TODO: Correct naming
     var headers = Object.keys(table[0])
-    var headers = Object.keys(table[0]).filter(header => header !== 'name' && header !== 'spaces')
+    var headers = Object.keys(table[0]).filter(header => header !== 'name' && header !== 'spaces' && header !== 'min_size')
 
     var deleteColRow = document.getElementById("column-delete-btns")
 
@@ -613,6 +613,7 @@ function setUploadedTableValues(table) {
         var rowElement = document.createElement('tr')
         addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['name'])))
         addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['spaces'])))
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['min_size'])))
 
         headers.forEach( header => {
                 addCellEventListeners(rowElement.appendChild(createElementWithText('td', row[header])))

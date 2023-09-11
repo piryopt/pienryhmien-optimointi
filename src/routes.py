@@ -1,12 +1,9 @@
 from random import shuffle
 from functools import wraps
-from sqlalchemy import text
 from flask import render_template, request, session, jsonify, redirect
-import os
 import markdown
 from pathlib import Path
-
-from src import app,db,scheduler,csrf
+from src import app,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -22,8 +19,7 @@ from src.tools.survey_result_helper import convert_choices_groups, convert_users
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
-from functools import wraps 
-from datetime import datetime
+#from src.tools.db_data_gen import gen_data
 
 """
 DECORATORS:
@@ -159,7 +155,7 @@ def new_survey_form(survey=None):
     query_params = request.args.to_dict()
     if("fromTemplate" in query_params):
         survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
-        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id")]
+        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size")]
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/surveys/create", methods = ["POST"])
@@ -377,7 +373,7 @@ def edit_survey_form(survey_id):
     """
 
     survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "min_size")]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -448,7 +444,7 @@ def edit_group_sizes(survey_id):
         survey_id (int): id of the survey
     """
     survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id")]
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size")]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template("group_sizes.html", survey_id=survey_id, survey=survey, survey_answers_amount=survey_answers_amount,
@@ -539,14 +535,53 @@ def survey_results(survey_id):
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+
+    # Loop until no group has less than its min_size
+    loop = True
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
-    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
-    sort = h.Hungarian(groups_dict, students_dict, weights)
-    sort.run()
-    output_data = sort.get_data()
+    dropped_groups_id = []
+    while loop:
+        weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
+        sort = h.Hungarian(groups_dict, students_dict, weights)
+        sort.run()
+        output_data = sort.get_data()
 
-    # create an dict which contains choice's additional info as list
+        # Count how many students each group has
+        group_sizes = {}
+        for id, group in groups_dict.items():
+            group_sizes[id] = 0
+        for [student_data, student_email, group_data] in output_data[0]:
+            group_id = group_data[0]
+            group_sizes[group_id] += 1
+
+        # Sort by size
+        sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
+        '''for s in sorted_groups:
+            print(f"id: {s}, size: {group_sizes[s]}")
+
+        for id in sorted_groups:
+            print(id)
+        '''
+        # Check if min_size is greater than group size. If it is, remove the group_id from all relevant lists and dictionaries.
+        violation = False
+        for survey_choice_id in sorted_groups:
+            min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
+            if min_size > group_sizes[survey_choice_id]:
+                violation = True
+                sorted_groups.remove(survey_choice_id)
+                groups_dict.pop(survey_choice_id)
+                dropped_groups_id.append(survey_choice_id)
+                for user_id, student in students_dict.items():
+                    if survey_choice_id in student.selections:
+                        student.selections.remove(survey_choice_id)
+                    if survey_choice_id in student.rejections:
+                        student.rejections.remove(survey_choice_id)
+                break
+        if not violation:
+            loop = False
+    
+    # Create a dict which contains choice's additional info as list
     additional_infos = {}
     for row in survey_choices:
         additional_infos[str(row[0])] = []
@@ -555,20 +590,47 @@ def survey_results(survey_id):
         for i in cinfos:
             additional_infos[str(row[0])].append(i[1])
 
-    # Add to data the number of the choice the user got
+    # Add to data the number of the choice that the user got. Also update happiness data displayed.
+    # All of this should be refactored into a separate function.
+    happiness_avg = 0
+    happiness_results = {}
     for results in output_data[0]:
         user_id = results[0][0]
         choice_id =  results[2][0]
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking)
+        happiness_avg += happiness
         results.append(happiness)
+        if happiness not in happiness_results:
+            happiness_results[happiness] = 1
+        else:
+            happiness_results[happiness] += 1
+    happiness_avg /= len(students_dict)
+    happiness_results_list = []
+    for k,v in happiness_results.items():
+        if v > 0:
+            happiness_results_list.append(f"{k}. valintaansa sijoitetut opiskelijat: {v} kpl")
+    
+    (x, y, z) = output_data
+    output_data = (x, happiness_avg, happiness_results_list)
+    
+    dropped_groups = []
+    for group_id in dropped_groups_id:
+        group = survey_choices_service.get_survey_choice(group_id)
+        dropped_groups.append(group.name)
 
     if request.method == "GET":
         return render_template("results.html", survey_id = survey_id, results = output_data[0],
                             happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists,
-                            infos=additional_infos, sc=cinfos)
+                            infos=additional_infos, sc=cinfos, dropped_groups = dropped_groups)
 
-    # If the request is post, check if results have been saved. If they have, redirect to previous_surveys page.
+    return save_survey_results(survey_id, output_data)
+
+@app.route("/surveys/<string:survey_id>/results/save")
+@teachers_only
+def save_survey_results(survey_id, output_data):
+    # Check if results have been saved. If they have, redirect to previous_surveys page.
+    saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
     if saved_result_exists:
         return redirect('/surveys')
 
@@ -586,6 +648,7 @@ def survey_results(survey_id):
             response = {"msg":f"ERROR IN SAVING {results[0][1]} RESULTS!"}
             return jsonify(response)
     return redirect('/surveys')
+
 
 @app.route("/surveys/<string:survey_id>/close", methods = ["POST"])
 @teachers_only
@@ -749,6 +812,32 @@ def admin_all_active_surveys():
         return redirect("/")
     return render_template("/admintools/admin_survey_list.html", data = data)
 
+'''@app.route("/admintools/gen_data", methods = ["GET", "POST"])
+def admin_gen_data():
+    """
+    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
+    """
+    user_id = session.get("user_id",0)
+    surveys = survey_repository.fetch_all_active_surveys(user_id)
+    if request.method == "GET":
+        return render_template("/admintools/gen_data.html", surveys = surveys)
+
+    if request.method == "POST":
+        student_n = request.form.get("student_n")
+        gen_data.generate_users(int(student_n))
+        gen_data.add_generated_users_db()
+        return redirect("/admintools/gen_data")
+
+@app.route("/admintools/gen_data/rankings", methods = ["POST"])
+def admin_gen_rankings():
+    """
+    Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
+    """
+    survey_id = request.form.get("survey_list")
+    gen_data.generate_rankings(survey_id)
+
+    return redirect(f"/surveys/{survey_id}/answers")
+'''
 """
 MISCELLANEOUS ROUTES:
 """

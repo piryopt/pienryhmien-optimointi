@@ -1,3 +1,3 @@
-"Tall.id","Tallennusaika","Päiväkodin nimi","Paikkamäärä","Postinumero","Lisätietoja"
-"1","15.7.23 21:19","Päiväkoti Toivo","3","00790","Tässä tekstiä, pilkulla"
-"2","15.7.23 21:19","Päiväkoti Gehenna","6","00666","Tässä tekstiä,, kahdella pilkulla"
+"Tall.id","Tallennusaika","Päiväkodin nimi","Paikkamäärä","Ryhmän minimikoko","Postinumero","Lisätietoja"
+"1","15.7.23 21:19","Päiväkoti Toivo","3","1","00790","Tässä tekstiä, pilkulla"
+"2","15.7.23 21:19","Päiväkoti Gehenna","6","1","00666","Tässä tekstiä,, kahdella pilkulla"

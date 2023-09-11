@@ -31,6 +31,13 @@
 </br>
 {% endif %}
 </br>
+{% if dropped_groups|length > 0 %}
+<b style="color:orangered">Ryhmät, jotka pudotettiin jaosta</b></br></br>
+{% for name in dropped_groups %}
+<ul><small style="color:orangered">{{ name }}</small></ul>
+{% endfor %}
+</br>
+{% endif %}
 
 <b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
 
