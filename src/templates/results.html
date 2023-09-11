@@ -32,9 +32,9 @@
 {% endif %}
 </br>
 {% if dropped_groups|length > 0 %}
-<b>Ryhmät, jotka pudotettiin jaosta</b></br></br>
+<b style="color:orangered">Ryhmät, jotka pudotettiin jaosta</b></br></br>
 {% for name in dropped_groups %}
-<ul><small>{{ name }}</small></ul>
+<ul><small style="color:orangered">{{ name }}</small></ul>
 {% endfor %}
 </br>
 {% endif %}
