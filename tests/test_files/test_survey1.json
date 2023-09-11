@@ -4,12 +4,14 @@
       {
         "Nimi": "Esimerkkipäiväkoti 1",
         "Enimmäispaikat": "8",
+        "Ryhmän minimikoko": "1",
         "Osoite": "Keijukaistenpolku 14",
         "Postinumero": "00820"
       },
       {
         "Nimi": "Esimerkkipäiväkoti 2",
         "Enimmäispaikat": "6",
+        "Ryhmän minimikoko": "1",
         "Osoite": "Hattulantie 2",
         "Postinumero": "00550"
       }
