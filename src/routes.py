@@ -373,7 +373,7 @@ def edit_survey_form(survey_id):
     """
 
     survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats")]
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "min_size")]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -444,7 +444,7 @@ def edit_group_sizes(survey_id):
         survey_id (int): id of the survey
     """
     survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id")]
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size")]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template("group_sizes.html", survey_id=survey_id, survey=survey, survey_answers_amount=survey_answers_amount,
@@ -564,7 +564,7 @@ def survey_results(survey_id):
                             happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists,
                             infos=additional_infos, sc=cinfos)
 
-    save_survey_results(survey_id, output_data)
+    return save_survey_results(survey_id, output_data)
 
 @app.route("/surveys/<string:survey_id>/results/drop_groups", methods = ["GET", "POST"])
 @ad_login
@@ -602,6 +602,7 @@ def survey_results_beta(survey_id):
     loop = True
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
+    dropped_groups_id = []
     while loop:
         weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
         sort = h.Hungarian(groups_dict, students_dict, weights)
@@ -632,6 +633,7 @@ def survey_results_beta(survey_id):
                 violation = True
                 sorted_groups.remove(survey_choice_id)
                 groups_dict.pop(survey_choice_id)
+                dropped_groups_id.append(survey_choice_id)
                 for user_id, student in students_dict.items():
                     if survey_choice_id in student.selections:
                         student.selections.remove(survey_choice_id)
@@ -674,13 +676,17 @@ def survey_results_beta(survey_id):
     (x, y, z) = output_data
     output_data = (x, happiness_avg, happiness_results_list)
     
+    dropped_groups = []
+    for group_id in dropped_groups_id:
+        group = survey_choices_service.get_survey_choice(group_id)
+        dropped_groups.append(group.name)
 
     if request.method == "GET":
         return render_template("results.html", survey_id = survey_id, results = output_data[0],
                             happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists,
-                            infos=additional_infos, sc=cinfos)
+                            infos=additional_infos, sc=cinfos, dropped_groups = dropped_groups)
 
-    save_survey_results(survey_id, output_data)
+    return save_survey_results(survey_id, output_data)
 
 @app.route("/surveys/<string:survey_id>/results/save")
 @teachers_only

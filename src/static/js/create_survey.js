@@ -592,7 +592,7 @@ function setUploadedTableValues(table) {
     // Add new headers if they exist
     // TODO: Correct naming
     var headers = Object.keys(table[0])
-    var headers = Object.keys(table[0]).filter(header => header !== 'name' && header !== 'spaces')
+    var headers = Object.keys(table[0]).filter(header => header !== 'name' && header !== 'spaces' && header !== 'min_size')
 
     var deleteColRow = document.getElementById("column-delete-btns")
 
@@ -613,6 +613,7 @@ function setUploadedTableValues(table) {
         var rowElement = document.createElement('tr')
         addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['name'])))
         addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['spaces'])))
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['min_size'])))
 
         headers.forEach( header => {
                 addCellEventListeners(rowElement.appendChild(createElementWithText('td', row[header])))
