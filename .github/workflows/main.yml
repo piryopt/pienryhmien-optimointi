@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["min_group_size"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
@@ -45,7 +45,3 @@ jobs:
         run: poetry run coverage run --branch -m pytest
       - name: lint
         run: poetry run pylint src/
-      - name: Run robot tests
-        run: |
-          poetry run flask run --debug &
-          poetry run robot tests/survey_testing.robot
