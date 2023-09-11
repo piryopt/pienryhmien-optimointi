@@ -535,68 +535,6 @@ def survey_results(survey_id):
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    groups_dict = convert_choices_groups(survey_choices)
-    students_dict = convert_users_students(user_rankings)
-    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
-    sort = h.Hungarian(groups_dict, students_dict, weights)
-    sort.run()
-    output_data = sort.get_data()
-
-    # create an dict which contains choice's additional info as list
-    additional_infos = {}
-    for row in survey_choices:
-        additional_infos[str(row[0])] = []
-        
-        cinfos = survey_choices_service.get_choice_additional_infos(row[0])
-        for i in cinfos:
-            additional_infos[str(row[0])].append(i[1])
-
-    # Add to data the number of the choice the user got
-    for results in output_data[0]:
-        user_id = results[0][0]
-        choice_id =  results[2][0]
-        ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
-        happiness = get_happiness(choice_id, ranking)
-        results.append(happiness)
-
-    if request.method == "GET":
-        return render_template("results.html", survey_id = survey_id, results = output_data[0],
-                            happiness_data = output_data[2], happiness = output_data[1], answered = saved_result_exists,
-                            infos=additional_infos, sc=cinfos)
-
-    return save_survey_results(survey_id, output_data)
-
-@app.route("/surveys/<string:survey_id>/results/drop_groups", methods = ["GET", "POST"])
-@ad_login
-@teachers_only
-def survey_results_beta(survey_id):
-    """
-    Display results of sorting students to groups.
-    For the post request, the answers are saved to the database.
-    """
-    # Check that the survey is closed. If it is open, redirect to home page.
-    if not survey_service.check_if_survey_closed(survey_id):
-        return redirect('/')
-    # Check if the answers are already saved to the database. This determines which operations are available to the teacher.
-    saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
-
-    # Check if there are more rankings than available slots
-    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
-    user_rankings = survey_service.fetch_survey_responses(survey_id)
-
-    if not user_rankings:
-        return redirect(f"/surveys/{survey_id}/answers")
-    survey_answers_amount = len(user_rankings)
-
-    #if more rankings than available slots add a non-group
-    if (survey_answers_amount > available_spaces):
-        added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-available_spaces)
-        if not added_group:
-            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
-            return jsonify(response)
-
-    # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
-    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
 
     # Loop until no group has less than its min_size
     loop = True
