@@ -19,7 +19,6 @@ from src.tools.survey_result_helper import convert_choices_groups, convert_users
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
-from src.tools.db_data_gen import gen_data
 
 """
 DECORATORS:
