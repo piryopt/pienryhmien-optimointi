@@ -584,7 +584,7 @@ function visibilityToggleRadioClick(event) {
 function setUploadedTableValues(table) {
     var headersRow = document.getElementById('choice-table-headers')
     // Remove variable columns if they exist
-    var begin = (headersRow.childElementCount-2)*-1
+    var begin = (headersRow.childElementCount-3)*-1
     var end = headersRow.childElementCount - 1
     var variableHeaders = Array.from(headersRow.children).slice(begin, end)
     variableHeaders.forEach(header => header.remove())

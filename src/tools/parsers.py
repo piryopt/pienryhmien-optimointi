@@ -16,8 +16,6 @@ def parser_elomake_csv_to_dict(file):
     info_headers = []
     first_row = file[0].split('''","''')
     col_count = len(first_row)
-    print(first_row)
-    print(col_count)
 
     # add column headers to own array
     for cell in first_row:
@@ -28,7 +26,6 @@ def parser_elomake_csv_to_dict(file):
 
     index = 0
     for line in file:
-        print(line)
         # bad, but using file[index] doesn't work
         if index == row_count - 1:
             break
