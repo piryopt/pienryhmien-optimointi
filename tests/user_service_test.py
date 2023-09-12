@@ -140,3 +140,20 @@ class TestUserService(unittest.TestCase):
         user_id = ur.find_by_email(test_user.email)[0]
         result = us.check_if_teacher(user_id)
         self.assertTrue(result)
+
+    def test_len_all_students(self):
+        """
+        Tests that the length of the list of all students is correct
+        """
+        ur.register(User("1.3 keskiarvo", "muhlu@email.com", False))
+        ur.register(User("motivaatio", "moti@email.com", False))
+        ur.register(User("Jaloissa ei ole tuntoa", "weak.af@email.com", False))
+        users = us.len_all_students()
+        self.assertEqual(users, 3)
+
+    def test_len_all_teachers(self):
+        """
+        Tests that the length of the list of all teachers is correct
+        """
+        users = us.len_all_teachers()
+        self.assertEqual(users, 1)
