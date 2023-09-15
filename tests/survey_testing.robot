@@ -5,8 +5,8 @@ Suite Teardown  Close Browser
 
 *** Variables ***
 ${SERVER}  127.0.0.1:5000
-${BROWSER}  headlessfirefox
-${DELAY}  0.0 seconds
+${BROWSER}  firefox
+${DELAY}  0.1 seconds
 ${HOME_URL}  http://${SERVER}/
 ${LOGOUT URL}  http://${SERVER}/auth/logout
 ${CREATE SURVEY URL}  http://${SERVER}/surveys/create
@@ -49,6 +49,7 @@ Create Survey As Teacher Case 1
     Go To Create Survey Page
     Set Create Survey Time Fields  01.08.2023  01.08.2024
     Input Text  groupname  ${SURVEY 1 NAME}
+    Click Element  xpath=//*[@id="deny-choices-yes"]
     Set Focus To Element  denied-choices-count
     Input Text  denied-choices-count  1
     Choose File  ${FILE_UPLOAD_BUTTON}  ${CURDIR}/test_files/test_survey2.csv
