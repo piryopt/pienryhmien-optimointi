@@ -174,7 +174,7 @@ function showMoreInfo(choiceID) {
         });
     }
     
-    if (currentlySelected != choiceID) {
+    else if (currentlySelected != choiceID) {
         $.ajax({
             type: "POST",
             url: "/surveys/getinfo",
@@ -214,7 +214,7 @@ function showRanking(ranking, email) {
             }
         });
     }
-    if (currentlySelected != email) {
+    else if (currentlySelected != email) {
         $.ajax({
             type: "POST",
             url: "/surveys/getranking",
