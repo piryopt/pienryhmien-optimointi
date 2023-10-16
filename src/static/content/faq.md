@@ -8,4 +8,4 @@
 - [Jakajan githubissa](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md) voit tutustua tarkempaan (englanninkieliseen) selostukseen algoritmin toiminnasta.
 
 ## Minulla on kysyttävää sovelluksesta, kehen voin olla yhteydessä?
-Kysymyksissä voit olla yhteydessä Pää Käyttäjään.
+Jakajassa on palautesivu, jossa voit kysyä mitä vain.

@@ -142,6 +142,19 @@ def get_info():
     additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(int(raw_id))
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
+@app.route("/surveys/getranking", methods=["POST"])
+def expand_ranking():
+    """
+    When a ranking is clicked, display all rankings.
+    """
+    raw_ranking = request.get_json()
+    ranking_list = convert_to_list(raw_ranking)
+    choices = []
+    for r in ranking_list:
+        choice = survey_choices_service.get_survey_choice(r)
+        choices.append(choice)
+    return render_template("showrankings.html", choices = choices)
+
 @app.route("/surveys/create", methods = ["GET"])
 @ad_login
 @teachers_only
@@ -836,8 +849,8 @@ def admin_gen_rankings():
     survey_id = request.form.get("survey_list")
     gen_data.generate_rankings(survey_id)
 
-    return redirect(f"/surveys/{survey_id}/answers")
-'''
+    return redirect(f"/surveys/{survey_id}/answers")'''
+
 """
 MISCELLANEOUS ROUTES:
 """

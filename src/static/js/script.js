@@ -196,3 +196,43 @@ function exitMoreInfo(choiceID) {
     document.getElementById(name).innerHTML = "";
     $('input[id="currently_selected"]').val("");
 }
+
+function showRanking(ranking, email) {
+    var name = "ranking-container " + ranking + " " + email
+    var rankingContainer = document.getElementById(name)
+    var currentlySelected = document.getElementById("currently_selected").value
+    if (currentlySelected === "") {
+        $.ajax({
+            type: "POST",
+            url: "/surveys/getranking",
+            data: JSON.stringify(ranking),
+            contentType: "application/json",
+            datatype: "html",
+            success: function(result) {
+                rankingContainer.innerHTML = result;
+                $('input[id="currently_selected"]').val(email);
+            }
+        });
+    }
+    if (currentlySelected != email) {
+        $.ajax({
+            type: "POST",
+            url: "/surveys/getranking",
+            data: JSON.stringify(ranking),
+            contentType: "application/json",
+            datatype: "html",
+            success: function(result) {
+                rankingContainer.innerHTML = result;
+                $('input[id="currently_selected"]').val(email);
+            }
+        });
+    } else {
+        exitMoreRanking(ranking, email);
+    }
+}
+
+function exitMoreRanking(ranking, email) {
+    var name = "ranking-container " + ranking + " " + email
+    document.getElementById(name).innerHTML = "";
+    $('input[id="currently_selected"]').val("");
+}

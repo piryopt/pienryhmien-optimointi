@@ -60,8 +60,18 @@
         <tr id="row_search_email">
         {% for row in survey_answers %}
           <td id="email_search"><p>{{ row[0] }}</p></td>
-          <td><p>{{ row[1] }}</p></td>
-          <td><p>{{ row[2] }}</p></td>
+          <td>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="showRanking('{{ row[1] }}', '{{ row[0] }}')">Näytä</button>
+            <div id="ranking-container {{ row[1] }} {{ row[0] }}">
+            </div>
+          </td>
+          <td>
+            {% if row[2] %}
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="showRanking('{{ row[2] }}', '{{ row[0] }}')">Näytä</button>
+            <div id="ranking-container {{ row[2] }} {{ row[0] }}">
+            </div>
+            {% endif %}
+          </td>
           <td><p>{{ row[3] }}</p></td>
           <td>
             <form action="/surveys/{{ survey_id }}/answers/delete" method="POST" onsubmit="return confirm ('Haluatko varmasti poistaa tämän vastauksen?')">
@@ -75,6 +85,7 @@
         {% endfor %}
       </tbody>
     </table>
+    <input type="hidden" id="currently_selected" value="">
   
 <script>
   $( document ).ready(function() {
