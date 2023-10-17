@@ -572,7 +572,7 @@ def survey_results(survey_id):
         group_sizes = {}
         for id, group in groups_dict.items():
             group_sizes[id] = 0
-        for [student_data, student_email, group_data] in output_data[0]:
+        for [student_data, student_email, group_data] in output_data:
             group_id = group_data[0]
             group_sizes[group_id] += 1
 
@@ -610,7 +610,7 @@ def survey_results(survey_id):
     # All of this should be refactored into a separate function.
     happiness_avg = 0
     happiness_results = {}
-    for results in output_data[0]:
+    for results in output_data:
         user_id = results[0][0]
         choice_id =  results[2][0]
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
@@ -630,8 +630,7 @@ def survey_results(survey_id):
     # Fix a bug where happiness results did not always come in the right order
     happiness_results_list.sort()
     
-    (x, y, z) = output_data
-    output_data = (x, happiness_avg, happiness_results_list)
+    output_data = (output_data, happiness_avg, happiness_results_list)
     
     dropped_groups = []
     for group_id in dropped_groups_id:

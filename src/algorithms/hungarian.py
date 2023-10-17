@@ -144,7 +144,7 @@ class Hungarian:
         """
         Returns a collection of data on the group selections
         """
-        return (self.get_selections_data(), np.average(self.student_happiness[:,1]), self.get_happiness_data_strings())
+        return self.get_selections_data()
 
     def get_selections_data(self):
         """
