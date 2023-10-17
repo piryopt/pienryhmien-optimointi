@@ -854,7 +854,8 @@ def admin_gen_rankings():
     survey_id = request.form.get("survey_list")
     gen_data.generate_rankings(survey_id)
 
-    return redirect(f"/surveys/{survey_id}/answers")'''
+    return redirect(f"/surveys/{survey_id}/answers")
+'''
 
 """
 MISCELLANEOUS ROUTES:

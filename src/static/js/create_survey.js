@@ -461,12 +461,6 @@ function submitNewColumn(event) {
 
     //add delete button for new column
     document.querySelector("#column-delete-btns").appendChild(createDeleteColumnCell())
-    var cell = document.createElement('td')
-    var btn = document.createElement('div')
-    btn.classList.add('delete-col-btn')
-    cell.appendChild(btn)
-    btn.addEventListener("click", removeColumn)
-
     
     
     if (!document.getElementById("add-column-header")){
