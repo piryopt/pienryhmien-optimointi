@@ -178,24 +178,21 @@ div.delete-col-btn-visible {
     background-image: url("../images/delete_white_36dp.svg");
     background-size: contain;
     width:100%;
-    height: 24px;
+    height: 30px;
     cursor: pointer;
-    background-position: center; 
+    background-position:center; 
     background-repeat: no-repeat;
 }
 
 
 .delete-col-btn:hover {
-    visibility: visible;
+    visibility:visible;
     background-image: url("../images/delete_white_36dp.svg");
     background-size: contain;
     width:100%;
-    height: 24px;
+    height: 30px;
     cursor: pointer;
     background-position: center; 
     background-repeat: no-repeat;
 }
 
-section div {
-    margin-bottom: 40px;
-}
