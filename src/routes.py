@@ -12,7 +12,6 @@ from src.services.user_rankings_service import user_rankings_service
 from src.services.final_group_service import final_group_service
 from src.services.survey_teachers_service import survey_teachers_service
 from src.services.feedback_service import feedback_service
-from src.tools import excelreader
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness, convert_date, convert_time
@@ -539,9 +538,18 @@ def survey_results(survey_id):
         return redirect(f"/surveys/{survey_id}/answers")
     survey_answers_amount = len(user_rankings)
 
-    #if more rankings than available slots add a non-group
+    # If more rankings than available slots add a non-group
     if (survey_answers_amount > available_spaces):
         added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-available_spaces)
+        if not added_group:
+            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
+            return jsonify(response)
+        
+    # Check if min and max sizes of the group are all the same.
+    min_max_same = survey_choices_service.check_min_equals_max(survey_id)
+    if min_max_same:
+        empty_group_size = available_spaces - survey_answers_amount
+        added_group = survey_choices_service.add_empty_survey_choice(survey_id, empty_group_size)
         if not added_group:
             response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
             return jsonify(response)
@@ -570,12 +578,7 @@ def survey_results(survey_id):
 
         # Sort by size
         sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
-        '''for s in sorted_groups:
-            print(f"id: {s}, size: {group_sizes[s]}")
 
-        for id in sorted_groups:
-            print(id)
-        '''
         # Check if min_size is greater than group size. If it is, remove the group_id from all relevant lists and dictionaries.
         violation = False
         for survey_choice_id in sorted_groups:
@@ -622,7 +625,10 @@ def survey_results(survey_id):
     happiness_results_list = []
     for k,v in happiness_results.items():
         if v > 0:
-            happiness_results_list.append(f"{k}. valintaansa sijoitetut opiskelijat: {v} kpl")
+            happiness_results_list.append((k, f". valintaansa sijoitetut opiskelijat: {v} kpl"))
+    
+    # Fix a bug where happiness results did not always come in the right order
+    happiness_results_list.sort()
     
     (x, y, z) = output_data
     output_data = (x, happiness_avg, happiness_results_list)
@@ -660,7 +666,7 @@ def save_survey_results(survey_id, output_data):
         if not saved:
             response = {"msg":f"ERROR IN SAVING {results[0][1]} RESULTS!"}
             return jsonify(response)
-    return redirect('/surveys')
+    return redirect(f'/surveys/{survey_id}/results')
 
 
 @app.route("/surveys/<string:survey_id>/close", methods = ["POST"])
@@ -880,21 +886,6 @@ def csv_instructions():
     csv_file = Path(__file__).parents[0] / 'static' / 'content' / 'csv-instructions.md'
     content = open(csv_file, 'r', encoding='utf-8').read()
     return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
-
-@app.route("/excel")
-def excel():
-    """
-    Performance test for the Hungarian algortihm with real life data.
-    """
-    groups_dict = excelreader.create_groups()
-    students_dict = excelreader.create_students(groups_dict)
-    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
-
-    sort = h.Hungarian(groups_dict, students_dict, weights)
-    sort.run()
-    output_data = sort.get_data()
-    return render_template("results.html", results = output_data[0],
-                           happiness_data = output_data[2], happiness = output_data[1])
 
 @app.route("/get_choices/<string:survey_id>", methods=["POST"])
 def get_choices(survey_id):

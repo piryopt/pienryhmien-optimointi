@@ -18,8 +18,8 @@
 </div>
 <div>
 <b>Ryhmänvalintojen keskiarvo: {{ happiness }}</b></br>
-{% for h in happiness_data%}
-<label>{{ h }}</label></br>
+{% for h in happiness_data %}
+<label>{{ h[0] }}{{ h[1] }}</label></br>
 {% endfor %}
 </br>
 <button type="submit" class="btn btn-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button></br></br>
@@ -60,7 +60,11 @@
         {% for row in results %}
         <td><p>{{ row[0][1] }}</p></td>       <!--name--> 
         <td><p>{{ row[1] }}</p></td>       <!--email--> 
-        <td><p>{{ row[2][1] }}</p></td>       <!--assigned group--> 
+        <td>
+            <p {%if row[2][1] == "Tyhjä" %} style="color:orangered" {% endif %}>
+                {{ row[2][1] }}
+            </p>
+        </td>       <!--assigned group--> 
         <td><p>{{ row[3] }}</p></td>       <!--Which choice--> 
 
         {% for info in infos[row[2][0]|string] %}

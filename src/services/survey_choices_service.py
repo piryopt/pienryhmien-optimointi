@@ -117,5 +117,24 @@ class SurveyChoicesService:
             in the survey
         """
         return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces, 0)
+    
+    def check_min_equals_max(self, survey_id):
+        """
+        Check if all survey choices have the same min and max values. Needed for fixing a bug
+        where the app crashes in certain cases.
+
+        Args:
+            survey_id: id for the survey
+        """
+        choices = self.get_list_of_survey_choices(survey_id)
+        if not choices:
+            return False
+        minmax = choices[0].max_spaces
+        for c in choices:
+            if c.max_spaces != minmax or c.min_size != minmax:
+                return False
+        return True
+
+
 
 survey_choices_service = SurveyChoicesService()
