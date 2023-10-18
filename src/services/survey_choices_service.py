@@ -134,6 +134,22 @@ class SurveyChoicesService:
             if c.max_spaces != minmax or c.min_size != minmax:
                 return False
         return True
+    
+    def check_answers_less_than_min_size(self, survey_id, survey_answers_amount):
+        """
+        Check if there are less answers than the group with the smallest min_size
+
+        Args:
+            survey_id: id for the survey
+            survey_answers_amount: The amount of answers for a survey
+        """
+        choices = self.get_list_of_survey_choices(survey_id)
+        if not choices:
+            return False
+        for choice in choices:
+            if survey_answers_amount > choice.min_size:
+                return False
+        return True
 
 
 

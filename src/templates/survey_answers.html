@@ -36,9 +36,8 @@
 <br><br>
 <form action="/surveys/{{ survey_id }}/close" method="POST" onsubmit="return confirm ('Haluatko varmasti sulkea kyselyn?')">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button type="submit" class="btn btn-danger" name="closin_time" style="float: right;" onclick="">Sulje kysely</button>
+  <input type="submit" class="btn btn-danger" name="closin_time" style="float: right;" value="Sulje kysely"></button>
 </form>
-<a href="/surveys/{{ survey_id }}/edit" class="btn btn-primary" style="float: right; margin-right: 60px">Muokkaa kyselyä</a>
 {% endif %}
 <br>
 <p>

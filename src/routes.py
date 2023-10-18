@@ -554,6 +554,13 @@ def survey_results(survey_id):
             response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
             return jsonify(response)
 
+    # Check that the amount of answers is greater than the smallest min_size of a group
+    answers_less_than_min_size = survey_choices_service.check_answers_less_than_min_size(survey_id, survey_answers_amount)
+    print(answers_less_than_min_size)
+    if answers_less_than_min_size:
+        response = {"status":"0", "msg":"Ryhmäjako epäonnistui. Liian vähän vastauksia eikä voitu täyttää ryhmiä min_size vaatimuksen takia."}
+        return jsonify(response)
+
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
 
