@@ -17,9 +17,10 @@
 <h2>Lajittelun tulokset</h2>
 </div>
 <div>
+<input type="hidden" id="survey_id" value="{{ survey_id }}">
 <b>Ryhmänvalintojen keskiarvo: {{ happiness }}</b></br>
-{% for h in happiness_data%}
-<label>{{ h }}</label></br>
+{% for h in happiness_data %}
+<label>{{ h[0] }}{{ h[1] }}</label></br>
 {% endfor %}
 </br>
 <button type="submit" class="btn btn-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button></br></br>
@@ -49,6 +50,7 @@
             <th><p>Sähköposti</p></th>
             <th><p>Ryhmä</p></th>
             <th><p>Monesko valinta</p></th>
+            <th><p>Valinnat</p></th>
             {% for s in sc %}
             <th style="display:none">{{s[0]}}</th>
             {% endfor %}
@@ -60,9 +62,17 @@
         {% for row in results %}
         <td><p>{{ row[0][1] }}</p></td>       <!--name--> 
         <td><p>{{ row[1] }}</p></td>       <!--email--> 
-        <td><p>{{ row[2][1] }}</p></td>       <!--assigned group--> 
+        <td>
+            <p {%if row[2][1] == "Tyhjä" %} style="color:orangered" {% endif %}>
+                {{ row[2][1] }}
+            </p>
+        </td>       <!--assigned group--> 
         <td><p>{{ row[3] }}</p></td>       <!--Which choice--> 
-
+        <td>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="showRankingResults('{{ row[1] }}')">Näytä</button>
+            <div id="all-rankings-container {{ row[1] }}">
+            </div>
+        </td>
         {% for info in infos[row[2][0]|string] %}
         <td style="display:none;">{{ info }}</td>
         {% endfor %}
@@ -71,6 +81,7 @@
     {% endfor %}
     </tbody>
 </table>
+<input type="hidden" id="currently_selected" value="">
 </div>
 
 <script>

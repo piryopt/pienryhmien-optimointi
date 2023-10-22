@@ -104,5 +104,23 @@ class UserRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def get_user_by_email(self, email):
+        """
+        SQL code for the id of a user with its email
+
+        args:
+            email: The email of a user
+        """
+        try:
+            sql = "SELECT * FROM users WHERE email=:email"
+            result = db.session.execute(text(sql), {"email":email})
+            user = result.fetchone()
+            if not user:
+                return False
+            return user
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 user_repository = UserRepository()

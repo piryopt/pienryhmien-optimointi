@@ -174,7 +174,7 @@ function showMoreInfo(choiceID) {
         });
     }
     
-    if (currentlySelected != choiceID) {
+    else if (currentlySelected != choiceID) {
         $.ajax({
             type: "POST",
             url: "/surveys/getinfo",
@@ -193,6 +193,47 @@ function showMoreInfo(choiceID) {
 
 function exitMoreInfo(choiceID) {
     var name = "info-container " + choiceID
+    document.getElementById(name).innerHTML = "";
+    $('input[id="currently_selected"]').val("");
+}
+
+function showRankingResults(email) {
+    var surveyID = document.getElementById("survey_id").value;
+    var name = "all-rankings-container " + email
+    var rankingContainer = document.getElementById(name)
+    var currentlySelected = document.getElementById("currently_selected").value
+    if (currentlySelected === "") {
+        $.ajax({
+            type: "POST",
+            url: "/surveys/" + surveyID + "/studentranking",
+            data: JSON.stringify(email),
+            contentType: "application/json",
+            datatype: "html",
+            success: function(result) {
+                rankingContainer.innerHTML = result;
+                $('input[id="currently_selected"]').val(email);
+            }
+        });
+    }
+    else if (currentlySelected != email) {
+        $.ajax({
+            type: "POST",
+            url: "/surveys/" + surveyID + "/studentranking",
+            data: JSON.stringify(email),
+            contentType: "application/json",
+            datatype: "html",
+            success: function(result) {
+                rankingContainer.innerHTML = result;
+                $('input[id="currently_selected"]').val(email);
+            }
+        });
+    } else {
+        exitMoreRankingResults(email);
+    }
+}
+
+function exitMoreRankingResults(email) {
+    var name = "all-rankings-container " + email
     document.getElementById(name).innerHTML = "";
     $('input[id="currently_selected"]').val("");
 }

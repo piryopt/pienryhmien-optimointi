@@ -349,7 +349,7 @@ async function hideColumnIcon(event) {
     var columnIndex = event.target.cellIndex
     if(columnIndex > 1) {
         var columnDeleteBtn = document.querySelector(`#column-delete-btns td:nth-child(${columnIndex + 1})`)
-        wait(150).then(_ => {
+        wait(1000).then(_ => {
             columnDeleteBtn.classList.remove("visible")
             columnDeleteBtn.querySelector(".delete-col-btn").classList.remove("delete-col-btn-visible")
             }
@@ -458,11 +458,9 @@ function submitNewColumn(event) {
     editedCell.innerHTML = ""
     editedCell.innerText = newValue
     editedCell.addEventListener("mouseover",showDeleteColumnIconOnHover)
-    editedCell.addEventListener("mouseleave",hideColumnIcon)
 
     //add delete button for new column
     document.querySelector("#column-delete-btns").appendChild(createDeleteColumnCell())
-
     
     
     if (!document.getElementById("add-column-header")){
@@ -524,7 +522,6 @@ function pageLoadActions() {
     var variableHeaders = document.querySelectorAll('#choice-table-headers th:not(.constant-header, #add-column-header)')
     variableHeaders.forEach( header => {
         header.addEventListener("mouseover",showDeleteColumnIconOnHover)
-        header.addEventListener("mouseleave",hideColumnIcon)
     } )
     document.querySelectorAll('.delete-col-btn').forEach(btn => {
         btn.addEventListener("click", removeColumn)
@@ -600,7 +597,6 @@ function setUploadedTableValues(table) {
         deleteColRow.appendChild(createDeleteColumnCell())
         var newHeader = createElementWithText('th', header, clickHandler=editCell)
         newHeader.addEventListener("mouseover",showDeleteColumnIconOnHover)
-        newHeader.addEventListener("mouseleave",hideColumnIcon)
         headersRow.insertBefore(newHeader, document.getElementById('add-column-header'))
         
     }

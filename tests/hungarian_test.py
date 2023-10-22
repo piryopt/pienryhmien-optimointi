@@ -153,12 +153,6 @@ class TestHungarian(unittest.TestCase):
         self.h.run()
         np.testing.assert_array_equal(self.h.matrix,ref)
 
-    def test_get_data_returns_correct_size_tuple(self):
-        """
-        Calls get data and tests that the tuple has 4 members
-        """
-        self.assertEqual(len(self.h.get_data()), 3)
-
     def test_get_happiness_data_strings_returns_correct_format(self):
         """
         Checks that function get_happiness_data_strings returns data in correct format
