@@ -123,8 +123,13 @@ body {background-color: rgb(24, 26, 27);}
 
 .dropdown-menu {
     min-width: 100%;
-    text-align: left;
     background-color: rgb(40, 45, 49);
+}
+
+.dropdown-menu[data-bs-popper] {
+    position: absolute;
+    top: 113%;
+    left: 0%;
 }
 
 .dropdown-item:hover {
