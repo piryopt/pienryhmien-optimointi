@@ -168,5 +168,18 @@ class UserService:
         if not teachers:
             return 0
         return len(teachers)
+    
+    def get_user_id_by_email(self, email):
+        """
+        Gets a user_id by its email
+
+        args:
+            email: The email of the user
+        """
+        user = self._user_repository.get_user_by_email(email)
+        if not user:
+            return False
+        return user.id
+
 
 user_service = UserService()

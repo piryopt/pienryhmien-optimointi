@@ -154,6 +154,21 @@ def expand_ranking():
         choices.append(choice)
     return render_template("showrankings.html", choices = choices)
 
+@app.route("/surveys/<string:survey_id>/studentranking", methods=["POST"])
+def expand_ranking_results(survey_id):
+    """
+    When a ranking is clicked, display all rankings.
+    """
+    email = request.get_json()
+    user_id = user_service.get_user_id_by_email(email)
+    ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
+    ranking_list = convert_to_list(ranking)
+    choices = []
+    for r in ranking_list:
+        choice = survey_choices_service.get_survey_choice(r)
+        choices.append(choice)
+    return render_template("showrankings.html", choices = choices)
+
 @app.route("/surveys/create", methods = ["GET"])
 @ad_login
 @teachers_only
@@ -635,7 +650,7 @@ def survey_results(survey_id):
     
     # Fix a bug where happiness results did not always come in the right order
     happiness_results_list.sort()
-    
+
     output_data = (output_data, happiness_avg, happiness_results_list)
     
     dropped_groups = []

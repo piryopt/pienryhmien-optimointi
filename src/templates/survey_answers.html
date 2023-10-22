@@ -60,13 +60,13 @@
         {% for row in survey_answers %}
           <td id="email_search"><p>{{ row[0] }}</p></td>
           <td>
-            <button type="button" class="btn btn-outline-success btn-sm" onclick="showRanking('{{ row[1] }}', '{{ row[0] }}')">Näytä</button>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="showRankingAnswers('{{ row[1] }}', '{{ row[0] }}')">Näytä</button>
             <div id="ranking-container {{ row[1] }} {{ row[0] }}">
             </div>
           </td>
           <td>
             {% if row[2] %}
-            <button type="button" class="btn btn-outline-danger btn-sm" onclick="showRanking('{{ row[2] }}', '{{ row[0] }}')">Näytä</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="showRankingAnswers('{{ row[2] }}', '{{ row[0] }}')">Näytä</button>
             <div id="ranking-container {{ row[2] }} {{ row[0] }}">
             </div>
             {% endif %}
