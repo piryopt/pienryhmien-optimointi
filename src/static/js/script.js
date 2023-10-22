@@ -196,41 +196,6 @@ function exitMoreInfo(choiceID) {
     document.getElementById(name).innerHTML = "";
     $('input[id="currently_selected"]').val("");
 }
-// Yes I know these 2 functions are almost identical. showRankingAnswers also works with rejections, which kinda cucks 
-// us out of using the same function for the ansers and results page.
-function showRankingAnswers(ranking, email) {
-    var name = "ranking-container " + ranking + " " + email
-    var rankingContainer = document.getElementById(name)
-    var currentlySelected = document.getElementById("currently_selected").value
-    if (currentlySelected === "") {
-        $.ajax({
-            type: "POST",
-            url: "/surveys/getranking",
-            data: JSON.stringify(ranking),
-            contentType: "application/json",
-            datatype: "html",
-            success: function(result) {
-                rankingContainer.innerHTML = result;
-                $('input[id="currently_selected"]').val(email);
-            }
-        });
-    }
-    else if (currentlySelected != email) {
-        $.ajax({
-            type: "POST",
-            url: "/surveys/getranking",
-            data: JSON.stringify(ranking),
-            contentType: "application/json",
-            datatype: "html",
-            success: function(result) {
-                rankingContainer.innerHTML = result;
-                $('input[id="currently_selected"]').val(email);
-            }
-        });
-    } else {
-        exitMoreRanking(ranking, email);
-    }
-}
 
 function showRankingResults(email) {
     var surveyID = document.getElementById("survey_id").value;
@@ -265,12 +230,6 @@ function showRankingResults(email) {
     } else {
         exitMoreRankingResults(email);
     }
-}
-
-function exitMoreRanking(ranking, email) {
-    var name = "ranking-container " + ranking + " " + email
-    document.getElementById(name).innerHTML = "";
-    $('input[id="currently_selected"]').val("");
 }
 
 function exitMoreRankingResults(email) {

@@ -141,33 +141,26 @@ def get_info():
     additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(int(raw_id))
     return render_template("moreinfo.html", basic = basic_info, infos = additional_info)
 
-@app.route("/surveys/getranking", methods=["POST"])
-def expand_ranking():
-    """
-    When a ranking is clicked, display all rankings.
-    """
-    raw_ranking = request.get_json()
-    ranking_list = convert_to_list(raw_ranking)
-    choices = []
-    for r in ranking_list:
-        choice = survey_choices_service.get_survey_choice(r)
-        choices.append(choice)
-    return render_template("showrankings.html", choices = choices)
-
 @app.route("/surveys/<string:survey_id>/studentranking", methods=["POST"])
-def expand_ranking_results(survey_id):
+def expand_ranking(survey_id):
     """
     When a ranking is clicked, display all rankings.
     """
     email = request.get_json()
     user_id = user_service.get_user_id_by_email(email)
-    ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
-    ranking_list = convert_to_list(ranking)
+    user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
+    ranking_list = convert_to_list(user_ranking[3])
+    rejection_list = convert_to_list(user_ranking[4])
     choices = []
     for r in ranking_list:
         choice = survey_choices_service.get_survey_choice(r)
         choices.append(choice)
-    return render_template("showrankings.html", choices = choices)
+    rejections = []
+    if len(rejection_list) > 0:
+        for r in rejection_list:
+            choice = survey_choices_service.get_survey_choice(r)
+            rejections.append(choice)
+    return render_template("showrankings.html", choices = choices, rejections = rejections)
 
 @app.route("/surveys/create", methods = ["GET"])
 @ad_login

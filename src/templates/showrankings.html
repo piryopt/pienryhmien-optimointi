@@ -1,6 +1,14 @@
 </br>
 <ol>
+<b>Valinnat</b>
 {% for survey_choice in choices %}
 <li><small>{{survey_choice[2]}}</small></li>
 {% endfor %}
+{% if rejections %}
+</br>
+<b>Hylkäykset</b>
+{% for survey_choice in rejections %}
+<li><small>{{survey_choice[2]}}</small></li>
+{% endfor %}
+{% endif %}
 </ol>
