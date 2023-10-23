@@ -565,8 +565,10 @@ def survey_results(survey_id):
     # Check that the amount of answers is greater than the smallest min_size of a group
     answers_less_than_min_size = survey_choices_service.check_answers_less_than_min_size(survey_id, survey_answers_amount)
     if answers_less_than_min_size:
-        response = {"status":"0", "msg":"Sorting failed! The amount of answers is less than the min_size of the smallest group."}
-        return jsonify(response)
+        added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount)
+        if not added_group:
+            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
+            return jsonify(response)
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
