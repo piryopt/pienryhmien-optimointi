@@ -556,7 +556,7 @@ def survey_results(survey_id):
     # Check if min and max sizes of the group are all the same.
     min_max_same = survey_choices_service.check_min_equals_max(survey_id)
     if min_max_same:
-        empty_group_size = available_spaces - survey_answers_amount
+        empty_group_size = 20
         added_group = survey_choices_service.add_empty_survey_choice(survey_id, empty_group_size)
         if not added_group:
             response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
@@ -565,8 +565,10 @@ def survey_results(survey_id):
     # Check that the amount of answers is greater than the smallest min_size of a group
     answers_less_than_min_size = survey_choices_service.check_answers_less_than_min_size(survey_id, survey_answers_amount)
     if answers_less_than_min_size:
-        response = {"status":"0", "msg":"Ryhmäjako epäonnistui. Liian vähän vastauksia eikä voitu täyttää ryhmiä min_size vaatimuksen takia."}
-        return jsonify(response)
+        added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount)
+        if not added_group:
+            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
+            return jsonify(response)
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
