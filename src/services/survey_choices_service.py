@@ -128,12 +128,12 @@ class SurveyChoicesService:
         """
         choices = self.get_list_of_survey_choices(survey_id)
         if not choices:
-            return False
+            return (False, 0)
         minmax = choices[0].max_spaces
         for c in choices:
             if c.max_spaces != minmax or c.min_size != minmax:
-                return False
-        return True
+                return (False, 0)
+        return (True, minmax)
     
     def check_answers_less_than_min_size(self, survey_id, survey_answers_amount):
         """

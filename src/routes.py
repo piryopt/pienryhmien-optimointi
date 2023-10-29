@@ -554,9 +554,9 @@ def survey_results(survey_id):
             return jsonify(response)
         
     # Check if min and max sizes of the group are all the same.
-    min_max_same = survey_choices_service.check_min_equals_max(survey_id)
-    if min_max_same:
-        empty_group_size = 20
+    (min_max_same, size) = survey_choices_service.check_min_equals_max(survey_id)
+    if min_max_same and survey_answers_amount % size != 0:
+        empty_group_size = size
         added_group = survey_choices_service.add_empty_survey_choice(survey_id, empty_group_size)
         if not added_group:
             response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
