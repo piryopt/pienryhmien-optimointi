@@ -39,6 +39,7 @@ def ad_login(f):
             return result
         roles = request.headers.get('eduPersonAffiliation')
         name = request.headers.get('cn')
+        print("name")
         email = request.headers.get('mail')
         role_bool = True if "faculty" in roles or "staff" in roles else False
         email_exists = user_service.find_by_email(email) # account doesn't exist, register
@@ -722,7 +723,8 @@ def login():
              User("olli1", "testi.opiskelija@helsinki.fi", False),
              User("robottiStudent", "robotti.student@helsinki.fi", False),
              User("robottiTeacher", "robotti.teacher@helsinki.fi", True),
-             User("robottiTeacher2", "robotti.2.teacher@helsinki.fi", True)]
+             User("robottiTeacher2", "robotti.2.teacher@helsinki.fi", True),
+             User("Ääpö Wokki", "hm@helsinki.fi", True)]
     
     if request.method == "GET":
         return render_template("mock_ad.html")

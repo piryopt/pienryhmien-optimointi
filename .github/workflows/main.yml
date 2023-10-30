@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["small_fixes"]
   pull_request:
     branches: ["main"]
 
