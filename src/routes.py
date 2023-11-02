@@ -441,7 +441,7 @@ def edit_survey_post(survey_id):
 @teachers_only
 def delete_survey(survey_id):
     #TODO
-    ...
+    return redirect("/surveys")
 
 @app.route("/surveys/<string:survey_id>/edit/add_teacher/<string:teacher_email>", methods=["POST"])
 @teachers_only
