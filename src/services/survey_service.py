@@ -429,6 +429,13 @@ class SurveyService:
         if not surveys:
             return False
         return surveys
+    
+    def set_survey_deleted_true(self, survey_id):
+        """
+        Sets survey tables column deleted to true, doesn't actually delete the survey
+        RETURNS whether updating was successful
+        """
+        return self._survey_repository.set_survey_deleted_true(survey_id)
 
 
 survey_service = SurveyService()
