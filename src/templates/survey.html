@@ -22,7 +22,12 @@
             showMoreInfo(this.id);
         });
     });
+
+    function copyURL() {
+      navigator.clipboard.writeText(window.location.href);
+    }
 </script>
+<button onclick="copyURL()" class="btn btn-primary" style="float: left">Kopioi kyselyn osoite leikepöydälle</button><br><br>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey[1] }}</h5>
     <label>Vastausaika päättyy {{ format_datestring(survey[7]) }}</label></br></br>
