@@ -391,3 +391,20 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(name, "Safest (most dangerous lmao) PED's")
         desc = ss.get_survey_description(survey_id)
         self.assertEqual(desc, "No way in hell will these have long term affects on your body, mind and soul.")
+
+    def test_len_active_surveys(self):
+        """
+        Test that the length of all active surveys is correct
+        """
+        surveys = ss.get_all_active_surveys()
+        length = ss.len_all_surveys()
+        self.assertEqual(0, length)
+        self.assertFalse(surveys)
+
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 16", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        surveys = ss.get_all_active_surveys()
+        length = ss.len_all_surveys()
+        self.assertEqual(len(surveys), length)
