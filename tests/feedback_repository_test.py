@@ -88,3 +88,16 @@ class TestFeedbackRepository(unittest.TestCase):
         fr.new_feedback(self.user_id, "Testi palaute 4", "bugi", "Toimiiko 4. testi?")
         success = fr.check_unsolved_title_doesnt_exist(self.user_id, "Testi palaute 4")
         self.assertFalse(success)
+
+    def test_exceptions_false(self):
+        """
+        Test that all exceptions return False
+        """
+        success = fr.new_feedback(-1, "Testi palaute 3", "bugi", "Toimiiko kolmas testi?")
+        self.assertFalse(success)
+        success = fr.get_feedback(-1)
+        self.assertFalse(success)
+        success = fr.check_unsolved_title_doesnt_exist(-1, "Motivaatio")
+        self.assertFalse(success)
+        success = fr.mark_feedback_solved(-1)
+        self.assertFalse(success)

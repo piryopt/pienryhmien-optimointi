@@ -60,3 +60,12 @@ class TestSurveyRepository(unittest.TestCase):
         """
         success_get = st.check_if_teacher_in_survey("ITSNOTREAL", -1)
         self.assertEqual(success_get, False)
+
+    def test_exceptions(self):
+        """
+        Test that exceptions return False
+        """
+        success = st.add_teacher_to_survey(-1, self.user_id)
+        self.assertFalse(success)
+        success = st.check_if_teacher_in_survey(-1, self.user_id)
+        self.assertFalse(success)

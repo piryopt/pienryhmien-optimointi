@@ -248,3 +248,54 @@ class TestSurveyRepository(unittest.TestCase):
         survey = sr.get_survey(survey_id)
         self.assertEqual(survey.surveyname, "Edited survey")
         self.assertEqual(survey.survey_description, "moti")
+
+    def test_get_survey_min_choices(self):
+        """
+        Test that the min choices of a survey is correct
+        """
+        survey_id = sr.create_new_survey("Test survey 15", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        st.add_teacher_to_survey(survey_id, self.user_id)
+        min_choices = sr.get_survey_min_choices(survey_id)
+        self.assertEqual(min_choices, 10)
+
+    def test_get_survey_max_denied_choices(self):
+        """
+        Test that the max denied choices is correct
+        """
+        survey_id = sr.create_new_survey("Test survey 15", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02", 2)
+        st.add_teacher_to_survey(survey_id, self.user_id)
+        max_denied_choices = sr.get_survey_max_denied_choices(survey_id)
+        self.assertEqual(max_denied_choices, 2)
+
+    def test_exceptions(self):
+        """
+        Test that exceptions return False
+        """
+        success = sr.get_survey(-1)
+        self.assertFalse(success)
+        success = sr.survey_name_exists("Motivaatio", -1)
+        self.assertFalse(success)
+        success = sr.count_created_surveys(-1)
+        self.assertFalse(success)
+        success = sr.close_survey(-1)
+        self.assertFalse(success)
+        success = sr.open_survey(-1)
+        self.assertFalse(success)
+        success = sr.get_active_surveys(-1)
+        self.assertFalse(success)
+        success = sr.get_closed_surveys(-1)
+        self.assertFalse(success)
+        success = sr.update_survey_answered(-1)
+        self.assertFalse(success)
+        success = sr.get_survey_description(-1)
+        self.assertFalse(success)
+        success = sr.get_survey_time_end(-1)
+        self.assertFalse(success)
+        success = sr.get_survey_time_begin(-1)
+        self.assertFalse(success)
+        success = sr.get_survey_min_choices(-1)
+        self.assertFalse(success)
+        success = sr.get_survey_max_denied_choices(-1)
+        self.assertFalse(success)
+        success = sr.get_survey_search_visibility(-1)
+        self.assertFalse(success)
