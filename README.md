@@ -1,5 +1,6 @@
 # Jakaja application for small group assignment optimization
 ![GHA workflow badge](https://github.com/piryopt/pienryhmien-optimointi/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/piryopt/pienryhmien-optimointi/graph/badge.svg?token=RUVDRPFG4Z)](https://codecov.io/gh/piryopt/pienryhmien-optimointi)
 
 ### Project description
 

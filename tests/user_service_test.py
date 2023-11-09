@@ -157,3 +157,17 @@ class TestUserService(unittest.TestCase):
         """
         users = us.len_all_teachers()
         self.assertEqual(users, 1)
+
+    def test_get_user_id_by_email(self):
+        """
+        Test that the id of the user is returned when given the correct email
+        """
+        user_id = us.get_user_id_by_email("tiina.testiope@email.com")
+        self.assertTrue(isinstance(user_id, int))
+
+    def test_get_user_id_by_invalid_email(self):
+        """
+        Test that no id is returned with an invalid email
+        """
+        user_id = us.get_user_id_by_email("moti@motivaatio.com")
+        self.assertFalse(user_id)

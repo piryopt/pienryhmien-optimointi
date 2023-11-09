@@ -36,6 +36,9 @@ class TestSurveyService(unittest.TestCase):
             "enddate": "31.12.2077",
             "endtime": "00:00",
         }
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            self.json_object = json.load(openfile)
 
     def setup_users(self):
         self.ur = ur
@@ -88,12 +91,7 @@ class TestSurveyService(unittest.TestCase):
         Tests that dict is parsed correctly to survey, its choices and their additional infos
         CASE NORMAL, the dict is valid etc.
         '''
-
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], self.json_object["surveyGroupname"], self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
 
         # check surveys tables information
@@ -130,11 +128,7 @@ class TestSurveyService(unittest.TestCase):
         count = ss.count_surveys_created(self.user_id)
         self.assertEqual(count, 0)
 
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 1", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
         count = ss.count_surveys_created(self.user_id)
         self.assertEqual(count, 1)
@@ -143,11 +137,7 @@ class TestSurveyService(unittest.TestCase):
         '''
         Test survey service functions close_survey() and check_if_survey_closed() normal cases
         '''
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 2", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
 
         closed = ss.check_if_survey_closed(survey_id)
@@ -172,11 +162,7 @@ class TestSurveyService(unittest.TestCase):
         '''
         Test that wrong user id can't close an survey
         '''
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 3", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 3", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
 
         ret = ss.close_survey(survey_id, self.user_id2)
@@ -187,13 +173,9 @@ class TestSurveyService(unittest.TestCase):
         '''
         Test only closed surveys are acquired
         '''
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        closed_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 4", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        closed_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 4", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(closed_id, self.user_email)
-        open_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 5", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        open_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 5", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(open_id, self.user_email)
 
         ss.close_survey(closed_id, self.user_id)
@@ -211,14 +193,9 @@ class TestSurveyService(unittest.TestCase):
         # first check 0 surveys branch
         surveys = ss.get_active_surveys(self.user_id)
         self.assertEqual(surveys, False)
-
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        closed_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 6", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        closed_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 6", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(closed_id, self.user_email)
-        open_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 7", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        open_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 7", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(open_id, self.user_email)
 
         ss.close_survey(closed_id, self.user_id)
@@ -229,11 +206,7 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(len(surveys), 1)
 
     def test_open_survey_normal(self):
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 8", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 8", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
 
         ss.close_survey(survey_id, self.user_id)
@@ -249,11 +222,7 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(ret, False)
 
     def test_open_survey_wrong_teacher(self):
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 9", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 9", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
 
         ss.close_survey(survey_id, self.user_id)
@@ -274,11 +243,7 @@ class TestSurveyService(unittest.TestCase):
         ret = ss.update_survey_answered("ITSNOTREAL")
         self.assertEqual(ret, False)
 
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 10", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 10", self.user_id, self.json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
 
         answered = ss.check_if_survey_results_saved(survey_id)
@@ -293,11 +258,7 @@ class TestSurveyService(unittest.TestCase):
         '''
         Tests that survey service parser dict correctly
         '''
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 11", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 11", self.user_id, self.json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
 
         survey_dict = ss.get_survey_as_dict(survey_id)
@@ -308,7 +269,7 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(survey_dict["min_choices"], 2)
         self.assertEqual(survey_dict["closed"], False)
         self.assertEqual(survey_dict["results_saved"], False)
-        self.assertEqual(survey_dict["survey_description"], json_object["surveyInformation"])
+        self.assertEqual(survey_dict["survey_description"], self.json_object["surveyInformation"])
         self.assertEqual(survey_dict["time_begin"], datetime.datetime(2023, 1, 1, 1, 1))
         self.assertEqual(survey_dict["time_end"], datetime.datetime(2024, 1, 1, 2, 2))
 
@@ -332,11 +293,7 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(closed_list, [])
 
     def test_get_list_active_answered(self):
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 12", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 12", self.user_id, self.json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id3, survey_id, ranking, "", "")
@@ -344,11 +301,7 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(1, len(active_list))
 
     def test_get_list_closed_answered(self):
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 12", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 12", self.user_id, self.json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
         ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id3, survey_id, ranking, "", "")
@@ -366,13 +319,9 @@ class TestSurveyService(unittest.TestCase):
         self.assertEqual(False, surveys)
 
     def test_check_surveys_to_close(self):
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 13", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 13", self.user_id, self.json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
         sts.add_teacher_to_survey(survey_id, self.user_email)
-        survey_id2 = ss.create_new_survey_manual(json_object["choices"], "Test survey 14", self.user_id, json_object["surveyInformation"], 2, "01.01.1998", "01:01", "01.01.1999", "02:02")
+        survey_id2 = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 14", self.user_id, self.json_object["surveyInformation"], 2, "01.01.1998", "01:01", "01.01.1999", "02:02")
         sts.add_teacher_to_survey(survey_id2, self.user_email)
         surveys = ss.check_for_surveys_to_close()
         closed = ss.check_if_survey_closed(survey_id2)
@@ -382,10 +331,7 @@ class TestSurveyService(unittest.TestCase):
         """
         Test that editing a survey works
         """
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 15", self.user_id, json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 15", self.user_id, self.json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
         ss.save_survey_edit(survey_id, self.edit_dict, self.user_id)
         name = ss.get_survey_name(survey_id)
         self.assertEqual(name, "Safest (most dangerous lmao) PED's")
@@ -409,3 +355,17 @@ class TestSurveyService(unittest.TestCase):
         ss.set_survey_deleted_true(survey_id1)
         surveys = ss.get_all_active_surveys()
         self.assertEqual(1, len(surveys))
+        
+    def test_len_active_surveys(self):
+        """
+        Test that the length of all active surveys is correct
+        """
+        surveys = ss.get_all_active_surveys()
+        length = ss.len_all_surveys()
+        self.assertEqual(0, length)
+        self.assertFalse(surveys)
+
+        survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 16", self.user_id, self.json_object["surveyInformation"], 2, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        surveys = ss.get_all_active_surveys()
+        length = ss.len_all_surveys()
+        self.assertEqual(len(surveys), length)

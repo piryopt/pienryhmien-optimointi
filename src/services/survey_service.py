@@ -9,7 +9,7 @@ from src.repositories.survey_choices_repository import (
     survey_choices_repository as default_survey_choices_repository
 )
 from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
-from src.tools.date_converter import time_to_close, time_to_open
+from src.tools.date_converter import time_to_close
 from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
 
@@ -268,24 +268,6 @@ class SurveyService:
             closing_time = time_to_close(survey_time_end)
             if closing_time:
                 self._survey_repository.close_survey(survey_id)
-    
-    def check_for_surveys_to_open(self):
-        """
-        Gets a list of all active surveys and closes them if closing time has arrived
-        """
-        # Fetch the list of all active surveys
-        surveys = self._survey_repository.get_all_closed_surveys()
-        # If the list is empty or it doesn't exist, return
-        if not surveys:
-            return False
-        if len(surveys) == 0:
-            return False
-        for survey in surveys:
-            survey_id = survey.id
-            survey_time_end = self._survey_repository.get_survey_time_begin(survey_id)
-            opening_time = time_to_open(survey_time_end)
-            if opening_time:
-                self._survey_repository.open_survey(survey_id)
 
     def fetch_survey_responses(self, survey_id):
         """
