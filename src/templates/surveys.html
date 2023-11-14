@@ -65,7 +65,11 @@
 
     <script>
       function copyURL(str) {
-        navigator.clipboard.writeText(window.location.href.slice(0, -1) + "/" + str);
+        var url = window.location.href
+        if (url.includes("#")) {
+          url = url.replace('#', '')
+        }
+        navigator.clipboard.writeText(url + "/" + str);
       }
     </script>
 {% endblock %}
