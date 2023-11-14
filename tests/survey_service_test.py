@@ -338,6 +338,24 @@ class TestSurveyService(unittest.TestCase):
         desc = ss.get_survey_description(survey_id)
         self.assertEqual(desc, "No way in hell will these have long term affects on your body, mind and soul.")
 
+    def test_survey_deleted(self):
+        """"
+        Test that after setting surveys as deleted it won't show up on list of active surveys
+        """
+        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        survey_id1 = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id2 = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+
+        surveys = ss.get_all_active_surveys()
+        self.assertEqual(2, len(surveys))
+
+        ss.set_survey_deleted_true(survey_id1)
+        surveys = ss.get_all_active_surveys()
+        self.assertEqual(1, len(surveys))
+        
     def test_len_active_surveys(self):
         """
         Test that the length of all active surveys is correct

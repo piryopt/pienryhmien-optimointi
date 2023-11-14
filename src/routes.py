@@ -39,6 +39,8 @@ def ad_login(f):
             return result
         roles = request.headers.get('eduPersonAffiliation')
         name = request.headers.get('cn')
+        '''for a in name:
+            print(ord(a))'''
         email = request.headers.get('mail')
         role_bool = True if "faculty" in roles or "staff" in roles else False
         email_exists = user_service.find_by_email(email) # account doesn't exist, register
@@ -439,8 +441,8 @@ def edit_survey_post(survey_id):
 @app.route("/surveys/<string:survey_id>/delete")
 @teachers_only
 def delete_survey(survey_id):
-    #TODO
-    ...
+    survey_service.set_survey_deleted_true(survey_id)
+    return redirect("/surveys")
 
 @app.route("/surveys/<string:survey_id>/edit/add_teacher/<string:teacher_email>", methods=["POST"])
 @teachers_only
@@ -722,7 +724,8 @@ def login():
              User("olli1", "testi.opiskelija@helsinki.fi", False),
              User("robottiStudent", "robotti.student@helsinki.fi", False),
              User("robottiTeacher", "robotti.teacher@helsinki.fi", True),
-             User("robottiTeacher2", "robotti.2.teacher@helsinki.fi", True)]
+             User("robottiTeacher2", "robotti.2.teacher@helsinki.fi", True),
+             User("Ääpö Wokki", "hm@helsinki.fi", True)]
     
     if request.method == "GET":
         return render_template("mock_ad.html")

@@ -347,6 +347,22 @@ class SurveyRepository:
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
+        
+    def set_survey_deleted_true(self, survey_id):
+        """
+        SQL code for setting survey's deleted field true
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "UPDATE surveys SET deleted = True WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id":survey_id})
+            db.session.commit()
+            return True
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
 
 
 survey_repository = SurveyRepository()
