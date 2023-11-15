@@ -32,7 +32,7 @@ class SurveyTeachersService:
         # Verify that a user with the email exists and that the user has teacher privileges
         user = self._user_repository.find_by_email(teacher_email)
         if not user:
-            message = "Sähköpostiosoitetta ei löydetty järjestelmästä!"
+            message = f"Sähköpostiosoitetta ei löydetty järjestelmästä! Onko {teacher_email} kirjautunut aikaisemmin Jakajaan?"
             return (False, message)
         
         if not user.isteacher:
