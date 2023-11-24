@@ -67,7 +67,7 @@
           <td>
             <form action="/surveys/{{ survey_id }}/answers/delete" method="POST" onsubmit="return confirm ('Haluatko varmasti poistaa tämän vastauksen?')">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-              <button type="submit"  class="btn btn-danger btn-sm" name="delete_input" style="float: left;" onclick="">Poista tämä vastaus</button>
+              <button type="submit"  class="btn btn-outline-danger btn-sm" name="delete_input" style="float: left;" onclick=""><img src="{{ url_for('static', filename='images/delete_white_36dp.svg') }}" width="30" height="24"></button>
               <input type="hidden" name="student_email" value="{{ row[0] }}">
             </form>
           </td>
