@@ -1,7 +1,12 @@
-h1, h2, h3, h4, h5, label, p, i, strong, li  {
+h1, h2, h3, h4, h5, label, p, i, strong, li {
     color: rgb(255, 255, 255);
     opacity: 0.8;
+}
 
+a.surveys_link {
+    color: rgb(255, 255, 255);
+    opacity: 0.8;
+    text-decoration: none;
 }
 
 h1, h2, h3 {
@@ -232,4 +237,10 @@ td.empty {
 main>div.container {
     margin-top: 40px;
     margin-bottom: 120px;
+}
+
+a.surveys_link:hover {
+    color: #ffffff;
+    text-decoration: none;
+    opacity: 0.5;
 }

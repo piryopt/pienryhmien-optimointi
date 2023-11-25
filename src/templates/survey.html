@@ -25,8 +25,8 @@
 </script>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey[1] }}</h5>
-    <label>Vastausaika päättyy {{ format_datestring(survey[7]) }}</label></br></br>
-    <label>{{ survey[5] }}</label>
+    <p>Vastausaika päättyy {{ format_datestring(survey[7]) }}</p></br></br>
+    {% if survey[5] %}<p>{{ survey[5] }}</p></br></br>{% endif %}
     <input type="hidden" id="max_bad_choices" value="{{ survey[8] }}">
     <input type="hidden" id="min_choices" value="{{ survey[2] }}">
     <input type="hidden" id="additional_info" value="{{ additional_info }}">

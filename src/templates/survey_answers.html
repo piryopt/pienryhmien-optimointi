@@ -48,10 +48,10 @@
     <table cellspacing="10" class="table table-striped">
       <thead class="table-dark">
         <tr>
-            <th><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Sähköposti</th>
-            <th><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Valinnat</th>
-            <th><img src="{{ url_for('static', filename='images/question_answer_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Perustelut</th>
-            <th><img src="{{ url_for('static', filename='images/person_off_white_36dp.svg') }}" alt="" width="30" height="24" class="d-inline-block align-text-top">  Vastauksen poistaminen</th>
+            <th><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Sähköposti</th>
+            <th><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Valinnat</th>
+            <th><img src="{{ url_for('static', filename='images/question_answer_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Perustelut</th>
+            <th><img src="{{ url_for('static', filename='images/person_off_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Vastauksen poistaminen</th>
         </tr>
       </thead>
       <tbody id="answers_table" >
@@ -67,7 +67,7 @@
           <td>
             <form action="/surveys/{{ survey_id }}/answers/delete" method="POST" onsubmit="return confirm ('Haluatko varmasti poistaa tämän vastauksen?')">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-              <button type="submit"  class="btn btn-danger btn-sm" name="delete_input" style="float: left;" onclick="">Poista tämä vastaus</button>
+              <button type="submit"  class="btn btn-outline-danger btn-sm" name="delete_input" style="float: left;" onclick=""><img src="{{ url_for('static', filename='images/delete_white_36dp.svg') }}" width="30" height="24"></button>
               <input type="hidden" name="student_email" value="{{ row[0] }}">
             </form>
           </td>
