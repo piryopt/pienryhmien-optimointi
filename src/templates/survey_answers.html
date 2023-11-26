@@ -11,7 +11,7 @@
 <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br><br>
 <input type="hidden" id="survey_id" value="{{ survey_id }}">
 {% if closed %}
-<a href="/surveys" class="btn btn-primary" style="float: right">Palaa kyselylistaan</a>
+<a href="/surveys" class="surveys_link" style="float: right">Palaa kyselylistaan</a>
 <br><br>
 {% if survey_answers_amount > available_spaces %}
 <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
@@ -26,17 +26,17 @@
    "Tyhjä"</p>
 <a href="/surveys/{{ survey_id }}/group_sizes" class="btn btn-primary" style="float: left">Muokkaa ryhmäkokoja</a><br><br><br>
 {% endif %}
-<a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-primary" name="algoin_time">Jaa ryhmiin</button></a>
+<a href="/surveys/{{ survey_id }}/results"><button type="submit" class="btn btn-outline-primary" name="algoin_time">Jaa ryhmiin</button></a>
 <form action="/surveys/{{ survey_id }}/open" method="POST" onsubmit="return confirm ('Haluatko varmasti avata kyselyn?')">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <button type="submit" class="btn btn-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
+  <button type="submit" class="btn btn-outline-warning" name="openin_time" style="float: right;" onclick="">Avaa kysely uudelleen</button>
 </form>
 {% else %}
-<a href="/surveys" class="btn btn-primary" style="float: right">Palaa kyselylistaan</a>
+<a href="/surveys" class="surveys_link" style="float: right">Palaa kyselylistaan</a>
 <br><br>
 <form action="/surveys/{{ survey_id }}/close" method="POST" onsubmit="return confirm ('Haluatko varmasti sulkea kyselyn?')">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  <input type="submit" class="btn btn-danger" name="closin_time" style="float: right;" value="Sulje kysely"></button>
+  <input type="submit" class="btn btn-outline-danger" name="closin_time" style="float: right;" value="Sulje kysely"></button>
 </form>
 {% endif %}
 <br>
@@ -59,7 +59,7 @@
         {% for row in survey_answers %}
           <td id="email_search"><p>{{ row[0] }}</p></td>
           <td>
-            <button type="button" class="btn btn-outline-success btn-sm" onclick="showRankingResults('{{ row[0] }}')">Näytä</button>
+            <button type="button" class="btn btn-link" onclick="showRankingResults('{{ row[0] }}')"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"><label style="cursor: pointer;">Näytä</label></button>
             <div id="all-rankings-container {{ row[0] }}">
             </div>
           </td>
@@ -67,7 +67,7 @@
           <td>
             <form action="/surveys/{{ survey_id }}/answers/delete" method="POST" onsubmit="return confirm ('Haluatko varmasti poistaa tämän vastauksen?')">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-              <button type="submit"  class="btn btn-outline-danger btn-sm" name="delete_input" style="float: left;" onclick=""><img src="{{ url_for('static', filename='images/delete_white_36dp.svg') }}" width="30" height="24"></button>
+              <button type="submit"  class="btn btn-link" name="delete_input" style="float: left;" onclick=""><img src="{{ url_for('static', filename='images/delete_white_36dp.svg') }}" width="30" height="24"></button>
               <input type="hidden" name="student_email" value="{{ row[0] }}">
             </form>
           </td>
