@@ -117,7 +117,7 @@ class SurveyRepository:
             teacher_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=True AND t.survey_id = s.id AND s.deleted=False) ORDER BY s.id ASC"
+            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=True AND t.survey_id = s.id AND s.deleted=False) ORDER BY s.time_end DESC"
             result = db.session.execute(text(sql), {"teacher_id":teacher_id})
             surveys = result.fetchall()
             return surveys
