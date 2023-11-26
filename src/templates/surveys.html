@@ -50,11 +50,11 @@
             <td>{% if row[2] %}<p style="color:orangered"> Suljettu </p>{% else %} <p style="color:green"> Avoin </p> {% endif %}</td>
             <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
             {% if is_teacher %}
-            <td>
-              <a href="/surveys/{{ row[0] }}/answers" class="surveys_link"><img src="{{ url_for('static', filename='images/manage_search_white_36dp.svg') }}" width="20" height="20"> Tarkastele tuloksia</a><br>
-              <a href="/surveys/{{ row[0] }}/edit" class="surveys_link"><img src="{{ url_for('static', filename='images/edit_white_36dp.svg') }}" width="20" height="20"> Muokkaa kyselyä tai lisää opettaja siihen</a><br>
-              <a href="/surveys/create?fromTemplate={{ row[0] }}" class="surveys_link"><img src="{{ url_for('static', filename='images/folder_copy_white_36dp.svg') }}" width="20" height="20"> Kopioi kysely</a>
-            </td>
+              <td>
+                <div id="closed_more_info_container_{{ row[0] }}">
+                  <a href="#" onclick="showClosedSurveysOperations('{{ row[0] }}')" class="surveys_link"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"> Näytä</a>
+                </div>
+              </td>
             {% endif %}
             <td>{{ format_datestring(row[4]) }}</td>
   
@@ -71,5 +71,12 @@
         }
         navigator.clipboard.writeText(url + "/" + str);
       }
+
+      function showClosedSurveysOperations(survey_id) {
+        var name = "closed_more_info_container_" + survey_id
+        document.getElementById(name).innerHTML = "<a href='/surveys/" + survey_id + "/answers' class='surveys_link'><img src='{{ url_for('static', filename='images/manage_search_white_36dp.svg') }}' width='20' height='20'> Tarkastele tuloksia</a><br>"
+            + "<a href='/surveys/" + survey_id + "/edit' class='surveys_link'><img src='{{ url_for('static', filename='images/edit_white_36dp.svg') }}' width='20' height='20'> Muokkaa kyselyä tai lisää opettaja siihen</a><br>"
+            + "<a href='/surveys/create?fromTemplate=" + survey_id + "' class='surveys_link'><img src='{{ url_for('static', filename='images/folder_copy_white_36dp.svg') }}' width='20' height='20'> Kopioi kysely</a>";
+}
     </script>
 {% endblock %}
