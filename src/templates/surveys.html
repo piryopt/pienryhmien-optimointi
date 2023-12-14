@@ -16,7 +16,7 @@
             <th scope="col"><p><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Kysely</p></th>
             <th scope="col"><p><img src="{{ url_for('static', filename='images/toggle_on_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Kyselyn tila</p> </th>
             <th scope="col"><p><img src="{{ url_for('static', filename='images/toggle_off_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Ryhmät luotu</p></th>
-            {% if is_teacher %}<th scope="col"><p><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Toiminnot</p></th>{% endif %}
+            {% if is_teacher %}<th scope="col" style="min-width:22em;"><p><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Toiminnot</p></th>{% endif %}
             <th scope="col"><p><img src="{{ url_for('static', filename='images/schedule_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Vastausaika päättyy</p></th>
         </tr>
       </thead>
@@ -52,7 +52,7 @@
             {% if is_teacher %}
               <td>
                 <div id="closed_more_info_container_{{ row[0] }}">
-                  <a href="#" onclick="showClosedSurveysOperations('{{ row[0] }}')" class="surveys_link"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"> Näytä</a>
+                  <label style="cursor: pointer;" onclick="showClosedSurveysOperations('{{ row[0] }}')"  class="surveys_link"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"> Näytä</label>
                 </div>
               </td>
             {% endif %}
