@@ -50,7 +50,7 @@
             <th><p><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Sähköposti</p></th>
             <th><p><img src="{{ url_for('static', filename='images/groups_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Ryhmä</p></th>
             <th><p><img src="{{ url_for('static', filename='images/format_list_numbered_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Monesko valinta</p></th>
-            <th><p><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Valinnat</p></th>
+            <th style="min-width:12em;"><p><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Valinnat</p></th>
             {% for s in sc %}
             <th style="display:none">{{s[0]}}</th>
             {% endfor %}
