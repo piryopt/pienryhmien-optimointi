@@ -14,7 +14,7 @@ def parser_elomake_csv_to_dict(file):
     file = file.split('\n')
     row_count = len(file)
     info_headers = []
-    first_row = file[0].split(",")
+    first_row = file[0].split('''","''')
     col_count = len(first_row)
 
     # add column headers to own array
@@ -23,7 +23,7 @@ def parser_elomake_csv_to_dict(file):
         temp = ''.join(c for c in cell if c.isprintable())
         # remove leftover " from parsing
         info_headers.append(temp.strip('"'))
-    
+
     index = 0
     for line in file:
         # bad, but using file[index] doesn't work
@@ -33,7 +33,7 @@ def parser_elomake_csv_to_dict(file):
             index += 1
             continue
 
-        temp = line.split(',')
+        temp = line.split('''","''')
         name = ''.join(c for c in temp[2] if c.isprintable())
         spaces = ''.join(c for c in temp[3] if c.isprintable()).strip('"')
         min_size = ''.join(c for c in temp[4] if c.isprintable()).strip('"')
