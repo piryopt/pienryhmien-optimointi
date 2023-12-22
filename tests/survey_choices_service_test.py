@@ -6,7 +6,7 @@ from src import db
 from src.repositories.user_repository import user_repository as ur
 from src.services.survey_service import survey_service as ss
 from src.services.survey_choices_service import survey_choices_service as scs
-from src.services.survey_teachers_service import survey_teachers_service as sts
+from src.services.survey_owners_service import survey_owners_service as sos
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 import json
@@ -41,7 +41,7 @@ class TestSurveyChoicesService(unittest.TestCase):
             json_object = json.load(openfile)
 
         self.survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        sts.add_teacher_to_survey(self.survey_id, self.user_email)
+        sos.add_owner_to_survey(self.survey_id, self.user_email)
 
     def tearDown(self):
         db.drop_all()

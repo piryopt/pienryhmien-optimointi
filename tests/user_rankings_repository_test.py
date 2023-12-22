@@ -6,7 +6,7 @@ from src import db
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_rankings_repository import user_rankings_repository as urr
 from src.repositories.user_repository import user_repository as ur
-from src.repositories.survey_teachers_repository import survey_teachers_repository as st
+from src.repositories.survey_owners_repository import survey_owners_repository as sor
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
@@ -31,7 +31,7 @@ class TestUserRankingsRepository(unittest.TestCase):
         self.user_id = ur.find_by_email(user1.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
         self.survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        st.add_teacher_to_survey(self.survey_id, self.user_id)
+        sor.add_owner_to_survey(self.survey_id, self.user_id)
         self.ranking = "2,3,5,4,1,6"
         urr.add_user_ranking(self.user_id, self.survey_id, self.ranking, "", "")
 

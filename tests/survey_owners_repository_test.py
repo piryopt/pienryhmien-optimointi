@@ -5,11 +5,11 @@ from dotenv import load_dotenv
 from src import db
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.user_repository import user_repository as ur
-from src.repositories.survey_teachers_repository import survey_teachers_repository as st
+from src.repositories.survey_owners_repository import survey_owners_repository as sor
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
-class TestSurveyRepository(unittest.TestCase):
+class TestSurveyOwnersRepository(unittest.TestCase):
     def setUp(self):
         load_dotenv()
         self.app = Flask(__name__)
@@ -37,35 +37,35 @@ class TestSurveyRepository(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_add_teacher_to_survey(self):
+    def test_add_owner_to_survey(self):
         """
-        Test that adding a teacher to a survey works. Also test if teacher added to survey
+        Test that adding an owner to a survey works. Also test if owner added to survey
         """
         survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        success_add = st.add_teacher_to_survey(survey_id, self.user_id)
+        success_add = sor.add_owner_to_survey(survey_id, self.user_id)
         self.assertEqual(success_add, True)
-        teacher = st.check_if_teacher_in_survey(survey_id, self.user_id)
-        self.assertEqual(teacher.survey_id, survey_id)
+        owner = sor.check_if_owner_in_survey(survey_id, self.user_id)
+        self.assertEqual(owner.survey_id, survey_id)
 
-    def test_add_teacher_invalid_survey(self):
+    def test_add_owner_invalid_survey(self):
         """
-        Test that you cannot add a teacher to an invalid survey
+        Test that you cannot add a owner to an invalid survey
         """
-        success_add = st.add_teacher_to_survey("ITSNOTREAL", self.user_id)
+        success_add = sor.add_owner_to_survey("ITSNOTREAL", self.user_id)
         self.assertEqual(success_add, False)
 
-    def test_add_teacher_invalid_survey(self):
+    def test_add_owner_invalid_survey(self):
         """
-        Test that you cannot get an invalid teacher from an invalid survey
+        Test that you cannot get an invalid owner from an invalid survey
         """
-        success_get = st.check_if_teacher_in_survey("ITSNOTREAL", -1)
+        success_get = sor.check_if_owner_in_survey("ITSNOTREAL", -1)
         self.assertEqual(success_get, False)
 
     def test_exceptions(self):
         """
         Test that exceptions return False
         """
-        success = st.add_teacher_to_survey(-1, self.user_id)
+        success = sor.add_owner_to_survey(-1, self.user_id)
         self.assertFalse(success)
-        success = st.check_if_teacher_in_survey(-1, self.user_id)
+        success = sor.check_if_owner_in_survey(-1, self.user_id)
         self.assertFalse(success)
