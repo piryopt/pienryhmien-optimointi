@@ -18,7 +18,8 @@ from src.tools.survey_result_helper import convert_choices_groups, convert_users
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
-#from src.tools.db_data_gen import gen_data
+from src.tools.db_data_gen import gen_data
+from src.tools.ohtu import read_file
 
 """
 DECORATORS:
@@ -849,7 +850,7 @@ def admin_all_active_surveys():
         return redirect("/")
     return render_template("/admintools/admin_survey_list.html", data = data)
 
-'''@app.route("/admintools/gen_data", methods = ["GET", "POST"])
+@app.route("/admintools/gen_data", methods = ["GET", "POST"])
 def admin_gen_data():
     """
     Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
@@ -874,7 +875,15 @@ def admin_gen_rankings():
     gen_data.generate_rankings(survey_id)
 
     return redirect(f"/surveys/{survey_id}/answers")
-'''
+
+@app.route("/admintools/gen_data/ohtu", methods = ["GET"])
+def ohtu_rankings():
+    """
+    Generate users and rankings from the csv file from the Ohjelmistoprojekti application
+    """
+    read_file()
+    return redirect("/surveys")
+
 
 """
 MISCELLANEOUS ROUTES:
