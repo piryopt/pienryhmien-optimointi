@@ -21,17 +21,17 @@ class SurveyRepository:
             print(e)
             return False
 
-    def survey_name_exists(self, surveyname, teacher_id):
+    def survey_name_exists(self, surveyname, user_id):
         """
         SQL code for getting the id from a survey that has a certain name, is open has access to by a certain user.
 
         args:
             surveyname: The name of the survey
-            teacher_id: The id of the user
+            user_id: The id of the user
         """
         try:
-            sql = "SELECT s.id FROM surveys s, survey_teachers t WHERE (s.surveyname=:surveyname AND t.teacher_id=:teacher_id AND s.closed=False AND t.survey_id=s.id AND s.deleted=False)"
-            result = db.session.execute(text(sql), {"surveyname":surveyname, "teacher_id":teacher_id})
+            sql = "SELECT s.id FROM surveys s, survey_owners so WHERE (s.surveyname=:surveyname AND so.user_id=:user_id AND s.closed=False AND so.survey_id=s.id AND s.deleted=False)"
+            result = db.session.execute(text(sql), {"surveyname":surveyname, "user_id":user_id})
             survey = result.fetchone()
             if not survey:
                 return False
@@ -42,14 +42,14 @@ class SurveyRepository:
 
     def count_created_surveys(self, user_id):
         """
-        SQL code for getting the number of surveys the teacher has access to
+        SQL code for getting the number of surveys the owner has access to
 
         args:
             user_id: The id of the user
         """
         # Do we want to diplay all surveys created or only the active ones?
         try:
-            sql = "SELECT s.id FROM surveys s, survey_teachers t WHERE (t.teacher_id=:user_id AND t.survey_id=s.id)"
+            sql = "SELECT s.id FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id)"
             result = db.session.execute(text(sql), {"user_id":user_id})
             survey_list = result.fetchall()
             if not survey_list:
@@ -91,16 +91,16 @@ class SurveyRepository:
             print(e)
             return False
 
-    def get_active_surveys(self, teacher_id):
+    def get_active_surveys(self, user_id):
         """
-        SQL code getting the list of all active surveys for which the teacher has access to.
+        SQL code getting the list of all active surveys for which the user has access to.
 
         args:
-            teacher_id: The id of the user
+            user_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND closed=False AND s.id=t.survey_id AND s.deleted=False)"
-            result = db.session.execute(text(sql), {"teacher_id":teacher_id})
+            sql = "SELECT s.id, s.surveyname FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False)"
+            result = db.session.execute(text(sql), {"user_id":user_id})
             surveys = result.fetchall()
             if not surveys:
                 return False
@@ -109,16 +109,16 @@ class SurveyRepository:
             print(e)
             return False
 
-    def get_closed_surveys(self, teacher_id):
+    def get_closed_surveys(self, user_id):
         """
-        SQL code getting the list of all closed surveys for which the teacher has access to.
+        SQL code getting the list of all closed surveys for which the owner has access to.
 
         args:
-            teacher_id: The id of the user
+            user_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=True AND t.survey_id = s.id AND s.deleted=False) ORDER BY s.time_end DESC"
-            result = db.session.execute(text(sql), {"teacher_id":teacher_id})
+            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND s.closed=True AND so.survey_id = s.id AND s.deleted=False) ORDER BY s.time_end DESC"
+            result = db.session.execute(text(sql), {"user_id":user_id})
             surveys = result.fetchall()
             return surveys
         except Exception as e: # pylint: disable=W0718
@@ -246,10 +246,10 @@ class SurveyRepository:
             return False
 
 
-    def fetch_all_active_surveys(self, teacher_id):
+    def fetch_all_active_surveys(self, user_id):
         '''Returns a list of all surveys in the database'''
-        sql = text("SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_teachers t WHERE (t.teacher_id=:teacher_id AND s.closed=False AND s.id=t.survey_id AND s.deleted=False)")
-        result = db.session.execute(sql, {"teacher_id":teacher_id})
+        sql = text("SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND s.closed=False AND s.id=so.survey_id AND s.deleted=False)")
+        result = db.session.execute(sql, {"user_id":user_id})
         all_surveys = result.fetchall()
         return all_surveys
 

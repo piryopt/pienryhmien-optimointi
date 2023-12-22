@@ -20,10 +20,10 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	deleted BOOLEAN
 );
 
-CREATE TABLE survey_teachers (
+CREATE TABLE survey_owners (
 	id SERIAL PRIMARY KEY,
 	survey_id VARCHAR(10) REFERENCES surveys,
-	teacher_id INTEGER REFERENCES users
+	user_id INTEGER REFERENCES users
 );
 
 CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä

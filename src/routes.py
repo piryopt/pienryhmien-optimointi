@@ -10,7 +10,7 @@ from src.services.survey_service import survey_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.services.final_group_service import final_group_service
-from src.services.survey_teachers_service import survey_teachers_service
+from src.services.survey_owners_service import survey_owners_service
 from src.services.feedback_service import feedback_service
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
@@ -66,6 +66,15 @@ def teachers_only(f):
     return _teachers_only
 
 """
+FUNCTIONS:
+"""
+def check_if_owner(survey_id):
+    current_user_id = session.get("user_id", 0)
+    owner_true = survey_owners_service.check_if_user_is_survey_owner(survey_id, current_user_id)
+    print(owner_true)
+    return owner_true
+
+"""
 FRONTPAGE:
 """
 @app.route("/")
@@ -85,8 +94,6 @@ def frontpage() -> str:
     if user_id == 0:
         return render_template('index.html')
     is_teacher = user_service.check_if_teacher(user_id)
-    if not is_teacher:
-         return render_template('index.html', exists = False, is_teacher = is_teacher)
     surveys_created = survey_service.count_surveys_created(user_id)
     # If 0 surveys created, return the base home page.
     if surveys_created == 0:
@@ -121,17 +128,10 @@ def previous_surveys():
     user_id = session.get("user_id",0)
     if user_id == 0:
         return redirect('/')
-    is_teacher = user_service.check_if_teacher(user_id)
-    active_surveys = []
-    closed_surveys = []
-    if is_teacher:
-        active_surveys = survey_repository.fetch_all_active_surveys(user_id)
-        closed_surveys = survey_service.get_list_closed_surveys(user_id)
-    else:
-        active_surveys = survey_service.get_list_active_answered(user_id)
-        closed_surveys = survey_service.get_list_closed_answered(user_id)
+    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
+    closed_surveys = survey_service.get_list_closed_surveys(user_id)
 
-    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys, is_teacher = is_teacher)
+    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys = closed_surveys)
 
 @app.route("/surveys/getinfo", methods=["POST"])
 def get_info():
@@ -166,7 +166,6 @@ def expand_ranking(survey_id):
 
 @app.route("/surveys/create", methods = ["GET"])
 @ad_login
-@teachers_only
 def new_survey_form(survey=None):
     """
     Page for survey creation. Adds fields automatically if user chose to copy from template
@@ -181,7 +180,6 @@ def new_survey_form(survey=None):
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/surveys/create", methods = ["POST"])
-@teachers_only
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -215,8 +213,8 @@ def new_survey_post():
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!"}
         return jsonify(response)
-    teacher_email = user_service.get_email(user_id)
-    (success, message) = survey_teachers_service.add_teacher_to_survey(survey_id, teacher_email)
+    email = user_service.get_email(user_id)
+    (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
     if not success:
         response = {"status":"0", "msg":message}
         return jsonify(response)
@@ -224,7 +222,6 @@ def new_survey_post():
     return jsonify(response)
 
 @app.route("/surveys/create/import", methods = ["POST"])
-@teachers_only
 def import_survey_choices():
     """
     Post method for creating a new survey when it uses data imported from a csv file.
@@ -372,19 +369,19 @@ def delete_submission(survey_id):
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
-@teachers_only
-def teacher_deletes_submission(survey_id):
+def owner_deletes_submission(survey_id):
     '''
-    Teacher (survey author) can delete a single rankinging from the survey for
+    Survey owner can delete a single rankinging from the survey for
     e.g. if a student has dropped the course.
     '''
+    if not check_if_owner(survey_id):
+        return redirect("/")
     user_data = user_service.find_by_email(request.form["student_email"])
     user_id = user_data.id
     user_rankings_service.delete_ranking(survey_id, user_id)
     return redirect(f'/surveys/{survey_id}/answers')
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["GET"])
-@teachers_only
 def edit_survey_form(survey_id):
     """
     Page for editing survey. Fields are filled automatically based on the original survey.
@@ -393,7 +390,8 @@ def edit_survey_form(survey_id):
     args:
         survey_id: id of the survey to be edited
     """
-
+    if not check_if_owner(survey_id):
+        return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "min_size")]
 
@@ -419,7 +417,6 @@ def edit_survey_form(survey_id):
     return render_template("edit_survey.html", survey=survey, survey_id = survey_id, edit_choices = edit_choices)
 
 @app.route("/surveys/<string:survey_id>/edit", methods = ["POST"])
-@teachers_only
 def edit_survey_post(survey_id):
     """
     Post method for saving edits to a survey.
@@ -439,18 +436,18 @@ def edit_survey_post(survey_id):
 
 
 @app.route("/surveys/<string:survey_id>/delete")
-@teachers_only
 def delete_survey(survey_id):
+    if not check_if_owner(survey_id):
+        return redirect("/")
     survey_service.set_survey_deleted_true(survey_id)
     return redirect("/surveys")
 
-@app.route("/surveys/<string:survey_id>/edit/add_teacher/<string:teacher_email>", methods=["POST"])
-@teachers_only
-def add_teacher(survey_id, teacher_email):
-    if not teacher_email:
+@app.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
+def add_owner(survey_id, email):
+    if not email:
         response = {"status":"0","msg":"Sähköpostiosoite puuttuu!"}
         return jsonify(response)
-    (success, message) = survey_teachers_service.add_teacher_to_survey(survey_id, teacher_email)
+    (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
     if not success:
         response = {"status":"0","msg":message}
         return jsonify(response)
@@ -458,13 +455,14 @@ def add_teacher(survey_id, teacher_email):
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/group_sizes", methods=["GET"])
-@teachers_only
 def edit_group_sizes(survey_id):
     """
     Edit group sizes in a survey and display total number of spaces vs answers
     Args:
         survey_id (int): id of the survey
     """
+    if not check_if_owner(survey_id):
+        return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size")]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
@@ -473,7 +471,6 @@ def edit_group_sizes(survey_id):
                             available_spaces=available_spaces, popularities = choice_popularities)
 
 @app.route("/surveys/<string:survey_id>/group_sizes", methods=["POST"])
-@teachers_only
 def post_group_sizes(survey_id):
     """
     Post method for editing group sizes in the survey
@@ -501,11 +498,12 @@ def post_group_sizes(survey_id):
 
 @app.route("/surveys/<string:survey_id>/answers", methods = ["GET"])
 @ad_login
-@teachers_only
 def survey_answers(survey_id):
     """
     For displaying the answers of a survey
     """
+    if not check_if_owner(survey_id):
+        return redirect("/")
     # If the results have been saved, redirect to the results page
     if survey_service.check_if_survey_results_saved(survey_id):
         return survey_results(survey_id)
@@ -528,16 +526,19 @@ def survey_answers(survey_id):
 
 @app.route("/surveys/<string:survey_id>/results", methods = ["GET", "POST"])
 @ad_login
-@teachers_only
 def survey_results(survey_id):
     """
     Display results of sorting students to groups.
     For the post request, the answers are saved to the database.
     """
+
+    if not check_if_owner(survey_id):
+        return redirect("/")
+
     # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
         return redirect('/')
-    # Check if the answers are already saved to the database. This determines which operations are available to the teacher.
+    # Check if the answers are already saved to the database. This determines which operations are available to the owner.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
     # Check if there are more rankings than available slots
@@ -663,8 +664,9 @@ def survey_results(survey_id):
     return save_survey_results(survey_id, output_data)
 
 @app.route("/surveys/<string:survey_id>/results/save")
-@teachers_only
 def save_survey_results(survey_id, output_data):
+    if not check_if_owner(survey_id):
+        return redirect("/")
     # Check if results have been saved. If they have, redirect to previous_surveys page.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
     if saved_result_exists:
@@ -687,7 +689,6 @@ def save_survey_results(survey_id, output_data):
 
 
 @app.route("/surveys/<string:survey_id>/close", methods = ["POST"])
-@teachers_only
 def close_survey(survey_id):
     """
     Close survey, so that no more answers can be submitted
@@ -700,7 +701,6 @@ def close_survey(survey_id):
     return redirect(f'/surveys/{survey_id}/answers')
 
 @app.route("/surveys/<string:survey_id>/open", methods = ["POST"])
-@teachers_only
 def open_survey(survey_id):
     """
     Open survey back up so that students can submit answers

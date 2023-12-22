@@ -93,13 +93,13 @@ function deleteSubmission() {
     });
 }
 
-function add_teacher() {
+function add_owner() {
     var surveyID = document.getElementById("survey_id").value;
-    var teacherEmail = document.getElementById("teacher_email").value
+    var email = document.getElementById("email").value
 
     $.ajax({
         type: "POST",
-        url: "/surveys/" + surveyID + "/edit/add_teacher/" + teacherEmail,
+        url: "/surveys/" + surveyID + "/edit/add_owner/" + email,
         success: function(result) {
             var alertMsg = {
                 msg: result.msg,
