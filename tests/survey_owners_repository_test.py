@@ -41,7 +41,7 @@ class TestSurveyOwnersRepository(unittest.TestCase):
         """
         Test that adding an owner to a survey works. Also test if owner added to survey
         """
-        survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
+        survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2024-01-01 02:02")
         success_add = sor.add_owner_to_survey(survey_id, self.user_id)
         self.assertEqual(success_add, True)
         owner = sor.check_if_owner_in_survey(survey_id, self.user_id)

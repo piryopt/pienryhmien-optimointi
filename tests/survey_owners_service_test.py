@@ -45,7 +45,7 @@ class TestSurveyOwnersService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
         (success, message) = sos.add_owner_to_survey(survey_id, self.user_email)
         self.assertEqual(success, True)
         (success, message) = sos.add_owner_to_survey(survey_id, self.user_email)
@@ -59,7 +59,7 @@ class TestSurveyOwnersService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
         (success, message) = sos.add_owner_to_survey(survey_id, "trt@tester.com")
         self.assertEqual(success, False)
 

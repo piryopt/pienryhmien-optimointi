@@ -40,7 +40,7 @@ class TestSurveyChoicesService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        self.survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
+        self.survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
         sos.add_owner_to_survey(self.survey_id, self.user_email)
 
     def tearDown(self):
