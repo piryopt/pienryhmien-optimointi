@@ -29,7 +29,7 @@
           <td>
             <a href="/surveys/{{ row[0] }}/answers" class="surveys_link"><img src="{{ url_for('static', filename='images/manage_search_white_36dp.svg') }}" width="20" height="20"> Tarkastele tuloksia</a><br>
             <a href="#" onclick="copyURL('{{ row[0] }}')" class="surveys_link"><img src="{{ url_for('static', filename='images/content_copy_white_36dp.svg') }}" width="20" height="20"> Kopioi kyselyn osoite leikepöydälle</button><br>
-            <a href="/surveys/{{ row[0] }}/edit" class="surveys_link"><img src="{{ url_for('static', filename='images/edit_white_36dp.svg') }}" width="20" height="20"> Muokkaa kyselyä tai lisää opettaja siihen</a><br>
+            <a href="/surveys/{{ row[0] }}/edit" class="surveys_link"><img src="{{ url_for('static', filename='images/edit_white_36dp.svg') }}" width="20" height="20"> Muokkaa kyselyä tai lisää siihen ylläpitäjä</a><br>
             <a href="/surveys/create?fromTemplate={{ row[0] }}" class="surveys_link"><img src="{{ url_for('static', filename='images/folder_copy_white_36dp.svg') }}" width="20" height="20"> Kopioi kysely</a><br>
             <a href="/surveys/{{ row[0] }}/delete" onclick="return confirm('Haluatko varmasti poistaa kyselyn?')" class="surveys_link"><img src="{{ url_for('static', filename='images/delete_white_36dp.svg') }}" width="20" height="20"> Poista kysely</a>
           </td>

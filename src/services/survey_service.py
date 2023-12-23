@@ -166,7 +166,7 @@ class SurveyService:
         '''
         return parser_elomake_csv_to_dict(file) # in tools
     
-    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices=0, allow_search_visibility=True):
+    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices=0, allow_search_visibility=True):
         '''
         Calls tools.parsers dictionary to survey parser
         that creates the survey, its choices and their additional infos
@@ -175,7 +175,7 @@ class SurveyService:
         if self._survey_repository.survey_name_exists(survey_name, user_id):
             return False
 
-        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
+        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility)
 
 
     def get_survey_description(self, survey_id):
@@ -322,12 +322,6 @@ class SurveyService:
             if not isinstance(survey_dict["minchoices"], int):
                 return {"success": False, "message": {"status":"0", "msg":"Priorisoitavien ryhmien vähimmäismäärän tulee olla numero"}}
 
-        # End date is not earlier than start date
-        st  = datetime.strptime(f'{survey_dict["startdate"]} {survey_dict["starttime"]}', "%d.%m.%Y %H:%M")
-        et = datetime.strptime(f'{survey_dict["enddate"]} {survey_dict["endtime"]}', "%d.%m.%Y %H:%M")
-        if et <= st:
-            return {"success": False, "message": {"status":"0", "msg":"Kyselyn sulkemispäivämäärä ei voi olla aikaisempi tai sama kuin aloituspäivämäärä"}}
-        
         return {"success": True}
     
     def save_survey_edit(self, survey_id, edit_dict, user_id):
@@ -351,15 +345,12 @@ class SurveyService:
             return (False, message)
 
         description = edit_dict["surveyInformation"]
-        date_begin = edit_dict["startdate"]
-        time_begin = edit_dict["starttime"]
         date_end = edit_dict["enddate"]
         time_end = edit_dict["endtime"]
 
-        datetime_begin = date_to_sql_valid(date_begin) + " " +  time_begin
         datetime_end = date_to_sql_valid(date_end) + " " +  time_end
 
-        saved = self._survey_repository.save_survey_edit(survey_id, surveyname, description, datetime_begin, datetime_end)
+        saved = self._survey_repository.save_survey_edit(survey_id, surveyname, description, datetime_end)
 
         # ADD FUNCTIONALITY FOR EDITING SURVEY CHOICES!
 

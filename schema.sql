@@ -13,7 +13,6 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	closed BOOLEAN,
 	results_saved BOOLEAN,
 	survey_description TEXT,
-	time_begin timestamp,
 	time_end timestamp,
 	allowed_denied_choices INTEGER,
 	allow_search_visibility BOOLEAN,

@@ -139,15 +139,9 @@ function createNewSurvey() {
     var minChoicesElement = document.getElementById("minchoices")
     var allowedDeniedChoices = document.getElementById("denied-choices-count")
 
-    var startDateParts = document.getElementById("start-date").value.split(".")
     var endDateParts = document.getElementById("end-date").value.split(".")
     var endDate = new Date(Number(endDateParts[2]), Number(endDateParts[1]-1), Number(endDateParts[0]))
-    var startDate = new Date(Number(startDateParts[2]), Number(startDateParts[1]-1), Number(startDateParts[0]))
     
-    if(endDate < startDate) {
-        showAlert({msg: "Vastausaika ei saa päättyä ennen vastausajan alkua", color: "red"})
-        return;
-    }
     var today = new Date()
     var todaysEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59)
     if(endDate <= todaysEnd) {
@@ -159,8 +153,6 @@ function createNewSurvey() {
         surveyGroupname: $("#groupname").val(),
         choices: rowsAsJson,
         surveyInformation: document.getElementById("survey-information").value,
-        startdate: document.getElementById("start-date").value,
-        starttime: document.getElementById("starttime").value,
         enddate: document.getElementById("end-date").value,
         endtime: document.getElementById("endtime").value,
         minchoices: minChoicesElement.classList.contains("hidden") ? rowsAsJson.length : Number(minChoicesElement.value),
@@ -227,8 +219,6 @@ function saveEdit() {
         surveyGroupname: $("#groupname").val(),
         //choices: rowsAsJson,
         surveyInformation: document.getElementById("survey-information").value,
-        startdate: document.getElementById("start-date").value,
-        starttime: document.getElementById("starttime").value,
         enddate: document.getElementById("end-date").value,
         endtime: document.getElementById("endtime").value,
     }

@@ -71,7 +71,6 @@ FUNCTIONS:
 def check_if_owner(survey_id):
     current_user_id = session.get("user_id", 0)
     owner_true = survey_owners_service.check_if_user_is_survey_owner(survey_id, current_user_id)
-    print(owner_true)
     return owner_true
 
 """
@@ -195,10 +194,6 @@ def new_survey_post():
     user_id = session.get("user_id",0)
     survey_choices = data["choices"]
     minchoices = data["minchoices"]
-
-    date_begin = data["startdate"]
-    time_begin = data["starttime"]
-
     date_end = data["enddate"]
     time_end = data["endtime"]
 
@@ -209,7 +204,7 @@ def new_survey_post():
         response = {"status":"0", "msg":"Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmiäismäärä! Kyselyn luominen epäonnistui!"}
         return jsonify(response)
 
-    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
+    survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility)
     if not survey_id:
         response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!"}
         return jsonify(response)
@@ -402,16 +397,11 @@ def edit_survey_form(survey_id):
         edit_choices = False
 
     # Convert datetime.datetime(year, month, day, hour, minute) to date (dd.mm.yyyy) and time (hh:mm)
-    start_date_data = survey["time_begin"]
     end_date_data = survey["time_end"]
-    start_date = convert_date(start_date_data)
     end_date = convert_date(end_date_data)
-    start_time = convert_time(start_date_data)
     end_time = convert_time(end_date_data)
 
-    survey["start_time"] = start_time
     survey["end_time"] = end_time
-    survey["start_date"] = start_date
     survey["end_date"] = end_date
  
     return render_template("edit_survey.html", survey=survey, survey_id = survey_id, edit_choices = edit_choices)
