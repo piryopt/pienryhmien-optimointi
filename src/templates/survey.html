@@ -25,9 +25,9 @@
 </script>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey[1] }}</h5>
-    <label>Vastausaika päättyy {{ format_datestring(survey[7]) }}</label></br></br>
-    <label>{{ survey[5] }}</label>
-    <input type="hidden" id="max_bad_choices" value="{{ survey[8] }}">
+    <p>Vastausaika päättyy {{ format_datestring(survey[6]) }}</p></br></br>
+    {% if survey[5] %}<p>{{ survey[5] }}</p></br></br>{% endif %}
+    <input type="hidden" id="max_bad_choices" value="{{ survey[7] }}">
     <input type="hidden" id="min_choices" value="{{ survey[2] }}">
     <input type="hidden" id="additional_info" value="{{ additional_info }}">
     <div class="col">
@@ -37,7 +37,7 @@
                     <i>Raahaa oikean reunan listasta vähintään {{ survey[2] }} vaihtoehtoa vihreään laatikkoon. {% if additional_info %}Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.{% endif %}</i>
                 </p>
             </div>
-            {% if survey[9] %}
+            {% if survey[8] %}
             <div class="col-sm">
                 <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
             </div>
@@ -60,7 +60,7 @@
                         {% endfor %}
                     </ol>
                 </div>
-                {% if survey[8] != 0 %}
+                {% if survey[7] != 0 %}
                 <div class="col-sm">
                     <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
                         {% for group in bad_survey_choices %}

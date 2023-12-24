@@ -2,8 +2,8 @@ from datetime import datetime
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
-from src.repositories.survey_teachers_repository import (
-    survey_teachers_repository as default_survey_teachers_repository
+from src.repositories.survey_owners_repository import (
+    survey_owners_repository as default_survey_owners_repository
 )
 from src.repositories.survey_choices_repository import (
     survey_choices_repository as default_survey_choices_repository
@@ -14,17 +14,20 @@ from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
 
 class SurveyService:
-    def __init__(self, survey_repositroy=default_survey_repository, survey_teachers_repository = default_survey_teachers_repository, choices_repository = default_survey_choices_repository):
+    def __init__(self, survey_repositroy=default_survey_repository, survey_owners_repository = default_survey_owners_repository, choices_repository = default_survey_choices_repository):
         """
         Initalizes the service for surveys with the repositories needed. The purpose of this class is to handle what happens after the SQL code in the
         corresponding repository
         
         args and variables:
             survey_repository: The repository for surveys
+            survey_owners_repository: The repository for survey owners
+            choices_repository: The repository for survey choices
+
 
         """
         self._survey_repository = survey_repositroy
-        self._survey_teachers_repository = survey_teachers_repository
+        self._survey_owners_repository = survey_owners_repository
         self._choices_repository = choices_repository
 
     def get_survey(self, survey_id):
@@ -60,7 +63,7 @@ class SurveyService:
             return 0
         return list_n
 
-    def close_survey(self, survey_id, teacher_id):
+    def close_survey(self, survey_id, user_id):
         """
         Close the survey, so that no more rankings can be added
 
@@ -71,39 +74,39 @@ class SurveyService:
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
             return False
-        # Only the teacher who created the survey can close it
-        teacher_exists = self._survey_teachers_repository.check_if_teacher_in_survey(survey_id, teacher_id)
-        if not teacher_exists:
+        # Only a survey owner can close it
+        owner_exists = self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
+        if not owner_exists:
             return False
         return self._survey_repository.close_survey(survey_id)
 
-    def open_survey(self, survey_id, teacher_id):
+    def open_survey(self, survey_id, user_id):
         """
         Re-open the survey, so that rankings can be added
 
         args:
             survey_id: The id of the survey
-            teacher_id: The id of the user, who is attempting to open the survey
+            user_id: The id of the user, who is attempting to open the survey
         """
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
             return False
-        # Only the teacher who created the survey can open it
-        teacher_exists = self._survey_teachers_repository.check_if_teacher_in_survey(survey_id, teacher_id)
-        if not teacher_exists:
+        # Only a survey owner can open it
+        owner_exists = self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
+        if not owner_exists:
             return False
-        if self._survey_repository.survey_name_exists(survey.surveyname, teacher_id):
+        if self._survey_repository.survey_name_exists(survey.surveyname, user_id):
             return False
         return self._survey_repository.open_survey(survey_id)
 
-    def get_active_surveys(self, teacher_id):
+    def get_active_surveys(self, user_id):
         """
         Get the list of active surveys for a user
 
         args:
-            teacher_id: The id of the user whose active surveys we want
+            user_id: The id of the user whose active surveys we want
         """
-        surveys = self._survey_repository.get_active_surveys(teacher_id)
+        surveys = self._survey_repository.get_active_surveys(user_id)
         if not surveys:
             return False
         return surveys
@@ -121,14 +124,14 @@ class SurveyService:
         closed = survey.closed
         return closed
 
-    def get_list_closed_surveys(self, teacher_id):
+    def get_list_closed_surveys(self, user_id):
         """
         Get the list of closed surveys for a user
 
         args:
-            teacher_id: The id of the user whose closed surveys we want
+            user_id: The id of the user whose closed surveys we want
         """
-        surveys = self._survey_repository.get_closed_surveys(teacher_id)
+        surveys = self._survey_repository.get_closed_surveys(user_id)
         return surveys
 
     def update_survey_answered(self, survey_id):
@@ -163,7 +166,7 @@ class SurveyService:
         '''
         return parser_elomake_csv_to_dict(file) # in tools
     
-    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices=0, allow_search_visibility=True):
+    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices=0, allow_search_visibility=True):
         '''
         Calls tools.parsers dictionary to survey parser
         that creates the survey, its choices and their additional infos
@@ -172,7 +175,7 @@ class SurveyService:
         if self._survey_repository.survey_name_exists(survey_name, user_id):
             return False
 
-        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_begin, time_begin, date_end, time_end, allowed_denied_choices, allow_search_visibility)
+        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility)
 
 
     def get_survey_description(self, survey_id):
@@ -319,12 +322,6 @@ class SurveyService:
             if not isinstance(survey_dict["minchoices"], int):
                 return {"success": False, "message": {"status":"0", "msg":"Priorisoitavien ryhmien vähimmäismäärän tulee olla numero"}}
 
-        # End date is not earlier than start date
-        st  = datetime.strptime(f'{survey_dict["startdate"]} {survey_dict["starttime"]}', "%d.%m.%Y %H:%M")
-        et = datetime.strptime(f'{survey_dict["enddate"]} {survey_dict["endtime"]}', "%d.%m.%Y %H:%M")
-        if et <= st:
-            return {"success": False, "message": {"status":"0", "msg":"Kyselyn sulkemispäivämäärä ei voi olla aikaisempi tai sama kuin aloituspäivämäärä"}}
-        
         return {"success": True}
     
     def save_survey_edit(self, survey_id, edit_dict, user_id):
@@ -348,15 +345,12 @@ class SurveyService:
             return (False, message)
 
         description = edit_dict["surveyInformation"]
-        date_begin = edit_dict["startdate"]
-        time_begin = edit_dict["starttime"]
         date_end = edit_dict["enddate"]
         time_end = edit_dict["endtime"]
 
-        datetime_begin = date_to_sql_valid(date_begin) + " " +  time_begin
         datetime_end = date_to_sql_valid(date_end) + " " +  time_end
 
-        saved = self._survey_repository.save_survey_edit(survey_id, surveyname, description, datetime_begin, datetime_end)
+        saved = self._survey_repository.save_survey_edit(survey_id, surveyname, description, datetime_end)
 
         # ADD FUNCTIONALITY FOR EDITING SURVEY CHOICES!
 
@@ -411,6 +405,13 @@ class SurveyService:
         if not surveys:
             return False
         return surveys
+    
+    def set_survey_deleted_true(self, survey_id):
+        """
+        Sets survey tables column deleted to true, doesn't actually delete the survey
+        RETURNS whether updating was successful
+        """
+        return self._survey_repository.set_survey_deleted_true(survey_id)
 
 
 survey_service = SurveyService()

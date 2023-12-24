@@ -139,15 +139,9 @@ function createNewSurvey() {
     var minChoicesElement = document.getElementById("minchoices")
     var allowedDeniedChoices = document.getElementById("denied-choices-count")
 
-    var startDateParts = document.getElementById("start-date").value.split(".")
     var endDateParts = document.getElementById("end-date").value.split(".")
     var endDate = new Date(Number(endDateParts[2]), Number(endDateParts[1]-1), Number(endDateParts[0]))
-    var startDate = new Date(Number(startDateParts[2]), Number(startDateParts[1]-1), Number(startDateParts[0]))
     
-    if(endDate < startDate) {
-        showAlert({msg: "Vastausaika ei saa päättyä ennen vastausajan alkua", color: "red"})
-        return;
-    }
     var today = new Date()
     var todaysEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59)
     if(endDate <= todaysEnd) {
@@ -159,8 +153,6 @@ function createNewSurvey() {
         surveyGroupname: $("#groupname").val(),
         choices: rowsAsJson,
         surveyInformation: document.getElementById("survey-information").value,
-        startdate: document.getElementById("start-date").value,
-        starttime: document.getElementById("starttime").value,
         enddate: document.getElementById("end-date").value,
         endtime: document.getElementById("endtime").value,
         minchoices: minChoicesElement.classList.contains("hidden") ? rowsAsJson.length : Number(minChoicesElement.value),
@@ -227,8 +219,6 @@ function saveEdit() {
         surveyGroupname: $("#groupname").val(),
         //choices: rowsAsJson,
         surveyInformation: document.getElementById("survey-information").value,
-        startdate: document.getElementById("start-date").value,
-        starttime: document.getElementById("starttime").value,
         enddate: document.getElementById("end-date").value,
         endtime: document.getElementById("endtime").value,
     }
@@ -337,28 +327,12 @@ function enterKeyPressOnEditedCell(event) {
 
 function showDeleteColumnIconOnHover(event){
     var columnIndex = event.target.cellIndex
-    if(columnIndex > 1) {
+    if(columnIndex > 2) {
         var columnDeleteBtn = document.querySelector(`#column-delete-btns td:nth-child(${columnIndex + 1})`)
         columnDeleteBtn.classList.add("visible")
         columnDeleteBtn.querySelector(".delete-col-btn").classList.add("delete-col-btn-visible")
     }
-    
 }
-
-async function hideColumnIcon(event) {
-    var columnIndex = event.target.cellIndex
-    if(columnIndex > 1) {
-        var columnDeleteBtn = document.querySelector(`#column-delete-btns td:nth-child(${columnIndex + 1})`)
-        wait(1000).then(_ => {
-            columnDeleteBtn.classList.remove("visible")
-            columnDeleteBtn.querySelector(".delete-col-btn").classList.remove("delete-col-btn-visible")
-            }
-        )
-        
-    }
-}
-
-let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function createDeleteColumnCell() {
     var cell = document.createElement('td')
@@ -453,6 +427,7 @@ function submitNewColumn(event) {
     // Case: New column has a name
     //  -->: Change name of the column, remove id
     editedCell.removeAttribute("id")
+    editedCell.addEventListener("mouseover",showDeleteColumnIconOnHover)
 
     //  -->: Set header value to what was given to the input field
     editedCell.innerHTML = ""
@@ -598,8 +573,9 @@ function setUploadedTableValues(table) {
         var newHeader = createElementWithText('th', header, clickHandler=editCell)
         newHeader.addEventListener("mouseover",showDeleteColumnIconOnHover)
         headersRow.insertBefore(newHeader, document.getElementById('add-column-header'))
-        
     }
+    // This fixes bug where the last column couldn't be deleted
+    deleteColRow.appendChild(createDeleteColumnCell())
 
     // set table body
     var tableBody = document.getElementById('choiceTable')
