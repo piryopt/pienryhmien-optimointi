@@ -437,6 +437,8 @@ def add_owner(survey_id, email):
     if not email:
         response = {"status":"0","msg":"Sähköpostiosoite puuttuu!"}
         return jsonify(response)
+    if not check_if_owner(survey_id):
+        return redirect("/")
     (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
     if not success:
         response = {"status":"0","msg":message}
