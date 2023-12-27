@@ -6,7 +6,7 @@ from src import db
 from src.repositories.survey_repository import survey_repository as sr
 from src.repositories.survey_choices_repository import survey_choices_repository as scr
 from src.repositories.user_repository import user_repository as ur
-from src.repositories.survey_teachers_repository import survey_teachers_repository as st
+from src.repositories.survey_owners_repository import survey_owners_repository as so
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
@@ -30,8 +30,8 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.ur.register(user2)
         self.user_id = ur.find_by_email(user1.email)[0]
         self.user_id2 = ur.find_by_email(user2.email)[0]
-        self.survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2023-01-01 01:01", "2024-01-01 02:02")
-        st.add_teacher_to_survey(self.survey_id, self.user_id)
+        self.survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2024-01-01 02:02")
+        so.add_owner_to_survey(self.survey_id, self.user_id)
         self.choice_id = scr.create_new_survey_choice(self.survey_id, "choice 1", 10, 5)
         self.choice_id2 = scr.create_new_survey_choice(self.survey_id, "choice 2", 10, 5)
 

@@ -6,13 +6,13 @@ from src import db
 from src.services.survey_service import survey_service as ss
 from src.services.survey_choices_service import survey_choices_service as scs
 from src.repositories.user_repository import user_repository as ur
-from src.services.survey_teachers_service import survey_teachers_service as sts
+from src.services.survey_owners_service import survey_owners_service as sos
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 import datetime
 import json
 
-class TestSurveyService(unittest.TestCase):
+class TestSurveyOwnersService(unittest.TestCase):
     def setUp(self):
         load_dotenv()
         self.app = Flask(__name__)
@@ -37,21 +37,21 @@ class TestSurveyService(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_add_teacher_to_survey(self):
+    def test_add_owner_to_survey(self):
         """
-        Test that adding a teacher to a survey works and check that it cannot be added again
+        Test that adding a owner to a survey works and check that it cannot be added again
         """
         with open("tests/test_files/test_survey1.json", 'r') as openfile:
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        (success, message) = sts.add_teacher_to_survey(survey_id, self.user_email)
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
+        (success, message) = sos.add_owner_to_survey(survey_id, self.user_email)
         self.assertEqual(success, True)
-        (success, message) = sts.add_teacher_to_survey(survey_id, self.user_email)
+        (success, message) = sos.add_owner_to_survey(survey_id, self.user_email)
         self.assertEqual(success, False)
 
-    def test_add_teacher_to_survey_invalid_email(self):
+    def test_add_owner_to_survey_invalid_email(self):
         """
         Test that adding an email that isn't in the database works correctly
         """
@@ -59,29 +59,17 @@ class TestSurveyService(unittest.TestCase):
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        (success, message) = sts.add_teacher_to_survey(survey_id, "trt@tester.com")
+        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
+        (success, message) = sos.add_owner_to_survey(survey_id, "trt@tester.com")
         self.assertEqual(success, False)
 
-    def test_add_student_to_survey(self):
+    def test_add_owner_to_invalid_survey(self):
         """
-        Test that a student cannot be added to a survey
+        Test that you cannot add a owner to an invalid survey
         """
         with open("tests/test_files/test_survey1.json", 'r') as openfile:
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2023", "01:01", "01.01.2024", "02:02")
-        (success, message) = sts.add_teacher_to_survey(survey_id, self.user_email_student)
-        self.assertEqual(success, False)
-
-    def test_add_teacher_to_invalid_survey(self):
-        """
-        Test that you cannot add a teacher to an invalid survey
-        """
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
-            # open as JSON instead of TextIOWrapper or something
-            json_object = json.load(openfile)
-
-        (success, message) = sts.add_teacher_to_survey("ITSNOTREAL", self.user_email)
+        (success, message) = sos.add_owner_to_survey("ITSNOTREAL", self.user_email)
         self.assertEqual(success, False)

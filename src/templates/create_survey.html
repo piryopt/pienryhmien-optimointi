@@ -51,52 +51,8 @@
     <section>
       <h2>Vastausaika</h2>
       <p>Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata.</p>
-      <label>Vastausaika alkaa:</label><br />
-      <input
-        data-role="date"
-        type="text" id="start-date"
-        class="datetime-input-field"
-        name="startdate"
-        validation-regex="\d\d\.\d\d\.\d\d\d\d"
-        validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
-        {% if survey.startdate %}
-          value="{{survey.startdate}}"
-        {% endif %}
-        >
-      <label for="starttime" class="time-label">Kello:</label>
-      <select name="starttime" id="starttime" class="datetime-input-field">
-        <option value="00:00">00:00</option>
-        <option value="01:00">01:00</option>
-        <option value="02:00">02:00</option>
-        <option value="03:00">03:00</option>
-        <option value="04:00">04:00</option>
-        <option value="05:00">05:00</option>
-        <option value="06:00">06:00</option>
-        <option value="07:00">07:00</option>
-        <option value="08:00">08:00</option>
-        <option value="09:00">09:00</option>
-        <option value="10:00">10:00</option>
-        <option value="11:00">11:00</option>
-        <option value="12:00">12:00</option>
-        <option value="13:00">13:00</option>
-        <option value="14:00">14:00</option>
-        <option value="15:00">15:00</option>
-        <option value="16:00">16:00</option>
-        <option value="17:00">17:00</option>
-        <option value="18:00">18:00</option>
-        <option value="19:00">19:00</option>
-        <option value="20:00">20:00</option>
-        <option value="21:00">21:00</option>
-        <option value="22:00">22:00</option>
-        <option value="23:00">23:00</option>
-      </select>
-      <br/>
-      <ul class="validation-warnings-list hidden">
-        <li><span class="input-validation-warning" id="startdate-validation-warning"></span></li>
-        <li><span class="input-validation-warning" id="starttime-validation-warning"></span></li>
-      </ul>
-      <label>Vastausaika päättyy:</label><br />
-      <input data-role="date" type="text" id="end-date" class="datetime-input-field" name="enddate" validation-regex="\d\d\.\d\d\.\d\d\d\d" validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy">
+      <label>Vastausaika päättyy:</label><br/>
+      <input data-role="date" type="text" id="end-date" class="datetime-input-field" name="enddate" validation-regex="\d\d\.\d\d\.\d\d\d\d" validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy" autocomplete="off">
       <label for="endtime" class="time-label">Kello:</label>
       <select name="endtime" id="endtime" class="datetime-input-field">
         <option value="00:00">00:00</option>

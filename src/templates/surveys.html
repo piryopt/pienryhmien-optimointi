@@ -16,7 +16,7 @@
             <th scope="col"><p><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Kysely</p></th>
             <th scope="col"><p><img src="{{ url_for('static', filename='images/toggle_on_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Kyselyn tila</p> </th>
             <th scope="col"><p><img src="{{ url_for('static', filename='images/toggle_off_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Ryhmät luotu</p></th>
-            {% if is_teacher %}<th scope="col" style="min-width:22em;"><p><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Toiminnot</p></th>{% endif %}
+            <th scope="col" style="min-width:22em;"><p><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Toiminnot</p></th>
             <th scope="col"><p><img src="{{ url_for('static', filename='images/schedule_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Vastausaika päättyy</p></th>
         </tr>
       </thead>
@@ -26,15 +26,13 @@
           <td><img src="{{ url_for('static', filename='images/insert_drive_file_white_36dp.svg') }}"width="20" height="20"><a href="/surveys/{{ row[0] }}" class="surveys_link"> {{ row[1] }}</a></td>       <!--survey name--> 
           <td>{% if row[2] %}<p style="color:orangered"> Suljettu </p>{% else %} <p style="color:green"> Avoin </p> {% endif %}</td>
           <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
-          {% if is_teacher %}
           <td>
             <a href="/surveys/{{ row[0] }}/answers" class="surveys_link"><img src="{{ url_for('static', filename='images/manage_search_white_36dp.svg') }}" width="20" height="20"> Tarkastele tuloksia</a><br>
             <a href="#" onclick="copyURL('{{ row[0] }}')" class="surveys_link"><img src="{{ url_for('static', filename='images/content_copy_white_36dp.svg') }}" width="20" height="20"> Kopioi kyselyn osoite leikepöydälle</button><br>
-            <a href="/surveys/{{ row[0] }}/edit" class="surveys_link"><img src="{{ url_for('static', filename='images/edit_white_36dp.svg') }}" width="20" height="20"> Muokkaa kyselyä tai lisää opettaja siihen</a><br>
+            <a href="/surveys/{{ row[0] }}/edit" class="surveys_link"><img src="{{ url_for('static', filename='images/edit_white_36dp.svg') }}" width="20" height="20"> Muokkaa kyselyä tai lisää siihen ylläpitäjä</a><br>
             <a href="/surveys/create?fromTemplate={{ row[0] }}" class="surveys_link"><img src="{{ url_for('static', filename='images/folder_copy_white_36dp.svg') }}" width="20" height="20"> Kopioi kysely</a><br>
             <a href="/surveys/{{ row[0] }}/delete" onclick="return confirm('Haluatko varmasti poistaa kyselyn?')" class="surveys_link"><img src="{{ url_for('static', filename='images/delete_white_36dp.svg') }}" width="20" height="20"> Poista kysely</a>
           </td>
-          {% endif %}
           <td>{{ format_datestring(row[4]) }}</td>
 
         </tr>
@@ -42,20 +40,18 @@
           <td>---</td>
           <td>---</td>
           <td>---</td>
-          {% if is_teacher %}<td>---</td>{% endif %}
+          <td>---</td>
           <td>---</td>
           <tr>
             {% for row in closed_surveys %}
             <td><img src="{{ url_for('static', filename='images/insert_page_break_white_36dp.svg') }}" width="20" height="20"><a href="/surveys/{{ row[0] }}" class="surveys_link"> {{ row[1] }}</a></td>       <!--survey name--> 
             <td>{% if row[2] %}<p style="color:orangered"> Suljettu </p>{% else %} <p style="color:green"> Avoin </p> {% endif %}</td>
             <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
-            {% if is_teacher %}
               <td>
                 <div id="closed_more_info_container_{{ row[0] }}">
                   <label style="cursor: pointer;" onclick="showClosedSurveysOperations('{{ row[0] }}')"  class="surveys_link"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"> Näytä</label>
                 </div>
               </td>
-            {% endif %}
             <td>{{ format_datestring(row[4]) }}</td>
   
           </tr>
