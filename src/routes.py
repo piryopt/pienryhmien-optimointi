@@ -411,6 +411,9 @@ def edit_survey_post(survey_id):
     """
     Post method for saving edits to a survey.
     """
+    if not check_if_owner(survey_id):
+        return redirect("/")
+
     edit_dict = request.get_json()
     validation = survey_service.validate_created_survey(edit_dict, edited = True)
     if not validation["success"]:
@@ -469,6 +472,9 @@ def post_group_sizes(survey_id):
     Args:
         survey_id (int): id of the survey
     """
+    if not check_if_owner(survey_id):
+        return redirect("/")
+
     data = request.get_json()
 
     #validation would be here
