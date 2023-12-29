@@ -72,7 +72,7 @@ def test_survey_more_info_works(page: Page):
     Test that if a survey choice has additional info, it is displayed when clicked and hidden when clicked again
     """
     login(page, "robottiTeacher", "repeat")
-    page.get_by_role("link", name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta").click()
+    page.get_by_role("link", name="Näytä vanhat kyselyt").click()
     page.get_by_role("link", name="Menaces").click()
     page.get_by_text("Isagi").click()
     expect(page.get_by_text("Quotes: How does it feel to be the clown of my story?").first).to_be_visible()
@@ -84,7 +84,7 @@ def test_answer_survey(page: Page):
     Test that a user can answer a created survey
     """
     login(page, "robottiTeacher", "eat")
-    page.get_by_role("link", name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta").click()
+    page.get_by_role("link", name="Näytä vanhat kyselyt").click()
     page.get_by_role("link", name="Menaces").click()
     expect(page.get_by_text("Menaces").first).to_be_visible()
     expect(page.get_by_text("Vegeta").first).to_be_visible()
@@ -107,7 +107,7 @@ def test_delete_survey_answer(page: Page):
     Test that a user can delete their submitted ranking
     """
     login(page, "robottiTeacher", "sleep")
-    page.get_by_role("link", name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta").click()
+    page.get_by_role("link", name="Näytä vanhat kyselyt").click()
     page.get_by_role("link", name="Menaces").click()
     page.locator("#deleteSubmission").click()
     expect(page.get_by_text("Oletko varma?")).to_be_visible()
