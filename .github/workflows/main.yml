@@ -51,5 +51,6 @@ jobs:
         run: poetry run pylint src/
       - name: Run playwright tests
         run: |
+          poetry run python -m playwright install --with-deps
           poetry run flask run --debug &
           poetry run pytest tests/playwright/survey_testing.py
