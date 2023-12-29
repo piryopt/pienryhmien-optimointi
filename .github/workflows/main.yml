@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["playwright_tests"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
@@ -55,7 +55,7 @@ jobs:
           poetry run flask run --debug &
           poetry run pytest tests/playwright/survey_testing.py --browser firefox
       - uses: actions/upload-artifact@v3
-        if: always()
+        if: failed()
         with:
           name: playwright-report
           path: playwright-report/
