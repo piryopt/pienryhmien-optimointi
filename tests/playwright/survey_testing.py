@@ -72,8 +72,11 @@ def test_create_new_survey(page: Page):
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
     page.keyboard.type("How does it feel to be the clown of my story?")
+    page.keyboard.press("Enter")
+    page.wait_for_timeout(500)
+    page.screenshot(path="playwright-report/beforeclick.png", full_page=True)
     page.locator("#create_survey").click()
-    page.screenshot(path="playwright-report/screenshot.png", full_page=True)
+    page.screenshot(path="playwright-report/afterclick.png", full_page=True)
     expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
 
 def test_survey_more_info_works(page: Page):
