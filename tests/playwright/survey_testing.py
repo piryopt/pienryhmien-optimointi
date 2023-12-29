@@ -65,7 +65,7 @@ def test_create_new_survey(page: Page):
     page.locator("xpath=//*[@id='choiceTable']/tr[3]/td[4]").click()
     page.keyboard.type("How does it feel to be the clown of my story?")
     page.locator("#create_survey").click()
-    page.screenshot(path="screenshot.png", full_page=True)
+    page.screenshot(path="playwright-report/screenshot.png", full_page=True)
     expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
 
 def test_survey_more_info_works(page: Page):
