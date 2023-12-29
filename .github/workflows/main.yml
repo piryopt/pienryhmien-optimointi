@@ -53,4 +53,4 @@ jobs:
         run: |
           poetry run python -m playwright install --with-deps
           poetry run flask run --debug &
-          poetry run pytest tests/playwright/survey_testing.py
+          poetry run pytest tests/playwright/survey_testing.py --browser firefox
