@@ -49,3 +49,14 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash)
       - name: lint
         run: poetry run pylint src/
+      - name: Run playwright tests
+        run: |
+          poetry run python -m playwright install --with-deps
+          poetry run flask run --debug &
+          poetry run pytest tests/playwright/survey_testing.py --browser firefox
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 2

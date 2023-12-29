@@ -13,3 +13,4 @@ scipy
 Flask-APScheduler
 markdown
 Flask-WTF
+pytest-playwright
