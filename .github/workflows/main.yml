@@ -49,3 +49,7 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash)
       - name: lint
         run: poetry run pylint src/
+      - name: Run playwright tests
+        run: |
+          poetry run flask run --debug &
+          poetry run pytest tests/playwright/survey_testing.py
