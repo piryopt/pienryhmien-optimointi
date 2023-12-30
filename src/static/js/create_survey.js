@@ -325,6 +325,7 @@ function enterKeyPressOnEditedCell(event) {
     }
 }
 
+
 function showDeleteColumnIconOnHover(event){
     var columnIndex = event.target.cellIndex
     if(columnIndex > 2) {
@@ -574,8 +575,6 @@ function setUploadedTableValues(table) {
         newHeader.addEventListener("mouseover",showDeleteColumnIconOnHover)
         headersRow.insertBefore(newHeader, document.getElementById('add-column-header'))
     }
-    // This fixes bug where the last column couldn't be deleted
-    deleteColRow.appendChild(createDeleteColumnCell())
 
     // set table body
     var tableBody = document.getElementById('choiceTable')
