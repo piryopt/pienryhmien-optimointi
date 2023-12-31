@@ -14,7 +14,7 @@ from src.services.survey_owners_service import survey_owners_service
 from src.services.feedback_service import feedback_service
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
-from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness, convert_date, convert_time
+from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, get_happiness, convert_date, convert_time, get_worst_group_id
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
@@ -584,22 +584,16 @@ def survey_results(survey_id):
             group_id = group_data[0]
             group_sizes[group_id] += 1
 
-        # Sort by size
-        sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
-
-        # Check if min_size is greater than group size. If it is, remove the group_id from all relevant lists and dictionaries.
-        ####################
-        ####################
-        # Possible refactor needed for which group is dropped. At the moment the group with the smallest amount of people is dropped
-        # Most likely it will be better to calculate which group has the least interest and drop that
-        ####################
-        ####################
+        # Check if min_size is greater than group size. If it is, remove the group_id that has the worst ranking from all relevant lists and dictionaries.
         violation = False
-        for survey_choice_id in sorted_groups:
+        for survey_choice_id, group in groups_dict.items():
             min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
             if min_size > group_sizes[survey_choice_id]:
                 violation = True
-                sorted_groups.remove(survey_choice_id)
+
+                # CHECK WHICH GROUP IS THE LEAST DESIRED!
+                survey_choice_id = get_worst_group_id(groups_dict, students_dict)
+
                 groups_dict.pop(survey_choice_id)
                 dropped_groups_id.append(survey_choice_id)
                 for user_id, student in students_dict.items():
@@ -612,8 +606,6 @@ def survey_results(survey_id):
         if not violation:
             loop = False
 
-
-    
     # Create a dict which contains choice's additional info as list
     additional_infos = {}
     for row in survey_choices:

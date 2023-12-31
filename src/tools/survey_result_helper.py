@@ -89,3 +89,27 @@ def check_if_zero_needed(unit):
     if len(unit) == 1:
         unit = "0"+ unit
     return unit
+
+def get_worst_group_id(groups_dict, students_dict):
+    """
+    Check which group the users rate as the least desired (The people have spoken :D)
+    """
+    group_rankings = {}
+    for id, group in groups_dict.items():
+        group_rankings[id] = 0
+        if group.name == "Tyhjä":
+            group_rankings[id] = -9999999
+
+    for id, student in students_dict.items():
+        rankings = student.selections
+        visited = {}
+        for id, group in groups_dict.items():
+            visited[id] = False
+        for i, r in enumerate(rankings):
+            group_rankings[r] += i
+            visited[r] = True
+        for id, v in visited.items():
+            if not v:
+                group_rankings[id] += len(rankings) + 1
+    
+    return max(group_rankings, key=group_rankings.get)
