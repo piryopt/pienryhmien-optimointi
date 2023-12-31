@@ -539,47 +539,38 @@ def survey_results(survey_id):
     # Check if the answers are already saved to the database. This determines which operations are available to the owner.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
-    # Check if there are more rankings than available slots
-    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     user_rankings = survey_service.fetch_survey_responses(survey_id)
 
     if not user_rankings:
         return redirect(f"/surveys/{survey_id}/answers")
     survey_answers_amount = len(user_rankings)
 
-    # If more rankings than available slots add a non-group
-    if (survey_answers_amount > available_spaces):
-        added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-available_spaces)
-        if not added_group:
-            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
-            return jsonify(response)
-        
-    # Check if min and max sizes of the group are all the same.
-    (min_max_same, size) = survey_choices_service.check_min_equals_max(survey_id)
-    if min_max_same and survey_answers_amount % size != 0:
-        empty_group_size = size
-        added_group = survey_choices_service.add_empty_survey_choice(survey_id, empty_group_size)
-        if not added_group:
-            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
-            return jsonify(response)
-
     # Check that the amount of answers is greater than the smallest min_size of a group
     answers_less_than_min_size = survey_choices_service.check_answers_less_than_min_size(survey_id, survey_answers_amount)
     if answers_less_than_min_size:
-        added_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount)
-        if not added_group:
-            response = {"status":"0", "msg":"Ryhmäjako epäonnistui"}
-            return jsonify(response)
+        survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount)
 
     # Create the dictionaries with the correct data, so that the Hungarian algorithm can generate the results.
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-
-    # Loop until no group has less than its min_size
-    loop = True
     groups_dict = convert_choices_groups(survey_choices)
     students_dict = convert_users_students(user_rankings)
     dropped_groups_id = []
+
+    # Loop until no group has less than its min_size
+    loop = True
+
     while loop:
+        # Check that there are enough seats. 
+        seats = 0
+        for id, group in groups_dict.items():
+            seats += group.size
+
+        # If there are less seats than survey answers, add an empty group 
+        if seats < survey_answers_amount:
+            empty_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-seats)
+            survey_choices.append(empty_group)
+
+        # Run the algotrithm with the groups that haven't been dropped
         weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
         sort = h.Hungarian(groups_dict, students_dict, weights)
         sort.run()
@@ -597,6 +588,12 @@ def survey_results(survey_id):
         sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
 
         # Check if min_size is greater than group size. If it is, remove the group_id from all relevant lists and dictionaries.
+        ####################
+        ####################
+        # Possible refactor needed for which group is dropped. At the moment the group with the smallest amount of people is dropped
+        # Most likely it will be better to calculate which group has the least interest and drop that
+        ####################
+        ####################
         violation = False
         for survey_choice_id in sorted_groups:
             min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
@@ -611,8 +608,11 @@ def survey_results(survey_id):
                     if survey_choice_id in student.rejections:
                         student.rejections.remove(survey_choice_id)
                 break
+
         if not violation:
             loop = False
+
+
     
     # Create a dict which contains choice's additional info as list
     additional_infos = {}
@@ -871,8 +871,7 @@ def admin_gen_rankings():
     survey_id = request.form.get("survey_list")
     gen_data.generate_rankings(survey_id)
 
-    return redirect(f"/surveys/{survey_id}/answers")
-'''
+    return redirect(f"/surveys/{survey_id}/answers")'''
 
 """
 MISCELLANEOUS ROUTES:
