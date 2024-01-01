@@ -18,6 +18,7 @@ from src.tools.survey_result_helper import convert_choices_groups, convert_users
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
+from src.entities.group import Group
 #from src.tools.db_data_gen import gen_data
 
 """
@@ -567,8 +568,9 @@ def survey_results(survey_id):
 
         # If there are less seats than survey answers, add an empty group 
         if seats < survey_answers_amount:
-            empty_group = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-seats)
-            survey_choices.append(empty_group)
+            empty_group_id = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-seats)
+            empty_group = survey_choices_service.get_survey_choice(empty_group_id)
+            groups_dict[empty_group[0]] = Group(empty_group[0], empty_group[2], empty_group[3])
 
         # Run the algotrithm with the groups that haven't been dropped
         weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
