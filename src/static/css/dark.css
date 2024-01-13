@@ -87,6 +87,7 @@ b, small {
 }
 
 .list-group-item {
+    border-radius: 12px;
     -webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
@@ -96,6 +97,7 @@ b, small {
 .list-group-item:hover {
     background-color: rgb(24, 26, 27);
     opacity: 0.7;
+    border-radius: 12px;
 }
 
 .btn-light {
