@@ -46,7 +46,7 @@
             {% for row in closed_surveys %}
             <td><img src="{{ url_for('static', filename='images/insert_page_break_white_36dp.svg') }}" width="20" height="20"><a href="/surveys/{{ row[0] }}" class="surveys_link"> {{ row[1] }}</a></td>       <!--survey name--> 
             <td>{% if row[2] %}<p style="color:orangered"> Suljettu </p>{% else %} <p style="color:green"> Avoin </p> {% endif %}</td>
-            <td><p>{% if row[3] %} Kyllä {% else %} Ei {% endif %}</p></td>
+            <td>{% if row[3] %}<p style="color:green">Kyllä</p>{% else %}<p>Ei</p>{% endif %}</td>
               <td>
                 <div id="closed_more_info_container_{{ row[0] }}">
                   <label style="cursor: pointer;" onclick="showClosedSurveysOperations('{{ row[0] }}')"  class="surveys_link"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"> Näytä</label>
