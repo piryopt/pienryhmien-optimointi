@@ -72,4 +72,4 @@ Rekisterinpitäjä oikaisee, poistaa tai täydentää rekisterissä olevan, käs
 
 ## Muut henkilötietojen käsittelyyn liittyvät oikeudet
 
-Rekisteröidyllä on myös oikeus kieltää rekisterinpitäjää käsittelemästä häntä itseään koskevia tietoja tässä rekisteriselosteessa mainittuihin tarkoituksiin, ellei tietojen käsittelyyn ole muuta lakiin, viranomaismääräykseen tai vastaavaan liittyvää perustetta. Markkinointikieltoja (soitto, painettu suoramarkkinointi, tekstiviesti ja sähköposti) koskevat tietojen korjauspyynnöt osoitetaan henkilökohtaisesti sähköpostitse. Lisäksi rekisteröidyllä on oikeus tehdä valitus henkilötiedon käsittelystä asianmukaiselle valvontaviranomaiselle.
+Rekisteröidyllä on myös oikeus kieltää rekisterinpitäjää käsittelemästä häntä itseään koskevia tietoja tässä rekisteriselosteessa mainittuihin tarkoituksiin, ellei tietojen käsittelyyn ole muuta lakiin, viranomaismääräykseen tai vastaavaan liittyvää perustetta. Lisäksi rekisteröidyllä on oikeus tehdä valitus henkilötiedon käsittelystä asianmukaiselle valvontaviranomaiselle.
