@@ -108,55 +108,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     survey_answers_amount = len(user_rankings)
     dropped_groups_id = []
 
-    # Loop until no group has less than its min_size
-    loop = True
-
-    while loop:
-        # Check that there are enough seats. 
-        seats = 0
-        for id, group in groups_dict.items():
-            seats += group.size
-
-        # If there are less seats than survey answers, add an empty group 
-        if seats < survey_answers_amount:
-            empty_group_id = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-seats)
-            empty_group = survey_choices_service.get_survey_choice(empty_group_id)
-            groups_dict[empty_group[0]] = Group(empty_group[0], empty_group[2], empty_group[3])
-
-        # Run the algotrithm with the groups that haven't been dropped
-        weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
-        sort = h.Hungarian(groups_dict, students_dict, weights)
-        sort.run()
-        output_data = sort.get_data()
-
-        # Count how many students each group has
-        group_sizes = {}
-        for id, group in groups_dict.items():
-            group_sizes[id] = 0
-        for [student_data, student_email, group_data] in output_data:
-            group_id = group_data[0]
-            group_sizes[group_id] += 1
-
-        # Check if min_size is greater than group size. If it is, remove the group_id that has the worst ranking from all relevant lists and dictionaries.
-        violation = False
-        sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
-
-        for survey_choice_id in sorted_groups:
-            min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
-            if min_size > group_sizes[survey_choice_id]:
-                violation = True
-                # Remove dropped group from groups_dict and student selections so that it doesn't affect the next round
-                groups_dict.pop(survey_choice_id)
-                dropped_groups_id.append(survey_choice_id)
-                for user_id, student in students_dict.items():
-                    if survey_choice_id in student.selections:
-                        student.selections.remove(survey_choice_id)
-                    if survey_choice_id in student.rejections:
-                        student.rejections.remove(survey_choice_id)
-                break
-
-        if not violation:
-            loop = False
+    output_data = run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id)
 
     # Create a dict which contains choice's additional info as list
     additional_infos = {}
@@ -197,3 +149,62 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
 
     output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, additional_infos, cinfos)
     return output_data
+
+def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id):
+    """
+    Run the hungarian algorithm until no violation.
+    """
+    loop = True
+    while loop:
+        seats = get_seats(groups_dict)
+
+        # If there are less seats than survey answers, add an empty group 
+        if seats < survey_answers_amount:
+            empty_group_id = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-seats)
+            empty_group = survey_choices_service.get_survey_choice(empty_group_id)
+            groups_dict[empty_group[0]] = Group(empty_group[0], empty_group[2], empty_group[3])
+
+        # Run the algotrithm with the groups that haven't been dropped
+        weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
+        sort = h.Hungarian(groups_dict, students_dict, weights)
+        sort.run()
+        output_data = sort.get_data()
+
+        # Count how many students each group has
+        group_sizes = {}
+        for id, group in groups_dict.items():
+            group_sizes[id] = 0
+        for [student_data, student_email, group_data] in output_data:
+            group_id = group_data[0]
+            group_sizes[group_id] += 1
+
+        # Check if min_size is greater than group size. If it is, remove the group_id that has the worst ranking from all relevant lists and dictionaries.
+        violation = False
+        sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
+
+        for survey_choice_id in sorted_groups:
+            min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
+            if min_size > group_sizes[survey_choice_id]:
+                violation = True
+                # Remove dropped group from groups_dict and student selections so that it doesn't affect the next round
+                groups_dict.pop(survey_choice_id)
+                dropped_groups_id.append(survey_choice_id)
+                for user_id, student in students_dict.items():
+                    if survey_choice_id in student.selections:
+                        student.selections.remove(survey_choice_id)
+                    if survey_choice_id in student.rejections:
+                        student.rejections.remove(survey_choice_id)
+                break
+
+        if not violation:
+            return output_data
+
+
+def get_seats(groups_dict):
+    """
+    Get the amount of available seats in the remaining groups
+    """
+    seats = 0
+    for id, group in groups_dict.items():
+        seats += group.size
+    return seats
