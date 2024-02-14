@@ -402,6 +402,8 @@ class SurveyService:
         Gets the list of all active surveys. Used for analytics in the admin page.
         """
         surveys = self._survey_repository.get_all_active_survey_admin_data()
+        if not surveys:
+            return False
         admin_data = []
         for survey in surveys:
             survey_choices = default_survey_choices_repository.find_survey_choices(survey[0])
