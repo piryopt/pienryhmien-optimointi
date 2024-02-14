@@ -180,10 +180,9 @@ def new_survey_post():
     Post method for creating a new survey.
     """
     data = request.get_json()
-
     validation = survey_service.validate_created_survey(data)
     if not validation["success"]:
-        return jsonify(validation["message"]), 400
+        return jsonify(validation["message"])
 
     survey_name = data["surveyGroupname"]
     description = data["surveyInformation"]
