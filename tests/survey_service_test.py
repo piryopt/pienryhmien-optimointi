@@ -346,23 +346,23 @@ class TestSurveyService(unittest.TestCase):
         survey_id1 = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
         survey_id2 = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
 
-        surveys = ss.get_active_surveys()
+        surveys = ss.get_all_active_surveys()
         self.assertEqual(2, len(surveys))
 
         ss.set_survey_deleted_true(survey_id1)
-        surveys = ss.get_active_surveys()
+        surveys = ss.get_all_active_surveys()
         self.assertEqual(1, len(surveys))
         
     def test_len_active_surveys(self):
         """
         Test that the length of all active surveys is correct
         """
-        surveys = ss.get_active_surveys()
+        surveys = ss.get_all_active_surveys()
         length = ss.len_all_surveys()
         self.assertEqual(0, length)
         self.assertFalse(surveys)
 
         survey_id = ss.create_new_survey_manual(self.json_object["choices"], "Test survey 16", self.user_id, self.json_object["surveyInformation"], 2, "01.01.2024", "02:02")
-        surveys = ss.get_active_surveys()
+        surveys = ss.get_all_active_surveys()
         length = ss.len_all_surveys()
         self.assertEqual(len(surveys), length)
