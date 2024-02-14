@@ -63,7 +63,7 @@ function showAlert(props) {
     if (fade.style.display === "none") {
         fade.style.display = "block";
     }
-    $("#fade").delay(5000).fadeOut(500);
+    $("#fade").delay(3000).fadeOut(500);
 }
 
 function deleteSubmission() {
