@@ -401,11 +401,14 @@ class SurveyService:
         """
         Gets the list of all active surveys. Used for analytics in the admin page.
         """
-        surveys = self._survey_repository.get_all_active_surveys()
-        if not surveys:
-            return False
-        return surveys
-    
+        surveys = self._survey_repository.get_all_active_survey_admin_data()
+        admin_data = []
+        for survey in surveys:
+            survey_choices = default_survey_choices_repository.find_survey_choices(survey[0])
+            survey_data = [survey[0], survey[1], survey[2], survey[3], survey[4], survey[5], len(survey_choices)]
+            admin_data.append(survey_data)
+        return admin_data
+
     def set_survey_deleted_true(self, survey_id):
         """
         Sets survey tables column deleted to true, doesn't actually delete the survey
