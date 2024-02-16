@@ -321,10 +321,10 @@ class SurveyService:
         if not edited:
             if not isinstance(survey_dict["minchoices"], int):
                 return {"success": False, "message": {"status":"0", "msg":"Priorisoitavien ryhmien vähimmäismäärän tulee olla numero"}}
-        for choice in survey_dict["choices"]:
-            if choice["Nimi"] == 'tyhjä' or choice["Enimmäispaikat"] == 'tyhjä' or choice["Ryhmän minimikoko"] == 'tyhjä':
-                return {"success": False, "message": {"status":"0", "msg":"Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle."}}
-
+        if "choices" in survey_dict:
+            for choice in survey_dict["choices"]:
+                if choice["Nimi"] == 'tyhjä' or choice["Enimmäispaikat"] == 'tyhjä' or choice["Ryhmän minimikoko"] == 'tyhjä':
+                    return {"success": False, "message": {"status":"0", "msg":"Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle."}}
         return {"success": True}
     
     def save_survey_edit(self, survey_id, edit_dict, user_id):
