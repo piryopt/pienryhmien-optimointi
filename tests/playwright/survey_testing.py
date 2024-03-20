@@ -2,6 +2,8 @@ import re
 from playwright.sync_api import Page, expect
 from playwright_tools import login
 
+first_survey_id = ""
+
 def test_login(page: Page):
     """
     Test that mock ad login works. After login the user is redirected to the home page
@@ -113,6 +115,11 @@ def test_answer_survey(page: Page):
     page.locator("#submitDoesntExistButton").click()
     expect(page.get_by_text("Tallennus onnistui.")).to_be_visible()
 
+    # Copy link to clipboard etc. buttons have the same names, so they can't be accessed by name
+    # for different surveys, therefore save current URL to use it later
+    global first_survey_id
+    first_survey_id = page.url
+
 def test_delete_survey_answer(page: Page):
     """
     Test that a user can delete their submitted ranking
@@ -124,3 +131,22 @@ def test_delete_survey_answer(page: Page):
     expect(page.get_by_text("Oletko varma?")).to_be_visible()
     page.locator("#confirmDelete").click()
     expect(page.get_by_text("Valinnat poistettu")).to_be_visible()
+
+def test_delete_survey(page: Page):
+    """
+    Delete the previously created survey,
+    TODO create a better way to clean the database,
+    Rasmus' first Playwright test, learning
+    """
+    # listener to auto accept the popup
+    page.on("dialog", lambda dialog: dialog.accept())
+
+    login(page, "robottiTeacher", "sleep")
+    page.get_by_role("link", name="Näytä vanhat kyselyt").click()
+    expect(page.locator("body")).to_contain_text("Menaces") # check if existed before
+    tmp = f"{first_survey_id}/delete"[21:] # delete http...5000 from URL s.t. href works
+    page.locator(f'[href*="{tmp}"]').click() # click correct delete button
+    # confirm message answered automatically
+    expect(page.locator("body")).not_to_contain_text("Menaces") # check doesn't exist anymore
+    
+
