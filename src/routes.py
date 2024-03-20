@@ -3,7 +3,7 @@ from functools import wraps
 from flask import render_template, request, session, jsonify, redirect
 import markdown
 from pathlib import Path
-from src import app,scheduler
+from src import app,scheduler,RUNNING_MODE
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -33,7 +33,7 @@ def ad_login(f):
     def _ad_login(*args, **kwargs):
         result = f(*args, **kwargs)
         # if logged in already do nothing or in local use
-        if session.get("user_id", 0) != 0 or app.debug:
+        if session.get("user_id", 0) != 0 or RUNNING_MODE == 0:
             return result
         roles = request.headers.get('eduPersonAffiliation')
         name = request.headers.get('cn')
@@ -79,7 +79,7 @@ def frontpage() -> str:
     Returns the rendered skeleton template
     """
     # used in local use
-    if app.debug and session.get("user_id", 0) == 0:
+    if RUNNING_MODE == 0 and session.get("user_id", 0) == 0:
         return redirect("/auth/login")
     reloaded = session.get("reloaded",0)
     if not reloaded:
@@ -613,7 +613,7 @@ def open_survey(survey_id):
 """
 @app.route("/auth/login", methods = ["GET", "POST"])
 def login():
-    if not app.debug:
+    if RUNNING_MODE != 0:
         return redirect("/")
     
     users = [User("outi1", "testi.opettaja@helsinki.fi", True),
@@ -652,7 +652,7 @@ def logout():
 
     # stupid, but Openshift getenv() can't find Openshift secrets,
     # so here we are
-    if app.debug:
+    if RUNNING_MODE == 0:
         return redirect("/")
     else:
         return redirect("/Shibboleth.sso/Logout")

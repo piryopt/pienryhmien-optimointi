@@ -17,6 +17,10 @@ app.config.from_object(Config())
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
+# 0 = local, 1 = staging/production
+# determines which login is used
+RUNNING_MODE = int(os.getenv("MODE"))
+
 db = SQLAlchemy(app)
 
 # initialize scheduler
