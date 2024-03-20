@@ -3,7 +3,7 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - main
+      - rassen_playwright
 jobs:
 
   build-and-push:
