@@ -170,7 +170,10 @@ def new_survey_form(survey=None):
     """
     query_params = request.args.to_dict()
     if("fromTemplate" in query_params):
-        survey = survey_service.get_survey_as_dict(query_params["fromTemplate"])
+        survey_id = query_params["fromTemplate"]
+        if not check_if_owner(survey_id):
+            return redirect("/")
+        survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size")]
     return render_template("create_survey.html", survey=survey)
 
