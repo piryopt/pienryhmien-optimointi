@@ -20,7 +20,10 @@ Let's first submit the SP application(s) to Haka's version of UH SP registry, th
 In `select organization` choose Helsingin yliopisto, rest of the fields should fill themselves. I didn't put anything into `PartnerForm ID`
 
 ### SP Basic Information
-`Service Provider Information` should be self-explanatory, I left `Service Login Page URL` and `Discovery Response URL` empty.
+`Service Provider Information` should be self-explanatory, I left `Service Login Page URL` empty.
+
+`Discovery Response URL #1` for us it was `<entity id>/Shibboleth.sso/Login`. [Guide (in Finnish) how to find it](https://wiki.eduuni.fi/display/CSCHAKA/Discovery+Response)
+
 Check both boxes `urn:oasis:names:tc:SAML:2.0:nameid-format:transient` and `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent` (cf. SP registry Technical Attributes). `Subject Identifier` as Not in use.
 According to [this guide](https://wiki.eduuni.fi/pages/viewpage.action?pageId=27297748) there should be an option to choose something other than Haka test, but I didn't have that. In the testing version I checked the Haka test box. In prodction I left it unchecked, and when the email notifiying that the application had been accepted, I replied to that email and requested for it to be put into production.
 
@@ -64,12 +67,12 @@ to\
 
 `url="https://login.helsinki.fi/metadata/sign-hy-metadata.xml"`\
 to\
-`url="https://haka.funet.fi/metadata/haka-metadata.xml"`
+`url="https://haka.funet.fi/metadata/haka-metadata-v9.xml"`
 
-[Production certificate](https://wiki.eduuni.fi/display/CSCHAKA/Metadata), download `haka-sign-v8.pem`, and same as above.\
+[Production certificate](https://wiki.eduuni.fi/display/CSCHAKA/Metadata), download `haka-sign-v9.pem`, and same as above. The version numbers seems to change occasionally, so it might not be v9 when you see this.\
 `<MetadataFilter type="Signature" certificate="sign-login.helsinki.fi.crt"/>`\
 to\
-`<MetadataFilter type="Signature" certificate="/shib-certs/haka-sign-v8.pem"/>`
+`<MetadataFilter type="Signature" certificate="/shib-certs/haka-sign-v9.pem"/>`
 
 ## Closing thoughts
 After all the steps have been taken and the Shibboleth pod/server restarted, everything should work.
