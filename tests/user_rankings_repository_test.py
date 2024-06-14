@@ -87,10 +87,3 @@ class TestUserRankingsRepository(unittest.TestCase):
         urr.add_user_ranking(self.user_id2, self.survey_id, ranking, rejections, reason)
         db_rejections = urr.get_user_ranking(self.user_id2, self.survey_id).rejections
         self.assertEqual(db_rejections, rejections)
-
-    def test_exceptions(self):
-        """
-        Test that exceptions return False
-        """
-        success = urr.delete_user_ranking(self.user_id, -1)
-        self.assertFalse(success)

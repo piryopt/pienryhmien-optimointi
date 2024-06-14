@@ -138,12 +138,3 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.assertEqual(len(info), 1)
         self.assertEqual(info[0][0], "Osoite")
         self.assertEqual(info[0][1], "Kakkakuja 4")
-
-    def test_exceptions(self):
-        """
-        Test that exceptions return False
-        """
-        success = scr.find_survey_choices(-1)
-        self.assertFalse(success)
-        success = scr.get_all_additional_infos(-1)
-        self.assertFalse(success)

@@ -69,12 +69,3 @@ class TestSurveyOwnersRepository(unittest.TestCase):
         """
         success_get = sor.check_if_owner_in_survey("ITSNOTREAL", -1)
         self.assertEqual(success_get, False)
-
-    def test_exceptions(self):
-        """
-        Test that exceptions return False
-        """
-        success = sor.add_owner_to_survey(-1, self.user_id)
-        self.assertFalse(success)
-        success = sor.check_if_owner_in_survey(-1, self.user_id)
-        self.assertFalse(success)

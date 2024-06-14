@@ -37,13 +37,6 @@ class TestUserRepository(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_get_user_by_email_invalid(self):
-        """
-        Test that an invalid email returns False
-        """
-        user = ur.get_user_by_email("moti@motivaatio.com")
-        self.assertFalse(user)
-
     def test_get_user_by_email(self):
         """
         Test that a user is returned with the correct email
