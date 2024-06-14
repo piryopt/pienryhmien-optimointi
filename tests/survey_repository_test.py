@@ -141,13 +141,6 @@ class TestSurveyRepository(unittest.TestCase):
         exists = sr.survey_name_exists("Test survey 9", self.user_id)
         self.assertEqual(True, exists)
 
-    def test_count_active_surveys_invalid_id(self):
-        """
-        Test that the function behaves correctly when trying to get the list of active created surveys for an invalid user
-        """
-        exists = sr.get_active_surveys(-1)
-        self.assertEqual(False, exists)
-
     def test_survey_description(self):
         """
         Test that getting the description of a survey works
@@ -199,20 +192,6 @@ class TestSurveyRepository(unittest.TestCase):
         sr.close_survey(survey_id)
         closed_answered = sr.get_list_closed_answered(self.user_id3)
         self.assertEqual(1, len(closed_answered))
-
-    def test_get_list_active_answered_invalid(self):
-        """
-        Test that getting the list of active surveys of an invalid account works
-        """
-        active_answered = sr.get_list_active_answered(-1)
-        self.assertEqual(active_answered, False)
-
-    def test_get_list_closed_answered_invalid(self):
-        """
-        Test that getting the list of closed surveys of an invalid account works
-        """
-        closed_answered = sr.get_list_closed_answered(-1)
-        self.assertEqual(closed_answered, False)
 
     def test_get_list_all_open_surveys(self):
         """

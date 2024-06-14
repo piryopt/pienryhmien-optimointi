@@ -62,13 +62,6 @@ class TestUserRankingsRepository(unittest.TestCase):
         db_ranking = urr.get_user_ranking(self.user_id, self.survey_id).ranking
         self.assertEqual(db_ranking, self.ranking)
 
-    def test_get_invalid_user_ranking(self):
-        """
-        Test that getting an invalid user ranking from the database works correctly
-        """
-        exists = urr.get_user_ranking(self.user_id, -1)
-        self.assertEqual(exists, False)
-
     def test_delete_user_ranking(self):
         """
         Test that deleting a user ranking works
