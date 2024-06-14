@@ -1,5 +1,10 @@
 import unittest
+import os
 import numpy as np
+from flask import Flask
+from flask_babel import Babel
+from dotenv import load_dotenv
+from src import db
 from src.entities.group import Group
 from src.entities.student import Student
 from src.algorithms.weights import Weights
@@ -13,6 +18,17 @@ class TestHungarian(unittest.TestCase):
         inputs them to the hungarian algorithm and calls functions to run
         the algorithm while saving some of the preliminary data structures for tests
         """
+        load_dotenv()
+        self.app = Flask(__name__)
+        self.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+        self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+        self.app.config["BABEL_DEFAULT_LOCALE"] = "fi"
+
+        babel = Babel(self.app)
+        db.init_app(self.app)
+
+        self.app_context = self.app.app_context()
+        self.app_context.push()
         self.groups = {22:Group(22,'Ducks',2), 14:Group(14,'Geese',1), 55:Group(55,'Mallards',1), 19:Group(19, "Roided Harpy Eagles", 1)}
         self.students = {114:Student(114, 'Jane', [22,14,55], []),
                         367:Student(367, 'Joe', [22,55,14], []),
