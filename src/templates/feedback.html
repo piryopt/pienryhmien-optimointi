@@ -1,28 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}Palaute{% endblock %}
+{% block title %}{{ _('Palaute') }}{% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block content %}
   </br>
-  <h2>Palaute</h2>
+  <h2>{{ _('Palaute')}}</h2>
     <div class="form-group">
-      <label>Otsikko</label>
+      <label>{{ _('Otsikko') }}</label>
       <input type="text" class="form-control" style="opacity: 0.9;" name="title" id="title">
     </div></br>
     <div class="form-group">
-        <label>Palutteen tyyppi</label>
+        <label>{{ _('Palutteen tyyppi') }}</label>
         <select class="form-select" style="opacity: 0.9;" name="type" id="type">
-            <option value="palaute">Palaute</option>
-            <option value="bugi">Bugi</option>
-            <option value="muu">Muu</option>
+        <label>{{ _('Palutteen tyyppi') }}</label>
+            <option value="palaute">{{ _('Palaute') }}</option>
+            <option value="bugi">{{ _('Bugi')}}</option>
+            <option value="muu">{{ _('Muu')}}</option>
           </select>
       </div></br>
     <div class="form-group">
-        <label>Sisältö</label>
+        <label>{{ _('Sisältö')}}</label>
         <textarea class="form-control" id="content" rows="5" style="opacity: 0.9;" name="content"></textarea>
       </div></br>
-    <button type="submit" class="btn btn-primary" onclick="add_feedback()">Anna palaute</button>
+    <button type="submit" class="btn btn-primary" onclick="add_feedback()">{{ _('Anna palaute') }}</button>
 {% endblock %}

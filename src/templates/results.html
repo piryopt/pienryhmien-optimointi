@@ -2,7 +2,7 @@
 
 {% extends 'base.html' %}
 
-{% block title %}Tulokset{% endblock %}
+{% block title %}{{ _('Tulokset') }}{% endblock %}
 
 {% block head %}
 {% endblock %}
@@ -14,43 +14,43 @@
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 </head>
 <div class="top-container">
-<h2>Lajittelun tulokset</h2>
+<h2>{{ _('Lajittelun tulokset') }}</h2>
 </div>
 <div>
 <input type="hidden" id="survey_id" value="{{ survey_id }}">
-<b>Ryhmänvalintojen keskiarvo: {{ happiness }}</b></br>
+<b>{{ _('Ryhmänvalintojen keskiarvo') }}: {{ happiness }}</b></br>
 {% for h in happiness_data %}
 <label>{{ h[0] }}{{ h[1] }}</label></br>
 {% endfor %}
 </br>
-<button type="submit" class="btn btn-outline-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">Vie tulokset Excel-taulukkoon</button></br></br>
+<button type="submit" class="btn btn-outline-primary" id="export_to_excel" onclick="ExportAllData_HTML(this)" name="excelbutton">{{ _('Vie tulokset Excel-taulukkoon') }}</button></br></br>
 {% if not answered %}
-<form action="/surveys/{{ survey_id }}/results" method="POST" onsubmit="return confirm ('Haluatko varmasti tallentaa tulokset?')">
+<form action="/surveys/{{ survey_id }}/results" method="POST" onsubmit="return confirm ('Confirm')">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <button type="submit" class="btn btn-outline-success" name="savin_time">Tallenna tulokset</button>
+    <button type="submit" class="btn btn-outline-success" name="savin_time">{{ _('Tallenna tulokset') }}</button>
 </form>
 </br>
 {% endif %}
 </br>
 {% if dropped_groups|length > 0 %}
-<b style="color:orangered">Ryhmät, jotka pudotettiin jaosta</b></br></br>
+<b style="color:orangered">{{ _('Ryhmät, jotka pudotettiin jaosta') }}</b></br></br>
 {% for name in dropped_groups %}
 <ul><small style="color:orangered">{{ name }}</small></ul>
 {% endfor %}
 </br>
 {% endif %}
 
-<b>Opiskelijat on lajiteltu ryhmiin seuraavasti:</b>
+<b>{{ _('Opiskelijat on lajiteltu ryhmiin seuraavasti') }}:</b>
 
 <BR><BR>
 <table id="results_table" cellspacing="10" class="table table-striped">
     <thead class="table-dark">
         <tr>
-            <th><p><img src="{{ url_for('static', filename='images/person_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Nimi</p></th>
-            <th><p><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Sähköposti</p></th>
-            <th><p><img src="{{ url_for('static', filename='images/groups_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Ryhmä</p></th>
-            <th><p><img src="{{ url_for('static', filename='images/format_list_numbered_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Monesko valinta</p></th>
-            <th style="min-width:12em;"><p><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  Valinnat</p></th>
+            <th><p><img src="{{ url_for('static', filename='images/person_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  {{ _('Nimi') }}</p></th>
+            <th><p><img src="{{ url_for('static', filename='images/email_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  {{ _('Sähköposti') }}</p></th>
+            <th><p><img src="{{ url_for('static', filename='images/groups_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  {{ _('Ryhmä') }}</p></th>
+            <th><p><img src="{{ url_for('static', filename='images/format_list_numbered_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  {{ _('Monesko valinta') }}</p></th>
+            <th style="min-width:12em;"><p><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  {{ _('Valinnat') }}</p></th>
             {% for s in sc %}
             <th style="display:none">{{s[0]}}</th>
             {% endfor %}
@@ -69,7 +69,7 @@
         </td>       <!--assigned group--> 
         <td>{%if row[2][1] != "Tyhjä" %}<p>{{ row[3] }}</p>{% endif %}</td>       <!--Which choice--> 
         <td>
-            <button type="button" class="btn btn-link" onclick="showRankingResults('{{ row[1] }}')"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"><label style="cursor: pointer;">Näytä</label></button>
+            <button type="button" class="btn btn-link" onclick="showRankingResults('{{ row[1] }}')"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"><label style="cursor: pointer;">{{ _('Näytä') }}</label></button>
             <div id="all-rankings-container {{ row[1] }}">
             </div>
         </td>

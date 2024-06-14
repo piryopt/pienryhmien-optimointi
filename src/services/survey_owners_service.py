@@ -1,3 +1,4 @@
+from flask_babel import gettext
 from src.repositories.survey_owners_repository import (
     survey_owners_repository as default_survey_owners_repository
 )
@@ -32,8 +33,8 @@ class SurveyOwnersService:
         # Verify that a user with the email exists
         user = self._user_repository.find_by_email(user_email)
         if not user:
-            message = f"Sähköpostiosoitetta ei löydetty järjestelmästä! Onko {user_email} kirjautunut aikaisemmin Jakajaan?"
-            return (False, message)
+            message = gettext('Sähköpostiosoitetta ei löydetty järjestelmästä? Onko hän kirjautunut aikaisemmin jakajaan? Syötetty sähköpostiosoite: ')
+            return (False, message + user_email)
         
         # Check that the survey exists
         survey = self._survey_repository.get_survey(survey_id)
@@ -45,7 +46,7 @@ class SurveyOwnersService:
         user_id = user.id
         exists = self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
         if exists:
-            message = "Opettajalla on jo oikeudet kyselyyn!"
+            message = gettext('Opettajalla on jo oikeudet kyselyyn!')
             return (False, message)
         
         # Everything checks out, give the user access to the survey
@@ -53,8 +54,8 @@ class SurveyOwnersService:
         if not success:
             message = "ERROR IN ADDING USER TO SURVEY!"
             return (False, message)
-        message = f"{user_email} sai oikeudet kyselyyn!"
-        return (True, message)
+        message = gettext('  sai oikeudet kyselyyn!')
+        return (True, user_email + message)
     
     def check_if_user_is_survey_owner(self, survey_id, user_id):
         """

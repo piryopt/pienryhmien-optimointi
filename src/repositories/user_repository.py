@@ -33,10 +33,9 @@ class UserRepository:
             print(f"The user with the email {user.email} already exists!")
             return
         try:
-            sql = "INSERT INTO users (name, email, isteacher, admin)" \
-                  "VALUES (:name, :email, :isteacher, False)"
-            db.session.execute(text(sql), {"name":user.name,
-                                            "email":user.email, "isteacher":user.isteacher})
+            sql = "INSERT INTO users (name, email, isteacher, admin, language)" \
+                  "VALUES (:name, :email, :isteacher, False, :language)"
+            db.session.execute(text(sql), {"name":user.name, "email":user.email, "isteacher":user.isteacher, "language":"fi"})
             db.session.commit()
         except Exception as e: # pylint: disable=W0718
             print(e)
@@ -119,6 +118,22 @@ class UserRepository:
             if not user:
                 return False
             return user
+        except Exception as e: # pylint: disable=W0718
+            print(e)
+            return False
+        
+    def change_user_language(self, user_id, language):
+        """
+        SQL code for changing the default language of the user
+
+        args:
+            user_id: The id of a user
+            language: The updated language
+        """
+        try:
+            sql = "UPDATE users SET language=:language WHERE id=:user_id"
+            db.session.execute(text(sql), {"user_id":user_id, "language":language})
+            db.session.commit()
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False

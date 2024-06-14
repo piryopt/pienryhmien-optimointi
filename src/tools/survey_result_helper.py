@@ -5,6 +5,7 @@ from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.tools.rankings_converter import convert_to_list
 from datetime import datetime
+from flask_babel import gettext
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 
@@ -137,7 +138,8 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_results_list = []
     for k,v in happiness_results.items():
         if v > 0:
-            happiness_results_list.append((k, f". valintaansa sijoitetut opiskelijat: {v} kpl"))
+            msg = gettext('. valintaansa sijoitetut käyttäjät: ')
+            happiness_results_list.append((k, msg + f"{v}"))
     
     # Fix a bug where happiness results did not always come in the right order
     happiness_results_list.sort()

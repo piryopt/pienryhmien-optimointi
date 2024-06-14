@@ -31,6 +31,7 @@ class UserService:
         session["email"] = user.email
         session["user_id"] = user.id
         session["full_name"] = user.name
+        session["language"] = user.language
         # Needed for fixing the AD-login session bug
         session["reloaded"] = False
         if user.isteacher:
@@ -66,7 +67,6 @@ class UserService:
             name: The name of the user
         """
         if not name:
-            print("All fields are required!")
             return False
         if len(name) < 1:
             return False
@@ -112,6 +112,7 @@ class UserService:
         del session["role"]
         del session["reloaded"]
         del session["admin"]
+        del session["language"]
 
     def find_by_email(self, email):
         """
@@ -181,5 +182,12 @@ class UserService:
             return False
         return user.id
 
+    def update_user_language(self, user_id, language):
+        accepted_languages = ['fi', 'en', 'sv']
+        if language not in accepted_languages:
+            return False
+        self._user_repository.change_user_language(user_id, language)
+        session["language"] = language
+        return True
 
 user_service = UserService()

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Kysely{% endblock %}
+{% block title %}{{ _('Kysely') }}{% endblock %}
 
 {% block head %}
 {% endblock %}
@@ -25,7 +25,7 @@
 </script>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey[1] }}</h5>
-    <p>Vastausaika päättyy {{ format_datestring(survey[6]) }}</p></br></br>
+    <p>{{ _('Vastausaika päättyy') }} {{ format_datestring(survey[6]) }}</p></br></br>
     {% if survey[5] %}<p>{{ survey[5] }}</p></br></br>{% endif %}
     <input type="hidden" id="max_bad_choices" value="{{ survey[7] }}">
     <input type="hidden" id="min_choices" value="{{ survey[2] }}">
@@ -34,12 +34,13 @@
         <div class="row">
             <div class="col-sm">
                 <p>
-                    <i>Raahaa oikean reunan listasta vähintään {{ survey[2] }} vaihtoehtoa vihreään laatikkoon. {% if additional_info %}Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.{% endif %}</i>
+                    <i>{{ _('Raahaa oikean reunan listasta vähintään') }} {{ survey[2] }} {{ _('vaihtoehtoa vihreään laatikkoon') }}. {% if additional_info %}{{ _('Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa') }}.{% endif %}</i>
                 </p>
             </div>
             {% if survey[8] %}
             <div class="col-sm">
-                <input id="searchChoices" type="text" placeholder="Etsi..."></br></br>
+                <label>{{ _('Haku') }}</label></br>
+                <input id="searchChoices" type="text"></br></br>
             </div>
             {% endif %}
         </div>
@@ -53,7 +54,7 @@
                                 <h5 class="mb-1">{{ group.name }}</h5>
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                             </div>
-                            <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                            <small class="text-muted">{{ _('Ryhmän maksimikoko') }}: {{ group.slots }}</small>
                             <div id="info-container {{group.id}}">
                             </div>
                         </li>
@@ -69,14 +70,14 @@
                                 <h5 class="mb-1">{{ group.name }}</h5>
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                             </div>
-                            <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                            <small class="text-muted">{{ _('Ryhmän maksimikoko') }}: {{ group.slots }}</small>
                             <div id="info-container {{group.id}}">
                             </div>
                         </li>
                         {% endfor %}
                     </ul>
                     <div class="form-group">
-                        <label for="reasons">Perustelut</label>
+                        <label for="reasons">{{ _('Perustelut') }}</label>
                         <textarea class="form-control" id="reasons" name="reasons" rows="3">{{ reason }}</textarea>
                     </div>
                 </div>
@@ -85,17 +86,17 @@
                     <div class="row" style="padding-top: 10px">
                         <div class="col-sm">
                             <div id="submitExists" style="display: none;">
-                                <button type="submit" class="btn btn-success" onclick="submit(0)">Päivitä valinnat</button>
+                                <button type="submit" class="btn btn-success" onclick="submit(0)">{{ _('Päivitä valinnat') }}</button>
                             </div>
                             <div id="submitDoesntExist" style="display: none">
-                                <button type="submit" class="btn btn-success" onclick="submit(1)" id="submitDoesntExistButton">Lähetä valinnat</button>
+                                <button type="submit" class="btn btn-success" onclick="submit(1)" id="submitDoesntExistButton">{{ _('Lähetä valinnat') }}</button>
                             </div>
                         </div>
                         <input type="hidden" id="survey_id" value="{{ survey[0] }}">
                         <input type="hidden" id="existing" value="{{ existing }}">
                         <div class="col-sm">
                             <div id="deleteContainer" style="display: none;">
-                                <button type="submit" id="deleteSubmission" class="btn btn-danger">Poista valinnat</button>
+                                <button type="submit" id="deleteSubmission" class="btn btn-danger">{{ _('Poista valinnat') }}</button>
                                 <script>
                                     $("#deleteSubmission").click(function() {
                                         $("#submitExists").hide();
@@ -107,7 +108,7 @@
                         </div>
                         <div class="row" id="confirmContainer" style="display: none;">
                             <div class="col-sm">
-                                <button type="input" id="noDeletion" class="btn btn-success">Peruuta</button>
+                                <button type="input" id="noDeletion" class="btn btn-success">{{ _('Peruuta') }}</button>
                                 <script>
                                     $("#noDeletion").click(function() {
                                         $("#submitExists").show();
@@ -117,9 +118,9 @@
                                 </script>
                             </div>
                             <div class="col-sm">
-                                <button type="submit" class="btn btn-danger" id="confirmDelete" onclick="deleteSubmission()">Poista</button>
+                                <button type="submit" class="btn btn-danger" id="confirmDelete" onclick="deleteSubmission()">{{ _('Poista') }}</button>
                             </div>
-                            <div class="col-sm"><p>Oletko varma?</p></div>
+                            <div class="col-sm"><p>{{ _('Oletko varma') }}?</p></div>
                         </div>
                     </div>
                 </div>
@@ -132,7 +133,7 @@
                             <h5 class="mb-1">{{ group.name }}</h5>
                             <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                         </div>
-                        <small class="text-muted">Ryhmän maksimikoko: {{ group.slots }}</small>
+                        <small class="text-muted">{{ _('Ryhmän maksimikoko') }}: {{ group.slots }}</small>
                         <div id="info-container {{group.id}}">
                         </div>
                     </li>

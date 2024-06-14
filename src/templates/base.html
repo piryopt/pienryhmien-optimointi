@@ -35,19 +35,18 @@
                     </a>
                     {% if session.admin %}
                     <div class="collapse navbar-collapse" id="navbarNav">
-                        <a class="nav-link" href="/admintools/analytics"><small>Tilastot</small></a>
-                        <a class="nav-link" href="/admintools/feedback"><small>Palaute</small></a>
-                        <a class="nav-link" href="/admintools/surveys"><small>Aktiiviset kyselyt</small></a>
+                        <a class="nav-link" href="/admintools/analytics"><small>{{ _('Tilastot') }}</small></a>
+                        <a class="nav-link" href="/admintools/feedback"><small>{{ _('Palaute') }}</small></a>
+                        <a class="nav-link" href="/admintools/surveys"><small>{{ _('Aktiiviset kyselyt') }}</small></a>
                     </div>
                     {% endif %}
                     <div class="d-flex">
                         <div class="dropdown">
                             <button class="btn dropdown btn-sm" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <b>{{ session.full_name }}</b><br>
-                            <small>{{ session.role }}</small>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="/auth/logout"><small>Kirjaudu ulos</small></a></li>
+                                <li><a class="dropdown-item" href="/auth/logout"><small> {{ _('Kirjaudu ulos') }}</small></a></li>
                             </ul>
                         </div>
                     </div>
@@ -69,9 +68,19 @@
 
         <footer class="footer mt-auto py-3 bg-dark">
             <div class="container">
-                <a href="/faq" class="text-muted">UKK</a>
-                <a href="/feedback" class="text-muted">Anna palautetta</a>
-                <a href="/privacy-policy" class="text-muted">Tietosuojaseloste</a>
+                <a href="/faq" class="text-muted">{{ _('UKK') }}</a>
+                <a href="/feedback" class="text-muted">{{ _('Anna palautetta') }}</a>
+                <a href="/privacy-policy" class="text-muted">{{ _('Tietosuojaseloste') }}</a>
+                {% if session.language == 'fi'%}
+                <img src="{{ url_for('static', filename='images/eng.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top" onclick="changeLanguage('en')" style="cursor: pointer;">
+                <img src="{{ url_for('static', filename='images/swe.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top" onclick="changeLanguage('sv')" style="cursor: pointer;">
+                {% elif session.language =='en'%}
+                <img src="{{ url_for('static', filename='images/fin.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top" onclick="changeLanguage('fi')" style="cursor: pointer;">
+                <img src="{{ url_for('static', filename='images/swe.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top" onclick="changeLanguage('sv')" style="cursor: pointer;">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/eng.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top" onclick="changeLanguage('en')" style="cursor: pointer;">
+                <img src="{{ url_for('static', filename='images/fin.svg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top" onclick="changeLanguage('fi')" style="cursor: pointer;">
+                {% endif %}
                 <a href="https://github.com/piryopt/pienryhmien-optimointi" class="github-logo"><img src="{{ url_for('static', filename='images/github-mark-white.png') }}" alt="Jakaja GitHubissa" width="30" height="30"></a>
             </div>
         </footer>

@@ -1,4 +1,5 @@
 from datetime import datetime
+from flask_babel import gettext
 from src.repositories.survey_repository import (
     survey_repository as default_survey_repository
 )
@@ -315,16 +316,19 @@ class SurveyService:
 
         # Name length
         if len(survey_dict["surveyGroupname"]) < 5:
-            return {"success": False, "message": {"status":"0", "msg":"Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"}}
+            msg = gettext('Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä')
+            return {"success": False, "message": {"status":"0", "msg":msg}}
         
         # Min choices is a number
         if not edited:
             if not isinstance(survey_dict["minchoices"], int):
-                return {"success": False, "message": {"status":"0", "msg":"Priorisoitavien ryhmien vähimmäismäärän tulee olla numero"}}
+                msg = gettext('Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!')
+                return {"success": False, "message": {"status":"0", "msg":msg}}
         if "choices" in survey_dict:
             for choice in survey_dict["choices"]:
                 if choice["Nimi"] == 'tyhjä' or choice["Enimmäispaikat"] == 'tyhjä' or choice["Ryhmän minimikoko"] == 'tyhjä':
-                    return {"success": False, "message": {"status":"0", "msg":"Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle."}}
+                    msg = gettext('Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle.')
+                    return {"success": False, "message": {"status":"0", "msg":msg}}
         return {"success": True}
     
     def save_survey_edit(self, survey_id, edit_dict, user_id):
@@ -344,7 +348,7 @@ class SurveyService:
         if name != surveyname:
             name_changed = True
         if self._survey_repository.survey_name_exists(surveyname, user_id) and name_changed:
-            message = "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"
+            message = gettext('Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!')
             return (False, message)
 
         description = edit_dict["surveyInformation"]
@@ -358,9 +362,9 @@ class SurveyService:
         # ADD FUNCTIONALITY FOR EDITING SURVEY CHOICES!
 
         if not saved:
-            message = "Ei voitu tallentaa muutoksia tietokantaan!"
+            message = gettext('Ei voitu tallentaa muutoksia tietokantaan!')
             return (False, message)
-        message = "Muutokset tallennettu!"
+        message = gettext('Muutokset tallennettu!')
         return (True, message)
 
     def update_survey_group_sizes(self, survey_id, choices):
@@ -373,13 +377,13 @@ class SurveyService:
             success = self._choices_repository.edit_choice_group_size(survey_id, choice['Nimi'], choice['Enimmäispaikat'])
             if not success:
                 if count > 0:
-                    message = "Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut"
+                    message = gettext('Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut')
                     return (False, message)
                 else:
-                    message = "Häiriö. Ryhmäkokojen päivitys ei onnistunut"
+                    message = gettext('Häiriö. Ryhmäkokojen päivitys ei onnistunut')
                     return (False, message)
             count += 1
-        message = "Ryhmäkoot päivitetty"
+        message = gettext('Ryhmäkoot päivitetty')
         return (True, message)
     
     def len_active_surveys(self):

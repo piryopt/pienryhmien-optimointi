@@ -1,6 +1,7 @@
 import unittest
 import os
 from flask import Flask
+from flask_babel import Babel
 from dotenv import load_dotenv
 from src import db
 from src.services.feedback_service import feedback_service as fs
@@ -15,6 +16,9 @@ class TestFeedbackService(unittest.TestCase):
         self.app = Flask(__name__)
         self.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
         self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+        self.app.config["BABEL_DEFAULT_LOCALE"] = "fi"
+
+        babel = Babel(self.app)
         db.init_app(self.app)
 
         self.app_context = self.app.app_context()

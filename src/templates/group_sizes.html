@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Muokkaa ryhmäkokoja{% endblock %}
+{% block title %}{{ _('Muokkaa ryhmäkokoja') }}{% endblock %}
 
 {% block head %}
   <script src="{{ url_for('static', filename='js/create_survey.js') }}"></script>
@@ -17,30 +17,30 @@
            alt=""
            class="d-inline-block align-text-middle"
       >
-      Muokkaa ryhmäkokoja
+      {{ _('Muokkaa ryhmäkokoja')}}
     </h1>
 
     <section>
       <h2>{{ survey.surveyname }}</h2>
     </section>
-    <i>Vastauksia: {{ survey_answers_amount }} kpl</i><br>
-    <i>Jaettavia paikkoja: {{ available_spaces }} kpl</i><br>
+    <i>{{ _('Vastauksia') }}: {{ survey_answers_amount }}</i><br>
+    <i>{{ _('Jaettavia paikkoja')}}: {{ available_spaces }}</i><br>
     {% if survey_answers_amount > available_spaces %}
     <br>
-    <h4 style="color:orangered">Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja</h4>
+    <h4 style="color:orangered">{{ _('Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja') }}</h4>
     {% endif %}
     <br>
     
     <section>
-      <h2>Priorisoitavat ryhmät</h2>
-      <p>Vaihtoehdon suosittuus kuvaa sitä, kuinka moni vastaaja on valinnut sen ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä</p>
-      <p><b>HUOM!</b> Jos muokkaat ryhmän nimeä, ei ryhmäkoon muokkaus tallennu</p>
+      <h2>{{ _('Priorisoitavat ryhmät') }}</h2>
+      <p>{{ _('Vaihtoehdon suositus kuvaa sitä, kuinka moni vastaaja on valinnut sen ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä') }}</p>
+      <p><b>{{ _('HUOM') }}!</b> {{ _('Jos muokkaat ryhmän nimeä, ei ryhmäkoon muokkaus tallennu') }}</p>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
           <tr id="choice-table-headers">
-            <th class="constant-header">Nimi</th>
-            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
-            <th class="constant-header">Suosittuus</th>
+            <th class="constant-header">{{ _('Nimi') }}</th>
+            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">{{ _('Enimmäispaikat') }}</th>
+            <th class="constant-header">{{ _('Suositus') }}</th>
           
           {% for colname in survey.variable_columns %}
             <th class="variable-header">{{colname}}</th>
@@ -64,6 +64,6 @@
 
     <section>
       <input type="hidden" value={{survey_id}} id="survey_id">
-      <button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveGroupSizes()" name="savegroupsizes">Tallenna muutokset</button>
+      <button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveGroupSizes()" name="savegroupsizes">{{ _('Tallenna muutokset') }}</button>
     </section>
 {% endblock %}

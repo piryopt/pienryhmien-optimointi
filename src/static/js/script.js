@@ -237,3 +237,14 @@ function exitMoreRankingResults(email) {
     document.getElementById(name).innerHTML = "";
     $('input[id="currently_selected"]').val("");
 }
+
+function changeLanguage(language) {
+    $.ajax({
+        type: "GET",
+        url: "/language/" + language,
+        datatype: "html",
+        success: function(result) {
+            location.reload()
+        }
+    });
+}

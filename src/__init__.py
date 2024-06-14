@@ -1,8 +1,9 @@
 import os
-from flask import Flask
+from flask import Flask, session
 from flask_apscheduler import APScheduler
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
+from flask_babel import Babel
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,10 +13,20 @@ class Config:
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
-app.config.from_object(Config())
 
+app.config.from_object(Config())
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["BABEL_DEFAULT_LOCALE"] = "fi"
+
+babel = Babel(app)
+
+def get_locale():
+    if 'language' not in session:
+        return 'fi'
+    return session.get("language", 0)
+
+babel.init_app(app, locale_selector=get_locale)
 
 db = SQLAlchemy(app)
 
