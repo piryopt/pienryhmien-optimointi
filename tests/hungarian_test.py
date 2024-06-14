@@ -158,7 +158,7 @@ class TestHungarian(unittest.TestCase):
         Checks that function get_happiness_data_strings returns data in correct format
         """
         happiness = self.h.get_happiness_data_strings()
-        self.assertEqual((len(happiness), happiness[0]),(1,'1. valintaansa sijoitetut opiskelijat: 3 kpl'))
+        self.assertEqual((len(happiness), happiness[0]),(1,'1. valintaansa sijoitetut käyttäjät: 3'))
 
     def test_reshape_matrix_can_add_empty_columns(self):
         """

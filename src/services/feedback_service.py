@@ -42,7 +42,7 @@ class FeedbackService:
             return (False, message)
         if len(content) > 1500:
             message = gettext('Sisältö on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 1500. Merkkejä oli ')
-            return (False, message + len(content))
+            return (False, message + str(len(content)))
         
         feedback_type = data["type"]
 

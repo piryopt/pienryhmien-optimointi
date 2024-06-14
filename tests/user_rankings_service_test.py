@@ -1,6 +1,7 @@
 import unittest
 import os
 from flask import Flask
+from flask_babel import Babel
 from dotenv import load_dotenv
 from src import db
 from src.repositories.user_repository import user_repository as ur
@@ -21,6 +22,14 @@ class TestUserRankingsService(unittest.TestCase):
         self.app = Flask(__name__)
         self.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
         self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+        self.app.config["BABEL_DEFAULT_LOCALE"] = "fi"
+
+        babel = Babel(self.app)
+
+        def get_locale():
+            return 'fi'
+
+        babel.init_app(self.app, locale_selector=get_locale)
         db.init_app(self.app)
 
         self.app_context = self.app.app_context()
