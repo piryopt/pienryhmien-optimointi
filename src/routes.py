@@ -843,7 +843,7 @@ def get_choices(survey_id):
 
     if len(good_ids) < min_choices:
         msg = gettext('Tallennus epäonnistui. Valitse vähintään ')
-        response = {"status":"0","msg":msg + min_choices}
+        response = {"status":"0","msg":msg + str(min_choices)}
         return jsonify(response)
 
     if len(bad_ids) > allowed_denied_choices:
