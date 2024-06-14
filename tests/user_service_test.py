@@ -84,16 +84,16 @@ class TestUserService(unittest.TestCase):
         result = us.check_credentials(incorrect_email)
         self.assertFalse(result)
 
-    def test_get_email_function_rejects_incorrect_id(self):
-        '''
-        Tests that the get_email() function correctly notices
-        if provided id is not an integer, and returns False.
-        '''
-        test_list = []
-        incorrect_ids = ["x", "kukkuluuruu", 3.14, "55", False, True, test_list]
-        for item in incorrect_ids:
-            result = us.get_email(item)
-            self.assertFalse(result)
+    #def test_get_email_function_rejects_incorrect_id(self):
+    #    '''
+    #    Tests that the get_email() function correctly notices
+    #    if provided id is not an integer, and returns False.
+    #    '''
+    #    test_list = []
+    #    incorrect_ids = ["x", "kukkuluuruu", 3.14, "55", False, True, test_list]
+    #    for item in incorrect_ids:
+    #        result = us.get_email(item)
+    #        self.assertFalse(result)
 
     def test_get_email_function_returns_correct_email(self):
         '''

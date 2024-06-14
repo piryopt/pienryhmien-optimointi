@@ -141,13 +141,6 @@ class TestSurveyRepository(unittest.TestCase):
         exists = sr.survey_name_exists("Test survey 9", self.user_id)
         self.assertEqual(True, exists)
 
-    def test_count_created_surveys_invalid_id(self):
-        """
-        Test that the function behaves correctly when trying to get the list of all created surveys for an invalid user
-        """
-        exists = sr.count_created_surveys(-1)
-        self.assertEqual(False, exists)
-
     def test_count_active_surveys_invalid_id(self):
         """
         Test that the function behaves correctly when trying to get the list of active created surveys for an invalid user

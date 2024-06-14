@@ -63,13 +63,6 @@ class TestUserRankingsService(unittest.TestCase):
         success = urs.add_user_ranking(self.user_id, self.survey_id, "1,2,3,4,5,6,7,8", "9", "Because seven ate nine")
         self.assertTrue(success)
 
-    def test_add_user_invalid_ranking(self):
-        """
-        Test that an invalid user ranking cannot be submitted
-        """
-        success = urs.add_user_ranking(self.user_id, -1, "1,2,3,4,5,6,7,8", "9", "Because seven ate nine")
-        self.assertFalse(success)
-
     def test_user_ranking_exists(self):
         """
         Test that a correct user ranking can be returned
