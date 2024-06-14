@@ -1,5 +1,6 @@
 import itertools
 import numpy as np
+from flask_babel import gettext
 from scipy.optimize import linear_sum_assignment
 from src.services.user_service import user_service
 
@@ -165,5 +166,6 @@ class Hungarian:
         choice, number = np.unique(self.student_happiness[:,1], return_counts=True)
         happiness_strings = []
         for i in range(len(choice)):
-            happiness_strings.append(f"{int(choice[i])}. valintaansa sijoitetut opiskelijat: {number[i]} kpl")
+            msg = gettext('valintaansa sijoitetut käyttäjät')
+            happiness_strings.append(f"{int(choice[i])}. " + msg + f": {number[i]}")
         return happiness_strings

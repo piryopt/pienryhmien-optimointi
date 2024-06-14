@@ -1,42 +1,42 @@
 {% extends 'base.html' %}
 
-{% block title %}Etusivu{% endblock %}
+{% block title %}{{ _('Etusivu') }}{% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block content %}
   </br>
-  <label>Toiminnot</label></br></br>
+  <label>{{ _('Toiminnot') }}</label></br></br>
     <div class="row">
       <div class="col-sm">
         <a href="/surveys/create" class="list-group-item list-group-item-action flex-column align-items-start" style="border-radius: 12px;">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1"><img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  Luo uusi kysely</h5>
+            <h5 class="mb-1"><img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ _('Luo uusi kysely') }}</h5>
           </div>
-          <small class="text-muted">Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta</small>
+          <small class="text-muted">{{ _('Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta') }}</small>
         </a>
       </div>
       <div class="col-sm">
         <a href="/surveys" class="list-group-item list-group-item-action flex-column align-items-start" style="border-radius: 12px;">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1"><img src="{{ url_for('static', filename='images/list_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  Näytä vanhat kyselyt</h5>
+            <h5 class="mb-1"><img src="{{ url_for('static', filename='images/list_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ _('Näytä vanhat kyselyt') }}</h5>
           </div>
-          <small class="text-muted">Luotuja kyselyitä: {{ surveys_created }} kpl</small>
+          <small class="text-muted">{{ _('Luotuja kyselyitä') }}: {{ surveys_created }}</small>
         </a>
       </div>
     </div>
     </br>
 
     {% if exists %}
-    </br><label>Käynnissä olevat kyselyt</label></br></br>
+    </br><label>{{ _('Käynnissä olevat kyselyt') }}</label></br></br>
     {% for d in data %}
     <a href="/surveys/{{ d[0] }}/answers" class="list-group-item list-group-item-action flex-column align-items-start" >
       <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1"><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ d[1] }}</h5>
-        <small class="text-muted">Vastausaika loppuu {{ format_datestring(d[3]) }}</small>
+        <small class="text-muted">{{ _('Vastausaika loppuu') }} {{ format_datestring(d[3]) }}</small>
       </div>
-      <small class="text-muted">Kyselyyn on vastannut {{ d[2] }} opiskelijaa</small>
+      <small class="text-muted">{{ _('Vastaukset') }}: {{ d[2] }}</small>
     </a></br>
     {% endfor %}
     {% endif %}

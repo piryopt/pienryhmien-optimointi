@@ -3,6 +3,7 @@ from functools import wraps
 from flask import render_template, request, session, jsonify, redirect
 import markdown
 from pathlib import Path
+from flask_babel import gettext
 from src import app,scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
@@ -17,6 +18,7 @@ from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_elomake_csv_to_dict
 from src.entities.user import User
 #from src.tools.db_data_gen import gen_data
+
 
 """
 DECORATORS:
@@ -104,7 +106,6 @@ def frontpage() -> str:
         participants = len(survey_answers)
         survey_ending_date = survey_service.get_survey_enddate(survey_id)
         data.append([survey_id, surveyname, participants, survey_ending_date])
-
     return render_template('index.html', surveys_created = surveys_created, exists = True, data = data, is_teacher = is_teacher)
 
 """
@@ -199,19 +200,22 @@ def new_survey_post():
     allow_search_visibility = data["allowSearchVisibility"]
 
     if minchoices > len(survey_choices):
-        response = {"status":"0", "msg":"Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmiäismäärä! Kyselyn luominen epäonnistui!"}
+        msg = gettext('Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmiäismäärä! Kyselyn luominen epäonnistui!')
+        response = {"status":"0", "msg":msg}
         return jsonify(response)
 
     survey_id = survey_service.create_new_survey_manual(survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility)
     if not survey_id:
-        response = {"status":"0", "msg":"Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!"}
+        msg = gettext('Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!')
+        response = {"status":"0", "msg":msg}
         return jsonify(response)
     email = user_service.get_email(user_id)
     (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
     if not success:
         response = {"status":"0", "msg":message}
         return jsonify(response)
-    response = {"status":"1", "msg":"Uusi kysely luotu!"}
+    msg = gettext('Uusi kysely luotu!')
+    response = {"status":"1", "msg":msg}
     return jsonify(response)
 
 @app.route("/surveys/create/import", methods = ["POST"])
@@ -355,10 +359,12 @@ def delete_submission(survey_id):
     """
     Delete the current ranking of the student.
     """
-    response = {"status":"0", "msg":"Poistaminen epäonnistui"}
+    msg = gettext('Poistaminen epäonnistui!')
+    response = {"status":"0", "msg":msg}
     current_user_id = session.get("user_id", 0)
     if user_rankings_service.delete_ranking(survey_id, current_user_id):
-        response = {"status":"1", "msg":"Valinnat poistettu"}
+        msg = gettext('Valinnat poistettu')
+        response = {"status":"1", "msg":msg}
     return jsonify(response)
 
 @app.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
@@ -436,7 +442,8 @@ def delete_survey(survey_id):
 @app.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
 def add_owner(survey_id, email):
     if not email:
-        response = {"status":"0","msg":"Sähköpostiosoite puuttuu!"}
+        msg = gettext('Sähköpostiosoite puuttuu!')
+        response = {"status":"0","msg":msg}
         return jsonify(response)
     if not check_if_owner(survey_id):
         return redirect("/")
@@ -485,10 +492,10 @@ def post_group_sizes(survey_id):
     response = {}
     if db_response[0] is True:
         response["status"] = "1"
-        response["msg"] = "Tallennus onnistui. Päivitä sivu nähdäksesi tilanne"
+        response["msg"] = gettext('Tallennus onnistui. Päivitä sivu nähdäksesi tilanne.')
     else:
         response["status"] = "0"
-        response["msg"] = "Tallennus epäonnistui."
+        response["msg"] = gettext('Tallennus epäonnistui.')
 
     return jsonify(response)
 
@@ -514,7 +521,7 @@ def survey_answers(survey_id):
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
-    error_message = "Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus sivulta."
+    error_message = gettext('Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus sivulta.')
     return render_template("survey_answers.html",
                            survey_name=survey_name, survey_answers=choices_data,
                            survey_answers_amount=survey_answers_amount, available_spaces = available_spaces,
@@ -595,7 +602,8 @@ def close_survey(survey_id):
     user_id = session.get("user_id",0)
     closed = survey_service.close_survey(survey_id, user_id)
     if not closed:
-        response = {"status":"0", "msg":"Kyselyn sulkeminen epäonnistui"}
+        msg = gettext('Kyselyn sulkeminen epäonnistui!')
+        response = {"status":"0", "msg":msg}
         return jsonify(response)
     return redirect(f'/surveys/{survey_id}/answers')
 
@@ -607,7 +615,8 @@ def open_survey(survey_id):
     user_id = session.get("user_id",0)
     opened = survey_service.open_survey(survey_id, user_id)
     if not opened:
-        response = {"status":"0", "msg":"Kyselyn avaaminen epäonnistui"}
+        msg = gettext('Kyselyn avaaminen epäonnistui!')
+        response = {"status":"0", "msg":msg}
         return jsonify(response)
     return redirect(f'/surveys/{survey_id}/answers')
 
@@ -833,11 +842,13 @@ def get_choices(survey_id):
     allowed_denied_choices = int(raw_data["maxBadChoices"])
 
     if len(good_ids) < min_choices:
-        response = {"status":"0","msg":f"Valitse vähintään {min_choices} vaihtoehtoa. Tallennus epäonnistui."}
+        msg = gettext('Tallennus epäonnistui. Valitse vähintään ')
+        response = {"status":"0","msg":msg + min_choices}
         return jsonify(response)
 
     if len(bad_ids) > allowed_denied_choices:
-        response = {"status":"0","msg":f"Voit hylätä korkeintaan {allowed_denied_choices} vaihtoehtoa. Tallennus epäonnistui."}
+        msg = gettext('Tallennus epäonnistui. Voit hylätä enintään ')
+        response = {"status":"0","msg":msg}
         return jsonify(response)
 
     ranking = convert_to_string(good_ids)
@@ -845,22 +856,27 @@ def get_choices(survey_id):
 
     # Verify that if user has rejections, they have also added a reasoning for them.
     if len(bad_ids) == 0 and len(reason) > 0:
-        response = {"status":"0","msg":"Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."}
+        msg = gettext('Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui.')
+        response = {"status":"0","msg":msg}
         return jsonify(response)
 
     # Verify that the reasoning isn't too long or short.
     if len(reason) > 300:
-        response = {"status":"0","msg":"Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."}
+        msg = gettext('Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään.')
+        response = {"status":"0","msg":msg}
         return jsonify(response)
     if len(reason) < 10 and len(bad_ids) > 0:
-        response = {"status":"0","msg":"Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10."}
+        msg = gettext('Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10.')
+        response = {"status":"0","msg":msg}
         return jsonify(response)
 
     user_id = session.get("user_id",0)
     submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking, rejections, reason)
-    response = {"status":"1","msg":"Tallennus onnistui."}
+    msg = gettext('Tallennus onnistui.')
+    response = {"status":"1","msg":msg}
     if not submission:
-        response = {"status":"0","msg":"Tallennus epäonnistui."}
+        msg = gettext('Tallennus epäonnistui')
+        response = {"status":"0","msg":msg}
     return jsonify(response)
 
 @app.route("/feedback", methods = ["GET", "POST"])
@@ -874,6 +890,30 @@ def feedback():
     if not success:
         response = {"status":"0","msg":message}
     return jsonify(response)
+
+@app.route("/language/en")
+def language_en():
+    user_id = session.get("user_id",0)
+    success = user_service.update_user_language(user_id, 'en')
+    if success:
+        response = {"status":"1", "msg": "Updated language to english!"}
+        return jsonify(response)
+
+@app.route("/language/fi")
+def language_fi():
+    user_id = session.get("user_id",0)
+    success = user_service.update_user_language(user_id, 'fi')
+    if success:
+        response = {"status":"1", "msg": "Kieli vaihdettu suomeksi!"}
+        return jsonify(response)
+
+@app.route("/language/sv")
+def language_sv():
+    user_id = session.get("user_id",0)
+    success = user_service.update_user_language(user_id, 'sv')
+    if success:
+        response = {"status":"1", "msg": "Uppdatera språket till svenska!"}
+        return jsonify(response)
 
 """
 TASKS:

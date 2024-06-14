@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Muokkaa kyselyä{% endblock %}
+{% block title %}{{ _('Muokkaa kyselyä') }}{% endblock %}
 
 {% block head %}
   <script src="{{ url_for('static', filename='js/create_survey.js') }}"></script>
@@ -19,18 +19,18 @@
   });
 </script>
 <section>
-  <h2>Kyselyn muokkaus</h2>
+  <h2>{{ _('Kyselyn muokkaus') }}</h2>
 </section>
 <section>
-  <h4>Anna käyttäjälle hallinnointioikeudet kyselyyn.</h4>
-  <label>Syötä käyttäjän sähköpostiosoite.</label><br><br>
+  <h4>{{ _('Anna käyttäjälle hallinnointioikeudet kyselyyn.') }}</h4>
+  <label>{{ _('Syötä käyttäjän sähköpostiosoite.') }}</label><br><br>
   <input type="email" name="email" id="email"><br><br>
-<button type="submit" class="btn btn-success btn-sm" name="addin_owner_time" onclick="add_owner()">Lisää käyttäjä</button>
+<button type="submit" class="btn btn-success btn-sm" name="addin_owner_time" onclick="add_owner()">{{ _('Lisää käyttäjä') }}</button>
 <br>
 </section>
 
 <section>
-  <h4>Kyselyn nimi</h4>
+  <h4>{{ _('Kyselyn nimi') }}</h4>
   <input
       type="text"
       class="form-control"
@@ -48,9 +48,9 @@
 </section>
 
 <section>
-  <h4>Vastausaika</h4>
-  <p>Voit pidentää tai lyhentää aikaväliä, jolloin kyselyyn on mahdollista vastata.</p>
-  <label>Vastausaika päättyy:</label><br/>
+  <h4>{{ _('Vastausaika') }}</h4>
+  <p>{{ _('Voit pidentää tai lyhentää aikaväliä, jolloin kyselyyn on mahdollista vastata.') }}</p>
+  <label>{{ _('Vastausaika päättyy:') }}</label><br/>
   <input 
     data-role="date"
     type="text"
@@ -61,7 +61,7 @@
     validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
     value="{{survey.end_date}}"
     >
-  <label for="endtime" class="time-label">Kello:</label>
+  <label for="endtime" class="time-label">{{ _('Kello') }}:</label>
       <select name="endtime" id="endtime" class="datetime-input-field">
         <option value="00:00" {% if survey.end_time == "00:00" %}selected{% endif %}>00:00</option>
         <option value="01:00" {% if survey.end_time == "01:00" %}selected{% endif %}>01:00</option>
@@ -95,8 +95,8 @@
 </section>
 
 <section>
-  <h4>Kyselyn kuvaus</h4>
-  <p>Voit muokata kyselyn kuvausta</p>
+  <h4>{{ _('Kyselyn kuvaus') }}</h4>
+  <p>{{ _('Voit muokata kyselyn kuvausta') }}</p>
   <textarea id="survey-information" class="form-control">{% if survey.surveyname %}{{survey.survey_description}}{% endif %}</textarea>
 </section>
 
@@ -171,10 +171,10 @@
 <input type="hidden" id="edit_choices" value="{{edit_choices}}">
 <section>
 <input type="hidden" value="{{survey_id}}" id="survey_id">
-<button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveEdit()" name="save_edit">Tallenna muutokset</button>
+<button type="submit" class="btn btn-primary" value="Tallenna muutokset" onclick="saveEdit()" name="save_edit">{{ _('Tallenna muutokset') }}</button>
 </section>
 <section>
-  <a href="/surveys/{{ survey_id }}/answers" class="btn btn-primary">Palaa kyselyn vastauksiin</a>
+  <a href="/surveys/{{ survey_id }}/answers" class="btn btn-primary">{{ _('Palaa kyselyn vastauksiin') }}</a>
 </section>
 
 {% endblock %}

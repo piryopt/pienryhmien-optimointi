@@ -1,3 +1,4 @@
+from flask_babel import gettext
 from src.repositories.feedback_repository import (
     feedback_repository as default_feedback_repository
 )
@@ -29,32 +30,32 @@ class FeedbackService:
         """
         title = data["title"]
         if len(title) < 3:
-            message = "Otsikko on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 3."
+            message = gettext('Otsikko on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 3.')
             return (False, message)
         if len(title) > 50:
-            message = "Otsikko on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 50."
+            message = gettext('Otsikko on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 50.')
             return (False, message)
 
         content = data["content"]
         if len(content) < 5:
-            message = "Sisältö on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 5."
+            message = gettext('Sisältö on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 5.')
             return (False, message)
         if len(content) > 1500:
-            message = f"Sisältö on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 1500. Merkkejä oli {len(content)}"
-            return (False, message)
+            message = gettext('Sisältö on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 1500. Merkkejä oli ')
+            return (False, message + len(content))
         
         feedback_type = data["type"]
 
         check_title = self._feedback_repository.check_unsolved_title_doesnt_exist(user_id, title)
         if not check_title:
-            message = "Olet jo luonut palautteen tällä otsikolla!"
+            message = gettext('Olet jo luonut palautteen tällä otsikolla!')
             return (False, message)
 
         success = self._feedback_repository.new_feedback(user_id, title, feedback_type, content)
         if not success:
-            message = "Palautteen antamisessa oli ongelma!"
+            message = gettext('Palautteen antamisessa oli ongelma!')
             return (False, message)
-        message = "Palautteen antaminen onnistui"
+        message = gettext('Palautteen antaminen onnistui')
         return (True, message)
     
     def get_feedback(self, feedback_id):

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Luo uusi kysely{% endblock %}
+{% block title %}{{ _('Luo uusi kysely') }}{% endblock %}
 
 {% block head %}
   <script src="{{ url_for('static', filename='js/create_survey.js') }}"></script>
@@ -25,12 +25,12 @@
            alt=""
            class="d-inline-block align-text-middle"
       >
-      Luo uusi kysely
+      {{ _('Luo uusi kysely') }}
     </h1>
 
     <section>
       <input type="hidden" id="edit_choices" value="True">
-      <h2>Kyselyn nimi</h2>
+      <h2>{{ _('Kyselyn nimi') }}</h2>
       <input
           type="text"
           class="form-control"
@@ -49,11 +49,11 @@
     </section>
 
     <section>
-      <h2>Vastausaika</h2>
-      <p>Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata.</p>
-      <label>Vastausaika päättyy:</label><br/>
+      <h2>{{ _('Vastausaika') }}</h2>
+      <p>{{ _('Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata.') }}</p>
+      <label>{{ _('Vastausaika päättyy') }}:</label><br/>
       <input data-role="date" type="text" id="end-date" class="datetime-input-field" name="enddate" validation-regex="\d\d\.\d\d\.\d\d\d\d" validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy" autocomplete="off">
-      <label for="endtime" class="time-label">Kello:</label>
+      <label for="endtime" class="time-label">{{ _('Kello') }}:</label>
       <select name="endtime" id="endtime" class="datetime-input-field">
         <option value="00:00">00:00</option>
         <option value="01:00">01:00</option>
@@ -87,21 +87,21 @@
     </section>
 
     <section>
-      <h2>Kyselyn kuvaus</h2>
-      <p>Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen. Kuvausteksti näytetään vastaajalle kyselyn yhteydessä</p>
+      <h2>{{ _('Kyselyn kuvaus') }}</h2>
+      <p>{{ _('Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen. Kuvausteksti näytetään vastaajalle kyselyn yhteydessä') }}</p>
       <textarea id="survey-information" class="form-control">{% if survey.surveyname %}{{survey.survey_description}}{% endif %}</textarea>
     </section>
 
     <section>
       <div>
-        <h3>Vaaditaanko kaikkien ryhmien järjestämistä?</h3>
+        <h3>{{ _('Vaaditaanko kaikkien ryhmien järjestämistä?') }}</h3>
         <input type="radio" name="min-choices-setting" value="hide" id="min-choices-all" data-dependant-class="min-choices-section" onclick="visibilityToggleRadioClick(event);" checked/>
-        <label for="min-choices-all">Kyllä</label>
+        <label for="min-choices-all">{{ _('Kyllä') }}</label>
         <input type="radio" name="min-choices-setting" value="show" id="min-choices-custom" data-dependant-class="min-choices-section" onclick="visibilityToggleRadioClick(event);"/>
-        <label for="min-choices-custom">Ei</label>
+        <label for="min-choices-custom">{{ _('Ei') }}</label>
       </div>
       <div class="min-choices-section hidden">
-        <label for="minchoices">Priorisoitujen ryhmien vähimmäismäärä</label>
+        <label for="minchoices">{{ _('Priorisoitujen ryhmien vähimmäismäärä') }}</label>
         <input
             type="text"
             class="form-control min-choices-section hidden"
@@ -119,14 +119,14 @@
       </div>
 
       <div>
-        <h3>Sallitaanko valintojen kieltäminen?</h3>
+        <h3>{{ _('Sallitaanko valintojen kieltäminen?') }}</h3>
         <input type="radio" name="deny-choices-setting" value="show" id="deny-choices-yes" data-dependant-class="deny-choices-section" onclick="visibilityToggleRadioClick(event);"/>
-        <label for="min-choices-all">Kyllä</label>
+        <label for="min-choices-all">{{ _('Kyllä') }}</label>
         <input type="radio" name="deny-choices-setting" value="hide" id="min-choices-no" data-dependant-class="deny-choices-section" onclick="visibilityToggleRadioClick(event);" checked/>
-        <label for="min-choices-custom">Ei</label>
+        <label for="min-choices-custom">{{ _('Ei') }}</label>
       </div>
       <div class="deny-choices-section hidden">
-        <label for="denied-choices-count">Sallittu kiellettyjen ryhmien määrä</label>
+        <label for="denied-choices-count">{{ _('Sallittu kiellettyjen ryhmien määrä') }}</label>
         <input
             type="text"
             class="form-control deny-choices-section hidden"
@@ -146,10 +146,10 @@
 
     <section>
       <div>
-        <h3>Näytetäänkö vastaajalle hakupalkki?</h3>
-        <p>Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. 
+        <h3>{{ _('Näytetäänkö vastaajalle hakupalkki?') }}</h3>
+        <p>{{ _('Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. 
           Suositeltavaa sallia kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää,
-           ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää
+           ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää') }}
         </p>
         <input 
           type="radio"
@@ -160,7 +160,7 @@
           checked
           {% endif %}
         />
-        <label for="min-choices-all">Kyllä</label>
+        <label for="min-choices-all">{{ _('Kyllä') }}</label>
         <input 
           type="radio"
           name="allow-search-visibility"
@@ -171,18 +171,18 @@
           {% endif %}
           checked
         />
-        <label for="min-choices-custom">Ei</label>
+        <label for="min-choices-custom">{{ _('Ei') }}</label>
       </div>
     </section>
 
     <section>
-      <h2>Priorisoitavat ryhmät</h2>
-      <p>Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää tietokenttä".</p>
+      <h2>{{ _('Priorisoitavat ryhmät') }}</h2>
+      <p>{{ _('Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää tietokenttä".') }}</p>
       <a href="/csv-instructions" class="text-muted">CSV-ohje</a><br>
       <input id="choiceFileInput" type="file" style="display: none;" onchange="handleFileUpload()"/>
-      <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">Tuo valinnat CSV-tiedostosta</button><br><br>
-      <p>Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *</p>
-      <p>Jos ryhmän minimikoolla ei ole väliä, syötä 0</p>
+      <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">{{ _('Tuo valinnat CSV-tiedostosta') }}</button><br><br>
+      <p>{{ _('Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *') }}</p>
+      <p>{{ _('Jos ryhmän minimikoolla ei ole väliä, syötä 0') }}</p>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
           <tr id="column-delete-btns">
@@ -198,9 +198,9 @@
             {% endif %}
           </tr>
           <tr id="choice-table-headers">
-            <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">Nimi</th>
-            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Enimmäispaikat</th>
-            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">Ryhmän minimikoko</th>
+            <th class="constant-header" col-validation-regex=".{5,}" validation-text="yli 5 merkkiä pitkiä">{{ _('Nimi') }}</th>
+            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">{{ _('Enimmäispaikat') }}</th>
+            <th class="constant-header" col-validation-regex="\d+" validation-text="kokonaislukuja">{{ _('Ryhmän minimikoko') }}</th>
           {# additional columns if template loaded with survey parameter present #}
           
           {% if survey is not none %}
@@ -211,7 +211,7 @@
             {% endif %}
           {% endif %}
 
-            <th class="variable-header" id="add-column-header">+ Lisää tietokenttä</th>
+            <th class="variable-header" id="add-column-header">+ {{ _('Lisää tietokenttä') }}</th>
           </tr>
         </thead>
         <tbody id="choiceTable" class="">
@@ -246,10 +246,10 @@
       <ul class="validation-warnings-list hidden" id="choicetable-validation-warnings">
       </ul>
 
-      <button onclick="addRow()" class="new-row-input btn btn-secondary" name="addchoice" id="add_choice">+ Lisää vaihtoehto</button>
+      <button onclick="addRow()" class="new-row-input btn btn-secondary" name="addchoice" id="add_choice">+ {{ _('Lisää vaihtoehto')}}</button>
     </section>
 
     <section>
-      <button type="submit" class="btn btn-primary" value="Luo kysely" onclick="createNewSurvey()" name="createsurvey" id="create_survey">Luo kysely</button>
+      <button type="submit" class="btn btn-primary" value="Luo kysely" onclick="createNewSurvey()" name="createsurvey" id="create_survey">{{ _('Luo kysely') }}</button>
     </section>
 {% endblock %}
