@@ -34,9 +34,11 @@ class UserRepository:
             return
         try:
             sql = "INSERT INTO users (name, email, isteacher, admin, language)" \
-                  "VALUES (:name, :email, :isteacher, False, :language)"
-            db.session.execute(text(sql), {"name":user.name, "email":user.email, "isteacher":user.isteacher, "language":"fi"})
+                  "VALUES (:name, :email, :isteacher, False, :language) RETURNING id"
+            result = db.session.execute(text(sql), {"name":user.name, "email":user.email, "isteacher":user.isteacher, "language":"fi"})
+            user_id = result.fetchone()[0]
             db.session.commit()
+            fix_unusual_symbols(user_id)
         except Exception as e: # pylint: disable=W0718
             print(e)
             return False
@@ -139,3 +141,19 @@ class UserRepository:
             return False
 
 user_repository = UserRepository()
+
+def fix_unusual_symbols(user_id):
+    """
+    SQL code for fixing å, ö, ä etc. because user registration with shibboleth parameters messes them up (i think)
+    """
+    sql = """
+    UPDATE users
+    SET name = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+            REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+            REPLACE(REPLACE(name, 'Ã¤', 'ä'), 'Ã¶', 'ö'), 'Ã¥', 'å'),
+            'Ã„', 'Ä'), 'Ã–', 'Ö'), 'Ã…', 'Å'), 'Ã©', 'é'), 'Ã¼', 'ü'),
+            'Ã ', 'à'), 'Ã«', 'ë'), 'Ãº', 'ú'), 'Ã³', 'ó')
+    WHERE id = :user_id
+    """
+    db.session.execute(text(sql), {"user_id":user_id})
+    db.session.commit()
