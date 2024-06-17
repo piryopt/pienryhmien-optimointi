@@ -38,7 +38,8 @@ def ad_login(f):
         if session.get("user_id", 0) != 0 or app.debug:
             return result
         roles = request.headers.get('eduPersonAffiliation')
-        name = request.headers.get('cn')
+        name = request.headers.get('cn').encode('latin-1').decode('utf-8')
+        print(name)
         email = request.headers.get('mail')
         role_bool = True if "faculty" in roles or "staff" in roles else False
         email_exists = user_service.find_by_email(email) # account doesn't exist, register
