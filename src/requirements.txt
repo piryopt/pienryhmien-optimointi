@@ -15,3 +15,4 @@ markdown
 Flask-WTF
 pytest-playwright
 Flask-Babel
+pandas
