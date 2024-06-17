@@ -1,57 +1,38 @@
+import re
+from io import StringIO
+import pandas as pd
 from src.repositories.survey_repository import survey_repository
 from src.repositories.survey_choices_repository import survey_choices_repository
 
-def parser_elomake_csv_to_dict(file):
+def parser_csv_to_dict(file):
     '''
-    Parses an Elomake imported CSV to a dictionary,
+    Parses an imported CSV to a dictionary,
     the dictionary is later used by parser_manual() (below)
     RETURNS dictionary that can be parsed by later functions
     '''
+    # Normalize separators: convert ',' and ';' to ';', and '","' to ';'
+    normalized_file = re.sub(r'(?<!")["]?[,;]["]?(?!")', ';', file)
+
+    f = StringIO(normalized_file)
+    reader = pd.read_csv(f, sep=';', dtype=str)
 
     ret_dict = {}
     ret_dict["choices"] = [] # array of dicts
+    columns = list(reader.columns)
+    col_count = len(columns)
 
-    file = file.split('\n')
-    row_count = len(file)
-    info_headers = []
-    first_row = file[0].split('''","''')
-    col_count = len(first_row)
+    for row in reader.values[1:]:
+        choice = {}
+        choice["name"] = row[0]
+        choice["spaces"] = row[1]
+        choice["min_size"] = row[2]
 
-    # add column headers to own array
-    for cell in first_row:
-        # remove unseen control characters etc.
-        temp = ''.join(c for c in cell if c.isprintable())
-        # remove leftover " from parsing
-        info_headers.append(temp.strip('"'))
-
-    index = 0
-    for line in file:
-        # bad, but using file[index] doesn't work
-        if index == row_count - 1:
-            break
-        if index == 0:
-            index += 1
-            continue
-
-        temp = line.split('''","''')
-        name = ''.join(c for c in temp[2] if c.isprintable())
-        spaces = ''.join(c for c in temp[3] if c.isprintable()).strip('"')
-        min_size = ''.join(c for c in temp[4] if c.isprintable()).strip('"')
-
-        # update dict/JSON
-        ret_dict["choices"].append({})
-        ret_dict["choices"][index - 1]["name"] = name
-        ret_dict["choices"][index - 1]["spaces"] = spaces
-        ret_dict["choices"][index - 1]["min_size"] = min_size
-
-        i = 5
+        i = 3
         while i < col_count:
-            temp_string = ''.join(c for c in temp[i] if c.isprintable())
-            # update dict/JSON
-            ret_dict["choices"][index - 1][info_headers[i]] = temp_string.strip('"')
+            choice[columns[i]] = row[i]
             i += 1
 
-        index += 1
+        ret_dict.get("choices").append(choice)
 
     return ret_dict
 

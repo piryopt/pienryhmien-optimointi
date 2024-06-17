@@ -15,7 +15,7 @@ from src.services.survey_owners_service import survey_owners_service
 from src.services.feedback_service import feedback_service
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, convert_date, convert_time, hungarian_results
 from src.tools.rankings_converter import convert_to_list, convert_to_string
-from src.tools.parsers import parser_elomake_csv_to_dict
+from src.tools.parsers import parser_csv_to_dict
 from src.entities.user import User
 #from src.tools.db_data_gen import gen_data
 
@@ -38,7 +38,7 @@ def ad_login(f):
         if session.get("user_id", 0) != 0 or app.debug:
             return result
         roles = request.headers.get('eduPersonAffiliation')
-        name = request.headers.get('cn')
+        name = request.headers.get('cn').encode('latin-1').decode('utf-8')
         email = request.headers.get('mail')
         role_bool = True if "faculty" in roles or "staff" in roles else False
         email_exists = user_service.find_by_email(email) # account doesn't exist, register
@@ -224,7 +224,7 @@ def import_survey_choices():
     Post method for creating a new survey when it uses data imported from a csv file.
     """
     data = request.get_json()
-    return jsonify(parser_elomake_csv_to_dict(data['uploadedFileContent'])["choices"])
+    return jsonify(parser_csv_to_dict(data['uploadedFileContent'])["choices"])
 
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:

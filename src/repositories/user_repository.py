@@ -34,19 +34,8 @@ class UserRepository:
             return
         try:
             sql = "INSERT INTO users (name, email, isteacher, admin, language)" \
-                  "VALUES (:name, :email, :isteacher, False, :language) RETURNING id"
-            result = db.session.execute(text(sql), {"name":user.name, "email":user.email, "isteacher":user.isteacher, "language":"fi"})
-            user_id = result.fetchone()[0]
-            sql = """
-                UPDATE users
-                SET name = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-                       REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-                       REPLACE(REPLACE(REPLACE(name, 'Ã¤', 'ä'), 'Ã¶', 'ö'), 'Ã¥', 'å'),
-                       'Ã„', 'Ä'), 'Ã–', 'Ö'), 'Ã…', 'Å'), 'Ã©', 'é'), 'Ã¼', 'ü'),
-                       'Ã ', 'à'), 'Ã«', 'ë'), 'Ãº', 'ú'), 'Ã³', 'ó'), 'Ã¡', 'á')
-                WHERE id = :user_id
-            """
-            db.session.execute(text(sql), {"user_id":user_id})
+                  "VALUES (:name, :email, :isteacher, False, :language)"
+            db.session.execute(text(sql), {"name":user.name, "email":user.email, "isteacher":user.isteacher, "language":"fi"})
             db.session.commit()
         except Exception as e: # pylint: disable=W0718
             print(e)

@@ -10,7 +10,7 @@ from src.repositories.survey_owners_repository import (
 from src.repositories.survey_choices_repository import (
     survey_choices_repository as default_survey_choices_repository
 )
-from src.tools.parsers import parser_elomake_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
+from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 from src.tools.date_converter import time_to_close
 from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
@@ -163,10 +163,10 @@ class SurveyService:
 
     def create_survey_from_csv(self, file):
         '''
-        Calls tools.parsers Elomake csv to dict parser
+        Calls tools.parsers csv to dict parser
         RETURNS the dictionary
         '''
-        return parser_elomake_csv_to_dict(file) # in tools
+        return parser_csv_to_dict(file) # in tools
     
     def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices=0, allow_search_visibility=True):
         '''
