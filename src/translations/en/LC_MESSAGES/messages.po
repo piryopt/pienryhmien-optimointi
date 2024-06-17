@@ -318,6 +318,10 @@ msgstr ""
 "Enter the groups that the survey respondent can prioritize in order of preference. Also, provide the maximum size for each group. If desired, you can "
 "add additional information about each item in separate columns. Create a new column by clicking on \"+ Add Field.\""
 
+#: templates/create_survey.html:181
+msgid "CSV-ohje"
+msgstr "CSV guide"
+
 #: templates/create_survey.html:183
 msgid "Tuo valinnat CSV-tiedostosta"
 msgstr "Import selections from a CSV file."

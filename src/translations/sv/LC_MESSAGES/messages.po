@@ -357,6 +357,10 @@ msgstr ""
 "objekt i sina egna kolumner. Lägg till en kolumn genom att "
 "klicka på \"+ Lägg till fält\"."
 
+#: templates/create_survey.html:181
+msgid "CSV-ohje"
+msgstr "CSV guide"
+
 #: templates/create_survey.html:183
 msgid "Tuo valinnat CSV-tiedostosta"
 msgstr "Importera val från en CSV-fil"

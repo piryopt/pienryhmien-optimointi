@@ -335,6 +335,10 @@ msgid ""
 "painamalla \"+ Lisää tietokenttä\"."
 msgstr ""
 
+#: templates/create_survey.html:181
+msgid "CSV-ohje"
+msgstr ""
+
 #: templates/create_survey.html:183
 msgid "Tuo valinnat CSV-tiedostosta"
 msgstr ""
