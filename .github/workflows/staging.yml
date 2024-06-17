@@ -3,7 +3,7 @@ name: Deploy to staging
 on:
   push:
     branches:
-      - name_fixes
+      - main
 jobs:
 
   build-and-push:
