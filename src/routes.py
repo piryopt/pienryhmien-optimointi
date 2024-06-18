@@ -792,8 +792,15 @@ def privacy_policy():
     Route returns the Privacy Policy -page linked in the footer
     """
     privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'Tietosuojaseloste.md'
+    title = "Tietosuojaseloste"
+    if session.get("language", 0) == 'en':
+        privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'privacypolicy-en.md'
+        title = "Privacy policy"
+    elif session.get("language", 0) == 'sv':
+        privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'privacypolicy-sv.md'
+        title = "Integritets policy"
     content = open(privacy_policy_file, 'r', encoding='utf-8').read()
-    return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
+    return render_template("content-page.html", content=markdown.markdown(content), title=title)
 
 @app.route("/faq")
 def faq():
