@@ -314,13 +314,7 @@ msgid "Näytetäänkö vastaajalle hakupalkki?"
 msgstr ""
 
 #: templates/create_survey.html:150
-msgid ""
-"Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja "
-"sen nimen ja vaihtoehtojen perusteella. \n"
-"          Suositeltavaa sallia kyselyille joissa on runsaasti "
-"vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää,\n"
-"           ja vastaavasti kieltää kyselyille joissa on vähän "
-"vastausvaihtoehtoja joista kaikki tulee järjestää"
+msgid "Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää, ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää"
 msgstr ""
 
 #: templates/create_survey.html:179 templates/group_sizes.html:35
@@ -329,10 +323,8 @@ msgstr ""
 
 #: templates/create_survey.html:180
 msgid ""
-"Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen."
-" Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä "
-"lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda "
-"painamalla \"+ Lisää tietokenttä\"."
+"Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä "
+"lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla \"+ Lisää tietokenttä\"."
 msgstr ""
 
 #: templates/create_survey.html:181

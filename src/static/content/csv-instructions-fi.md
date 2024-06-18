@@ -13,7 +13,7 @@ Kolmessa ensimmäisessä kohdassa nimellä ei ole väliä (Päiväkodin nimi, ni
 Ylläolevaan kyselyn vastaaminen tuottaa tälläisen CSV-tiedoston, joka löytyy Elomakkeen kohdasta lomakeraportti:
 <img src="/static/images/csv-report-view.png" alt="Lomakeraportti">
 
-<strong>Kaksi ensimmäistä saraketta ovat turhia, joten poista ne luodusta .csv tiedostosta.</strong> 
+<strong>Kaksi ensimmäistä saraketta ovat turhia (Tall.id, Tallennusaika), joten poista ne luodusta .csv tiedostosta.</strong> 
 
 ## Muuta
 Ainoat pakolliset kentät ovat kohteen nimi, paikkamäärä ja ryhmien minimikoko. .csv tiedoston erottajalla ei ole väliä (voi olla , tai ; tai "," tms.), sillä Jakaja muuttaa ne automaattisesti ;. Alla oleva kuva näyttää esimerkkitiedoston muodon:
