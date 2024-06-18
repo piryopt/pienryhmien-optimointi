@@ -171,6 +171,18 @@ msgstr "Error. Update of group sizes failed."
 msgid "Ryhmäkoot päivitetty"
 msgstr "Group sizes updated."
 
+#: templates/base.html:38
+msgid "Tilastot"
+msgstr "Statistics"
+
+#: templates/base.html:39 templates/feedback.html:3 templates/feedback.html:10 templates/feedback.html:19
+msgid "Palaute"
+msgstr "Feedback"
+
+#: templates/base.html:40
+msgid "Aktiiviset kyselyt"
+msgstr "Open surveys"
+
 #: templates/base.html:49
 msgid "Kirjaudu ulos"
 msgstr "Log out"
