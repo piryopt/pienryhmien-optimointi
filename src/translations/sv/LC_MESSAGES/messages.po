@@ -171,18 +171,6 @@ msgstr "Störning. Uppdatering av gruppstorlekar misslyckades"
 msgid "Ryhmäkoot päivitetty"
 msgstr "Gruppstorlekar uppdaterade"
 
-#: templates/base.html:38
-msgid "Tilastot"
-msgstr "Statistik"
-
-#: templates/base.html:39 templates/feedback.html:3 templates/feedback.html:10 templates/feedback.html:19
-msgid "Palaute"
-msgstr "Feedback"
-
-#: templates/base.html:40
-msgid "Aktiiviset kyselyt"
-msgstr "Aktiva enkäter"
-
 #: templates/base.html:49
 msgid "Kirjaudu ulos"
 msgstr "Logga ut"
