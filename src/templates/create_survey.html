@@ -147,9 +147,7 @@
     <section>
       <div>
         <h3>{{ _('Näytetäänkö vastaajalle hakupalkki?') }}</h3>
-        <p>{{ _('Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. 
-          Suositeltavaa sallia kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää,
-           ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää') }}
+        <p>{{ _('Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää, ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää') }}
         </p>
         <input 
           type="radio"
@@ -178,7 +176,7 @@
     <section>
       <h2>{{ _('Priorisoitavat ryhmät') }}</h2>
       <p>{{ _('Syötä ryhmät jotka kyselyyn vastaaja voi asettaa mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla "+ Lisää tietokenttä".') }}</p>
-      <a href="/csv-instructions" class="text-muted">CSV-ohje</a><br>
+      <a href="/csv-instructions" class="text-muted">{{ _('CSV-ohje') }}</a><br>
       <input id="choiceFileInput" type="file" style="display: none;" onchange="handleFileUpload()"/>
       <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">{{ _('Tuo valinnat CSV-tiedostosta') }}</button><br><br>
       <p>{{ _('Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *') }}</p>

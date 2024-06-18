@@ -792,26 +792,47 @@ def privacy_policy():
     Route returns the Privacy Policy -page linked in the footer
     """
     privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'Tietosuojaseloste.md'
+    title = "Tietosuojaseloste"
+    if session.get("language", 0) == 'en':
+        privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'privacypolicy-en.md'
+        title = "Privacy policy"
+    elif session.get("language", 0) == 'sv':
+        privacy_policy_file = Path(__file__).parents[0] / 'static' / 'content' / 'privacypolicy-sv.md'
+        title = "Integritets policy"
     content = open(privacy_policy_file, 'r', encoding='utf-8').read()
-    return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
+    return render_template("content-page.html", content=markdown.markdown(content), title=title)
 
 @app.route("/faq")
 def faq():
     """
     Route returns the Frequently Asked Questions -page linked in the footer
     """
-    faq_file = Path(__file__).parents[0] / 'static' / 'content' / 'faq.md'
+    faq_file = Path(__file__).parents[0] / 'static' / 'content' / 'faq-fi.md'
+    title="UKK"
+    if session.get("language", 0) == 'en':
+        faq_file = Path(__file__).parents[0] / 'static' / 'content' / 'faq-en.md'
+        title = "FAQ"
+    elif session.get("language", 0) == 'sv':
+        faq_file = Path(__file__).parents[0] / 'static' / 'content' / 'faq-sv.md'
+        title = "FAQ"
     content = open(faq_file, 'r', encoding='utf-8').read()
-    return render_template("content-page.html", content=markdown.markdown(content), title="UKK")
+    return render_template("content-page.html", content=markdown.markdown(content), title=title)
 
 @app.route("/csv-instructions")
 def csv_instructions():
     """
-    Route returns the Privacy Policy -page linked in the footer
+    Route returns the csv instructions -page linked in the footer
     """
-    csv_file = Path(__file__).parents[0] / 'static' / 'content' / 'csv-instructions.md'
+    csv_file = Path(__file__).parents[0] / 'static' / 'content' / 'csv-instructions-fi.md'
+    title="CSV ohjeet"
+    if session.get("language", 0) == 'en':
+        csv_file = Path(__file__).parents[0] / 'static' / 'content' / 'csv-instructions-en.md'
+        title = "CSV instructions"
+    elif session.get("language", 0) == 'sv':
+        csv_file = Path(__file__).parents[0] / 'static' / 'content' / 'csv-instructions-sv.md'
+        title = "CSV guide"
     content = open(csv_file, 'r', encoding='utf-8').read()
-    return render_template("content-page.html", content=markdown.markdown(content), title="Tietosuojaseloste")
+    return render_template("content-page.html", content=markdown.markdown(content), title=title)
 
 @app.route("/get_choices/<string:survey_id>", methods=["POST"])
 def get_choices(survey_id):
