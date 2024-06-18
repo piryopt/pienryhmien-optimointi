@@ -287,7 +287,7 @@ msgstr "Minimum number of prioritized groups"
 
 #: templates/create_survey.html:122
 msgid "Sallitaanko valintojen kieltäminen?"
-msgstr "Are denials of selections allowed?"
+msgstr "Can participants deny selections?"
 
 #: templates/create_survey.html:129
 msgid "Sallittu kiellettyjen ryhmien määrä"
@@ -295,13 +295,10 @@ msgstr "Allowed number of denied groups"
 
 #: templates/create_survey.html:149
 msgid "Näytetäänkö vastaajalle hakupalkki?"
-msgstr "Show users the search bar?"
+msgstr "Show the search bar?"
 
 #: templates/create_survey.html:150
-msgid ""
-"Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. \n"
-"          Suositeltavaa sallia kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää,\n"
-"           ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää"
+msgid "Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei tarvitse järjestää, ja vastaavasti kieltää kyselyille joissa on vähän vastausvaihtoehtoja joista kaikki tulee järjestää"
 msgstr ""
 "Through the search bar, the respondent can filter options based on their name and choices. It is advisable to allow for surveys with numerous response "
 "options, not all of which need to be organized, and conversely, to disallow surveys with few response options where all must be organized."
@@ -316,7 +313,7 @@ msgid ""
 "lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen voit luoda painamalla \"+ Lisää tietokenttä\"."
 msgstr ""
 "Enter the groups that the survey respondent can prioritize in order of preference. Also, provide the maximum size for each group. If desired, you can "
-"add additional information about each item in separate columns. Create a new column by clicking on \"+ Add Field.\""
+"add additional information about each item in separate columns. Create a new column by clicking on \"+ Add Field\"."
 
 #: templates/create_survey.html:181
 msgid "CSV-ohje"
