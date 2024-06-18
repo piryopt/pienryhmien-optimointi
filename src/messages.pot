@@ -184,19 +184,6 @@ msgstr ""
 msgid "Ryhmäkoot päivitetty"
 msgstr ""
 
-#: templates/base.html:38
-msgid "Tilastot"
-msgstr ""
-
-#: templates/base.html:39 templates/feedback.html:3 templates/feedback.html:10
-#: templates/feedback.html:19
-msgid "Palaute"
-msgstr ""
-
-#: templates/base.html:40
-msgid "Aktiiviset kyselyt"
-msgstr ""
-
 #: templates/base.html:49
 msgid "Kirjaudu ulos"
 msgstr ""
