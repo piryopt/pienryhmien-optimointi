@@ -68,6 +68,8 @@ FUNCTIONS:
 """
 def check_if_owner(survey_id):
     current_user_id = session.get("user_id", 0)
+    if user_service.check_if_admin(current_user_id):
+        return True
     owner_true = survey_owners_service.check_if_user_is_survey_owner(survey_id, current_user_id)
     return owner_true
 
