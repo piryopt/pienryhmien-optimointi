@@ -10,13 +10,16 @@ from src.repositories.survey_owners_repository import (
 from src.repositories.survey_choices_repository import (
     survey_choices_repository as default_survey_choices_repository
 )
+from src.services.user_service import (
+    user_service as default_user_service
+)
 from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 from src.tools.date_converter import time_to_close
 from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
 
 class SurveyService:
-    def __init__(self, survey_repositroy=default_survey_repository, survey_owners_repository = default_survey_owners_repository, choices_repository = default_survey_choices_repository):
+    def __init__(self, survey_repositroy=default_survey_repository, survey_owners_repository = default_survey_owners_repository, choices_repository = default_survey_choices_repository, user_service = default_user_service):
         """
         Initalizes the service for surveys with the repositories needed. The purpose of this class is to handle what happens after the SQL code in the
         corresponding repository
@@ -25,12 +28,14 @@ class SurveyService:
             survey_repository: The repository for surveys
             survey_owners_repository: The repository for survey owners
             choices_repository: The repository for survey choices
+            user_service: The service for users
 
 
         """
         self._survey_repository = survey_repositroy
         self._survey_owners_repository = survey_owners_repository
         self._choices_repository = choices_repository
+        self._user_service = user_service
 
     def get_survey(self, survey_id):
         """
@@ -78,7 +83,8 @@ class SurveyService:
             return False
         # Only a survey owner can close it
         owner_exists = self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
-        if not owner_exists:
+        admin = self._user_service.check_if_admin(user_id)
+        if not owner_exists and not admin:
             return False
         return self._survey_repository.close_survey(survey_id)
 
@@ -95,7 +101,8 @@ class SurveyService:
             return False
         # Only a survey owner can open it
         owner_exists = self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
-        if not owner_exists:
+        admin = self._user_service.check_if_admin(user_id)
+        if not owner_exists and not admin:
             return False
         if self._survey_repository.survey_name_exists(survey.surveyname, user_id):
             return False
