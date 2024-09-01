@@ -21,7 +21,7 @@ def parser_csv_to_dict(file):
     columns = list(reader.columns)
     col_count = len(columns)
 
-    for row in reader.values[1:]:
+    for row in reader.values:
         choice = {}
         choice["name"] = row[0]
         choice["spaces"] = row[1]
