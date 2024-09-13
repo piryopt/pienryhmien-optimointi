@@ -4,6 +4,8 @@
 
 ### Project description
 
+https://jakaja.it.helsinki.fi/
+
 This is the repository of the final product of the [Software Engineering Lab course](https://studies.helsinki.fi/courses/cur/otm-96ddc0a9-a15b-4717-bfdc-23872092b730) (the department of Computer Science in University of Helsinki): [the **Jakaja** application](https://jakaja.it.helsinki.fi/).
 
 The Jakaja application is designed for the Faculty of Educational Sciences of the University of Helsinki. The customers challenge is assigning large numbers of students into groups. In the past the group assignment was handled manually with Excel sheets, being slow and tedious. Freely available application solutions are not suitable for large groups and it's difficult to take exceptions into account. The jakaja application is designed to fix the issue. 
