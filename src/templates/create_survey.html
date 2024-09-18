@@ -95,6 +95,7 @@
     <section>
       <div>
         <h3>{{ _('Vaaditaanko kaikkien ryhmien järjestämistä?') }}</h3>
+        <p>{{ _('Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)') }}</p>
         <input type="radio" name="min-choices-setting" value="hide" id="min-choices-all" data-dependant-class="min-choices-section" onclick="visibilityToggleRadioClick(event);" checked/>
         <label for="min-choices-all">{{ _('Kyllä') }}</label>
         <input type="radio" name="min-choices-setting" value="show" id="min-choices-custom" data-dependant-class="min-choices-section" onclick="visibilityToggleRadioClick(event);"/>
@@ -181,6 +182,7 @@
       <button onclick="uploadChoiceFileBtn()" class="btn btn-secondary" name="uploadChoiceFile">{{ _('Tuo valinnat CSV-tiedostosta') }}</button><br><br>
       <p>{{ _('Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *') }}</p>
       <p>{{ _('Jos ryhmän minimikoolla ei ole väliä, syötä 0') }}</p>
+      <p>{{ _('HUOM! Ryhmät, jotka eivät saavuta jaossa minimikokoa, tiputetaan jaosta.') }}</p>
       <table class="table table-dark table-striped table-hover choice-table-main">
         <thead class="">
           <tr id="column-delete-btns">

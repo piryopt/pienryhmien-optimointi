@@ -273,6 +273,10 @@ msgstr ""
 msgid "Vaaditaanko kaikkien ryhmien järjestämistä?"
 msgstr "Is organizing all groups required?"
 
+#: templates/create_survey.html:98
+msgid "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)"
+msgstr "It is recommended that all groups be organized unless there is a large number of them (>10)."
+
 #: templates/create_survey.html:99 templates/create_survey.html:124 templates/create_survey.html:163 templates/surveys.html:49
 msgid "Kyllä"
 msgstr "Yes"
@@ -332,6 +336,10 @@ msgstr ""
 #: templates/create_survey.html:185
 msgid "Jos ryhmän minimikoolla ei ole väliä, syötä 0"
 msgstr "If the minimum size of the group doesn't matter, enter 0."
+
+#: templates/create_survey.html:186
+msgid "HUOM! Ryhmät, jotka eivät saavuta jaossa minimikokoa, tiputetaan jaosta."
+msgstr "NOTE! Groups that do not meet the minimum size in the distribution will be dropped from the allocation."
 
 #: templates/create_survey.html:201 templates/group_sizes.html:41 templates/results.html:49
 msgid "Nimi"

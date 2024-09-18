@@ -285,6 +285,10 @@ msgstr ""
 msgid "Vaaditaanko kaikkien ryhmien järjestämistä?"
 msgstr ""
 
+#: templates/create_survey.html:98
+msgid "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)"
+msgstr ""
+
 #: templates/create_survey.html:99 templates/create_survey.html:124
 #: templates/create_survey.html:163 templates/surveys.html:28
 #: templates/surveys.html:49
@@ -343,6 +347,10 @@ msgstr ""
 
 #: templates/create_survey.html:185
 msgid "Jos ryhmän minimikoolla ei ole väliä, syötä 0"
+msgstr ""
+
+#: templates/create_survey.html:186
+msgid "HUOM! Ryhmät, jotka eivät saavuta jaossa minimikokoa, tiputetaan jaosta."
 msgstr ""
 
 #: templates/create_survey.html:201 templates/group_sizes.html:41
