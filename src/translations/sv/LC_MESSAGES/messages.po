@@ -267,6 +267,11 @@ msgstr "Här kan du ange en beskrivning av enkäten och instruktioner för att s
 msgid "Vaaditaanko kaikkien ryhmien järjestämistä?"
 msgstr "Krävs det att alla grupper ordnas?"
 
+#: templates/create_survey.html:98
+msgid "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)"
+msgstr "Det rekommenderas att alla grupper organiseras om det inte finns ett stort antal (>10)."
+
+
 #: templates/create_survey.html:99 templates/create_survey.html:124 templates/create_survey.html:163 templates/surveys.html:28 templates/surveys.html:49
 msgid "Kyllä"
 msgstr "Ja"
@@ -323,6 +328,10 @@ msgstr "Om du vill att informationen för en viss kolumn inte ska visas för res
 #: templates/create_survey.html:185
 msgid "Jos ryhmän minimikoolla ei ole väliä, syötä 0"
 msgstr "Om det inte spelar roll med minimistorleken, ange 0"
+
+#: templates/create_survey.html:186
+msgid "HUOM! Ryhmät, jotka eivät saavuta jaossa minimikokoa, tiputetaan jaosta."
+msgstr "OBS! Grupper som inte når minimistorleken i fördelningen kommer att tas bort från fördelningen."
 
 #: templates/create_survey.html:201 templates/group_sizes.html:41 templates/results.html:49
 msgid "Nimi"
