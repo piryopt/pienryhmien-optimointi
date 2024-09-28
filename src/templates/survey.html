@@ -34,7 +34,8 @@
         <div class="row">
             <div class="col-sm">
                 <p>
-                    <i>{{ _('Raahaa oikean reunan listasta vähintään') }} {{ survey[2] }} {{ _('vaihtoehtoa vihreään laatikkoon') }}. {% if additional_info %}{{ _('Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa') }}.{% endif %}</i>
+                    <i>{{ _('Raahaa oikean reunan listasta vähintään') }} {{ survey[2] }} {{ _('vaihtoehtoa vihreään laatikkoon') }}.</i>
+                    {% if additional_info %}<i style="color: #0bdb2ed6;">{{ _('Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa') }}.</i>{% endif %}
                 </p>
             </div>
             {% if survey[8] %}
