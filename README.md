@@ -5,6 +5,7 @@
 ### Project description
 
 https://jakaja.it.helsinki.fi/
+https://jakaja-test.it.helsinki.fi/
 
 This is the repository of the final product of the [Software Engineering Lab course](https://studies.helsinki.fi/courses/cur/otm-96ddc0a9-a15b-4717-bfdc-23872092b730) (the department of Computer Science in University of Helsinki): [the **Jakaja** application](https://jakaja.it.helsinki.fi/).
 
