@@ -62,7 +62,7 @@ Students:
 - Boris Banchev
 - Joni Ursin
 - Sasu Paukku
-- Nanna Ilona
+- Nanna Ketola
 - Tomi
 - Niilo Kuronen
 
