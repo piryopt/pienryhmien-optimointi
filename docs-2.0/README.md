@@ -5,26 +5,23 @@ The system helps assign students into groups based on their preferences, using t
 
 The goal of **Jakaja 2.0** is to extend and refine the original system to better handle real-world requirements and improve maintainability.
 
----
-
 ## Differences from Jakaja 1.0
 
 ### Improvements
 
-    - **Group size constraints:**
-        - Teachers can define **minimum and maximum group sizes**
-        - Group size rules are **stronger than student preferences** (unpopular groups must still reach a minimum size)
-        -
+- **Group size constraints:**
 
-    - **Multi-dimensional preferences:**
-        - Instead of only a single theme, students can express preferences along **two axes** (*topic* and *schedule*, or *placement* and *partner experience*)
-        - The assignment algorithm considers both dimensions in optimization
+  - Teachers can define **minimum and maximum group sizes**
+  - Group size rules are **stronger than student preferences** (unpopular groups must still reach a minimum size)
 
-    - **Priority groups:**
-        - Teachers can assign higher or lower **priority weights** to certain groups
-        - Algorithm adapts to balance preferences with these weights
+- **Multi-dimensional preferences:**
 
----
+  - Instead of only a single theme, students can express preferences along **two axes** (_topic_ and _schedule_, or _placement_ and _partner experience_)
+  - The assignment algorithm considers both dimensions in optimization
+
+- **Priority groups:**
+  - Teachers can assign higher or lower **priority weights** to certain groups
+  - Algorithm adapts to balance preferences with these weights
 
 ### Demos
 
@@ -37,18 +34,13 @@ The goal of **Jakaja 2.0** is to extend and refine the original system to better
 
 ### Project practicalities and progress documentation
 
-- [Definition of done](!)
-- [Product backlog](!)
+- [Definition of done](https://github.com/piryopt/pienryhmien-optimointi/tree/main/docs-2.0/definition_of_done.md)
+- [Product backlog](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=1#gid=1)
 - Sprint backlogs
 
-  - [Sprint 1](!)
-  - [Sprint 2](!)
-  - [Sprint 3](!)
-  - [Sprint 4](!)
-  - [Sprint 5](!)
-  - [Sprint 6](!)
+  - [Sprint 0](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=1494077212#gid=1494077212)
 
-- [Working hours](!)
+- [Working hours](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=1447160151#gid=1447160151)
 
 ### Project team communication
 
@@ -62,7 +54,7 @@ Students:
 - Boris Banchev
 - Joni Ursin
 - Sasu Paukku
-- Nanna Ilona
+- Nanna Ketola
 - Tomi
 - Niilo Kuronen
 
