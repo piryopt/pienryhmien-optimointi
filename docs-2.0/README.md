@@ -55,7 +55,7 @@ Students:
 - Joni Ursin
 - Sasu Paukku
 - Nanna Ketola
-- Tomi
+- Tomi Poutanen
 - Niilo Kuronen
 
 Supervisor:
