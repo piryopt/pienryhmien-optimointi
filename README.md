@@ -22,7 +22,7 @@ The Jakaja application uses [The Hungarian Algorithm](https://en.wikipedia.org/w
 ### Product documentation
 
 - [Application architecture](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/architecture.md)
-- [Application logic](https://github.com/piryopt/pienryhmien-optimointi/blob/doc_changes/documentation/process_flow_chart.pdf)
+- [Application logic](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/process_flow_chart.pdf)
 - [The hungarian Algorithm description](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md)
 - [Database documentation](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/database_docs/)
 - [User guide for local testing](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/user_guide.md)
