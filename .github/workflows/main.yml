@@ -22,6 +22,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+          -c max_connection=200
 
     steps:
       - uses: actions/checkout@v2
@@ -32,13 +33,11 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --no-root
       - name: Create .env file
         run: |
-          cd src
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
-          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env
-          cd ../
+          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env 
       - name: Run migrations
         run: psql -f schema.sql postgresql://postgres:postgres@localhost:5432/postgres
       - name: Run pytest tests
@@ -54,7 +53,7 @@ jobs:
           poetry run python -m playwright install --with-deps
           poetry run flask run --debug &
           poetry run pytest tests/playwright/survey_testing.py --browser firefox
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-report

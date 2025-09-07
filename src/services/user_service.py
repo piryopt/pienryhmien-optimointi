@@ -140,7 +140,7 @@ class UserService:
             user_id: The id of the user
         """
         user = self._user_repository.get_user_data(user_id)
-        return user.isteacher
+        return user.isteacher if user else False
     
     def check_if_admin(self, user_id):
         """
@@ -150,7 +150,7 @@ class UserService:
             user_id: The id of the user
         """
         user = self._user_repository.get_user_data(user_id)
-        return user.admin
+        return user.admin if user else False
     
     def len_all_students(self):
         """
