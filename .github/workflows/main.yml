@@ -35,10 +35,8 @@ jobs:
         run: poetry install --no-root
       - name: Create .env file
         run: |
-          cd src
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
-          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env
-          cd ../
+          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env 
       - name: Run migrations
         run: psql -f schema.sql postgresql://postgres:postgres@localhost:5432/postgres
       - name: Run pytest tests
