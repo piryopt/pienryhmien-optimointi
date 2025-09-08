@@ -1,4 +1,4 @@
-import re
+import csv
 from io import StringIO
 import pandas as pd
 from src.repositories.survey_repository import survey_repository
@@ -10,29 +10,32 @@ def parser_csv_to_dict(file):
     the dictionary is later used by parser_manual() (below)
     RETURNS dictionary that can be parsed by later functions
     '''
-    # Normalize separators: convert ',' and ';' to ';', and '","' to ';'
-    normalized_file = re.sub(r'(?<!")["]?[,;]["]?(?!")', ';', file)
 
-    f = StringIO(normalized_file)
-    reader = pd.read_csv(f, sep=';', dtype=str)
+    f = StringIO(file)
 
-    ret_dict = {}
-    ret_dict["choices"] = [] # array of dicts
+    try:
+        dialect = csv.Sniffer().sniff(file[:1024])
+        delimiter = dialect.delimiter
+    except Exception:
+        delimiter = ';'
+
+    reader = pd.read_csv(f, sep=delimiter, dtype=str)
+
+    ret_dict = {"choices": []}
     columns = list(reader.columns)
     col_count = len(columns)
 
     for row in reader.values:
-        choice = {}
-        choice["name"] = row[0]
-        choice["spaces"] = row[1]
-        choice["min_size"] = row[2]
+        choice = {
+            "name": row[0],
+            "spaces": row[1],
+            "min_size": row[2]
+        }
 
-        i = 3
-        while i < col_count:
+        for i in range(3, col_count):
             choice[columns[i]] = row[i]
-            i += 1
 
-        ret_dict.get("choices").append(choice)
+        ret_dict["choices"].append(choice)
 
     return ret_dict
 
