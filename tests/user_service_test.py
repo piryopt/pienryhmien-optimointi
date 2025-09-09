@@ -29,6 +29,7 @@ class TestUserService(unittest.TestCase):
         self.ur.register(user1)
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 

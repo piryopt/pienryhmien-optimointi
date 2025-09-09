@@ -27,6 +27,7 @@ class TestFeedbackRepository(unittest.TestCase):
         self.user_id = ur.find_by_email(user1.email)[0]
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 

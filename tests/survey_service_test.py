@@ -56,6 +56,7 @@ class TestSurveyService(unittest.TestCase):
         self.user_email = user1.email
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 
@@ -334,7 +335,7 @@ class TestSurveyService(unittest.TestCase):
         ss.set_survey_deleted_true(survey_id1)
         surveys = ss.get_all_active_surveys()
         self.assertEqual(1, len(surveys))
-        
+
     def test_len_active_surveys(self):
         """
         Test that the length of all active surveys is correct

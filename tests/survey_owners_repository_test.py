@@ -34,6 +34,7 @@ class TestSurveyOwnersRepository(unittest.TestCase):
         self.user_id3 = ur.find_by_email(user3.email)[0]
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 
@@ -54,7 +55,7 @@ class TestSurveyOwnersRepository(unittest.TestCase):
         success_add = sor.add_owner_to_survey("ITSNOTREAL", self.user_id)
         self.assertEqual(success_add, False)
 
-    def test_add_owner_invalid_survey(self):
+    def test_get_owner_invalid_survey(self):
         """
         Test that you cannot get an invalid owner from an invalid survey
         """

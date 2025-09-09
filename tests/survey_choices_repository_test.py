@@ -36,6 +36,7 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.choice_id2 = scr.create_new_survey_choice(self.survey_id, "choice 2", 10, 5)
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 

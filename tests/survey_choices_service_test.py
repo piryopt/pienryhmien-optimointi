@@ -48,6 +48,7 @@ class TestSurveyChoicesService(unittest.TestCase):
         sos.add_owner_to_survey(self.survey_id, self.user_email)
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 
@@ -135,7 +136,7 @@ class TestSurveyChoicesService(unittest.TestCase):
     def test_add_empty_survey_choice(self):
         """
         Tests that function add_empty_survey_choice() adds an empty choice
-        with the name "Tyhjä" and the number of seats given when the 
+        with the name "Tyhjä" and the number of seats given when the
         function was called
         """
         scs.add_empty_survey_choice(self.survey_id, 3)

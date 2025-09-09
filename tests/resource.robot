@@ -88,7 +88,7 @@ Drag To Green Box Bottom
 
     ${green box}=  Get Vertical Position  ${choice}
     ${green box}=  Evaluate  ${green box} + 55
-    [Return]  ${green box}
+    RETURN  ${green box}
 
 Go To Survey Answers Page
     [Arguments]  ${survey url}
