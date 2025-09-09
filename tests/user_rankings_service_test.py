@@ -48,6 +48,7 @@ class TestUserRankingsService(unittest.TestCase):
         sos.add_owner_to_survey(self.survey_id, self.user_email)
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 

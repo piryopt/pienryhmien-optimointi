@@ -35,6 +35,7 @@ class TestFeedbackService(unittest.TestCase):
         self.data["content"] = "Testikattavuus voisi olla parempi"
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 

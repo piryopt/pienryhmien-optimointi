@@ -22,7 +22,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          -c max_connection=200
 
     steps:
       - uses: actions/checkout@v2
@@ -37,7 +36,7 @@ jobs:
       - name: Create .env file
         run: |
           echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
-          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env 
+          echo "SECRET_KEY=4d0073b79d64862d5db725bdc5a11ba7" >> .env
       - name: Run migrations
         run: psql -f schema.sql postgresql://postgres:postgres@localhost:5432/postgres
       - name: Run pytest tests

@@ -36,6 +36,7 @@ class TestUserRankingsRepository(unittest.TestCase):
         urr.add_user_ranking(self.user_id, self.survey_id, self.ranking, "", "")
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 

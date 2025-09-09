@@ -39,6 +39,7 @@ class TestSurveyRepository(unittest.TestCase):
         self.user_id3 = ur.find_by_email(user3.email)[0]
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 

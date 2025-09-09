@@ -38,6 +38,7 @@ class TestSurveyOwnersService(unittest.TestCase):
         self.user_email_student = user2.email
 
     def tearDown(self):
+        db.session.remove()
         db.drop_all()
         self.app_context.pop()
 
