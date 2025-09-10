@@ -74,13 +74,17 @@ docker compose down -v
 
 ### Restart the Application After Code Changes
 
-If you make changes to the code and want to restart the application:
+Changes to web page should be automatically visible after refreshing the page.
+
+But just in case if you make changes to the code and want to restart the application manually:
 
 1. Stop the containers (`Ctrl+C`).
 2. remove the containers:
+
    ```bash
    docker compose down
    ```
+
 3. Rebuild and start again:
 
    ```bash
