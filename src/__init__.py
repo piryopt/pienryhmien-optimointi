@@ -18,6 +18,7 @@ app.config.from_object(Config())
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["BABEL_DEFAULT_LOCALE"] = "fi"
+app.config["DEBUG"] = os.getenv("FLASK_DEBUG", "0") == "1"
 
 babel = Babel(app)
 

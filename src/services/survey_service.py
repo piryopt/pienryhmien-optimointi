@@ -338,6 +338,9 @@ class SurveyService:
                 language_mapping = {'fi': 0, 'en': 1, 'sv': 2}
                 dictionary = [["Nimi", "Name", "Namn"], ["Enimmäispaikat", "Maximum capacity", "Max antal platser"], ["Ryhmän minimikoko", "Minimum group size", "Minsta gruppstorlek"]]
                 lang_i = language_mapping.get(language)
+                if lang_i is None:
+                    lang_i = 0
+                    
                 if choice[dictionary[0][lang_i]] == 'tyhjä' or choice[dictionary[1][lang_i]] == 'tyhjä' or choice[dictionary[2][lang_i]] == 'tyhjä':
                     msg = gettext('Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle.')
                     return {"success": False, "message": {"status":"0", "msg":msg}}

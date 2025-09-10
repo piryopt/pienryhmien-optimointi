@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    env_file: .env
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    restart: always
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+    depends_on:
+      - db
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/usr/src/app
