@@ -344,6 +344,7 @@
         {% endfor %} {% endif %} {% endif %}
       </tr>
       <tr id="choice-table-headers">
+        <th><input type="checkbox" id="select-all-choices" checked="false"></th>
         <th
           class="constant-header"
           col-validation-regex=".{5,}"
@@ -381,6 +382,7 @@
       survey is not none %} {% if survey.choices|length > 0 %} {% for choice in
       survey.choices %}
       <tr>
+        <td><input type="checkbox" name="choice-checkbox"></td>
         <td>{{ choice.name }}</td>
         <td>{{ choice.seats }}</td>
         <td>{{ choice.min_size }}</td>
@@ -394,6 +396,7 @@
       {% endfor %} {# If survey parameter is not set, create empty row with
       columns for constant values #} {% endif %} {% else %}
       <tr>
+        <td><input type="checkbox" name="choice-checkbox"></td>
         <td class="empty" tabindex="0">tyhjä</td>
         <td class="empty" tabindex="0">tyhjä</td>
         <td class="empty" tabindex="0">tyhjä</td>

@@ -296,15 +296,24 @@ function saveGroupSizes() {
 function addRow() {
     var newRow = document.getElementById("choiceTable").insertRow()
 
+    var checkboxCell = document.createElement("td")
+    checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">'
+    newRow.appendChild(checkboxCell)
+
     headers = document.querySelectorAll("#choice-table-headers th:not(#add-column-header)")
-    headers.forEach( _ => {
+    headers.forEach( (header, index) => {
+        if (index === 0) return
         newRow.appendChild(createEmptyInputCell())
     })
 
     newRow.appendChild(createDeleteRowCell())
+    enableSelectAllCheckbox()
 }
 
 function addCellEventListeners(cellElem) {
+    // Do not add event listeners to checkbox cells
+    if (cellElem.querySelector('input[type="checkbox"]')) return
+
     cellElem.addEventListener("click", editCell)
     cellElem.addEventListener("keydown", enterKeypressOnFocucedCell)
 }
@@ -494,7 +503,7 @@ function pageLoadActions() {
     var addColHeader = document.getElementById("add-column-header")
     addColHeader.addEventListener("click", editCell)
 
-    //Check for existing custom headers
+    // Check for existing custom headers
     var variableHeaders = document.querySelectorAll('#choice-table-headers th:not(.constant-header, #add-column-header)')
     variableHeaders.forEach( header => {
         header.addEventListener("mouseover",showDeleteColumnIconOnHover)
@@ -502,6 +511,9 @@ function pageLoadActions() {
     document.querySelectorAll('.delete-col-btn').forEach(btn => {
         btn.addEventListener("click", removeColumn)
     })
+
+    // Enable "Select All" checkbox functionality
+    enableSelectAllCheckbox()
 }
 
 document.addEventListener("DOMContentLoaded",function() {
@@ -604,4 +616,13 @@ function createElementWithText(type, content, clickHandler=null) {
     }
 
     return element
+}
+
+function enableSelectAllCheckbox(selectAllId = "select-all-choices", checkboxName = "choice-checkbox") {
+    const selectAll = document.getElementById(selectAllId)
+    if (!selectAll) return
+    selectAll.addEventListener("change", function() {
+        const checkboxes = document.querySelectorAll(`input[name="${checkboxName}"]`)
+        checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    })
 }
