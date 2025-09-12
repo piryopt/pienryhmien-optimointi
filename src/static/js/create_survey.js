@@ -591,9 +591,13 @@ function setUploadedTableValues(table) {
     // set table body
     var tableBody = document.getElementById('choiceTable')
     tableBody.innerHTML = ''
-    
+
+    var checkboxCell = document.createElement("td")
+    checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">'
+
     table.forEach(row => {
         var rowElement = document.createElement('tr')
+        rowElement.appendChild(checkboxCell.cloneNode(true))
         addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['name'])))
         addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['spaces'])))
         addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['min_size'])))
