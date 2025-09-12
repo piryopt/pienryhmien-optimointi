@@ -58,14 +58,18 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
         choice_id = 0
         for pair in choice:
             if count == 0:
-                name = choice[pair]
+                mandatory = choice[pair]
                 count += 1
                 continue
             if count == 1:
-                spaces = choice[pair]
+                name = choice[pair]
                 count += 1
                 continue
             if count == 2:
+                spaces = choice[pair]
+                count += 1
+                continue
+            if count == 3:
                 min_size = choice[pair]
                 count += 1
                 choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, spaces, min_size)
