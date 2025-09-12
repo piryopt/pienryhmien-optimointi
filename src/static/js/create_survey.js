@@ -5,7 +5,12 @@ function parseObjFromRow(row, headers) {
     obj = {}
 
     for (var i=0; i < headers.length;i++) {
+        if (i == 0) {
+            const mandatory_checkbox = cells[i].querySelector('input[type="checkbox"]')
+            obj["mandatory"] = mandatory_checkbox.checked
+        } else {
         obj[headers[i]] = cells[i].innerText
+        }
     }
 
     return obj
