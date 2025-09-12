@@ -563,52 +563,84 @@ function visibilityToggleRadioClick(event) {
             element.classList.add("hidden")
         })
     }
-
 }
 
 function setUploadedTableValues(table) {
-    var headersRow = document.getElementById('choice-table-headers')
-    // Remove variable columns if they exist
-    var begin = (headersRow.childElementCount-3)*-1
-    var end = headersRow.childElementCount - 1
-    var variableHeaders = Array.from(headersRow.children).slice(begin, end)
-    variableHeaders.forEach(header => header.remove())
+    var headersRow = document.getElementById('choice-table-headers');
+    headersRow.innerHTML = ''; // Clear all headers
 
-    // Add new headers if they exist
-    // TODO: Correct naming
-    var headers = Object.keys(table[0])
-    var headers = Object.keys(table[0]).filter(header => header !== 'name' && header !== 'spaces' && header !== 'min_size')
+    // 1. Add checkbox header
+    var checkboxHeader = document.createElement('th');
+    checkboxHeader.innerHTML = '<input type="checkbox" id="select-all-choices">';
+    headersRow.appendChild(checkboxHeader);
 
-    var deleteColRow = document.getElementById("column-delete-btns")
+    // 2. Add constant headers
+    var constantHeaders = [
+        { text: 'Nimi', key: 'name' },
+        { text: 'Enimmäispaikat', key: 'spaces' },
+        { text: 'Ryhmän minimikoko', key: 'min_size' }
+    ];
+    constantHeaders.forEach(header => {
+        var th = document.createElement('th');
+        th.innerText = header.text;
+        th.className = 'constant-header';
+        headersRow.appendChild(th);
+    });
 
-    for(var header of headers) {
-        deleteColRow.appendChild(createDeleteColumnCell())
-        var newHeader = createElementWithText('th', header, clickHandler=editCell)
-        newHeader.addEventListener("mouseover",showDeleteColumnIconOnHover)
-        headersRow.insertBefore(newHeader, document.getElementById('add-column-header'))
+    // 3. Add variable headers
+    var variableHeaders = Object.keys(table[0]).filter(header => !['name', 'spaces', 'min_size'].includes(header));
+    variableHeaders.forEach(header => {
+        var th = document.createElement('th');
+        th.innerText = header;
+        th.className = 'variable-header';
+        headersRow.appendChild(th);
+    });
+
+    // 4. Add "add column" header
+    headersRow.appendChild(createAddColumnHeader());
+
+    // Set up delete column buttons row (if you use it)
+    var deleteColRow = document.getElementById("column-delete-btns");
+    deleteColRow.innerHTML = '';
+    // Add empty cells for constant columns
+    for (let i = 0; i < constantHeaders.length + 1; i++) {
+        deleteColRow.appendChild(document.createElement('td'));
     }
+    // Add delete buttons for variable columns
+    variableHeaders.forEach(() => {
+        deleteColRow.appendChild(createDeleteColumnCell());
+    });
+    // Add empty cell for "add column"
+    deleteColRow.appendChild(document.createElement('td'));
 
-    // set table body
-    var tableBody = document.getElementById('choiceTable')
-    tableBody.innerHTML = ''
-
-    var checkboxCell = document.createElement("td")
-    checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">'
+    // 5. Set table body
+    var tableBody = document.getElementById('choiceTable');
+    tableBody.innerHTML = '';
 
     table.forEach(row => {
-        var rowElement = document.createElement('tr')
-        rowElement.appendChild(checkboxCell.cloneNode(true))
-        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['name'])))
-        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['spaces'])))
-        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['min_size'])))
+        var rowElement = document.createElement('tr');
+        // Add checkbox cell
+        var checkboxCell = document.createElement("td");
+        checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">';
+        rowElement.appendChild(checkboxCell);
 
-        headers.forEach( header => {
-                addCellEventListeners(rowElement.appendChild(createElementWithText('td', row[header])))
-            }   
-        )
-        rowElement.appendChild(createDeleteRowCell())
-        tableBody.append(rowElement)
-    })
+        // Add constant cells
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['name'])));
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['spaces'])));
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['min_size'])));
+
+        // Add variable cells
+        variableHeaders.forEach(header => {
+            addCellEventListeners(rowElement.appendChild(createElementWithText('td', row[header])));
+        });
+
+        // Add delete row cell
+        rowElement.appendChild(createDeleteRowCell());
+        tableBody.append(rowElement);
+    });
+
+    // Re-enable select all checkbox functionality
+    enableSelectAllCheckbox();
 }
 
 function createElementWithText(type, content, clickHandler=null) {
