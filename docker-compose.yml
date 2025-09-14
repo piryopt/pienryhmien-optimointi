@@ -21,3 +21,18 @@ services:
       - "5001:5000"
     volumes:
       - .:/usr/src/app
+
+  test:
+    profiles: ["test"]
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      - db
+      - web
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      BASE_URL: http://web:5000
+    volumes:
+      - .:/usr/src/app
+    entrypoint: ["pytest", "tests/"]

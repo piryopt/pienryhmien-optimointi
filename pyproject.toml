@@ -18,7 +18,6 @@ psycopg2-binary = "^2.9.7"
 flask-apscheduler = "^1.13.1"
 markdown = "^3.7.0"
 flask-wtf = "^1.2.1"
-pytest-playwright = "^0.5.2"
 flask-babel = "^4.0.0"
 pandas = "^2.2.3"
 invoke = "^2.2.0"
@@ -30,6 +29,8 @@ pylint = "^3.3.1"
 robotframework-databaselibrary = "^1.2.4"
 robotframework-seleniumlibrary = "^6.1.0"
 selenium = "4.9.1"
+playwright = "^1.55.0"
+pytest-playwright = "^0.7.1"
 
 [build-system]
 requires = ["poetry-core"]
