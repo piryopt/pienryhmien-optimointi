@@ -13,6 +13,9 @@ scipy
 Flask-APScheduler
 markdown
 Flask-WTF
+pytest
+playwright
 pytest-playwright
 Flask-Babel
 pandas
+
