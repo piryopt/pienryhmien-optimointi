@@ -72,7 +72,7 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
             if count == 3:
                 min_size = choice[pair]
                 count += 1
-                choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, spaces, min_size)
+                choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, spaces, min_size, mandatory)
                 continue
 
             hidden = False
