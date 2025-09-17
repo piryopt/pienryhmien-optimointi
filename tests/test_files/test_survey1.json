@@ -2,6 +2,7 @@
     "surveyGroupname": "Testikysely JSON",
     "choices": [
       {
+        "mandatory": false,
         "Nimi": "Esimerkkipäiväkoti 1",
         "Enimmäispaikat": "8",
         "Ryhmän minimikoko": "1",
@@ -9,6 +10,7 @@
         "Postinumero": "00820"
       },
       {
+        "mandatory": false,
         "Nimi": "Esimerkkipäiväkoti 2",
         "Enimmäispaikat": "6",
         "Ryhmän minimikoko": "1",

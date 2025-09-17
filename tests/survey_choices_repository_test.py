@@ -32,8 +32,8 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         self.user_id2 = ur.find_by_email(user2.email)[0]
         self.survey_id = sr.create_new_survey("Test survey 1", 10, "Motivaatio", "2024-01-01 02:02")
         so.add_owner_to_survey(self.survey_id, self.user_id)
-        self.choice_id = scr.create_new_survey_choice(self.survey_id, "choice 1", 10, 5)
-        self.choice_id2 = scr.create_new_survey_choice(self.survey_id, "choice 2", 10, 5)
+        self.choice_id = scr.create_new_survey_choice(self.survey_id, "choice 1", 10, 5, False)
+        self.choice_id2 = scr.create_new_survey_choice(self.survey_id, "choice 2", 10, 5, False)
 
     def tearDown(self):
         db.session.remove()
@@ -66,7 +66,7 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         Test that a survey choice is not added if there's an error in survey id
         and that return is False
         """
-        success = scr.create_new_survey_choice("not a survey", "choice 1", 10, 5)
+        success = scr.create_new_survey_choice("not a survey", "choice 1", 10, 5, False)
         self.assertEqual(success, False)
 
     def test_get_invalid_choice(self):

@@ -103,7 +103,7 @@ class SurveyChoicesService:
         """
         choices = self.get_list_of_survey_choices(survey_id)
         tally = 0
-        for (id, survey_id, name, spaces, deleted, min_size) in choices:
+        for (id, survey_id, name, spaces, deleted, min_size, mandatory) in choices:
             tally += spaces
         return tally
 
@@ -116,7 +116,7 @@ class SurveyChoicesService:
             spaces (int): Number of spaces needed in the group, equal to extra answers
             in the survey
         """
-        return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces, 0)
+        return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces, 0, False)
     
     def check_min_equals_max(self, survey_id):
         """
