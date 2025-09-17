@@ -14,6 +14,7 @@ Flask-APScheduler
 markdown
 Flask-WTF
 pytest
+pytest-cov
 playwright
 pytest-playwright
 Flask-Babel
