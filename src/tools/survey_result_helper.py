@@ -186,8 +186,14 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
 
         for survey_choice_id in sorted_groups:
             min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
+            mandatory = survey_choices_service.get_survey_choice_mandatory(survey_choice_id)
             if min_size > group_sizes[survey_choice_id]:
+                if mandatory:
+                    # If the group is mandatory, we can't drop it
+                    mandatory_group_violation = True
+                    continue
                 violation = True
+                mandatory_group_violation = False
                 # Remove dropped group from groups_dict and student selections so that it doesn't affect the next round
                 groups_dict.pop(survey_choice_id)
                 dropped_groups_id.append(survey_choice_id)
@@ -196,6 +202,24 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                         student.selections.remove(survey_choice_id)
                     if survey_choice_id in student.rejections:
                         student.rejections.remove(survey_choice_id)
+                break
+
+        if mandatory_group_violation and not violation:
+            # There was a mandatory group violation but no other violations, 
+            # so we have to drop a group even if it meets the min_size requirement
+            violation = True
+            mandatory_group_violation = False
+            
+            for survey_choice_id in sorted_groups:
+                mandatory = survey_choices_service.get_survey_choice_mandatory(survey_choice_id)
+                if not mandatory:
+                    groups_dict.pop(survey_choice_id)
+                    dropped_groups_id.append(survey_choice_id)
+                    for user_id, student in students_dict.items():
+                        if survey_choice_id in student.selections:
+                            student.selections.remove(survey_choice_id)
+                        if survey_choice_id in student.rejections:
+                            student.rejections.remove(survey_choice_id)
                 break
 
         if not violation:
