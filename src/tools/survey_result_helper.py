@@ -95,7 +95,7 @@ def check_if_zero_needed(unit):
         unit = "0"+ unit
     return unit
 
-def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
+def hungarian_results_main(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
     """
     Run the hungarian algorthim until their is no violation for the min_size portion
 
@@ -152,7 +152,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, additional_infos, cinfos)
     return output_data
 
-def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id):
+def run_hungarian_main(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id):
     """
     Run the hungarian algorithm until no violation.
     """
@@ -201,6 +201,104 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
         if not violation:
             return output_data
 
+def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
+    """
+    Run the hungarian algorthim until their is no violation for the min_size portion
+
+    args:
+        survey_id: The id of the survey
+        user_rankings: The rankings for the survey in question
+        groups_dict: A dict containing survey choices which have been converted into group entities. Needed for the hungarian algorithm
+        students_dict: A dict containing users which have been converted into students entities. Needed for the hungarian algorithm
+        survey_choices: The choices of the survey in question
+    """
+    survey_answers_amount = len(user_rankings)
+
+    output_data = run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict)
+
+    # Create a dict which contains choice's additional info as list
+    additional_infos = {}
+    for row in survey_choices:
+        additional_infos[str(row[0])] = []
+        cinfos = survey_choices_service.get_choice_additional_infos(row[0])
+        for i in cinfos:
+            additional_infos[str(row[0])].append(i[1])
+
+    # Add to data the number of the choice that the user got. Also update happiness data displayed.
+    happiness_avg = 0
+    happiness_results = {}
+    for results in output_data:
+        user_id = results[0][0]
+        choice_id = results[2][0]
+        ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
+        happiness = get_happiness(choice_id, ranking)
+        happiness_avg += happiness
+        results.append(happiness)
+        happiness_results[happiness] = happiness_results.get(happiness, 0) + 1
+
+    happiness_avg /= len(students_dict)
+    happiness_results_list = []
+    for k, v in sorted(happiness_results.items()):
+        msg = gettext('. valintaansa sijoitetut käyttäjät: ')
+        happiness_results_list.append((k, msg + f"{v}"))
+
+    dropped_groups = []
+
+    output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, additional_infos, cinfos)
+    return output_data
+
+def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict):
+    """
+    Run the Hungarian algorithm once, then fill groups whose min_size didn't get filled with students from overfilled groups
+    """
+    # If there are less seats than survey answers, add an empty group 
+    total_seats = sum(group.size for group in groups_dict.values())
+    if total_seats < len(students_dict):
+        empty_group_id = survey_choices_service.add_empty_survey_choice(
+            survey_id, len(students_dict) - total_seats
+        )
+        empty_group = survey_choices_service.get_survey_choice(empty_group_id)
+        groups_dict[empty_group[0]] = Group(empty_group[0], empty_group[2], empty_group[3])
+
+    # Run the Hungarian algorithm
+    weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
+    sorter = h.Hungarian(groups_dict, students_dict, weights)
+    sorter.run()
+    output_data = sorter.get_data()
+
+    # Count current group sizes
+    group_sizes = {gid: 0 for gid in groups_dict}
+    for _, _, group_data in output_data:
+        group_id = group_data[0]
+        group_sizes[group_id] += 1
+
+    # Check if min_size is not filled
+    for group_id, group in groups_dict.items():
+        min_size = survey_choices_service.get_survey_choice_min_size(group_id)
+        if group_sizes[group_id] < min_size:
+            deficit = min_size - group_sizes[group_id]
+
+            # Pick candidates from overfilled groups
+            candidates = []
+            for i, (student_data, student_email, assigned_group) in enumerate(output_data):
+                assigned_group_id = assigned_group[0]
+                min_size = survey_choices_service.get_survey_choice_min_size(assigned_group_id)
+
+                if group_sizes[assigned_group_id] > min_size:
+                    candidates.append((i, student_data[0], assigned_group_id))
+
+            # Move candidates into unfilled groups
+            for j in range(deficit):
+                if not candidates:
+                    break
+                idx, student_id, from_group_id = candidates.pop(0)
+
+                output_data[idx][2][0] = group_id
+                output_data[idx][2][1] = groups_dict[group_id].name
+                group_sizes[group_id] += 1
+                group_sizes[from_group_id] -= 1
+
+    return output_data
 
 def get_seats(groups_dict):
     """
