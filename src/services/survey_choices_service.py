@@ -151,6 +151,18 @@ class SurveyChoicesService:
                 return False
         return True
 
+    def get_survey_choice_mandatory(self, survey_choice_id:int):
+        """
+        Returns a boolean indicating if the survey choice is mandatory
+
+        args:
+            survey_choice_id: The id of the survey choice
+        """
+        survey_choice = self._survey_choices_repository.get_survey_choice(survey_choice_id)
+        if not survey_choice:
+            return False
+        return survey_choice.mandatory
+
 
 
 survey_choices_service = SurveyChoicesService()
