@@ -109,10 +109,11 @@ def parser_existing_survey_to_dict(survey_id):
     index = 0
     for row in survey_choices:
         survey_dict["choices"].append({})
-        survey_dict["choices"][index]["id"] = row[0]
-        survey_dict["choices"][index]["name"] = row[2]
-        survey_dict["choices"][index]["seats"] = row[3]
-        survey_dict["choices"][index]["min_size"] = row[5]
+        survey_dict["choices"][index]["mandatory"] = row.mandatory
+        survey_dict["choices"][index]["id"] = row.id
+        survey_dict["choices"][index]["name"] = row.name
+        survey_dict["choices"][index]["seats"] = row.max_spaces
+        survey_dict["choices"][index]["min_size"] = row.min_size
 
         additional_infos = survey_choices_repository.get_choice_additional_infos(row[0])
 
