@@ -10,7 +10,7 @@ Alla oleva kuva näyttää esimerkkitiedoston muodon:
 </br></br>
 
 Jakaja pudottaa oletuksena epäsuositun ryhmä-vaihtoehdon, jos sen minimikoko ei täyty jaossa. Jos haluat, että jotkut ryhmät
-toteutuvat varmasti voit lisätä CSV tiedostoon sarakkeen "Mandatory" ja täyttää sen arvoilla TRUE tai FALSE sen mukaan onko ryhmä pakollinen vai ei. Sarakkeen "Mandatory" arvot voivat olla esimerkiksi TRUE, true tai True eli kirjainkoolla ei ole välilä. FALSE arvoa ei periaatteessa ole pakko antaa, muttaa sarake tarvitsee joka rivillä jonkin arvon (esimerkiksi tyhjät lainausmerkit " " käyvät hyvin).
+toteutuvat varmasti voit lisätä CSV tiedostoon sarakkeen "Mandatory" ja täyttää sen arvoilla TRUE tai FALSE sen mukaan onko ryhmä pakollinen vai ei. Sarakkeen "Mandatory" arvot voivat olla esimerkiksi TRUE, true tai True eli kirjainkoolla ei ole välilä. FALSE arvoa ei periaatteessa ole pakko antaa, muttaa sarake tarvitsee joka rivillä jonkin arvon (esimerkiksi tyhjät lainausmerkit " " käyvät hyvin). 
 
 Alla oleva kuva näyttää esimerkkitiedoston muodon, jossa on sellaisia ryhmiä joiden on pakko toteutua:
 <img src="/static/images/csv2.png" alt="Esimerkki csv-tiedosto">
@@ -28,4 +28,3 @@ Ylläolevaan kyselyn vastaaminen tuottaa tälläisen CSV-tiedoston, joka löytyy
 <img src="/static/images/csv-report-view.png" alt="Lomakeraportti">
 
 <strong>Kaksi ensimmäistä saraketta ovat turhia (Tall.id, Tallennusaika), joten poista ne luodusta .csv tiedostosta.</strong> 
-
