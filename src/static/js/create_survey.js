@@ -593,7 +593,7 @@ function setUploadedTableValues(table) {
     });
 
     // 3. Add variable headers
-    var variableHeaders = Object.keys(table[0]).filter(header => !['name', 'spaces', 'min_size'].includes(header));
+    var variableHeaders = Object.keys(table[0]).filter(header => !['name', 'spaces', 'min_size', 'Mandatory'].includes(header));
     variableHeaders.forEach(header => {
         var th = document.createElement('th');
         th.innerText = header;
@@ -626,7 +626,12 @@ function setUploadedTableValues(table) {
         var rowElement = document.createElement('tr');
         // Add checkbox cell
         var checkboxCell = document.createElement("td");
-        checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">';
+        const mandatoryValue = String(row['Mandatory']).trim().toLowerCase()
+        if (mandatoryValue === "true") {
+            checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox" checked="checked">';
+        } else {
+            checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">';
+        }
         rowElement.appendChild(checkboxCell);
 
         // Add constant cells
