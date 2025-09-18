@@ -381,7 +381,7 @@
       survey is not none %} {% if survey.choices|length > 0 %} {% for choice in
       survey.choices %}
       <tr>
-        <td><input type="checkbox" name="choice-checkbox"></td>
+        <td><input type="checkbox" name="choice-checkbox" {{ 'checked' if choice.mandatory }}></td>
         <td>{{ choice.name }}</td>
         <td>{{ choice.seats }}</td>
         <td>{{ choice.min_size }}</td>
