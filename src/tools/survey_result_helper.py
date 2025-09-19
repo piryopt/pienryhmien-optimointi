@@ -182,6 +182,8 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
 
         # Check if min_size is greater than group size. If it is, remove the group_id that has the worst ranking from all relevant lists and dictionaries.
         violation = False
+        mandatory_group_violation = False
+
         sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
 
         for survey_choice_id in sorted_groups:
@@ -193,7 +195,6 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                     mandatory_group_violation = True
                     continue
                 violation = True
-                mandatory_group_violation = False
                 # Remove dropped group from groups_dict and student selections so that it doesn't affect the next round
                 groups_dict.pop(survey_choice_id)
                 dropped_groups_id.append(survey_choice_id)
@@ -207,9 +208,6 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
         if mandatory_group_violation and not violation:
             # There was a mandatory group violation but no other violations, 
             # so we have to drop a group even if it meets the min_size requirement
-            violation = True
-            mandatory_group_violation = False
-            
             for survey_choice_id in sorted_groups:
                 mandatory = survey_choices_service.get_survey_choice_mandatory(survey_choice_id)
                 if not mandatory:
@@ -220,9 +218,9 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                             student.selections.remove(survey_choice_id)
                         if survey_choice_id in student.rejections:
                             student.rejections.remove(survey_choice_id)
-                break
+                    break
 
-        if not violation:
+        if not violation and not mandatory_group_violation:
             return output_data
 
 
