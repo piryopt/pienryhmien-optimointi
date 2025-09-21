@@ -54,7 +54,7 @@ jobs:
         run: |
           poetry run python -m playwright install --with-deps
           poetry run flask run --debug &
-          poetry run pytest tests/playwright/survey_testing.py --browser firefox
+          poetry run pytest tests/playwright/survey_testing.py --browser chromium
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
