@@ -182,35 +182,55 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
 
         # Check if min_size is greater than group size. If it is, remove the group_id that has the worst ranking from all relevant lists and dictionaries.
         violation = False
-        mandatory_group_violation = False
 
         sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
 
         for survey_choice_id in sorted_groups:
             min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
             mandatory = survey_choices_service.get_survey_choice_mandatory(survey_choice_id)
-            if min_size > group_sizes[survey_choice_id]:
-                if mandatory:
-                    # If the group is mandatory, we can't drop it
-                    mandatory_group_violation = True
-                    continue
-                violation = True
-                # Remove dropped group from groups_dict and student selections so that it doesn't affect the next round
-                groups_dict.pop(survey_choice_id)
-                dropped_groups_id.append(survey_choice_id)
-                for user_id, student in students_dict.items():
-                    if survey_choice_id in student.selections:
-                        student.selections.remove(survey_choice_id)
-                    if survey_choice_id in student.rejections:
-                        student.rejections.remove(survey_choice_id)
-                break
 
-        if mandatory_group_violation and not violation:
-            # There was a mandatory group violation but no other violations, 
-            # so we have to drop a group even if it meets the min_size requirement
-            for survey_choice_id in sorted_groups:
-                mandatory = survey_choices_service.get_survey_choice_mandatory(survey_choice_id)
-                if not mandatory:
+            if min_size > group_sizes[survey_choice_id]:
+                violation = True
+                if mandatory:
+                    needed = min_size - group_sizes[survey_choice_id]
+
+                    # Collect candidates (students not already in this group)
+                    candidates = []
+                    for i, entry in enumerate(output_data):
+                        student_info, email, group_info = entry
+                        student_id = student_info[0]
+                        assigned_group = group_info[0]
+
+                        # Skip students already in this mandatory group
+                        if assigned_group == survey_choice_id:
+                            continue
+
+                        # Skip students in other mandatory groups
+                        if survey_choices_service.get_survey_choice_mandatory(assigned_group):
+                            continue
+
+                        candidates.append((i, student_id, assigned_group))
+
+                    # Sort candidates by how much they like this mandatory group
+                    candidates.sort(key=lambda c: rank(students_dict, c[1], survey_choice_id))
+
+                    # Reassign enough students
+                    for j in range(needed):
+                        idx, student_id, old_group = candidates[j]
+                        output_data[idx][2] = [survey_choice_id, groups_dict[survey_choice_id].name]  # overwrite group assignment
+                        group_sizes[old_group] -= 1
+                        group_sizes[survey_choice_id] += 1
+                    
+                        # Lock this student into the mandatory group so that the hungarian algorithm doesn't move them again
+                        students_dict[student_id].selections = [survey_choice_id]
+
+                    # Update group_sizes
+                    group_sizes[survey_choice_id] = min_size
+
+                    # Continue to next group check
+                    break
+                else:
+                    # Non-mandatory underfilled → drop it
                     groups_dict.pop(survey_choice_id)
                     dropped_groups_id.append(survey_choice_id)
                     for user_id, student in students_dict.items():
@@ -220,8 +240,24 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                             student.rejections.remove(survey_choice_id)
                     break
 
-        if not violation and not mandatory_group_violation:
+        if not violation:
             return output_data
+
+
+def rank(students_dict, student_id, target_group_id):
+    """
+    args:
+        students_dict: A dict containing users which have been converted into students entities.
+        student_id: The id of the student whose ranking we want to check
+        target_group_id: The id of the group whose ranking we want to check
+
+    Get the ranking index of a target group for a specific student.
+
+    returns: The index of the target group in the student's selections or 999 if not found
+    """
+
+    selections = students_dict[student_id].selections
+    return selections.index(target_group_id) if target_group_id in selections else 999
 
 
 def get_seats(groups_dict):
