@@ -141,5 +141,5 @@ class TestSurveyChoicesService(unittest.TestCase):
         """
         scs.add_empty_survey_choice(self.survey_id, 3)
         choices = scs.get_list_of_survey_choices(self.survey_id)
-        self.assertEqual(choices[2][2], "Tyhjä")
-        self.assertEqual(choices[2][3], 3)
+        self.assertEqual(choices[2].name, "Tyhjä")
+        self.assertEqual(choices[2].max_spaces, 3)

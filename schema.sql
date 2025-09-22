@@ -32,7 +32,8 @@ CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
 	name TEXT,
 	max_spaces INTEGER,
 	deleted BOOLEAN,
-	min_size INTEGER
+	min_size INTEGER,
+	mandatory BOOLEAN -- group must be filled
 );
 
 CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices

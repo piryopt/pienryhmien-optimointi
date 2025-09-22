@@ -177,7 +177,7 @@ def new_survey_form(survey=None):
         if not check_if_owner(survey_id):
             return redirect("/")
         survey = survey_service.get_survey_as_dict(survey_id)
-        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size")]
+        survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size" and column != "mandatory")]
     return render_template("create_survey.html", survey=survey)
 
 @app.route("/surveys/create", methods = ["POST"])
@@ -394,7 +394,7 @@ def edit_survey_form(survey_id):
     if not check_if_owner(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "min_size")]
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "min_size" and column != "mandatory")]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -466,7 +466,7 @@ def edit_group_sizes(survey_id):
     if not check_if_owner(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size")]
+    survey["variable_columns"] = [column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "id" and column != "min_size" and column != "mandatory")]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template("group_sizes.html", survey_id=survey_id, survey=survey, survey_answers_amount=survey_answers_amount,

@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 from playwright.sync_api import Page, expect
-from playwright_tools import login
+from playwright_tools import login, trace_on_failure, video_context
 
 FILE_TO_UPLOAD = Path(__file__).parent / ".." / "test_files" / "test_survey1.csv"
 
@@ -48,7 +48,7 @@ def test_create_new_survey(page: Page):
     page.locator("#end-date").fill("31.12.2028")
     page.locator("#endtime").select_option("23:00")
     page.locator("#survey-information").fill("Absolute menaces to society")
-    page.locator("xpath=//*[@id='choiceTable']/tr/td[1]").click()
+    page.locator("#choiceTable tr").nth(0).locator("td").nth(1).click()
     page.keyboard.type("Vegeta")
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
@@ -59,10 +59,11 @@ def test_create_new_survey(page: Page):
     page.locator("xpath=//*[@id='add-column-header']").click()
     page.keyboard.type("Quotes")
     page.keyboard.press("Enter")
-    page.locator("xpath=//*[@id='choiceTable']/tr/td[4]").click()
+    page.locator("#choiceTable tr").nth(0).locator("td").nth(4).click()
     page.keyboard.type("Trespass into the domain of the Gods!")
     page.locator("#add_choice").click()
-    page.locator("xpath=//*[@id='choiceTable']/tr[2]/td[1]").click()
+    page.locator("#choiceTable tr").nth(1).wait_for(state="visible", timeout=60000)
+    page.locator("#choiceTable tr").nth(1).locator("td").nth(1).click()
     page.keyboard.type("Barou")
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
@@ -74,7 +75,8 @@ def test_create_new_survey(page: Page):
     page.keyboard.press("Enter")
     page.keyboard.type("Talent without hard work is nothing.")
     page.locator("#add_choice").click()
-    page.locator("xpath=//*[@id='choiceTable']/tr[3]/td[1]").click()
+    page.locator("#choiceTable tr").nth(2).wait_for(state="visible", timeout=60000)
+    page.locator("#choiceTable tr").nth(2).locator("td").nth(1).click()
     page.keyboard.type("Isagi")
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
