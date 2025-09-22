@@ -11,6 +11,10 @@ def trace_on_failure(context, request):
     else:
         context.tracing.stop()
 
+@pytest.fixture(scope="function")
+def video_context(browser):
+    return browser.new_context(record_video_dir="videos/")
+
 def login(page, username, password):
     """
     Helper function for logging the user in
