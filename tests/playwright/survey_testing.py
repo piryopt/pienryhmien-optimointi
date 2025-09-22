@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 from playwright.sync_api import Page, expect
-from playwright_tools import login, trace_on_failure
+from playwright_tools import login, trace_on_failure, video_context
 
 FILE_TO_UPLOAD = Path(__file__).parent / ".." / "test_files" / "test_survey1.csv"
 
@@ -62,6 +62,7 @@ def test_create_new_survey(page: Page):
     page.locator("#choiceTable tr").nth(0).locator("td").nth(4).click()
     page.keyboard.type("Trespass into the domain of the Gods!")
     page.locator("#add_choice").click()
+    page.locator("#choiceTable tr").nth(1).wait_for(state="visible")
     page.locator("#choiceTable tr").nth(1).locator("td").nth(1).click()
     page.keyboard.type("Barou")
     page.keyboard.press("Tab")
@@ -74,6 +75,7 @@ def test_create_new_survey(page: Page):
     page.keyboard.press("Enter")
     page.keyboard.type("Talent without hard work is nothing.")
     page.locator("#add_choice").click()
+    page.locator("#choiceTable tr").nth(2).wait_for(state="visible")
     page.locator("#choiceTable tr").nth(2).locator("td").nth(1).click()
     page.keyboard.type("Isagi")
     page.keyboard.press("Tab")
