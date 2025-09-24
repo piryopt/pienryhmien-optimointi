@@ -168,3 +168,4 @@ documentation/generated/*
 
 .github_token
 push_to_cloud.sh
+.DS_Store
