@@ -312,7 +312,17 @@ function addRow() {
     })
 
     newRow.appendChild(createDeleteRowCell())
-    enableSelectAllCheckbox()
+    //enableSelectAllCheckbox()
+  
+    var selectAllId = 'select-all-choices'
+    var checkboxName = 'choice-checkbox'
+
+    const selectAll = document.getElementById(selectAllId)
+    if (!selectAll) return
+    selectAll.addEventListener("change", function() {
+        const checkboxes = document.querySelectorAll(`input[name="${checkboxName}"]`)
+        checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    })
 }
 
 function addCellEventListeners(cellElem) {
