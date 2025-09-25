@@ -649,6 +649,7 @@ function visibilityToggleRadioClick(event) {
       )
     ).forEach((element) => {
       element.classList.add("hidden");
+
     });
   }
 }
@@ -737,6 +738,35 @@ function setUploadedTableValues(table) {
         rowElement.appendChild(createElementWithText("td", row[header]))
       );
     });
+
+    // Add empty cell for "add column"
+    deleteColRow.appendChild(document.createElement('td'));
+
+    // 5. Set table body
+    var tableBody = document.getElementById('choiceTable');
+    tableBody.innerHTML = '';
+
+    table.forEach(row => {
+        var rowElement = document.createElement('tr');
+        // Add checkbox cell
+        var checkboxCell = document.createElement("td");
+        const mandatoryValue = String(row['Mandatory']).trim().toLowerCase()
+        if (mandatoryValue === "true") {
+            checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox" checked="checked">';
+        } else {
+            checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">';
+        }
+        rowElement.appendChild(checkboxCell);
+
+        // Add constant cells
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['name'])));
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['spaces'])));
+        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['min_size'])));
+
+        // Add variable cells
+        variableHeaders.forEach(header => {
+            addCellEventListeners(rowElement.appendChild(createElementWithText('td', row[header])));
+        });
 
     // Add delete row cell
     rowElement.appendChild(createDeleteRowCell());
