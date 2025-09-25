@@ -373,7 +373,7 @@ function addRow() {
   newRow.appendChild(deleteCell);
   console.log("Delete row cell appended", deleteCell);
   enableSelectAllCheckbox();
-  console.log("Select all checkbox enabled");
+  console.log("Select all checkbox enableddd");
 }
 
 function addCellEventListeners(cellElem) {
