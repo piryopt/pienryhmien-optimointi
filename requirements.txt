@@ -5,9 +5,6 @@ openpyxl
 Flask-SQLAlchemy
 python-dotenv
 psycopg2-binary
-selenium==4.9.0
-robotframework
-robotframework-seleniumlibrary 
 matplotlib
 scipy
 Flask-APScheduler
