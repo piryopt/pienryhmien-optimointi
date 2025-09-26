@@ -6,11 +6,13 @@ Flask-SQLAlchemy
 python-dotenv
 psycopg2-binary
 matplotlib
+numpy
 scipy
 Flask-APScheduler
 markdown
 Flask-WTF
 pytest
+pylint
 pytest-cov
 playwright
 pytest-playwright

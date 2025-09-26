@@ -61,9 +61,6 @@ def test_create_new_survey(page: Page):
     page.keyboard.press("Enter")
     page.locator("#choiceTable tr").nth(0).locator("td").nth(4).click()
     page.keyboard.type("Trespass into the domain of the Gods!")
-
-    # TODO: fix add_choice for CI
-    """
     page.locator("#add_choice").click()
     page.locator("#choiceTable tr").nth(1).wait_for(state="visible", timeout=60000)
     page.locator("#choiceTable tr").nth(1).locator("td").nth(1).click()
@@ -91,7 +88,6 @@ def test_create_new_survey(page: Page):
     page.keyboard.press("Enter")
     page.keyboard.type("How does it feel to be the clown of my story?")
     page.keyboard.press("Enter")
-    """
     page.wait_for_timeout(500)
     page.locator("#create_survey").click()
     # page.screenshot(path="playwright-report/afterclick.png", full_page=True)
