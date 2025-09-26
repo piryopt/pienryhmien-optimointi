@@ -121,6 +121,8 @@ function setValidationErrorMsg(elem) {
   warningTextContainer.classList.add("active-warning");
   warningTextContainer.classList.remove("hidden");
   warningTextContainer.parentElement.parentElement.classList.remove("hidden");
+
+  elem.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function createNewSurvey() {
@@ -343,37 +345,22 @@ function saveGroupSizes() {
 }
 
 function addRow() {
-  console.log("addRow called");
-  var choiceTable = document.getElementById("choiceTable");
-  if (!choiceTable) {
-    console.error("choiceTable element not found");
-    return;
-  }
-  var newRow = choiceTable.insertRow();
-  console.log("New row inserted", newRow);
+  var newRow = document.getElementById("choiceTable").insertRow();
 
   var checkboxCell = document.createElement("td");
   checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">';
   newRow.appendChild(checkboxCell);
-  console.log("Checkbox cell appended", checkboxCell);
 
-  var headers = document.querySelectorAll(
+  headers = document.querySelectorAll(
     "#choice-table-headers th:not(#add-column-header)"
   );
-  console.log("Headers found:", headers);
   headers.forEach((header, index) => {
-    console.log("Header", index, header);
     if (index === 0) return;
-    var emptyCell = createEmptyInputCell();
-    newRow.appendChild(emptyCell);
-    console.log("Empty input cell appended", emptyCell);
+    newRow.appendChild(createEmptyInputCell());
   });
 
-  var deleteCell = createDeleteRowCell();
-  newRow.appendChild(deleteCell);
-  console.log("Delete row cell appended", deleteCell);
+  newRow.appendChild(createDeleteRowCell());
   enableSelectAllCheckbox();
-  console.log("Select all checkbox enableddd");
 }
 
 function addCellEventListeners(cellElem) {
@@ -642,7 +629,6 @@ function visibilityToggleRadioClick(event) {
     ).forEach((element) => {
       element.classList.remove("hidden");
     });
-
   } else if (event.target.value === "hide") {
     Array.from(
       document.querySelectorAll(
@@ -650,15 +636,6 @@ function visibilityToggleRadioClick(event) {
       )
     ).forEach((element) => {
       element.classList.add("hidden");
-
-
-    // 3. Add variable headers
-    var variableHeaders = Object.keys(table[0]).filter(header => !['name', 'spaces', 'min_size', 'Mandatory'].includes(header));
-    variableHeaders.forEach(header => {
-        var th = document.createElement('th');
-        th.innerText = header;
-        th.className = 'variable-header';
-        headersRow.appendChild(th);
     });
   }
 }
@@ -747,37 +724,6 @@ function setUploadedTableValues(table) {
         rowElement.appendChild(createElementWithText("td", row[header]))
       );
     });
-
-
-    // Add empty cell for "add column"
-    deleteColRow.appendChild(document.createElement('td'));
-
-    // 5. Set table body
-    var tableBody = document.getElementById('choiceTable');
-    tableBody.innerHTML = '';
-
-    table.forEach(row => {
-        var rowElement = document.createElement('tr');
-        // Add checkbox cell
-        var checkboxCell = document.createElement("td");
-        const mandatoryValue = String(row['Mandatory']).trim().toLowerCase()
-        if (mandatoryValue === "true") {
-            checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox" checked="checked">';
-        } else {
-            checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">';
-        }
-        rowElement.appendChild(checkboxCell);
-
-        // Add constant cells
-        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['name'])));
-        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['spaces'])));
-        addCellEventListeners(rowElement.appendChild(createElementWithText('td', row['min_size'])));
-
-        // Add variable cells
-        variableHeaders.forEach(header => {
-            addCellEventListeners(rowElement.appendChild(createElementWithText('td', row[header])));
-        });
-
 
     // Add delete row cell
     rowElement.appendChild(createDeleteRowCell());
