@@ -12,6 +12,7 @@ from src.entities.user import User
 from src.tools.db_tools import clear_database
 import json
 
+
 class TestUserRankingsService(unittest.TestCase):
     def setUp(self):
         """
@@ -40,11 +41,13 @@ class TestUserRankingsService(unittest.TestCase):
         self.user_id2 = ur.find_by_email(user2.email)[0]
         self.user_email = user.email
 
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+        with open("tests/test_files/test_survey1.json", "r") as openfile:
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        self.survey_id = ss.create_new_survey_manual(json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
+        self.survey_id = ss.create_new_survey_manual(
+            json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02"
+        )
         sos.add_owner_to_survey(self.survey_id, self.user_email)
 
     def tearDown(self):

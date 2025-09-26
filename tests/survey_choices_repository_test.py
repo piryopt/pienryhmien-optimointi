@@ -10,6 +10,7 @@ from src.repositories.survey_owners_repository import survey_owners_repository a
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
+
 class TestSurveyChoicesRepository(unittest.TestCase):
     def setUp(self):
         load_dotenv()
@@ -58,7 +59,7 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that getting a survey choice returns False if choice doesn't exist
         """
-        choice = scr.get_survey_choice(self.choice_id+12)
+        choice = scr.get_survey_choice(self.choice_id + 12)
         self.assertEqual(choice, False)
 
     def test_create_new_survey_choice_returns_false_for_exception(self):
@@ -96,7 +97,7 @@ class TestSurveyChoicesRepository(unittest.TestCase):
         """
         Test that create_new_choice_info() works and returns True
         """
-        success = scr.create_new_choice_info(self.choice_id+56, "Priority", "0", False)
+        success = scr.create_new_choice_info(self.choice_id + 56, "Priority", "0", False)
         self.assertEqual(success, False)
 
     def test_get_choice_additional_infos(self):

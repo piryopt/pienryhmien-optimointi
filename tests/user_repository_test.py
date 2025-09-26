@@ -9,7 +9,6 @@ from src.tools.db_tools import clear_database
 
 
 class TestUserRepository(unittest.TestCase):
-
     def setUp(self):
         load_dotenv()
         self.app = Flask(__name__)

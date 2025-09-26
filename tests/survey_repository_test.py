@@ -11,6 +11,7 @@ from src.entities.user import User
 from src.tools.db_tools import clear_database
 import datetime
 
+
 class TestSurveyRepository(unittest.TestCase):
     def setUp(self):
         load_dotenv()
@@ -226,7 +227,7 @@ class TestSurveyRepository(unittest.TestCase):
         survey_id3 = sr.create_new_survey("Test survey 17", 10, "Motivaatio", "2024-01-01 02:02")
         sor.add_owner_to_survey(survey_id3, self.user_id)
         sr.close_survey(survey_id3)
-        all_open_surveys =sr.get_all_active_surveys()
+        all_open_surveys = sr.get_all_active_surveys()
         self.assertEqual(2, len(all_open_surveys))
 
     def test_save_survey_edit(self):

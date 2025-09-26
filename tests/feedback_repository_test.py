@@ -8,6 +8,7 @@ from src.repositories.user_repository import user_repository as ur
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
+
 class TestFeedbackRepository(unittest.TestCase):
     def setUp(self):
         load_dotenv()

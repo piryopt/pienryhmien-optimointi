@@ -1,12 +1,9 @@
-from src.repositories.survey_choices_repository import (
-    survey_choices_repository as default_survey_choices_repository
-)
-from src.repositories.survey_repository import (
-    survey_repository as default_survey_repository
-)
+from src.repositories.survey_choices_repository import survey_choices_repository as default_survey_choices_repository
+from src.repositories.survey_repository import survey_repository as default_survey_repository
+
 
 class SurveyChoicesService:
-    def __init__(self, survey_choices_repository = default_survey_choices_repository, survey_repository = default_survey_repository):
+    def __init__(self, survey_choices_repository=default_survey_choices_repository, survey_repository=default_survey_repository):
         """
         Initalized the service for survey choices with the repositories needed. The purpose of this class is to handle what happens after the SQL code in the
         corresponding repository
@@ -19,7 +16,7 @@ class SurveyChoicesService:
         self._survey_choices_repository = survey_choices_repository
         self._survey_repository = survey_repository
 
-    def get_list_of_survey_choices(self, survey_id:str):
+    def get_list_of_survey_choices(self, survey_id: str):
         """
         Returns a list of survey choices from a survey
 
@@ -32,7 +29,7 @@ class SurveyChoicesService:
         survey_choices = self._survey_choices_repository.find_survey_choices(survey_id)
         return survey_choices
 
-    def get_survey_choice(self, survey_choice_id:int):
+    def get_survey_choice(self, survey_choice_id: int):
         """
         Returns the data of a survey choice
 
@@ -43,8 +40,8 @@ class SurveyChoicesService:
         if not survey_choice:
             return False
         return survey_choice
-    
-    def get_survey_choice_min_size(self, survey_choice_id:int):
+
+    def get_survey_choice_min_size(self, survey_choice_id: int):
         """
         Returns the min_size of a survey choice
 
@@ -56,7 +53,7 @@ class SurveyChoicesService:
             return False
         return survey_choice.min_size
 
-    def get_choice_name_and_spaces(self, choice_id:int):
+    def get_choice_name_and_spaces(self, choice_id: int):
         """
         Get the name and spaces from a survey choice
 
@@ -65,9 +62,9 @@ class SurveyChoicesService:
         """
         # take only the needed columns
         data = self._survey_choices_repository.get_survey_choice(choice_id)
-        return (data[0],data[2], data[3])
+        return (data[0], data[2], data[3])
 
-    def get_choice_additional_infos(self, choice_id:int):
+    def get_choice_additional_infos(self, choice_id: int):
         """
         Get all info of a survey choice except name and spaces
 
@@ -75,8 +72,8 @@ class SurveyChoicesService:
             choice_id: The id of the survey choice
         """
         return self._survey_choices_repository.get_choice_additional_infos(choice_id)
-    
-    def get_choice_additional_infos_not_hidden(self, choice_id:int):
+
+    def get_choice_additional_infos_not_hidden(self, choice_id: int):
         """
         Get all info of a survey choice except name and spaces
 
@@ -93,7 +90,7 @@ class SurveyChoicesService:
             survey_id: The id of the survey
         """
         return self._survey_choices_repository.get_all_additional_infos(survey_id)
-        
+
     def count_number_of_available_spaces(self, survey_id: str):
         """
         Returns int of the total number of available space in the groups of a survey
@@ -103,7 +100,7 @@ class SurveyChoicesService:
         """
         choices = self.get_list_of_survey_choices(survey_id)
         tally = 0
-        for (id, survey_id, name, spaces, deleted, min_size, mandatory) in choices:
+        for id, survey_id, name, spaces, deleted, min_size, mandatory in choices:
             tally += spaces
         return tally
 
@@ -117,7 +114,7 @@ class SurveyChoicesService:
             in the survey
         """
         return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces, 0, False)
-    
+
     def check_min_equals_max(self, survey_id):
         """
         Check if all survey choices have the same min and max values. Needed for fixing a bug
@@ -134,7 +131,7 @@ class SurveyChoicesService:
             if c.max_spaces != minmax or c.min_size != minmax:
                 return (False, 0)
         return (True, minmax)
-    
+
     def check_answers_less_than_min_size(self, survey_id, survey_answers_amount):
         """
         Check if there are less answers than the group with the smallest min_size
@@ -151,7 +148,7 @@ class SurveyChoicesService:
                 return False
         return True
 
-    def get_survey_choice_mandatory(self, survey_choice_id:int):
+    def get_survey_choice_mandatory(self, survey_choice_id: int):
         """
         Returns a boolean indicating if the survey choice is mandatory
 
@@ -162,7 +159,6 @@ class SurveyChoicesService:
         if not survey_choice:
             return False
         return survey_choice.mandatory
-
 
 
 survey_choices_service = SurveyChoicesService()

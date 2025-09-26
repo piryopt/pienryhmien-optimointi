@@ -1,29 +1,28 @@
 from datetime import datetime
 from flask_babel import gettext
 from flask import session
-from src.repositories.survey_repository import (
-    survey_repository as default_survey_repository
-)
-from src.repositories.survey_owners_repository import (
-    survey_owners_repository as default_survey_owners_repository
-)
-from src.repositories.survey_choices_repository import (
-    survey_choices_repository as default_survey_choices_repository
-)
-from src.services.user_service import (
-    user_service as default_user_service
-)
+from src.repositories.survey_repository import survey_repository as default_survey_repository
+from src.repositories.survey_owners_repository import survey_owners_repository as default_survey_owners_repository
+from src.repositories.survey_choices_repository import survey_choices_repository as default_survey_choices_repository
+from src.services.user_service import user_service as default_user_service
 from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 from src.tools.date_converter import time_to_close
 from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
 
+
 class SurveyService:
-    def __init__(self, survey_repositroy=default_survey_repository, survey_owners_repository = default_survey_owners_repository, choices_repository = default_survey_choices_repository, user_service = default_user_service):
+    def __init__(
+        self,
+        survey_repositroy=default_survey_repository,
+        survey_owners_repository=default_survey_owners_repository,
+        choices_repository=default_survey_choices_repository,
+        user_service=default_user_service,
+    ):
         """
         Initalizes the service for surveys with the repositories needed. The purpose of this class is to handle what happens after the SQL code in the
         corresponding repository
-        
+
         args and variables:
             survey_repository: The repository for surveys
             survey_owners_repository: The repository for survey owners
@@ -169,23 +168,35 @@ class SurveyService:
         return survey.results_saved
 
     def create_survey_from_csv(self, file):
-        '''
+        """
         Calls tools.parsers csv to dict parser
         RETURNS the dictionary
-        '''
-        return parser_csv_to_dict(file) # in tools
-    
-    def create_new_survey_manual(self, survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices=0, allow_search_visibility=True):
-        '''
+        """
+        return parser_csv_to_dict(file)  # in tools
+
+    def create_new_survey_manual(
+        self,
+        survey_choices,
+        survey_name,
+        user_id,
+        description,
+        minchoices,
+        date_end,
+        time_end,
+        allowed_denied_choices=0,
+        allow_search_visibility=True,
+    ):
+        """
         Calls tools.parsers dictionary to survey parser
         that creates the survey, its choices and their additional infos
         RETURNS created survey's id
-        '''
+        """
         if self._survey_repository.survey_name_exists(survey_name, user_id):
             return False
 
-        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility)
-
+        return parser_dict_to_survey(
+            survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility
+        )
 
     def get_survey_description(self, survey_id):
         """
@@ -195,7 +206,7 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.get_survey_description(survey_id)
-    
+
     def get_survey_enddate(self, survey_id):
         """
         Gets the enddate of the survey
@@ -222,7 +233,7 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.get_survey_max_denied_choices(survey_id)
-    
+
     def get_survey_search_visibility(self, survey_id):
         """
         Returns the set preference of showing a choice filtering search bar in the response view of the form.
@@ -233,12 +244,12 @@ class SurveyService:
         return self._survey_repository.get_survey_search_visibility(survey_id)
 
     def get_survey_as_dict(self, survey_id):
-        '''
+        """
         Gets survey, its choices and their additional infos as dictionary
         RETURNS dictionary
-        '''
+        """
         return parser_existing_survey_to_dict(survey_id)
-    
+
     def get_list_active_answered(self, user_id):
         """
         Gets a list of active surveys that the user has answered.
@@ -250,7 +261,7 @@ class SurveyService:
         if not active:
             return []
         return active
-    
+
     def get_list_closed_answered(self, user_id):
         """
         Gets a list of closed surveys that the user has answered.
@@ -262,7 +273,7 @@ class SurveyService:
         if not closed:
             return []
         return closed
-    
+
     def check_for_surveys_to_close(self):
         """
         Gets a list of all active surveys and closes them if closing time has arrived
@@ -284,7 +295,7 @@ class SurveyService:
     def fetch_survey_responses(self, survey_id):
         """
         Gets a list of user_survey_rankings for the survey
-        
+
         args:
             survey_id: The id of the survey
         """
@@ -293,7 +304,7 @@ class SurveyService:
             return []
         return rankings
 
-    def get_choice_popularities(self, survey_id:str):
+    def get_choice_popularities(self, survey_id: str):
         """
         Calls repository function fetch_survey_responses() to get user rankings
         for the choices in the survey and from this data calculates how many
@@ -311,43 +322,49 @@ class SurveyService:
         popularities = {}
         for response in responses:
             ranking = response[1].split(",")
-            for i in range(min(3,len(ranking))):
+            for i in range(min(3, len(ranking))):
                 if int(ranking[i]) in popularities:
                     popularities[int(ranking[i])] += 1
                 else:
                     popularities[int(ranking[i])] = 1
         return (answers, popularities)
 
-    def validate_created_survey(self, survey_dict, edited = False):
-        #print("VALIDATING")
-        #print(survey_dict)
+    def validate_created_survey(self, survey_dict, edited=False):
+        # print("VALIDATING")
+        # print(survey_dict)
 
         # Name length
         if len(survey_dict["surveyGroupname"]) < 5:
-            msg = gettext('Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä')
-            return {"success": False, "message": {"status":"0", "msg":msg}}
-        
+            msg = gettext("Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä")
+            return {"success": False, "message": {"status": "0", "msg": msg}}
+
         # Min choices is a number
         if not edited:
             if not isinstance(survey_dict["minchoices"], int):
-                msg = gettext('Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!')
-                return {"success": False, "message": {"status":"0", "msg":msg}}
+                msg = gettext("Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!")
+                return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
             for choice in survey_dict["choices"]:
                 language = session.get("language", 0)
-                language_mapping = {'fi': 0, 'en': 1, 'sv': 2}
-                dictionary = [["Nimi", "Name", "Namn"], ["Enimmäispaikat", "Maximum capacity", "Max antal platser"], ["Ryhmän minimikoko", "Minimum group size", "Minsta gruppstorlek"]]
+                language_mapping = {"fi": 0, "en": 1, "sv": 2}
+                dictionary = [
+                    ["Nimi", "Name", "Namn"],
+                    ["Enimmäispaikat", "Maximum capacity", "Max antal platser"],
+                    ["Ryhmän minimikoko", "Minimum group size", "Minsta gruppstorlek"],
+                ]
                 lang_i = language_mapping.get(language)
                 if lang_i is None:
                     lang_i = 0
-                    
-                if choice[dictionary[0][lang_i]] == 'tyhjä' or choice[dictionary[1][lang_i]] == 'tyhjä' or choice[dictionary[2][lang_i]] == 'tyhjä':
-                    msg = gettext('Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle.')
-                    return {"success": False, "message": {"status":"0", "msg":msg}}
+
+                if choice[dictionary[0][lang_i]] == "tyhjä" or choice[dictionary[1][lang_i]] == "tyhjä" or choice[dictionary[2][lang_i]] == "tyhjä":
+                    msg = gettext(
+                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle."
+                    )
+                    return {"success": False, "message": {"status": "0", "msg": msg}}
         return {"success": True}
-    
+
     def save_survey_edit(self, survey_id, edit_dict, user_id):
-        '''
+        """
         Function to save edited survey data
         Edit page might not return every data field for survey so function first
         gets survey data as dictionary and replaces applicaple fields with edited fields
@@ -355,7 +372,7 @@ class SurveyService:
         args:
             survey_id (str): ID of the survey being edited
             edict_dict (dict): Dictionary of values returned by save edit
-        '''
+        """
         surveyname = edit_dict["surveyGroupname"]
 
         name_changed = False
@@ -363,23 +380,23 @@ class SurveyService:
         if name != surveyname:
             name_changed = True
         if self._survey_repository.survey_name_exists(surveyname, user_id) and name_changed:
-            message = gettext('Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!')
+            message = gettext("Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!")
             return (False, message)
 
         description = edit_dict["surveyInformation"]
         date_end = edit_dict["enddate"]
         time_end = edit_dict["endtime"]
 
-        datetime_end = date_to_sql_valid(date_end) + " " +  time_end
+        datetime_end = date_to_sql_valid(date_end) + " " + time_end
 
         saved = self._survey_repository.save_survey_edit(survey_id, surveyname, description, datetime_end)
 
         # ADD FUNCTIONALITY FOR EDITING SURVEY CHOICES!
 
         if not saved:
-            message = gettext('Ei voitu tallentaa muutoksia tietokantaan!')
+            message = gettext("Ei voitu tallentaa muutoksia tietokantaan!")
             return (False, message)
-        message = gettext('Muutokset tallennettu!')
+        message = gettext("Muutokset tallennettu!")
         return (True, message)
 
     def update_survey_group_sizes(self, survey_id, choices):
@@ -389,18 +406,18 @@ class SurveyService:
         """
         count = 0
         for choice in choices:
-            success = self._choices_repository.edit_choice_group_size(survey_id, choice['Nimi'], choice['Enimmäispaikat'])
+            success = self._choices_repository.edit_choice_group_size(survey_id, choice["Nimi"], choice["Enimmäispaikat"])
             if not success:
                 if count > 0:
-                    message = gettext('Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut')
+                    message = gettext("Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut")
                     return (False, message)
                 else:
-                    message = gettext('Häiriö. Ryhmäkokojen päivitys ei onnistunut')
+                    message = gettext("Häiriö. Ryhmäkokojen päivitys ei onnistunut")
                     return (False, message)
             count += 1
-        message = gettext('Ryhmäkoot päivitetty')
+        message = gettext("Ryhmäkoot päivitetty")
         return (True, message)
-    
+
     def len_active_surveys(self):
         """
         Gets the size of all active surveys. Used for analytics in the admin page.
@@ -409,7 +426,7 @@ class SurveyService:
         if not surveys:
             return 0
         return len(surveys)
-    
+
     def len_all_surveys(self):
         """
         Gets the size of all surveys. Used for analytics in the admin page.
@@ -418,7 +435,7 @@ class SurveyService:
         if not surveys:
             return 0
         return len(surveys)
-    
+
     def get_all_active_surveys(self):
         """
         Gets the list of all active surveys. Used for analytics in the admin page.

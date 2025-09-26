@@ -9,6 +9,7 @@ from flask_babel import gettext
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 
+
 def convert_choices_groups(survey_choices):
     """
     Converts database data into the class "Group", which is used in the sorting algorithm
@@ -20,6 +21,7 @@ def convert_choices_groups(survey_choices):
     for choice in survey_choices:
         groups[choice[0]] = Group(choice[0], choice[2], choice[3])
     return groups
+
 
 def convert_users_students(user_rankings):
     """
@@ -36,11 +38,12 @@ def convert_users_students(user_rankings):
         int_ranking = [int(i) for i in ranking]
         int_rejections = []
         if user_ranking[2]:
-            if len(user_ranking[2])>0:
+            if len(user_ranking[2]) > 0:
                 rejections = convert_to_list(user_ranking[2])
                 int_rejections = [int(i) for i in rejections]
         students[user_id] = Student(user_id, name, int_ranking, int_rejections)
     return students
+
 
 def get_happiness(survey_choice_id, user_ranking):
     """
@@ -58,7 +61,8 @@ def get_happiness(survey_choice_id, user_ranking):
         if survey_choice_id == int(choice_id):
             break
     return happiness
-    
+
+
 def convert_date(data):
     """
     Convert a datetime object to a dd.mm.yyyy string
@@ -71,7 +75,8 @@ def convert_date(data):
     year = str(data.year)
     date = day + "." + month + "." + year
     return date
-    
+
+
 def convert_time(data):
     """
     Convert a datetime object to a hh:mm string
@@ -84,6 +89,7 @@ def convert_time(data):
     time = time_hour + ":" + time_minute
     return time
 
+
 def check_if_zero_needed(unit):
     """
     Add a 0 to the start of the unit if it's length is 1.
@@ -92,8 +98,9 @@ def check_if_zero_needed(unit):
         unit: hour/minute/day/month of a datetime object
     """
     if len(unit) == 1:
-        unit = "0"+ unit
+        unit = "0" + unit
     return unit
+
 
 def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
     """
@@ -115,7 +122,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     additional_infos = {}
     for row in survey_choices:
         additional_infos[str(row[0])] = []
-        
+
         cinfos = survey_choices_service.get_choice_additional_infos(row[0])
         for i in cinfos:
             additional_infos[str(row[0])].append(i[1])
@@ -125,7 +132,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_results = {}
     for results in output_data:
         user_id = results[0][0]
-        choice_id =  results[2][0]
+        choice_id = results[2][0]
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking)
         happiness_avg += happiness
@@ -136,14 +143,14 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
             happiness_results[happiness] += 1
     happiness_avg /= len(students_dict)
     happiness_results_list = []
-    for k,v in happiness_results.items():
+    for k, v in happiness_results.items():
         if v > 0:
-            msg = gettext('. valintaansa sijoitetut käyttäjät: ')
+            msg = gettext(". valintaansa sijoitetut käyttäjät: ")
             happiness_results_list.append((k, msg + f"{v}"))
-    
+
     # Fix a bug where happiness results did not always come in the right order
     happiness_results_list.sort()
-    
+
     dropped_groups = []
     for group_id in dropped_groups_id:
         group = survey_choices_service.get_survey_choice(group_id)
@@ -151,6 +158,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
 
     output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, additional_infos, cinfos)
     return output_data
+
 
 def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id):
     """
@@ -160,9 +168,9 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
     while loop:
         seats = get_seats(groups_dict)
 
-        # If there are less seats than survey answers, add an empty group 
+        # If there are less seats than survey answers, add an empty group
         if seats < survey_answers_amount:
-            empty_group_id = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-seats)
+            empty_group_id = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount - seats)
             empty_group = survey_choices_service.get_survey_choice(empty_group_id)
             groups_dict[empty_group[0]] = Group(empty_group[0], empty_group[2], empty_group[3])
 
@@ -220,7 +228,7 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                         output_data[idx][2] = [survey_choice_id, groups_dict[survey_choice_id].name]  # overwrite group assignment
                         group_sizes[old_group] -= 1
                         group_sizes[survey_choice_id] += 1
-                    
+
                         # Lock this student into the mandatory group so that the hungarian algorithm doesn't move them again
                         students_dict[student_id].selections = [survey_choice_id]
 
