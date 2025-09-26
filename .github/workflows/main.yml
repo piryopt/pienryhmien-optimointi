@@ -71,7 +71,7 @@ jobs:
       - name: Run Playwright tests
         run: |
           python -m playwright install --with-deps chromium
-          pytest tests/playwright/survey_testing.py --browser chromium
+          pytest -s tests/playwright/survey_testing.py --browser chromium
 
       - name: Upload test artifacts
         if: failure()
@@ -81,6 +81,7 @@ jobs:
           path: |
             flask_output.log
             trace_*.zip
+            videos/
             network.har
             playwright-report/
           retention-days: 2
