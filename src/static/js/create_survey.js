@@ -298,6 +298,7 @@ function saveGroupSizes() {
     }); 
 }
 
+/*
 function addRow() {
     var newRow = document.getElementById("choiceTable").insertRow()
 
@@ -313,6 +314,43 @@ function addRow() {
 
     newRow.appendChild(createDeleteRowCell())
     enableSelectAllCheckbox()
+}
+*/
+function addRow() {
+    console.log("addRow() called");
+    try {
+        var newRow = document.getElementById("choiceTable").insertRow();
+        console.log("New row created:", newRow);
+        var checkboxCell = document.createElement("td");
+        checkboxCell.innerHTML = '<input type="checkbox" name="choice-checkbox">';
+        newRow.appendChild(checkboxCell);
+        console.log("Checkbox cell added");
+        headers = document.querySelectorAll("#choice-table-headers th:not(#add-column-header)");
+        console.log("Headers found:", headers.length);
+        headers.forEach( (header, index) => {
+            if (index === 0) return;
+            console.log("Adding input cell for header index:", index);
+            newRow.appendChild(createEmptyInputCell());
+        });
+        console.log("Appending delete row cell");
+        newRow.appendChild(createDeleteRowCell());
+        console.log("Row fully constructed");
+        var selectAllId = 'select-all-choices';
+        var checkboxName = 'choice-checkbox';
+        const selectAll = document.getElementById(selectAllId);
+        if (!selectAll) {
+            console.log("selectAll element not found");
+            return;
+        }
+        selectAll.addEventListener("change", function() {
+            console.log("selectAll change event triggered");
+            const checkboxes = document.querySelectorAll(`input[name="${checkboxName}"]`);
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+        });
+        console.log("selectAll event listener added");
+    } catch (error) {
+        console.error("Error in addRow:", error);
+    }
 }
 
 function addCellEventListeners(cellElem) {
