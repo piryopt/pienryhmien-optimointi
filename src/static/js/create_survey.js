@@ -102,25 +102,21 @@ function removeValidationErrorMsg(elem) {
 function setValidationErrorMsg(elem) {
   // Expects that every field that can raise validation error has a corresponding
   // span element with id matching "#${fieldName}-validation-warning" -scheme
-  elem.classList.add("active-warning");
-  elem.classList.remove("hidden");
-  var fieldName = elem.getAttribute("name");
+  elem.classList.add("active-warning")
+  elem.classList.remove("hidden")
+  var fieldName = elem.getAttribute("name")
 
-  var alertMsg = elem.getAttribute("validation-text")
-    ? elem.getAttribute("validation-text")
-    : "Jokin meni pieleen! Tarkasta kenttien sisältö";
-  var warningTextContainer = document.querySelector(
-    `#${fieldName}-validation-warning`
-  );
+  var alertMsg = elem.getAttribute("validation-text") ? elem.getAttribute("validation-text") : "Jokin meni pieleen! Tarkasta kenttien sisältö"
+  var warningTextContainer = document.querySelector(`#${fieldName}-validation-warning`)
 
-  if (!warningTextContainer) {
-    showAlert({ msg: alertMsg, color: "red" });
+  if(!warningTextContainer) {
+      showAlert({msg: alertMsg, color:"red"})
   }
 
-  warningTextContainer.innerText = alertMsg;
-  warningTextContainer.classList.add("active-warning");
-  warningTextContainer.classList.remove("hidden");
-  warningTextContainer.parentElement.parentElement.classList.remove("hidden");
+  warningTextContainer.innerText = alertMsg
+  warningTextContainer.classList.add("active-warning")
+  warningTextContainer.classList.remove("hidden")
+  warningTextContainer.parentElement.parentElement.classList.remove('hidden')
 
   elem.scrollIntoView({ behavior: "smooth", block: "center" });
 }

@@ -115,6 +115,17 @@ td.edited:after {
   background-color: #b9b9bb;
 }
 
+.ui-datepicker-unselectable.ui-state-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ui-state-highlight {
+  background: lightskyblue !important;
+  color: #000 !important;
+  font-weight: bold;
+}
+
 .choice-table-main {
   width: auto;
 }
