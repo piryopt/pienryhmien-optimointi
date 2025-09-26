@@ -13,6 +13,12 @@
 docker compose run --rm test
 ```
 
+### Run pytests with coverage HTML report
+
+```
+docker compose run --rm test --cov=src --cov-report=html
+```
+
 ### Run playwright tests
 
 ```
