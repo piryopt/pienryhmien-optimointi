@@ -92,10 +92,17 @@ def test_create_new_survey(page: Page):
     page.locator("#choiceTable tr").nth(0).locator("td").nth(4).click()
     page.keyboard.type("Trespass into the domain of the Gods!")
 
+    page.evaluate("document.getElementById('add_choice_button').click()")
+    page.locator("#add_choice_button").click(force=True)
+
     page.wait_for_selector("#add_choice_button", state="visible")
     page.wait_for_function("typeof addRow === 'function'")
     print("addRow is available on the page")
     assert page.evaluate("document.getElementById('add_choice_button').onclick !== null")
+
+    button = page.locator("#add_choice_button")
+    button.scroll_into_view_if_needed()
+    button.click(force=False, timeout=5000)
 
     page.locator("#add_choice_button").click()
     page.locator("#choiceTable tr").nth(1).wait_for(state="visible", timeout=60000)
