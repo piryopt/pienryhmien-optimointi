@@ -108,6 +108,8 @@ function setValidationErrorMsg(elem) {
     warningTextContainer.classList.add("active-warning")
     warningTextContainer.classList.remove("hidden")
     warningTextContainer.parentElement.parentElement.classList.remove('hidden')
+
+    elem.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function createNewSurvey() {
