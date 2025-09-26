@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 from playwright.sync_api import Page, expect
-from playwright_tools import login, trace_on_failure
+from playwright_tools import login, trace_on_failure, browser_context_args
 
 FILE_TO_UPLOAD = Path(__file__).parent / ".." / "test_files" / "test_survey2.csv"
 
@@ -35,10 +35,40 @@ def test_go_to_all_surveys_page(page: Page):
     expect(page).to_have_title(re.compile("Aiemmat kyselyt - Jakaja"))
 
 
+def test_create_new_survey_with_csv_file(page: Page):
+    """
+    Test that the user is able to create a new survey with a pre-made CSV file
+    """
+    page.on("console", lambda msg: print(f"[BROWSER LOG] {msg.type}: {msg.text}"))
+
+    login(page, "robottiTeacher", "RoboCop")
+    page.get_by_role(
+        "link",
+        name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
+    ).click()
+    page.locator("#groupname").fill("Päiväkoti valinta")
+    page.locator("#end-date").fill("31.08.2029")
+    page.locator("#endtime").select_option("12:00")
+    page.locator("#survey-information").fill(
+        "Valitse mihin päiväkotiin haluat sijoittaa itsesi"
+    )
+
+    with page.expect_file_chooser() as fc_info:
+        page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
+    file_chooser = fc_info.value
+    file_chooser.set_files(str(FILE_TO_UPLOAD))
+    expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
+    expect(page.get_by_text("Nallitie 3")).to_be_visible()
+    page.locator("#create_survey").click()
+    expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
+
+
 def test_create_new_survey(page: Page):
     """
     Test that the user is able to create a new survey
     """
+    page.on("console", lambda msg: print(f"[BROWSER LOG] {msg.type}: {msg.text}"))
+
     login(page, "robottiTeacher", "abuse gear")
     page.get_by_role(
         "link",
@@ -91,32 +121,6 @@ def test_create_new_survey(page: Page):
     page.wait_for_timeout(500)
     page.locator("#create_survey").click()
     # page.screenshot(path="playwright-report/afterclick.png", full_page=True)
-    expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
-
-
-def test_create_new_survey_with_csv_file(page: Page):
-    """
-    Test that the user is able to create a new survey with a pre-made CSV file
-    """
-    login(page, "robottiTeacher", "RoboCop")
-    page.get_by_role(
-        "link",
-        name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
-    ).click()
-    page.locator("#groupname").fill("Päiväkoti valinta")
-    page.locator("#end-date").fill("31.08.2029")
-    page.locator("#endtime").select_option("12:00")
-    page.locator("#survey-information").fill(
-        "Valitse mihin päiväkotiin haluat sijoittaa itsesi"
-    )
-
-    with page.expect_file_chooser() as fc_info:
-        page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
-    file_chooser = fc_info.value
-    file_chooser.set_files(str(FILE_TO_UPLOAD))
-    expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
-    expect(page.get_by_text("Nallitie 3")).to_be_visible()
-    page.locator("#create_survey").click()
     expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
 
 

@@ -59,17 +59,28 @@ jobs:
       - name: Lint code
         run: pylint src/
 
-      - name: Run playwright tests
+      - name: Run Flask server and log output
+        run: |
+          flask run --debug > flask_output.log 2>&1 &
+          for i in {1..30}; do
+            curl -sSf http://localhost:5000/ && break
+            echo "Waiting for server..."
+            sleep 1
+          done
+
+      - name: Run Playwright tests
         run: |
           python -m playwright install --with-deps chromium
-          flask run --debug &
-          sleep 5
           pytest tests/playwright/survey_testing.py --browser chromium
 
-      - name: Upload Playwright traces on failure
+      - name: Upload test artifacts
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-traces
-          path: trace_*.zip
+          name: test-artifacts
+          path: |
+            flask_output.log
+            trace_*.zip
+            network.har
+            playwright-report/
           retention-days: 2

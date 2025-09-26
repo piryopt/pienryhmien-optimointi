@@ -2,15 +2,21 @@ import os
 import pytest
 
 
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    return {
+        **browser_context_args,
+        "record_video_dir": "videos/",
+        "record_har_path": "network.har",
+    }
+
+
 @pytest.fixture(scope="function", autouse=True)
 def trace_on_failure(context, request):
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     yield
-    if request.node.rep_call.failed:
-        trace_path = f"trace_{request.node.name}.zip"
-        context.tracing.stop(path=trace_path)
-    else:
-        context.tracing.stop()
+    trace_path = f"trace_{request.node.name}.zip"
+    context.tracing.stop(path=trace_path)
 
 
 def login(page, username, password):
