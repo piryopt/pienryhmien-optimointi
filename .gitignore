@@ -59,6 +59,9 @@ coverage.xml
 cover/
 test-results/
 
+# Playwright
+trace_test*
+
 # Django stuff:
 *.log
 local_settings.py
