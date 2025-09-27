@@ -1,6 +1,17 @@
 import os
 import pytest
 
+
+# Add to imports of survey_testing.py to get more info
+@pytest.fixture(scope="session")
+def browser_context_args(browser_context_args):
+    return {
+        **browser_context_args,
+        "record_video_dir": "videos/",
+        "record_har_path": "network.har",
+    }
+
+
 @pytest.fixture(scope="function", autouse=True)
 def trace_on_failure(context, request):
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
@@ -11,9 +22,6 @@ def trace_on_failure(context, request):
     else:
         context.tracing.stop()
 
-@pytest.fixture(scope="function")
-def video_context(browser):
-    return browser.new_context(record_video_dir="videos/")
 
 def login(page, username, password):
     """
