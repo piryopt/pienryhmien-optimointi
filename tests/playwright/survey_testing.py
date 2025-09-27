@@ -104,6 +104,8 @@ def test_create_new_survey(page: Page):
 
     page.locator("#choiceTable tr").nth(1).wait_for(state="visible", timeout=60000)
     page.locator("#choiceTable tr").nth(1).locator("td").nth(1).click()
+    page.locator("#choiceTable tr").nth(1).locator("td").nth(1).click()
+
     page.keyboard.type("Barou")
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
@@ -116,6 +118,8 @@ def test_create_new_survey(page: Page):
     page.keyboard.type("Talent without hard work is nothing.")
     page.locator("#choiceTable tr").nth(2).wait_for(state="visible", timeout=60000)
     page.locator("#choiceTable tr").nth(2).locator("td").nth(1).click()
+    page.locator("#choiceTable tr").nth(2).locator("td").nth(1).click()
+
     page.keyboard.type("Isagi")
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
