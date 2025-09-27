@@ -99,9 +99,7 @@ def test_create_new_survey(page: Page):
         "document.getElementById('add_choice_button').onclick !== null"
     )
 
-    button = page.locator("#add_choice_button")
-    button.scroll_into_view_if_needed()
-    button.click(force=False, timeout=5000)
+    page.locator("#add_choice_button").click()
     page.locator("#add_choice_button").click()
 
     page.locator("#choiceTable tr").nth(1).wait_for(state="visible", timeout=60000)
