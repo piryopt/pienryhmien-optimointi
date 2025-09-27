@@ -39,9 +39,10 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-
+          echo "TEST_DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres" > .env
+          echo "TEST_SECRET_KEY={{ secrets.SECRET_KEY }}" >> .env
+          echo "FLASK_ENV=testing" >> .env
+          
       - name: Run DB migrations
         run: psql -f schema.sql postgresql://postgres:postgres@localhost:5432/postgres
 

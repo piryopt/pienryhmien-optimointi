@@ -640,7 +640,8 @@ def login():
              User("robottiStudent", "robotti.student@helsinki.fi", False),
              User("robottiTeacher", "robotti.teacher@helsinki.fi", True),
              User("robottiTeacher2", "robotti.2.teacher@helsinki.fi", True),
-             User("Ääpö Wokki", "hm@helsinki.fi", True)]
+             User("Ääpö Wokki", "hm@helsinki.fi", True),
+             User("opettaja", "opettaja@mail.com", True)]
     
     if request.method == "GET":
         return render_template("mock_ad.html")
@@ -764,31 +765,36 @@ def admin_all_active_surveys():
         return redirect("/")
     return render_template("/admintools/admin_survey_list.html", data = data)
 
-'''@app.route("/admintools/gen_data", methods = ["GET", "POST"])
+@app.route("/admintools/gen_data", methods = ["GET", "POST"])
 def admin_gen_data():
     """
     Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
     """
-    user_id = session.get("user_id",0)
-    surveys = survey_repository.fetch_all_active_surveys(user_id)
-    if request.method == "GET":
-        return render_template("/admintools/gen_data.html", surveys = surveys)
-
-    if request.method == "POST":
-        student_n = request.form.get("student_n")
-        gen_data.generate_users(int(student_n))
-        gen_data.add_generated_users_db()
-        return redirect("/admintools/gen_data")
-
-@app.route("/admintools/gen_data/rankings", methods = ["POST"])
-def admin_gen_rankings():
-    """
-    Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
-    """
-    survey_id = request.form.get("survey_list")
-    gen_data.generate_rankings(survey_id)
-
-    return redirect(f"/surveys/{survey_id}/answers")'''
+    from scripts import fill_database_with_survey_answers
+    students = int(request.args.get("students"))
+    groups = int(request.args.get("groups"))
+    fill_database_with_survey_answers.fill_database(groups, students)
+    return redirect("/")
+#    user_id = session.get("user_id",0)
+#    surveys = survey_repository.fetch_all_active_surveys(user_id)
+#    if request.method == "GET":
+#        return render_template("/admintools/gen_data.html", surveys = surveys)
+#
+#    if request.method == "POST":
+#        student_n = request.form.get("student_n")
+#        gen_data.generate_users(int(student_n))
+#        gen_data.add_generated_users_db()
+#        return redirect("/admintools/gen_data")
+#
+#@app.route("/admintools/gen_data/rankings", methods = ["POST"])
+#def admin_gen_rankings():
+#    """
+#    Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
+#    """
+#    survey_id = request.form.get("survey_list")
+#    gen_data.generate_rankings(survey_id)
+#
+#    return redirect(f"/surveys/{survey_id}/answers")
 
 """
 MISCELLANEOUS ROUTES:

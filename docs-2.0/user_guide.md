@@ -18,31 +18,43 @@ cd pienryhmien-optimointi
 Create a file named `.env` in the project root with the following content. Replace the values with your own secure choices:
 
 ```env
-# PostgreSQL settings
-POSTGRES_USER=your_db_user
-POSTGRES_PASSWORD=your_db_password
-POSTGRES_DB=your_db_name
+# For dev
+POSTGRES_USER=devuser
+POSTGRES_PASSWORD=devpass
+POSTGRES_DB=dev_db_name
+DEV_DATABASE_URL=postgresql://devuser:devpass@db:5432/dev_db_name
+DEV_SECRET_KEY=dev_secret
 
-# Flask settings
-SECRET_KEY=your_secret_key
+# For test
+TEST_POSTGRES_USER=testuser
+TEST_POSTGRES_PASSWORD=testpass
+TEST_POSTGRES_DB=test_db_name
+TEST_DATABASE_URL=postgresql://testuser:testpass@test-db:5432/test_db_name
+TEST_SECRET_KEY=test_secret
+
+
+# Debug on "1" else "0"
 FLASK_DEBUG=1
-
-# Database URL for Flask SQLAlchemy
-DATABASE_URL=postgresql://your_db_user:your_db_password@db:5432/your_db_name
 ```
 
 ---
 
-## 3. Start the Project with Docker Compose
+## 3. Start the Project with Docker Compose (development environment or testing environment)
 
-Make sure Docker is installed and running. Then, in your project root, run:
+Make sure Docker is installed and running. Then, in your project root, run development environment with:
 
 ```bash
-docker-compose up --build
+docker compose up web db --build
 ```
 
-- This will build and start both the web application and the PostgreSQL database.
+- This will build and start both the web application and the PostgreSQL development database
 - The web app will be available at [http://localhost:5001](http://localhost:5001) (or the port you set in `docker-compose.yml`).
+
+To run the application in testing environment which uses the test database run:
+
+```bash
+docker compose run --rm test
+```
 
 ---
 
@@ -88,7 +100,7 @@ But just in case if you make changes to the code and want to restart the applica
 3. Rebuild and start again:
 
    ```bash
-   docker compose up --build
+   docker compose up web db --build
    ```
 
    This ensures your changes are included in the running containers.
