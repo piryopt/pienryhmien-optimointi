@@ -7,7 +7,6 @@ from flask_babel import Babel
 from dotenv import load_dotenv
 
 
-
 class Config:
     SCHEDULER_API_ENABLED = True
 

@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from src import db
 from src.tools.db_tools import clear_database
 
+
 def main():
     load_dotenv()
     app = Flask(__name__)
@@ -13,6 +14,7 @@ def main():
     with app.app_context():
         clear_database()
         print("Test database cleared.")
+
 
 if __name__ == "__main__":
     main()

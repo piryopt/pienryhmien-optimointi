@@ -49,9 +49,7 @@ def test_create_new_survey_with_csv_file(page: Page):
     page.locator("#groupname").fill("Päiväkoti valinta")
     page.locator("#end-date").fill("31.08.2029")
     page.locator("#endtime").select_option("12:00")
-    page.locator("#survey-information").fill(
-        "Valitse mihin päiväkotiin haluat sijoittaa itsesi"
-    )
+    page.locator("#survey-information").fill("Valitse mihin päiväkotiin haluat sijoittaa itsesi")
 
     with page.expect_file_chooser() as fc_info:
         page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
@@ -95,9 +93,7 @@ def test_create_new_survey(page: Page):
     page.wait_for_selector("#add_choice_button", state="visible")
     page.wait_for_function("typeof addRow === 'function'")
     print("addRow is available on the page")
-    assert page.evaluate(
-        "document.getElementById('add_choice_button').onclick !== null"
-    )
+    assert page.evaluate("document.getElementById('add_choice_button').onclick !== null")
 
     page.evaluate("document.getElementById('add_choice_button').click()")
     page.evaluate("document.getElementById('add_choice_button').click()")
@@ -163,27 +159,15 @@ def test_answer_survey(page: Page):
     expect(page.get_by_text("Päiväkoti Kotikallio").first).to_be_visible()
     expect(page.get_by_text("Päiväkoti Nalli").first).to_be_visible()
     page.locator("#submitDoesntExistButton").click()
-    expect(
-        page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")
-    ).to_be_visible()
-    expect(
-        page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")
-    ).to_be_hidden()
-    page.get_by_text("Päiväkoti Toivo").drag_to(
-        page.locator("xpath=//*[@id='sortable-good']")
-    )
+    expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_visible()
+    expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_hidden()
+    page.get_by_text("Päiväkoti Toivo").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
     page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Floora").drag_to(
-        page.locator("xpath=//*[@id='sortable-good']")
-    )
+    page.get_by_text("Päiväkoti Floora").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
     page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Kotikallio").drag_to(
-        page.locator("xpath=//*[@id='sortable-good']")
-    )
+    page.get_by_text("Päiväkoti Kotikallio").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
     page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Nalli").drag_to(
-        page.locator("xpath=//*[@id='sortable-good']")
-    )
+    page.get_by_text("Päiväkoti Nalli").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
     page.wait_for_timeout(500)
     page.locator("#submitDoesntExistButton").click()
     expect(page.get_by_text("Tallennus onnistui.")).to_be_visible()

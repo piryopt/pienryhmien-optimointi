@@ -23,7 +23,6 @@ def trace_on_failure(context, request):
         context.tracing.stop()
 
 
-
 def login(page, username, password):
     """
     Helper function for logging the user in

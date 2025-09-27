@@ -38,8 +38,8 @@ class Hungarian:
         self.assigned_groups = {key: [] for key, group in self.groups.items()}
         self.student_happiness = np.zeros((len(self.students), 2))
 
-        self.assigned_groups = {key:[] for key, group in self.groups.items()}
-        self.student_happiness = np.zeros((len(self.students),2))
+        self.assigned_groups = {key: [] for key, group in self.groups.items()}
+        self.student_happiness = np.zeros((len(self.students), 2))
 
     def run(self):
         """
@@ -80,8 +80,8 @@ class Hungarian:
         """
         matrix = []
         mandatory_base_weight = 100000  # Very high base weight for mandatory groups
-        mandatory_penalty = 1000        # Penalty for lower ranking
-        mandatory_low_weight = 50000    # Lower, but still high, for not ranked/rejected
+        mandatory_penalty = 1000  # Penalty for lower ranking
+        mandatory_low_weight = 50000  # Lower, but still high, for not ranked/rejected
 
         # Count how many mandatory spots have been assigned for each group
         group_spot_counter = {group_id: 0 for group_id, group in self.groups.items() if group.mandatory}
@@ -150,8 +150,7 @@ class Hungarian:
         negative and then adding the original matrix maximum to each number
         """
         maximum = np.max(self.matrix)
-        self.matrix = self.matrix*-1+maximum
-
+        self.matrix = self.matrix * -1 + maximum
 
     def find_assignment(self):
         """
