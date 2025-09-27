@@ -67,7 +67,7 @@ def test_create_new_survey(page: Page):
     """
     Test that the user is able to create a new survey
     """
-    page.on("console", lambda msg: print(f"[BROWSER LOG] {msg.type}: {msg.text}"))
+    page.on("console", lambda msg: print(f"Console [{msg.type}]: {msg.text}"))
 
     login(page, "robottiTeacher", "abuse gear")
     page.get_by_role(

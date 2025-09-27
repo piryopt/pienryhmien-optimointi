@@ -18,7 +18,7 @@ def convert_choices_groups(survey_choices):
     """
     groups = {}
     for choice in survey_choices:
-        groups[choice[0]] = Group(choice[0], choice[2], choice[3])
+        groups[choice[0]] = Group(choice[0], choice[2], choice[3], choice[5], choice[6])
     return groups
 
 def convert_users_students(user_rankings):
@@ -164,7 +164,7 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
         if seats < survey_answers_amount:
             empty_group_id = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount-seats)
             empty_group = survey_choices_service.get_survey_choice(empty_group_id)
-            groups_dict[empty_group[0]] = Group(empty_group[0], empty_group[2], empty_group[3])
+            groups_dict[empty_group[0]] = Group(empty_group[0], empty_group[2], empty_group[3], empty_group[5], empty_group[6])
 
         # Run the algotrithm with the groups that haven't been dropped
         weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()
