@@ -21,8 +21,8 @@ class TestSurveyChoicesService(unittest.TestCase):
 
         load_dotenv()
         self.app = Flask(__name__)
-        self.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-        self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+        self.app.config["SECRET_KEY"] = os.getenv("TEST_SECRET_KEY")
+        self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("TEST_DATABASE_URL")
         self.app.config["BABEL_DEFAULT_LOCALE"] = "fi"
 
         babel = Babel(self.app)

@@ -1,8 +1,8 @@
-FROM registry.access.redhat.com/ubi8/python-39
+FROM registry.access.redhat.com/ubi8/python-312
 
 WORKDIR /usr/src/app
 
-COPY ./src .
+COPY . .
 COPY ./schema.sql .
 
 RUN pip install --no-cache-dir -r requirements.txt

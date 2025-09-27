@@ -1,9 +1,9 @@
 from pathlib import Path
 import re
 from playwright.sync_api import Page, expect
-from playwright_tools import login, trace_on_failure, video_context
+from playwright_tools import login, trace_on_failure
 
-FILE_TO_UPLOAD = Path(__file__).parent / ".." / "test_files" / "test_survey1.csv"
+FILE_TO_UPLOAD = Path(__file__).parent / ".." / "test_files" / "test_survey2.csv"
 
 
 def test_login(page: Page):
@@ -35,10 +35,40 @@ def test_go_to_all_surveys_page(page: Page):
     expect(page).to_have_title(re.compile("Aiemmat kyselyt - Jakaja"))
 
 
+def test_create_new_survey_with_csv_file(page: Page):
+    """
+    Test that the user is able to create a new survey with a pre-made CSV file
+    """
+    page.on("console", lambda msg: print(f"[BROWSER LOG] {msg.type}: {msg.text}"))
+
+    login(page, "robottiTeacher", "RoboCop")
+    page.get_by_role(
+        "link",
+        name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
+    ).click()
+    page.locator("#groupname").fill("Päiväkoti valinta")
+    page.locator("#end-date").fill("31.08.2029")
+    page.locator("#endtime").select_option("12:00")
+    page.locator("#survey-information").fill(
+        "Valitse mihin päiväkotiin haluat sijoittaa itsesi"
+    )
+
+    with page.expect_file_chooser() as fc_info:
+        page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
+    file_chooser = fc_info.value
+    file_chooser.set_files(str(FILE_TO_UPLOAD))
+    expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
+    expect(page.get_by_text("Nallitie 3")).to_be_visible()
+    page.locator("#create_survey").click()
+    expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
+
+
 def test_create_new_survey(page: Page):
     """
     Test that the user is able to create a new survey
     """
+    page.on("console", lambda msg: print(f"Console [{msg.type}]: {msg.text}"))
+
     login(page, "robottiTeacher", "abuse gear")
     page.get_by_role(
         "link",
@@ -61,9 +91,21 @@ def test_create_new_survey(page: Page):
     page.keyboard.press("Enter")
     page.locator("#choiceTable tr").nth(0).locator("td").nth(4).click()
     page.keyboard.type("Trespass into the domain of the Gods!")
-    page.locator("#add_choice").click()
+
+    page.wait_for_selector("#add_choice_button", state="visible")
+    page.wait_for_function("typeof addRow === 'function'")
+    print("addRow is available on the page")
+    assert page.evaluate(
+        "document.getElementById('add_choice_button').onclick !== null"
+    )
+
+    page.evaluate("document.getElementById('add_choice_button').click()")
+    page.evaluate("document.getElementById('add_choice_button').click()")
+
     page.locator("#choiceTable tr").nth(1).wait_for(state="visible", timeout=60000)
     page.locator("#choiceTable tr").nth(1).locator("td").nth(1).click()
+    page.locator("#choiceTable tr").nth(1).locator("td").nth(1).click()
+
     page.keyboard.type("Barou")
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
@@ -74,9 +116,10 @@ def test_create_new_survey(page: Page):
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
     page.keyboard.type("Talent without hard work is nothing.")
-    page.locator("#add_choice").click()
     page.locator("#choiceTable tr").nth(2).wait_for(state="visible", timeout=60000)
     page.locator("#choiceTable tr").nth(2).locator("td").nth(1).click()
+    page.locator("#choiceTable tr").nth(2).locator("td").nth(1).click()
+
     page.keyboard.type("Isagi")
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
@@ -94,41 +137,17 @@ def test_create_new_survey(page: Page):
     expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
 
 
-def test_create_new_survey_with_csv_file(page: Page):
-    """
-    Test that the user is able to create a new survey with a pre-made CSV file
-    """
-    login(page, "robottiTeacher", "RoboCop")
-    page.get_by_role(
-        "link",
-        name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
-    ).click()
-    page.locator("#groupname").fill("Päiväkoti valinta")
-    page.locator("#end-date").fill("31.08.2029")
-    page.locator("#endtime").select_option("12:00")
-    page.locator("#survey-information").fill("Valitse mihin päiväkotiin haluat sijoittaa itsesi")
-
-    with page.expect_file_chooser() as fc_info:
-        page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
-    file_chooser = fc_info.value
-    file_chooser.set_files(str(FILE_TO_UPLOAD))
-    expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
-    expect(page.get_by_text("Tässä tekstiä,, kahdella pilkulla")).to_be_visible()
-    page.locator("#create_survey").click()
-    expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
-
-
 def test_survey_more_info_works(page: Page):
     """
     Test that if a survey choice has additional info, it is displayed when clicked and hidden when clicked again
     """
     login(page, "robottiTeacher", "repeat")
     page.get_by_role("link", name="Näytä vanhat kyselyt").click()
-    page.get_by_role("link", name="Menaces").click()
-    page.get_by_text("Isagi").click()
-    expect(page.get_by_text("Quotes: How does it feel to be the clown of my story?").first).to_be_visible()
-    page.get_by_text("Isagi").click()
-    expect(page.get_by_text("Quotes: How does it feel to be the clown of my story?").first).to_be_hidden()
+    page.get_by_role("link", name="Päiväkoti valinta").click()
+    page.get_by_text("Päiväkoti Floora").click()
+    expect(page.get_by_text("Osoite: Syyriankatu 1").first).to_be_visible()
+    page.get_by_text("Päiväkoti Toivo").click()
+    expect(page.get_by_text("Osoite: Apteekkarinraitti 3").first).to_be_hidden()
 
 
 def test_answer_survey(page: Page):
@@ -137,19 +156,34 @@ def test_answer_survey(page: Page):
     """
     login(page, "robottiTeacher", "eat")
     page.get_by_role("link", name="Näytä vanhat kyselyt").click()
-    page.get_by_role("link", name="Menaces").click()
-    expect(page.get_by_text("Menaces").first).to_be_visible()
-    expect(page.get_by_text("Vegeta").first).to_be_visible()
-    expect(page.get_by_text("Barou").first).to_be_visible()
-    expect(page.get_by_text("Isagi").first).to_be_visible()
+    page.get_by_role("link", name="Päiväkoti valinta").click()
+    expect(page.get_by_text("Päiväkoti valinta").first).to_be_visible()
+    expect(page.get_by_text("Päiväkoti Toivo").first).to_be_visible()
+    expect(page.get_by_text("Päiväkoti Floora").first).to_be_visible()
+    expect(page.get_by_text("Päiväkoti Kotikallio").first).to_be_visible()
+    expect(page.get_by_text("Päiväkoti Nalli").first).to_be_visible()
     page.locator("#submitDoesntExistButton").click()
-    expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 3")).to_be_visible()
-    expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 3")).to_be_hidden()
-    page.get_by_text("Barou").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
+    expect(
+        page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")
+    ).to_be_visible()
+    expect(
+        page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")
+    ).to_be_hidden()
+    page.get_by_text("Päiväkoti Toivo").drag_to(
+        page.locator("xpath=//*[@id='sortable-good']")
+    )
     page.wait_for_timeout(500)
-    page.get_by_text("Isagi").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
+    page.get_by_text("Päiväkoti Floora").drag_to(
+        page.locator("xpath=//*[@id='sortable-good']")
+    )
     page.wait_for_timeout(500)
-    page.get_by_text("Vegeta").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
+    page.get_by_text("Päiväkoti Kotikallio").drag_to(
+        page.locator("xpath=//*[@id='sortable-good']")
+    )
+    page.wait_for_timeout(500)
+    page.get_by_text("Päiväkoti Nalli").drag_to(
+        page.locator("xpath=//*[@id='sortable-good']")
+    )
     page.wait_for_timeout(500)
     page.locator("#submitDoesntExistButton").click()
     expect(page.get_by_text("Tallennus onnistui.")).to_be_visible()
@@ -161,7 +195,7 @@ def test_delete_survey_answer(page: Page):
     """
     login(page, "robottiTeacher", "sleep")
     page.get_by_role("link", name="Näytä vanhat kyselyt").click()
-    page.get_by_role("link", name="Menaces").click()
+    page.get_by_role("link", name="Päiväkoti valinta").click()
     page.locator("#deleteSubmission").click()
     expect(page.get_by_text("Oletko varma?")).to_be_visible()
     page.locator("#confirmDelete").click()

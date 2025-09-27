@@ -38,6 +38,9 @@ class Hungarian:
         self.assigned_groups = {key: [] for key, group in self.groups.items()}
         self.student_happiness = np.zeros((len(self.students), 2))
 
+        self.assigned_groups = {key:[] for key, group in self.groups.items()}
+        self.student_happiness = np.zeros((len(self.students),2))
+
     def run(self):
         """
         Calls functions in appropriate order to process matrix to correct form
@@ -76,15 +79,56 @@ class Hungarian:
         available spaces)
         """
         matrix = []
-        for key, student in self.students.items():
+        mandatory_base_weight = 100000  # Very high base weight for mandatory groups
+        mandatory_penalty = 1000        # Penalty for lower ranking
+        mandatory_low_weight = 50000    # Lower, but still high, for not ranked/rejected
+
+        # Count how many mandatory spots have been assigned for each group
+        group_spot_counter = {group_id: 0 for group_id, group in self.groups.items() if group.mandatory}
+        group_spot_indices = {group_id: [] for group_id, group in self.groups.items() if group.mandatory}
+        # Build a list of column indices for each mandatory group
+        for col_idx, group_id in self.index_to_group_dict.items():
+            if self.groups[group_id].mandatory:
+                group_spot_indices[group_id].append(col_idx)
+
+        n_students = len(self.students)
+        n_spots = len(self.index_to_group_dict)
+
+        # Build the matrix row by row
+        for student_idx, (student_id, student) in enumerate(self.students.items()):
             row = []
-            for k, v in self.index_to_group_dict.items():
-                if v in student.selections:
-                    row.append(self.weights[student.selections.index(v)])
-                elif v in student.rejections:
-                    row.append(0)
+            for col_idx in range(n_spots):
+                group_id = self.index_to_group_dict[col_idx]
+                group = self.groups[group_id]
+                # If this is a mandatory group
+                if group.mandatory:
+                    # For the first min_size spots, use high weights
+                    mandatory_spots = group_spot_indices[group_id]
+                    spot_number = mandatory_spots.index(col_idx)
+                    if spot_number < group.min_size:
+                        if group_id in student.selections:
+                            rank = student.selections.index(group_id)
+                            row.append(mandatory_base_weight - rank * mandatory_penalty)
+                        elif group_id in student.rejections:
+                            row.append(mandatory_low_weight)
+                        else:
+                            row.append(mandatory_low_weight)
+                    else:
+                        # After min_size spots, use normal weights
+                        if group_id in student.selections:
+                            row.append(self.weights[student.selections.index(group_id)])
+                        elif group_id in student.rejections:
+                            row.append(0)
+                        else:
+                            row.append(self.weights[-1])
                 else:
-                    row.append(self.weights[-1])
+                    # Non-mandatory group: normal weights
+                    if group_id in student.selections:
+                        row.append(self.weights[student.selections.index(group_id)])
+                    elif group_id in student.rejections:
+                        row.append(0)
+                    else:
+                        row.append(self.weights[-1])
             matrix.append(row)
         return np.array(matrix)
 
@@ -106,7 +150,8 @@ class Hungarian:
         negative and then adding the original matrix maximum to each number
         """
         maximum = np.max(self.matrix)
-        self.matrix = self.matrix * -1 + maximum
+        self.matrix = self.matrix*-1+maximum
+
 
     def find_assignment(self):
         """

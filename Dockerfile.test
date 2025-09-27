@@ -2,11 +2,15 @@ FROM mcr.microsoft.com/playwright/python:v1.54.0-noble
 
 WORKDIR usr/src/app
 
-COPY src/requirements.txt .
+RUN apt-get update && apt-get install -y bash
+
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+RUN chmod +x scripts/run_playwright_tests.sh
 
 RUN playwright install --with-deps
 
