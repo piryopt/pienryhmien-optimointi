@@ -6,17 +6,21 @@ from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
 from dotenv import load_dotenv
 
-load_dotenv()
 
 class Config:
     SCHEDULER_API_ENABLED = True
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
-
+load_dotenv()
 app.config.from_object(Config())
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+env = os.getenv("FLASK_ENV", "development")
+if env == "testing":
+    app.config["SECRET_KEY"] = os.getenv("TEST_SECRET_KEY")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("TEST_DATABASE_URL")
+else:
+    app.config["SECRET_KEY"] = os.getenv("DEV_SECRET_KEY")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DEV_DATABASE_URL")
 app.config["BABEL_DEFAULT_LOCALE"] = "fi"
 app.config["DEBUG"] = os.getenv("FLASK_DEBUG", "0") == "1"
 

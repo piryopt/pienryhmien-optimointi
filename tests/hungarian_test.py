@@ -20,8 +20,8 @@ class TestHungarian(unittest.TestCase):
         """
         load_dotenv()
         self.app = Flask(__name__)
-        self.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-        self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+        self.app.config["SECRET_KEY"] = os.getenv("TEST_SECRET_KEY")
+        self.app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("TEST_DATABASE_URL")
         self.app.config["BABEL_DEFAULT_LOCALE"] = "fi"
 
         babel = Babel(self.app)
@@ -29,7 +29,7 @@ class TestHungarian(unittest.TestCase):
 
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.groups = {22:Group(22,'Ducks',2), 14:Group(14,'Geese',1), 55:Group(55,'Mallards',1), 19:Group(19, "Roided Harpy Eagles", 1)}
+        self.groups = {22:Group(22,'Ducks',2,0,False), 14:Group(14,'Geese',1,0,False), 55:Group(55,'Mallards',1,0,False), 19:Group(19, "Roided Harpy Eagles", 1,0,False)}
         self.students = {114:Student(114, 'Jane', [22,14,55], []),
                         367:Student(367, 'Joe', [22,55,14], []),
                         847:Student(847, 'Janet', [55,22,14], [])}

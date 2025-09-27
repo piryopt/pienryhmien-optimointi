@@ -5,16 +5,32 @@ services:
     env_file: .env
     volumes:
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - dev_db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+  test-db:
+    image: postgres:15
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${TEST_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${TEST_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${TEST_POSTGRES_DB}
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - test_db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
 
   web:
     build: .
     restart: always
     env_file: .env
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      SECRET_KEY: ${SECRET_KEY}
+      DATABASE_URL: ${DEV_DATABASE_URL}
+      SECRET_KEY: ${DEV_SECRET_KEY}
+      FLASK_ENV: development
     depends_on:
       - db
     ports:
@@ -22,17 +38,40 @@ services:
     volumes:
       - .:/usr/src/app
 
+  web-test:
+    build: .
+    restart: always
+    env_file: .env
+    environment:
+      DATABASE_URL: ${TEST_DATABASE_URL}
+      SECRET_KEY: ${TEST_SECRET_KEY}
+      FLASK_ENV: testing
+    depends_on:
+      - test-db
+    ports:
+      - "5002:5000"
+    volumes:
+      - .:/usr/src/app
+    profiles: ["test"]
+
   test:
     profiles: ["test"]
+    env_file: .env
     build:
       context: .
       dockerfile: Dockerfile.test
     depends_on:
-      - db
-      - web
+      - test-db
+      - web-test
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      BASE_URL: http://web:5000
+      DATABASE_URL: ${TEST_DATABASE_URL}
+      SECRET_KEY: ${TEST_SECRET_KEY}
+      FLASK_ENV: testing
+      BASE_URL: http://web-test:5000
     volumes:
       - .:/usr/src/app
     entrypoint: ["pytest", "tests/"]
+
+volumes:
+  dev_db_data:
+  test_db_data:
