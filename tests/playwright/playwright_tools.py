@@ -2,6 +2,7 @@ import os
 import pytest
 
 
+# Add to imports of survey_testing.py to get more info
 @pytest.fixture(scope="session")
 def browser_context_args(browser_context_args):
     return {
@@ -15,8 +16,11 @@ def browser_context_args(browser_context_args):
 def trace_on_failure(context, request):
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     yield
-    trace_path = f"trace_{request.node.name}.zip"
-    context.tracing.stop(path=trace_path)
+    if request.node.rep_call.failed:
+        trace_path = f"trace_{request.node.name}.zip"
+        context.tracing.stop(path=trace_path)
+    else:
+        context.tracing.stop()
 
 
 def login(page, username, password):
