@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 from playwright.sync_api import Page, expect
-from playwright_tools import login, trace_on_failure, browser_context_args
+from playwright_tools import login, trace_on_failure
 
 FILE_TO_UPLOAD = Path(__file__).parent / ".." / "test_files" / "test_survey2.csv"
 
@@ -92,11 +92,17 @@ def test_create_new_survey(page: Page):
     page.locator("#choiceTable tr").nth(0).locator("td").nth(4).click()
     page.keyboard.type("Trespass into the domain of the Gods!")
 
+    page.wait_for_selector("#add_choice_button", state="visible")
+    page.wait_for_function("typeof addRow === 'function'")
+    print("addRow is available on the page")
+    assert page.evaluate(
+        "document.getElementById('add_choice_button').onclick !== null"
+    )
+
     button = page.locator("#add_choice_button")
-    button.wait_for(state="visible", timeout=5000)
     button.scroll_into_view_if_needed()
-    page.wait_for_timeout(200)
-    button.click(timeout=5000)
+    button.click(force=False, timeout=5000)
+    page.locator("#add_choice_button").click()
 
     page.locator("#choiceTable tr").nth(1).wait_for(state="visible", timeout=60000)
     page.locator("#choiceTable tr").nth(1).locator("td").nth(1).click()
@@ -110,13 +116,6 @@ def test_create_new_survey(page: Page):
     page.keyboard.press("Tab")
     page.keyboard.press("Enter")
     page.keyboard.type("Talent without hard work is nothing.")
-
-    button = page.locator("#add_choice_button")
-    button.wait_for(state="visible", timeout=5000)
-    button.scroll_into_view_if_needed()
-    page.wait_for_timeout(200)
-    button.click(timeout=5000)
-
     page.locator("#choiceTable tr").nth(2).wait_for(state="visible", timeout=60000)
     page.locator("#choiceTable tr").nth(2).locator("td").nth(1).click()
     page.keyboard.type("Isagi")

@@ -81,7 +81,5 @@ jobs:
           path: |
             flask_output.log
             trace_*.zip
-            videos/
-            network.har
             playwright-report/
           retention-days: 2
