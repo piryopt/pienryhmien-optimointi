@@ -793,24 +793,24 @@ msgstr "\" Kopiera enkät\""
 #: tools/survey_result_helper.py:57 tools/survey_result_helper.py:151
 #: tools/survey_result_helper.py:162
 msgid "Hylätty"
-msgstr ""
+msgstr "Avvisad"
 
 #: tools/survey_result_helper.py:66 tools/survey_result_helper.py:151
 msgid "Ei järjestetty"
-msgstr ""
+msgstr "Ej placerad
 
 #: tools/survey_result_helper.py:108 tools/survey_result_helper.py:165
 #: tools/survey_result_helper.py:166
 msgid "Ei järjestettyyn"
-msgstr ""
+msgstr "Ej placerad"
 
 #: tools/survey_result_helper.py:110 tools/survey_result_helper.py:163
 msgid "Hylättyyn"
-msgstr ""
+msgstr "Avvisad"
 
 #: tools/survey_result_helper.py:164 tools/survey_result_helper.py:167
 msgid " valintaan sijoitetut käyttäjät: "
-msgstr ""
+msgstr " val: "
 
 #: tools/survey_result_helper.py:169
 msgid ". valintaansa sijoitetut käyttäjät: "
