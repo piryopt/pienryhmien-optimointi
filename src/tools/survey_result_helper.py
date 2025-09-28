@@ -54,7 +54,7 @@ def get_happiness(survey_choice_id, user_ranking, user_rejections):
     rejections_list = convert_to_int_list(user_rejections)
 
     if survey_choice_id in rejections_list:
-        return "rejected"
+        return gettext("Hylätty")
 
     ranking_list = convert_to_list(user_ranking)
     happiness = 0
@@ -63,7 +63,7 @@ def get_happiness(survey_choice_id, user_ranking, user_rejections):
         if survey_choice_id == int(choice_id):
             return happiness
 
-    return "not ranked"
+    return gettext("Ei järjestetty")
 
 def convert_date(data):
     """
@@ -105,9 +105,9 @@ def happiness_sort_key(x):
     value = x[0]
     if isinstance(value, int):
         return (0, value)
-    elif value == "not ranked":
+    elif value == gettext("Ei järjestettyyn"):
         return (1, 0)
-    elif value == "rejected":
+    elif value == gettext("Hylättyyn"):
         return (2, 0)
     else:
         # Any other string (shouldn't happen)
@@ -148,7 +148,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
         rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking, rejections)
-        if happiness != "rejected" and happiness != "not ranked":
+        if happiness != gettext("Hylätty") and happiness != gettext("Ei järjestetty"):
             happiness_avg += happiness
         results.append(happiness)
         if happiness not in happiness_results:
@@ -159,17 +159,15 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_results_list = []
     for k,v in happiness_results.items():
         if v > 0:
-            if k == "rejected":
-                k = "Hylättyyn"
-                msg = gettext(' valintaansa sijoitetut käyttäjät: ')
-                happiness_results_list.append((k, msg + f"{v}"))
-            elif k == "not ranked":
-                k = "Ei järjestettyyn"
-                msg = gettext(' valintaansa sijoitetut käyttäjät: ')
-                happiness_results_list.append((k, msg + f"{v}"))
+            if k == gettext("Hylätty"):
+                k = gettext("Hylättyyn")
+                msg = gettext(' valintaan sijoitetut käyttäjät: ')
+            elif k == gettext("Ei järjestetty"):
+                k = gettext("Ei järjestettyyn")
+                msg = gettext(' valintaan sijoitetut käyttäjät: ')
             else:
                 msg = gettext('. valintaansa sijoitetut käyttäjät: ')
-                happiness_results_list.append((k, msg + f"{v}"))
+            happiness_results_list.append((k, msg + f"{v}"))
     
     # Fix a bug where happiness results did not always come in the right order
     happiness_results_list.sort(key=happiness_sort_key)
