@@ -3,7 +3,7 @@ from src.entities.student import Student
 from src.services.user_service import user_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
-from src.tools.rankings_converter import convert_to_list
+from src.tools.rankings_converter import convert_to_list, convert_to_int_list
 from datetime import datetime
 from flask_babel import gettext
 import src.algorithms.hungarian as h
@@ -42,7 +42,7 @@ def convert_users_students(user_rankings):
         students[user_id] = Student(user_id, name, int_ranking, int_rejections)
     return students
 
-def get_happiness(survey_choice_id, user_ranking):
+def get_happiness(survey_choice_id, user_ranking, user_rejections):
     """
     A function for getting the ordinal number of the survey_choice which the student ended in. E.G rankings = "2,4,5,1,3" and they
     got chosen for 4, the function returns 2.
@@ -51,14 +51,20 @@ def get_happiness(survey_choice_id, user_ranking):
         survey_choice_id: The id of the survey choice in which the student was selected into
         user_ranking: The ranking of the user for the survey
     """
+    rejections_list = convert_to_int_list(user_rejections)
+
+    if survey_choice_id in rejections_list:
+        return "rejected"
+
     ranking_list = convert_to_list(user_ranking)
     happiness = 0
     for choice_id in ranking_list:
         happiness += 1
         if survey_choice_id == int(choice_id):
-            break
-    return happiness
-    
+            return happiness
+
+    return "not ranked"
+
 def convert_date(data):
     """
     Convert a datetime object to a dd.mm.yyyy string
@@ -95,6 +101,19 @@ def check_if_zero_needed(unit):
         unit = "0"+ unit
     return unit
 
+def happiness_sort_key(x):
+    value = x[0]
+    if isinstance(value, int):
+        return (0, value)
+    elif value == "not ranked":
+        return (1, 0)
+    elif value == "rejected":
+        return (2, 0)
+    else:
+        # Any other string (shouldn't happen)
+        return (3, 0)
+
+
 def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
     """
     Run the hungarian algorthim until their is no violation for the min_size portion
@@ -127,8 +146,10 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
         user_id = results[0][0]
         choice_id =  results[2][0]
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
-        happiness = get_happiness(choice_id, ranking)
-        happiness_avg += happiness
+        rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
+        happiness = get_happiness(choice_id, ranking, rejections)
+        if happiness != "rejected" and happiness != "not ranked":
+            happiness_avg += happiness
         results.append(happiness)
         if happiness not in happiness_results:
             happiness_results[happiness] = 1
@@ -138,11 +159,20 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_results_list = []
     for k,v in happiness_results.items():
         if v > 0:
-            msg = gettext('. valintaansa sijoitetut käyttäjät: ')
-            happiness_results_list.append((k, msg + f"{v}"))
+            if k == "rejected":
+                k = "Hylättyyn"
+                msg = gettext(' valintaansa sijoitetut käyttäjät: ')
+                happiness_results_list.append((k, msg + f"{v}"))
+            elif k == "not ranked":
+                k = "Ei järjestettyyn"
+                msg = gettext(' valintaansa sijoitetut käyttäjät: ')
+                happiness_results_list.append((k, msg + f"{v}"))
+            else:
+                msg = gettext('. valintaansa sijoitetut käyttäjät: ')
+                happiness_results_list.append((k, msg + f"{v}"))
     
     # Fix a bug where happiness results did not always come in the right order
-    happiness_results_list.sort()
+    happiness_results_list.sort(key=happiness_sort_key)
     
     dropped_groups = []
     for group_id in dropped_groups_id:
@@ -255,8 +285,12 @@ def rank(students_dict, student_id, target_group_id):
 
     returns: The index of the target group in the student's selections or 999 if not found
     """
-
     selections = students_dict[student_id].selections
+    rejections = students_dict[student_id].rejections
+
+    if target_group_id in rejections:
+        return 1000
+    
     return selections.index(target_group_id) if target_group_id in selections else 999
 
 
