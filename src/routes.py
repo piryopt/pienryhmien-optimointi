@@ -270,10 +270,12 @@ def surveys(survey_id):
             survey_all_info[row[0]] = {"name": row[2]}
             survey_all_info[row[0]]["slots"] = row[3]
             survey_all_info[row[0]]["id"] = row[0]
+            survey_all_info[row[0]]["mandatory"] = row[6]
             survey_all_info[row[0]]["search"] = row[2]
             survey_all_info[row[0]]["infos"] = []
         else:
             survey_all_info[row[0]]["name"] = row[2]
+            survey_all_info[row[0]]["mandatory"] = row[6]
             survey_all_info[row[0]]["slots"] = row[3]
             survey_all_info[row[0]]["id"] = row[0]
 
@@ -317,6 +319,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
         good_choice["name"] = survey_choice[2]
         good_choice["id"] = survey_choice[0]
         good_choice["slots"] = survey_choice[3]
+        good_choice["mandatory"] = survey_choice[6]
         good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
         if not survey_choice:
             continue
@@ -332,6 +335,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
             bad_choice["name"] = survey_choice[2]
             bad_choice["id"] = survey_choice[0]
             bad_choice["slots"] = survey_choice[3]
+            bad_choice["mandatory"] = survey_choice[6]
             bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
             if not survey_choice:
                 continue
@@ -344,6 +348,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
         neutral_choice["name"] = survey_choice[2]
         neutral_choice["id"] = survey_choice[0]
         neutral_choice["slots"] = survey_choice[3]
+        neutral_choice["mandatory"] = survey_choice[6]
         neutral_choice["search"] = survey_all_info[int(survey_choice[0])]["search"]
         neutral_choices.append(neutral_choice)
 

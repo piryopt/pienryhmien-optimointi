@@ -37,6 +37,7 @@
                     <i>{{ _('Raahaa oikean reunan listasta vähintään') }} {{ survey[2] }} {{ _('vaihtoehtoa vihreään laatikkoon') }}.</i>
                     {% if additional_info %}<i style="color: #0bdb2ed6;">{{ _('Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa') }}.</i>{% endif %}
                 </p>
+                <p><i>{{ _('Tärkeäksi merkityt ryhmät täytetään aina vähintään minimikokoon asti vastauksista riippumatta.') }}</i></p>
             </div>
             {% if survey[8] %}
             <div class="col-sm">
@@ -56,6 +57,9 @@
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                             </div>
                             <small class="text-muted">{{ _('Ryhmän maksimikoko') }}: {{ group.slots }}</small>
+                            {% if group.mandatory %}
+                              <small class="text-danger">{{ _('Tärkeä') }}</small>
+                            {% endif %}
                             <div id="info-container {{group.id}}">
                             </div>
                         </li>
@@ -72,6 +76,10 @@
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                             </div>
                             <small class="text-muted">{{ _('Ryhmän maksimikoko') }}: {{ group.slots }}</small>
+
+                            {% if group.mandatory %}
+                              <small class="text-danger">{{ _('Tärkeä') }}</small>
+                            {% endif %}
                             <div id="info-container {{group.id}}">
                             </div>
                         </li>
@@ -135,6 +143,9 @@
                             <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
                         </div>
                         <small class="text-muted">{{ _('Ryhmän maksimikoko') }}: {{ group.slots }}</small>
+                        {% if group.mandatory %}
+                          <small class="text-danger">{{ _('Tärkeä') }}</small>
+                        {% endif %}
                         <div id="info-container {{group.id}}">
                         </div>
                     </li>
