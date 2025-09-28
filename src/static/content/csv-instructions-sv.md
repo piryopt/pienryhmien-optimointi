@@ -1,7 +1,7 @@
-# En guide för att skapa undersökningar med en csv-fil
-Det är möjligt att importera undersökningsalternativ från en csv-fil, så länge filen följer följande regler.</br>
+# En guide för att skapa undersökningar med en CSV-fil
+Det är möjligt att importera undersökningsalternativ från en CSV-fil, så länge filen följer följande regler.</br>
 
-De enda obligatoriska fälten är facilitetens namn, kapacitet och minsta gruppsstorlek. Avgränsaren i .csv-filen spelar ingen roll (det kan vara ,, ; eller "," osv.), eftersom Separator automatiskt kommer att ändra dem till ;. </br></br>
+De enda obligatoriska fälten är facilitetens namn, kapacitet och minsta gruppsstorlek. Avgränsaren i CSV-filen spelar ingen roll (det kan vara ,, ; eller "," osv.), eftersom separatorn automatiskt ändrar dem till ;. </br></br>
 Bilden nedan visar formatet på en exempelfil:
 <img src="/static/images/csv.png" alt="Exempel CSV-fil"></br>
 
