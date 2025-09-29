@@ -5,10 +5,11 @@ def convert_to_list(ranking_string):
     args:
         ranking_string: The string that is converted into a list. The string is retrieved from the database table user_survey_rankings
     """
-    if ranking_string == '':
+    if ranking_string == "":
         return []
     ranking_list = ranking_string.split(",")
     return ranking_list
+
 
 def convert_to_string(ranking_list):
     """
@@ -18,5 +19,5 @@ def convert_to_string(ranking_list):
         ranking_list: The list of rankings that the user chooses. It is converted into a string which is need when adding rankings
         to the database
     """
-    ranking_string = ','.join(ranking_list)
+    ranking_string = ",".join(ranking_list)
     return ranking_string

@@ -1,8 +1,7 @@
-from flask import session # pylint: disable=R0401
+from flask import session  # pylint: disable=R0401
 from src.entities.user import User
-from src.repositories.user_repository import (
-    user_repository as default_user_repository
-)
+from src.repositories.user_repository import user_repository as default_user_repository
+
 
 class UserService:
     def __init__(self, user_repositroy=default_user_repository):
@@ -122,8 +121,8 @@ class UserService:
             email: The email of the user
         """
         return self._user_repository.find_by_email(email)
-    
-    def make_user_teacher(self, email): # don't remove, needed later
+
+    def make_user_teacher(self, email):  # don't remove, needed later
         """
         Give a user teacher privileges
 
@@ -141,7 +140,7 @@ class UserService:
         """
         user = self._user_repository.get_user_data(user_id)
         return user.isteacher if user else False
-    
+
     def check_if_admin(self, user_id):
         """
         Check if the user has admin privileges
@@ -151,7 +150,7 @@ class UserService:
         """
         user = self._user_repository.get_user_data(user_id)
         return user.admin if user else False
-    
+
     def len_all_students(self):
         """
         Gets the number of students registered in Jakaja. Used for analytics in the admin page.
@@ -160,7 +159,7 @@ class UserService:
         if not users:
             return 0
         return len(users)
-    
+
     def len_all_teachers(self):
         """
         Gets the number of teachers that have survey privileges in Jakaja. Used for analytics in the admin page.
@@ -169,7 +168,7 @@ class UserService:
         if not teachers:
             return 0
         return len(teachers)
-    
+
     def get_user_id_by_email(self, email):
         """
         Gets a user_id by its email
@@ -183,11 +182,12 @@ class UserService:
         return user.id
 
     def update_user_language(self, user_id, language):
-        accepted_languages = ['fi', 'en', 'sv']
+        accepted_languages = ["fi", "en", "sv"]
         if language not in accepted_languages:
             return False
         self._user_repository.change_user_language(user_id, language)
         session["language"] = language
         return True
+
 
 user_service = UserService()

@@ -1,8 +1,9 @@
 class Weights:
-    '''
+    """
     Class for creating and managing weights in the hungarian algorithm
-    '''
-    def __init__(self, n_choices:int, n_students:int):
+    """
+
+    def __init__(self, n_choices: int, n_students: int):
         """
         Calls function calculate_weights to create self.weights list of
         int numbers that act as profit weights in hungarian algorithm.
@@ -10,9 +11,9 @@ class Weights:
 
         Args:
             n_choices (int): number of choices levels in the questionnaire,
-            e.g. levels when ranking  
+            e.g. levels when ranking
             n_students (int): number of students to sort in the groups
-        
+
         Variables:
             self.weights (dict): dictionary of weights with keys from 0 to n_choices
             paired with weights in order where highest weight is paired with
@@ -39,10 +40,10 @@ class Weights:
             paired with weights in order where highest weight is paired with
             lowest key
         """
-        weights = list(range((n_choices+2)*n_students, n_students*2, -n_students))
+        weights = list(range((n_choices + 2) * n_students, n_students * 2, -n_students))
         weights = dict(zip(list(range(len(weights))), weights))
-        weights[-1] = n_students*2
-        weights[None] = n_students*2
+        weights[-1] = n_students * 2
+        weights[None] = n_students * 2
         return weights
 
     def get_weights(self):

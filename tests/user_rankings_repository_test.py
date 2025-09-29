@@ -10,6 +10,7 @@ from src.repositories.survey_owners_repository import survey_owners_repository a
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
+
 class TestUserRankingsRepository(unittest.TestCase):
     def setUp(self):
         load_dotenv()
@@ -44,7 +45,7 @@ class TestUserRankingsRepository(unittest.TestCase):
         """
         Tests that add_user_ranking() returns false if adding ranking fails
         """
-        success = urr.add_user_ranking(self.user_id+12, self.survey_id, self.ranking, "", "")
+        success = urr.add_user_ranking(self.user_id + 12, self.survey_id, self.ranking, "", "")
         self.assertEqual(success, False)
 
     def test_get_user_ranking(self):

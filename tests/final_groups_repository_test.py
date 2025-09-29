@@ -11,6 +11,7 @@ from src.repositories.survey_owners_repository import survey_owners_repository a
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
+
 class TestFinalGroupsRepository(unittest.TestCase):
     def setUp(self):
         load_dotenv()
@@ -40,7 +41,7 @@ class TestFinalGroupsRepository(unittest.TestCase):
         so.add_owner_to_survey(survey_id, self.user_id)
         choice_id1 = scr.create_new_survey_choice(survey_id, "choice 1", 10, 1, False)
         choice_id2 = scr.create_new_survey_choice(survey_id, "choice 2", 10, 1, False)
-        
+
         success = fgr.save_result(self.user_id, survey_id, choice_id2)
         self.assertEqual(success, True)
 
@@ -49,7 +50,6 @@ class TestFinalGroupsRepository(unittest.TestCase):
         so.add_owner_to_survey(survey_id, self.user_id)
         choice_id1 = scr.create_new_survey_choice(survey_id, "choice 1", 10, 1, False)
         choice_id2 = scr.create_new_survey_choice(survey_id, "choice 2", 10, 1, False)
-        
-        success = fgr.save_result(self.user_id+12, survey_id, choice_id2)
+
+        success = fgr.save_result(self.user_id + 12, survey_id, choice_id2)
         self.assertEqual(success, False)
-    

@@ -1,6 +1,7 @@
 from sqlalchemy import text
 from src import db
 
+
 class UserRepository:
     def find_by_email(self, email):
         """
@@ -12,12 +13,12 @@ class UserRepository:
         """
         try:
             sql = "SELECT * FROM users WHERE email=:email"
-            result = db.session.execute(text(sql), {"email":email})
+            result = db.session.execute(text(sql), {"email": email})
             user = result.fetchone()
             if not user:
                 return False
             return user
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
 
@@ -33,11 +34,10 @@ class UserRepository:
             print(f"The user with the email {user.email} already exists!")
             return
         try:
-            sql = "INSERT INTO users (name, email, isteacher, admin, language)" \
-                  "VALUES (:name, :email, :isteacher, False, :language)"
-            db.session.execute(text(sql), {"name":user.name, "email":user.email, "isteacher":user.isteacher, "language":"fi"})
+            sql = "INSERT INTO users (name, email, isteacher, admin, language)VALUES (:name, :email, :isteacher, False, :language)"
+            db.session.execute(text(sql), {"name": user.name, "email": user.email, "isteacher": user.isteacher, "language": "fi"})
             db.session.commit()
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
         return user
@@ -53,7 +53,7 @@ class UserRepository:
             if not users:
                 return False
             return users
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
 
@@ -66,16 +66,16 @@ class UserRepository:
         """
         try:
             sql = "SELECT * FROM users WHERE id=:id"
-            result = db.session.execute(text(sql), {"id":user_id})
+            result = db.session.execute(text(sql), {"id": user_id})
             user = result.fetchone()
             if not user:
                 return False
             return user
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
-        
-    def make_user_teacher(self, email): # don't remove, needed later
+
+    def make_user_teacher(self, email):  # don't remove, needed later
         """
         SQL code for giving a user teacher privileges
 
@@ -83,7 +83,7 @@ class UserRepository:
             email: The email of the user
         """
         sql = "UPDATE users SET isteacher=true WHERE email=:email"
-        db.session.execute(text(sql), {"email":email})
+        db.session.execute(text(sql), {"email": email})
         db.session.commit()
 
     def get_all_teachers(self):
@@ -100,10 +100,10 @@ class UserRepository:
             if not teachers:
                 return False
             return teachers
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
-        
+
     def get_user_by_email(self, email):
         """
         SQL code for the id of a user with its email
@@ -113,15 +113,15 @@ class UserRepository:
         """
         try:
             sql = "SELECT * FROM users WHERE email=:email"
-            result = db.session.execute(text(sql), {"email":email})
+            result = db.session.execute(text(sql), {"email": email})
             user = result.fetchone()
             if not user:
                 return False
             return user
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
-        
+
     def change_user_language(self, user_id, language):
         """
         SQL code for changing the default language of the user
@@ -132,10 +132,11 @@ class UserRepository:
         """
         try:
             sql = "UPDATE users SET language=:language WHERE id=:user_id"
-            db.session.execute(text(sql), {"user_id":user_id, "language":language})
+            db.session.execute(text(sql), {"user_id": user_id, "language": language})
             db.session.commit()
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
+
 
 user_repository = UserRepository()
