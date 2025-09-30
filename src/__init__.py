@@ -20,8 +20,8 @@ if env == "testing":
     app.config["SECRET_KEY"] = os.getenv("TEST_SECRET_KEY")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("TEST_DATABASE_URL")
 else:
-    app.config["SECRET_KEY"] = os.getenv("DEV_SECRET_KEY")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DEV_DATABASE_URL")
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["BABEL_DEFAULT_LOCALE"] = "fi"
 app.config["DEBUG"] = os.getenv("FLASK_DEBUG", "0") == "1"
 
