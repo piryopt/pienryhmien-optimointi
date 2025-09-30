@@ -10,7 +10,6 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script>
   $(document).ready(function () {
-    const currentDate = new Date();
     $("#start-date")
       .datepicker({
         dateFormat: "dd.mm.yy",
@@ -19,12 +18,6 @@
     $("#end-date").datepicker({
       dateFormat: "dd.mm.yy",
       minDate: 0,
-      beforeShowDay: function (date) {
-        if (date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
-          return [true, "ui-state-highlight"];
-        }
-        return [true, ""];
-      },
     });
   });
 </script>
