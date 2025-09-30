@@ -797,7 +797,7 @@ msgstr "Avvisad"
 
 #: tools/survey_result_helper.py:66 tools/survey_result_helper.py:151
 msgid "Ei järjestetty"
-msgstr "Ej placerad
+msgstr "Ej placerad"
 
 #: tools/survey_result_helper.py:108 tools/survey_result_helper.py:165
 #: tools/survey_result_helper.py:166
