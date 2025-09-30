@@ -18,7 +18,21 @@
 </div>
 <div>
 <input type="hidden" id="survey_id" value="{{ survey_id }}">
+
+{% set unranked_or_rejected = [] %}
+{% for h in happiness_data %}
+    {% if h[0] in ["Ei järjestettyyn", "Unranked", "Ej placerad", "Hylättyyn", "Rejected", "Avvisad"] %}
+        {% set _ = unranked_or_rejected.append(1) %}
+    {% endif %}
+{% endfor %}
+
 <b>{{ _('Ryhmänvalintojen keskiarvo') }}: {{ happiness }}</b></br>
+{% if unranked_or_rejected|length > 0 %}
+    <p>
+        {{ _('Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon.') }}
+    </p>
+{% endif %}
+
 {% for h in happiness_data %}
     {% if h[0] == "Ei järjestettyyn" or h[0] == "Unranked" or h[0] == "Ej placerad" %}
         <label style="color:rgb(255, 255, 45)">{{ h[0] }}{{ h[1] }}</label></br>
