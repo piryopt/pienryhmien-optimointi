@@ -4,9 +4,9 @@ from flask_babel import gettext
 from scipy.optimize import linear_sum_assignment
 from src.services.user_service import user_service
 
-class Hungarian:
 
-    def __init__(self,groups:dict,students:dict,weights:dict):
+class Hungarian:
+    def __init__(self, groups: dict, students: dict, weights: dict):
         """
         Initiates data structures used in assigning students to groups
         with the hungarian algorithm
@@ -35,9 +35,12 @@ class Hungarian:
         self.weights = weights
         self.index_to_group_dict = self.create_group_dict()
         self.matrix = self.create_matrix()
-        self.assigned_groups = {key:[] for key, group in self.groups.items()}
-        self.student_happiness = np.zeros((len(self.students),2))
-       
+        self.assigned_groups = {key: [] for key, group in self.groups.items()}
+        self.student_happiness = np.zeros((len(self.students), 2))
+
+        self.assigned_groups = {key: [] for key, group in self.groups.items()}
+        self.student_happiness = np.zeros((len(self.students), 2))
+
     def run(self):
         """
         Calls functions in appropriate order to process matrix to correct form
@@ -61,7 +64,7 @@ class Hungarian:
         """
         Creates a dictionary which maps the column indices of the matrix to the group IDs.
         """
-        ids = list(itertools.chain.from_iterable([[key]*group.size for key, group in self.groups.items()]))
+        ids = list(itertools.chain.from_iterable([[key] * group.size for key, group in self.groups.items()]))
         return dict(zip(list(range(len(ids))), ids))
 
     def create_matrix(self):
@@ -77,8 +80,8 @@ class Hungarian:
         """
         matrix = []
         mandatory_base_weight = 100000  # Very high base weight for mandatory groups
-        mandatory_penalty = 1000        # Penalty for lower ranking
-        mandatory_low_weight = 50000    # Lower, but still high, for not ranked/rejected
+        mandatory_penalty = 1000  # Penalty for lower ranking
+        mandatory_low_weight = 50000  # Lower, but still high, for not ranked/rejected
 
         # Count how many mandatory spots have been assigned for each group
         group_spot_counter = {group_id: 0 for group_id, group in self.groups.items() if group.mandatory}
@@ -133,13 +136,13 @@ class Hungarian:
         """
         Makes the matrix square if necessary by padding with zeroes.
         Padding by adding columns is technically unnescessary as the app should
-        check that there are not more students than available spaces 
+        check that there are not more students than available spaces
         """
         rows, cols = np.shape(self.matrix)
         if cols > rows:
-            self.matrix = np.pad(self.matrix,[(0,cols-rows),(0,0)],mode="constant", constant_values=self.weights[-1])
+            self.matrix = np.pad(self.matrix, [(0, cols - rows), (0, 0)], mode="constant", constant_values=self.weights[-1])
         elif cols < rows:
-            self.matrix = np.pad(self.matrix,[(0,0),(0,rows-cols)],mode="constant", constant_values=self.weights[-1])
+            self.matrix = np.pad(self.matrix, [(0, 0), (0, rows - cols)], mode="constant", constant_values=self.weights[-1])
 
     def profit_matrix_to_cost_matrix(self):
         """
@@ -147,9 +150,8 @@ class Hungarian:
         negative and then adding the original matrix maximum to each number
         """
         maximum = np.max(self.matrix)
-        self.matrix = self.matrix*-1+maximum
+        self.matrix = self.matrix * -1 + maximum
 
-    
     def find_assignment(self):
         """
         Uses scipy function linear_sum_assignemt to find the assignemt of
@@ -178,9 +180,9 @@ class Hungarian:
             student_id = self.index_to_student_dict[i]
             self.assigned_groups[assigned_group].append(student_id)
             if assigned_group in self.students[student_id].selections:
-                happiness = self.students[student_id].selections.index(assigned_group)+1
+                happiness = self.students[student_id].selections.index(assigned_group) + 1
             else:
-                happiness = len(self.weights)-1
+                happiness = len(self.weights) - 1
             self.student_happiness[i] = [student_id, happiness]
 
     def get_data(self):
@@ -205,9 +207,9 @@ class Hungarian:
         """
         Summarizes self.student_happiness to string format
         """
-        choice, number = np.unique(self.student_happiness[:,1], return_counts=True)
+        choice, number = np.unique(self.student_happiness[:, 1], return_counts=True)
         happiness_strings = []
         for i in range(len(choice)):
-            msg = gettext('valintaansa sijoitetut käyttäjät')
+            msg = gettext("valintaansa sijoitetut käyttäjät")
             happiness_strings.append(f"{int(choice[i])}. " + msg + f": {number[i]}")
         return happiness_strings

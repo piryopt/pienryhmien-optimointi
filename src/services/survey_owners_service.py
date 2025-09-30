@@ -1,21 +1,20 @@
 from flask_babel import gettext
-from src.repositories.survey_owners_repository import (
-    survey_owners_repository as default_survey_owners_repository
-)
-from src.repositories.user_repository import (
-    user_repository as default_user_repository
-)
-from src.repositories.survey_repository import (
-    survey_repository as default_survey_repository
-)
+from src.repositories.survey_owners_repository import survey_owners_repository as default_survey_owners_repository
+from src.repositories.user_repository import user_repository as default_user_repository
+from src.repositories.survey_repository import survey_repository as default_survey_repository
+
 
 class SurveyOwnersService:
-    def __init__(self, survey_owners_repository=default_survey_owners_repository, user_repository = default_user_repository,
-                 survey_repository = default_survey_repository):
+    def __init__(
+        self,
+        survey_owners_repository=default_survey_owners_repository,
+        user_repository=default_user_repository,
+        survey_repository=default_survey_repository,
+    ):
         """
         Initalizes the service for survey_owners with the repositories needed. The purpose of this class is to handle what happens after the SQL code in the
         corresponding repository
-        
+
         args and variables:
             survey_owners_repository: The repository for survey owners
             user_repository: The repository for users
@@ -33,9 +32,11 @@ class SurveyOwnersService:
         # Verify that a user with the email exists
         user = self._user_repository.find_by_email(user_email)
         if not user:
-            message = gettext('Sähköpostiosoitetta ei löydetty järjestelmästä? Onko hän kirjautunut aikaisemmin jakajaan? Syötetty sähköpostiosoite: ')
+            message = gettext(
+                "Sähköpostiosoitetta ei löydetty järjestelmästä? Onko hän kirjautunut aikaisemmin jakajaan? Syötetty sähköpostiosoite: "
+            )
             return (False, message + user_email)
-        
+
         # Check that the survey exists
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
@@ -46,22 +47,23 @@ class SurveyOwnersService:
         user_id = user.id
         exists = self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
         if exists:
-            message = gettext('Opettajalla on jo oikeudet kyselyyn!')
+            message = gettext("Opettajalla on jo oikeudet kyselyyn!")
             return (False, message)
-        
+
         # Everything checks out, give the user access to the survey
         success = self._survey_owners_repository.add_owner_to_survey(survey_id, user_id)
         if not success:
             message = "ERROR IN ADDING USER TO SURVEY!"
             return (False, message)
-        message = gettext('  sai oikeudet kyselyyn!')
+        message = gettext("  sai oikeudet kyselyyn!")
         return (True, user_email + message)
-    
+
     def check_if_user_is_survey_owner(self, survey_id, user_id):
         """
         Checks if the user has access to the survey as an owner
         """
         owner = self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
         return owner
+
 
 survey_owners_service = SurveyOwnersService()

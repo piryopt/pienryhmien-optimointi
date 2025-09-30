@@ -1,6 +1,7 @@
 import unittest
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 
+
 class TestWeights(unittest.TestCase):
     def setUp(self):
         self.ranking_string = "4,3,6,7,2,5"

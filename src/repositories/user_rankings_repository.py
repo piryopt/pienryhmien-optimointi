@@ -1,5 +1,6 @@
-from sqlalchemy import text # pylint: disable=R0401
+from sqlalchemy import text  # pylint: disable=R0401
 from src import db
+
 
 class UserRankingsRepository:
     def add_user_ranking(self, user_id, survey_id, ranking, rejections, reason):
@@ -20,10 +21,13 @@ class UserRankingsRepository:
                 ON CONFLICT (user_id, survey_id) 
                 DO UPDATE SET ranking=:ranking, rejections=:rejections, reason=:reason, deleted=:deleted
                 """
-            db.session.execute(text(sql), {"user_id":user_id,"survey_id":survey_id,"ranking":ranking, "rejections":rejections, "reason":reason, "deleted":False})
+            db.session.execute(
+                text(sql),
+                {"user_id": user_id, "survey_id": survey_id, "ranking": ranking, "rejections": rejections, "reason": reason, "deleted": False},
+            )
             db.session.commit()
             return True
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
 
@@ -37,18 +41,18 @@ class UserRankingsRepository:
         """
         try:
             sql = "SELECT * FROM user_survey_rankings WHERE (user_id=:user_id AND survey_id=:survey_id AND deleted=False)"
-            result = db.session.execute(text(sql), {"user_id":user_id, "survey_id":survey_id})
+            result = db.session.execute(text(sql), {"user_id": user_id, "survey_id": survey_id})
             ranking = result.fetchone()
             if not ranking:
                 return False
             return ranking
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
 
     def delete_user_ranking(self, user_id, survey_id):
         """
-        SQL code for deleting a user_survey_ranking entry. It can be manually restored if no new ranking is added 
+        SQL code for deleting a user_survey_ranking entry. It can be manually restored if no new ranking is added
 
         args:
             user_id: The id of the user
@@ -56,13 +60,13 @@ class UserRankingsRepository:
         """
         try:
             sql = "UPDATE user_survey_rankings SET deleted = True WHERE (user_id=:user_id AND survey_id=:survey_id)"
-            db.session.execute(text(sql), {"user_id":user_id, "survey_id":survey_id})
+            db.session.execute(text(sql), {"user_id": user_id, "survey_id": survey_id})
             db.session.commit()
             return True
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
-        
+
     def get_all_rankings(self):
         """
         SQL code for getting the amount of all rankings. Used for analytics in the admin page.
@@ -74,8 +78,9 @@ class UserRankingsRepository:
             if not rankings:
                 return False
             return rankings
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
+
 
 user_rankings_repository = UserRankingsRepository()

@@ -10,6 +10,7 @@ from src.repositories.feedback_repository import feedback_repository as fr
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
+
 class TestFeedbackService(unittest.TestCase):
     def setUp(self):
         load_dotenv()

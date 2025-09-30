@@ -1,6 +1,7 @@
 import unittest
 from src.algorithms.weights import Weights
 
+
 class TestWeights(unittest.TestCase):
     """
     Tests class that creates weights for the hungarian algorithm.
@@ -36,7 +37,7 @@ class TestWeights(unittest.TestCase):
         copypasted from the algorithm code directly, this is a reasonably good test
         that all weights should be correct
         """
-        self.assertEqual(self.w.weights[2], self.n_students*self.n_choices)
+        self.assertEqual(self.w.weights[2], self.n_students * self.n_choices)
 
     def test_function_get_weights_returns_something(self):
         """

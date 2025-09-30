@@ -4,12 +4,13 @@ import pandas as pd
 from src.repositories.survey_repository import survey_repository
 from src.repositories.survey_choices_repository import survey_choices_repository
 
+
 def parser_csv_to_dict(file):
-    '''
+    """
     Parses an imported CSV to a dictionary,
     the dictionary is later used by parser_manual() (below)
     RETURNS dictionary that can be parsed by later functions
-    '''
+    """
 
     f = StringIO(file)
 
@@ -17,7 +18,7 @@ def parser_csv_to_dict(file):
         dialect = csv.Sniffer().sniff(file[:1024])
         delimiter = dialect.delimiter
     except Exception:
-        delimiter = ';'
+        delimiter = ";"
 
     reader = pd.read_csv(f, sep=delimiter, dtype=str)
 
@@ -26,11 +27,7 @@ def parser_csv_to_dict(file):
     col_count = len(columns)
 
     for row in reader.values:
-        choice = {
-            "name": row[0],
-            "spaces": row[1],
-            "min_size": row[2]
-        }
+        choice = {"name": row[0], "spaces": row[1], "min_size": row[2]}
 
         for i in range(3, col_count):
             choice[columns[i]] = row[i]
@@ -41,17 +38,18 @@ def parser_csv_to_dict(file):
 
 
 def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility):
-    '''
+    """
     Parses a dictionary and creates a survey, its choices and their additional infos
     RETURNS created survey's id
-    '''
+    """
 
-    datetime_end = date_to_sql_valid(date_end) + " " +  time_end
+    datetime_end = date_to_sql_valid(date_end) + " " + time_end
 
-    survey_id = survey_repository.create_new_survey(survey_name, minchoices, description, datetime_end, allowed_denied_choices, allow_search_visibility)
+    survey_id = survey_repository.create_new_survey(
+        survey_name, minchoices, description, datetime_end, allowed_denied_choices, allow_search_visibility
+    )
 
     for choice in survey_choices:
-
         # unsophisticated, but since all the data is key-value pairs,
         # this is the way it has to be
         count = 0
@@ -77,7 +75,7 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
 
             hidden = False
 
-            if pair[-1] == '*':
+            if pair[-1] == "*":
                 hidden = True
 
             survey_choices_repository.create_new_choice_info(choice_id, pair, choice[pair], hidden)
@@ -85,11 +83,12 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
 
     return survey_id
 
+
 def parser_existing_survey_to_dict(survey_id):
-    '''
+    """
     Parses existing survey, its choices and their infos into a dict
     RETURNS dictionary of survey data
-    '''
+    """
     survey_dict = {}
 
     survey = survey_repository.get_survey(survey_id)
@@ -125,10 +124,11 @@ def parser_existing_survey_to_dict(survey_id):
 
     return survey_dict
 
+
 def date_to_sql_valid(date):
-    '''
+    """
     RETURNS SQL datetime valid date str
-    '''
-    date = date.split('.')
+    """
+    date = date.split(".")
 
     return date[2] + "-" + date[1] + "-" + date[0]

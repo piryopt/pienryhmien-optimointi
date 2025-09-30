@@ -1,6 +1,7 @@
 from sqlalchemy import text
 from src import db
 
+
 class SurveyOwnersRepository:
     def add_owner_to_survey(self, survey_id, user_id):
         """
@@ -12,10 +13,10 @@ class SurveyOwnersRepository:
         """
         try:
             sql = "INSERT INTO survey_owners (survey_id, user_id) VALUES (:survey_id, :user_id)"
-            db.session.execute(text(sql), {"survey_id":survey_id, "user_id":user_id})
+            db.session.execute(text(sql), {"survey_id": survey_id, "user_id": user_id})
             db.session.commit()
             return True
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
 
@@ -29,13 +30,14 @@ class SurveyOwnersRepository:
         """
         try:
             sql = "SELECT * FROM survey_owners WHERE survey_id=:survey_id AND user_id=:user_id"
-            result = db.session.execute(text(sql), {"survey_id":survey_id, "user_id":user_id})
+            result = db.session.execute(text(sql), {"survey_id": survey_id, "user_id": user_id})
             owner = result.fetchone()
             if not owner:
                 return False
             return owner
-        except Exception as e: # pylint: disable=W0718
+        except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
-        
+
+
 survey_owners_repository = SurveyOwnersRepository()

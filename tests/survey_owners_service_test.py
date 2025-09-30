@@ -13,6 +13,7 @@ from src.tools.db_tools import clear_database
 import datetime
 import json
 
+
 class TestSurveyOwnersService(unittest.TestCase):
     def setUp(self):
         load_dotenv()
@@ -46,11 +47,13 @@ class TestSurveyOwnersService(unittest.TestCase):
         """
         Test that adding a owner to a survey works and check that it cannot be added again
         """
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+        with open("tests/test_files/test_survey1.json", "r") as openfile:
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(
+            json_object["choices"], "Test survey 1", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02"
+        )
         (success, message) = sos.add_owner_to_survey(survey_id, self.user_email)
         self.assertEqual(success, True)
         (success, message) = sos.add_owner_to_survey(survey_id, self.user_email)
@@ -60,11 +63,13 @@ class TestSurveyOwnersService(unittest.TestCase):
         """
         Test that adding an email that isn't in the database works correctly
         """
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+        with open("tests/test_files/test_survey1.json", "r") as openfile:
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 
-        survey_id = ss.create_new_survey_manual(json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02")
+        survey_id = ss.create_new_survey_manual(
+            json_object["choices"], "Test survey 2", self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02"
+        )
         (success, message) = sos.add_owner_to_survey(survey_id, "trt@tester.com")
         self.assertEqual(success, False)
 
@@ -72,7 +77,7 @@ class TestSurveyOwnersService(unittest.TestCase):
         """
         Test that you cannot add a owner to an invalid survey
         """
-        with open("tests/test_files/test_survey1.json", 'r') as openfile:
+        with open("tests/test_files/test_survey1.json", "r") as openfile:
             # open as JSON instead of TextIOWrapper or something
             json_object = json.load(openfile)
 

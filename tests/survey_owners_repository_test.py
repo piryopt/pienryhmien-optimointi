@@ -9,6 +9,7 @@ from src.repositories.survey_owners_repository import survey_owners_repository a
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
+
 class TestSurveyOwnersRepository(unittest.TestCase):
     def setUp(self):
         load_dotenv()

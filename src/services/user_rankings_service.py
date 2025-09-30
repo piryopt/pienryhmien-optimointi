@@ -1,12 +1,9 @@
-from src.repositories.user_rankings_repository import (
-    user_rankings_repository as default_user_rankings_repository
-)
-from src.repositories.survey_repository import (
-    survey_repository as default_survey_repository
-)
+from src.repositories.user_rankings_repository import user_rankings_repository as default_user_rankings_repository
+from src.repositories.survey_repository import survey_repository as default_survey_repository
+
 
 class UserRankingsService:
-    def __init__(self, user_rankings_repository = default_user_rankings_repository, survey_repository = default_survey_repository):
+    def __init__(self, user_rankings_repository=default_user_rankings_repository, survey_repository=default_survey_repository):
         """
         Initalized the service for user rankings with the repositories needed. The purpose of this class is to handle what happens after the SQL code in the
         corresponding repository
@@ -29,7 +26,7 @@ class UserRankingsService:
             rejections: The rejections of the survey by the user. This can be an empty string if no rejections added
             reason: The reasoning for the rejections. This can be an empty string if no rejections added
         """
-        ranking = self._user_rankings_repository.add_user_ranking(user_id,survey_id,ranking, rejections, reason)
+        ranking = self._user_rankings_repository.add_user_ranking(user_id, survey_id, ranking, rejections, reason)
         return ranking
 
     def user_ranking_exists(self, survey_id, user_id):
@@ -89,5 +86,6 @@ class UserRankingsService:
         if not rankings:
             return 0
         return len(rankings)
+
 
 user_rankings_service = UserRankingsService()
