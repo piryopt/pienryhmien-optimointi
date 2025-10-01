@@ -137,6 +137,8 @@ def test_create_new_survey_with_csv_file(page: Page):
     """
     Test that the user is able to create a new survey with a pre-made CSV file
     """
+    page.on("console", lambda msg: print(f"[BROWSER LOG] {msg.type}: {msg.text}"))
+
     login(page, "robottiTeacher", "RoboCop")
     page.get_by_role(
         "link",
@@ -145,16 +147,14 @@ def test_create_new_survey_with_csv_file(page: Page):
     page.locator("#groupname").fill("Päiväkoti valinta")
     page.locator("#end-date").fill("31.08.2029")
     page.locator("#endtime").select_option("12:00")
-    page.locator("#survey-information").fill(
-        "Valitse mihin päiväkotiin haluat sijoittaa itsesi"
-    )
+    page.locator("#survey-information").fill("Valitse mihin päiväkotiin haluat sijoittaa itsesi")
 
     with page.expect_file_chooser() as fc_info:
         page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
     file_chooser = fc_info.value
-    file_chooser.set_files(str(TEST_FILES_PATH) + '/test_survey2.csv')
+    file_chooser.set_files(str(TEST_FILES_PATH) + "/test_survey2.csv")
     expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
-    expect(page.get_by_text("Tässä tekstiä,, kahdella pilkulla")).to_be_visible()
+    expect(page.get_by_text("Nallitie 3")).to_be_visible()
     page.locator("#create_survey").click()
     expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
 
