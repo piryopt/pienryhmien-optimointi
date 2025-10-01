@@ -103,6 +103,24 @@ class TestSurveyChoicesService(unittest.TestCase):
         one_choice = scs.get_survey_choice(choices[0][0])
         self.assertEqual(choices[0][2], one_choice[2])
 
+    def test_get_survey_choice_min_size_return_correct_value(self):
+        """
+        Fetches all choices with get_list_of_survey_choices() and inputs
+        the first result choice id to function get_survey_choice_min_size(),
+        then tests that the returned min_size value is correct
+        """
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        min_size = scs.get_survey_choice_min_size(choices[0][0])
+        self.assertEqual(choices[0].min_size, min_size)
+
+    def test_get_survey_choice_min_size_returns_false_if_choice_not_found(self):
+        """
+        Tests that function get_survey_choice_min_size() returns false if no
+        choice found with the id used as input, uses a string as input
+        when ids should be int
+        """
+        self.assertEqual(scs.get_survey_choice_min_size("Not an id"), False)
+
     def test_get_choice_name_and_spaces_gets_correct_choice(self):
         """
         Fetches all choices with get_list_of_survey_choices() and inputs
@@ -143,3 +161,56 @@ class TestSurveyChoicesService(unittest.TestCase):
         choices = scs.get_list_of_survey_choices(self.survey_id)
         self.assertEqual(choices[2].name, "Tyhjä")
         self.assertEqual(choices[2].max_spaces, 3)
+
+    def test_check_min_equals_max_returns_false_if_choices_dont_have_equal_min_and_max(self):
+        """
+        Tests that function check_min_equals_max() returns false if
+        not all choices have equal min and max values
+        """
+        self.assertEqual(scs.check_min_equals_max(self.survey_id), (False, 0))
+
+    def test_get_survey_choice_mandatory_returns_false_if_choice_is_not_mandatory(self):
+        """
+        Tests that function get_survey_choice_mandatory() returns false when the
+        group is not mandatory
+        """
+        choices = scs.get_list_of_survey_choices(self.survey_id)
+        self.assertEqual(scs.get_survey_choice_mandatory(choices[0][0]), False)
+
+    def test_get_survey_choice_mandatory_returns_true_if_choice_is_mandatory(self):
+        """
+        Tests that function get_survey_choice_mandatory() returns true when the
+        group is mandatory
+        """
+        with open("tests/test_files/test_survey3.json", "r") as openfile:
+            # open as JSON instead of TextIOWrapper or something
+            json_object = json.load(openfile)
+
+        self.mandatory_choices_survey_id = ss.create_new_survey_manual(
+            json_object["choices"], json_object["surveyGroupname"], self.user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02"
+        )
+        sos.add_owner_to_survey(self.mandatory_choices_survey_id, self.user_email)
+
+        choices = scs.get_list_of_survey_choices(self.mandatory_choices_survey_id)
+        self.assertEqual(scs.get_survey_choice_mandatory(choices[0][0]), True)
+
+    def test_get_survey_choice_mandatory_returns_false_if_choice_id_not_found(self):
+        """
+        Tests that function get_survey_choice_mandatory() returns false when the
+        choice id is not found
+        """
+        self.assertEqual(scs.get_survey_choice_mandatory("Not an id"), False)
+
+    def test_check_answers_less_than_min_size_returns_false_if_number_of_answers_greater_than_min_size(self):
+        """
+        Tests that function check_answers_less_than_min_size() returns false if
+        the number of answers is greater than the min size of the group with the smallest min size
+        """
+        self.assertEqual(scs.check_answers_less_than_min_size(self.survey_id, 5), False)
+
+    def test_check_answers_less_than_min_size_returns_true_if_number_of_answers_less_than_min_size(self):
+        """
+        Tests that function check_answers_less_than_min_size() returns false if
+        the number of answers is greater than the min size of the group with the smallest min size
+        """
+        self.assertEqual(scs.check_answers_less_than_min_size(self.survey_id, 0), True)
