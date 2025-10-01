@@ -250,7 +250,7 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                             # Compare ranking positions
                             current_group_rank = rank(students_dict, student_id, assigned_group)
                             target_group_rank = rank(students_dict, student_id, survey_choice_id)
-                            if current_group_rank < target_group_rank:
+                            if current_group_rank <= target_group_rank:
                                 continue
 
                         candidates.append((i, student_id, assigned_group))
