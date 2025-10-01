@@ -43,3 +43,10 @@ class TestUserRepository(unittest.TestCase):
         self.assertEqual(user.name, "Tiina Testiopettaja")
         self.assertEqual(user.email, "tiina.testiope@email.com")
         self.assertTrue(user.isteacher)
+
+    def test_change_user_language_returns_false_if_user_id_invalid(self):
+        """
+        Test that changing the language of a user with an invalid ID returns False
+        """
+        result = self.ur.change_user_language("invalid_id", "fi")
+        self.assertFalse(result)
