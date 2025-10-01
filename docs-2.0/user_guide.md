@@ -22,7 +22,7 @@ Create a file named `.env` in the project root with the following content. Repla
 POSTGRES_USER=devuser
 POSTGRES_PASSWORD=devpass
 POSTGRES_DB=dev_db_name
-DEV_DATABASE_URL=postgresql://devuser:devpass@db:5432/dev_db_name
+DATABASE_URL=postgresql://devuser:devpass@db:5432/dev_db_name
 SECRET_KEY=dev_secret
 
 # For test
