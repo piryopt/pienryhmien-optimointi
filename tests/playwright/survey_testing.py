@@ -152,7 +152,7 @@ def test_create_new_survey_with_csv_file(page: Page):
     with page.expect_file_chooser() as fc_info:
         page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
     file_chooser = fc_info.value
-    file_chooser.set_files(str(TEST_FILES_PATH) + '/test_survey1.csv')
+    file_chooser.set_files(str(TEST_FILES_PATH) + '/test_survey2.csv')
     expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
     expect(page.get_by_text("Tässä tekstiä,, kahdella pilkulla")).to_be_visible()
     page.locator("#create_survey").click()
