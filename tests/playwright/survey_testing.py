@@ -3,7 +3,7 @@ import re
 from playwright.sync_api import Page, expect
 from playwright_tools import login, trace_on_failure
 
-FILE_TO_UPLOAD = Path(__file__).parent / ".." / "test_files" / "test_survey2.csv"
+TEST_FILES_PATH = Path(__file__).parent / ".." / "test_files"
 
 
 def test_login(page: Page):
@@ -54,7 +54,7 @@ def test_create_new_survey_with_csv_file(page: Page):
     with page.expect_file_chooser() as fc_info:
         page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
     file_chooser = fc_info.value
-    file_chooser.set_files(str(FILE_TO_UPLOAD))
+    file_chooser.set_files(str(TEST_FILES_PATH) + "/test_survey2.csv")
     expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
     expect(page.get_by_text("Nallitie 3")).to_be_visible()
     page.locator("#create_survey").click()
@@ -133,6 +133,32 @@ def test_create_new_survey(page: Page):
     expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
 
 
+def test_create_new_survey_with_csv_file(page: Page):
+    """
+    Test that the user is able to create a new survey with a pre-made CSV file
+    """
+    page.on("console", lambda msg: print(f"[BROWSER LOG] {msg.type}: {msg.text}"))
+
+    login(page, "robottiTeacher", "RoboCop")
+    page.get_by_role(
+        "link",
+        name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
+    ).click()
+    page.locator("#groupname").fill("Päiväkoti valinta")
+    page.locator("#end-date").fill("31.08.2029")
+    page.locator("#endtime").select_option("12:00")
+    page.locator("#survey-information").fill("Valitse mihin päiväkotiin haluat sijoittaa itsesi")
+
+    with page.expect_file_chooser() as fc_info:
+        page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
+    file_chooser = fc_info.value
+    file_chooser.set_files(str(TEST_FILES_PATH) + "/test_survey2.csv")
+    expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
+    expect(page.get_by_text("Nallitie 3")).to_be_visible()
+    page.locator("#create_survey").click()
+    expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
+
+
 def test_survey_more_info_works(page: Page):
     """
     Test that if a survey choice has additional info, it is displayed when clicked and hidden when clicked again
@@ -194,3 +220,19 @@ def test_logging_out(page: Page):
     page.locator("#dropdownMenuButton1").click()
     page.get_by_text("Kirjaudu ulos").click()
     expect(page.get_by_text("Salasana (laita mitä vaan)")).to_be_visible()
+
+def test_mandatory_groups_get_filled_using_csv_file(page: Page):
+    login(page, "robottiTeacher", "sleep")
+    page.get_by_role("link", name="Luo uusi kysely").click()
+    with page.expect_file_chooser() as fc_info:
+        page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
+    file_chooser = fc_info.value
+    file_chooser.set_files(str(TEST_FILES_PATH) + '/test_survey3.csv')
+    page.wait_for_selector("table")
+    rows = page.locator("table tbody tr")
+    first_checkbox = rows.nth(0).locator("input[type='checkbox']")
+    second_checkbox = rows.nth(1).locator("input[type='checkbox']")
+    fourth_checkbox = rows.nth(3).locator("input[type='checkbox']")
+    assert first_checkbox.is_checked()
+    assert not second_checkbox.is_checked()
+    assert fourth_checkbox.is_checked()
