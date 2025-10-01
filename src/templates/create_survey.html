@@ -199,17 +199,17 @@
       data-dependant-class="deny-choices-section"
       onclick="visibilityToggleRadioClick(event);"
     />
-    <label for="min-choices-all">{{ _('Kyllä') }}</label>
+    <label for="deny-choices-yes">{{ _('Kyllä') }}</label>
     <input
       type="radio"
       name="deny-choices-setting"
       value="hide"
-      id="min-choices-no"
+      id="deny-choices-no"
       data-dependant-class="deny-choices-section"
       onclick="visibilityToggleRadioClick(event);"
       checked
     />
-    <label for="min-choices-custom">{{ _('Ei') }}</label>
+    <label for="deny-choices-no">{{ _('Ei') }}</label>
   </div>
   <div class="deny-choices-section hidden">
     <label for="denied-choices-count"
@@ -275,7 +275,7 @@
       endif
       %}
     />
-    <label for="min-choices-all">{{ _('Kyllä') }}</label>
+    <label for="search-visibility-yes">{{ _('Kyllä') }}</label>
     <input
       type="radio"
       name="allow-search-visibility"
@@ -298,7 +298,7 @@
       %}
       checked
     />
-    <label for="min-choices-custom">{{ _('Ei') }}</label>
+    <label for="search-visibility-no">{{ _('Ei') }}</label>
   </div>
 </section>
 
