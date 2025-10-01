@@ -245,9 +245,13 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                         if assigned_group == survey_choice_id:
                             continue
 
-                        # Skip students in other mandatory groups
+                        # Skip students in other mandatory groups if they prefer their current mandatory group more
                         if survey_choices_service.get_survey_choice_mandatory(assigned_group):
-                            continue
+                            # Compare ranking positions
+                            current_group_rank = rank(students_dict, student_id, assigned_group)
+                            target_group_rank = rank(students_dict, student_id, survey_choice_id)
+                            if current_group_rank < target_group_rank:
+                                continue
 
                         candidates.append((i, student_id, assigned_group))
 
