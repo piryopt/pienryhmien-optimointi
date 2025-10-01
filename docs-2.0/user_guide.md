@@ -23,7 +23,7 @@ POSTGRES_USER=devuser
 POSTGRES_PASSWORD=devpass
 POSTGRES_DB=dev_db_name
 DEV_DATABASE_URL=postgresql://devuser:devpass@db:5432/dev_db_name
-DEV_SECRET_KEY=dev_secret
+SECRET_KEY=dev_secret
 
 # For test
 TEST_POSTGRES_USER=testuser
