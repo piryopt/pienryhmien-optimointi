@@ -67,6 +67,17 @@ class UserRankingsService:
         ranking = self._user_rankings_repository.get_user_ranking(user_id, survey_id)
         return ranking.ranking
 
+    def get_user_rejections(self, user_id, survey_id):
+        """
+        Gets the user rejections for a survey
+
+        args:
+            survey_id: The id of the survey
+            user_id: The id of the user
+        """
+        ranking = self._user_rankings_repository.get_user_ranking(user_id, survey_id)
+        return ranking.rejections
+    
     def len_all_rankings(self):
         """
         Get the amount of all rankings made in Jakaja. Used for analytics in the admin page.

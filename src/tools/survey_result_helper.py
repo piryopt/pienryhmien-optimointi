@@ -3,7 +3,7 @@ from src.entities.student import Student
 from src.services.user_service import user_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
-from src.tools.rankings_converter import convert_to_list
+from src.tools.rankings_converter import convert_to_list, convert_to_int_list
 from datetime import datetime
 from flask_babel import gettext
 import src.algorithms.hungarian as h
@@ -45,7 +45,7 @@ def convert_users_students(user_rankings):
     return students
 
 
-def get_happiness(survey_choice_id, user_ranking):
+def get_happiness(survey_choice_id, user_ranking, user_rejections):
     """
     A function for getting the ordinal number of the survey_choice which the student ended in. E.G rankings = "2,4,5,1,3" and they
     got chosen for 4, the function returns 2.
@@ -54,14 +54,19 @@ def get_happiness(survey_choice_id, user_ranking):
         survey_choice_id: The id of the survey choice in which the student was selected into
         user_ranking: The ranking of the user for the survey
     """
+    rejections_list = convert_to_int_list(user_rejections)
+
+    if survey_choice_id in rejections_list:
+        return gettext("Hylätty")
+
     ranking_list = convert_to_list(user_ranking)
     happiness = 0
     for choice_id in ranking_list:
         happiness += 1
         if survey_choice_id == int(choice_id):
-            break
-    return happiness
+            return happiness
 
+    return gettext("Ei järjestetty")
 
 def convert_date(data):
     """
@@ -102,6 +107,24 @@ def check_if_zero_needed(unit):
     return unit
 
 
+def happiness_sort_key(x):
+    """
+    A sort key function for sorting happiness results so that integers come first
+    in ascending order, then "Ei järjestettyyn", then "Hylättyyn".
+    """
+
+    value = x[0]
+    if isinstance(value, int):
+        return (0, value)
+    elif value == gettext("Ei järjestettyyn"):
+        return (1, 0)
+    elif value == gettext("Hylättyyn"):
+        return (2, 0)
+    else:
+        # Any other string (shouldn't happen)
+        return (3, 0)
+
+
 def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
     """
     Run the hungarian algorthim until their is no violation for the min_size portion
@@ -134,8 +157,10 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
         user_id = results[0][0]
         choice_id = results[2][0]
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
-        happiness = get_happiness(choice_id, ranking)
-        happiness_avg += happiness
+        rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
+        happiness = get_happiness(choice_id, ranking, rejections)
+        if happiness != gettext("Hylätty") and happiness != gettext("Ei järjestetty"):
+            happiness_avg += happiness
         results.append(happiness)
         if happiness not in happiness_results:
             happiness_results[happiness] = 1
@@ -145,11 +170,18 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_results_list = []
     for k, v in happiness_results.items():
         if v > 0:
-            msg = gettext(". valintaansa sijoitetut käyttäjät: ")
+            if k == gettext("Hylätty"):
+                k = gettext("Hylättyyn")
+                msg = gettext(' valintaan sijoitetut käyttäjät: ')
+            elif k == gettext("Ei järjestetty"):
+                k = gettext("Ei järjestettyyn")
+                msg = gettext(' valintaan sijoitetut käyttäjät: ')
+            else:
+                msg = gettext('. valintaansa sijoitetut käyttäjät: ')
             happiness_results_list.append((k, msg + f"{v}"))
 
     # Fix a bug where happiness results did not always come in the right order
-    happiness_results_list.sort()
+    happiness_results_list.sort(key=happiness_sort_key)
 
     dropped_groups = []
     for group_id in dropped_groups_id:
@@ -213,9 +245,13 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                         if assigned_group == survey_choice_id:
                             continue
 
-                        # Skip students in other mandatory groups
+                        # Skip students in other mandatory groups if they prefer their current mandatory group more
                         if survey_choices_service.get_survey_choice_mandatory(assigned_group):
-                            continue
+                            # Compare ranking positions
+                            current_group_rank = rank(students_dict, student_id, assigned_group)
+                            target_group_rank = rank(students_dict, student_id, survey_choice_id)
+                            if current_group_rank <= target_group_rank:
+                                continue
 
                         candidates.append((i, student_id, assigned_group))
 
@@ -263,8 +299,12 @@ def rank(students_dict, student_id, target_group_id):
 
     returns: The index of the target group in the student's selections or 999 if not found
     """
-
     selections = students_dict[student_id].selections
+    rejections = students_dict[student_id].rejections
+
+    if target_group_id in rejections:
+        return 1000
+    
     return selections.index(target_group_id) if target_group_id in selections else 999
 
 
