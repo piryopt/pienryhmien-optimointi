@@ -171,3 +171,48 @@ class TestUserService(unittest.TestCase):
         """
         user_id = us.get_user_id_by_email("moti@motivaatio.com")
         self.assertFalse(user_id)
+
+    def test_logout_clears_session(self):
+        """
+        Test that logging out clears the user session
+        """
+        with self.app.test_request_context():
+            from flask import session
+
+            session["email"] = "test@email.com"
+            session["user_id"] = 1
+            session["full_name"] = "Test User"
+            session["role"] = "Opettaja"
+            session["reloaded"] = False
+            session["admin"] = True
+            session["language"] = "fi"
+            us.logout()
+            for key in ["email", "user_id", "full_name", "role", "reloaded", "admin", "language"]:
+                self.assertNotIn(key, session)
+
+    def test_update_user_language_changes_session_language_if_language_valid(self):
+        """
+        Test that update_user_language changes session['language'] if language is valid
+        """
+        user_id = us.get_user_id_by_email("tiina.testiope@email.com")
+        with self.app.test_request_context():
+            from flask import session
+
+            session["language"] = "en"
+            result = us.update_user_language(user_id, "sv")
+            self.assertTrue(result)
+            self.assertEqual(session["language"], "sv")
+
+    def test_update_user_language_does_not_change_session_language_if_language_invalid(self):
+        """
+        Test that update_user_language does not change session['language'] if language is invalid
+        """
+        user_id = us.get_user_id_by_email("tiina.testiope@email.com")
+        with self.app.test_request_context():
+            # Set initial language
+            from flask import session
+
+            session["language"] = "fi"
+            result = us.update_user_language(user_id, "invalid_language")
+            self.assertFalse(result)
+            self.assertEqual(session["language"], "fi")
