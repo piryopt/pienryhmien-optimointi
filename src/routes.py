@@ -114,8 +114,8 @@ def frontpage() -> str:
         return render_template("index.html", surveys_created=surveys_created, exists=False, is_teacher=is_teacher)
     data = []
     for s in surveys:
-        survey_id = s[0]
-        surveyname = s[1]
+        survey_id = s.id
+        surveyname = s.surveyname
         survey_answers = survey_service.fetch_survey_responses(survey_id)
         participants = len(survey_answers)
         survey_ending_date = survey_service.get_survey_enddate(survey_id)
@@ -166,8 +166,8 @@ def expand_ranking(survey_id):
     email = request.get_json()
     user_id = user_service.get_user_id_by_email(email)
     user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
-    ranking_list = convert_to_list(user_ranking[3])
-    rejection_list = convert_to_list(user_ranking[4])
+    ranking_list = convert_to_list(user_ranking.ranking)
+    rejection_list = convert_to_list(user_ranking.rejections)
     choices = []
     for r in ranking_list:
         choice = survey_choices_service.get_survey_choice(r)
