@@ -243,6 +243,17 @@ function saveEdit() {
     console.log("Form contents not valid, won't post");
     return;
   }
+    
+    // Date is valid
+    var endDateParts = document.getElementById("end-date").value.split(".")
+    var endDate = new Date(Number(endDateParts[2]), Number(endDateParts[1]-1), Number(endDateParts[0]))
+    
+    var today = new Date()
+    var todaysEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59)
+    if(endDate <= todaysEnd) {
+        showAlert({msg: "Vastausajan päättymispäivä ei saa olla kuluva päivä tai menneisyydessä", color: "red"})
+        return;
+    }
 
   //Valid content, continue to post
 
