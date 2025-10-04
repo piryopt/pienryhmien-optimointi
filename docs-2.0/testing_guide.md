@@ -22,5 +22,5 @@ docker compose run --rm test --cov=src --cov-report=html
 ### Run playwright tests
 
 ```
-docker compose run --rm test scripts/run_playwright_tests.sh
+docker compose run --rm test tests/playwright/survey_testing.py --browser chromium
 ```
