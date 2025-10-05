@@ -7,6 +7,7 @@ from src.repositories.user_repository import user_repository as ur
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
+
 @pytest.fixture
 def test_app():
     """
@@ -28,12 +29,14 @@ def test_app():
     db.drop_all()
     app_context.pop()
 
+
 def test_get_user_by_email_invalid(test_app):
     """
     Test that an invalid email returns False
     """
     user = ur.get_user_by_email("moti@motivaatio.com")
     assert not user
+
 
 def test_get_user_by_email(test_app):
     """
@@ -43,3 +46,22 @@ def test_get_user_by_email(test_app):
     assert user.name == "Tiina Testiopettaja"
     assert user.email == "tiina.testiope@email.com"
     assert user.isteacher
+
+
+def test_get_user_data_returns_false_for_invalid_id(test_app):
+    """
+    Test that get_user_data() returns False if user not found or id invalid
+    """
+
+    incorrect_ids = ["x", "kukkuluuruu", 3.14, "55", False, True, []]
+    for item in incorrect_ids:
+        assert ur.get_user_data(item) is False
+
+
+def test_change_user_language_returns_false_for_invalid_user_id(test_app):
+    """
+    Test that changing language with an invalid user id returns False
+    """
+    incorrect_ids = ["x", "kukkuluuruu", 3.14, "55", False, True, []]
+    for item in incorrect_ids:
+        assert ur.change_user_language(item, "en") is False
