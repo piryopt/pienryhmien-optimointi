@@ -2,8 +2,9 @@
 Det är möjligt att importera undersökningsalternativ från en csv-fil, så länge filen följer följande regler.</br>
 
 De enda obligatoriska fälten är facilitetens namn, kapacitet och minsta gruppsstorlek. Avgränsaren i .csv-filen spelar ingen roll (det kan vara ,, ; eller "," osv.), eftersom Separator automatiskt kommer att ändra dem till ;. </br></br>
-Bilden nedan visar formatet på en exempelfil:
-<img src="/static/images/csv.png" alt="Exempel CSV-fil">
+
+Bilden nedan visar formatet på en exempelfil:</br>
+<img src="/static/images/csv.png" alt="Exempel CSV-fil" width="900">
 </br></br>
 <img src="static/images/csv-create.png" alt="CSV-tiedostosta luonti" width="900">
 </br></br>

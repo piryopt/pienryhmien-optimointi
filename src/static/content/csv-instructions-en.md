@@ -4,8 +4,8 @@ It is possible to import survey choices from a CSV file, as long as the file fol
 
 In this case, the seperator in the CSV-file doest not matter (it can be , or ; etc.). The file must at minimun contain name, capacity and minimum group size for each choice. The first row of the file must be a header row.</br>
 
-The image below shows the format of an example file:
-<img src="/static/images/csv.png" alt="Example CSV-file">
+The image below shows the format of an example file:</br>
+<img src="/static/images/csv.png" alt="Example CSV-file" width="900">
 </br></br>
 <img src="static/images/csv-create.png" alt="Resulting survey" width="900">
 </br></br>

@@ -5,7 +5,7 @@ Kyselyn vaihtoehdot on mahdollista tuoda CSV-tiedostosta näitä ohjeita noudatt
 Jakajassa CSV-tiedoston erottajalla ei ole väliä (voi olla esimerkiksi , tai ;). Pakolliset tiedot jokaiselle kohtelle on nimi, paikkamäärä ja ryhmien minimikoko. Tiedoston ylimmän rivin tulee olla otsikkorivi eli vähintään seuraavanlainen: </br>
 "Päiväkodin nimi", "Paikkamäärä", "Minimikoko"</br></br>
 
-Alla oleva kuva näyttää esimerkkitiedoston muodon ja siitä syntyvän kyselyn:
+Alla oleva kuva näyttää esimerkkitiedoston muodon ja siitä syntyvän kyselyn:</br>
 <img src="/static/images/csv.png" alt="Esimerkki CSV-tiedosto" width="900">
 </br></br>
 <img src="static/images/csv-create.png" alt="CSV-tiedostosta luonti" width="900">
