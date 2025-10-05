@@ -5,12 +5,17 @@ It is possible to import survey choices from a CSV file, as long as the file fol
 In this case, the seperator in the CSV-file doest not matter (it can be , or ; etc.). The file must at minimun contain name, capacity and minimum group size for each choice. The first row of the file must be a header row.</br>
 
 The image below shows the format of an example file:
-<img src="/static/images/csv.png" alt="Example CSV-file"></br>
+<img src="/static/images/csv.png" alt="Example CSV-file">
+</br></br>
+<img src="static/images/csv-create.png" alt="Resulting survey" width="900">
+</br></br>
 
 By default, unpopular groups that dont meet the minimum size after distribution will be dropped. If you want to make sure that certaing groups are not dropped, you can add a column called "Mandatory" to the CSV file and fill it with values TRUE or FALSE depending on whether the group is required or not. The values in the "Mandatory" column can be for example TRUE, true, or True, the letter case does not matter. A FALSE value is not strictly required, but each row in the column must contain some value (for example, empty quotation marks " " are acceptable).
 
 The image below shows the format of an example file that has the mandatory column:
 <img src="/static/images/csv2.png" alt="Example CSV-file">
+</br></br>
+<img src="static/images/csv2-create.png" alt="Resulting survey" width="900">
 
 
 ## When using E-lomake

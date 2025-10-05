@@ -1,19 +1,22 @@
 # Ohje kyselyn luomiseen CSV-tiedostosta
 
-Kyselyn vaihtoehdot on mahdollista tuoda CSV-tiedostosta näitä ohjeita noudattamalla. CSV on lyhenne sanoista "Comma-Separated Values". CSV tiedostossa tieto on siis tallennettu siten, että sarakkeet on eroteltu jollain merkillä (tyypillisesti pilkulla).
+Kyselyn vaihtoehdot on mahdollista tuoda CSV-tiedostosta näitä ohjeita noudattamalla. CSV on lyhenne sanoista "Comma-Separated Values". CSV-tiedostossa tieto on siis tallennettu siten, että sarakkeet on eroteltu jollain merkillä (tyypillisesti pilkulla).
 
-Jakajassa CSV tiedoston erottajalla ei ole väliä (voi olla esimerkiksi , tai ;). Pakolliset tiedot jokaiselle kohtelle on nimi, paikkamäärä ja ryhmien minimikoko. Tiedoston ylimmän rivin tulee olla otsikkorivi eli vähintään seuraavanlainen: </br>
+Jakajassa CSV-tiedoston erottajalla ei ole väliä (voi olla esimerkiksi , tai ;). Pakolliset tiedot jokaiselle kohtelle on nimi, paikkamäärä ja ryhmien minimikoko. Tiedoston ylimmän rivin tulee olla otsikkorivi eli vähintään seuraavanlainen: </br>
 "Päiväkodin nimi", "Paikkamäärä", "Minimikoko"</br></br>
 
-Alla oleva kuva näyttää esimerkkitiedoston muodon:
-<img src="/static/images/csv.png" alt="Esimerkki csv-tiedosto">
+Alla oleva kuva näyttää esimerkkitiedoston muodon ja siitä syntyvän kyselyn:
+<img src="/static/images/csv.png" alt="Esimerkki CSV-tiedosto" width="900">
+</br></br>
+<img src="static/images/csv-create.png" alt="CSV-tiedostosta luonti" width="900">
 </br></br>
 
-Jakaja pudottaa oletuksena epäsuositun ryhmä-vaihtoehdon, jos sen minimikoko ei täyty jaossa. Jos haluat, että jotkut ryhmät
-toteutuvat varmasti voit lisätä CSV tiedostoon sarakkeen "Mandatory" ja täyttää sen arvoilla TRUE tai FALSE sen mukaan onko ryhmä pakollinen vai ei. Sarakkeen "Mandatory" arvot voivat olla esimerkiksi TRUE, true tai True eli kirjainkoolla ei ole välilä. FALSE arvoa ei periaatteessa ole pakko antaa, muttaa sarake tarvitsee joka rivillä jonkin arvon (esimerkiksi tyhjät lainausmerkit " " käyvät hyvin). 
+Jakaja pudottaa oletuksena epäsuositun ryhmän, jos sen minimikoko ei täyty jaossa. Jos haluat, että jotkut ryhmät toteutuvat varmasti, voit lisätä CSV-tiedostoon sarakkeen "Mandatory" ja täyttää sen arvoilla TRUE tai FALSE sen mukaan onko ryhmä pakollinen vai ei. Sarakkeen "Mandatory" arvot voivat olla esimerkiksi TRUE, true tai True eli kirjainkoolla ei ole välilä. FALSE arvoa ei periaatteessa ole pakko antaa, muttaa sarake tarvitsee jokaisella rivillä jonkin arvon (esimerkiksi tyhjät lainausmerkit " " käyvät hyvin). 
 
-Alla oleva kuva näyttää esimerkkitiedoston muodon, jossa on sellaisia ryhmiä joiden on pakko toteutua:
-<img src="/static/images/csv2.png" alt="Esimerkki csv-tiedosto">
+Alla oleva kuva näyttää pakollisia ryhmiä sisältävän esimerkkitiedoston muodon ja siitä syntyvän kyselyn:
+<img src="/static/images/csv2.png" alt="Esimerkki CSV-tiedosto" width="900">
+</br></br>
+<img src="static/images/csv2-create.png" alt="CSV-tiedostosta luonti" width="900">
 
 
 ## E-lomake
