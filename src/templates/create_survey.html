@@ -131,7 +131,7 @@
   <h2>{{ _('Kyselyn kuvaus') }}</h2>
   <p>
     {{ _('Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen.
-    Kuvausteksti näytetään vastaajalle kyselyn yhteydessä') }}
+    Kuvausteksti näytetään vastaajalle kyselyn yhteydessä.') }}
   </p>
   <textarea id="survey-information" class="form-control">
 {% if survey.surveyname %}{{survey.survey_description}}{% endif %}</textarea
@@ -258,7 +258,7 @@
       vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia
       kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei
       tarvitse järjestää, ja vastaavasti kieltää kyselyille joissa on vähän
-      vastausvaihtoehtoja joista kaikki tulee järjestää') }}
+      vastausvaihtoehtoja joista kaikki tulee järjestää.') }}
     </p>
     <input
       type="radio"
@@ -312,7 +312,7 @@
 <section>
   <h2>{{ _('Priorisoitavat ryhmät') }}</h2>
   <p>
-    {{ _('Syötä ryhmät jotka kyselyyn vastaaja voi asettaa
+    {{ _('Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa
     mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko.
     Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen
     voit luoda painamalla "+ Lisää tietokenttä".') }}
@@ -333,9 +333,9 @@
   ><br /><br />
   <p>
     {{ _('Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa
-    opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *') }}
+    opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *.') }}
   </p>
-  <p>{{ _('Jos ryhmän minimikoolla ei ole väliä, syötä 0') }}</p>
+  <p>{{ _('Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän mimimikoko ei voi olla 0.') }}</p>
   <p>
     {{ _('HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat, että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella oleva laatikko.') }}
   </p>
