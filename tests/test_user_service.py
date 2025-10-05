@@ -1,36 +1,9 @@
-
-import os
-import pytest
-from flask import Flask
-from dotenv import load_dotenv
-from src import db
 from src.services.user_service import user_service as us
 from src.repositories.user_repository import user_repository as ur
 from src.entities.user import User
-from src.tools.db_tools import clear_database
 
-@pytest.fixture
-def test_app():
-    """
-    Pytest fixture to set up and tear down Flask app and database for user service tests.
-    """
-    load_dotenv()
-    app = Flask(__name__)
-    app.config["SECRET_KEY"] = os.getenv("TEST_SECRET_KEY")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("TEST_DATABASE_URL")
-    db.init_app(app)
 
-    app_context = app.app_context()
-    app_context.push()
-    clear_database()
-    user1 = User("Tiina Testiopettaja", "tiina.testiope@email.com", True)
-    ur.register(user1)
-    yield app
-    db.session.remove()
-    db.drop_all()
-    app_context.pop()
-
-def test_create_user_function_regognizes_email_in_use(test_app):
+def test_create_user_function_regognizes_email_in_use(setup_db):
     """
     Tests that the create_user() function notices when the app tries to
     register someone new with email that is already in use for another user.
@@ -39,21 +12,24 @@ def test_create_user_function_regognizes_email_in_use(test_app):
     result = us.create_user("Etunimi Sukunimi", "tiina.testiope@email.com", True)
     assert result is None
 
-def test_create_user_returns_false_if_not_validate(test_app):
+
+def test_create_user_returns_false_if_not_validate(setup_db):
     """
     Test that create_user() returns False if validate() returns false
     """
     result = us.create_user("", "tiina.testiope@email.com", True)
     assert result is False
 
-def test_validate(test_app):
+
+def test_validate(setup_db):
     """
     Test that validate returns true if name valid
     """
     result = us.validate("Testi Opettaja")
     assert result is True
 
-def test_check_credentials_empty_email(test_app):
+
+def test_check_credentials_empty_email(setup_db):
     """
     Tests that check_credentials() function checks emails
     and notices if the email address provided is empty.
@@ -63,7 +39,8 @@ def test_check_credentials_empty_email(test_app):
     result = us.check_credentials(empty_email)
     assert not result
 
-def test_check_credentials_incorrect_email(test_app):
+
+def test_check_credentials_incorrect_email(setup_db):
     """
     Tests that check_credentials() function checks emails
     and notices if the email address provided is not correct.
@@ -73,7 +50,8 @@ def test_check_credentials_incorrect_email(test_app):
     result = us.check_credentials(incorrect_email)
     assert not result
 
-def test_get_email_function_rejects_incorrect_id(test_app):
+
+def test_get_email_function_rejects_incorrect_id(setup_db):
     """
     Tests that the get_email() function correctly notices
     if provided id is not an integer, and returns False.
@@ -84,7 +62,8 @@ def test_get_email_function_rejects_incorrect_id(test_app):
         result = us.get_email(item)
         assert not result
 
-def test_get_email_function_returns_correct_email(test_app):
+
+def test_get_email_function_returns_correct_email(setup_db):
     """
     Tests that the get_email() function returns correct email
     when given user id.
@@ -95,7 +74,8 @@ def test_get_email_function_returns_correct_email(test_app):
     result = us.get_email(user_id)
     assert result == "maija@poppanen.com"
 
-def test_get_name_function_rejects_incorrect_name(test_app):
+
+def test_get_name_function_rejects_incorrect_name(setup_db):
     """
     Tests that the get_name() function correctly notices
     if provided id is not an integer, and returns False.
@@ -106,7 +86,8 @@ def test_get_name_function_rejects_incorrect_name(test_app):
         result = us.get_name(item)
         assert not result
 
-def test_get_name_function_returns_correct_name(test_app):
+
+def test_get_name_function_returns_correct_name(setup_db):
     """
     Tests that the get_name() function returns correct name
     when given user id.
@@ -117,7 +98,8 @@ def test_get_name_function_returns_correct_name(test_app):
     result = us.get_name(user_id)
     assert result == "Matti Meikäläinen"
 
-def test_find_by_email_rejects_incorrect_email(test_app):
+
+def test_find_by_email_rejects_incorrect_email(setup_db):
     """
     Tests that the find_by_email() function correctly notices
     if provided email is not a string, and returns False.
@@ -128,7 +110,8 @@ def test_find_by_email_rejects_incorrect_email(test_app):
         result = us.find_by_email(item)
         assert not result
 
-def test_check_if_teacher_correct(test_app):
+
+def test_check_if_teacher_correct(setup_db):
     """
     Tests that the check_if_teacher() function returns correctly
     is user is a teacher.
@@ -139,7 +122,8 @@ def test_check_if_teacher_correct(test_app):
     result = us.check_if_teacher(user_id)
     assert result
 
-def test_len_all_students(test_app):
+
+def test_len_all_students(setup_db):
     """
     Tests that the length of the list of all students is correct
     """
@@ -149,21 +133,24 @@ def test_len_all_students(test_app):
     users = us.len_all_students()
     assert users == 3
 
-def test_len_all_teachers(test_app):
+
+def test_len_all_teachers(setup_db):
     """
     Tests that the length of the list of all teachers is correct
     """
     users = us.len_all_teachers()
-    assert users == 1
+    assert users == 3
 
-def test_get_user_id_by_email(test_app):
+
+def test_get_user_id_by_email(setup_db):
     """
     Test that the id of the user is returned when given the correct email
     """
     user_id = us.get_user_id_by_email("tiina.testiope@email.com")
     assert isinstance(user_id, int)
 
-def test_get_user_id_by_invalid_email(test_app):
+
+def test_get_user_id_by_invalid_email(setup_db):
     """
     Test that no id is returned with an invalid email
     """
