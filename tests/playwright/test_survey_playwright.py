@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 from playwright.sync_api import Page, expect
-from playwright_tools import login, trace_on_failure
+from .playwright_tools import login
 
 TEST_FILES_PATH = Path(__file__).parent / ".." / "test_files"
 
@@ -221,13 +221,14 @@ def test_logging_out(page: Page):
     page.get_by_text("Kirjaudu ulos").click()
     expect(page.get_by_text("Salasana (laita mitä vaan)")).to_be_visible()
 
+
 def test_mandatory_groups_get_filled_using_csv_file(page: Page):
     login(page, "robottiTeacher", "sleep")
     page.get_by_role("link", name="Luo uusi kysely").click()
     with page.expect_file_chooser() as fc_info:
         page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
     file_chooser = fc_info.value
-    file_chooser.set_files(str(TEST_FILES_PATH) + '/test_survey3.csv')
+    file_chooser.set_files(str(TEST_FILES_PATH) + "/test_survey3.csv")
     page.wait_for_selector("table")
     rows = page.locator("table tbody tr")
     first_checkbox = rows.nth(0).locator("input[type='checkbox']")
