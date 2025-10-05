@@ -47,6 +47,7 @@ def setup_env():
         json_object["choices"], json_object["surveyGroupname"], user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02"
     )
     sos.add_owner_to_survey(survey_id, user_email)
+    db.session.commit()
 
     yield {
         "app": app,
@@ -198,17 +199,6 @@ def test_check_min_equals_max(setup_env):
     assert scs.check_min_equals_max(d["survey_id"]) == (False, 0)
 
 
-def test_get_survey_choice_mandatory(setup_env):
-    """
-    Tests that function survey_choice_mandatory_field() returns true when the
-    choice is mandatory
-    """
-    d = setup_env
-    choices = scs.get_list_of_survey_choices(d["survey_id"])
-    result = scs.get_survey_choice_mandatory(choices[1][0])
-    assert result is True
-
-
 def test_get_survey_choice_mandatory_returns_false_when_group_is_not_mandatory(setup_env):
     """
     Tests that function survey_choice_mandatory_field() returns false
@@ -217,6 +207,16 @@ def test_get_survey_choice_mandatory_returns_false_when_group_is_not_mandatory(s
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
     assert scs.get_survey_choice_mandatory(choices[0][0]) is False
+
+
+def test_get_survey_choice_mandatory(setup_env):
+    """
+    Tests that function survey_choice_mandatory_field() returns true when the
+    choice is mandatory
+    """
+    d = setup_env
+    choices = scs.get_list_of_survey_choices(d["survey_id"])
+    assert scs.get_survey_choice_mandatory(choices[1][0]) is True
 
 
 def test_check_answers_less_than_min_size(setup_env):

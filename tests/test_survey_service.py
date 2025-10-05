@@ -67,12 +67,21 @@ def test_setup_teardown():
     db.drop_all()
     app_context.pop()
 
+
+def test_get_survey_nonexisting_id():
+    """
+    Test that get_survey_returns False for an invalid survey id
+    """
+    assert ss.get_survey("FALSEID") is False
+
+
 def test_get_survey_name_nonexisting_id():
     """
     Test that no survey name is returned for an invalid survey id
     """
     name = ss.get_survey_name("ITSNOTREAL")
     assert name is False
+
 
 def test_survey_creation_case_normal(test_setup_teardown):
     """
@@ -116,6 +125,7 @@ def test_survey_creation_case_normal(test_setup_teardown):
     assert choice2_infos[1][0] == "Postinumero"
     assert choice2_infos[1][1] == "00550"
 
+
 def test_count_surveys_created(test_setup_teardown):
     """
     Test survey service function count_surveys_created()
@@ -131,6 +141,7 @@ def test_count_surveys_created(test_setup_teardown):
     sos.add_owner_to_survey(survey_id, d["user_email"])
     count = ss.count_surveys_created(d["user_id"])
     assert count == 1
+
 
 def test_survey_closed(test_setup_teardown):
     """
@@ -149,6 +160,7 @@ def test_survey_closed(test_setup_teardown):
     closed = ss.check_if_survey_closed(survey_id)
     assert closed is True
 
+
 def test_close_non_existing_survey(test_setup_teardown):
     """
     Test survey service functions close_survey() and check_if_survey_closed() non existing cases
@@ -160,6 +172,7 @@ def test_close_non_existing_survey(test_setup_teardown):
 
     ret = ss.check_if_survey_closed("ITSNOTREAL")
     assert ret is False
+
 
 def test_wrong_owner_cant_close_survey(test_setup_teardown):
     """
@@ -173,6 +186,7 @@ def test_wrong_owner_cant_close_survey(test_setup_teardown):
 
     ret = ss.close_survey(survey_id, d["user_id2"])
     assert ret is False
+
 
 def test_get_list_closed_surveys(test_setup_teardown):
     """
@@ -194,6 +208,7 @@ def test_get_list_closed_surveys(test_setup_teardown):
 
     assert surveys[0][0] == closed_id
     assert len(surveys) == 1
+
 
 def test_get_list_open_surveys(test_setup_teardown):
     """
@@ -218,6 +233,7 @@ def test_get_list_open_surveys(test_setup_teardown):
     assert surveys[0][0] == open_id
     assert len(surveys) == 1
 
+
 def test_open_survey_normal(test_setup_teardown):
     """
     Test reopening a closed survey
@@ -236,6 +252,7 @@ def test_open_survey_normal(test_setup_teardown):
     closed = ss.check_if_survey_closed(survey_id)
     assert closed is False
 
+
 def test_open_survey_non_existant(test_setup_teardown):
     """
     Test opening a non-existent survey
@@ -243,6 +260,7 @@ def test_open_survey_non_existant(test_setup_teardown):
     d = test_setup_teardown
     ret = ss.open_survey("ITSNOTREAL", d["user_id"])
     assert ret is False
+
 
 def test_open_survey_wrong_owner(test_setup_teardown):
     """
@@ -260,6 +278,7 @@ def test_open_survey_wrong_owner(test_setup_teardown):
 
     ret = ss.check_if_survey_closed(survey_id)
     assert ret is True
+
 
 def test_check_if_survey_results_saved(test_setup_teardown):
     """
@@ -283,6 +302,7 @@ def test_check_if_survey_results_saved(test_setup_teardown):
 
     answered = ss.check_if_survey_results_saved(survey_id)
     assert answered is True
+
 
 def test_get_survey_as_dict(test_setup_teardown):
     """
@@ -314,6 +334,7 @@ def test_get_survey_as_dict(test_setup_teardown):
     assert survey_dict["choices"][1]["Osoite"] == "Hattulantie 2"
     assert survey_dict["choices"][1]["Postinumero"] == "00550"
 
+
 def test_get_list_active_answered_invalid():
     """
     Test get_list_active_answered with invalid survey id
@@ -321,12 +342,14 @@ def test_get_list_active_answered_invalid():
     active_list = ss.get_list_active_answered("ITSNOTREAL")
     assert active_list == []
 
+
 def test_get_list_closed_answered_invalid():
     """
     Test get_list_closed_answered with invalid survey id
     """
     closed_list = ss.get_list_closed_answered("ITSNOTREAL")
     assert closed_list == []
+
 
 def test_get_list_active_answered(test_setup_teardown):
     """
@@ -341,6 +364,7 @@ def test_get_list_active_answered(test_setup_teardown):
     urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
     active_list = ss.get_list_active_answered(d["user_id3"])
     assert len(active_list) == 1
+
 
 def test_get_list_closed_answered(test_setup_teardown):
     """
@@ -357,12 +381,14 @@ def test_get_list_closed_answered(test_setup_teardown):
     closed_list = ss.get_list_closed_answered(d["user_id3"])
     assert len(closed_list) == 1
 
+
 def test_check_surveys_to_close_empty(test_setup_teardown):
     """
     Test that the function works when no open surveys
     """
     surveys = ss.check_for_surveys_to_close()
     assert surveys is False
+
 
 def test_check_surveys_to_close(test_setup_teardown):
     """
@@ -381,6 +407,71 @@ def test_check_surveys_to_close(test_setup_teardown):
     closed = ss.check_if_survey_closed(survey_id2)
     assert closed is True
 
+
+def test_validate_created_survey_invalid_name(test_setup_teardown):
+    """
+    Test that creating a survey with a  name that is too short returns False
+    """
+    survey_dict = {
+        "surveyGroupname": "Test",
+        "surveyInformation": "Test survey validation with a name that is too short",
+        "enddate": "31.12.2077",
+        "endtime": "00:00",
+    }
+
+    assert ss.validate_created_survey(survey_dict) == {
+        "success": False,
+        "message": {"status": "0", "msg": "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"},
+    }
+
+
+def test_validate_created_survey(test_setup_teardown):
+    """
+    Test that creating a survey with valid inputs returns True
+    """
+
+    survey_dict = {
+        "surveyGroupname": "Test survey invalid min choices",
+        "surveyInformation": "Test survey validation with min_choices less than 1",
+        "enddate": "31.12.2077",
+        "endtime": "00:00",
+        "minchoices": 1,
+    }
+
+    assert ss.validate_created_survey(survey_dict) == {"success": True}
+
+
+def test_validate_created_survey_invalid_min_choices(test_setup_teardown):
+    """
+    Test that creating a survey with min_choices that is not an integer returns False
+    """
+    survey_dict = {
+        "surveyGroupname": "Test survey invalid min choices",
+        "surveyInformation": "Test survey validation with min_choices less than 1",
+        "enddate": "31.12.2077",
+        "endtime": "00:00",
+        "minchoices": 2.4,
+    }
+
+    survey_dict2 = {
+        "surveyGroupname": "Test survey invalid min choices",
+        "surveyInformation": "Test survey validation with min_choices less than 1",
+        "enddate": "31.12.2077",
+        "endtime": "00:00",
+        "minchoices": "not a number",
+    }
+
+    assert ss.validate_created_survey(survey_dict) == {
+        "success": False,
+        "message": {"status": "0", "msg": "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"},
+    }
+
+    assert ss.validate_created_survey(survey_dict2) == {
+        "success": False,
+        "message": {"status": "0", "msg": "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"},
+    }
+
+
 def test_save_survey_edit(test_setup_teardown):
     """
     Test that editing a survey works
@@ -394,6 +485,7 @@ def test_save_survey_edit(test_setup_teardown):
     assert name == "Safest (most dangerous lmao) PED's"
     desc = ss.get_survey_description(survey_id)
     assert desc == "No way in hell will these have long term affects on your body, mind and soul."
+
 
 def test_survey_deleted(test_setup_teardown):
     """
@@ -414,6 +506,7 @@ def test_survey_deleted(test_setup_teardown):
     ss.set_survey_deleted_true(survey_id1)
     surveys = ss.get_all_active_surveys()
     assert len(surveys) == 1
+
 
 def test_len_active_surveys(test_setup_teardown):
     """
