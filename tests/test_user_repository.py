@@ -17,3 +17,22 @@ def test_get_user_by_email(setup_db):
     assert user.name == "Tiina Testiopettaja"
     assert user.email == "tiina.testiope@email.com"
     assert user.isteacher
+
+
+def test_get_user_data_returns_false_for_invalid_id(test_app):
+    """
+    Test that get_user_data() returns False if user not found or id invalid
+    """
+
+    incorrect_ids = ["x", "kukkuluuruu", 3.14, "55", False, True, []]
+    for item in incorrect_ids:
+        assert ur.get_user_data(item) is False
+
+
+def test_change_user_language_returns_false_for_invalid_user_id(test_app):
+    """
+    Test that changing language with an invalid user id returns False
+    """
+    incorrect_ids = ["x", "kukkuluuruu", 3.14, "55", False, True, []]
+    for item in incorrect_ids:
+        assert ur.change_user_language(item, "en") is False

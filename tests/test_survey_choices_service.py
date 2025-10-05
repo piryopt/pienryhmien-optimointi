@@ -5,7 +5,6 @@ from src.services.survey_choices_service import survey_choices_service as scs
 from src.services.survey_owners_service import survey_owners_service as sos
 import json
 
-
 @pytest.fixture()
 def setup_env(setup_db):
     """
@@ -26,7 +25,6 @@ def setup_env(setup_db):
     setup_db["survey_id"] = survey_id
 
     return setup_db
-
 
 def test_get_list_of_survey_choices_returns_false_if_no_data_found():
     """
@@ -86,6 +84,26 @@ def test_get_survey_choice_gets_correct_choice(setup_env):
     assert choices[0][2] == one_choice[2]
 
 
+def test_get_survey_choice_min_size(setup_env):
+    """
+    Fetches all choices with get_list_of_survey_choices() and inputs
+    the first result choice id to function get_survey_choice_min_size(),
+    then tests that the returned min_size value is correct
+    """
+    d = setup_env
+    choices = scs.get_list_of_survey_choices(d["survey_id"])
+    min_size = scs.get_survey_choice_min_size(choices[0].id)
+    assert min_size == choices[0].min_size
+
+
+def test_get_survey_choice_min_size_invalid_id():
+    """
+    Tests that function get_survey_choice_min_size returns False
+    when an invalid id is used as input
+    """
+    assert scs.get_survey_choice_min_size("Not an id") is False
+
+
 def test_get_choice_name_and_spaces_gets_correct_choice(setup_env):
     """
     Fetches all choices with get_list_of_survey_choices() and inputs
@@ -134,3 +152,49 @@ def test_add_empty_survey_choice(setup_env):
     assert choices[2].name == "Tyhjä"
     assert choices[2].max_spaces == 3
 
+
+def test_check_min_equals_max(setup_env):
+    """
+    Tests that function check_min_equal_max() returns false
+    when min_size and max_size are not equal for all of the choice
+    """
+    d = setup_env
+    assert scs.check_min_equals_max(d["survey_id"]) == (False, 0)
+
+
+def test_get_survey_choice_mandatory_returns_false_when_group_is_not_mandatory(setup_env):
+    """
+    Tests that function survey_choice_mandatory_field() returns false
+    when group is not mandatory
+    """
+    d = setup_env
+    choices = scs.get_list_of_survey_choices(d["survey_id"])
+    assert scs.get_survey_choice_mandatory(choices[0][0]) is False
+
+
+def test_get_survey_choice_mandatory(setup_env):
+    """
+    Tests that function survey_choice_mandatory_field() returns true when the
+    choice is mandatory
+    """
+    d = setup_env
+    choices = scs.get_list_of_survey_choices(d["survey_id"])
+    assert scs.get_survey_choice_mandatory(choices[1][0]) is True
+
+
+def test_check_answers_less_than_min_size(setup_env):
+    """
+    Tests that function check_answers_less_than_min_size() returns true if
+    the number of answers is less than the min size of the group with the smallest min size
+    """
+    d = setup_env
+    assert scs.check_answers_less_than_min_size(d["survey_id"], 0) is True
+
+
+def test_check_answers_less_than_min_size_returns_false_if_answers_greater_than_min_size(setup_env):
+    """
+    Tests that function check_answers_less_than_min_size() returns false if
+    the number of answers is greater than the min size of the group with the smallest min size
+    """
+    d = setup_env
+    assert scs.check_answers_less_than_min_size(d["survey_id"], 5) is False

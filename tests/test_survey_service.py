@@ -28,6 +28,13 @@ def setup_env(setup_db):
     return setup_db
 
 
+def test_get_survey_nonexisting_id():
+    """
+    Test that get_survey_returns False for an invalid survey id
+    """
+    assert ss.get_survey("FALSEID") is False
+
+
 def test_get_survey_name_nonexisting_id():
     """
     Test that no survey name is returned for an invalid survey id
@@ -359,6 +366,70 @@ def test_check_surveys_to_close(setup_env):
     surveys = ss.check_for_surveys_to_close()
     closed = ss.check_if_survey_closed(survey_id2)
     assert closed is True
+
+
+def test_validate_created_survey_invalid_name(setup_env):
+    """
+    Test that creating a survey with a  name that is too short returns False
+    """
+    survey_dict = {
+        "surveyGroupname": "Test",
+        "surveyInformation": "Test survey validation with a name that is too short",
+        "enddate": "31.12.2077",
+        "endtime": "00:00",
+    }
+
+    assert ss.validate_created_survey(survey_dict) == {
+        "success": False,
+        "message": {"status": "0", "msg": "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"},
+    }
+
+
+def test_validate_created_survey(setup_env):
+    """
+    Test that creating a survey with valid inputs returns True
+    """
+
+    survey_dict = {
+        "surveyGroupname": "Test survey invalid min choices",
+        "surveyInformation": "Test survey validation with min_choices less than 1",
+        "enddate": "31.12.2077",
+        "endtime": "00:00",
+        "minchoices": 1,
+    }
+
+    assert ss.validate_created_survey(survey_dict) == {"success": True}
+
+
+def test_validate_created_survey_invalid_min_choices(setup_env):
+    """
+    Test that creating a survey with min_choices that is not an integer returns False
+    """
+    survey_dict = {
+        "surveyGroupname": "Test survey invalid min choices",
+        "surveyInformation": "Test survey validation with min_choices less than 1",
+        "enddate": "31.12.2077",
+        "endtime": "00:00",
+        "minchoices": 2.4,
+    }
+
+    survey_dict2 = {
+        "surveyGroupname": "Test survey invalid min choices",
+        "surveyInformation": "Test survey validation with min_choices less than 1",
+        "enddate": "31.12.2077",
+        "endtime": "00:00",
+        "minchoices": "not a number",
+    }
+
+    assert ss.validate_created_survey(survey_dict) == {
+        "success": False,
+        "message": {"status": "0", "msg": "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"},
+    }
+
+    assert ss.validate_created_survey(survey_dict2) == {
+        "success": False,
+        "message": {"status": "0", "msg": "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"},
+    }
 
 
 def test_save_survey_edit(setup_env):

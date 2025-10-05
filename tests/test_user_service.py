@@ -29,6 +29,14 @@ def test_validate(setup_db):
     assert result is True
 
 
+def test_validate_retrurns_false_for_invalid_name(setup_db):
+    """
+    Test that validate returns false if name invalid
+    """
+    result = us.validate("")
+    assert result is False
+
+
 def test_check_credentials_empty_email(setup_db):
     """
     Tests that check_credentials() function checks emails
@@ -134,6 +142,14 @@ def test_len_all_students(setup_db):
     assert users == 3
 
 
+def test_len_all_students_when_no_students(setup_db):
+    """
+    Tests that all_students() returns 0 when there are no students in the database
+    """
+    users = us.len_all_students()
+    assert users == 0
+
+
 def test_len_all_teachers(setup_db):
     """
     Tests that the length of the list of all teachers is correct
@@ -156,3 +172,62 @@ def test_get_user_id_by_invalid_email(setup_db):
     """
     user_id = us.get_user_id_by_email("moti@motivaatio.com")
     assert not user_id
+
+
+def test_logout_clears_session(test_app):
+    """
+    Test that the logout function clears the session
+    """
+    with test_app.test_request_context():
+        from flask import session
+
+        session["email"] = "test@email.com"
+        session["user_id"] = 1
+        session["full_name"] = "Test User"
+        session["role"] = "Opettaja"
+        session["reloaded"] = False
+        session["admin"] = True
+        session["language"] = "fi"
+
+        us.logout()
+
+        for key in ["email", "user_id", "full_name", "role", "reloaded", "admin", "language"]:
+            assert key not in session
+
+
+def test_update_user_language_valid_language(test_app):
+    """
+    Test that update_user_language returns True if the language is valid and
+    the session language is updated
+    """
+    user_id = us.get_user_id_by_email("tiina.testiope@email.com")
+
+    with test_app.test_request_context():
+        from flask import session
+
+        session["language"] = "fi"
+        result = us.update_user_language(user_id, "en")
+
+    assert result
+
+    user = ur.find_by_email("tiina.testiope@email.com")
+    assert user.language == "en"
+
+
+def test_update_user_language_invalid_language(test_app):
+    """
+    Test that update_user_language returns False if the language is invalid and
+    the session language is not updated
+    """
+    user_id = us.get_user_id_by_email("tiina.testiope@email.com")
+
+    with test_app.test_request_context():
+        from flask import session
+
+        session["language"] = "fi"
+        result = us.update_user_language(user_id, "invalid_language")
+
+    assert not result
+
+    user = ur.find_by_email("tiina.testiope@email.com")
+    assert user.language == "fi"
