@@ -23,9 +23,8 @@ def get_locale():
     from flask import has_request_context
 
     if not has_request_context():
-        # if "language" not in session:
         return "fi"
-    return session.get("language", "fi")
+    return session.get("language", 0)
 
 
 def create_app(test_config=None):

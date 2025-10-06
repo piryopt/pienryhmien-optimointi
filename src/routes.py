@@ -1071,5 +1071,5 @@ def close_surveys():
     """
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """
-    with app.app_context():
+    with current_app.app_context():
         survey_service.check_for_surveys_to_close()
