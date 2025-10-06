@@ -484,3 +484,18 @@ def test_len_active_surveys(setup_env):
     surveys = ss.get_all_active_surveys()
     length = ss.len_all_surveys()
     assert len(surveys) == length
+
+
+def test_len_active_surveys_admin(setup_env):
+    """
+    Test that the length of all active surveys is correct for admin page
+    """
+    d = setup_env
+    length = ss.len_active_surveys()
+    assert length == 0
+
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey 17", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+    )
+    length = ss.len_active_surveys()
+    assert length == 1
