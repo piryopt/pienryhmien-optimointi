@@ -276,17 +276,18 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                     # Sort candidates by how much they like this mandatory group
                     candidates.sort(key=lambda c: rank(students_dict, c[1], survey_choice_id))
 
+                    if len(candidates) < needed:
+                        groups_dict.pop(survey_choice_id)
+                        dropped_groups_id.append(survey_choice_id)
+                        for user_id, student in students_dict.items():
+                            if survey_choice_id in student.selections:
+                                student.selections.remove(survey_choice_id)
+                            if survey_choice_id in student.rejections:
+                                student.rejections.remove(survey_choice_id)
+                        break
+
                     # Reassign enough students
                     for j in range(needed):
-                        if len(candidates) < needed:
-                            groups_dict.pop(survey_choice_id)
-                            dropped_groups_id.append(survey_choice_id)
-                            for user_id, student in students_dict.items():
-                                if survey_choice_id in student.selections:
-                                    student.selections.remove(survey_choice_id)
-                                if survey_choice_id in student.rejections:
-                                    student.rejections.remove(survey_choice_id)
-                            break
                         idx, student_id, old_group = candidates[j]
                         output_data[idx][2] = [survey_choice_id, groups_dict[survey_choice_id].name]  # overwrite group assignment
                         group_sizes[old_group] -= 1
