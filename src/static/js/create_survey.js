@@ -658,10 +658,11 @@ function setUploadedTableValues(table) {
 
   // 2. Add constant headers
   var constantHeaders = [
-    { text: "Nimi", key: "name" },
-    { text: "Enimmäispaikat", key: "spaces" },
-    { text: "Ryhmän minimikoko", key: "min_size" },
+    { text: headerLocale.name, key: "name" },
+    { text: headerLocale.max_spaces, key: "spaces" },
+    { text: headerLocale.min_size, key: "min_size" },
   ];
+
   constantHeaders.forEach((header) => {
     var th = document.createElement("th");
     th.innerText = header.text;
