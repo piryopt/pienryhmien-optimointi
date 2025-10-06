@@ -68,6 +68,7 @@ def get_happiness(survey_choice_id, user_ranking, user_rejections):
 
     return gettext("Ei järjestetty")
 
+
 def convert_date(data):
     """
     Convert a datetime object to a dd.mm.yyyy string
@@ -172,12 +173,12 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
         if v > 0:
             if k == gettext("Hylätty"):
                 k = gettext("Hylättyyn")
-                msg = gettext(' valintaan sijoitetut käyttäjät: ')
+                msg = gettext(" valintaan sijoitetut käyttäjät: ")
             elif k == gettext("Ei järjestetty"):
                 k = gettext("Ei järjestettyyn")
-                msg = gettext(' valintaan sijoitetut käyttäjät: ')
+                msg = gettext(" valintaan sijoitetut käyttäjät: ")
             else:
-                msg = gettext('. valintaansa sijoitetut käyttäjät: ')
+                msg = gettext(". valintaansa sijoitetut käyttäjät: ")
             happiness_results_list.append((k, msg + f"{v}"))
 
     # Fix a bug where happiness results did not always come in the right order
@@ -234,8 +235,9 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                 if mandatory:
                     needed = min_size - group_sizes[survey_choice_id]
 
-                    # Collect candidates (students not already in this group)
+                    # Collect candidates Phase 1 (students not already in this group)
                     candidates = []
+                    students_in_mandatory_groups = []
                     for i, entry in enumerate(output_data):
                         student_info, email, group_info = entry
                         student_id = student_info[0]
@@ -251,9 +253,25 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                             current_group_rank = rank(students_dict, student_id, assigned_group)
                             target_group_rank = rank(students_dict, student_id, survey_choice_id)
                             if current_group_rank <= target_group_rank:
+                                students_in_mandatory_groups.append((i, student_id, assigned_group))
                                 continue
 
                         candidates.append((i, student_id, assigned_group))
+
+                    # If not enough candidates, Phase 2: pull from any group (respect min_size for mandatory groups)
+                    if len(candidates) < needed:
+                        for i, student_id, assigned_group in students_in_mandatory_groups:
+                            # Skip if already in candidates
+                            if any(c[1] == student_id for c in candidates):
+                                continue
+
+                            # For mandatory groups, don't violate min_size
+                            current_group_min_size = survey_choices_service.get_survey_choice_min_size(assigned_group)
+
+                            if group_sizes[assigned_group] <= current_group_min_size:
+                                continue
+
+                            candidates.append((i, student_id, assigned_group))
 
                     # Sort candidates by how much they like this mandatory group
                     candidates.sort(key=lambda c: rank(students_dict, c[1], survey_choice_id))
@@ -304,7 +322,7 @@ def rank(students_dict, student_id, target_group_id):
 
     if target_group_id in rejections:
         return 1000
-    
+
     return selections.index(target_group_id) if target_group_id in selections else 999
 
 
