@@ -19,7 +19,7 @@ def test_get_user_by_email(setup_db):
     assert user.isteacher
 
 
-def test_get_user_data_returns_false_for_invalid_id(test_app):
+def test_get_user_data_returns_false_for_invalid_id(setup_db):
     """
     Test that get_user_data() returns False if user not found or id invalid
     """
@@ -29,7 +29,7 @@ def test_get_user_data_returns_false_for_invalid_id(test_app):
         assert ur.get_user_data(item) is False
 
 
-def test_change_user_language_returns_false_for_invalid_user_id(test_app):
+def test_change_user_language_returns_false_for_invalid_user_id(setup_db):
     """
     Test that changing language with an invalid user id returns False
     """

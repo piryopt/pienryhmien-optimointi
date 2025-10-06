@@ -174,11 +174,11 @@ def test_get_user_id_by_invalid_email(setup_db):
     assert not user_id
 
 
-def test_logout_clears_session(test_app):
+def test_logout_clears_session(setup_db):
     """
     Test that the logout function clears the session
     """
-    with test_app.test_request_context():
+    with setup_db["app"].test_request_context():
         from flask import session
 
         session["email"] = "test@email.com"
@@ -195,14 +195,14 @@ def test_logout_clears_session(test_app):
             assert key not in session
 
 
-def test_update_user_language_valid_language(test_app):
+def test_update_user_language_valid_language(setup_db):
     """
     Test that update_user_language returns True if the language is valid and
     the session language is updated
     """
     user_id = us.get_user_id_by_email("tiina.testiope@email.com")
 
-    with test_app.test_request_context():
+    with setup_db["app"].test_request_context():
         from flask import session
 
         session["language"] = "fi"
@@ -214,14 +214,14 @@ def test_update_user_language_valid_language(test_app):
     assert user.language == "en"
 
 
-def test_update_user_language_invalid_language(test_app):
+def test_update_user_language_invalid_language(setup_db):
     """
     Test that update_user_language returns False if the language is invalid and
     the session language is not updated
     """
     user_id = us.get_user_id_by_email("tiina.testiope@email.com")
 
-    with test_app.test_request_context():
+    with setup_db["app"].test_request_context():
         from flask import session
 
         session["language"] = "fi"
