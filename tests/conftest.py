@@ -1,8 +1,6 @@
 import os
 import pytest
-from flask import Flask
 from dotenv import load_dotenv
-from flask_babel import Babel
 from src import create_app, db
 from src.repositories.user_repository import user_repository as ur
 from src.entities.user import User
