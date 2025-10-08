@@ -150,6 +150,8 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
         for i in cinfos:
             additional_infos[str(row[0])].append(i[1])
 
+    infos = survey_choices_service.get_choice_additional_infos(survey_choices[0].id)
+    additional_info_keys = list(map(lambda i: i.info_key, infos))
     # Add to data the number of the choice that the user got. Also update happiness data displayed.
     happiness_avg = 0
     happiness_results = {}
@@ -188,7 +190,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
         group = survey_choices_service.get_survey_choice(group_id)
         dropped_groups.append(group.name)
 
-    output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, additional_infos, cinfos)
+    output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, additional_infos, additional_info_keys)
     return output_data
 
 

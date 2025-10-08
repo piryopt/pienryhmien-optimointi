@@ -653,7 +653,7 @@ def survey_results(survey_id):
             happiness=output_data[1],
             answered=saved_result_exists,
             infos=output_data[4],
-            sc=output_data[5],
+            additional_info_keys=output_data[5],
             dropped_groups=output_data[3],
         )
 
@@ -862,19 +862,19 @@ def admin_all_active_surveys():
     return render_template("/admintools/admin_survey_list.html", data=data)
 
 
-@bp.route("/admintools/gen_data", methods=["GET", "POST"])
-def admin_gen_data():
-    """
-    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
-    """
-    from scripts import fill_database_with_survey_answers
-
-    students = int(request.args.get("students"))
-    groups = int(request.args.get("groups"))
-    fill_database_with_survey_answers.fill_database(groups, students)
-    return redirect("/")
-
-
+#@app.route("/admintools/gen_data", methods=["GET", "POST"])
+#def admin_gen_data():
+#    """
+#    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
+#    """
+#    from scripts import fill_database_with_survey_answers
+#
+#    students = int(request.args.get("students"))
+#    groups = int(request.args.get("groups"))
+#    fill_database_with_survey_answers.fill_database(groups, students)
+#    return redirect("/")
+#
+#
 #    user_id = session.get("user_id",0)
 #    surveys = survey_repository.fetch_all_active_surveys(user_id)
 #    if request.method == "GET":
