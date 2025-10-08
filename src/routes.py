@@ -653,7 +653,7 @@ def survey_results(survey_id):
             happiness=output_data[1],
             answered=saved_result_exists,
             infos=output_data[4],
-            sc=output_data[5],
+            additional_info_keys=output_data[5],
             dropped_groups=output_data[3],
         )
 
