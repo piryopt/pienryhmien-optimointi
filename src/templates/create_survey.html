@@ -48,7 +48,7 @@
     id="groupname"
     name="groupname"
     validation-regex=".{5,}"
-    validation-text="Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"
+    validation-text="{{ _('Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä') }}"
     onchange="fieldIsValid(this)"
     {%
     if
@@ -83,7 +83,7 @@
     class="datetime-input-field"
     name="enddate"
     validation-regex="\d\d\.\d\d\.\d\d\d\d"
-    validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
+    validation-text="{{ _('Päivämäärän tulee olla muodossa pp.kk.yyyy') }}"
     autocomplete="off"
   />
   <label for="endtime" class="time-label">{{ _('Kello') }}:</label>
