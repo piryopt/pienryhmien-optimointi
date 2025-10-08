@@ -48,9 +48,9 @@ class SurveyRepository:
         args:
             user_id: The id of the user
         """
-        # Do we want to diplay all surveys created or only the active ones?
+        # Here we display all surveys created by a user that are not deleted, so in surveys table deleted=False
         try:
-            sql = "SELECT s.id FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id)"
+            sql = "SELECT s.id FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id AND s.deleted=False)"
             result = db.session.execute(text(sql), {"user_id": user_id})
             survey_list = result.fetchall()
             if not survey_list:

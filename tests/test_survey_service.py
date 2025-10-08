@@ -467,6 +467,23 @@ def test_survey_deleted(setup_env):
     surveys = ss.get_all_active_surveys()
     assert len(surveys) == 1
 
+def test_deleting_closed_survey_decreases_created_surveys_count(setup_env):
+    """
+    Test that after creating, closing, and deleting a survey,
+    count_surveys_created returns 0.
+    """
+    d = setup_env
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey delete closed", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+    )
+    sos.add_owner_to_survey(survey_id, d["user_email"])
+    count_before_deletion = ss.count_surveys_created(d["user_id"])
+    assert count_before_deletion == 1
+    ss.close_survey(survey_id, d["user_id"])
+    ss.set_survey_deleted_true(survey_id)
+    count_after_deletion = ss.count_surveys_created(d["user_id"])
+    assert count_after_deletion == 0
+
 
 def test_len_active_surveys(setup_env):
     """
