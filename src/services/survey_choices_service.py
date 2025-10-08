@@ -99,9 +99,9 @@ class SurveyChoicesService:
             survey_id (str): id for the survey
         """
         choices = self.get_list_of_survey_choices(survey_id)
-        tally = 0
-        for id, survey_id, name, spaces, deleted, min_size, mandatory in choices:
-            tally += spaces
+
+        tally = sum(choice.max_spaces for choice in choices)
+
         return tally
 
     def add_empty_survey_choice(self, survey_id: str, spaces: int):
