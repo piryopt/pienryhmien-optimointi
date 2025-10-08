@@ -44,9 +44,9 @@ function cellIsValid(elem) {
       var newWarning = document.createElement("li");
       newWarning.setAttribute("id", colWarningItemId);
       newWarning.classList.add("input-validation-warning");
-      newWarning.innerText = `Sarakkeen "${
+      newWarning.innerText = `${headerLocale.column} "${
         colHeader.innerText
-      }" arvojen tulee olla ${colHeader.getAttribute("validation-text")}`;
+      }" ${headerLocale.values_must_be} ${colHeader.getAttribute("validation-text")}`;
       warningsList.appendChild(newWarning);
 
       warningsList.classList.remove("hidden");
