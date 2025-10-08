@@ -1,5 +1,14 @@
 {% extends 'base.html' %} {% block title %}{{ _('Luo uusi kysely') }}{% endblock
 %} {% block head %}
+
+<script>
+    var headerLocale = {
+        'name': "{{ _('Nimi') }}",
+        'max_spaces': "{{ _('Enimmäispaikat') }}",
+        'min_size': "{{ _('Ryhmän minimikoko') }}",
+    };
+</script>
+
 <script src="{{ url_for('static', filename='js/create_survey.js') }}"></script>
 <link
   rel="stylesheet"

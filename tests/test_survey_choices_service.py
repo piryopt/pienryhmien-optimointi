@@ -1,67 +1,30 @@
 import pytest
-import os
-from flask import Flask
-from flask_babel import Babel
-from dotenv import load_dotenv
-from src import db
 from src.repositories.user_repository import user_repository as ur
 from src.services.survey_service import survey_service as ss
 from src.services.survey_choices_service import survey_choices_service as scs
 from src.services.survey_owners_service import survey_owners_service as sos
-from src.entities.user import User
-from src.tools.db_tools import clear_database
 import json
 
-
-@pytest.fixture(autouse=True)
-def setup_env():
+@pytest.fixture()
+def setup_env(setup_db):
     """
     Creates environment, test users and imports a test survey from json.
     """
-    load_dotenv()
-    app = Flask(__name__)
-    app.config["SECRET_KEY"] = os.getenv("TEST_SECRET_KEY")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("TEST_DATABASE_URL")
-    app.config["BABEL_DEFAULT_LOCALE"] = "fi"
 
-    babel = Babel(app)
-    db.init_app(app)
-
-    app_context = app.app_context()
-    app_context.push()
-
-    clear_database()
-
-    user = User("Maija Mallikas", "maija@tester.com", True)
-    user2 = User("Tero Testaaja", "tero@tester.com", True)
-    ur.register(user)
-    ur.register(user2)
-    user_id = ur.find_by_email(user.email)[0]
-    user_id2 = ur.find_by_email(user2.email)[0]
-    user_email = user.email
+    user = ur.get_user_data(setup_db["user_id"])
 
     with open("tests/test_files/test_survey1.json", "r") as openfile:
         json_object = json.load(openfile)
 
     survey_id = ss.create_new_survey_manual(
-        json_object["choices"], json_object["surveyGroupname"], user_id, json_object["surveyInformation"], 1, "01.01.2024", "02:02"
+        json_object["choices"], json_object["surveyGroupname"], user.id, json_object["surveyInformation"], 1, "01.01.2024", "02:02"
     )
-    sos.add_owner_to_survey(survey_id, user_email)
-    db.session.commit()
+    sos.add_owner_to_survey(survey_id, user.email)
 
-    yield {
-        "app": app,
-        "app_context": app_context,
-        "user_id": user_id,
-        "user_id2": user_id2,
-        "user_email": user_email,
-        "survey_id": survey_id,
-    }
+    setup_db["user_email"] = user.email
+    setup_db["survey_id"] = survey_id
 
-    db.session.remove()
-    db.drop_all()
-    app_context.pop()
-
+    return setup_db
 
 def test_get_list_of_survey_choices_returns_false_if_no_data_found():
     """
