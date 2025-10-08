@@ -119,15 +119,17 @@
 function ExportAllData_HTML(){
     var wb = {SheetNames:[],Sheets:{}};
     var ws9 = XLSX.utils.table_to_sheet(document.getElementById('results_table'),{raw:true});
-    var ws9Keys = Object.keys(ws9)
-    const choiceColSymbol = ws9Keys.filter(k => ws9[k].v === " Valinnat")[0][0]
-    const choiceColCharCode = choiceColSymbol.charCodeAt(0)
+    var ws9Keys = Object.keys(ws9);
+    const choiceColKey = ws9Keys.filter(k => ws9[k].v === " Valinnat")[0];
+    const choiceColIndex = XLSX.utils.decode_cell(choiceColKey).c;
     const finalValues = Object.fromEntries(
         Object.entries(ws9).map(([key, val]) => {
-                if (key.charCodeAt(0) > choiceColCharCode) {
-                    const newKey = String.fromCharCode(key.charCodeAt(0) - 1) + key.slice(1)
+            const decoded = XLSX.utils.decode_cell(key)  
+            if (decoded.c > choiceColIndex) {
+                    decoded.c -= 1
+                    const newKey = XLSX.utils.encode_cell(decoded)
                     return [newKey, val]
-                } else if (key.charCodeAt(0) === choiceColCharCode) {
+                } else if (decoded.c === choiceColIndex) {
                     return null
                 }
                 return [key, val]
