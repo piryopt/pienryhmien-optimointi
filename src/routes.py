@@ -1,10 +1,10 @@
 from random import shuffle
 from functools import wraps
-from flask import render_template, request, session, jsonify, redirect
+from flask import render_template, request, session, jsonify, redirect, Blueprint, current_app
 import markdown
 from pathlib import Path
 from flask_babel import gettext
-from src import app, scheduler
+from src import scheduler
 from src.repositories.survey_repository import survey_repository
 from src.services.user_service import user_service
 from src.services.survey_service import survey_service
@@ -18,6 +18,8 @@ from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_csv_to_dict
 from src.entities.user import User
 # from src.tools.db_data_gen import gen_data
+
+bp = Blueprint("main", __name__)
 
 
 """
@@ -37,7 +39,7 @@ def ad_login(f):
     def _ad_login(*args, **kwargs):
         result = f(*args, **kwargs)
         # if logged in already do nothing or in local use
-        if session.get("user_id", 0) != 0 or app.debug:
+        if session.get("user_id", 0) != 0 or current_app.debug:
             return result
         roles = request.headers.get("eduPersonAffiliation", "")
         name = request.headers.get("cn", "").encode("latin-1").decode("utf-8")
@@ -88,14 +90,14 @@ FRONTPAGE:
 """
 
 
-@app.route("/")
+@bp.route("/")
 @ad_login
 def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
     # used in local use
-    if app.debug and session.get("user_id", 0) == 0:
+    if current_app.debug and session.get("user_id", 0) == 0:
         return redirect("/auth/login")
     reloaded = session.get("reloaded", 0)
     if not reloaded:
@@ -128,7 +130,7 @@ def frontpage() -> str:
 """
 
 
-@app.route("/surveys")
+@bp.route("/surveys")
 @ad_login
 def previous_surveys():
     """
@@ -147,7 +149,7 @@ def previous_surveys():
     return render_template("surveys.html", active_surveys=active_surveys, closed_surveys=closed_surveys)
 
 
-@app.route("/surveys/getinfo", methods=["POST"])
+@bp.route("/surveys/getinfo", methods=["POST"])
 def get_info():
     """
     When a choice is clicked, display choice info.
@@ -158,7 +160,7 @@ def get_info():
     return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
 
 
-@app.route("/surveys/<string:survey_id>/studentranking", methods=["POST"])
+@bp.route("/surveys/<string:survey_id>/studentranking", methods=["POST"])
 def expand_ranking(survey_id):
     """
     When a ranking is clicked, display all rankings.
@@ -180,7 +182,7 @@ def expand_ranking(survey_id):
     return render_template("showrankings.html", choices=choices, rejections=rejections)
 
 
-@app.route("/surveys/create", methods=["GET"])
+@bp.route("/surveys/create", methods=["GET"])
 @ad_login
 def new_survey_form(survey=None):
     """
@@ -203,7 +205,7 @@ def new_survey_form(survey=None):
     return render_template("create_survey.html", survey=survey)
 
 
-@app.route("/surveys/create", methods=["POST"])
+@bp.route("/surveys/create", methods=["POST"])
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -246,7 +248,7 @@ def new_survey_post():
     return jsonify(response)
 
 
-@app.route("/surveys/create/import", methods=["POST"])
+@bp.route("/surveys/create/import", methods=["POST"])
 def import_survey_choices():
     """
     Post method for creating a new survey when it uses data imported from a csv file.
@@ -260,7 +262,7 @@ def import_survey_choices():
 """
 
 
-@app.route("/surveys/<string:survey_id>")
+@bp.route("/surveys/<string:survey_id>")
 @ad_login
 def surveys(survey_id):
     """
@@ -323,7 +325,7 @@ def surveys(survey_id):
     return render_template("survey.html", choices=shuffled_choices, survey=survey, additional_info=additional_info)
 
 
-@app.route("/surveys/<string:survey_id>/answered")
+@bp.route("/surveys/<string:survey_id>/answered")
 def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     """
     The answer page for surveys if an answer exists.
@@ -403,7 +405,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     )
 
 
-@app.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
+@bp.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
     """
     Delete the current ranking of the student.
@@ -417,7 +419,7 @@ def delete_submission(survey_id):
     return jsonify(response)
 
 
-@app.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
+@bp.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
 def owner_deletes_submission(survey_id):
     """
     Survey owner can delete a single rankinging from the survey for
@@ -431,7 +433,7 @@ def owner_deletes_submission(survey_id):
     return redirect(f"/surveys/{survey_id}/answers")
 
 
-@app.route("/surveys/<string:survey_id>/edit", methods=["GET"])
+@bp.route("/surveys/<string:survey_id>/edit", methods=["GET"])
 def edit_survey_form(survey_id):
     """
     Page for editing survey. Fields are filled automatically based on the original survey.
@@ -464,7 +466,7 @@ def edit_survey_form(survey_id):
     return render_template("edit_survey.html", survey=survey, survey_id=survey_id, edit_choices=edit_choices)
 
 
-@app.route("/surveys/<string:survey_id>/edit", methods=["POST"])
+@bp.route("/surveys/<string:survey_id>/edit", methods=["POST"])
 def edit_survey_post(survey_id):
     """
     Post method for saving edits to a survey.
@@ -486,7 +488,7 @@ def edit_survey_post(survey_id):
     return jsonify(response)
 
 
-@app.route("/surveys/<string:survey_id>/delete")
+@bp.route("/surveys/<string:survey_id>/delete")
 def delete_survey(survey_id):
     if not check_if_owner(survey_id):
         return redirect("/")
@@ -494,7 +496,7 @@ def delete_survey(survey_id):
     return redirect("/surveys")
 
 
-@app.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
+@bp.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
 def add_owner(survey_id, email):
     if not email:
         msg = gettext("Sähköpostiosoite puuttuu!")
@@ -510,7 +512,7 @@ def add_owner(survey_id, email):
     return jsonify(response)
 
 
-@app.route("/surveys/<string:survey_id>/group_sizes", methods=["GET"])
+@bp.route("/surveys/<string:survey_id>/group_sizes", methods=["GET"])
 def edit_group_sizes(survey_id):
     """
     Edit group sizes in a survey and display total number of spaces vs answers
@@ -537,7 +539,7 @@ def edit_group_sizes(survey_id):
     )
 
 
-@app.route("/surveys/<string:survey_id>/group_sizes", methods=["POST"])
+@bp.route("/surveys/<string:survey_id>/group_sizes", methods=["POST"])
 def post_group_sizes(survey_id):
     """
     Post method for editing group sizes in the survey
@@ -567,7 +569,7 @@ def post_group_sizes(survey_id):
     return jsonify(response)
 
 
-@app.route("/surveys/<string:survey_id>/answers", methods=["GET"])
+@bp.route("/surveys/<string:survey_id>/answers", methods=["GET"])
 @ad_login
 def survey_answers(survey_id):
     """
@@ -605,7 +607,7 @@ def survey_answers(survey_id):
     )
 
 
-@app.route("/surveys/<string:survey_id>/results", methods=["GET", "POST"])
+@bp.route("/surveys/<string:survey_id>/results", methods=["GET", "POST"])
 @ad_login
 def survey_results(survey_id):
     """
@@ -656,7 +658,7 @@ def survey_results(survey_id):
     return save_survey_results(survey_id, output_data)
 
 
-@app.route("/surveys/<string:survey_id>/results/save")
+@bp.route("/surveys/<string:survey_id>/results/save")
 def save_survey_results(survey_id, output_data):
     if not check_if_owner(survey_id):
         return redirect("/")
@@ -681,7 +683,7 @@ def save_survey_results(survey_id, output_data):
     return redirect(f"/surveys/{survey_id}/results")
 
 
-@app.route("/surveys/<string:survey_id>/close", methods=["POST"])
+@bp.route("/surveys/<string:survey_id>/close", methods=["POST"])
 def close_survey(survey_id):
     """
     Close survey, so that no more answers can be submitted
@@ -695,7 +697,7 @@ def close_survey(survey_id):
     return redirect(f"/surveys/{survey_id}/answers")
 
 
-@app.route("/surveys/<string:survey_id>/open", methods=["POST"])
+@bp.route("/surveys/<string:survey_id>/open", methods=["POST"])
 def open_survey(survey_id):
     """
     Open survey back up so that students can submit answers
@@ -714,9 +716,9 @@ def open_survey(survey_id):
 """
 
 
-@app.route("/auth/login", methods=["GET", "POST"])
+@bp.route("/auth/login", methods=["GET", "POST"])
 def login():
-    if not app.debug:
+    if not current_app.debug:
         return redirect("/")
 
     users = [
@@ -751,13 +753,13 @@ def login():
         return redirect("/")
 
 
-@app.route("/auth/logout")
+@bp.route("/auth/logout")
 def logout():
     user_service.logout()
 
     # stupid, but Openshift getenv() can't find Openshift secrets,
     # so here we are
-    if app.debug:
+    if current_app.debug:
         return redirect("/")
     else:
         return redirect("/Shibboleth.sso/Logout")
@@ -768,7 +770,7 @@ ADMINTOOLS -ROUTES:
 """
 
 
-@app.route("/admintools/analytics")
+@bp.route("/admintools/analytics")
 def admin_analytics():
     # Only admins permitted!
     user_id = session.get("user_id", 0)
@@ -792,7 +794,7 @@ def admin_analytics():
     return render_template("admintools/admin_analytics.html", data=data)
 
 
-@app.route("/admintools/feedback")
+@bp.route("/admintools/feedback")
 def admin_feedback():
     # Only admins permitted!
     user_id = session.get("user_id", 0)
@@ -805,7 +807,7 @@ def admin_feedback():
     return render_template("admintools/admin_feedback.html", data=data)
 
 
-@app.route("/admintools/feedback/closed")
+@bp.route("/admintools/feedback/closed")
 def admin_closed_feedback():
     # Only admins permitted!
     user_id = session.get("user_id", 0)
@@ -818,7 +820,7 @@ def admin_closed_feedback():
     return render_template("admintools/admin_closed_feedback.html", data=data)
 
 
-@app.route("/admintools/feedback/<int:feedback_id>")
+@bp.route("/admintools/feedback/<int:feedback_id>")
 def admin_feedback_data(feedback_id):
     # Only admins permitted!
     user_id = session.get("user_id", 0)
@@ -832,7 +834,7 @@ def admin_feedback_data(feedback_id):
     return render_template("admintools/admin_feedback_data.html", feedback=feedback)
 
 
-@app.route("/admintools/feedback/<int:feedback_id>/close", methods=["POST"])
+@bp.route("/admintools/feedback/<int:feedback_id>/close", methods=["POST"])
 def admin_feedback_close_feedback(feedback_id):
     # Only admins permitted!
     user_id = session.get("user_id", 0)
@@ -845,7 +847,7 @@ def admin_feedback_close_feedback(feedback_id):
     return redirect("/admintools/feedback")
 
 
-@app.route("/admintools/surveys", methods=["GET"])
+@bp.route("/admintools/surveys", methods=["GET"])
 def admin_all_active_surveys():
     # Only admins permitted!
     user_id = session.get("user_id", 0)
@@ -858,7 +860,7 @@ def admin_all_active_surveys():
     return render_template("/admintools/admin_survey_list.html", data=data)
 
 
-@app.route("/admintools/gen_data", methods=["GET", "POST"])
+@bp.route("/admintools/gen_data", methods=["GET", "POST"])
 def admin_gen_data():
     """
     Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
@@ -882,7 +884,7 @@ def admin_gen_data():
 #        gen_data.add_generated_users_db()
 #        return redirect("/admintools/gen_data")
 #
-# @app.route("/admintools/gen_data/rankings", methods = ["POST"])
+# @bp.route("/admintools/gen_data/rankings", methods = ["POST"])
 # def admin_gen_rankings():
 #    """
 #    Generate user rankings for a survey (chosen from a list) for testing. DELETE BEFORE PRODUCTION!!!
@@ -897,7 +899,7 @@ MISCELLANEOUS ROUTES:
 """
 
 
-@app.route("/privacy-policy")
+@bp.route("/privacy-policy")
 def privacy_policy():
     """
     Route returns the Privacy Policy -page linked in the footer
@@ -914,7 +916,7 @@ def privacy_policy():
     return render_template("content-page.html", content=markdown.markdown(content), title=title)
 
 
-@app.route("/faq")
+@bp.route("/faq")
 def faq():
     """
     Route returns the Frequently Asked Questions -page linked in the footer
@@ -931,7 +933,7 @@ def faq():
     return render_template("content-page.html", content=markdown.markdown(content), title=title)
 
 
-@app.route("/csv-instructions")
+@bp.route("/csv-instructions")
 def csv_instructions():
     """
     Route returns the csv instructions -page linked in the footer
@@ -948,7 +950,7 @@ def csv_instructions():
     return render_template("content-page.html", content=markdown.markdown(content), title=title)
 
 
-@app.route("/get_choices/<string:survey_id>", methods=["POST"])
+@bp.route("/get_choices/<string:survey_id>", methods=["POST"])
 def get_choices(survey_id):
     """
     Save the ranking to the database.
@@ -1017,7 +1019,7 @@ def get_choices(survey_id):
     return jsonify(response)
 
 
-@app.route("/feedback", methods=["GET", "POST"])
+@bp.route("/feedback", methods=["GET", "POST"])
 def feedback():
     if request.method == "GET":
         return render_template("feedback.html")
@@ -1030,7 +1032,7 @@ def feedback():
     return jsonify(response)
 
 
-@app.route("/language/en")
+@bp.route("/language/en")
 def language_en():
     user_id = session.get("user_id", 0)
     success = user_service.update_user_language(user_id, "en")
@@ -1039,7 +1041,7 @@ def language_en():
         return jsonify(response)
 
 
-@app.route("/language/fi")
+@bp.route("/language/fi")
 def language_fi():
     user_id = session.get("user_id", 0)
     success = user_service.update_user_language(user_id, "fi")
@@ -1048,7 +1050,7 @@ def language_fi():
         return jsonify(response)
 
 
-@app.route("/language/sv")
+@bp.route("/language/sv")
 def language_sv():
     user_id = session.get("user_id", 0)
     success = user_service.update_user_language(user_id, "sv")
@@ -1062,10 +1064,8 @@ TASKS:
 """
 
 
-@scheduler.task("cron", id="close_surveys", hour="*")
 def close_surveys():
     """
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """
-    with app.app_context():
-        survey_service.check_for_surveys_to_close()
+    survey_service.check_for_surveys_to_close()

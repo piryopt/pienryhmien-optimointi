@@ -44,9 +44,9 @@ function cellIsValid(elem) {
       var newWarning = document.createElement("li");
       newWarning.setAttribute("id", colWarningItemId);
       newWarning.classList.add("input-validation-warning");
-      newWarning.innerText = `Sarakkeen "${
+      newWarning.innerText = `${headerLocale.column} "${
         colHeader.innerText
-      }" arvojen tulee olla ${colHeader.getAttribute("validation-text")}`;
+      }" ${headerLocale.values_must_be} ${colHeader.getAttribute("validation-text")}`;
       warningsList.appendChild(newWarning);
 
       warningsList.classList.remove("hidden");
@@ -243,6 +243,17 @@ function saveEdit() {
     console.log("Form contents not valid, won't post");
     return;
   }
+    
+    // Date is valid
+    var endDateParts = document.getElementById("end-date").value.split(".")
+    var endDate = new Date(Number(endDateParts[2]), Number(endDateParts[1]-1), Number(endDateParts[0]))
+    
+    var today = new Date()
+    var todaysEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59)
+    if(endDate <= todaysEnd) {
+        showAlert({msg: "Vastausajan päättymispäivä ei saa olla kuluva päivä tai menneisyydessä", color: "red"})
+        return;
+    }
 
   //Valid content, continue to post
 
@@ -647,10 +658,11 @@ function setUploadedTableValues(table) {
 
   // 2. Add constant headers
   var constantHeaders = [
-    { text: "Nimi", key: "name" },
-    { text: "Enimmäispaikat", key: "spaces" },
-    { text: "Ryhmän minimikoko", key: "min_size" },
+    { text: headerLocale.name, key: "name" },
+    { text: headerLocale.max_spaces, key: "spaces" },
+    { text: headerLocale.min_size, key: "min_size" },
   ];
+
   constantHeaders.forEach((header) => {
     var th = document.createElement("th");
     th.innerText = header.text;

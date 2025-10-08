@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-09-30 14:53+0300\n"
-"PO-Revision-Date: 2024-06-18 11:16+0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-08 13:57+0300\n"
+"PO-Revision-Date: 2025-10-05 18:48+0300\n"
 "Last-Translator: \n"
 "Language: sv\n"
 "Language-Team: sv <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: routes.py:228
+#: routes.py:230
 msgid ""
 "Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmiäismäärä! "
 "Kyselyn luominen epäonnistui!"
@@ -26,35 +26,35 @@ msgstr ""
 "Det finns färre alternativ än minimiantalet prioriterade grupper! "
 "Misslyckades med att skapa enkäten!"
 
-#: routes.py:236
+#: routes.py:238
 msgid "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!"
 msgstr "En enkät med detta namn är redan igång! Stäng den eller byt namn!"
 
-#: routes.py:244
+#: routes.py:246
 msgid "Uusi kysely luotu!"
 msgstr "Ny enkät skapad!"
 
-#: routes.py:413
+#: routes.py:415
 msgid "Poistaminen epäonnistui!"
 msgstr "Borttagningen misslyckades!"
 
-#: routes.py:417
+#: routes.py:419
 msgid "Valinnat poistettu"
 msgstr "Alternativen borttagna"
 
-#: routes.py:502
+#: routes.py:504
 msgid "Sähköpostiosoite puuttuu!"
 msgstr "E-postadress saknas!"
 
-#: routes.py:564
+#: routes.py:566
 msgid "Tallennus onnistui. Päivitä sivu nähdäksesi tilanne."
 msgstr "Sparande lyckades. Uppdatera sidan för att se status."
 
-#: routes.py:567
+#: routes.py:569
 msgid "Tallennus epäonnistui."
 msgstr "Sparande misslyckades."
 
-#: routes.py:594
+#: routes.py:596
 msgid ""
 "Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia "
 "paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus "
@@ -64,27 +64,27 @@ msgstr ""
 "platser. Du kan ändra antalet platser som ska delas ut på "
 "redigeringssidan för enkäten."
 
-#: routes.py:694
+#: routes.py:696
 msgid "Kyselyn sulkeminen epäonnistui!"
 msgstr "Misslyckades med att stänga enkäten!"
 
-#: routes.py:708
+#: routes.py:710
 msgid "Kyselyn avaaminen epäonnistui!"
 msgstr "Misslyckades med att öppna enkäten!"
 
-#: routes.py:982
+#: routes.py:984
 msgid "Tallennus epäonnistui. Valitse vähintään "
 msgstr "Sparande misslyckades. Välj åtminstone "
 
-#: routes.py:987
+#: routes.py:989
 msgid "Tallennus epäonnistui. Voit hylätä enintään "
 msgstr "Sparande misslyckades. Du kan avvisa högst "
 
-#: routes.py:996
+#: routes.py:998
 msgid "Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."
 msgstr "Inga godkända skäl om inga avslag finns! Sparande misslyckades."
 
-#: routes.py:1002
+#: routes.py:1004
 msgid ""
 "Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla "
 "korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."
@@ -92,21 +92,21 @@ msgstr ""
 "Motiveringen är för lång, sparande misslyckades. Maximalt 300 tecken "
 "tillåtna. Kontakta enkätens arrangör vid behov."
 
-#: routes.py:1008
+#: routes.py:1010
 msgid ""
 "Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla "
 "vähintään 10."
 msgstr "Motiveringen är för kort, sparande misslyckades. Minst 10 tecken krävs."
 
-#: routes.py:1014
+#: routes.py:1016
 msgid "Tallennus onnistui."
 msgstr "Sparande lyckades."
 
-#: routes.py:1017
+#: routes.py:1019
 msgid "Tallennus epäonnistui"
 msgstr "Sparande misslyckades"
 
-#: algorithms/hungarian.py:213
+#: algorithms/hungarian.py:169
 msgid "valintaansa sijoitetut käyttäjät"
 msgstr "användare som tilldelats sina val"
 
@@ -156,7 +156,7 @@ msgstr "Läraren har redan rättigheter till enkäten!"
 msgid "  sai oikeudet kyselyyn!"
 msgstr " fick rättigheter till enkäten!"
 
-#: services/survey_service.py:338
+#: services/survey_service.py:338 templates/create_survey.html:53
 msgid "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"
 msgstr "Enkätens namn måste vara minst 5 tecken långt"
 
@@ -257,155 +257,198 @@ msgstr "Valda grupper i prioritetsordning"
 msgid "Ryhmät joihin osallistumiseen on este"
 msgstr "Grupper där deltagande är hinder"
 
-#: templates/create_survey.html:1 templates/create_survey.html:37
+#: templates/create_survey.html:1 templates/create_survey.html:41
 #: templates/index.html:15
 msgid "Luo uusi kysely"
 msgstr "Skapa en ny enkät"
 
-#: templates/create_survey.html:42 templates/edit_survey.html:33
+#: templates/create_survey.html:6 templates/create_survey.html:364
+#: templates/group_sizes.html:41 templates/results.html:69
+msgid "Nimi"
+msgstr "Namn"
+
+#: templates/create_survey.html:7 templates/create_survey.html:371
+#: templates/group_sizes.html:42
+msgid "Enimmäispaikat"
+msgstr "Max antal platser"
+
+#: templates/create_survey.html:8 templates/create_survey.html:378
+msgid "Ryhmän minimikoko"
+msgstr "Minsta gruppstorlek"
+
+#: templates/create_survey.html:9
+msgid "Sarakkeen"
+msgstr "Kolumnen"
+
+#: templates/create_survey.html:10
+msgid "arvojen tulee olla"
+msgstr "värdena måste vara"
+
+#: templates/create_survey.html:46 templates/edit_survey.html:34
 msgid "Kyselyn nimi"
 msgstr "Enkätens namn"
 
-#: templates/create_survey.html:71 templates/edit_survey.html:51
+#: templates/create_survey.html:75 templates/edit_survey.html:52
 msgid "Vastausaika"
 msgstr "Svarstid"
 
-#: templates/create_survey.html:73
+#: templates/create_survey.html:77
 msgid ""
-"Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista\n"
-"    vastata."
-msgstr ""
+"Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista     "
+"vastata."
+msgstr "Svarstiden anger tidsintervallet när enkäten kan   besvaras."
 
-#: templates/create_survey.html:76 templates/survey.html:28
+#: templates/create_survey.html:80 templates/survey.html:28
 #: templates/surveys.html:20
 msgid "Vastausaika päättyy"
 msgstr "Svarstiden avslutas"
 
-#: templates/create_survey.html:87 templates/edit_survey.html:64
+#: templates/create_survey.html:88
+msgid "Päivämäärän tulee olla muodossa pp.kk.yyyy"
+msgstr "Datumet måste vara i formatet dd.mm.yyyy"
+
+#: templates/create_survey.html:91 templates/edit_survey.html:65
 msgid "Kello"
 msgstr "Klockan"
 
-#: templates/create_survey.html:131 templates/edit_survey.html:98
+#: templates/create_survey.html:135 templates/edit_survey.html:99
 msgid "Kyselyn kuvaus"
 msgstr "Enkätens beskrivning"
 
-#: templates/create_survey.html:133
+#: templates/create_survey.html:137
 msgid ""
-"Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen.\n"
-"    Kuvausteksti näytetään vastaajalle kyselyn yhteydessä"
+"Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen.     "
+"Kuvausteksti näytetään vastaajalle kyselyn yhteydessä."
 msgstr ""
+"Här kan du ange en beskrivning av enkäten och instruktioner för att svara"
+" på den.   Beskrivningstexten visas för svaranden i samband med enkäten."
 
-#: templates/create_survey.html:143
+#: templates/create_survey.html:147
 msgid "Vaaditaanko kaikkien ryhmien järjestämistä?"
 msgstr "Krävs det att alla grupper ordnas?"
 
-#: templates/create_survey.html:145
+#: templates/create_survey.html:149
 msgid ""
-"Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei\n"
-"      niitä ole suuri määrä (>10)"
+"Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei       "
+"niitä ole suuri määrä (>10)"
 msgstr ""
+"Det rekommenderas att alla grupper organiseras om det inte   finns ett "
+"stort antal (>10)."
 
-#: templates/create_survey.html:157 templates/create_survey.html:209
-#: templates/create_survey.html:285 templates/surveys.html:28
+#: templates/create_survey.html:161 templates/create_survey.html:213
+#: templates/create_survey.html:289 templates/surveys.html:28
 #: templates/surveys.html:49
 msgid "Kyllä"
 msgstr "Ja"
 
-#: templates/create_survey.html:166 templates/create_survey.html:219
-#: templates/create_survey.html:308 templates/surveys.html:28
+#: templates/create_survey.html:170 templates/create_survey.html:223
+#: templates/create_survey.html:312 templates/surveys.html:28
 #: templates/surveys.html:49
 msgid "Ei"
 msgstr "Nej"
 
-#: templates/create_survey.html:170
+#: templates/create_survey.html:174
 msgid "Priorisoitujen ryhmien vähimmäismäärä"
 msgstr "Minsta antal prioriterade grupper"
 
-#: templates/create_survey.html:200
+#: templates/create_survey.html:182 templates/create_survey.html:235
+msgid "Kentän tulee olla kokonaisluku"
+msgstr "Fältet måste vara ett heltal"
+
+#: templates/create_survey.html:204
 msgid "Sallitaanko valintojen kieltäminen?"
 msgstr "Tillåts det att förbjuda val?"
 
-#: templates/create_survey.html:223
+#: templates/create_survey.html:227
 msgid "Sallittu kiellettyjen ryhmien määrä"
 msgstr "Antal tillåtna förbjudna grupper"
 
-#: templates/create_survey.html:255
+#: templates/create_survey.html:259
 msgid "Näytetäänkö vastaajalle hakupalkki?"
 msgstr "Visas sökfältet för respondenten?"
 
-#: templates/create_survey.html:257
+#: templates/create_survey.html:261
 msgid ""
-"Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään\n"
-"      vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa "
-"sallia\n"
-"      kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia "
-"ei\n"
-"      tarvitse järjestää, ja vastaavasti kieltää kyselyille joissa on "
-"vähän\n"
-"      vastausvaihtoehtoja joista kaikki tulee järjestää"
+"Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään       "
+"vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia"
+"       kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,       "
+"ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle       tai "
+"pienelle kyselylle."
 msgstr ""
+"Med hjälp av sökfältet kan respondenterna filtrera alternativen de ser "
+"baserat på deras namn och alternativ.   Det rekommenderas att tillåta "
+"undersökningar med ett stort antal svarsalternativ, som alla inte behöver"
+" ordnas,   och på samma sätt förbjuda undersökningar med få "
+"svarsalternativ, som alla måste ordnas."
 
-#: templates/create_survey.html:313 templates/group_sizes.html:35
+#: templates/create_survey.html:317 templates/group_sizes.html:35
 msgid "Priorisoitavat ryhmät"
 msgstr "Prioriterade grupper"
 
-#: templates/create_survey.html:315
+#: templates/create_survey.html:319
 msgid ""
-"Syötä ryhmät jotka kyselyyn vastaaja voi asettaa\n"
-"    mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen "
-"enimmäiskoko.\n"
-"    Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. "
-"Sarakkeen\n"
-"    voit luoda painamalla \"+ Lisää tietokenttä\"."
+"Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa     "
+"mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko."
+"     Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. "
+"Sarakkeen     voit luoda painamalla '+ Lisää tietokenttä'."
 msgstr ""
+"Ange grupperna som respondenten kan placera i meningsordning. Ge också "
+"varje grupp dess maximala storlek.   Om du vill kan du lägga till "
+"ytterligare information om objektet i dess egna kolumner.   Du kan skapa "
+"kolumnen genom att trycka på \"'+ Lägg till datafält\"."
 
-#: templates/create_survey.html:320
+#: templates/create_survey.html:324
 msgid "CSV-ohje"
 msgstr "CSV guide"
 
-#: templates/create_survey.html:332
+#: templates/create_survey.html:336
 msgid "Tuo valinnat CSV-tiedostosta"
 msgstr "Importera val från en CSV-fil"
 
-#: templates/create_survey.html:335
+#: templates/create_survey.html:339
 msgid ""
-"Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa\n"
-"    opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *"
+"Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa     "
+"opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *."
 msgstr ""
+"Om du vill att informationen för en viss kolumn inte ska visas för "
+"respondentena   under svarsfasen, sätt * som sista tecknet i "
+"kolumnnamnet."
 
-#: templates/create_survey.html:338
-msgid "Jos ryhmän minimikoolla ei ole väliä, syötä 0"
-msgstr "Om det inte spelar roll med minimistorleken, ange 0"
+#: templates/create_survey.html:342
+msgid ""
+"Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän "
+"mimimikoko ei voi olla 0."
+msgstr ""
+"Om det inte spelar roll med minimistorleken, ange 0. Minsta storlek för "
+"en obligatorisk grupp kan inte vara 0."
 
-#: templates/create_survey.html:340
+#: templates/create_survey.html:344
 msgid ""
 "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat, "
 "että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella "
 "oleva laatikko."
 msgstr ""
+"OBS! Grupper som understiger minsta storlek kommer att uteslutas från "
+"tilldelningen. Om du vill säkerställa att en viss grupp bildas, kryssa i "
+"rutan till vänster om gruppen."
 
-#: templates/create_survey.html:360 templates/group_sizes.html:41
-#: templates/results.html:69
-msgid "Nimi"
-msgstr "Namn"
+#: templates/create_survey.html:362
+msgid "yli 5 merkkiä pitkiä"
+msgstr "längre än 5 tecken"
 
-#: templates/create_survey.html:367 templates/group_sizes.html:42
-msgid "Enimmäispaikat"
-msgstr "Max antal platser"
+#: templates/create_survey.html:369 templates/create_survey.html:376
+msgid "kokonaislukuja"
+msgstr "heltal"
 
-#: templates/create_survey.html:374
-msgid "Ryhmän minimikoko"
-msgstr "Minsta gruppstorlek"
-
-#: templates/create_survey.html:383
+#: templates/create_survey.html:387
 msgid "Lisää tietokenttä"
 msgstr "Lägg till fält"
 
-#: templates/create_survey.html:428
+#: templates/create_survey.html:432
 msgid "Lisää vaihtoehto"
 msgstr "Lägg till alternativ"
 
-#: templates/create_survey.html:441
+#: templates/create_survey.html:445
 msgid "Luo kysely"
 msgstr "Skapa enkät"
 
@@ -413,41 +456,41 @@ msgstr "Skapa enkät"
 msgid "Muokkaa kyselyä"
 msgstr "Redigera enkät"
 
-#: templates/edit_survey.html:22
+#: templates/edit_survey.html:23
 msgid "Kyselyn muokkaus"
 msgstr "Redigering av enkät"
 
-#: templates/edit_survey.html:25
+#: templates/edit_survey.html:26
 msgid "Anna käyttäjälle hallinnointioikeudet kyselyyn."
 msgstr "Tilldela administrativa rättigheter till användaren för enkäten."
 
-#: templates/edit_survey.html:26
+#: templates/edit_survey.html:27
 msgid "Syötä käyttäjän sähköpostiosoite."
 msgstr "Ange användarens e-postadress."
 
-#: templates/edit_survey.html:28
+#: templates/edit_survey.html:29
 msgid "Lisää käyttäjä"
 msgstr "Lägg till användare"
 
-#: templates/edit_survey.html:52
+#: templates/edit_survey.html:53
 msgid ""
 "Voit pidentää tai lyhentää aikaväliä, jolloin kyselyyn on mahdollista "
 "vastata."
 msgstr "Du kan förlänga eller förkorta tidsintervallet när enkäten kan besvaras."
 
-#: templates/edit_survey.html:53
+#: templates/edit_survey.html:54
 msgid "Vastausaika päättyy:"
 msgstr "Svarstiden avslutas:"
 
-#: templates/edit_survey.html:99
+#: templates/edit_survey.html:100
 msgid "Voit muokata kyselyn kuvausta"
 msgstr "Du kan redigera enkätens beskrivning"
 
-#: templates/edit_survey.html:174 templates/group_sizes.html:67
+#: templates/edit_survey.html:175 templates/group_sizes.html:67
 msgid "Tallenna muutokset"
 msgstr "Spara ändringar"
 
-#: templates/edit_survey.html:177
+#: templates/edit_survey.html:178
 msgid "Palaa kyselyn vastauksiin"
 msgstr "Gå tillbaka till enkätsvaren"
 
@@ -489,24 +532,24 @@ msgid "Jaettavia paikkoja"
 msgstr "Platser att tilldela"
 
 #: templates/group_sizes.html:30 templates/survey_answers.html:17
-msgid "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja"
-msgstr "Det finns fler svarande än tillgängliga platser att tilldela"
+msgid "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja."
+msgstr "Det finns fler svarande än tillgängliga platser att tilldela."
 
 #: templates/group_sizes.html:36
 msgid ""
 "Vaihtoehdon suositus kuvaa sitä, kuinka moni vastaaja on valinnut sen "
-"ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä"
+"ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä."
 msgstr ""
 "Rekommendationen för ett alternativ visar hur många svarande som har valt"
-" det som sin första, andra eller tredje val i enkäten"
+" det som sin första, andra eller tredje val i enkäten."
 
 #: templates/group_sizes.html:37
 msgid "HUOM"
 msgstr "OBS"
 
 #: templates/group_sizes.html:37
-msgid "Jos muokkaat ryhmän nimeä, ei ryhmäkoon muokkaus tallennu"
-msgstr "Om du ändrar gruppens namn, sparas inte redigeringen av gruppstorleken"
+msgid "Jos muokkaat ryhmän nimeä, ei ryhmäkoon muokkaus tallennu."
+msgstr "Om du ändrar gruppens namn, sparas inte redigeringen av gruppstorleken."
 
 #: templates/group_sizes.html:43
 msgid "Suositus"
@@ -615,20 +658,20 @@ msgid "Raahaa oikean reunan listasta vähintään"
 msgstr "Dra åtminstone ett alternativ från högerlistan till den gröna rutan"
 
 #: templates/survey.html:37
-msgid "vaihtoehtoa vihreään laatikkoon"
-msgstr "ett alternativ till den gröna lådan"
+msgid "vaihtoehtoa vihreään laatikkoon."
+msgstr "ett alternativ till den gröna lådan."
 
 #: templates/survey.html:38
-msgid "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa"
-msgstr "Klicka på alternativet för att se mer information om det"
+msgid "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa."
+msgstr "Klicka på alternativet för att se mer information om det."
 
 #: templates/survey.html:40
 msgid ""
 "Tärkeäksi merkityt ryhmät täytetään aina vähintään minimikokoon asti "
 "vastauksista riippumatta."
 msgstr ""
-"Grupper markerade som viktiga fylls alltid till minst minimistorlek, "
-"oavsett svaren."
+"Grupper som markerats som viktiga fylls alltid till minst "
+"minimistorleken, oavsett svaren."
 
 #: templates/survey.html:44
 msgid "Haku"
@@ -640,7 +683,7 @@ msgstr "Maximal gruppstorlek"
 
 #: templates/survey.html:61 templates/survey.html:81 templates/survey.html:147
 msgid "Tärkeä"
-msgstr "Viktig"
+msgstr "Viktigt"
 
 #: templates/survey.html:89 templates/survey_answers.html:52
 msgid "Perustelut"
@@ -692,25 +735,23 @@ msgstr "Ta bort överflödiga svar"
 
 #: templates/survey_answers.html:19
 msgid ""
-"Poista kyselystä vastaajat, jotka ovat ilmoittaneet jättävänsä\n"
-"   kuitenkin osallistumatta, tai joiden ei kuuluisi muusta syystä olla "
-"mukana ryhmäjaossa. Jos esimerkiksi\n"
-"   olet itse kokeillut kyselyyn vastaamista, poista oma vastauksesi"
+"Poista kyselystä vastaajat, jotka ovat ilmoittaneet jättävänsä    "
+"kuitenkin osallistumatta, tai joiden ei kuuluisi muusta syystä olla "
+"mukana ryhmäjaossa. Jos esimerkiksi    olet itse kokeillut kyselyyn "
+"vastaamista, poista oma vastauksesi."
 msgstr ""
-"Ta bort respondenter från enkäten som har meddelat att de inte kommer att"
-" delta, eller som av andra skäl inte ska ingå i gruppindelningen. Om du "
-"till exempel har testat att svara på enkäten själv, ta bort ditt eget "
-"svar"
+"Ta bort respondenter från enkäten som har meddelat att de   inte kommer "
+"att delta, eller som av andra skäl inte ska ingå i gruppindelningen. Om "
+"du   till exempel har testat att svara på enkäten själv, ta bort ditt "
+"eget svar."
 
 #: templates/survey_answers.html:22
 msgid ""
 "Tarkastele ryhmiä, joihin vastaajat jaetaan. Lisää paikkoja niihin "
-"ryhmiin,\n"
-"   joihin se on mahdollista tehdä."
+"ryhmiin,    joihin se on mahdollista tehdä."
 msgstr ""
 "Se på grupperna som respondenter fördelas till. Lägg till platser i de "
-"grupper\n"
-"   där det är möjligt att göra det."
+"grupper   där det är möjligt att göra det."
 
 #: templates/survey_answers.html:24 templates/survey_answers.html:28
 msgid "Jaa ryhmiin"
@@ -719,14 +760,13 @@ msgstr "Dela in i grupper"
 #: templates/survey_answers.html:24
 msgid ""
 "Jos vastauksia on edelleen liikaa, voit silti tehdä ryhmäjaon. Algoritmi "
-"jakaa ryhmät mahdollisimman\n"
-"   hyvin opiskelijoiden toiveita vastaavaksi ja ryhmäjaon ulkopuolelle "
-"jäävät sijoitetaan ryhmään nimeltä \"Tyhjä\""
+"jakaa ryhmät mahdollisimman    hyvin opiskelijoiden toiveita vastaavaksi "
+"ja ryhmäjaon ulkopuolelle jäävät sijoitetaan ryhmään nimeltä 'Tyhjä'."
 msgstr ""
 "Om det fortfarande finns för många svar, kan du fortfarande göra en "
-"gruppindelning. Algoritmen kommer att fördela grupperna så att de så "
+"gruppindelning. Algoritmen kommer att fördela   grupperna så att de så "
 "mycket som möjligt motsvarar studenternas önskemål, och de som inte kan "
-"placeras i någon grupp kommer att placeras i en grupp som heter \"Tom\"."
+"placeras i någon grupp kommer att placeras i en grupp som heter 'Tyhjä'."
 
 #: templates/survey_answers.html:31
 msgid "Avaa kysely uudelleen"
@@ -825,79 +865,6 @@ msgstr " val: "
 #: tools/survey_result_helper.py:180
 msgid ". valintaansa sijoitetut käyttäjät: "
 msgstr ". val: "
-
-#~ msgid ""
-#~ "Vastausaika määrittää aikavälin, jolloin "
-#~ "kyselyyn on mahdollista vastata."
-#~ msgstr "Svarstiden anger tidsintervallet när enkäten kan besvaras."
-
-#~ msgid ""
-#~ "Tähän voit antaa kuvauksen kyselystä ja"
-#~ " ohjeita siihen vastaamiseen. Kuvausteksti "
-#~ "näytetään vastaajalle kyselyn yhteydessä"
-#~ msgstr ""
-#~ "Här kan du ange en beskrivning av"
-#~ " enkäten och instruktioner för att "
-#~ "svara på den. Beskrivningstexten visas "
-#~ "för svaranden i samband med enkäten"
-
-#~ msgid ""
-#~ "Suositellaan, että vaaditaan kaikkien ryhmien"
-#~ " järjestämistä ellei niitä ole suuri "
-#~ "määrä (>10)"
-#~ msgstr ""
-#~ "Det rekommenderas att alla grupper "
-#~ "organiseras om det inte finns ett "
-#~ "stort antal (>10)."
-
-#~ msgid ""
-#~ "Hakupalkin avulla kyselyyn vastaaja voi "
-#~ "suodataa näkemiään vaihtoehtoja sen nimen "
-#~ "ja vaihtoehtojen perusteella. Suositeltavaa "
-#~ "sallia kyselyille joissa on runsaasti "
-#~ "vastausvaihtoehtoja joista kaikkia ei tarvitse"
-#~ " järjestää, ja vastaavasti kieltää "
-#~ "kyselyille joissa on vähän vastausvaihtoehtoja"
-#~ " joista kaikki tulee järjestää"
-#~ msgstr ""
-#~ "Med hjälp av sökfältet kan "
-#~ "respondenterna filtrera alternativen de ser"
-#~ " baserat på deras namn och "
-#~ "alternativ. \n"
-#~ "Det rekommenderas att tillåta undersökningar"
-#~ " med ett stort antal svarsalternativ, "
-#~ "som alla inte behöver ordnas, \n"
-#~ "och på samma sätt förbjuda "
-#~ "undersökningar med få svarsalternativ, som "
-#~ "alla måste ordnas"
-
-#~ msgid ""
-#~ "Syötä ryhmät jotka kyselyyn vastaaja voi"
-#~ " asettaa mielekkyysjärjestykseen. Anna kullekkin"
-#~ " ryhmälle myös sen enimmäiskoko. "
-#~ "Halutessasi voit lisätä lisätietoa kohteesta"
-#~ " omiin sarakkeisiinsa. Sarakkeen voit luoda"
-#~ " painamalla \"+ Lisää tietokenttä\"."
-#~ msgstr ""
-#~ "Ange grupperna som respondenten kan "
-#~ "placera i meningsordning. Ge också varje"
-#~ " grupp dess maximala storlek. Om du"
-#~ " vill kan du lägga till ytterligare"
-#~ " information om objektet i dess egna"
-#~ " kolumner. Du kan skapa kolumnen "
-#~ "genom att trycka på \"'+ Lägg till"
-#~ " datafält\"."
-
-#~ msgid ""
-#~ "Jos haluat, ettei jonkun tietyn "
-#~ "sarakkeen tieto näy vastausvaiheessa "
-#~ "opiskelijoille, laita sen sarakkeen nimen "
-#~ "viimeiseksi merkiksi *"
-#~ msgstr ""
-#~ "Om du vill att informationen för "
-#~ "en viss kolumn inte ska visas för"
-#~ " respondentena under svarsfasen, sätt * "
-#~ "som sista tecknet i kolumnnamnet"
 
 #~ msgid ""
 #~ "HUOM! Ryhmät, jotka eivät saavuta jaossa"

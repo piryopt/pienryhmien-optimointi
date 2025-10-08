@@ -1,5 +1,16 @@
 {% extends 'base.html' %} {% block title %}{{ _('Luo uusi kysely') }}{% endblock
 %} {% block head %}
+
+<script>
+    var headerLocale = {
+        'name': "{{ _('Nimi') }}",
+        'max_spaces': "{{ _('Enimmäispaikat') }}",
+        'min_size': "{{ _('Ryhmän minimikoko') }}",
+        'column': "{{ _('Sarakkeen') }}",
+        'values_must_be': "{{ _('arvojen tulee olla')}}",
+    };
+</script>
+
 <script src="{{ url_for('static', filename='js/create_survey.js') }}"></script>
 <link
   rel="stylesheet"
@@ -10,7 +21,6 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script>
   $(document).ready(function () {
-    const currentDate = new Date();
     $("#start-date")
       .datepicker({
         dateFormat: "dd.mm.yy",
@@ -19,12 +29,6 @@
     $("#end-date").datepicker({
       dateFormat: "dd.mm.yy",
       minDate: 0,
-      beforeShowDay: function (date) {
-        if (date.getDate() === currentDate.getDate() && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear()) {
-          return [true, "ui-state-highlight"];
-        }
-        return [true, ""];
-      },
     });
   });
 </script>
@@ -46,7 +50,7 @@
     id="groupname"
     name="groupname"
     validation-regex=".{5,}"
-    validation-text="Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"
+    validation-text="{{ _('Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä') }}"
     onchange="fieldIsValid(this)"
     {%
     if
@@ -70,8 +74,8 @@
 <section>
   <h2>{{ _('Vastausaika') }}</h2>
   <p>
-    {{ _('Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista
-    vastata.') }}
+    {{ _("Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista \
+    vastata.") }}
   </p>
   <label>{{ _('Vastausaika päättyy') }}:</label><br />
   <input
@@ -81,7 +85,7 @@
     class="datetime-input-field"
     name="enddate"
     validation-regex="\d\d\.\d\d\.\d\d\d\d"
-    validation-text="Päivämäärän tulee olla muodossa pp.kk.yyyy"
+    validation-text="{{ _('Päivämäärän tulee olla muodossa pp.kk.yyyy') }}"
     autocomplete="off"
   />
   <label for="endtime" class="time-label">{{ _('Kello') }}:</label>
@@ -130,8 +134,8 @@
 <section>
   <h2>{{ _('Kyselyn kuvaus') }}</h2>
   <p>
-    {{ _('Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen.
-    Kuvausteksti näytetään vastaajalle kyselyn yhteydessä') }}
+    {{ _("Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen. \
+    Kuvausteksti näytetään vastaajalle kyselyn yhteydessä.") }}
   </p>
   <textarea id="survey-information" class="form-control">
 {% if survey.surveyname %}{{survey.survey_description}}{% endif %}</textarea
@@ -142,8 +146,8 @@
   <div>
     <h3>{{ _('Vaaditaanko kaikkien ryhmien järjestämistä?') }}</h3>
     <p>
-      {{ _('Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei
-      niitä ole suuri määrä (>10)') }}
+      {{ _("Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei \
+      niitä ole suuri määrä (>10)") }}
     </p>
     <input
       type="radio"
@@ -175,7 +179,7 @@
       id="minchoices"
       name="minchoices"
       validation-regex="\d+"
-      validation-text="Kentän tulee olla kokonaisluku"
+      validation-text="{{ _('Kentän tulee olla kokonaisluku') }}"
       onchange="fieldIsValid(this)"
       {%
       if
@@ -206,17 +210,17 @@
       data-dependant-class="deny-choices-section"
       onclick="visibilityToggleRadioClick(event);"
     />
-    <label for="min-choices-all">{{ _('Kyllä') }}</label>
+    <label for="deny-choices-yes">{{ _('Kyllä') }}</label>
     <input
       type="radio"
       name="deny-choices-setting"
       value="hide"
-      id="min-choices-no"
+      id="deny-choices-no"
       data-dependant-class="deny-choices-section"
       onclick="visibilityToggleRadioClick(event);"
       checked
     />
-    <label for="min-choices-custom">{{ _('Ei') }}</label>
+    <label for="deny-choices-no">{{ _('Ei') }}</label>
   </div>
   <div class="deny-choices-section hidden">
     <label for="denied-choices-count"
@@ -228,7 +232,7 @@
       id="denied-choices-count"
       name="denied-choices-count"
       validation-regex="\d+"
-      validation-text="Kentän tulee olla kokonaisluku"
+      validation-text="{{ _('Kentän tulee olla kokonaisluku') }}"
       onchange="fieldIsValid(this)"
       {%
       if
@@ -254,11 +258,11 @@
   <div>
     <h3>{{ _('Näytetäänkö vastaajalle hakupalkki?') }}</h3>
     <p>
-      {{ _('Hakupalkin avulla kyselyyn vastaaja voi suodataa näkemiään
-      vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia
-      kyselyille joissa on runsaasti vastausvaihtoehtoja joista kaikkia ei
-      tarvitse järjestää, ja vastaavasti kieltää kyselyille joissa on vähän
-      vastausvaihtoehtoja joista kaikki tulee järjestää') }}
+      {{ _("Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään \
+      vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia \
+      kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja, \
+      ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle \
+      tai pienelle kyselylle.") }}
     </p>
     <input
       type="radio"
@@ -282,7 +286,7 @@
       endif
       %}
     />
-    <label for="min-choices-all">{{ _('Kyllä') }}</label>
+    <label for="search-visibility-yes">{{ _('Kyllä') }}</label>
     <input
       type="radio"
       name="allow-search-visibility"
@@ -305,17 +309,17 @@
       %}
       checked
     />
-    <label for="min-choices-custom">{{ _('Ei') }}</label>
+    <label for="search-visibility-no">{{ _('Ei') }}</label>
   </div>
 </section>
 
 <section>
   <h2>{{ _('Priorisoitavat ryhmät') }}</h2>
   <p>
-    {{ _('Syötä ryhmät jotka kyselyyn vastaaja voi asettaa
-    mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko.
-    Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen
-    voit luoda painamalla "+ Lisää tietokenttä".') }}
+    {{ _("Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa \
+    mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. \
+    Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen \
+    voit luoda painamalla '+ Lisää tietokenttä'.") }}
   </p>
   <a href="/csv-instructions" class="text-muted">{{ _('CSV-ohje') }}</a><br />
   <input
@@ -332,10 +336,10 @@
     {{ _('Tuo valinnat CSV-tiedostosta') }}</button
   ><br /><br />
   <p>
-    {{ _('Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa
-    opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *') }}
+    {{ _("Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa \
+    opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *.") }}
   </p>
-  <p>{{ _('Jos ryhmän minimikoolla ei ole väliä, syötä 0') }}</p>
+  <p>{{ _('Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän mimimikoko ei voi olla 0.') }}</p>
   <p>
     {{ _('HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat, että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella oleva laatikko.') }}
   </p>
@@ -355,21 +359,21 @@
         <th
           class="constant-header"
           col-validation-regex=".{5,}"
-          validation-text="yli 5 merkkiä pitkiä"
+          validation-text="{{ _('yli 5 merkkiä pitkiä') }}"
         >
           {{ _('Nimi') }}
         </th>
         <th
           class="constant-header"
           col-validation-regex="\d+"
-          validation-text="kokonaislukuja"
+          validation-text="{{ _('kokonaislukuja') }}"
         >
           {{ _('Enimmäispaikat') }}
         </th>
         <th
           class="constant-header"
           col-validation-regex="\d+"
-          validation-text="kokonaislukuja"
+          validation-text="{{ _('kokonaislukuja') }}"
         >
           {{ _('Ryhmän minimikoko') }}
         </th>

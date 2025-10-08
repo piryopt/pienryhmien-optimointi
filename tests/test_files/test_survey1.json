@@ -10,7 +10,7 @@
         "Postinumero": "00820"
       },
       {
-        "mandatory": false,
+        "mandatory": true,
         "Nimi": "Esimerkkipäiväkoti 2",
         "Enimmäispaikat": "6",
         "Ryhmän minimikoko": "1",
