@@ -6,6 +6,8 @@
         'name': "{{ _('Nimi') }}",
         'max_spaces': "{{ _('Enimmäispaikat') }}",
         'min_size': "{{ _('Ryhmän minimikoko') }}",
+        'column': "{{ _('Sarakkeen') }}",
+        'values_must_be': "{{ _('arvojen tulee olla')}}",
     };
 </script>
 
@@ -177,7 +179,7 @@
       id="minchoices"
       name="minchoices"
       validation-regex="\d+"
-      validation-text="Kentän tulee olla kokonaisluku"
+      validation-text="{{ _('Kentän tulee olla kokonaisluku') }}"
       onchange="fieldIsValid(this)"
       {%
       if
@@ -230,7 +232,7 @@
       id="denied-choices-count"
       name="denied-choices-count"
       validation-regex="\d+"
-      validation-text="Kentän tulee olla kokonaisluku"
+      validation-text="{{ _('Kentän tulee olla kokonaisluku') }}"
       onchange="fieldIsValid(this)"
       {%
       if
@@ -357,21 +359,21 @@
         <th
           class="constant-header"
           col-validation-regex=".{5,}"
-          validation-text="yli 5 merkkiä pitkiä"
+          validation-text="{{ _('yli 5 merkkiä pitkiä') }}"
         >
           {{ _('Nimi') }}
         </th>
         <th
           class="constant-header"
           col-validation-regex="\d+"
-          validation-text="kokonaislukuja"
+          validation-text="{{ _('kokonaislukuja') }}"
         >
           {{ _('Enimmäispaikat') }}
         </th>
         <th
           class="constant-header"
           col-validation-regex="\d+"
-          validation-text="kokonaislukuja"
+          validation-text="{{ _('kokonaislukuja') }}"
         >
           {{ _('Ryhmän minimikoko') }}
         </th>
