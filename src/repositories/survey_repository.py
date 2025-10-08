@@ -50,7 +50,7 @@ class SurveyRepository:
         """
         # Do we want to diplay all surveys created or only the active ones?
         try:
-            sql = "SELECT s.id FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id)"
+            sql = "SELECT s.id FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id AND s.deleted=False)"
             result = db.session.execute(text(sql), {"user_id": user_id})
             survey_list = result.fetchall()
             if not survey_list:
