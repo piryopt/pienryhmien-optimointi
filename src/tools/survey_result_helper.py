@@ -4,10 +4,10 @@ from src.services.user_service import user_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.tools.rankings_converter import convert_to_list, convert_to_int_list
-from datetime import datetime
 from flask_babel import gettext
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
+import copy
 
 
 def convert_choices_groups(survey_choices):
@@ -197,6 +197,8 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
     """
     Run the hungarian algorithm until no violation.
     """
+    students_dict_original = copy.deepcopy(students_dict)
+
     loop = True
     while loop:
         seats = get_seats(groups_dict)
@@ -250,9 +252,11 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                         # Skip students in other mandatory groups if they prefer their current mandatory group more
                         if survey_choices_service.get_survey_choice_mandatory(assigned_group):
                             # Compare ranking positions
-                            current_group_rank = rank(students_dict, student_id, assigned_group)
-                            target_group_rank = rank(students_dict, student_id, survey_choice_id)
-                            if current_group_rank <= target_group_rank:
+                            current_group_rank = rank(students_dict_original, student_id, assigned_group)
+                            target_group_rank = rank(students_dict_original, student_id, survey_choice_id)
+                            current_group_min_size = survey_choices_service.get_survey_choice_min_size(assigned_group)
+
+                            if current_group_rank <= target_group_rank and group_sizes[assigned_group] <= current_group_min_size:
                                 students_in_mandatory_groups.append((i, student_id, assigned_group))
                                 continue
 
@@ -273,9 +277,6 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
 
                             candidates.append((i, student_id, assigned_group))
 
-                    # Sort candidates by how much they like this mandatory group
-                    candidates.sort(key=lambda c: rank(students_dict, c[1], survey_choice_id))
-
                     if len(candidates) < needed:
                         groups_dict.pop(survey_choice_id)
                         dropped_groups_id.append(survey_choice_id)
@@ -285,6 +286,9 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                             if survey_choice_id in student.rejections:
                                 student.rejections.remove(survey_choice_id)
                         break
+
+                    # Sort candidates by how much they like this mandatory group
+                    candidates.sort(key=lambda c: rank(students_dict_original, c[1], survey_choice_id))
 
                     # Reassign enough students
                     for j in range(needed):
