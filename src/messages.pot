@@ -1,794 +1,799 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-05 18:48+0300\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-10-08 13:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
 
-#: src/routes.py:228
+#: routes.py:230
 msgid ""
 "Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmiäismäärä! "
 "Kyselyn luominen epäonnistui!"
 msgstr ""
 
-#: src/routes.py:236
+#: routes.py:238
 msgid "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!"
 msgstr ""
 
-#: src/routes.py:244
+#: routes.py:246
 msgid "Uusi kysely luotu!"
 msgstr ""
 
-#: src/routes.py:413
+#: routes.py:415
 msgid "Poistaminen epäonnistui!"
 msgstr ""
 
-#: src/routes.py:417
+#: routes.py:419
 msgid "Valinnat poistettu"
 msgstr ""
 
-#: src/routes.py:502
+#: routes.py:504
 msgid "Sähköpostiosoite puuttuu!"
 msgstr ""
 
-#: src/routes.py:564
+#: routes.py:566
 msgid "Tallennus onnistui. Päivitä sivu nähdäksesi tilanne."
 msgstr ""
 
-#: src/routes.py:567
+#: routes.py:569
 msgid "Tallennus epäonnistui."
 msgstr ""
 
-#: src/routes.py:595
+#: routes.py:596
 msgid ""
 "Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia "
-"paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus sivulta."
+"paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus "
+"sivulta."
 msgstr ""
 
-#: src/routes.py:694
+#: routes.py:696
 msgid "Kyselyn sulkeminen epäonnistui!"
 msgstr ""
 
-#: src/routes.py:708
+#: routes.py:710
 msgid "Kyselyn avaaminen epäonnistui!"
 msgstr ""
 
-#: src/routes.py:982
+#: routes.py:984
 msgid "Tallennus epäonnistui. Valitse vähintään "
 msgstr ""
 
-#: src/routes.py:987
+#: routes.py:989
 msgid "Tallennus epäonnistui. Voit hylätä enintään "
 msgstr ""
 
-#: src/routes.py:996
-msgid ""
-"Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."
+#: routes.py:998
+msgid "Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."
 msgstr ""
 
-#: src/routes.py:1003
+#: routes.py:1004
 msgid ""
 "Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla "
 "korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."
 msgstr ""
 
-#: src/routes.py:1008
+#: routes.py:1010
 msgid ""
 "Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla "
 "vähintään 10."
 msgstr ""
 
-#: src/routes.py:1014
+#: routes.py:1016
 msgid "Tallennus onnistui."
 msgstr ""
 
-#: src/routes.py:1017
+#: routes.py:1019
 msgid "Tallennus epäonnistui"
 msgstr ""
 
-#: src/templates/results.html:5
-msgid "Tulokset"
-msgstr ""
-
-#: src/templates/results.html:17
-msgid "Lajittelun tulokset"
-msgstr ""
-
-#: src/templates/results.html:29
-msgid "Ryhmänvalintojen keskiarvo"
-msgstr ""
-
-#: src/templates/results.html:32
-msgid ""
-"Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-"
-"järjestettyihin valintoihin ei vaikuta keskiarvoon."
-msgstr ""
-
-#: src/templates/results.html:46
-msgid "Vie tulokset Excel-taulukkoon"
-msgstr ""
-
-#: src/templates/results.html:50
-msgid "Tallenna tulokset"
-msgstr ""
-
-#: src/templates/results.html:56
-msgid "Ryhmät, jotka pudotettiin jaosta"
-msgstr ""
-
-#: src/templates/results.html:63
-msgid "Opiskelijat on lajiteltu ryhmiin seuraavasti"
-msgstr ""
-
-#: src/templates/results.html:69 src/templates/create_survey.html:360
-#: src/templates/group_sizes.html:41
-msgid "Nimi"
-msgstr ""
-
-#: src/templates/results.html:70 src/templates/survey_answers.html:50
-msgid "Sähköposti"
-msgstr ""
-
-#: src/templates/results.html:71
-msgid "Ryhmä"
-msgstr ""
-
-#: src/templates/results.html:72
-msgid "Monesko valinta"
-msgstr ""
-
-#: src/templates/results.html:73 src/templates/showrankings.html:3
-#: src/templates/survey_answers.html:51
-msgid "Valinnat"
-msgstr ""
-
-#: src/templates/results.html:102 src/templates/survey_answers.html:61
-#: src/templates/surveys.html:52
-msgid "Näytä"
-msgstr ""
-
-#: src/templates/index.html:3
-msgid "Etusivu"
-msgstr ""
-
-#: src/templates/index.html:10 src/templates/surveys.html:19
-msgid "Toiminnot"
-msgstr ""
-
-#: src/templates/index.html:15 src/templates/create_survey.html:1
-#: src/templates/create_survey.html:37
-msgid "Luo uusi kysely"
-msgstr ""
-
-#: src/templates/index.html:17
-msgid "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta"
-msgstr ""
-
-#: src/templates/index.html:23
-msgid "Näytä vanhat kyselyt"
-msgstr ""
-
-#: src/templates/index.html:25
-msgid "Luotuja kyselyitä"
-msgstr ""
-
-#: src/templates/index.html:32
-msgid "Käynnissä olevat kyselyt"
-msgstr ""
-
-#: src/templates/index.html:37
-msgid "Vastausaika loppuu"
-msgstr ""
-
-#: src/templates/index.html:39
-msgid "Vastaukset"
-msgstr ""
-
-#: src/templates/showrankings.html:9
-msgid "Hylkäykset"
-msgstr ""
-
-#: src/templates/survey_answers.html:3
-msgid "Kyselyn vastaukset"
-msgstr ""
-
-#: src/templates/survey_answers.html:9
-msgid "(Ryhmänjako tallennettu)"
-msgstr ""
-
-#: src/templates/survey_answers.html:10 src/templates/group_sizes.html:26
-msgid "Vastauksia"
-msgstr ""
-
-#: src/templates/survey_answers.html:11 src/templates/group_sizes.html:27
-msgid "Jaettavia paikkoja"
-msgstr ""
-
-#: src/templates/survey_answers.html:14 src/templates/survey_answers.html:34
-msgid "Palaa kyselylistaan"
-msgstr ""
-
-#: src/templates/survey_answers.html:17 src/templates/group_sizes.html:30
-msgid "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja."
-msgstr ""
-
-#: src/templates/survey_answers.html:18
-msgid "Suositeltu järjestys käsitellä tilanne"
-msgstr ""
-
-#: src/templates/survey_answers.html:19
-msgid "Poista ylimääräiset vastaukset"
-msgstr ""
-
-#: src/templates/survey_answers.html:19
-msgid ""
-"Poista kyselystä vastaajat, jotka ovat ilmoittaneet jättävänsä    kuitenkin "
-"osallistumatta, tai joiden ei kuuluisi muusta syystä olla mukana "
-"ryhmäjaossa. Jos esimerkiksi    olet itse kokeillut kyselyyn vastaamista, "
-"poista oma vastauksesi."
-msgstr ""
-
-#: src/templates/survey_answers.html:22 src/templates/survey_answers.html:26
-#: src/templates/group_sizes.html:3 src/templates/group_sizes.html:20
-msgid "Muokkaa ryhmäkokoja"
-msgstr ""
-
-#: src/templates/survey_answers.html:22
-msgid ""
-"Tarkastele ryhmiä, joihin vastaajat jaetaan. Lisää paikkoja niihin "
-"ryhmiin,    joihin se on mahdollista tehdä."
-msgstr ""
-
-#: src/templates/survey_answers.html:24 src/templates/survey_answers.html:28
-msgid "Jaa ryhmiin"
-msgstr ""
-
-#: src/templates/survey_answers.html:24
-msgid ""
-"Jos vastauksia on edelleen liikaa, voit silti tehdä ryhmäjaon. Algoritmi "
-"jakaa ryhmät mahdollisimman    hyvin opiskelijoiden toiveita vastaavaksi ja "
-"ryhmäjaon ulkopuolelle jäävät sijoitetaan ryhmään nimeltä 'Tyhjä'."
-msgstr ""
-
-#: src/templates/survey_answers.html:31
-msgid "Avaa kysely uudelleen"
-msgstr ""
-
-#: src/templates/survey_answers.html:38
-msgid "Sulje kysely"
-msgstr ""
-
-#: src/templates/survey_answers.html:43
-msgid "Hae yksittäistä vastausta kirjoittamalla tähän kenttään"
-msgstr ""
-
-#: src/templates/survey_answers.html:44
-msgid "vastaajan sähköposti tai osa siitä"
-msgstr ""
-
-#: src/templates/survey_answers.html:52 src/templates/survey.html:89
-msgid "Perustelut"
-msgstr ""
-
-#: src/templates/survey_answers.html:53
-msgid "Vastauksen poistaminen"
-msgstr ""
-
-#: src/templates/base.html:38
-msgid "Tilastot"
-msgstr ""
-
-#: src/templates/base.html:39 src/templates/feedback.html:3
-#: src/templates/feedback.html:10 src/templates/feedback.html:19
-msgid "Palaute"
-msgstr ""
-
-#: src/templates/base.html:40
-msgid "Aktiiviset kyselyt"
-msgstr ""
-
-#: src/templates/base.html:49
-msgid "Kirjaudu ulos"
-msgstr ""
-
-#: src/templates/base.html:71
-msgid "UKK"
-msgstr ""
-
-#: src/templates/base.html:72
-msgid "Anna palautetta"
-msgstr ""
-
-#: src/templates/base.html:73
-msgid "Tietosuojaseloste"
-msgstr ""
-
-#: src/templates/feedback.html:12
-msgid "Otsikko"
-msgstr ""
-
-#: src/templates/feedback.html:16 src/templates/feedback.html:18
-msgid "Palutteen tyyppi"
-msgstr ""
-
-#: src/templates/feedback.html:20
-msgid "Bugi"
-msgstr ""
-
-#: src/templates/feedback.html:21
-msgid "Muu"
-msgstr ""
-
-#: src/templates/feedback.html:25
-msgid "Sisältö"
-msgstr ""
-
-#: src/templates/feedback.html:28
-msgid "Anna palaute"
-msgstr ""
-
-#: src/templates/edit_survey.html:3
-msgid "Muokkaa kyselyä"
-msgstr ""
-
-#: src/templates/edit_survey.html:22
-msgid "Kyselyn muokkaus"
-msgstr ""
-
-#: src/templates/edit_survey.html:25
-msgid "Anna käyttäjälle hallinnointioikeudet kyselyyn."
-msgstr ""
-
-#: src/templates/edit_survey.html:26
-msgid "Syötä käyttäjän sähköpostiosoite."
-msgstr ""
-
-#: src/templates/edit_survey.html:28
-msgid "Lisää käyttäjä"
-msgstr ""
-
-#: src/templates/edit_survey.html:33 src/templates/create_survey.html:42
-msgid "Kyselyn nimi"
-msgstr ""
-
-#: src/templates/edit_survey.html:51 src/templates/create_survey.html:71
-msgid "Vastausaika"
-msgstr ""
-
-#: src/templates/edit_survey.html:52
-msgid ""
-"Voit pidentää tai lyhentää aikaväliä, jolloin kyselyyn on mahdollista "
-"vastata."
-msgstr ""
-
-#: src/templates/edit_survey.html:53
-msgid "Vastausaika päättyy:"
-msgstr ""
-
-#: src/templates/edit_survey.html:64 src/templates/create_survey.html:87
-msgid "Kello"
-msgstr ""
-
-#: src/templates/edit_survey.html:98 src/templates/create_survey.html:131
-msgid "Kyselyn kuvaus"
-msgstr ""
-
-#: src/templates/edit_survey.html:99
-msgid "Voit muokata kyselyn kuvausta"
-msgstr ""
-
-#: src/templates/edit_survey.html:174 src/templates/group_sizes.html:67
-msgid "Tallenna muutokset"
-msgstr ""
-
-#: src/templates/edit_survey.html:177
-msgid "Palaa kyselyn vastauksiin"
-msgstr ""
-
-#: src/templates/survey.html:3 src/templates/surveys.html:16
-msgid "Kysely"
-msgstr ""
-
-#: src/templates/survey.html:28 src/templates/create_survey.html:76
-#: src/templates/surveys.html:20
-msgid "Vastausaika päättyy"
-msgstr ""
-
-#: src/templates/survey.html:37
-msgid "Raahaa oikean reunan listasta vähintään"
-msgstr ""
-
-#: src/templates/survey.html:37
-msgid "vaihtoehtoa vihreään laatikkoon."
-msgstr ""
-
-#: src/templates/survey.html:38
-msgid "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa."
-msgstr ""
-
-#: src/templates/survey.html:40
-msgid ""
-"Tärkeäksi merkityt ryhmät täytetään aina vähintään minimikokoon asti "
-"vastauksista riippumatta."
-msgstr ""
-
-#: src/templates/survey.html:44
-msgid "Haku"
-msgstr ""
-
-#: src/templates/survey.html:59 src/templates/survey.html:78
-#: src/templates/survey.html:145
-msgid "Ryhmän maksimikoko"
-msgstr ""
-
-#: src/templates/survey.html:61 src/templates/survey.html:81
-#: src/templates/survey.html:147
-msgid "Tärkeä"
-msgstr ""
-
-#: src/templates/survey.html:98
-msgid "Päivitä valinnat"
-msgstr ""
-
-#: src/templates/survey.html:101
-msgid "Lähetä valinnat"
-msgstr ""
-
-#: src/templates/survey.html:108
-msgid "Poista valinnat"
-msgstr ""
-
-#: src/templates/survey.html:120
-msgid "Peruuta"
-msgstr ""
-
-#: src/templates/survey.html:130
-msgid "Poista"
-msgstr ""
-
-#: src/templates/survey.html:132
-msgid "Oletko varma"
-msgstr ""
-
-#: src/templates/closedsurvey.html:3
-msgid "Suljettu kysely"
-msgstr ""
-
-#: src/templates/closedsurvey.html:19
-msgid "Kysely on suljettu"
-msgstr ""
-
-#: src/templates/closedsurvey.html:21
-msgid "Tämä kysely on suljettu eikä siihen voi enää vastata."
-msgstr ""
-
-#: src/templates/closedsurvey.html:23
-msgid "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta."
-msgstr ""
-
-#: src/templates/closedsurvey.html:25
-msgid "Et ole vastannut tähän kyselyyn."
-msgstr ""
-
-#: src/templates/closedsurvey.html:33
-msgid "Tehdyt valinnat"
-msgstr ""
-
-#: src/templates/closedsurvey.html:35
-msgid "Valitut ryhmät mielekkyysjärjestyksessä"
-msgstr ""
-
-#: src/templates/closedsurvey.html:45
-msgid "Ryhmät joihin osallistumiseen on este"
-msgstr ""
-
-#: src/templates/create_survey.html:73
-msgid ""
-"Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista     vastata."
-msgstr ""
-
-#: src/templates/create_survey.html:133
-msgid ""
-"Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen.     "
-"Kuvausteksti näytetään vastaajalle kyselyn yhteydessä."
-msgstr ""
-
-#: src/templates/create_survey.html:143
-msgid "Vaaditaanko kaikkien ryhmien järjestämistä?"
-msgstr ""
-
-#: src/templates/create_survey.html:145
-msgid ""
-"Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei       "
-"niitä ole suuri määrä (>10)"
-msgstr ""
-
-#: src/templates/create_survey.html:157 src/templates/create_survey.html:209
-#: src/templates/create_survey.html:285 src/templates/surveys.html:28
-#: src/templates/surveys.html:49
-msgid "Kyllä"
-msgstr ""
-
-#: src/templates/create_survey.html:166 src/templates/create_survey.html:219
-#: src/templates/create_survey.html:308 src/templates/surveys.html:28
-#: src/templates/surveys.html:49
-msgid "Ei"
-msgstr ""
-
-#: src/templates/create_survey.html:170
-msgid "Priorisoitujen ryhmien vähimmäismäärä"
-msgstr ""
-
-#: src/templates/create_survey.html:200
-msgid "Sallitaanko valintojen kieltäminen?"
-msgstr ""
-
-#: src/templates/create_survey.html:223
-msgid "Sallittu kiellettyjen ryhmien määrä"
-msgstr ""
-
-#: src/templates/create_survey.html:255
-msgid "Näytetäänkö vastaajalle hakupalkki?"
-msgstr ""
-
-#: src/templates/create_survey.html:257
-msgid ""
-"Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään       "
-"vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa "
-"sallia       kyselyille, joissa on runsaasti ei-pakollisia "
-"vaihtoehtoja,       ja vastaavasti kieltää pakollisia vaihtoehtoja "
-"sisältävälle       tai pienelle kyselylle."
-msgstr ""
-
-#: src/templates/create_survey.html:313 src/templates/group_sizes.html:35
-msgid "Priorisoitavat ryhmät"
-msgstr ""
-
-#: src/templates/create_survey.html:315
-msgid ""
-"Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa     "
-"mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko.     "
-"Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. "
-"Sarakkeen     voit luoda painamalla '+ Lisää tietokenttä'."
-msgstr ""
-
-#: src/templates/create_survey.html:320
-msgid "CSV-ohje"
-msgstr ""
-
-#: src/templates/create_survey.html:332
-msgid "Tuo valinnat CSV-tiedostosta"
-msgstr ""
-
-#: src/templates/create_survey.html:335
-msgid ""
-"Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa     "
-"opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *."
-msgstr ""
-
-#: src/templates/create_survey.html:338
-msgid ""
-"Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän mimimikoko "
-"ei voi olla 0."
-msgstr ""
-
-#: src/templates/create_survey.html:340
-msgid ""
-"HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat, että "
-"tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella oleva "
-"laatikko."
-msgstr ""
-
-#: src/templates/create_survey.html:367 src/templates/group_sizes.html:42
-msgid "Enimmäispaikat"
-msgstr ""
-
-#: src/templates/create_survey.html:374
-msgid "Ryhmän minimikoko"
-msgstr ""
-
-#: src/templates/create_survey.html:383
-msgid "Lisää tietokenttä"
-msgstr ""
-
-#: src/templates/create_survey.html:428
-msgid "Lisää vaihtoehto"
-msgstr ""
-
-#: src/templates/create_survey.html:441
-msgid "Luo kysely"
-msgstr ""
-
-#: src/templates/group_sizes.html:36
-msgid ""
-"Vaihtoehdon suositus kuvaa sitä, kuinka moni vastaaja on valinnut sen "
-"ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä."
-msgstr ""
-
-#: src/templates/group_sizes.html:37
-msgid "HUOM"
-msgstr ""
-
-#: src/templates/group_sizes.html:37
-msgid "Jos muokkaat ryhmän nimeä, ei ryhmäkoon muokkaus tallennu."
-msgstr ""
-
-#: src/templates/group_sizes.html:43
-msgid "Suositus"
-msgstr ""
-
-#: src/templates/surveys.html:3 src/templates/surveys.html:10
-msgid "Aiemmat kyselyt"
-msgstr ""
-
-#: src/templates/surveys.html:17
-msgid "Kyselyn tila"
-msgstr ""
-
-#: src/templates/surveys.html:18
-msgid "Ryhmät luotu"
-msgstr ""
-
-#: src/templates/surveys.html:27 src/templates/surveys.html:48
-msgid "Suljettu"
-msgstr ""
-
-#: src/templates/surveys.html:27 src/templates/surveys.html:48
-msgid "Avoin"
-msgstr ""
-
-#: src/templates/surveys.html:30
-msgid "Tarkastele tuloksia"
-msgstr ""
-
-#: src/templates/surveys.html:31
-msgid "Kopioi kyselyn osoite leikepöydälle"
-msgstr ""
-
-#: src/templates/surveys.html:32
-msgid "Muokkaa kyselyä tai lisää siihen ylläpitäjä"
-msgstr ""
-
-#: src/templates/surveys.html:33
-msgid "Kopioi kysely"
-msgstr ""
-
-#: src/templates/surveys.html:34
-msgid "Poista kysely"
-msgstr ""
-
-#: src/templates/surveys.html:73
-msgid "\" Tarkastele tuloksia\""
-msgstr ""
-
-#: src/templates/surveys.html:74
-msgid "\" Muokkaa kyselyä tai lisää siihen ylläpitäjä\""
-msgstr ""
-
-#: src/templates/surveys.html:75
-msgid "\" Kopioi kysely\""
-msgstr ""
-
-#: src/algorithms/hungarian.py:169
+#: algorithms/hungarian.py:169
 msgid "valintaansa sijoitetut käyttäjät"
 msgstr ""
 
-#: src/services/survey_service.py:338
-msgid "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"
-msgstr ""
-
-#: src/services/survey_service.py:344
-msgid "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"
-msgstr ""
-
-#: src/services/survey_service.py:361
-msgid ""
-"Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi "
-"ilmestyy, kun asetat hiiren poistettavan rivin päälle."
-msgstr ""
-
-#: src/services/survey_service.py:383
-msgid "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"
-msgstr ""
-
-#: src/services/survey_service.py:397
-msgid "Ei voitu tallentaa muutoksia tietokantaan!"
-msgstr ""
-
-#: src/services/survey_service.py:399
-msgid "Muutokset tallennettu!"
-msgstr ""
-
-#: src/services/survey_service.py:412
-msgid "Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut"
-msgstr ""
-
-#: src/services/survey_service.py:415
-msgid "Häiriö. Ryhmäkokojen päivitys ei onnistunut"
-msgstr ""
-
-#: src/services/survey_service.py:418
-msgid "Ryhmäkoot päivitetty"
-msgstr ""
-
-#: src/services/survey_owners_service.py:36
-msgid ""
-"Sähköpostiosoitetta ei löydetty järjestelmästä? Onko hän kirjautunut "
-"aikaisemmin jakajaan? Syötetty sähköpostiosoite: "
-msgstr ""
-
-#: src/services/survey_owners_service.py:50
-msgid "Opettajalla on jo oikeudet kyselyyn!"
-msgstr ""
-
-#: src/services/survey_owners_service.py:58
-msgid "  sai oikeudet kyselyyn!"
-msgstr ""
-
-#: src/services/feedback_service.py:30
+#: services/feedback_service.py:30
 msgid "Otsikko on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 3."
 msgstr ""
 
-#: src/services/feedback_service.py:33
+#: services/feedback_service.py:33
 msgid "Otsikko on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 50."
 msgstr ""
 
-#: src/services/feedback_service.py:38
+#: services/feedback_service.py:38
 msgid "Sisältö on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 5."
 msgstr ""
 
-#: src/services/feedback_service.py:41
+#: services/feedback_service.py:41
 msgid ""
 "Sisältö on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 1500. "
 "Merkkejä oli "
 msgstr ""
 
-#: src/services/feedback_service.py:48
+#: services/feedback_service.py:48
 msgid "Olet jo luonut palautteen tällä otsikolla!"
 msgstr ""
 
-#: src/services/feedback_service.py:53
+#: services/feedback_service.py:53
 msgid "Palautteen antamisessa oli ongelma!"
 msgstr ""
 
-#: src/services/feedback_service.py:55
+#: services/feedback_service.py:55
 msgid "Palautteen antaminen onnistui"
 msgstr ""
 
-#: src/tools/survey_result_helper.py:60 src/tools/survey_result_helper.py:162
-#: src/tools/survey_result_helper.py:173
+#: services/survey_owners_service.py:35
+msgid ""
+"Sähköpostiosoitetta ei löydetty järjestelmästä? Onko hän kirjautunut "
+"aikaisemmin jakajaan? Syötetty sähköpostiosoite: "
+msgstr ""
+
+#: services/survey_owners_service.py:50
+msgid "Opettajalla on jo oikeudet kyselyyn!"
+msgstr ""
+
+#: services/survey_owners_service.py:58
+msgid "  sai oikeudet kyselyyn!"
+msgstr ""
+
+#: services/survey_service.py:338 templates/create_survey.html:51
+msgid "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"
+msgstr ""
+
+#: services/survey_service.py:344
+msgid "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"
+msgstr ""
+
+#: services/survey_service.py:360
+msgid ""
+"Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi"
+" ilmestyy, kun asetat hiiren poistettavan rivin päälle."
+msgstr ""
+
+#: services/survey_service.py:383
+msgid "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!"
+msgstr ""
+
+#: services/survey_service.py:397
+msgid "Ei voitu tallentaa muutoksia tietokantaan!"
+msgstr ""
+
+#: services/survey_service.py:399
+msgid "Muutokset tallennettu!"
+msgstr ""
+
+#: services/survey_service.py:412
+msgid "Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut"
+msgstr ""
+
+#: services/survey_service.py:415
+msgid "Häiriö. Ryhmäkokojen päivitys ei onnistunut"
+msgstr ""
+
+#: services/survey_service.py:418
+msgid "Ryhmäkoot päivitetty"
+msgstr ""
+
+#: templates/base.html:38
+msgid "Tilastot"
+msgstr ""
+
+#: templates/base.html:39 templates/feedback.html:3 templates/feedback.html:10
+#: templates/feedback.html:19
+msgid "Palaute"
+msgstr ""
+
+#: templates/base.html:40
+msgid "Aktiiviset kyselyt"
+msgstr ""
+
+#: templates/base.html:49
+msgid "Kirjaudu ulos"
+msgstr ""
+
+#: templates/base.html:71
+msgid "UKK"
+msgstr ""
+
+#: templates/base.html:72
+msgid "Anna palautetta"
+msgstr ""
+
+#: templates/base.html:73
+msgid "Tietosuojaseloste"
+msgstr ""
+
+#: templates/closedsurvey.html:3
+msgid "Suljettu kysely"
+msgstr ""
+
+#: templates/closedsurvey.html:19
+msgid "Kysely on suljettu"
+msgstr ""
+
+#: templates/closedsurvey.html:21
+msgid "Tämä kysely on suljettu eikä siihen voi enää vastata."
+msgstr ""
+
+#: templates/closedsurvey.html:23
+msgid "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta."
+msgstr ""
+
+#: templates/closedsurvey.html:25
+msgid "Et ole vastannut tähän kyselyyn."
+msgstr ""
+
+#: templates/closedsurvey.html:33
+msgid "Tehdyt valinnat"
+msgstr ""
+
+#: templates/closedsurvey.html:35
+msgid "Valitut ryhmät mielekkyysjärjestyksessä"
+msgstr ""
+
+#: templates/closedsurvey.html:45
+msgid "Ryhmät joihin osallistumiseen on este"
+msgstr ""
+
+#: templates/create_survey.html:1 templates/create_survey.html:39
+#: templates/index.html:15
+msgid "Luo uusi kysely"
+msgstr ""
+
+#: templates/create_survey.html:6 templates/create_survey.html:362
+#: templates/group_sizes.html:41 templates/results.html:69
+msgid "Nimi"
+msgstr ""
+
+#: templates/create_survey.html:7 templates/create_survey.html:369
+#: templates/group_sizes.html:42
+msgid "Enimmäispaikat"
+msgstr ""
+
+#: templates/create_survey.html:8 templates/create_survey.html:376
+msgid "Ryhmän minimikoko"
+msgstr ""
+
+#: templates/create_survey.html:44 templates/edit_survey.html:34
+msgid "Kyselyn nimi"
+msgstr ""
+
+#: templates/create_survey.html:73 templates/edit_survey.html:52
+msgid "Vastausaika"
+msgstr ""
+
+#: templates/create_survey.html:75
+msgid ""
+"Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista     "
+"vastata."
+msgstr ""
+
+#: templates/create_survey.html:78 templates/survey.html:28
+#: templates/surveys.html:20
+msgid "Vastausaika päättyy"
+msgstr ""
+
+#: templates/create_survey.html:86
+msgid "Päivämäärän tulee olla muodossa pp.kk.yyyy"
+msgstr ""
+
+#: templates/create_survey.html:89 templates/edit_survey.html:65
+msgid "Kello"
+msgstr ""
+
+#: templates/create_survey.html:133 templates/edit_survey.html:99
+msgid "Kyselyn kuvaus"
+msgstr ""
+
+#: templates/create_survey.html:135
+msgid ""
+"Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen.     "
+"Kuvausteksti näytetään vastaajalle kyselyn yhteydessä."
+msgstr ""
+
+#: templates/create_survey.html:145
+msgid "Vaaditaanko kaikkien ryhmien järjestämistä?"
+msgstr ""
+
+#: templates/create_survey.html:147
+msgid ""
+"Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei       "
+"niitä ole suuri määrä (>10)"
+msgstr ""
+
+#: templates/create_survey.html:159 templates/create_survey.html:211
+#: templates/create_survey.html:287 templates/surveys.html:28
+#: templates/surveys.html:49
+msgid "Kyllä"
+msgstr ""
+
+#: templates/create_survey.html:168 templates/create_survey.html:221
+#: templates/create_survey.html:310 templates/surveys.html:28
+#: templates/surveys.html:49
+msgid "Ei"
+msgstr ""
+
+#: templates/create_survey.html:172
+msgid "Priorisoitujen ryhmien vähimmäismäärä"
+msgstr ""
+
+#: templates/create_survey.html:202
+msgid "Sallitaanko valintojen kieltäminen?"
+msgstr ""
+
+#: templates/create_survey.html:225
+msgid "Sallittu kiellettyjen ryhmien määrä"
+msgstr ""
+
+#: templates/create_survey.html:257
+msgid "Näytetäänkö vastaajalle hakupalkki?"
+msgstr ""
+
+#: templates/create_survey.html:259
+msgid ""
+"Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään       "
+"vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia"
+"       kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,       "
+"ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle       tai "
+"pienelle kyselylle."
+msgstr ""
+
+#: templates/create_survey.html:315 templates/group_sizes.html:35
+msgid "Priorisoitavat ryhmät"
+msgstr ""
+
+#: templates/create_survey.html:317
+msgid ""
+"Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa     "
+"mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko."
+"     Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. "
+"Sarakkeen     voit luoda painamalla '+ Lisää tietokenttä'."
+msgstr ""
+
+#: templates/create_survey.html:322
+msgid "CSV-ohje"
+msgstr ""
+
+#: templates/create_survey.html:334
+msgid "Tuo valinnat CSV-tiedostosta"
+msgstr ""
+
+#: templates/create_survey.html:337
+msgid ""
+"Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa     "
+"opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *."
+msgstr ""
+
+#: templates/create_survey.html:340
+msgid ""
+"Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän "
+"mimimikoko ei voi olla 0."
+msgstr ""
+
+#: templates/create_survey.html:342
+msgid ""
+"HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat, "
+"että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella "
+"oleva laatikko."
+msgstr ""
+
+#: templates/create_survey.html:385
+msgid "Lisää tietokenttä"
+msgstr ""
+
+#: templates/create_survey.html:430
+msgid "Lisää vaihtoehto"
+msgstr ""
+
+#: templates/create_survey.html:443
+msgid "Luo kysely"
+msgstr ""
+
+#: templates/edit_survey.html:3
+msgid "Muokkaa kyselyä"
+msgstr ""
+
+#: templates/edit_survey.html:23
+msgid "Kyselyn muokkaus"
+msgstr ""
+
+#: templates/edit_survey.html:26
+msgid "Anna käyttäjälle hallinnointioikeudet kyselyyn."
+msgstr ""
+
+#: templates/edit_survey.html:27
+msgid "Syötä käyttäjän sähköpostiosoite."
+msgstr ""
+
+#: templates/edit_survey.html:29
+msgid "Lisää käyttäjä"
+msgstr ""
+
+#: templates/edit_survey.html:53
+msgid ""
+"Voit pidentää tai lyhentää aikaväliä, jolloin kyselyyn on mahdollista "
+"vastata."
+msgstr ""
+
+#: templates/edit_survey.html:54
+msgid "Vastausaika päättyy:"
+msgstr ""
+
+#: templates/edit_survey.html:100
+msgid "Voit muokata kyselyn kuvausta"
+msgstr ""
+
+#: templates/edit_survey.html:175 templates/group_sizes.html:67
+msgid "Tallenna muutokset"
+msgstr ""
+
+#: templates/edit_survey.html:178
+msgid "Palaa kyselyn vastauksiin"
+msgstr ""
+
+#: templates/feedback.html:12
+msgid "Otsikko"
+msgstr ""
+
+#: templates/feedback.html:16 templates/feedback.html:18
+msgid "Palutteen tyyppi"
+msgstr ""
+
+#: templates/feedback.html:20
+msgid "Bugi"
+msgstr ""
+
+#: templates/feedback.html:21
+msgid "Muu"
+msgstr ""
+
+#: templates/feedback.html:25
+msgid "Sisältö"
+msgstr ""
+
+#: templates/feedback.html:28
+msgid "Anna palaute"
+msgstr ""
+
+#: templates/group_sizes.html:3 templates/group_sizes.html:20
+#: templates/survey_answers.html:22 templates/survey_answers.html:26
+msgid "Muokkaa ryhmäkokoja"
+msgstr ""
+
+#: templates/group_sizes.html:26 templates/survey_answers.html:10
+msgid "Vastauksia"
+msgstr ""
+
+#: templates/group_sizes.html:27 templates/survey_answers.html:11
+msgid "Jaettavia paikkoja"
+msgstr ""
+
+#: templates/group_sizes.html:30 templates/survey_answers.html:17
+msgid "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja."
+msgstr ""
+
+#: templates/group_sizes.html:36
+msgid ""
+"Vaihtoehdon suositus kuvaa sitä, kuinka moni vastaaja on valinnut sen "
+"ensimmäiseksi, toiseksi tai kolmanneksi valinnakseen kyselyssä."
+msgstr ""
+
+#: templates/group_sizes.html:37
+msgid "HUOM"
+msgstr ""
+
+#: templates/group_sizes.html:37
+msgid "Jos muokkaat ryhmän nimeä, ei ryhmäkoon muokkaus tallennu."
+msgstr ""
+
+#: templates/group_sizes.html:43
+msgid "Suositus"
+msgstr ""
+
+#: templates/index.html:3
+msgid "Etusivu"
+msgstr ""
+
+#: templates/index.html:10 templates/surveys.html:19
+msgid "Toiminnot"
+msgstr ""
+
+#: templates/index.html:17
+msgid "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta"
+msgstr ""
+
+#: templates/index.html:23
+msgid "Näytä vanhat kyselyt"
+msgstr ""
+
+#: templates/index.html:25
+msgid "Luotuja kyselyitä"
+msgstr ""
+
+#: templates/index.html:32
+msgid "Käynnissä olevat kyselyt"
+msgstr ""
+
+#: templates/index.html:37
+msgid "Vastausaika loppuu"
+msgstr ""
+
+#: templates/index.html:39
+msgid "Vastaukset"
+msgstr ""
+
+#: templates/results.html:5
+msgid "Tulokset"
+msgstr ""
+
+#: templates/results.html:17
+msgid "Lajittelun tulokset"
+msgstr ""
+
+#: templates/results.html:29
+msgid "Ryhmänvalintojen keskiarvo"
+msgstr ""
+
+#: templates/results.html:32
+msgid ""
+"Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-"
+"järjestettyihin valintoihin ei vaikuta keskiarvoon."
+msgstr ""
+
+#: templates/results.html:46
+msgid "Vie tulokset Excel-taulukkoon"
+msgstr ""
+
+#: templates/results.html:50
+msgid "Tallenna tulokset"
+msgstr ""
+
+#: templates/results.html:56
+msgid "Ryhmät, jotka pudotettiin jaosta"
+msgstr ""
+
+#: templates/results.html:63
+msgid "Opiskelijat on lajiteltu ryhmiin seuraavasti"
+msgstr ""
+
+#: templates/results.html:70 templates/survey_answers.html:50
+msgid "Sähköposti"
+msgstr ""
+
+#: templates/results.html:71
+msgid "Ryhmä"
+msgstr ""
+
+#: templates/results.html:72
+msgid "Monesko valinta"
+msgstr ""
+
+#: templates/results.html:73 templates/showrankings.html:3
+#: templates/survey_answers.html:51
+msgid "Valinnat"
+msgstr ""
+
+#: templates/results.html:102 templates/survey_answers.html:61
+#: templates/surveys.html:52
+msgid "Näytä"
+msgstr ""
+
+#: templates/showrankings.html:9
+msgid "Hylkäykset"
+msgstr ""
+
+#: templates/survey.html:3 templates/surveys.html:16
+msgid "Kysely"
+msgstr ""
+
+#: templates/survey.html:37
+msgid "Raahaa oikean reunan listasta vähintään"
+msgstr ""
+
+#: templates/survey.html:37
+msgid "vaihtoehtoa vihreään laatikkoon."
+msgstr ""
+
+#: templates/survey.html:38
+msgid "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa."
+msgstr ""
+
+#: templates/survey.html:40
+msgid ""
+"Tärkeäksi merkityt ryhmät täytetään aina vähintään minimikokoon asti "
+"vastauksista riippumatta."
+msgstr ""
+
+#: templates/survey.html:44
+msgid "Haku"
+msgstr ""
+
+#: templates/survey.html:59 templates/survey.html:78 templates/survey.html:145
+msgid "Ryhmän maksimikoko"
+msgstr ""
+
+#: templates/survey.html:61 templates/survey.html:81 templates/survey.html:147
+msgid "Tärkeä"
+msgstr ""
+
+#: templates/survey.html:89 templates/survey_answers.html:52
+msgid "Perustelut"
+msgstr ""
+
+#: templates/survey.html:98
+msgid "Päivitä valinnat"
+msgstr ""
+
+#: templates/survey.html:101
+msgid "Lähetä valinnat"
+msgstr ""
+
+#: templates/survey.html:108
+msgid "Poista valinnat"
+msgstr ""
+
+#: templates/survey.html:120
+msgid "Peruuta"
+msgstr ""
+
+#: templates/survey.html:130
+msgid "Poista"
+msgstr ""
+
+#: templates/survey.html:132
+msgid "Oletko varma"
+msgstr ""
+
+#: templates/survey_answers.html:3
+msgid "Kyselyn vastaukset"
+msgstr ""
+
+#: templates/survey_answers.html:9
+msgid "(Ryhmänjako tallennettu)"
+msgstr ""
+
+#: templates/survey_answers.html:14 templates/survey_answers.html:34
+msgid "Palaa kyselylistaan"
+msgstr ""
+
+#: templates/survey_answers.html:18
+msgid "Suositeltu järjestys käsitellä tilanne"
+msgstr ""
+
+#: templates/survey_answers.html:19
+msgid "Poista ylimääräiset vastaukset"
+msgstr ""
+
+#: templates/survey_answers.html:19
+msgid ""
+"Poista kyselystä vastaajat, jotka ovat ilmoittaneet jättävänsä    "
+"kuitenkin osallistumatta, tai joiden ei kuuluisi muusta syystä olla "
+"mukana ryhmäjaossa. Jos esimerkiksi    olet itse kokeillut kyselyyn "
+"vastaamista, poista oma vastauksesi."
+msgstr ""
+
+#: templates/survey_answers.html:22
+msgid ""
+"Tarkastele ryhmiä, joihin vastaajat jaetaan. Lisää paikkoja niihin "
+"ryhmiin,    joihin se on mahdollista tehdä."
+msgstr ""
+
+#: templates/survey_answers.html:24 templates/survey_answers.html:28
+msgid "Jaa ryhmiin"
+msgstr ""
+
+#: templates/survey_answers.html:24
+msgid ""
+"Jos vastauksia on edelleen liikaa, voit silti tehdä ryhmäjaon. Algoritmi "
+"jakaa ryhmät mahdollisimman    hyvin opiskelijoiden toiveita vastaavaksi "
+"ja ryhmäjaon ulkopuolelle jäävät sijoitetaan ryhmään nimeltä 'Tyhjä'."
+msgstr ""
+
+#: templates/survey_answers.html:31
+msgid "Avaa kysely uudelleen"
+msgstr ""
+
+#: templates/survey_answers.html:38
+msgid "Sulje kysely"
+msgstr ""
+
+#: templates/survey_answers.html:43
+msgid "Hae yksittäistä vastausta kirjoittamalla tähän kenttään"
+msgstr ""
+
+#: templates/survey_answers.html:44
+msgid "vastaajan sähköposti tai osa siitä"
+msgstr ""
+
+#: templates/survey_answers.html:53
+msgid "Vastauksen poistaminen"
+msgstr ""
+
+#: templates/surveys.html:3 templates/surveys.html:10
+msgid "Aiemmat kyselyt"
+msgstr ""
+
+#: templates/surveys.html:17
+msgid "Kyselyn tila"
+msgstr ""
+
+#: templates/surveys.html:18
+msgid "Ryhmät luotu"
+msgstr ""
+
+#: templates/surveys.html:27 templates/surveys.html:48
+msgid "Suljettu"
+msgstr ""
+
+#: templates/surveys.html:27 templates/surveys.html:48
+msgid "Avoin"
+msgstr ""
+
+#: templates/surveys.html:30
+msgid "Tarkastele tuloksia"
+msgstr ""
+
+#: templates/surveys.html:31
+msgid "Kopioi kyselyn osoite leikepöydälle"
+msgstr ""
+
+#: templates/surveys.html:32
+msgid "Muokkaa kyselyä tai lisää siihen ylläpitäjä"
+msgstr ""
+
+#: templates/surveys.html:33
+msgid "Kopioi kysely"
+msgstr ""
+
+#: templates/surveys.html:34
+msgid "Poista kysely"
+msgstr ""
+
+#: templates/surveys.html:73
+msgid "\" Tarkastele tuloksia\""
+msgstr ""
+
+#: templates/surveys.html:74
+msgid "\" Muokkaa kyselyä tai lisää siihen ylläpitäjä\""
+msgstr ""
+
+#: templates/surveys.html:75
+msgid "\" Kopioi kysely\""
+msgstr ""
+
+#: tools/survey_result_helper.py:60 tools/survey_result_helper.py:162
+#: tools/survey_result_helper.py:173
 msgid "Hylätty"
 msgstr ""
 
-#: src/tools/survey_result_helper.py:69 src/tools/survey_result_helper.py:162
-#: src/tools/survey_result_helper.py:176
+#: tools/survey_result_helper.py:69 tools/survey_result_helper.py:162
+#: tools/survey_result_helper.py:176
 msgid "Ei järjestetty"
 msgstr ""
 
-#: src/tools/survey_result_helper.py:119 src/tools/survey_result_helper.py:177
+#: tools/survey_result_helper.py:119 tools/survey_result_helper.py:177
 msgid "Ei järjestettyyn"
 msgstr ""
 
-#: src/tools/survey_result_helper.py:121 src/tools/survey_result_helper.py:174
+#: tools/survey_result_helper.py:121 tools/survey_result_helper.py:174
 msgid "Hylättyyn"
 msgstr ""
 
-#: src/tools/survey_result_helper.py:175 src/tools/survey_result_helper.py:178
+#: tools/survey_result_helper.py:175 tools/survey_result_helper.py:178
 msgid " valintaan sijoitetut käyttäjät: "
 msgstr ""
 
-#: src/tools/survey_result_helper.py:180
+#: tools/survey_result_helper.py:180
 msgid ". valintaansa sijoitetut käyttäjät: "
 msgstr ""
+
