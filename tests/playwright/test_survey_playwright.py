@@ -143,7 +143,7 @@ def test_survey_more_info_works(setup_db, page: Page, create_survey_with_csv_fil
     page.get_by_text("Päiväkoti Floora").click()
     expect(page.get_by_text("Osoite: Syyriankatu 1").first).to_be_visible()
     page.get_by_text("Päiväkoti Toivo").click()
-    expect(page.get_by_text("Osoite: Apteekkarinraitti 3").first).to_be_hidden()
+    expect(page.get_by_text("Osoite: Apteekkarinraitti 3").first).to_be_visible()
 
 
 def test_answer_survey(setup_db, page: Page, create_survey_with_csv_file):

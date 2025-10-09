@@ -116,8 +116,8 @@ def frontpage() -> str:
         return render_template("index.html", surveys_created=surveys_created, exists=False, is_teacher=is_teacher)
     data = []
     for s in surveys:
-        survey_id = s[0]
-        surveyname = s[1]
+        survey_id = s.id
+        surveyname = s.surveyname
         survey_answers = survey_service.fetch_survey_responses(survey_id)
         participants = len(survey_answers)
         survey_ending_date = survey_service.get_survey_enddate(survey_id)
@@ -168,8 +168,8 @@ def expand_ranking(survey_id):
     email = request.get_json()
     user_id = user_service.get_user_id_by_email(email)
     user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
-    ranking_list = convert_to_list(user_ranking[3])
-    rejection_list = convert_to_list(user_ranking[4])
+    ranking_list = convert_to_list(user_ranking.ranking)
+    rejection_list = convert_to_list(user_ranking.rejections)
     choices = []
     for r in ranking_list:
         choice = survey_choices_service.get_survey_choice(r)
@@ -289,26 +289,26 @@ def surveys(survey_id):
 
     survey_all_info = {}
     for row in survey_choices_info:
-        if row[0] not in survey_all_info:
-            survey_all_info[row[0]] = {"infos": [{row[1]: row[2]}]}
-            survey_all_info[row[0]]["search"] = row[2]
+        if row.choice_id not in survey_all_info:
+            survey_all_info[row.choice_id] = {"infos": [{row.info_key: row.info_value}]}
+            survey_all_info[row.choice_id]["search"] = row.info_value
         else:
-            survey_all_info[row[0]]["infos"].append({row[1]: row[2]})
-            survey_all_info[row[0]]["search"] += " " + row[2]
+            survey_all_info[row.choice_id]["infos"].append({row.info_key: row.info_value})
+            survey_all_info[row.choice_id]["search"] += " " + row.info_value
 
     for row in survey_choices:
-        if row[0] not in survey_all_info:
-            survey_all_info[row[0]] = {"name": row[2]}
-            survey_all_info[row[0]]["slots"] = row[3]
-            survey_all_info[row[0]]["id"] = row[0]
-            survey_all_info[row[0]]["mandatory"] = row[6]
-            survey_all_info[row[0]]["search"] = row[2]
-            survey_all_info[row[0]]["infos"] = []
+        if row.id not in survey_all_info:
+            survey_all_info[row.id] = {"name": row.name}
+            survey_all_info[row.id]["slots"] = row.max_spaces
+            survey_all_info[row.id]["id"] = row.id
+            survey_all_info[row.id]["mandatory"] = row.mandatory
+            survey_all_info[row.id]["search"] = row.name
+            survey_all_info[row.id]["infos"] = []
         else:
-            survey_all_info[row[0]]["name"] = row[2]
-            survey_all_info[row[0]]["mandatory"] = row[6]
-            survey_all_info[row[0]]["slots"] = row[3]
-            survey_all_info[row[0]]["id"] = row[0]
+            survey_all_info[row.id]["name"] = row.name
+            survey_all_info[row.id]["mandatory"] = row.mandatory
+            survey_all_info[row.id]["slots"] = row.max_spaces
+            survey_all_info[row.id]["id"] = row.id
 
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     if user_survey_ranking:
@@ -317,13 +317,11 @@ def surveys(survey_id):
     # If the survey is closed, return a different page, where the student can view their answers.
     closed = survey_service.check_if_survey_closed(survey_id)
     if closed:
-        return render_template("closedsurvey.html", survey_name=survey[1])
+        return render_template("closedsurvey.html", survey_name=survey.surveyname)
 
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
-    temp = list(survey_all_info.items())
-    shuffle(temp)
-    shuffled_choices = [v for k, v in dict(temp).items()]
-
+    shuffled_choices = list(survey_all_info.values())
+    shuffle(shuffled_choices)
     return render_template("survey.html", choices=shuffled_choices, survey=survey, additional_info=additional_info)
 
 
@@ -338,9 +336,9 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
 
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     existing = "1"
-    user_rankings = user_survey_ranking[3]
-    rejections = user_survey_ranking[4]
-    reason = user_survey_ranking[5]
+    user_rankings = user_survey_ranking.ranking
+    rejections = user_survey_ranking.rejections
+    reason = user_survey_ranking.reason
 
     list_of_good_survey_choice_id = convert_to_list(user_rankings)
 
@@ -348,10 +346,10 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     for survey_choice_id in list_of_good_survey_choice_id:
         survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
         good_choice = {}
-        good_choice["name"] = survey_choice[2]
-        good_choice["id"] = survey_choice[0]
-        good_choice["slots"] = survey_choice[3]
-        good_choice["mandatory"] = survey_choice[6]
+        good_choice["name"] = survey_choice.name
+        good_choice["id"] = survey_choice.survey_id
+        good_choice["slots"] = survey_choice.max_spaces
+        good_choice["mandatory"] = survey_choice.mandatory
         good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
         if not survey_choice:
             continue
@@ -364,10 +362,10 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
         for survey_choice_id in list_of_bad_survey_choice_id:
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
             bad_choice = {}
-            bad_choice["name"] = survey_choice[2]
-            bad_choice["id"] = survey_choice[0]
-            bad_choice["slots"] = survey_choice[3]
-            bad_choice["mandatory"] = survey_choice[6]
+            bad_choice["name"] = survey_choice.name
+            bad_choice["id"] = survey_choice.survey_id
+            bad_choice["slots"] = survey_choice.max_spaces
+            bad_choice["mandatory"] = survey_choice.mandatory
             bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
             if not survey_choice:
                 continue
@@ -377,10 +375,10 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     neutral_choices = []
     for survey_choice in survey_choices:
         neutral_choice = {}
-        neutral_choice["name"] = survey_choice[2]
-        neutral_choice["id"] = survey_choice[0]
-        neutral_choice["slots"] = survey_choice[3]
-        neutral_choice["mandatory"] = survey_choice[6]
+        neutral_choice["name"] = survey_choice.name
+        neutral_choice["id"] = survey_choice.survey_id
+        neutral_choice["slots"] = survey_choice.max_spaces
+        neutral_choice["mandatory"] = survey_choice.mandatory
         neutral_choice["search"] = survey_all_info[int(survey_choice[0])]["search"]
         neutral_choices.append(neutral_choice)
 
@@ -391,8 +389,8 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
             "closedsurvey.html",
             bad_survey_choices=bad_survey_choices,
             good_survey_choices=good_survey_choices,
-            survey_name=survey[1],
-            min_choices=survey[2],
+            survey_name=survey.surveyname,
+            min_choices=survey.min_choices,
         )
 
     return render_template(

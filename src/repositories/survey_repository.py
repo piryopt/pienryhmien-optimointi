@@ -328,21 +328,6 @@ class SurveyRepository:
             print(e)
             return False
 
-    def get_all_active_survey_admin_data(self):
-        """
-        Get all relevant survey data for the admin page
-        """
-        try:
-            sql = "SELECT id, surveyname, min_choices, time_end, allowed_denied_choices, allow_search_visibility FROM surveys WHERE (closed=False AND deleted=False)"
-            result = db.session.execute(text(sql))
-            surveys = result.fetchall()
-            if not surveys:
-                return False
-            return surveys
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return False
-
     def save_survey_edit(self, survey_id, surveyname, survey_description, time_end):
         """
         SQL code for updating the values of a survey
