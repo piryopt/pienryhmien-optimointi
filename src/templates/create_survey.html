@@ -2,13 +2,13 @@
 %} {% block head %}
 
 <script>
-    var headerLocale = {
-        'name': "{{ _('Nimi') }}",
-        'max_spaces': "{{ _('Enimmäispaikat') }}",
-        'min_size': "{{ _('Ryhmän minimikoko') }}",
-        'column': "{{ _('Sarakkeen') }}",
-        'values_must_be': "{{ _('arvojen tulee olla')}}",
-    };
+  var headerLocale = {
+    name: "{{ _('Nimi') }}",
+    max_spaces: "{{ _('Enimmäispaikat') }}",
+    min_size: "{{ _('Ryhmän minimikoko') }}",
+    column: "{{ _('Sarakkeen') }}",
+    values_must_be: "{{ _('arvojen tulee olla')}}",
+  };
 </script>
 
 <script src="{{ url_for('static', filename='js/create_survey.js') }}"></script>
@@ -259,10 +259,10 @@
     <h3>{{ _('Näytetäänkö vastaajalle hakupalkki?') }}</h3>
     <p>
       {{ _("Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään \
-      vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia \
-      kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja, \
-      ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle \
-      tai pienelle kyselylle.") }}
+      vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia
+      \ kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja, \ ja
+      vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle \ tai pienelle
+      kyselylle.") }}
     </p>
     <input
       type="radio"
@@ -318,8 +318,8 @@
   <p>
     {{ _("Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa \
     mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko. \
-    Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen \
-    voit luoda painamalla '+ Lisää tietokenttä'.") }}
+    Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen
+    \ voit luoda painamalla '+ Lisää tietokenttä'.") }}
   </p>
   <a href="/csv-instructions" class="text-muted">{{ _('CSV-ohje') }}</a><br />
   <input
@@ -339,9 +339,14 @@
     {{ _("Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa \
     opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *.") }}
   </p>
-  <p>{{ _('Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän mimimikoko ei voi olla 0.') }}</p>
   <p>
-    {{ _('HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat, että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella oleva laatikko.') }}
+    {{ _('Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän
+    mimimikoko ei voi olla 0.') }}
+  </p>
+  <p>
+    {{ _('HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat,
+    että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella
+    oleva laatikko.') }}
   </p>
   <table class="table table-dark table-striped table-hover choice-table-main">
     <thead class="">
@@ -355,7 +360,10 @@
         {% endfor %} {% endif %} {% endif %}
       </tr>
       <tr id="choice-table-headers">
-        <th><input type="checkbox" id="select-all-choices"></th>
+        <th>
+          <label>Pakota minimikoko</label>
+          <input type="checkbox" id="select-all-choices" />
+        </th>
         <th
           class="constant-header"
           col-validation-regex=".{5,}"
@@ -393,7 +401,10 @@
       survey is not none %} {% if survey.choices|length > 0 %} {% for choice in
       survey.choices %}
       <tr>
-        <td><input type="checkbox" name="choice-checkbox" {{ 'checked' if choice.mandatory }}></td>
+        <td>
+          <input type="checkbox" name="choice-checkbox" {{ 'checked' if
+          choice.mandatory }}>
+        </td>
         <td>{{ choice.name }}</td>
         <td>{{ choice.seats }}</td>
         <td>{{ choice.min_size }}</td>
@@ -407,7 +418,7 @@
       {% endfor %} {# If survey parameter is not set, create empty row with
       columns for constant values #} {% endif %} {% else %}
       <tr>
-        <td><input type="checkbox" name="choice-checkbox"></td>
+        <td><input type="checkbox" name="choice-checkbox" /></td>
         <td class="empty" tabindex="0">tyhjä</td>
         <td class="empty" tabindex="0">tyhjä</td>
         <td class="empty" tabindex="0">tyhjä</td>
