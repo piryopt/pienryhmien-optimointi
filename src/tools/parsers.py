@@ -73,10 +73,7 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
                 choice_id = survey_choices_repository.create_new_survey_choice(survey_id, name, spaces, min_size, mandatory)
                 continue
 
-            hidden = False
-
-            if pair[-1] == "*":
-                hidden = True
+            hidden = pair[-1] == "*"
 
             survey_choices_repository.create_new_choice_info(choice_id, pair, choice[pair], hidden)
             count += 1
@@ -89,38 +86,15 @@ def parser_existing_survey_to_dict(survey_id):
     Parses existing survey, its choices and their infos into a dict
     RETURNS dictionary of survey data
     """
-    survey_dict = {}
-
     survey = survey_repository.get_survey(survey_id)
-
-    survey_dict["id"] = survey[0]
-    survey_dict["surveyname"] = survey[1]
-    survey_dict["min_choices"] = survey[2]
-    survey_dict["closed"] = survey[3]
-    survey_dict["results_saved"] = survey[4]
-    survey_dict["survey_description"] = survey[5]
-    survey_dict["time_end"] = survey[6]
-    survey_dict["allow_search_visibility"] = survey[8]
+    survey_dict = dict(survey._mapping)
 
     survey_choices = survey_choices_repository.find_survey_choices(survey_id)
+
     survey_dict["choices"] = []
-
-    index = 0
     for row in survey_choices:
-        survey_dict["choices"].append({})
-        survey_dict["choices"][index]["mandatory"] = row.mandatory
-        survey_dict["choices"][index]["id"] = row.id
-        survey_dict["choices"][index]["name"] = row.name
-        survey_dict["choices"][index]["seats"] = row.max_spaces
-        survey_dict["choices"][index]["min_size"] = row.min_size
-
-        additional_infos = survey_choices_repository.get_choice_additional_infos(row[0])
-
-        for info in additional_infos:
-            print(info)
-            survey_dict["choices"][index][info[0]] = info[1]
-
-        index += 1
+        additional_infos = survey_choices_repository.get_choice_additional_infos(row.id)
+        survey_dict["choices"].append(dict(row._mapping) | dict(additional_infos))
 
     return survey_dict
 
