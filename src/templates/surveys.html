@@ -23,17 +23,17 @@
       <tbody>
         <tr>
           {% for row in active_surveys %}
-          <td><img src="{{ url_for('static', filename='images/insert_drive_file_white_36dp.svg') }}"width="20" height="20"><a href="/surveys/{{ row[0] }}" class="surveys_link"> {{ row[1] }}</a></td>       <!--survey name--> 
-          <td>{% if row[2] %}<p style="color:orangered"> {{ _('Suljettu') }} </p>{% else %} <p style="color:green"> {{ _('Avoin') }} </p> {% endif %}</td>
-          <td><p>{% if row[3] %} {{ _('Kyllä') }} {% else %} {{ _('Ei') }} {% endif %}</p></td>
+          <td><img src="{{ url_for('static', filename='images/insert_drive_file_white_36dp.svg') }}"width="20" height="20"><a href="/surveys/{{ row.id }}" class="surveys_link"> {{ row.surveyname }}</a></td>       <!--survey name--> 
+          <td>{% if row.closed %}<p style="color:orangered"> {{ _('Suljettu') }} </p>{% else %} <p style="color:green"> {{ _('Avoin') }} </p> {% endif %}</td>
+          <td><p>{% if row.results_saved %} {{ _('Kyllä') }} {% else %} {{ _('Ei') }} {% endif %}</p></td>
           <td>
-            <a href="/surveys/{{ row[0] }}/answers" class="surveys_link"><img src="{{ url_for('static', filename='images/manage_search_white_36dp.svg') }}" width="20" height="20"> {{ _('Tarkastele tuloksia') }}</a><br>
-            <a href="#" onclick="copyURL('{{ row[0] }}')" class="surveys_link"><img src="{{ url_for('static', filename='images/content_copy_white_36dp.svg') }}" width="20" height="20"> {{ _('Kopioi kyselyn osoite leikepöydälle') }}</button><br>
-            <a href="/surveys/{{ row[0] }}/edit" class="surveys_link"><img src="{{ url_for('static', filename='images/edit_white_36dp.svg') }}" width="20" height="20"> {{ _('Muokkaa kyselyä tai lisää siihen ylläpitäjä') }}</a><br>
-            <a href="/surveys/create?fromTemplate={{ row[0] }}" class="surveys_link"><img src="{{ url_for('static', filename='images/folder_copy_white_36dp.svg') }}" width="20" height="20"> {{ _('Kopioi kysely') }}</a><br>
-            <a href="/surveys/{{ row[0] }}/delete" onclick="return confirm('Haluatko varmasti poistaa kyselyn?')" class="surveys_link"><img src="{{ url_for('static', filename='images/delete_white_36dp.svg') }}" width="20" height="20"> {{ _('Poista kysely') }}</a>
+            <a href="/surveys/{{ row.id }}/answers" class="surveys_link"><img src="{{ url_for('static', filename='images/manage_search_white_36dp.svg') }}" width="20" height="20"> {{ _('Tarkastele tuloksia') }}</a><br>
+            <a href="#" onclick="copyURL('{{ row.id }}')" class="surveys_link"><img src="{{ url_for('static', filename='images/content_copy_white_36dp.svg') }}" width="20" height="20"> {{ _('Kopioi kyselyn osoite leikepöydälle') }}</button><br>
+            <a href="/surveys/{{ row.id }}/edit" class="surveys_link"><img src="{{ url_for('static', filename='images/edit_white_36dp.svg') }}" width="20" height="20"> {{ _('Muokkaa kyselyä tai lisää siihen ylläpitäjä') }}</a><br>
+            <a href="/surveys/create?fromTemplate={{ row.id }}" class="surveys_link"><img src="{{ url_for('static', filename='images/folder_copy_white_36dp.svg') }}" width="20" height="20"> {{ _('Kopioi kysely') }}</a><br>
+            <a href="/surveys/{{ row.id }}/delete" onclick="return confirm('Haluatko varmasti poistaa kyselyn?')" class="surveys_link"><img src="{{ url_for('static', filename='images/delete_white_36dp.svg') }}" width="20" height="20"> {{ _('Poista kysely') }}</a>
           </td>
-          <td>{{ format_datestring(row[4]) }}</td>
+          <td>{{ format_datestring(row.time_end) }}</td>
 
         </tr>
         {% endfor %}
@@ -45,14 +45,14 @@
           <tr>
             {% for row in closed_surveys %}
             <td><img src="{{ url_for('static', filename='images/insert_page_break_white_36dp.svg') }}" width="20" height="20"><a href="/surveys/{{ row[0] }}" class="surveys_link"> {{ row[1] }}</a></td>       <!--survey name--> 
-            <td>{% if row[2] %}<p style="color:orangered"> {{ _('Suljettu') }} </p>{% else %} <p style="color:green"> {{ _('Avoin') }} </p> {% endif %}</td>
-            <td>{% if row[3] %}<p style="color:green">{{ _('Kyllä') }}</p>{% else %}<p>{{ _('Ei') }}</p>{% endif %}</td>
+            <td>{% if row.closed %}<p style="color:orangered"> {{ _('Suljettu') }} </p>{% else %} <p style="color:green"> {{ _('Avoin') }} </p> {% endif %}</td>
+            <td>{% if row.results_saved %}<p style="color:green">{{ _('Kyllä') }}</p>{% else %}<p>{{ _('Ei') }}</p>{% endif %}</td>
               <td>
-                <div id="closed_more_info_container_{{ row[0] }}">
-                  <label style="cursor: pointer;" onclick="showClosedSurveysOperations('{{ row[0] }}')"  class="surveys_link"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"> {{ _('Näytä') }}</label>
+                <div id="closed_more_info_container_{{ row.id }}">
+                  <label style="cursor: pointer;" onclick="showClosedSurveysOperations('{{ row.id }}')"  class="surveys_link"><img src="{{ url_for('static', filename='images/menu_white_36dp.svg') }}" alt="" width="20" height="20" class="d-inline-block align-text-top"> {{ _('Näytä') }}</label>
                 </div>
               </td>
-            <td>{{ format_datestring(row[4]) }}</td>
+            <td>{{ format_datestring(row.time_end) }}</td>
   
           </tr>
           {% endfor %}
