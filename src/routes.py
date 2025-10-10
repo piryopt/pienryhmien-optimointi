@@ -187,10 +187,7 @@ def new_survey_form(survey=None):
             return redirect("/")
         survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in 
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
+            column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
         ]
     return render_template("create_survey.html", survey=survey)
 
@@ -312,6 +309,7 @@ def surveys(survey_id):
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
     shuffled_choices = list(survey_all_info.values())
     shuffle(shuffled_choices)
+    print(shuffled_choices)
     return render_template("survey.html", choices=shuffled_choices, survey=survey, additional_info=additional_info)
 
 
@@ -337,7 +335,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
         survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
         good_choice = {}
         good_choice["name"] = survey_choice.name
-        good_choice["id"] = survey_choice.survey_id
+        good_choice["id"] = survey_choice.id
         good_choice["slots"] = survey_choice.max_spaces
         good_choice["mandatory"] = survey_choice.mandatory
         good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
@@ -353,7 +351,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
             bad_choice = {}
             bad_choice["name"] = survey_choice.name
-            bad_choice["id"] = survey_choice.survey_id
+            bad_choice["id"] = survey_choice.id
             bad_choice["slots"] = survey_choice.max_spaces
             bad_choice["mandatory"] = survey_choice.mandatory
             bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
@@ -366,7 +364,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     for survey_choice in survey_choices:
         neutral_choice = {}
         neutral_choice["name"] = survey_choice.name
-        neutral_choice["id"] = survey_choice.survey_id
+        neutral_choice["id"] = survey_choice.id
         neutral_choice["slots"] = survey_choice.max_spaces
         neutral_choice["mandatory"] = survey_choice.mandatory
         neutral_choice["search"] = survey_all_info[int(survey_choice[0])]["search"]
@@ -436,11 +434,8 @@ def edit_survey_form(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in 
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
-        ]
+        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+    ]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -516,11 +511,8 @@ def edit_group_sizes(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in 
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
-        ]
+        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+    ]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template(
