@@ -31,12 +31,12 @@
     {% if exists %}
     </br><label>{{ _('Käynnissä olevat kyselyt') }}</label></br></br>
     {% for d in data %}
-    <a href="/surveys/{{ d[0] }}/answers" class="list-group-item list-group-item-action flex-column align-items-start" >
+    <a href="/surveys/{{ d.id }}/answers" class="list-group-item list-group-item-action flex-column align-items-start" >
       <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1"><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ d[1] }}</h5>
-        <small class="text-muted">{{ _('Vastausaika loppuu') }} {{ format_datestring(d[3]) }}</small>
+        <h5 class="mb-1"><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ d.surveyname }}</h5>
+        <small class="text-muted">{{ _('Vastausaika loppuu') }} {{ format_datestring(d.time_end) }}</small>
       </div>
-      <small class="text-muted">{{ _('Vastaukset') }}: {{ d[2] }}</small>
+      <small class="text-muted">{{ _('Vastaukset') }}: {{ d.response_count }}</small>
     </a></br>
     {% endfor %}
     {% endif %}

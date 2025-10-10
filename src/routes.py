@@ -106,23 +106,12 @@ def frontpage() -> str:
     user_id = session.get("user_id", 0)
     if user_id == 0:
         return render_template("index.html")
-    # is_teacher = user_service.check_if_teacher(user_id)
     surveys_created = survey_service.count_surveys_created(user_id)
-    # If 0 surveys created, return the base home page.
-    # if surveys_created == 0:
-    #    return render_template("index.html", surveys_created=0, exists=False)
-    surveys = survey_service.get_active_surveys_and_response_count(user_id)
-    if not surveys:
+    active_surveys = survey_service.get_active_surveys_and_response_count(user_id)
+    if not active_surveys:
         return render_template("index.html", surveys_created=surveys_created, exists=False)
-    data = []
-    for s in surveys:
-        survey_id = s.id
-        surveyname = s.surveyname
-        survey_answers = survey_service.fetch_survey_responses(survey_id)
-        participants = len(survey_answers)
-        # survey_ending_date = survey_service.get_survey_enddate(survey_id)
-        data.append([survey_id, surveyname, participants, s.time_end])
-    return render_template("index.html", surveys_created=surveys_created, exists=True, data=data)
+
+    return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
 
 """

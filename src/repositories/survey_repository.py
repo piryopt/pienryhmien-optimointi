@@ -283,7 +283,7 @@ class SurveyRepository:
     def fetch_survey_responses(self, survey_id):
         """Returns a list of answers submitted to a certain survey"""
         try:
-            sql = text("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " + "WHERE survey_id=:survey_id AND deleted IS FALSE")
+            sql = text("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings WHERE survey_id=:survey_id AND deleted IS FALSE")
             result = db.session.execute(sql, {"survey_id": survey_id})
             responses = result.fetchall()
             if not responses:
