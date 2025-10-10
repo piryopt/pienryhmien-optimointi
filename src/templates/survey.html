@@ -25,21 +25,21 @@
 </script>
 <div class="row">
     <h5><img src="{{ url_for('static', filename='images/assignment_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ survey[1] }}</h5>
-    <p>{{ _('Vastausaika päättyy') }} {{ format_datestring(survey[6]) }}</p></br></br>
-    {% if survey[5] %}<p>{{ survey[5] }}</p></br></br>{% endif %}
-    <input type="hidden" id="max_bad_choices" value="{{ survey[7] }}">
-    <input type="hidden" id="min_choices" value="{{ survey[2] }}">
+    <p>{{ _('Vastausaika päättyy') }} {{ format_datestring(survey.time_end) }}</p></br></br>
+    {% if survey.survey_description %}<p>{{ survey.survey_description }}</p></br></br>{% endif %}
+    <input type="hidden" id="max_bad_choices" value="{{ survey.allowed_denied_choices }}">
+    <input type="hidden" id="min_choices" value="{{ survey.min_choices }}">
     <input type="hidden" id="additional_info" value="{{ additional_info }}">
     <div class="col">
         <div class="row">
             <div class="col-sm">
                 <p>
-                    <i>{{ _('Raahaa oikean reunan listasta vähintään') }} {{ survey[2] }} {{ _('vaihtoehtoa vihreään laatikkoon.') }}.</i>
+                    <i>{{ _('Raahaa oikean reunan listasta vähintään') }} {{ survey.min_choices }} {{ _('vaihtoehtoa vihreään laatikkoon.') }}.</i>
                     {% if additional_info %}<i style="color: #0bdb2ed6;">{{ _('Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.') }}.</i>{% endif %}
                 </p>
                 <p><i>{{ _('Tärkeäksi merkityt ryhmät täytetään aina vähintään minimikokoon asti vastauksista riippumatta.') }}</i></p>
             </div>
-            {% if survey[8] %}
+            {% if survey.allow_search_visibility %}
             <div class="col-sm">
                 <label>{{ _('Haku') }}</label></br>
                 <input id="searchChoices" type="text"></br></br>
@@ -60,13 +60,13 @@
                             {% if group.mandatory %}
                               <small class="text-danger">{{ _('Tärkeä') }}</small>
                             {% endif %}
-                            <div id="info-container {{group.id}}">
+                            <div id="info-container {{ group.id }}">
                             </div>
                         </li>
                         {% endfor %}
                     </ol>
                 </div>
-                {% if survey[7] != 0 %}
+                {% if survey.allowed_denied_choices != 0 %}
                 <div class="col-sm">
                     <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
                         {% for group in bad_survey_choices %}
@@ -80,7 +80,7 @@
                             {% if group.mandatory %}
                               <small class="text-danger">{{ _('Tärkeä') }}</small>
                             {% endif %}
-                            <div id="info-container {{group.id}}">
+                            <div id="info-container {{ group.id }}">
                             </div>
                         </li>
                         {% endfor %}
@@ -101,7 +101,7 @@
                                 <button type="submit" class="btn btn-success" onclick="submit(1)" id="submitDoesntExistButton">{{ _('Lähetä valinnat') }}</button>
                             </div>
                         </div>
-                        <input type="hidden" id="survey_id" value="{{ survey[0] }}">
+                        <input type="hidden" id="survey_id" value="{{ survey.id }}">
                         <input type="hidden" id="existing" value="{{ existing }}">
                         <div class="col-sm">
                             <div id="deleteContainer" style="display: none;">
@@ -146,7 +146,7 @@
                         {% if group.mandatory %}
                           <small class="text-danger">{{ _('Tärkeä') }}</small>
                         {% endif %}
-                        <div id="info-container {{group.id}}">
+                        <div id="info-container {{ group.id }}">
                         </div>
                     </li>
                     {% endfor %}
