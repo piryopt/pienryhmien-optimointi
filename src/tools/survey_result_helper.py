@@ -10,158 +10,6 @@ import src.algorithms.weights as w
 import copy
 
 
-def convert_choices_groups(survey_choices):
-    """
-    Converts database data into the class "Group", which is used in the sorting algorithm
-
-    args:
-        survey_choices: The list of choices for a survey
-    """
-    groups = {}
-    for choice in survey_choices:
-        groups[choice[0]] = Group(choice[0], choice[2], choice[3], choice[5], choice[6])
-    return groups
-
-
-def convert_users_students(user_rankings):
-    """
-    Converts database data into the class "Student", which is used in the sorting algorithm
-
-    args:
-        user_rankings: The list of user rankings for a survey
-    """
-    students = {}
-    for user_ranking in user_rankings:
-        user_id = user_ranking[0]
-        name = user_service.get_name(user_id)
-        ranking = convert_to_list(user_ranking[1])
-        int_ranking = [int(i) for i in ranking]
-        int_rejections = []
-        if user_ranking[2]:
-            if len(user_ranking[2]) > 0:
-                rejections = convert_to_list(user_ranking[2])
-                int_rejections = [int(i) for i in rejections]
-        students[user_id] = Student(user_id, name, int_ranking, int_rejections)
-    return students
-
-
-def get_happiness(survey_choice_id, user_ranking, user_rejections):
-    """
-    A function for getting the ordinal number of the survey_choice which the student ended in. E.G rankings = "2,4,5,1,3" and they
-    got chosen for 4, the function returns 2.
-
-    args:
-        survey_choice_id: The id of the survey choice in which the student was selected into
-        user_ranking: The ranking of the user for the survey
-    """
-    rejections_list = convert_to_int_list(user_rejections)
-
-    if survey_choice_id in rejections_list:
-        return gettext("Hylätty")
-
-    ranking_list = convert_to_list(user_ranking)
-    happiness = 0
-    for choice_id in ranking_list:
-        happiness += 1
-        if survey_choice_id == int(choice_id):
-            return happiness
-
-    return gettext("Ei järjestetty")
-
-
-def convert_date(data):
-    """
-    Convert a datetime object to a dd.mm.yyyy string
-
-    args:
-        data: The datetime object
-    """
-    day = check_if_zero_needed(str(data.day))
-    month = check_if_zero_needed(str(data.month))
-    year = str(data.year)
-    date = day + "." + month + "." + year
-    return date
-
-
-def convert_time(data):
-    """
-    Convert a datetime object to a hh:mm string
-
-    args:
-        data: The datetime object
-    """
-    time_hour = check_if_zero_needed(str(data.hour))
-    time_minute = check_if_zero_needed(str(data.minute))
-    time = time_hour + ":" + time_minute
-    return time
-
-
-def check_if_zero_needed(unit):
-    """
-    Add a 0 to the start of the unit if it's length is 1.
-
-    args:
-        unit: hour/minute/day/month of a datetime object
-    """
-    if len(unit) == 1:
-        unit = "0" + unit
-    return unit
-
-
-def happiness_sort_key(x):
-    """
-    A sort key function for sorting happiness results so that integers come first
-    in ascending order, then "Ei järjestettyyn", then "Hylättyyn".
-    """
-
-    value = x[0]
-    if isinstance(value, int):
-        return (0, value)
-    elif value == gettext("Ei järjestettyyn"):
-        return (1, 0)
-    elif value == gettext("Hylättyyn"):
-        return (2, 0)
-    else:
-        # Any other string (shouldn't happen)
-        return (3, 0)
-
-
-def get_additional_infos(survey_choices):
-    """
-    Create a dict which contains choice's additional info as list
-
-    args:
-        survey_choices: The choices of the survey in question
-    """
-    additional_infos = {}
-    for row in survey_choices:
-        additional_infos[str(row[0])] = []
-
-        cinfos = survey_choices_service.get_choice_additional_infos(row[0])
-        for i in cinfos:
-            additional_infos[str(row[0])].append(i[1])
-
-    return additional_infos, cinfos
-
-
-def dropped_group_names(dropped_groups_id):
-    """
-    Get the names of dropped groups by their ids
-
-    args:
-        dropped_groups_id: A list of ids of dropped groups
-
-    returns:
-        A list of names of dropped groups
-    """
-    dropped_groups = []
-    for group_id in dropped_groups_id:
-        group = survey_choices_service.get_survey_choice(group_id)
-        dropped_groups.append(group.name)
-
-    return dropped_groups
-
-
 def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
     """
     Run the hungarian algorthim until their is no violation for the min_size portion
@@ -202,32 +50,6 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
 
     output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, cinfos, additional_infos)
     return output_data
-
-
-def get_happiness_data(output_data, survey_id):
-    """
-    Extract happiness data from the output data.
-
-    args:
-        output_data: The output data from the hungarian algorithm along with happiness average, happiness results, dropped groups and additional infos
-    """
-    happiness_results = {}
-    happiness_avg = 0
-    for results in output_data:
-        user_id = results[0][0]
-        choice_id = results[2][0]
-        ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
-        rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
-        happiness = get_happiness(choice_id, ranking, rejections)
-        if happiness != gettext("Hylätty") and happiness != gettext("Ei järjestetty"):
-            happiness_avg += happiness
-        results.append(happiness)
-        if happiness not in happiness_results:
-            happiness_results[happiness] = 1
-        else:
-            happiness_results[happiness] += 1
-
-    return happiness_avg, happiness_results
 
 
 def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id):
@@ -298,26 +120,6 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
             return output_data
 
 
-def rank(students_dict, student_id, target_group_id):
-    """
-    args:
-        students_dict: A dict containing users which have been converted into students entities.
-        student_id: The id of the student whose ranking we want to check
-        target_group_id: The id of the group whose ranking we want to check
-
-    Get the ranking index of a target group for a specific student.
-
-    returns: The index of the target group in the student's selections or 999 if not found
-    """
-    selections = students_dict[student_id].selections
-    rejections = students_dict[student_id].rejections
-
-    if target_group_id in rejections:
-        return 1000
-
-    return selections.index(target_group_id) if target_group_id in selections else 999
-
-
 def get_seats(groups_dict):
     """
     Get the amount of available seats in the remaining groups
@@ -363,7 +165,6 @@ def get_candidates(students_dict, survey_choice_id, output_data, group_sizes, ne
     returns:
         A list of tuples (index in output_data, student_id, old_group_id) representing candidates for reassignment
     """
-
     # Collect candidates, Phase 1
     candidates = []
     students_in_mandatory_groups = []
@@ -401,6 +202,43 @@ def get_candidates(students_dict, survey_choice_id, output_data, group_sizes, ne
     return candidates
 
 
+def rank(students_dict, student_id, target_group_id):
+    """
+    args:
+        students_dict: A dict containing users which have been converted into students entities.
+        student_id: The id of the student whose ranking we want to check
+        target_group_id: The id of the group whose ranking we want to check
+
+    Get the ranking index of a target group for a specific student.
+
+    returns: The index of the target group in the student's selections or 999 if not found
+    """
+    selections = students_dict[student_id].selections
+    rejections = students_dict[student_id].rejections
+
+    if target_group_id in rejections:
+        return 1000
+
+    return selections.index(target_group_id) if target_group_id in selections else 999
+
+
+def drop_choice(groups_dict, students_dict, dropped_choice_id):
+    """
+    Remove a choice from all relevant lists and dictionaries.
+
+    args:
+        groups_dict: A dict containing survey choices which have been converted into group entities.
+        students_dict: A dict containing users which have been converted into students entities.
+        dropped_choice_id: The id of the survey choice to be removed
+    """
+    groups_dict.pop(dropped_choice_id)
+    for user_id, student in students_dict.items():
+        if dropped_choice_id in student.selections:
+            student.selections.remove(dropped_choice_id)
+        if dropped_choice_id in student.rejections:
+            student.rejections.remove(dropped_choice_id)
+
+
 def reassign_students(target_group_id, candidates, amount, students_dict, groups_dict, output_data, group_sizes):
     """
     Reassign students to a group
@@ -424,18 +262,179 @@ def reassign_students(target_group_id, candidates, amount, students_dict, groups
         students_dict[student_id].selections = [target_group_id]
 
 
-def drop_choice(groups_dict, students_dict, dropped_choice_id):
+def get_additional_infos(survey_choices):
     """
-    Remove a choice from all relevant lists and dictionaries.
+    Create a dict which contains choice's additional info as list
 
     args:
-        groups_dict: A dict containing survey choices which have been converted into group entities.
-        students_dict: A dict containing users which have been converted into students entities.
-        dropped_choice_id: The id of the survey choice to be removed
+        survey_choices: The choices of the survey in question
     """
-    groups_dict.pop(dropped_choice_id)
-    for user_id, student in students_dict.items():
-        if dropped_choice_id in student.selections:
-            student.selections.remove(dropped_choice_id)
-        if dropped_choice_id in student.rejections:
-            student.rejections.remove(dropped_choice_id)
+    additional_infos = {}
+    for row in survey_choices:
+        additional_infos[str(row[0])] = []
+
+        cinfos = survey_choices_service.get_choice_additional_infos(row[0])
+        for i in cinfos:
+            additional_infos[str(row[0])].append(i[1])
+
+    return additional_infos, cinfos
+
+
+def get_happiness_data(output_data, survey_id):
+    """
+    Extract happiness data from the output data.
+
+    args:
+        output_data: The output data from the hungarian algorithm along with happiness average, happiness results, dropped groups and additional infos
+    """
+    happiness_results = {}
+    happiness_avg = 0
+    for results in output_data:
+        user_id = results[0][0]
+        choice_id = results[2][0]
+        ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
+        rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
+        happiness = get_happiness(choice_id, ranking, rejections)
+        if happiness != gettext("Hylätty") and happiness != gettext("Ei järjestetty"):
+            happiness_avg += happiness
+        results.append(happiness)
+        if happiness not in happiness_results:
+            happiness_results[happiness] = 1
+        else:
+            happiness_results[happiness] += 1
+
+    return happiness_avg, happiness_results
+
+
+def get_happiness(survey_choice_id, user_ranking, user_rejections):
+    """
+    A function for getting the ordinal number of the survey_choice which the student ended in. E.G rankings = "2,4,5,1,3" and they
+    got chosen for 4, the function returns 2.
+
+    args:
+        survey_choice_id: The id of the survey choice in which the student was selected into
+        user_ranking: The ranking of the user for the survey
+    """
+    rejections_list = convert_to_int_list(user_rejections)
+
+    if survey_choice_id in rejections_list:
+        return gettext("Hylätty")
+
+    ranking_list = convert_to_list(user_ranking)
+    happiness = 0
+    for choice_id in ranking_list:
+        happiness += 1
+        if survey_choice_id == int(choice_id):
+            return happiness
+
+    return gettext("Ei järjestetty")
+
+
+def happiness_sort_key(x):
+    """
+    A sort key function for sorting happiness results so that integers come first
+    in ascending order, then "Ei järjestettyyn", then "Hylättyyn".
+    """
+
+    value = x[0]
+    if isinstance(value, int):
+        return (0, value)
+    elif value == gettext("Ei järjestettyyn"):
+        return (1, 0)
+    elif value == gettext("Hylättyyn"):
+        return (2, 0)
+    else:
+        # Any other string (shouldn't happen)
+        return (3, 0)
+
+
+def dropped_group_names(dropped_groups_id):
+    """
+    Get the names of dropped groups by their ids
+
+    args:
+        dropped_groups_id: A list of ids of dropped groups
+
+    returns:
+        A list of names of dropped groups
+    """
+    dropped_groups = []
+    for group_id in dropped_groups_id:
+        group = survey_choices_service.get_survey_choice(group_id)
+        dropped_groups.append(group.name)
+
+    return dropped_groups
+
+
+def convert_choices_groups(survey_choices):
+    """
+    Converts database data into the class "Group", which is used in the sorting algorithm
+
+    args:
+        survey_choices: The list of choices for a survey
+    """
+    groups = {}
+    for choice in survey_choices:
+        groups[choice[0]] = Group(choice[0], choice[2], choice[3], choice[5], choice[6])
+    return groups
+
+
+def convert_users_students(user_rankings):
+    """
+    Converts database data into the class "Student", which is used in the sorting algorithm
+
+    args:
+        user_rankings: The list of user rankings for a survey
+    """
+    students = {}
+    for user_ranking in user_rankings:
+        user_id = user_ranking[0]
+        name = user_service.get_name(user_id)
+        ranking = convert_to_list(user_ranking[1])
+        int_ranking = [int(i) for i in ranking]
+        int_rejections = []
+        if user_ranking[2]:
+            if len(user_ranking[2]) > 0:
+                rejections = convert_to_list(user_ranking[2])
+                int_rejections = [int(i) for i in rejections]
+        students[user_id] = Student(user_id, name, int_ranking, int_rejections)
+    return students
+
+
+def convert_date(data):
+    """
+    Convert a datetime object to a dd.mm.yyyy string
+
+    args:
+        data: The datetime object
+    """
+    day = check_if_zero_needed(str(data.day))
+    month = check_if_zero_needed(str(data.month))
+    year = str(data.year)
+    date = day + "." + month + "." + year
+    return date
+
+
+def convert_time(data):
+    """
+    Convert a datetime object to a hh:mm string
+
+    args:
+        data: The datetime object
+    """
+    time_hour = check_if_zero_needed(str(data.hour))
+    time_minute = check_if_zero_needed(str(data.minute))
+    time = time_hour + ":" + time_minute
+    return time
+
+
+def check_if_zero_needed(unit):
+    """
+    Add a 0 to the start of the unit if it's length is 1.
+
+    args:
+        unit: hour/minute/day/month of a datetime object
+    """
+    if len(unit) == 1:
+        unit = "0" + unit
+    return unit
