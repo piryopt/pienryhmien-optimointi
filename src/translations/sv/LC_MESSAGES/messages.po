@@ -369,7 +369,6 @@ msgid "Näytetäänkö vastaajalle hakupalkki?"
 msgstr "Visas sökfältet för respondenten?"
 
 #: templates/create_survey.html:261
-#, fuzzy
 msgid ""
 "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään       "
 "vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia"
@@ -391,7 +390,6 @@ msgid "Priorisoitavat ryhmät"
 msgstr "Prioriterade grupper"
 
 #: templates/create_survey.html:319
-#, fuzzy
 msgid ""
 "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa     "
 "mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko."
@@ -422,7 +420,6 @@ msgstr ""
 "kolumnnamnet."
 
 #: templates/create_survey.html:343
-#, fuzzy
 msgid ""
 "Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän\n"
 "    mimimikoko ei voi olla 0."
@@ -431,7 +428,6 @@ msgstr ""
 "en obligatorisk grupp kan inte vara 0."
 
 #: templates/create_survey.html:347
-#, fuzzy
 msgid ""
 "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat,\n"
 "    että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla "
