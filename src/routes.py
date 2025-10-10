@@ -143,9 +143,9 @@ def get_info():
     """
     When a choice is clicked, display choice info.
     """
-    raw_id = request.get_json()
-    basic_info = survey_choices_service.get_choice_name_and_spaces(int(raw_id))
-    additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(int(raw_id))
+    choice_id = int(request.get_json())
+    basic_info = survey_choices_service.get_choice_name_and_spaces(choice_id)
+    additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(choice_id)
     return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
 
 
@@ -187,9 +187,10 @@ def new_survey_form(survey=None):
             return redirect("/")
         survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [
-            column
-            for column in survey["choices"][0]
-            if (column != "name" and column != "seats" and column != "id" and column != "min_size" and column != "mandatory")
+            column for column in survey["choices"][0]
+            if (column not in 
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
         ]
     return render_template("create_survey.html", survey=survey)
 
@@ -435,8 +436,11 @@ def edit_survey_form(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-        column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "min_size" and column != "mandatory")
-    ]
+            column for column in survey["choices"][0]
+            if (column not in 
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
+        ]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -512,10 +516,11 @@ def edit_group_sizes(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-        column
-        for column in survey["choices"][0]
-        if (column != "name" and column != "seats" and column != "id" and column != "min_size" and column != "mandatory")
-    ]
+            column for column in survey["choices"][0]
+            if (column not in 
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
+        ]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template(

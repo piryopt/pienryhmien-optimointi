@@ -62,7 +62,7 @@ class SurveyChoicesService:
         """
         # take only the needed columns
         data = self._survey_choices_repository.get_survey_choice(choice_id)
-        return (data[0], data[2], data[3])
+        return (data.id, data.name, data.max_spaces)
 
     def get_choice_additional_infos(self, choice_id: int):
         """

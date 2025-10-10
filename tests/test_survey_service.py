@@ -285,12 +285,12 @@ def test_get_survey_as_dict(setup_env):
     assert survey_dict["time_end"] == datetime.datetime(2024, 1, 1, 2, 2)
 
     assert survey_dict["choices"][0]["name"] == "Esimerkkipäiväkoti 1"
-    assert survey_dict["choices"][0]["seats"] == 8
+    assert survey_dict["choices"][0]["max_spaces"] == 8
     assert survey_dict["choices"][0]["Osoite"] == "Keijukaistenpolku 14"
     assert survey_dict["choices"][0]["Postinumero"] == "00820"
 
     assert survey_dict["choices"][1]["name"] == "Esimerkkipäiväkoti 2"
-    assert survey_dict["choices"][1]["seats"] == 6
+    assert survey_dict["choices"][1]["max_spaces"] == 6
     assert survey_dict["choices"][1]["Osoite"] == "Hattulantie 2"
     assert survey_dict["choices"][1]["Postinumero"] == "00550"
 
