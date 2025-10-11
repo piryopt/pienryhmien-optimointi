@@ -9,9 +9,11 @@ from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_
 from src.tools.date_converter import time_to_close
 from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
+from src.tools.constants import SURVEY_FIELDS
 
 
 class SurveyService:
+    SURVEY_FIELDS = SURVEY_FIELDS
     def __init__(
         self,
         survey_repositroy=default_survey_repository,
@@ -24,6 +26,7 @@ class SurveyService:
         corresponding repository
 
         args and variables:
+            SURVEY_FIELDS: Survey column names to help with languages
             survey_repository: The repository for surveys
             survey_owners_repository: The repository for survey owners
             choices_repository: The repository for survey choices
@@ -342,8 +345,7 @@ class SurveyService:
         return (answers, popularities)
 
     def validate_created_survey(self, survey_dict, edited=False):
-        # print("VALIDATING")
-        # print(survey_dict)
+        language = session.get("language", "fi")
 
         # Name length
         if len(survey_dict["surveyGroupname"]) < 5:
@@ -357,20 +359,12 @@ class SurveyService:
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
             for choice in survey_dict["choices"]:
-                language = session.get("language", 0)
-                language_mapping = {"fi": 0, "en": 1, "sv": 2}
-                dictionary = [
-                    ["Nimi", "Name", "Namn"],
-                    ["Enimmäispaikat", "Maximum capacity", "Max antal platser"],
-                    ["Ryhmän minimikoko", "Minimum group size", "Minsta gruppstorlek"],
-                ]
-                lang_i = language_mapping.get(language)
-                if lang_i is None:
-                    lang_i = 0
-
-                if choice[dictionary[0][lang_i]] == "tyhjä" or choice[dictionary[1][lang_i]] == "tyhjä" or choice[dictionary[2][lang_i]] == "tyhjä":
+                if choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä" \
+                or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä" \
+                or choice[SurveyService.SURVEY_FIELDS["min_size"][language]] == "tyhjä":
                     msg = gettext(
-                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle."
+                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi " \
+                        "ilmestyy, kun asetat hiiren poistettavan rivin päälle."
                     )
                     return {"success": False, "message": {"status": "0", "msg": msg}}
         return {"success": True}
@@ -413,12 +407,18 @@ class SurveyService:
 
     def update_survey_group_sizes(self, survey_id, choices):
         """
-        Updates the group sizes of survey choices. A teacher only gets to use this fucntion if the amount of students that have answered the
-        survey is greater than the sum of all group sizes.
+        Updates the group sizes of survey choices. A teacher only gets to use this
+        fucntion if the amount of students that have answered the survey is greater
+        than the sum of all group sizes.
         """
         count = 0
+        language = session.get("language", "fi")
         for choice in choices:
-            success = self._choices_repository.edit_choice_group_size(survey_id, choice["Nimi"], choice["Enimmäispaikat"])
+            success = self._choices_repository.edit_choice_group_size(
+                survey_id,
+                choice[SurveyService.SURVEY_FIELDS["name"][language]],
+                choice[SurveyService.SURVEY_FIELDS["spaces"][language]]
+            )
             if not success:
                 if count > 0:
                     message = gettext("Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut")
