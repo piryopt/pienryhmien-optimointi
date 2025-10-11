@@ -36,22 +36,22 @@ def test_get_survey_choice(setup_env):
     assert choice.name == "choice 1"
 
 
-def test_get_survey_choice_returns_false_forn_nonexistant_choice(setup_env):
+def test_get_survey_choice_returns_none_forn_nonexistant_choice(setup_env):
     """
-    Test that getting a survey choice returns False if choice doesn't exist
+    Test that getting a survey choice returns None if choice doesn't exist
     """
     d = setup_env
     choice = scr.get_survey_choice(d["choice_id"] + 12)
-    assert choice is False
+    assert choice is None
 
 
-def test_create_new_survey_choice_returns_false_for_exception():
+def test_create_new_survey_choice_returns_none_for_exception():
     """
     Test that a survey choice is not added if there's an error in survey id
-    and that return is False
+    and that return is None
     """
-    success = scr.create_new_survey_choice("not a survey", "choice 1", 10, 5, False)
-    assert success is False
+    survey_choice_id = scr.create_new_survey_choice("not a survey", "choice 1", 10, 5, False)
+    assert survey_choice_id is None
 
 
 def test_get_invalid_choice():
@@ -59,7 +59,7 @@ def test_get_invalid_choice():
     Test that getting an invalid survey choice behaves the correct way
     """
     choice = scr.get_survey_choice("ITSNOTREAL")
-    assert choice is False
+    assert choice is None
 
 
 def test_edit_choice_group_size(setup_env):

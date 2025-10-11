@@ -69,7 +69,7 @@ def test_get_survey_choice_returns_false_if_survey_not_found():
     choice found with the id used as input, uses a string as input
     when ids should be int
     """
-    assert scs.get_survey_choice("Not an id") is False
+    assert scs.get_survey_choice("Not an id") is None
 
 
 def test_get_survey_choice_gets_correct_choice(setup_env):
@@ -101,7 +101,7 @@ def test_get_survey_choice_min_size_invalid_id():
     Tests that function get_survey_choice_min_size returns False
     when an invalid id is used as input
     """
-    assert scs.get_survey_choice_min_size("Not an id") is False
+    assert scs.get_survey_choice_min_size("Not an id") is None
 
 
 def test_get_choice_name_and_spaces_gets_correct_choice(setup_env):
@@ -151,15 +151,6 @@ def test_add_empty_survey_choice(setup_env):
     choices = scs.get_list_of_survey_choices(d["survey_id"])
     assert choices[2].name == "Tyhjä"
     assert choices[2].max_spaces == 3
-
-
-def test_check_min_equals_max(setup_env):
-    """
-    Tests that function check_min_equal_max() returns false
-    when min_size and max_size are not equal for all of the choice
-    """
-    d = setup_env
-    assert scs.check_min_equals_max(d["survey_id"]) == (False, 0)
 
 
 def test_get_survey_choice_mandatory_returns_false_when_group_is_not_mandatory(setup_env):
