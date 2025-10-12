@@ -31,7 +31,8 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     additional_infos, cinfos = get_additional_infos(survey_choices)
 
     happiness_avg, happiness_results = get_happiness_data(output_data, survey_id)
-    happiness_avg /= len(students_dict) - unranked_or_rejected
+    print(f"students: {len(students_dict)}, unranked_or_rejected: {unranked_or_rejected}")
+    happiness_avg /= len(students_dict) - unranked_or_rejected if (len(students_dict) - unranked_or_rejected) > 0 else 1
 
     happiness_results_list = []
     for k, v in happiness_results.items():
