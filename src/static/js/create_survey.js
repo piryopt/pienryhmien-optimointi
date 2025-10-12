@@ -157,6 +157,7 @@ function createNewSurvey() {
   var rowsAsJson = tableRows.map(function (x) {
     return parseObjFromRow(x, tableHeaders);
   });
+
   var minChoicesElement = document.getElementById("minchoices");
   var allowedDeniedChoices = document.getElementById("denied-choices-count");
 
@@ -247,16 +248,32 @@ function saveEdit() {
     return;
   }
     
-    // Date is valid
-    var endDateParts = document.getElementById("end-date").value.split(".")
-    var endDate = new Date(Number(endDateParts[2]), Number(endDateParts[1]-1), Number(endDateParts[0]))
-    
-    var today = new Date()
-    var todaysEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59)
-    if(endDate <= todaysEnd) {
-        showAlert({msg: "Vastausajan päättymispäivä ei saa olla kuluva päivä tai menneisyydessä", color: "red"})
-        return;
-    }
+  // Date is valid
+  var endDateParts = document.getElementById("end-date").value.split(".");
+  var endTime = document.getElementById("endtime").value.split(":");
+
+  var endDate = new Date(
+    Number(endDateParts[2]),
+    Number(endDateParts[1] - 1),
+    Number(endDateParts[0]),
+    Number(endTime[0])
+  );
+
+  var today = new Date();
+  var todaysEnd = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+    today.getHours(),
+  );
+
+  if (endDate <= todaysEnd) {
+    showAlert({
+      msg: "Vastausaika ei voi olla menneisyydessä",
+      color: "red",
+    });
+    return;
+  }
 
   //Valid content, continue to post
 
