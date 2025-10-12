@@ -44,9 +44,9 @@ function cellIsValid(elem) {
       var newWarning = document.createElement("li");
       newWarning.setAttribute("id", colWarningItemId);
       newWarning.classList.add("input-validation-warning");
-      newWarning.innerText = `${headerLocale.column} "${
-        colHeader.innerText
-      }" ${headerLocale.values_must_be} ${colHeader.getAttribute("validation-text")}`;
+      newWarning.innerText = `${headerLocale.column} "${colHeader.innerText}" ${
+        headerLocale.values_must_be
+      } ${colHeader.getAttribute("validation-text")}`;
       warningsList.appendChild(newWarning);
 
       warningsList.classList.remove("hidden");
@@ -102,21 +102,25 @@ function removeValidationErrorMsg(elem) {
 function setValidationErrorMsg(elem) {
   // Expects that every field that can raise validation error has a corresponding
   // span element with id matching "#${fieldName}-validation-warning" -scheme
-  elem.classList.add("active-warning")
-  elem.classList.remove("hidden")
-  var fieldName = elem.getAttribute("name")
+  elem.classList.add("active-warning");
+  elem.classList.remove("hidden");
+  var fieldName = elem.getAttribute("name");
 
-  var alertMsg = elem.getAttribute("validation-text") ? elem.getAttribute("validation-text") : "Jokin meni pieleen! Tarkasta kenttien sisältö"
-  var warningTextContainer = document.querySelector(`#${fieldName}-validation-warning`)
+  var alertMsg = elem.getAttribute("validation-text")
+    ? elem.getAttribute("validation-text")
+    : "Jokin meni pieleen! Tarkasta kenttien sisältö";
+  var warningTextContainer = document.querySelector(
+    `#${fieldName}-validation-warning`
+  );
 
-  if(!warningTextContainer) {
-      showAlert({msg: alertMsg, color:"red"})
+  if (!warningTextContainer) {
+    showAlert({ msg: alertMsg, color: "red" });
   }
 
-  warningTextContainer.innerText = alertMsg
-  warningTextContainer.classList.add("active-warning")
-  warningTextContainer.classList.remove("hidden")
-  warningTextContainer.parentElement.parentElement.classList.remove('hidden')
+  warningTextContainer.innerText = alertMsg;
+  warningTextContainer.classList.add("active-warning");
+  warningTextContainer.classList.remove("hidden");
+  warningTextContainer.parentElement.parentElement.classList.remove("hidden");
 
   elem.scrollIntoView({ behavior: "smooth", block: "center" });
 }
@@ -243,17 +247,30 @@ function saveEdit() {
     console.log("Form contents not valid, won't post");
     return;
   }
-    
-    // Date is valid
-    var endDateParts = document.getElementById("end-date").value.split(".")
-    var endDate = new Date(Number(endDateParts[2]), Number(endDateParts[1]-1), Number(endDateParts[0]))
-    
-    var today = new Date()
-    var todaysEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(),23,59)
-    if(endDate <= todaysEnd) {
-        showAlert({msg: "Vastausajan päättymispäivä ei saa olla kuluva päivä tai menneisyydessä", color: "red"})
-        return;
-    }
+
+  // Date is valid
+  var endDateParts = document.getElementById("end-date").value.split(".");
+  var endDate = new Date(
+    Number(endDateParts[2]),
+    Number(endDateParts[1] - 1),
+    Number(endDateParts[0])
+  );
+
+  var today = new Date();
+  var todaysEnd = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+    23,
+    59
+  );
+  if (endDate <= todaysEnd) {
+    showAlert({
+      msg: "Vastausajan päättymispäivä ei saa olla kuluva päivä tai menneisyydessä",
+      color: "red",
+    });
+    return;
+  }
 
   //Valid content, continue to post
 
@@ -653,7 +670,7 @@ function setUploadedTableValues(table) {
 
   // 1. Add checkbox header
   var checkboxHeader = document.createElement("th");
-  checkboxHeader.innerHTML = '<input type="checkbox" id="select-all-choices">';
+  checkboxHeader.innerHTML = `<label>${headerLocale.force_min_size}</label><input type="checkbox" id="select-all-choices />`;
   headersRow.appendChild(checkboxHeader);
 
   // 2. Add constant headers
