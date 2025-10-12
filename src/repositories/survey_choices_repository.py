@@ -92,7 +92,7 @@ class SurveyChoicesRepository:
             return result.fetchall()
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_choice_additional_infos_not_hidden(self, choice_id):
         """
@@ -104,7 +104,7 @@ class SurveyChoicesRepository:
             return result.fetchall()
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_all_additional_infos(self, survey_id):
         """
@@ -121,7 +121,7 @@ class SurveyChoicesRepository:
             return result.fetchall()
         except Exception as e:
             print(e)
-            return False
+            return []
 
 
 survey_choices_repository = SurveyChoicesRepository()
