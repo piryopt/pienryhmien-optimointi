@@ -27,11 +27,12 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     survey_answers_amount = len(user_rankings)
     dropped_groups_id = []
 
-    output_data = run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id)
+    output_data, unranked_or_rejected = run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id)
     additional_infos, cinfos = get_additional_infos(survey_choices)
 
     happiness_avg, happiness_results = get_happiness_data(output_data, survey_id)
-    happiness_avg /= len(students_dict)
+    happiness_avg /= len(students_dict) - unranked_or_rejected
+
     happiness_results_list = []
     for k, v in happiness_results.items():
         if v > 0:
@@ -85,8 +86,8 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
         output_data = sort.get_data()
         group_sizes = get_group_sizes(output_data, groups_dict)
 
-        # Check if min_size is greater than group size. If it is, remove the group_id that has the worst ranking from all relevant lists and dictionaries.
-        # If a group is mandatory, try to fill it first by reassigning students from other groups.
+        # Check if min_size is greater than group size. If not drop the group.
+        # If the group is mandatory, try to fill it first by reassigning students from other groups.
         violation = False
         sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
         for survey_choice_id in sorted_groups:
@@ -116,8 +117,10 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
                     dropped_groups_id.append(survey_choice_id)
                     break
 
+        unranked_or_rejected = students_in_unranked_or_rejected_groups(output_data, students_dict_original)
+
         if not violation:
-            return output_data
+            return output_data, unranked_or_rejected
 
 
 def get_seats(groups_dict):
@@ -262,6 +265,20 @@ def reassign_students(target_group_id, candidates, amount, students_dict, groups
         students_dict[student_id].selections = [target_group_id]
 
 
+def students_in_unranked_or_rejected_groups(output_data, students_dict):
+    """
+    Count how many students are in unranked or rejected groups
+
+    args:
+        output_data: The output data from the hungarian algorithm along with happiness average, happiness results, dropped groups and additional infos
+    """
+    return sum(
+        1
+        for result in output_data
+        if ((result[2][0] in students_dict[result[0][0]].rejections) or (result[2][0] not in students_dict[result[0][0]].selections))
+    )
+
+
 def get_additional_infos(survey_choices):
     """
     Create a dict which contains choice's additional info as list
@@ -335,7 +352,6 @@ def happiness_sort_key(x):
     A sort key function for sorting happiness results so that integers come first
     in ascending order, then "Ei järjestettyyn", then "Hylättyyn".
     """
-
     value = x[0]
     if isinstance(value, int):
         return (0, value)
