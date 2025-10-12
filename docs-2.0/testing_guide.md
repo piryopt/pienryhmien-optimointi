@@ -7,20 +7,26 @@
 
 ## Running tests
 
-### Run pytests
+### Run all pytests
 
 ```
 docker compose run --rm test
+```
+
+### Run pytests without playwright
+
+```
+docker compose run --rm test --ignore=tests/playwright/
+```
+
+### Run only only playwright tests
+
+```
+docker compose run --rm test tests/playwright/ --browser chromium
 ```
 
 ### Run pytests with coverage HTML report
 
 ```
 docker compose run --rm test --cov=src --cov-report=html
-```
-
-### Run playwright tests
-
-```
-docker compose run --rm test tests/playwright/survey_testing.py --browser chromium
 ```

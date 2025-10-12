@@ -55,7 +55,7 @@ class SurveyService:
         survey = self._survey_repository.get_survey(survey_id)
         if not survey:
             return False
-        return survey[1]
+        return survey.surveyname
 
     def count_surveys_created(self, user_id):
         """
@@ -440,13 +440,21 @@ class SurveyService:
         """
         Gets the list of all active surveys. Used for analytics in the admin page.
         """
-        surveys = self._survey_repository.get_all_active_survey_admin_data()
+        surveys = self._survey_repository.get_all_active_surveys()
         if not surveys:
             return False
         admin_data = []
         for survey in surveys:
-            survey_choices = default_survey_choices_repository.find_survey_choices(survey[0])
-            survey_data = [survey[0], survey[1], survey[2], survey[3], survey[4], survey[5], len(survey_choices)]
+            survey_choices = default_survey_choices_repository.find_survey_choices(survey.id)
+            survey_data = [
+                survey.id,
+                survey.surveyname,
+                survey.min_choices,
+                survey.time_end,
+                survey.allowed_denied_choices,
+                survey.allow_search_visibility,
+                len(survey_choices),
+            ]
             admin_data.append(survey_data)
         return admin_data
 

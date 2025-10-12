@@ -1,6 +1,7 @@
 import pytest
 from src.algorithms.weights import Weights
 
+
 @pytest.fixture
 def weights_obj():
     """
@@ -13,12 +14,14 @@ def weights_obj():
     w = Weights(n_choices, n_students)
     return w, n_choices, n_students
 
+
 def test_weights_created(weights_obj):
     """
     Tests that after init the dictionary of weights has items in it
     """
     w, _, _ = weights_obj
     assert len(w.weights) > 0
+
 
 def test_correct_number_of_weights_created(weights_obj):
     """
@@ -28,7 +31,7 @@ def test_correct_number_of_weights_created(weights_obj):
 
     w, _, _ = weights_obj
     assert len(w.weights) == 5
-    
+
 
 def test_weight_values_are_correct(weights_obj):
     """
@@ -40,6 +43,7 @@ def test_weight_values_are_correct(weights_obj):
     w, n_choices, n_students = weights_obj
     assert w.weights[2] == n_students * n_choices
 
+
 def test_function_get_weights_returns_something(weights_obj):
     """
     Tests that the class function get_weights returns an item with a
@@ -48,12 +52,14 @@ def test_function_get_weights_returns_something(weights_obj):
     w, _, _ = weights_obj
     assert len(w.get_weights()) > 0
 
+
 def test_function_get_weights_returns_correct_number_of_weights(weights_obj):
     """
     Tests that the number of weights returned by get weights is correct
     """
     w, _, _ = weights_obj
     assert len(w.get_weights()) == 5
+
 
 def test_function_get_weights_returns_the_correct_dictionary(weights_obj):
     """

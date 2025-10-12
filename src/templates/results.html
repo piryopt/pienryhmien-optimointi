@@ -71,8 +71,8 @@
             <th><p><img src="{{ url_for('static', filename='images/groups_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  {{ _('Ryhmä') }}</p></th>
             <th><p><img src="{{ url_for('static', filename='images/format_list_numbered_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  {{ _('Monesko valinta') }}</p></th>
             <th style="min-width:12em;"><p><img src="{{ url_for('static', filename='images/done_white_36dp.svg') }}" alt="" width="24" height="24" class="d-inline-block align-text-top">  {{ _('Valinnat') }}</p></th>
-            {% for s in sc %}
-            <th style="display:none">{{s[0]}}</th>
+            {% for key in additional_info_keys %}
+            <th style="display:none">{{ key }}</th>
             {% endfor %}
         </tr>
     </thead>
@@ -119,8 +119,26 @@
 function ExportAllData_HTML(){
     var wb = {SheetNames:[],Sheets:{}};
     var ws9 = XLSX.utils.table_to_sheet(document.getElementById('results_table'),{raw:true});
+    var ws9Keys = Object.keys(ws9);
+    const choiceColKey = ws9Keys.filter(k => ws9[k].v === " Valinnat")[0];
+    const choiceColIndex = XLSX.utils.decode_cell(choiceColKey).c;
+    const finalValues = Object.fromEntries(
+        Object.entries(ws9).map(([key, val]) => {
+            const decoded = XLSX.utils.decode_cell(key)  
+            if (decoded.c > choiceColIndex) {
+                    decoded.c -= 1
+                    const newKey = XLSX.utils.encode_cell(decoded)
+                    return [newKey, val]
+                } else if (decoded.c === choiceColIndex) {
+                    return null
+                }
+                return [key, val]
+            }
+        )
+        .filter(e => e !== null)
+    )
     wb.SheetNames.push('tulokset'); 
-    wb.Sheets["tulokset"] = ws9;
+    wb.Sheets["tulokset"] = finalValues;
     XLSX.writeFile(wb,"tulokset.xlsx",{cellStyles:true});
 }
 

@@ -60,19 +60,27 @@
     </table>
 
     <script>
+      const tResults = "{{ _('Tarkastele tuloksia') }}";
+      const tEdit = "{{ _('Muokkaa kyselyä tai lisää siihen ylläpitäjä') }}";
+      const tCopy = "{{ _('Kopioi kysely') }}";
+      const tDelete = "{{ _('Poista kysely') }}";
+      const tDeleteConfirm = "Haluatko varmasti poistaa kyselyn?";
+
       function copyURL(str) {
-        var url = window.location.href
+        var url = window.location.href;
         if (url.includes("#")) {
-          url = url.replace('#', '')
+          url = url.replace('#', '');
         }
         navigator.clipboard.writeText(url + "/" + str);
       }
 
       function showClosedSurveysOperations(survey_id) {
-        var name = "closed_more_info_container_" + survey_id
-        document.getElementById(name).innerHTML = "<a href='/surveys/" + survey_id + "/answers' class='surveys_link'><img src='{{ url_for('static', filename='images/manage_search_white_36dp.svg') }}' width='20' height='20'>" + {{ _ ('" Tarkastele tuloksia"') }} + "</a><br>"
-            + "<a href='/surveys/" + survey_id + "/edit' class='surveys_link'><img src='{{ url_for('static', filename='images/edit_white_36dp.svg') }}' width='20' height='20'>" + {{ _('" Muokkaa kyselyä tai lisää siihen ylläpitäjä"') }} + "</a><br>"
-            + "<a href='/surveys/create?fromTemplate=" + survey_id + "' class='surveys_link'><img src='{{ url_for('static', filename='images/folder_copy_white_36dp.svg') }}' width='20' height='20'>" + {{ _('" Kopioi kysely"') }} + "</a>";
-}
+        var name = "closed_more_info_container_" + survey_id;
+        document.getElementById(name).innerHTML =
+          `<a href='/surveys/${survey_id}/answers' class='surveys_link'><img src='{{ url_for('static', filename='images/manage_search_white_36dp.svg') }}' width='20' height='20'> ${tResults}</a><br>` +
+          `<a href='/surveys/${survey_id}/edit' class='surveys_link'><img src='{{ url_for('static', filename='images/edit_white_36dp.svg') }}' width='20' height='20'> ${tEdit}</a><br>` +
+          `<a href='/surveys/create?fromTemplate=${survey_id}' class='surveys_link'><img src='{{ url_for('static', filename='images/folder_copy_white_36dp.svg') }}' width='20' height='20'> ${tCopy}</a><br>` +
+          `<a href='/surveys/${survey_id}/delete' onclick='return confirm("${tDeleteConfirm}")' class='surveys_link'><img src='{{ url_for('static', filename='images/delete_white_36dp.svg') }}' width='20' height='20'> ${tDelete}</a>`;
+      }
     </script>
 {% endblock %}

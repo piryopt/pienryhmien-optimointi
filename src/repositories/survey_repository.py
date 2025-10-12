@@ -48,9 +48,9 @@ class SurveyRepository:
         args:
             user_id: The id of the user
         """
-        # Do we want to diplay all surveys created or only the active ones?
+        # Here we display all surveys created by a user that are not deleted, so in surveys table deleted=False
         try:
-            sql = "SELECT s.id FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id)"
+            sql = "SELECT s.id FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id AND s.deleted=False)"
             result = db.session.execute(text(sql), {"user_id": user_id})
             survey_list = result.fetchall()
             if not survey_list:
@@ -319,21 +319,6 @@ class SurveyRepository:
         """
         try:
             sql = "SELECT * FROM surveys WHERE (closed=False AND deleted=False)"
-            result = db.session.execute(text(sql))
-            surveys = result.fetchall()
-            if not surveys:
-                return False
-            return surveys
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return False
-
-    def get_all_active_survey_admin_data(self):
-        """
-        Get all relevant survey data for the admin page
-        """
-        try:
-            sql = "SELECT id, surveyname, min_choices, time_end, allowed_denied_choices, allow_search_visibility FROM surveys WHERE (closed=False AND deleted=False)"
             result = db.session.execute(text(sql))
             surveys = result.fetchall()
             if not surveys:
