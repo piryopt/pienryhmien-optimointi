@@ -15,12 +15,10 @@ class SurveyRepository:
             sql = "SELECT * FROM surveys WHERE id=:survey_id"
             result = db.session.execute(text(sql), {"survey_id": survey_id})
             survey = result.fetchone()
-            if not survey:
-                return False
             return survey
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def survey_name_exists(self, surveyname, user_id):
         """
@@ -103,12 +101,10 @@ class SurveyRepository:
             sql = "SELECT s.id, s.surveyname, s.time_end FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False)"
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
-            if not surveys:
-                return False
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_active_surveys_and_response_count(self, user_id):
         """
@@ -125,12 +121,10 @@ class SurveyRepository:
             GROUP BY s.id, s.surveyname"""
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
-            if not surveys:
-                return False
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_closed_surveys(self, user_id):
         """
@@ -146,7 +140,7 @@ class SurveyRepository:
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def update_survey_answered(self, survey_id):
         """
@@ -197,7 +191,7 @@ class SurveyRepository:
             return result.fetchone()[0]
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def get_survey_description(self, survey_id):
         """
@@ -212,7 +206,7 @@ class SurveyRepository:
             return result.fetchone()[0]
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def get_survey_time_end(self, survey_id):
         """
@@ -224,7 +218,7 @@ class SurveyRepository:
             return result.fetchone()[0]
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def get_survey_min_choices(self, survey_id):
         """
@@ -239,7 +233,7 @@ class SurveyRepository:
             return result.fetchone()[0]
         except Exception as e:
             print(e)
-            return False
+            return None
 
     def get_survey_max_denied_choices(self, survey_id):
         """
@@ -254,7 +248,7 @@ class SurveyRepository:
             return result.fetchone()[0]
         except Exception as e:
             print(e)
-            return False
+            return None
 
     def get_survey_search_visibility(self, survey_id):
         """
@@ -269,7 +263,7 @@ class SurveyRepository:
             return result.fetchone()[0]
         except Exception as e:
             print(e)
-            return False
+            return None
 
     def fetch_all_active_surveys(self, user_id):
         """Returns a list of all surveys in the database"""
@@ -286,12 +280,10 @@ class SurveyRepository:
             sql = text("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " + "WHERE survey_id=:survey_id AND deleted IS FALSE")
             result = db.session.execute(sql, {"survey_id": survey_id})
             responses = result.fetchall()
-            if not responses:
-                return False
             return responses
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_list_active_answered(self, user_id):
         """
@@ -307,12 +299,10 @@ class SurveyRepository:
             )
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
-            if not surveys:
-                return False
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_list_closed_answered(self, user_id):
         """
@@ -328,12 +318,10 @@ class SurveyRepository:
             )
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
-            if not surveys:
-                return False
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_all_active_surveys(self):
         """
@@ -343,12 +331,10 @@ class SurveyRepository:
             sql = "SELECT * FROM surveys WHERE (closed=False AND deleted=False)"
             result = db.session.execute(text(sql))
             surveys = result.fetchall()
-            if not surveys:
-                return False
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def save_survey_edit(self, survey_id, surveyname, survey_description, time_end):
         """
@@ -373,12 +359,10 @@ class SurveyRepository:
             sql = "SELECT * FROM surveys"
             result = db.session.execute(text(sql))
             surveys = result.fetchall()
-            if not surveys:
-                return False
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def set_survey_deleted_true(self, survey_id):
         """

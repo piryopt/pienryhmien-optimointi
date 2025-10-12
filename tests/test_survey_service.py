@@ -176,7 +176,7 @@ def test_get_list_open_surveys(setup_env):
     """
     d = setup_env
     surveys = ss.get_active_surveys(d["user_id"])
-    assert surveys is False
+    assert surveys == []
     closed_id = ss.create_new_survey_manual(
         d["json_object"]["choices"], "Test survey 6", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
     )

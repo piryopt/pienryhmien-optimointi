@@ -117,10 +117,7 @@ class SurveyService:
         args:
             user_id: The id of the user whose active surveys we want
         """
-        surveys = self._survey_repository.get_active_surveys(user_id)
-        if not surveys:
-            return False
-        return surveys
+        return self._survey_repository.get_active_surveys(user_id)
 
     def get_active_surveys_and_response_count(self, user_id):
         """
@@ -129,10 +126,7 @@ class SurveyService:
         args:
             user_id: The id of the user whose active surveys we want
         """
-        surveys = self._survey_repository.get_active_surveys_and_response_count(user_id)
-        if not surveys:
-            return False
-        return surveys
+        return self._survey_repository.get_active_surveys_and_response_count(user_id)
 
     def check_if_survey_closed(self, survey_id):
         """
@@ -154,8 +148,7 @@ class SurveyService:
         args:
             user_id: The id of the user whose closed surveys we want
         """
-        surveys = self._survey_repository.get_closed_surveys(user_id)
-        return surveys
+        return self._survey_repository.get_closed_surveys(user_id)
 
     def update_survey_answered(self, survey_id):
         """
@@ -272,10 +265,7 @@ class SurveyService:
         args:
             user_id: The id of the user
         """
-        active = self._survey_repository.get_list_active_answered(user_id)
-        if not active:
-            return []
-        return active
+        return self._survey_repository.get_list_active_answered(user_id)
 
     def get_list_closed_answered(self, user_id):
         """
@@ -284,10 +274,7 @@ class SurveyService:
         args:
             user_id: The id of the user
         """
-        closed = self._survey_repository.get_list_closed_answered(user_id)
-        if not closed:
-            return []
-        return closed
+        return self._survey_repository.get_list_closed_answered(user_id)
 
     def check_for_surveys_to_close(self):
         """
@@ -314,10 +301,8 @@ class SurveyService:
         args:
             survey_id: The id of the survey
         """
-        rankings = self._survey_repository.fetch_survey_responses(survey_id)
-        if not rankings:
-            return []
-        return rankings
+        return self._survey_repository.fetch_survey_responses(survey_id)
+        
 
     def get_choice_popularities(self, survey_id: str):
         """
@@ -345,8 +330,6 @@ class SurveyService:
         return (answers, popularities)
 
     def validate_created_survey(self, survey_dict, edited=False):
-        language = session.get("language", "fi")
-
         # Name length
         if len(survey_dict["surveyGroupname"]) < 5:
             msg = gettext("Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä")
@@ -358,6 +341,7 @@ class SurveyService:
                 msg = gettext("Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!")
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
+            language = session.get("language", "fi")
             for choice in survey_dict["choices"]:
                 if choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä" \
                 or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä" \
@@ -444,8 +428,6 @@ class SurveyService:
         Gets the size of all surveys. Used for analytics in the admin page.
         """
         surveys = self._survey_repository.get_all_surveys()
-        if not surveys:
-            return 0
         return len(surveys)
 
     def get_all_active_surveys(self):
@@ -454,7 +436,7 @@ class SurveyService:
         """
         surveys = self._survey_repository.get_all_active_surveys()
         if not surveys:
-            return False
+            return []
         admin_data = []
         for survey in surveys:
             survey_choices = default_survey_choices_repository.find_survey_choices(survey.id)

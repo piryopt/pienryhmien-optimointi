@@ -23,11 +23,7 @@ class SurveyChoicesService:
         args:
             survey_id: The id of the survey from which we want the survey choices
         """
-        survey = self._survey_repository.get_survey(survey_id)
-        if not survey:
-            return False
-        survey_choices = self._survey_choices_repository.find_survey_choices(survey_id)
-        return survey_choices
+        return self._survey_choices_repository.find_survey_choices(survey_id)
 
     def get_survey_choice(self, survey_choice_id: int):
         """

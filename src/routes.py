@@ -590,7 +590,7 @@ def survey_answers(survey_id):
     survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
-        choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
+        choices_data.append([user_service.get_email(s.user_id), s.ranking, s.rejections, s.reason])
 
     survey_answers_amount = len(survey_answers)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)

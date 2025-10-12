@@ -31,7 +31,7 @@ def test_get_list_of_survey_choices_returns_false_if_no_data_found():
     Inputs a nonexistent survey id to getter and checks that return is "False"
     """
     ret = scs.get_list_of_survey_choices("ITSNOTREAL")
-    assert ret is False
+    assert ret == []
 
 
 def test_get_list_of_survey_choices_returns_correct_number_of_choices(setup_env):
