@@ -40,35 +40,23 @@ class FeedbackRepository:
             print(e)
             return False
 
-    def get_unsolved_feedback(self):
+    def get_feedback(self, solved):
         """
         SQL code for getting a list of feedback which haven't been solved
         """
         try:
-            sql = "SELECT * FROM feedback WHERE solved=False"
-            result = db.session.execute(text(sql))
+            sql = """
+                SELECT F.id, F.title, F.type, U.email
+                FROM feedback F LEFT JOIN users U 
+                ON F.user_id = U.id
+                WHERE F.solved = :solved
+            """
+            result = db.session.execute(text(sql), {"solved": solved})
             feedback = result.fetchall()
-            if not feedback:
-                return False
             return feedback
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
-
-    def get_solved_feedback(self):
-        """
-        SQL code for getting a list of feedback which have been solved
-        """
-        try:
-            sql = "SELECT * FROM feedback WHERE solved=True"
-            result = db.session.execute(text(sql))
-            feedback = result.fetchall()
-            if not feedback:
-                return False
-            return feedback
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return False
+            return []
 
     def check_unsolved_title_doesnt_exist(self, user_id, title):
         """
