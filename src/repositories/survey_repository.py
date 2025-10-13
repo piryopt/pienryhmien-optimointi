@@ -123,12 +123,10 @@ class SurveyRepository:
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
 
-            if not surveys:
-                return False
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_closed_surveys(self, user_id):
         """
