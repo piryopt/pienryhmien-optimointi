@@ -62,25 +62,19 @@ class FeedbackService:
         args:
             feedback_id: The id of the feedback
         """
-        feedback = self._feedback_repository.get_feedback(feedback_id)
-        if not feedback:
-            return False
-        user_id = feedback.user_id
-        email = self._user_service.get_email(user_id)
-        feedback_list = [feedback.id, feedback.title, feedback.type, email, feedback.content]
-        return feedback_list
+        return self._feedback_repository.get_feedback(feedback_id)
 
     def get_unsolved_feedback(self):
         """
         Get a list of all feedback that hasn't been solved.
         """
-        return self._feedback_repository.get_feedback(False)
+        return self._feedback_repository.get_feedback_by_solved(False)
 
     def get_solved_feedback(self):
         """
         Get a list of all feedback that has been solved.
         """
-        return self._feedback_repository.get_feedback(True)
+        return self._feedback_repository.get_feedback_by_solved(True)
 
     def mark_feedback_solved(self, feedback_id):
         """

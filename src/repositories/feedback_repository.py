@@ -30,17 +30,19 @@ class FeedbackRepository:
             feedback_id: The id of the feedback
         """
         try:
-            sql = "SELECT * FROM feedback WHERE id=:feedback_id"
+            sql = """
+                SELECT F.id, F.title, F.type, U.email, F.content 
+                FROM feedback F LEFT JOIN users U ON F.user_id = U.id 
+                WHERE F.id = :feedback_id
+            """
             result = db.session.execute(text(sql), {"feedback_id": feedback_id})
             feedback = result.fetchone()
-            if not feedback:
-                return False
             return feedback
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
-    def get_feedback(self, solved):
+    def get_feedback_by_solved(self, solved):
         """
         SQL code for getting a list of feedback which haven't been solved
         """
