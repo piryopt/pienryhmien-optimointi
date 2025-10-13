@@ -31,7 +31,7 @@ class FeedbackRepository:
         """
         try:
             sql = """
-                SELECT F.id, F.title, F.type, U.email, F.content 
+                SELECT F.id, F.title, F.type, U.email, F.content, F.solved
                 FROM feedback F LEFT JOIN users U ON F.user_id = U.id 
                 WHERE F.id = :feedback_id
             """

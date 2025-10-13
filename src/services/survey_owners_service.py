@@ -62,8 +62,7 @@ class SurveyOwnersService:
         """
         Checks if the user has access to the survey as an owner
         """
-        owner = self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
-        return owner
+        return self._survey_owners_repository.check_if_owner_in_survey(survey_id, user_id)
 
 
 survey_owners_service = SurveyOwnersService()

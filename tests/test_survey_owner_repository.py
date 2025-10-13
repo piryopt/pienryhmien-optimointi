@@ -11,7 +11,7 @@ def test_add_owner_to_survey(setup_db):
     success_add = sor.add_owner_to_survey(survey_id, d["user_id"])
     assert success_add is True
     owner = sor.check_if_owner_in_survey(survey_id, d["user_id"])
-    assert owner.survey_id == survey_id
+    assert owner == True
 
 
 def test_add_owner_invalid_survey(setup_db):

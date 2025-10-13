@@ -50,7 +50,7 @@ def test_get_invalid_user_ranking(setup_env):
     """
     user_id = setup_env["user_id"]
     exists = urr.get_user_ranking(user_id, -1)
-    assert exists is False
+    assert exists is None
 
 
 def test_delete_user_ranking(setup_env):
@@ -60,8 +60,8 @@ def test_delete_user_ranking(setup_env):
     user_id = setup_env["user_id"]
     survey_id = setup_env["survey_id"]
     urr.delete_user_ranking(user_id, survey_id)
-    deleted = urr.get_user_ranking(user_id, survey_id)
-    assert deleted is False
+    user_ranking = urr.get_user_ranking(user_id, survey_id)
+    assert user_ranking is None
 
 
 def test_user_ranking_rejections(setup_env):

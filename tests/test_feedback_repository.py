@@ -17,7 +17,7 @@ def test_get_feedbacK(setup_db):
     d = setup_db
     feedback_id = ""
     fr.new_feedback(d["user_id"], "Testi palaute 2", "bugi", "Toimiiko toka testi?")
-    feedback_list = fr.get_unsolved_feedback()
+    feedback_list = fr.get_feedback_by_solved(False)
     for f in feedback_list:
         if f.title == "Testi palaute 2":
             feedback_id = f.id
@@ -39,7 +39,7 @@ def test_get_unsolved_feedback(setup_db):
     """
     d = setup_db
     fr.new_feedback(d["user_id"], "Testi palaute 5", "bugi", "Toimiiko 5. testi?")
-    unsolved_list = fr.get_unsolved_feedback()
+    unsolved_list = fr.get_feedback_by_solved(False)
     assert len(unsolved_list) == 1
 
 
@@ -50,7 +50,7 @@ def test_mark_feedback_solved(setup_db):
     d = setup_db
     fr.new_feedback(d["user_id"], "Testi palaute 3", "bugi", "Toimiiko kolmas testi?")
     feedback_id = ""
-    feedback_list = fr.get_unsolved_feedback()
+    feedback_list = fr.get_feedback_by_solved(False)
     for f in feedback_list:
         if f.title == "Testi palaute 3":
             feedback_id = f.id
@@ -58,7 +58,7 @@ def test_mark_feedback_solved(setup_db):
     assert success
     feedback = fr.get_feedback(feedback_id)
     assert feedback.solved
-    unsolved_list = fr.get_solved_feedback()
+    unsolved_list = fr.get_feedback_by_solved(True)
     assert len(unsolved_list) == 1
 
 
