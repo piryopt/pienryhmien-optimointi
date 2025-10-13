@@ -128,18 +128,6 @@ class SurveyService:
         """
         return self._survey_repository.get_active_surveys_and_response_count(user_id)
 
-    def get_active_surveys_and_response_count(self, user_id):
-        """
-        Get the active surveys for a user and response count
-
-        args:
-            user_id: The id of the user whose active surveys we want
-        """
-        surveys = self._survey_repository.get_active_surveys_and_response_count(user_id)
-        if not surveys:
-            return False
-        return surveys
-
     def check_if_survey_closed(self, survey_id):
         """
         Check if the survey is open or closed
