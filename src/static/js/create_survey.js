@@ -161,14 +161,18 @@ function createNewSurvey() {
   var rowsAsJson = tableRows.map(function (x) {
     return parseObjFromRow(x, tableHeaders, true);
   });
+
   var minChoicesElement = document.getElementById("minchoices");
   var allowedDeniedChoices = document.getElementById("denied-choices-count");
 
   var endDateParts = document.getElementById("end-date").value.split(".");
+  var endTime = document.getElementById("endtime").value.split(":");
+
   var endDate = new Date(
     Number(endDateParts[2]),
     Number(endDateParts[1] - 1),
-    Number(endDateParts[0])
+    Number(endDateParts[0]),
+    Number(endTime[0])
   );
 
   var today = new Date();
@@ -176,12 +180,12 @@ function createNewSurvey() {
     today.getFullYear(),
     today.getMonth(),
     today.getDate(),
-    23,
-    59
+    today.getHours(),
   );
+
   if (endDate <= todaysEnd) {
     showAlert({
-      msg: "Vastausajan päättymispäivä ei saa olla kuluva päivä tai menneisyydessä",
+      msg: "Vastausaika ei voi olla menneisyydessä",
       color: "red",
     });
     return;
@@ -247,13 +251,16 @@ function saveEdit() {
     console.log("Form contents not valid, won't post");
     return;
   }
-
+    
   // Date is valid
   var endDateParts = document.getElementById("end-date").value.split(".");
+  var endTime = document.getElementById("endtime").value.split(":");
+
   var endDate = new Date(
     Number(endDateParts[2]),
     Number(endDateParts[1] - 1),
-    Number(endDateParts[0])
+    Number(endDateParts[0]),
+    Number(endTime[0])
   );
 
   var today = new Date();
@@ -261,12 +268,12 @@ function saveEdit() {
     today.getFullYear(),
     today.getMonth(),
     today.getDate(),
-    23,
-    59
+    today.getHours(),
   );
+
   if (endDate <= todaysEnd) {
     showAlert({
-      msg: "Vastausajan päättymispäivä ei saa olla kuluva päivä tai menneisyydessä",
+      msg: "Vastausaika ei voi olla menneisyydessä",
       color: "red",
     });
     return;

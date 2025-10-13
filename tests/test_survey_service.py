@@ -467,6 +467,7 @@ def test_survey_deleted(setup_env):
     surveys = ss.get_all_active_surveys()
     assert len(surveys) == 1
 
+
 def test_deleting_closed_survey_decreases_created_surveys_count(setup_env):
     """
     Test that after creating, closing, and deleting a survey,
@@ -501,6 +502,33 @@ def test_len_active_surveys(setup_env):
     surveys = ss.get_all_active_surveys()
     length = ss.len_all_surveys()
     assert len(surveys) == length
+
+
+def test_get_correct_active_surveys_and_response_count(setup_env):
+    """
+    Test that service returns correct active surveys and response count to surveys that user owns
+    """
+    d = setup_env
+    surveys = ss.get_active_surveys_and_response_count(d["user_id"])
+
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+    )
+
+    sos.add_owner_to_survey(survey_id, d["user_email"])
+
+    surveys = ss.get_active_surveys_and_response_count(d["user_id"])
+    assert surveys[0].surveyname == "Test survey 16"
+    assert surveys[0].response_count == 0
+
+    ranking3 = "2,1,5,6,3,4"
+    ranking2 = "1,2,5,6,4,3"
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+
+    surveys = ss.get_active_surveys_and_response_count(d["user_id"])
+    assert surveys[0].surveyname == "Test survey 16"
+    assert surveys[0].response_count == 2
 
 
 def test_len_active_surveys_admin(setup_env):

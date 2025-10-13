@@ -117,10 +117,12 @@ class SurveyRepository:
             sql = """SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count FROM surveys s 
             JOIN survey_owners so ON s.id = so.survey_id 
             LEFT JOIN user_survey_rankings us ON s.id = us.survey_id 
-            WHERE (so.user_id=1 AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
+            WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
             GROUP BY s.id, s.surveyname"""
+
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
+
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
@@ -277,7 +279,7 @@ class SurveyRepository:
     def fetch_survey_responses(self, survey_id):
         """Returns a list of answers submitted to a certain survey"""
         try:
-            sql = text("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings " + "WHERE survey_id=:survey_id AND deleted IS FALSE")
+            sql = text("SELECT user_id, ranking, rejections, reason FROM user_survey_rankings WHERE survey_id=:survey_id AND deleted IS FALSE")
             result = db.session.execute(sql, {"survey_id": survey_id})
             responses = result.fetchall()
             return responses

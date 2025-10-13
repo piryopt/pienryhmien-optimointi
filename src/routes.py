@@ -106,23 +106,12 @@ def frontpage() -> str:
     user_id = session.get("user_id", 0)
     if user_id == 0:
         return render_template("index.html")
-    # is_teacher = user_service.check_if_teacher(user_id)
     surveys_created = survey_service.count_surveys_created(user_id)
-    # If 0 surveys created, return the base home page.
-    # if surveys_created == 0:
-    #    return render_template("index.html", surveys_created=0, exists=False)
-    surveys = survey_service.get_active_surveys_and_response_count(user_id)
-    if not surveys:
+    active_surveys = survey_service.get_active_surveys_and_response_count(user_id)
+    if not active_surveys:
         return render_template("index.html", surveys_created=surveys_created, exists=False)
-    data = []
-    for s in surveys:
-        survey_id = s.id
-        surveyname = s.surveyname
-        survey_answers = survey_service.fetch_survey_responses(survey_id)
-        participants = len(survey_answers)
-        # survey_ending_date = survey_service.get_survey_enddate(survey_id)
-        data.append([survey_id, surveyname, participants, s.time_end])
-    return render_template("index.html", surveys_created=surveys_created, exists=True, data=data)
+
+    return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
 
 """
@@ -199,7 +188,7 @@ def new_survey_form(survey=None):
         survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [
             column for column in survey["choices"][0]
-            if (column not in 
+            if (column not in
                 {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
             )
         ]
@@ -348,7 +337,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
         survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
         good_choice = {}
         good_choice["name"] = survey_choice.name
-        good_choice["id"] = survey_choice.survey_id
+        good_choice["id"] = survey_choice.id
         good_choice["slots"] = survey_choice.max_spaces
         good_choice["mandatory"] = survey_choice.mandatory
         good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
@@ -364,7 +353,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
             survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
             bad_choice = {}
             bad_choice["name"] = survey_choice.name
-            bad_choice["id"] = survey_choice.survey_id
+            bad_choice["id"] = survey_choice.id
             bad_choice["slots"] = survey_choice.max_spaces
             bad_choice["mandatory"] = survey_choice.mandatory
             bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
@@ -377,7 +366,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     for survey_choice in survey_choices:
         neutral_choice = {}
         neutral_choice["name"] = survey_choice.name
-        neutral_choice["id"] = survey_choice.survey_id
+        neutral_choice["id"] = survey_choice.id
         neutral_choice["slots"] = survey_choice.max_spaces
         neutral_choice["mandatory"] = survey_choice.mandatory
         neutral_choice["search"] = survey_all_info[int(survey_choice[0])]["search"]
@@ -448,7 +437,7 @@ def edit_survey_form(survey_id):
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
             column for column in survey["choices"][0]
-            if (column not in 
+            if (column not in
                 {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
             )
         ]
@@ -528,7 +517,7 @@ def edit_group_sizes(survey_id):
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
             column for column in survey["choices"][0]
-            if (column not in 
+            if (column not in
                 {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
             )
         ]

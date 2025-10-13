@@ -172,6 +172,33 @@ def test_get_list_active_answered(setup_db):
     assert len(active_answered) == 1
 
 
+def test_get_active_surveys_with_response_count_correct_id(setup_db):
+    """
+    Test that user with ownership returns correct surveys with correct answer count
+    """
+    d = setup_db
+    survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2024-01-01 02:02")
+    sor.add_owner_to_survey(survey_id, d["user_id"])
+    ranking = "2,3,5,4,1,6"
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    surveys = sr.get_active_surveys_and_response_count(d["user_id"])
+    assert surveys[0].surveyname == "Test survey 14"
+    assert surveys[0].response_count == 1
+
+
+def test_dont_get_active_surveys_with_response_count_incorrect_id(setup_db):
+    """
+    Test that user id with no ownership doesn't get surveys
+    """
+    d = setup_db
+    survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2024-01-01 02:02")
+    sor.add_owner_to_survey(survey_id, d["user_id"])
+    ranking = "2,3,5,4,1,6"
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    surveys = sr.get_active_surveys_and_response_count(d["user_id2"])
+    assert not surveys
+
+
 def test_get_list_closed_answered(setup_db):
     """
     Test that the list of closed surveys which the student has answered is the correct length
@@ -288,4 +315,14 @@ def test_exceptions():
     success = sr.get_survey_max_denied_choices(-1)
     assert not success
     success = sr.get_survey_search_visibility(-1)
+    assert not success
+    success = sr.get_active_surveys_and_response_count(-1)
+    assert not success
+    success = sr.get_all_active_surveys()
+    assert not success
+    success = sr.save_survey_edit(-1, "Motivaatio", "Moti moi moi", "loppuu joskus")
+    assert not success
+    success = sr.get_all_surveys()
+    assert not success
+    success = sr.set_survey_deleted_true(-1)
     assert not success
