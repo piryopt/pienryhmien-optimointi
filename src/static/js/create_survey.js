@@ -1,11 +1,11 @@
 var emptyCellText = "tyhjä";
 
-function parseObjFromRow(row, headers) {
+function parseObjFromRow(row, headers, checkbox_included) {
   var cells = Array.from(row.getElementsByTagName("td"));
   obj = {};
 
   for (var i = 0; i < headers.length; i++) {
-    if (i == 0) {
+    if (i == 0 && checkbox_included) {
       const mandatory_checkbox = cells[i].querySelector(
         'input[type="checkbox"]'
       );
@@ -159,7 +159,7 @@ function createNewSurvey() {
 
   var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"));
   var rowsAsJson = tableRows.map(function (x) {
-    return parseObjFromRow(x, tableHeaders);
+    return parseObjFromRow(x, tableHeaders, true);
   });
 
   var minChoicesElement = document.getElementById("minchoices");
@@ -331,7 +331,7 @@ function saveGroupSizes() {
   var surveyID = document.getElementById("survey_id").value;
   var tableRows = Array.from(document.querySelectorAll("#choiceTable tr"));
   var rowsAsJson = tableRows.map(function (x) {
-    return parseObjFromRow(x, tableHeaders);
+    return parseObjFromRow(x, tableHeaders, false);
   });
   var requestData = {
     surveyGroupname: $("#groupname").val(),

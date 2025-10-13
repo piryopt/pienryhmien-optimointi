@@ -26,7 +26,7 @@ def test_get_user_data_returns_false_for_invalid_id(setup_db):
 
     incorrect_ids = ["x", "kukkuluuruu", 3.14, "55", False, True, []]
     for item in incorrect_ids:
-        assert ur.get_user_data(item) is False
+        assert ur.get_user_data(item) is None
 
 
 def test_change_user_language_returns_false_for_invalid_user_id(setup_db):

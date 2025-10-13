@@ -187,7 +187,10 @@ def new_survey_form(survey=None):
             return redirect("/")
         survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [
-            column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+            column for column in survey["choices"][0]
+            if (column not in
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
         ]
     return render_template("create_survey.html", survey=survey)
 
@@ -434,8 +437,11 @@ def edit_survey_form(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
-    ]
+            column for column in survey["choices"][0]
+            if (column not in
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
+        ]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -511,8 +517,11 @@ def edit_group_sizes(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
-    ]
+            column for column in survey["choices"][0]
+            if (column not in
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
+        ]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template(
@@ -571,7 +580,7 @@ def survey_answers(survey_id):
     survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
-        choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
+        choices_data.append([user_service.get_email(s.user_id), s.ranking, s.rejections, s.reason])
 
     survey_answers_amount = len(survey_answers)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
