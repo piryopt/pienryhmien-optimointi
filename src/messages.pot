@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-10-08 13:57+0300\n"
+"POT-Creation-Date: 2025-10-09 17:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: routes.py:230
 msgid ""
@@ -31,70 +31,70 @@ msgstr ""
 msgid "Uusi kysely luotu!"
 msgstr ""
 
-#: routes.py:415
+#: routes.py:413
 msgid "Poistaminen epäonnistui!"
 msgstr ""
 
-#: routes.py:419
+#: routes.py:417
 msgid "Valinnat poistettu"
 msgstr ""
 
-#: routes.py:504
+#: routes.py:502
 msgid "Sähköpostiosoite puuttuu!"
 msgstr ""
 
-#: routes.py:566
+#: routes.py:564
 msgid "Tallennus onnistui. Päivitä sivu nähdäksesi tilanne."
 msgstr ""
 
-#: routes.py:569
+#: routes.py:567
 msgid "Tallennus epäonnistui."
 msgstr ""
 
-#: routes.py:596
+#: routes.py:595
 msgid ""
 "Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia "
 "paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus "
 "sivulta."
 msgstr ""
 
-#: routes.py:696
+#: routes.py:694
 msgid "Kyselyn sulkeminen epäonnistui!"
 msgstr ""
 
-#: routes.py:710
+#: routes.py:708
 msgid "Kyselyn avaaminen epäonnistui!"
 msgstr ""
 
-#: routes.py:984
+#: routes.py:982
 msgid "Tallennus epäonnistui. Valitse vähintään "
 msgstr ""
 
-#: routes.py:989
+#: routes.py:987
 msgid "Tallennus epäonnistui. Voit hylätä enintään "
 msgstr ""
 
-#: routes.py:998
+#: routes.py:996
 msgid "Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui."
 msgstr ""
 
-#: routes.py:1004
+#: routes.py:1003
 msgid ""
 "Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla "
 "korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."
 msgstr ""
 
-#: routes.py:1010
+#: routes.py:1008
 msgid ""
 "Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla "
 "vähintään 10."
 msgstr ""
 
-#: routes.py:1016
+#: routes.py:1014
 msgid "Tallennus onnistui."
 msgstr ""
 
-#: routes.py:1019
+#: routes.py:1017
 msgid "Tallennus epäonnistui"
 msgstr ""
 
@@ -132,7 +132,7 @@ msgstr ""
 msgid "Palautteen antaminen onnistui"
 msgstr ""
 
-#: services/survey_owners_service.py:35
+#: services/survey_owners_service.py:36
 msgid ""
 "Sähköpostiosoitetta ei löydetty järjestelmästä? Onko hän kirjautunut "
 "aikaisemmin jakajaan? Syötetty sähköpostiosoite: "
@@ -147,6 +147,7 @@ msgid "  sai oikeudet kyselyyn!"
 msgstr ""
 
 #: services/survey_service.py:338 templates/create_survey.html:53
+#: templates/edit_survey.html:40
 msgid "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"
 msgstr ""
 
@@ -154,7 +155,7 @@ msgstr ""
 msgid "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"
 msgstr ""
 
-#: services/survey_service.py:360
+#: services/survey_service.py:361
 msgid ""
 "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi"
 " ilmestyy, kun asetat hiiren poistettavan rivin päälle."
@@ -250,17 +251,17 @@ msgstr ""
 msgid "Luo uusi kysely"
 msgstr ""
 
-#: templates/create_survey.html:6 templates/create_survey.html:364
+#: templates/create_survey.html:6 templates/create_survey.html:372
 #: templates/group_sizes.html:41 templates/results.html:69
 msgid "Nimi"
 msgstr ""
 
-#: templates/create_survey.html:7 templates/create_survey.html:371
+#: templates/create_survey.html:7 templates/create_survey.html:379
 #: templates/group_sizes.html:42
 msgid "Enimmäispaikat"
 msgstr ""
 
-#: templates/create_survey.html:8 templates/create_survey.html:378
+#: templates/create_survey.html:8 templates/create_survey.html:386
 msgid "Ryhmän minimikoko"
 msgstr ""
 
@@ -291,7 +292,7 @@ msgstr ""
 msgid "Vastausaika päättyy"
 msgstr ""
 
-#: templates/create_survey.html:88
+#: templates/create_survey.html:88 templates/edit_survey.html:62
 msgid "Päivämäärän tulee olla muodossa pp.kk.yyyy"
 msgstr ""
 
@@ -355,9 +356,12 @@ msgstr ""
 msgid ""
 "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään       "
 "vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia"
-"       kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,       "
-"ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle       tai "
-"pienelle kyselylle."
+"\n"
+"      \\ kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja, \\ "
+"ja\n"
+"      vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle \\ tai "
+"pienelle\n"
+"      kyselylle."
 msgstr ""
 
 #: templates/create_survey.html:317 templates/group_sizes.html:35
@@ -369,7 +373,8 @@ msgid ""
 "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa     "
 "mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko."
 "     Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. "
-"Sarakkeen     voit luoda painamalla '+ Lisää tietokenttä'."
+"Sarakkeen\n"
+"    \\ voit luoda painamalla '+ Lisää tietokenttä'."
 msgstr ""
 
 #: templates/create_survey.html:324
@@ -386,36 +391,41 @@ msgid ""
 "opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *."
 msgstr ""
 
-#: templates/create_survey.html:342
+#: templates/create_survey.html:343
 msgid ""
-"Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän "
-"mimimikoko ei voi olla 0."
+"Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän\n"
+"    mimimikoko ei voi olla 0."
 msgstr ""
 
-#: templates/create_survey.html:344
+#: templates/create_survey.html:347
 msgid ""
-"HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat, "
-"että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella "
-"oleva laatikko."
+"HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat,\n"
+"    että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla "
+"puolella\n"
+"    oleva laatikko."
 msgstr ""
 
-#: templates/create_survey.html:362
+#: templates/create_survey.html:364
+msgid "Pakota minimikoko"
+msgstr ""
+
+#: templates/create_survey.html:370
 msgid "yli 5 merkkiä pitkiä"
 msgstr ""
 
-#: templates/create_survey.html:369 templates/create_survey.html:376
+#: templates/create_survey.html:377 templates/create_survey.html:384
 msgid "kokonaislukuja"
 msgstr ""
 
-#: templates/create_survey.html:387
+#: templates/create_survey.html:395
 msgid "Lisää tietokenttä"
 msgstr ""
 
-#: templates/create_survey.html:432
+#: templates/create_survey.html:443
 msgid "Lisää vaihtoehto"
 msgstr ""
 
-#: templates/create_survey.html:445
+#: templates/create_survey.html:456
 msgid "Luo kysely"
 msgstr ""
 
@@ -759,7 +769,7 @@ msgstr ""
 msgid "Avoin"
 msgstr ""
 
-#: templates/surveys.html:30
+#: templates/surveys.html:30 templates/surveys.html:63
 msgid "Tarkastele tuloksia"
 msgstr ""
 
@@ -767,53 +777,41 @@ msgstr ""
 msgid "Kopioi kyselyn osoite leikepöydälle"
 msgstr ""
 
-#: templates/surveys.html:32
+#: templates/surveys.html:32 templates/surveys.html:64
 msgid "Muokkaa kyselyä tai lisää siihen ylläpitäjä"
 msgstr ""
 
-#: templates/surveys.html:33
+#: templates/surveys.html:33 templates/surveys.html:65
 msgid "Kopioi kysely"
 msgstr ""
 
-#: templates/surveys.html:34
+#: templates/surveys.html:34 templates/surveys.html:66
 msgid "Poista kysely"
 msgstr ""
 
-#: templates/surveys.html:73
-msgid "\" Tarkastele tuloksia\""
-msgstr ""
-
-#: templates/surveys.html:74
-msgid "\" Muokkaa kyselyä tai lisää siihen ylläpitäjä\""
-msgstr ""
-
-#: templates/surveys.html:75
-msgid "\" Kopioi kysely\""
-msgstr ""
-
-#: tools/survey_result_helper.py:60 tools/survey_result_helper.py:162
-#: tools/survey_result_helper.py:173
+#: tools/survey_result_helper.py:60 tools/survey_result_helper.py:164
+#: tools/survey_result_helper.py:175
 msgid "Hylätty"
 msgstr ""
 
-#: tools/survey_result_helper.py:69 tools/survey_result_helper.py:162
-#: tools/survey_result_helper.py:176
+#: tools/survey_result_helper.py:69 tools/survey_result_helper.py:164
+#: tools/survey_result_helper.py:178
 msgid "Ei järjestetty"
 msgstr ""
 
-#: tools/survey_result_helper.py:119 tools/survey_result_helper.py:177
+#: tools/survey_result_helper.py:119 tools/survey_result_helper.py:179
 msgid "Ei järjestettyyn"
 msgstr ""
 
-#: tools/survey_result_helper.py:121 tools/survey_result_helper.py:174
+#: tools/survey_result_helper.py:121 tools/survey_result_helper.py:176
 msgid "Hylättyyn"
 msgstr ""
 
-#: tools/survey_result_helper.py:175 tools/survey_result_helper.py:178
+#: tools/survey_result_helper.py:177 tools/survey_result_helper.py:180
 msgid " valintaan sijoitetut käyttäjät: "
 msgstr ""
 
-#: tools/survey_result_helper.py:180
+#: tools/survey_result_helper.py:182
 msgid ". valintaansa sijoitetut käyttäjät: "
 msgstr ""
 
