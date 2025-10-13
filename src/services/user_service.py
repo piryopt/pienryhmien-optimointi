@@ -78,11 +78,11 @@ class UserService:
         args:
             user_id: The id of the user
         """
-        if not id:
-            return False
+        if not user_id:
+            return None
         user = self._user_repository.get_user_data(user_id)
         if not user:
-            return False
+            return None
         email = user.email
         return email
 
@@ -93,11 +93,11 @@ class UserService:
         args:
             user_id: The id of the user
         """
-        if not id:
-            return False
+        if not user_id:
+            return None
         user = self._user_repository.get_user_data(user_id)
         if not user:
-            return False
+            return None
         name = user.name
         return name
 
@@ -156,8 +156,6 @@ class UserService:
         Gets the number of students registered in Jakaja. Used for analytics in the admin page.
         """
         users = self._user_repository.get_all_students()
-        if not users:
-            return 0
         return len(users)
 
     def len_all_teachers(self):
@@ -165,8 +163,6 @@ class UserService:
         Gets the number of teachers that have survey privileges in Jakaja. Used for analytics in the admin page.
         """
         teachers = self._user_repository.get_all_teachers()
-        if not teachers:
-            return 0
         return len(teachers)
 
     def get_user_id_by_email(self, email):
@@ -178,16 +174,16 @@ class UserService:
         """
         user = self._user_repository.get_user_by_email(email)
         if not user:
-            return False
+            return None
         return user.id
 
     def update_user_language(self, user_id, language):
         accepted_languages = ["fi", "en", "sv"]
         if language not in accepted_languages:
             return False
-        self._user_repository.change_user_language(user_id, language)
+        success = self._user_repository.change_user_language(user_id, language)
         session["language"] = language
-        return True
+        return success
 
 
 user_service = UserService()

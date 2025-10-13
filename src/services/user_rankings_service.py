@@ -37,10 +37,7 @@ class UserRankingsService:
             survey_id: The id of the survey
             user_id: The id of the user
         """
-        ranking = self._user_rankings_repository.get_user_ranking(user_id, survey_id)
-        if not ranking:
-            return False
-        return ranking
+        return self._user_rankings_repository.get_user_ranking(user_id, survey_id)
 
     def delete_ranking(self, survey_id, current_user_id):
         """
@@ -53,8 +50,7 @@ class UserRankingsService:
         ranking = self._user_rankings_repository.get_user_ranking(current_user_id, survey_id)
         if not ranking:
             return False
-        self._user_rankings_repository.delete_user_ranking(current_user_id, survey_id)
-        return True
+        return self._user_rankings_repository.delete_user_ranking(current_user_id, survey_id)
 
     def get_user_ranking(self, user_id, survey_id):
         """
@@ -82,10 +78,8 @@ class UserRankingsService:
         """
         Get the amount of all rankings made in Jakaja. Used for analytics in the admin page.
         """
-        rankings = self._user_rankings_repository.get_all_rankings()
-        if not rankings:
-            return 0
-        return len(rankings)
+        return self._user_rankings_repository.get_all_rankings()
+        
 
 
 user_rankings_service = UserRankingsService()

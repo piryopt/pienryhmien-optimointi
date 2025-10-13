@@ -34,7 +34,7 @@ class SurveyOwnersRepository:
             owner = result.fetchone()
             if not owner:
                 return False
-            return owner
+            return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return False

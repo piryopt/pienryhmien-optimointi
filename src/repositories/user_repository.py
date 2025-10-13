@@ -15,12 +15,10 @@ class UserRepository:
             sql = "SELECT * FROM users WHERE email=:email"
             result = db.session.execute(text(sql), {"email": email})
             user = result.fetchone()
-            if not user:
-                return False
             return user
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def register(self, user):
         """
@@ -32,14 +30,14 @@ class UserRepository:
         existing_user = self.find_by_email(user.email)
         if existing_user:
             print(f"The user with the email {user.email} already exists!")
-            return
+            return None
         try:
             sql = "INSERT INTO users (name, email, isteacher, admin, language)VALUES (:name, :email, :isteacher, False, :language)"
             db.session.execute(text(sql), {"name": user.name, "email": user.email, "isteacher": user.isteacher, "language": "fi"})
             db.session.commit()
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
         return user
 
     def get_all_students(self):
@@ -50,12 +48,10 @@ class UserRepository:
             sql = "SELECT * FROM users WHERE isteacher=False"
             result = db.session.execute(text(sql))
             users = result.fetchall()
-            if not users:
-                return False
             return users
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_user_data(self, user_id):
         """
@@ -68,12 +64,10 @@ class UserRepository:
             sql = "SELECT * FROM users WHERE id=:id"
             result = db.session.execute(text(sql), {"id": user_id})
             user = result.fetchone()
-            if not user:
-                return False
             return user
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def make_user_teacher(self, email):  # don't remove, needed later
         """
@@ -97,12 +91,10 @@ class UserRepository:
             sql = "SELECT * FROM users WHERE isteacher=True"
             result = db.session.execute(text(sql))
             teachers = result.fetchall()
-            if not teachers:
-                return False
             return teachers
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_user_by_email(self, email):
         """
@@ -115,12 +107,10 @@ class UserRepository:
             sql = "SELECT * FROM users WHERE email=:email"
             result = db.session.execute(text(sql), {"email": email})
             user = result.fetchone()
-            if not user:
-                return False
             return user
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def change_user_language(self, user_id, language):
         """
@@ -134,6 +124,7 @@ class UserRepository:
             sql = "UPDATE users SET language=:language WHERE id=:user_id"
             db.session.execute(text(sql), {"user_id": user_id, "language": language})
             db.session.commit()
+            return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
