@@ -121,10 +121,12 @@ class SurveyRepository:
             sql = """SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count FROM surveys s 
             JOIN survey_owners so ON s.id = so.survey_id 
             LEFT JOIN user_survey_rankings us ON s.id = us.survey_id 
-            WHERE (so.user_id=1 AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
+            WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
             GROUP BY s.id, s.surveyname"""
+
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
+
             if not surveys:
                 return False
             return surveys
