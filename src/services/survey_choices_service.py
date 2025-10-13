@@ -23,11 +23,7 @@ class SurveyChoicesService:
         args:
             survey_id: The id of the survey from which we want the survey choices
         """
-        survey = self._survey_repository.get_survey(survey_id)
-        if not survey:
-            return False
-        survey_choices = self._survey_choices_repository.find_survey_choices(survey_id)
-        return survey_choices
+        return self._survey_choices_repository.find_survey_choices(survey_id)
 
     def get_survey_choice(self, survey_choice_id: int):
         """
@@ -36,10 +32,7 @@ class SurveyChoicesService:
         args:
             survey_choice_id: The id of the survey choice
         """
-        survey_choice = self._survey_choices_repository.get_survey_choice(survey_choice_id)
-        if not survey_choice:
-            return False
-        return survey_choice
+        return self._survey_choices_repository.get_survey_choice(survey_choice_id)
 
     def get_survey_choice_min_size(self, survey_choice_id: int):
         """
@@ -50,7 +43,7 @@ class SurveyChoicesService:
         """
         survey_choice = self._survey_choices_repository.get_survey_choice(survey_choice_id)
         if not survey_choice:
-            return False
+            return None
         return survey_choice.min_size
 
     def get_choice_name_and_spaces(self, choice_id: int):
@@ -62,7 +55,9 @@ class SurveyChoicesService:
         """
         # take only the needed columns
         data = self._survey_choices_repository.get_survey_choice(choice_id)
-        return (data[0], data[2], data[3])
+        if not data:
+            return None
+        return (data.id, data.name, data.max_spaces)
 
     def get_choice_additional_infos(self, choice_id: int):
         """
@@ -115,23 +110,6 @@ class SurveyChoicesService:
         """
         return self._survey_choices_repository.create_new_survey_choice(survey_id, "Tyhjä", spaces, 0, False)
 
-    def check_min_equals_max(self, survey_id):
-        """
-        Check if all survey choices have the same min and max values. Needed for fixing a bug
-        where the app crashes in certain cases.
-
-        Args:
-            survey_id: id for the survey
-        """
-        choices = self.get_list_of_survey_choices(survey_id)
-        if not choices:
-            return (False, 0)
-        minmax = choices[0].max_spaces
-        for c in choices:
-            if c.max_spaces != minmax or c.min_size != minmax:
-                return (False, 0)
-        return (True, minmax)
-
     def check_answers_less_than_min_size(self, survey_id, survey_answers_amount):
         """
         Check if there are less answers than the group with the smallest min_size
@@ -157,7 +135,7 @@ class SurveyChoicesService:
         """
         survey_choice = self._survey_choices_repository.get_survey_choice(survey_choice_id)
         if not survey_choice:
-            return False
+            return None
         return survey_choice.mandatory
 
 

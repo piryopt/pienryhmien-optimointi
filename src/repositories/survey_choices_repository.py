@@ -17,7 +17,7 @@ class SurveyChoicesRepository:
             return survey_choices
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_survey_choice(self, choice_id):
         """
@@ -30,12 +30,10 @@ class SurveyChoicesRepository:
             sql = "SELECT * FROM survey_choices WHERE (id=:id AND deleted=False)"
             result = db.session.execute(text(sql), {"id": choice_id})
             ranking = result.fetchone()
-            if not ranking:
-                return False
             return ranking
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def create_new_survey_choice(self, survey_id, name, seats, min_size, mandatory):
         """
@@ -54,7 +52,7 @@ class SurveyChoicesRepository:
             return result.fetchone()[0]
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def edit_choice_group_size(self, survey_id: str, choice_name: str, seats: int):
         """
@@ -64,7 +62,7 @@ class SurveyChoicesRepository:
         """
         try:
             sql = "UPDATE survey_choices SET max_spaces = :max_spaces WHERE survey_id = :survey_id AND name = :choice_name"
-            result = db.session.execute(text(sql), {"survey_id": survey_id, "choice_name": choice_name, "max_spaces": seats})
+            db.session.execute(text(sql), {"survey_id": survey_id, "choice_name": choice_name, "max_spaces": seats})
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
@@ -94,7 +92,7 @@ class SurveyChoicesRepository:
             return result.fetchall()
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_choice_additional_infos_not_hidden(self, choice_id):
         """
@@ -106,7 +104,7 @@ class SurveyChoicesRepository:
             return result.fetchall()
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return []
 
     def get_all_additional_infos(self, survey_id):
         """
@@ -123,7 +121,7 @@ class SurveyChoicesRepository:
             return result.fetchall()
         except Exception as e:
             print(e)
-            return False
+            return []
 
 
 survey_choices_repository = SurveyChoicesRepository()

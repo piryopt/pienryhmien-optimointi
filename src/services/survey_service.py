@@ -9,9 +9,11 @@ from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_
 from src.tools.date_converter import time_to_close
 from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
+from src.tools.constants import SURVEY_FIELDS
 
 
 class SurveyService:
+    SURVEY_FIELDS = SURVEY_FIELDS
     def __init__(
         self,
         survey_repositroy=default_survey_repository,
@@ -24,6 +26,7 @@ class SurveyService:
         corresponding repository
 
         args and variables:
+            SURVEY_FIELDS: Survey column names to help with languages
             survey_repository: The repository for surveys
             survey_owners_repository: The repository for survey owners
             choices_repository: The repository for survey choices
@@ -114,10 +117,16 @@ class SurveyService:
         args:
             user_id: The id of the user whose active surveys we want
         """
-        surveys = self._survey_repository.get_active_surveys(user_id)
-        if not surveys:
-            return False
-        return surveys
+        return self._survey_repository.get_active_surveys(user_id)
+
+    def get_active_surveys_and_response_count(self, user_id):
+        """
+        Get the active surveys for a user and response count
+
+        args:
+            user_id: The id of the user whose active surveys we want
+        """
+        return self._survey_repository.get_active_surveys_and_response_count(user_id)
 
     def check_if_survey_closed(self, survey_id):
         """
@@ -139,8 +148,7 @@ class SurveyService:
         args:
             user_id: The id of the user whose closed surveys we want
         """
-        surveys = self._survey_repository.get_closed_surveys(user_id)
-        return surveys
+        return self._survey_repository.get_closed_surveys(user_id)
 
     def update_survey_answered(self, survey_id):
         """
@@ -257,10 +265,7 @@ class SurveyService:
         args:
             user_id: The id of the user
         """
-        active = self._survey_repository.get_list_active_answered(user_id)
-        if not active:
-            return []
-        return active
+        return self._survey_repository.get_list_active_answered(user_id)
 
     def get_list_closed_answered(self, user_id):
         """
@@ -269,10 +274,7 @@ class SurveyService:
         args:
             user_id: The id of the user
         """
-        closed = self._survey_repository.get_list_closed_answered(user_id)
-        if not closed:
-            return []
-        return closed
+        return self._survey_repository.get_list_closed_answered(user_id)
 
     def check_for_surveys_to_close(self):
         """
@@ -299,10 +301,8 @@ class SurveyService:
         args:
             survey_id: The id of the survey
         """
-        rankings = self._survey_repository.fetch_survey_responses(survey_id)
-        if not rankings:
-            return []
-        return rankings
+        return self._survey_repository.fetch_survey_responses(survey_id)
+        
 
     def get_choice_popularities(self, survey_id: str):
         """
@@ -330,9 +330,6 @@ class SurveyService:
         return (answers, popularities)
 
     def validate_created_survey(self, survey_dict, edited=False):
-        # print("VALIDATING")
-        # print(survey_dict)
-
         # Name length
         if len(survey_dict["surveyGroupname"]) < 5:
             msg = gettext("Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä")
@@ -344,21 +341,14 @@ class SurveyService:
                 msg = gettext("Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!")
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
+            language = session.get("language", "fi")
             for choice in survey_dict["choices"]:
-                language = session.get("language", 0)
-                language_mapping = {"fi": 0, "en": 1, "sv": 2}
-                dictionary = [
-                    ["Nimi", "Name", "Namn"],
-                    ["Enimmäispaikat", "Maximum capacity", "Max antal platser"],
-                    ["Ryhmän minimikoko", "Minimum group size", "Minsta gruppstorlek"],
-                ]
-                lang_i = language_mapping.get(language)
-                if lang_i is None:
-                    lang_i = 0
-
-                if choice[dictionary[0][lang_i]] == "tyhjä" or choice[dictionary[1][lang_i]] == "tyhjä" or choice[dictionary[2][lang_i]] == "tyhjä":
+                if choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä" \
+                or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä" \
+                or choice[SurveyService.SURVEY_FIELDS["min_size"][language]] == "tyhjä":
                     msg = gettext(
-                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi ilmestyy, kun asetat hiiren poistettavan rivin päälle."
+                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi " \
+                        "ilmestyy, kun asetat hiiren poistettavan rivin päälle."
                     )
                     return {"success": False, "message": {"status": "0", "msg": msg}}
         return {"success": True}
@@ -401,12 +391,18 @@ class SurveyService:
 
     def update_survey_group_sizes(self, survey_id, choices):
         """
-        Updates the group sizes of survey choices. A teacher only gets to use this fucntion if the amount of students that have answered the
-        survey is greater than the sum of all group sizes.
+        Updates the group sizes of survey choices. A teacher only gets to use this
+        fucntion if the amount of students that have answered the survey is greater
+        than the sum of all group sizes.
         """
         count = 0
+        language = session.get("language", "fi")
         for choice in choices:
-            success = self._choices_repository.edit_choice_group_size(survey_id, choice["Nimi"], choice["Enimmäispaikat"])
+            success = self._choices_repository.edit_choice_group_size(
+                survey_id,
+                choice[SurveyService.SURVEY_FIELDS["name"][language]],
+                choice[SurveyService.SURVEY_FIELDS["spaces"][language]]
+            )
             if not success:
                 if count > 0:
                     message = gettext("Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut")
@@ -432,8 +428,6 @@ class SurveyService:
         Gets the size of all surveys. Used for analytics in the admin page.
         """
         surveys = self._survey_repository.get_all_surveys()
-        if not surveys:
-            return 0
         return len(surveys)
 
     def get_all_active_surveys(self):
@@ -442,7 +436,7 @@ class SurveyService:
         """
         surveys = self._survey_repository.get_all_active_surveys()
         if not surveys:
-            return False
+            return []
         admin_data = []
         for survey in surveys:
             survey_choices = default_survey_choices_repository.find_survey_choices(survey.id)

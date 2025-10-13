@@ -108,7 +108,7 @@ def test_get_feedback(setup_env):
     d["data"]["content"] = "Huijasin, ne ovat heikkoja >:D"
     success, message = fs.new_feedback(d["user_id"], d["data"])
     assert success
-    all_unsolved_feedback = fr.get_unsolved_feedback()
+    all_unsolved_feedback = fr.get_feedback_by_solved(False)
     feedback = all_unsolved_feedback[-1]
     feedback_data = fs.get_feedback(feedback.id)
     assert feedback_data[1] == "Testit ovat mahtavia!"
@@ -132,7 +132,7 @@ def test_get_solved_feedback(setup_env):
     d["data"]["content"] = "Huijasin, ne ovat heikkoja >:D"
     success, message = fs.new_feedback(d["user_id"], d["data"])
     assert success
-    all_unsolved_feedback = fr.get_unsolved_feedback()
+    all_unsolved_feedback = fr.get_feedback_by_solved(False)
     feedback = all_unsolved_feedback[-1]
     fs.mark_feedback_solved(feedback.id)
     all_solved_feedback = fs.get_solved_feedback()

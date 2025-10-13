@@ -43,12 +43,10 @@ class UserRankingsRepository:
             sql = "SELECT * FROM user_survey_rankings WHERE (user_id=:user_id AND survey_id=:survey_id AND deleted=False)"
             result = db.session.execute(text(sql), {"user_id": user_id, "survey_id": survey_id})
             ranking = result.fetchone()
-            if not ranking:
-                return False
             return ranking
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return None
 
     def delete_user_ranking(self, user_id, survey_id):
         """
@@ -72,15 +70,13 @@ class UserRankingsRepository:
         SQL code for getting the amount of all rankings. Used for analytics in the admin page.
         """
         try:
-            sql = "SELECT * FROM user_survey_rankings"
+            sql = "SELECT COUNT(id) FROM user_survey_rankings"
             result = db.session.execute(text(sql))
-            rankings = result.fetchall()
-            if not rankings:
-                return False
-            return rankings
+            rankings_count = result.fetchone()[0]
+            return rankings_count
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            return 0
 
 
 user_rankings_repository = UserRankingsRepository()

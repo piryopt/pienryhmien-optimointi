@@ -124,15 +124,15 @@ function ExportAllData_HTML(){
     const choiceColIndex = XLSX.utils.decode_cell(choiceColKey).c;
     const finalValues = Object.fromEntries(
         Object.entries(ws9).map(([key, val]) => {
-            const decoded = XLSX.utils.decode_cell(key)  
+            const decoded = XLSX.utils.decode_cell(key);
             if (decoded.c > choiceColIndex) {
-                    decoded.c -= 1
-                    const newKey = XLSX.utils.encode_cell(decoded)
-                    return [newKey, val]
+                    decoded.c -= 1;
+                    const newKey = XLSX.utils.encode_cell(decoded);
+                    return [newKey, val];
                 } else if (decoded.c === choiceColIndex) {
-                    return null
+                    return null;
                 }
-                return [key, val]
+                return [key, val];
             }
         )
         .filter(e => e !== null)

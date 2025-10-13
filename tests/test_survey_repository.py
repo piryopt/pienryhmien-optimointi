@@ -21,8 +21,8 @@ def test_check_that_survey_doesnt_exist():
     """
     Test that survey with invalid id doesn't exist
     """
-    exists = sr.get_survey("ITSNOTREAL")
-    assert exists is False
+    survey = sr.get_survey("ITSNOTREAL")
+    assert survey is None
 
 
 def test_survey_name_doesnt_exist(setup_db):
@@ -121,8 +121,8 @@ def test_count_active_surveys_invalid_id():
     """
     Test that the function behaves correctly when trying to get the list of active created surveys for an invalid user
     """
-    exists = sr.get_active_surveys(-1)
-    assert exists is False
+    active_surveys = sr.get_active_surveys(-1)
+    assert active_surveys == []
 
 
 def test_survey_description(setup_db):
@@ -191,7 +191,7 @@ def test_get_list_active_answered_invalid():
     Test that getting the list of active surveys of an invalid account works
     """
     active_answered = sr.get_list_active_answered(-1)
-    assert active_answered is False
+    assert active_answered == []
 
 
 def test_get_list_closed_answered_invalid():
@@ -199,7 +199,7 @@ def test_get_list_closed_answered_invalid():
     Test that getting the list of closed surveys of an invalid account works
     """
     closed_answered = sr.get_list_closed_answered(-1)
-    assert closed_answered is False
+    assert closed_answered == []
 
 
 def test_get_list_all_open_surveys(setup_db):

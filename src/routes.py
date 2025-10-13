@@ -106,23 +106,23 @@ def frontpage() -> str:
     user_id = session.get("user_id", 0)
     if user_id == 0:
         return render_template("index.html")
-    is_teacher = user_service.check_if_teacher(user_id)
+    # is_teacher = user_service.check_if_teacher(user_id)
     surveys_created = survey_service.count_surveys_created(user_id)
     # If 0 surveys created, return the base home page.
-    if surveys_created == 0:
-        return render_template("index.html", surveys_created=0, exists=False, is_teacher=is_teacher)
-    surveys = survey_service.get_active_surveys(user_id)
+    # if surveys_created == 0:
+    #    return render_template("index.html", surveys_created=0, exists=False)
+    surveys = survey_service.get_active_surveys_and_response_count(user_id)
     if not surveys:
-        return render_template("index.html", surveys_created=surveys_created, exists=False, is_teacher=is_teacher)
+        return render_template("index.html", surveys_created=surveys_created, exists=False)
     data = []
     for s in surveys:
         survey_id = s.id
         surveyname = s.surveyname
         survey_answers = survey_service.fetch_survey_responses(survey_id)
         participants = len(survey_answers)
-        survey_ending_date = survey_service.get_survey_enddate(survey_id)
-        data.append([survey_id, surveyname, participants, survey_ending_date])
-    return render_template("index.html", surveys_created=surveys_created, exists=True, data=data, is_teacher=is_teacher)
+        # survey_ending_date = survey_service.get_survey_enddate(survey_id)
+        data.append([survey_id, surveyname, participants, s.time_end])
+    return render_template("index.html", surveys_created=surveys_created, exists=True, data=data)
 
 
 """
@@ -154,9 +154,9 @@ def get_info():
     """
     When a choice is clicked, display choice info.
     """
-    raw_id = request.get_json()
-    basic_info = survey_choices_service.get_choice_name_and_spaces(int(raw_id))
-    additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(int(raw_id))
+    choice_id = int(request.get_json())
+    basic_info = survey_choices_service.get_choice_name_and_spaces(choice_id)
+    additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(choice_id)
     return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
 
 
@@ -198,9 +198,10 @@ def new_survey_form(survey=None):
             return redirect("/")
         survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [
-            column
-            for column in survey["choices"][0]
-            if (column != "name" and column != "seats" and column != "id" and column != "min_size" and column != "mandatory")
+            column for column in survey["choices"][0]
+            if (column not in 
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
         ]
     return render_template("create_survey.html", survey=survey)
 
@@ -446,8 +447,11 @@ def edit_survey_form(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-        column for column in survey["choices"][0] if (column != "name" and column != "seats" and column != "min_size" and column != "mandatory")
-    ]
+            column for column in survey["choices"][0]
+            if (column not in 
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
+        ]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -523,10 +527,11 @@ def edit_group_sizes(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-        column
-        for column in survey["choices"][0]
-        if (column != "name" and column != "seats" and column != "id" and column != "min_size" and column != "mandatory")
-    ]
+            column for column in survey["choices"][0]
+            if (column not in 
+                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
+            )
+        ]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template(
@@ -585,7 +590,7 @@ def survey_answers(survey_id):
     survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
-        choices_data.append([user_service.get_email(s[0]), s[1], s[2], s[3]])
+        choices_data.append([user_service.get_email(s.user_id), s.ranking, s.rejections, s.reason])
 
     survey_answers_amount = len(survey_answers)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
@@ -860,8 +865,8 @@ def admin_all_active_surveys():
     return render_template("/admintools/admin_survey_list.html", data=data)
 
 
-#@app.route("/admintools/gen_data", methods=["GET", "POST"])
-#def admin_gen_data():
+# @app.route("/admintools/gen_data", methods=["GET", "POST"])
+# def admin_gen_data():
 #    """
 #    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
 #    """
