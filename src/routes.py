@@ -312,7 +312,6 @@ def surveys(survey_id):
     # Shuffle the choices, so that the choices aren't displayed in a fixed order.
     shuffled_choices = list(survey_all_info.values())
     shuffle(shuffled_choices)
-    print(shuffled_choices)
     return render_template("survey.html", choices=shuffled_choices, survey=survey, additional_info=additional_info)
 
 

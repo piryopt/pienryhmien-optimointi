@@ -316,3 +316,13 @@ def test_exceptions():
     assert not success
     success = sr.get_survey_search_visibility(-1)
     assert not success
+    success = sr.get_active_surveys_and_response_count(-1)
+    assert not success
+    success = sr.get_all_active_surveys()
+    assert not success
+    success = sr.save_survey_edit(-1, "Motivaatio", "Moti moi moi", "loppuu joskus")
+    assert not success
+    success = sr.get_all_surveys()
+    assert not success
+    success = sr.set_survey_deleted_true(-1)
+    assert not success

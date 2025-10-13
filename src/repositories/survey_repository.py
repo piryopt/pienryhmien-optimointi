@@ -117,26 +117,6 @@ class SurveyRepository:
             sql = """SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count FROM surveys s 
             JOIN survey_owners so ON s.id = so.survey_id 
             LEFT JOIN user_survey_rankings us ON s.id = us.survey_id 
-            WHERE (so.user_id=1 AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
-            GROUP BY s.id, s.surveyname"""
-            result = db.session.execute(text(sql), {"user_id": user_id})
-            surveys = result.fetchall()
-            return surveys
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return []
-
-    def get_active_surveys_and_response_count(self, user_id):
-        """
-        Get all active surveys and response counts to surveys where user is an owner.
-
-        args:
-            user_id: The id of the user
-        """
-        try:
-            sql = """SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count FROM surveys s 
-            JOIN survey_owners so ON s.id = so.survey_id 
-            LEFT JOIN user_survey_rankings us ON s.id = us.survey_id 
             WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
             GROUP BY s.id, s.surveyname"""
 
