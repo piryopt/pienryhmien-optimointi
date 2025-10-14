@@ -3,6 +3,12 @@
 {% block title %}{{ _('Kysely') }}{% endblock %}
 
 {% block head %}
+<style>
+    .important-group {
+        border: 2px solid #ff9800 !important;
+        box-shadow: 0 0 8px #ff9800;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -51,7 +57,7 @@
                 <div class="col-sm">
                     <ol id="sortable-good" class="list-group list-group-numbered" style="border-style: solid; min-height: 80px; border-color: green; padding-right: 10px;">
                         {% for group in good_survey_choices %}
-                        <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}" data-toggle="modal" data-target="#myModal">
+                        <li class="list-group-item list-group-item-action flex-column align-items-start{% if group.mandatory %} important-group{% endif %}" aria-current="true" id="{{ group.id }}" data-toggle="modal" data-target="#myModal">
                             <div class="d-flex w-100 justify-content-between" id="search">
                                 <h5 class="mb-1">{{ group.name }}</h5>
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
@@ -70,7 +76,7 @@
                 <div class="col-sm">
                     <ul id="sortable-bad" class="list-group" style="border-style: solid; min-height: 80px; border-color: darkred; padding-right: 10px;">
                         {% for group in bad_survey_choices %}
-                        <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
+                        <li class="list-group-item list-group-item-action flex-column align-items-start{% if group.mandatory %} important-group{% endif %}" aria-current="true" id="{{ group.id }}">
                             <div class="d-flex w-100 justify-content-between" id="search">
                                 <h5 class="mb-1">{{ group.name }}</h5>
                                 <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
@@ -137,7 +143,7 @@
             <div class="col-sm">
                 <ul id="sortable-neutral" class="list-group" style="min-height: 80px; border-style: solid; border-color: gray; padding-right: 10px;">
                     {% for group in choices %}
-                    <li class="list-group-item list-group-item-action flex-column align-items-start" aria-current="true" id="{{ group.id }}">
+                    <li class="list-group-item list-group-item-action flex-column align-items-start{% if group.mandatory %} important-group{% endif %}" aria-current="true" id="{{ group.id }}">
                         <div class="d-flex w-100 justify-content-between" id="search">
                             <h5 class="mb-1">{{ group.name }}</h5>
                             <h4 class="mb-1" style="display: none">{{ group.search }}</h4>
