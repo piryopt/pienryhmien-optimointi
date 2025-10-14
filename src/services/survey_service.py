@@ -7,7 +7,6 @@ from src.repositories.survey_choices_repository import survey_choices_repository
 from src.services.user_service import user_service as default_user_service
 from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 from src.tools.date_converter import time_to_close
-from datetime import datetime
 from src.tools.parsers import date_to_sql_valid
 from src.tools.constants import SURVEY_FIELDS
 
@@ -376,6 +375,15 @@ class SurveyService:
         description = edit_dict["surveyInformation"]
         date_end = edit_dict["enddate"]
         time_end = edit_dict["endtime"]
+
+        date_string = f"{date_end} {time_end}"
+        format_code = "%d.%m.%Y %H:%M"
+
+        parsed_time = datetime.strptime(date_string, format_code)
+
+        if parsed_time <= datetime.now():
+            message = gettext("Vastausajan päättyminen ei voi olla menneisyydessä")
+            return (False, message)
 
         datetime_end = date_to_sql_valid(date_end) + " " + time_end
 

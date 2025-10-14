@@ -438,7 +438,7 @@ def owner_deletes_submission(survey_id):
 def edit_survey_form(survey_id):
     """
     Page for editing survey. Fields are filled automatically based on the original survey.
-    The fields that can be edited depend on wether there are answers to the survey or not
+    The fields that can be edited depend on whether there are answers to the survey or not
 
     args:
         survey_id: id of the survey to be edited
