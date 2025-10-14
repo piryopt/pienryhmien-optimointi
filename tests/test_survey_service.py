@@ -4,7 +4,7 @@ from src.services.survey_choices_service import survey_choices_service as scs
 from src.repositories.user_repository import user_repository as ur
 from src.repositories.user_rankings_repository import user_rankings_repository as urr
 from src.services.survey_owners_service import survey_owners_service as sos
-import datetime
+from datetime import datetime
 import json
 
 
@@ -55,7 +55,7 @@ def test_survey_creation_case_normal(setup_env):
         d["user_id"],
         d["json_object"]["surveyInformation"],
         1,
-        "01.01.2024",
+        "01.01.2026",
         "02:02",
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
@@ -96,7 +96,7 @@ def test_count_surveys_created(setup_env):
     assert count == 0
 
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 1", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 1", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     count = ss.count_surveys_created(d["user_id"])
@@ -109,7 +109,7 @@ def test_survey_closed(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 2", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 2", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
 
@@ -140,7 +140,7 @@ def test_wrong_owner_cant_close_survey(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 3", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 3", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
 
@@ -154,11 +154,11 @@ def test_get_list_closed_surveys(setup_env):
     """
     d = setup_env
     closed_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 4", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 4", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(closed_id, d["user_email"])
     open_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 5", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 5", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(open_id, d["user_email"])
 
@@ -178,11 +178,11 @@ def test_get_list_open_surveys(setup_env):
     surveys = ss.get_active_surveys(d["user_id"])
     assert surveys == []
     closed_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 6", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 6", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(closed_id, d["user_email"])
     open_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 7", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 7", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(open_id, d["user_email"])
 
@@ -200,7 +200,7 @@ def test_open_survey_normal(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 8", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 8", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
 
@@ -228,7 +228,7 @@ def test_open_survey_wrong_owner(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 9", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 9", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
 
@@ -251,7 +251,7 @@ def test_check_if_survey_results_saved(setup_env):
     assert ret is False
 
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 10", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 10", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
 
@@ -270,7 +270,7 @@ def test_get_survey_as_dict(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 11", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 11", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
 
@@ -282,7 +282,7 @@ def test_get_survey_as_dict(setup_env):
     assert survey_dict["closed"] is False
     assert survey_dict["results_saved"] is False
     assert survey_dict["survey_description"] == d["json_object"]["surveyInformation"]
-    assert survey_dict["time_end"] == datetime.datetime(2024, 1, 1, 2, 2)
+    assert survey_dict["time_end"] == datetime(2026, 1, 1, 2, 2)
 
     assert survey_dict["choices"][0]["name"] == "Esimerkkipäiväkoti 1"
     assert survey_dict["choices"][0]["max_spaces"] == 8
@@ -317,7 +317,7 @@ def test_get_list_active_answered(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 12", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 12", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     ranking = "2,3,5,4,1,6"
@@ -332,7 +332,7 @@ def test_get_list_closed_answered(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 12", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 12", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     ranking = "2,3,5,4,1,6"
@@ -356,7 +356,7 @@ def test_check_surveys_to_close(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 13", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 13", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     survey_id2 = ss.create_new_survey_manual(
@@ -438,13 +438,64 @@ def test_save_survey_edit(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 15", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 15", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
     )
     ss.save_survey_edit(survey_id, d["edit_dict"], d["user_id"])
     name = ss.get_survey_name(survey_id)
     assert name == "Safest (most dangerous lmao) PED's"
     desc = ss.get_survey_description(survey_id)
     assert desc == "No way in hell will these have long term affects on your body, mind and soul."
+
+
+def test_dont_save_survey_edit_with_past_date(setup_env):
+    """
+    Test that editing survey end date to past doesn't work
+    """
+    d = setup_env
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey 15", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
+    )
+
+    d["edit_dict"]["enddate"] = "31.12.2020"
+
+    result = ss.save_survey_edit(survey_id, d["edit_dict"], d["user_id"])
+    assert "Vastausajan päättyminen ei voi olla menneisyydessä" in result
+
+    survey = ss.get_survey(survey_id)
+
+    assert survey.surveyname != "Safest (most dangerous lmao) PED's"
+    assert survey.surveyname == "Test survey 15"
+    assert survey.time_end == datetime(2026, 1, 1, 2, 2)
+
+
+def test_dont_save_survey_edit_with_same_name(setup_env):
+    """
+    Test that editing survey name to already existing name doesn't work
+    """
+    d = setup_env
+
+    survey_id1 = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Very unique survey", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
+    )
+
+    survey_id2 = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Other survey", d["user_id"], d["json_object"]["surveyInformation"], 2, "02.02.2026", "02:02"
+    )
+
+    sos.add_owner_to_survey(survey_id1, d["user_email"])
+    sos.add_owner_to_survey(survey_id2, d["user_email"])
+
+    len_surveys = ss.len_all_surveys()
+    assert len_surveys == 2
+
+    d["edit_dict"]["surveyGroupname"] = "Very unique survey"
+
+    result = ss.save_survey_edit(survey_id2, d["edit_dict"], d["user_id"])
+
+    assert "Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeaä!" in result
+
+    survey2 = ss.get_survey(survey_id2)
+    assert survey2.surveyname == "Other survey"
 
 
 def test_survey_deleted(setup_env):
@@ -454,10 +505,10 @@ def test_survey_deleted(setup_env):
     d = setup_env
     json_object = d["json_object"]
     survey_id1 = ss.create_new_survey_manual(
-        json_object["choices"], "Test survey 1", d["user_id"], json_object["surveyInformation"], 1, "01.01.2024", "02:02"
+        json_object["choices"], "Test survey 1", d["user_id"], json_object["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     survey_id2 = ss.create_new_survey_manual(
-        json_object["choices"], "Test survey 2", d["user_id"], json_object["surveyInformation"], 1, "01.01.2024", "02:02"
+        json_object["choices"], "Test survey 2", d["user_id"], json_object["surveyInformation"], 1, "01.01.2026", "02:02"
     )
 
     surveys = ss.get_all_active_surveys()
@@ -475,7 +526,7 @@ def test_deleting_closed_survey_decreases_created_surveys_count(setup_env):
     """
     d = setup_env
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey delete closed", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey delete closed", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2026", "02:02"
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     count_before_deletion = ss.count_surveys_created(d["user_id"])
@@ -497,7 +548,7 @@ def test_len_active_surveys(setup_env):
     assert not surveys
 
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
     )
     surveys = ss.get_all_active_surveys()
     length = ss.len_all_surveys()
@@ -512,7 +563,7 @@ def test_get_correct_active_surveys_and_response_count(setup_env):
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
 
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
     )
 
     sos.add_owner_to_survey(survey_id, d["user_email"])
@@ -540,7 +591,7 @@ def test_len_active_surveys_admin(setup_env):
     assert length == 0
 
     survey_id = ss.create_new_survey_manual(
-        d["json_object"]["choices"], "Test survey 17", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2024", "02:02"
+        d["json_object"]["choices"], "Test survey 17", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
     )
     length = ss.len_active_surveys()
     assert length == 1
