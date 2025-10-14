@@ -16,6 +16,12 @@
           </div>
           <small class="text-muted">{{ _('Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta') }}</small>
         </a>
+          <a href="/multiphase/survey/create" class="list-group-item list-group-item-action flex-column align-items-start" style="border-radius: 12px; margin-top: 16px;">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1"><img src="{{ url_for('static', filename='images/note_add_white_36dp.svg') }}" alt="" width="34" height="30" class="d-inline-block align-text-top">  {{ _('Luo uusi monivaiheinen kysely') }}</h5>
+            </div>
+            <small class="text-muted">{{ _('Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot') }}</small>
+          </a>
       </div>
       <div class="col-sm">
         <a href="/surveys" class="list-group-item list-group-item-action flex-column align-items-start" style="border-radius: 12px;">
