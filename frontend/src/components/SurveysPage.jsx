@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import surveyService from "../serivces/surveys";
+import SurveysTable from "./surveys_page_components/SurveysTable";
 
 const SurveysPage = () => {
   const [activeSurveys, setActiveSurveys] = useState([]);
@@ -20,12 +21,10 @@ const SurveysPage = () => {
   }, []);
   
   return (
-      <div>
-        <h1>Aiemmat kyselyt</h1>
-        {activeSurveys.map(a => <p>{a.surveyname}</p>)}
-        ----------------------
-        {closedSurveys.map(c => <p>{c.surveyname}</p>)}
-      </div>
+    <div>
+      <h2>Aiemmat</h2>
+      <SurveysTable activeSurveys={activeSurveys} closedSurveys={closedSurveys} />
+    </div>
   );
 };
 
