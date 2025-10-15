@@ -1,4 +1,5 @@
 from random import shuffle
+from datetime import datetime
 from functools import wraps
 from flask import render_template, request, session, jsonify, redirect, Blueprint, current_app
 import markdown
@@ -215,6 +216,16 @@ def new_survey_post():
 
     allowed_denied_choices = data["allowedDeniedChoices"]
     allow_search_visibility = data["allowSearchVisibility"]
+ 
+    date_string = f"{date_end} {time_end}"
+    format_code = "%d.%m.%Y %H:%M"
+
+    parsed_time = datetime.strptime(date_string, format_code)
+
+    if parsed_time <= datetime.now():
+        msg = gettext("Vastausajan päättyminen ei voi olla menneisyydessä")
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
 
     if minchoices > len(survey_choices):
         msg = gettext("Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmiäismäärä! Kyselyn luominen epäonnistui!")
@@ -427,7 +438,7 @@ def owner_deletes_submission(survey_id):
 def edit_survey_form(survey_id):
     """
     Page for editing survey. Fields are filled automatically based on the original survey.
-    The fields that can be edited depend on wether there are answers to the survey or not
+    The fields that can be edited depend on whether there are answers to the survey or not
 
     args:
         survey_id: id of the survey to be edited

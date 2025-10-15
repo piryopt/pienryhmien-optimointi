@@ -165,32 +165,6 @@ function createNewSurvey() {
   var minChoicesElement = document.getElementById("minchoices");
   var allowedDeniedChoices = document.getElementById("denied-choices-count");
 
-  var endDateParts = document.getElementById("end-date").value.split(".");
-  var endTime = document.getElementById("endtime").value.split(":");
-
-  var endDate = new Date(
-    Number(endDateParts[2]),
-    Number(endDateParts[1] - 1),
-    Number(endDateParts[0]),
-    Number(endTime[0])
-  );
-
-  var today = new Date();
-  var todaysEnd = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-    today.getHours(),
-  );
-
-  if (endDate <= todaysEnd) {
-    showAlert({
-      msg: "Vastausaika ei voi olla menneisyydessä",
-      color: "red",
-    });
-    return;
-  }
-
   var requestData = {
     surveyGroupname: $("#groupname").val(),
     choices: rowsAsJson,
@@ -251,33 +225,7 @@ function saveEdit() {
     console.log("Form contents not valid, won't post");
     return;
   }
-    
-  // Date is valid
-  var endDateParts = document.getElementById("end-date").value.split(".");
-  var endTime = document.getElementById("endtime").value.split(":");
 
-  var endDate = new Date(
-    Number(endDateParts[2]),
-    Number(endDateParts[1] - 1),
-    Number(endDateParts[0]),
-    Number(endTime[0])
-  );
-
-  var today = new Date();
-  var todaysEnd = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-    today.getHours(),
-  );
-
-  if (endDate <= todaysEnd) {
-    showAlert({
-      msg: "Vastausaika ei voi olla menneisyydessä",
-      color: "red",
-    });
-    return;
-  }
 
   //Valid content, continue to post
 
