@@ -119,6 +119,19 @@ def frontpage() -> str:
 /SURVEYS/* ROUTES:
 """
 
+@bp.route("/surveys/active")
+@ad_login
+def surveys_active():
+    user_id = session.get("user_id", 0)
+    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
+    return jsonify([dict(a._mapping) for a in active_surveys])
+
+@bp.route("/surveys/closed")
+@ad_login
+def surveys_closed():
+    user_id = session.get("user_id", 0)
+    closed_surveys = survey_service.get_list_closed_surveys(user_id)
+    return jsonify([dict(c._mapping) for c in closed_surveys])
 
 @bp.route("/surveys")
 @ad_login
