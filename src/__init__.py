@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
 from dotenv import load_dotenv
 from src.tools.date_converter import format_datestring
+from flask_cors import CORS
 
 
 csfr = CSRFProtect()
@@ -31,6 +32,8 @@ def create_app(test_config=None):
     load_dotenv()
 
     app = Flask(__name__)
+    CORS(app, origins=["http://localhost:5173"], supports_credentials=True)
+
     app.config.from_object(Config())
 
     env = os.getenv("FLASK_ENV", "development")

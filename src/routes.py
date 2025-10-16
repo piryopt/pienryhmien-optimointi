@@ -195,6 +195,11 @@ def new_survey_form(survey=None):
         ]
     return render_template("create_survey.html", survey=survey)
 
+@bp.route("/multiphase/survey/create", methods=["GET"])
+@ad_login
+def multiphase_survey_create():
+    return render_template("create_multiphase_survey.html")
+
 
 @bp.route("/surveys/create", methods=["POST"])
 def new_survey_post():
