@@ -1,0 +1,248 @@
+h1, h2, h3, h4, h5, label, p, i, strong, li {
+    color: rgb(255, 255, 255);
+    opacity: 0.8;
+}
+
+a.surveys_link {
+    color: rgb(255, 255, 255);
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+h1, h2, h3 {
+    margin-top: 1em;
+    margin-bottom: .5em;
+}
+
+b, small {
+    color: rgb(255, 255, 255);
+    opacity: 0.9;
+}
+
+.left {
+    width: 50%;
+    padding-top: 50px;
+    float: left;
+}
+
+.right {
+    width: 50%;
+    padding-top: 50px;
+    float: left;
+}
+
+.top-container {
+    height: 50px;
+    width: 100%;
+}
+
+.list-br {
+    display: block;
+    margin: 3px 0;
+}
+
+#sortable-bad, #sortable-good, #sortable-neutral {
+    min-height: 20px;
+    min-width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0 0 0;
+    float: left;
+    margin-right: 10px;
+    color: #fff;
+}
+
+#sortable-bad li, #sortable-good li, #sortable-neutral li {
+    border-radius: 5px;
+    text-align: left;
+    margin: 0 5px 5px 5px;
+    padding: 7px;
+    background-color: rgb(24, 26, 27);
+    border-color: #4b4848;
+    cursor: grab;
+}
+
+#fade {
+    display: none;
+    bottom: 0;
+    background: green;
+    height: 50px;
+    width: 100%;
+    margin: 0 auto;
+    color: rgb(255, 255, 255);
+    opacity: 0.9;
+    text-align: center;
+    padding-top: 10px;
+    position: fixed;
+    -webkit-box-shadow: 0px 1px 7px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 1px 7px 4px rgba(0,0,0,0.75);
+    box-shadow: 0px 1px 7px 4px rgba(0,0,0,0.75);
+}
+
+
+.navbar {
+    -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.75);
+}
+
+.list-group-item {
+    border-radius: 12px;
+    -webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
+    background-color: rgb(24, 26, 27);
+  }
+
+.list-group-item:hover {
+    background-color: rgb(24, 26, 27);
+    opacity: 0.7;
+    border-radius: 12px;
+}
+
+.btn-light {
+    background-color: #5e0474;
+}
+
+.navbar-expand-lg {
+    background-color: #5e0474;
+}
+
+body {background-color: rgb(24, 26, 27);}
+
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    --bs-table-accent-bg: var(--bs-table-striped-bg);
+    color: #ffffff;
+    opacity: 0.8;
+}
+
+.list-group-numbered>.list-group-item::before {
+    font-size: 12px;
+    color: white;
+    content: counters(section, ".") ". ";
+    counter-increment: section;
+}
+.table>:not(caption)>*>* {
+    color: #ffffff;
+    opacity: 0.8;
+}
+
+.dropdown-menu {
+    min-width: 100%;
+    background-color: rgb(40, 45, 49);
+}
+
+.dropdown-menu[data-bs-popper] {
+    position: absolute;
+    top: 113%;
+    left: 0%;
+}
+
+.dropdown-item:hover {
+    background-color: rgb(28, 31, 33);
+    opacity: 0.5;
+}
+
+.page-title {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+td.empty {
+    color: #696969 !important;
+}
+
+.action-btn-cell {
+    width: 0;
+}
+
+.spacer-row {
+    height: 3rem;
+    background-color: #1f2226;
+    border: none !important;
+}
+
+/* Closed survey page - notification block */
+.closed-survey-notifier {
+    background-color: #2a2b2c;
+    padding: 20px;
+    border: 3px solid #fff;
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.closed-survey-content {
+    padding: 20px;
+    flex: 5;
+}
+
+.closed-survey-icon {
+    flex: 1;
+}
+
+/* Closed survey page - choice listings*/
+.choices-container {
+    border: 3px solid;
+    padding: 3px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.choices-container ol {
+    margin: 0 0 0 0;
+    padding-left: 0;
+}
+
+.choices-container li {
+    color: #fff;
+    padding: 7px;
+    list-style-position: inside;
+}
+.choices-container li:nth-child(odd) {
+    background-color: #2a2b2c;
+}
+
+.choices-container li:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.border-green {
+    border-color: green;
+}
+
+.border-red {
+    border-color: red;
+}
+
+/* Footer */
+.footer .container {
+    display: flex;
+}
+
+.footer .container * {
+    flex: 1;
+}
+
+.footer .container a {
+    text-decoration: none;
+    text-align: center;
+}
+
+.footer .container a:hover {
+    text-decoration: underline;
+}
+
+main>div.container {
+    margin-top: 40px;
+    margin-bottom: 120px;
+}
+
+a.surveys_link:hover {
+    color: #ffffff;
+    text-decoration: none;
+    opacity: 0.5;
+}
