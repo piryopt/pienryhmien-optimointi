@@ -7,8 +7,6 @@ const SurveyMultiphaseCreate = () => {
 
   return (
     <div>
-      <Navbar />
-      <LanguageSwitcher />
       <h1>{t("Luo uusi monivaiheinen kysely")}</h1>
       <p>{t("Tämä on kyselyn luontisivu!!")}</p>
     </div>

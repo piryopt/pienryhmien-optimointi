@@ -1,14 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SurveyMultiphaseCreate from "./components/SurveyMultiphaseCreate";
+import Layout from "./components/Layout";
 const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/multiphase/survey/create"
-          element={<SurveyMultiphaseCreate />}
-        />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route
+            path="/multiphase/survey/create"
+            element={<SurveyMultiphaseCreate />}
+          />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 };
