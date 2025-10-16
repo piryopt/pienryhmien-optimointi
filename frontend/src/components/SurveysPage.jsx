@@ -31,7 +31,7 @@ const SurveysPage = () => {
           width="42"
           height="47"
         />
-        Aiemmat kyselyt
+        &nbsp;Aiemmat kyselyt
       </h2>
       <SurveysTable activeSurveys={activeSurveys} closedSurveys={closedSurveys} />
     </div>

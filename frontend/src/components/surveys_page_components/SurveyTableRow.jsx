@@ -1,13 +1,30 @@
 import { useState } from "react";
 import SurveyMoreInfo from "./SurveyMoreInfo";
 import menu_white from "../../static/images/menu_white_36dp.svg";
+import insertDriveFileWhite from "../../static/images/insert_drive_file_white_36dp.svg";
+import insertPageBreakWhite from "../../static/images/insert_page_break_white_36dp.svg";
 
 const SurveyTableRow = ({ survey }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
 
   return (
     <tr>
-      <td>{survey.surveyname}</td>
+      <td>
+        <img 
+            src={survey.closed ? insertPageBreakWhite : insertDriveFileWhite}
+            alt=""
+            className="d-inline-block align-text-top"
+            width="20"
+            height="20"
+          />
+        <a 
+          className="surveys_link"
+          href={`${survey.id}`}
+        >
+          &nbsp;
+          {survey.surveyname}
+        </a>
+        </td>
       <td>
         <p style={{color: survey.closed ? "orangered" : "green"}}>
           {survey.closed ? "Suljettu" : "Avoin"}
