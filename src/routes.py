@@ -310,11 +310,13 @@ def surveys(survey_id):
             survey_all_info[row.id]["mandatory"] = row.mandatory
             survey_all_info[row.id]["search"] = row.name
             survey_all_info[row.id]["infos"] = []
+            survey_all_info[row.id]["min_size"] = row.min_size
         else:
             survey_all_info[row.id]["name"] = row.name
             survey_all_info[row.id]["mandatory"] = row.mandatory
             survey_all_info[row.id]["slots"] = row.max_spaces
             survey_all_info[row.id]["id"] = row.id
+            survey_all_info[row.id]["min_size"] = row.min_size
 
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     if user_survey_ranking:
@@ -357,6 +359,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
         good_choice["slots"] = survey_choice.max_spaces
         good_choice["mandatory"] = survey_choice.mandatory
         good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
+        good_choice["min_size"] = survey_choice.min_size
         if not survey_choice:
             continue
         good_survey_choices.append(good_choice)
@@ -373,6 +376,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
             bad_choice["slots"] = survey_choice.max_spaces
             bad_choice["mandatory"] = survey_choice.mandatory
             bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
+            bad_choice["min_size"] = survey_choice.min_size
             if not survey_choice:
                 continue
             bad_survey_choices.append(bad_choice)
@@ -386,6 +390,7 @@ def surveys_answer_exists(survey_id, survey_all_info, additional_info):
         neutral_choice["slots"] = survey_choice.max_spaces
         neutral_choice["mandatory"] = survey_choice.mandatory
         neutral_choice["search"] = survey_all_info[int(survey_choice[0])]["search"]
+        neutral_choice["min_size"] = survey_choice.min_size
         neutral_choices.append(neutral_choice)
 
     # If the survey is closed, return a different page, where the student can view their answers.

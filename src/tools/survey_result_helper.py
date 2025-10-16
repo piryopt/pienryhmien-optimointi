@@ -293,6 +293,11 @@ def get_additional_infos(survey_choices):
         cinfos = survey_choices_service.get_choice_additional_infos(row[0])
         for i in cinfos:
             additional_infos[str(row[0])].append(i[1])
+        
+        mandatory = survey_choices_service.get_survey_choice_mandatory(row[0])
+        min_size = survey_choices_service.get_survey_choice_min_size(row[0])
+        if mandatory:
+            additional_infos[str(row[0])].append(f"Minimikoko: {min_size}")
 
     return additional_infos, cinfos
 
