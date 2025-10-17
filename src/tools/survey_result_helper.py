@@ -30,8 +30,8 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     output_data, unranked_or_rejected = run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id)
     additional_infos, cinfos = get_additional_infos(survey_choices)
 
-    happiness_avg, happiness_results = get_happiness_data(output_data, survey_id)
-    happiness_avg /= len(students_dict) - unranked_or_rejected if (len(students_dict) - unranked_or_rejected) > 0 else 1
+    happiness_sum, happiness_results = get_happiness_data(output_data, survey_id)
+    happiness_avg = happiness_sum / (len(students_dict) - unranked_or_rejected) if (len(students_dict) - unranked_or_rejected) > 0 else 1
 
     happiness_results_list = []
     for k, v in happiness_results.items():
@@ -293,7 +293,7 @@ def get_additional_infos(survey_choices):
         cinfos = survey_choices_service.get_choice_additional_infos(row[0])
         for i in cinfos:
             additional_infos[str(row[0])].append(i[1])
-        
+
         mandatory = survey_choices_service.get_survey_choice_mandatory(row[0])
         min_size = survey_choices_service.get_survey_choice_min_size(row[0])
         if mandatory:
@@ -308,9 +308,10 @@ def get_happiness_data(output_data, survey_id):
 
     args:
         output_data: The output data from the hungarian algorithm along with happiness average, happiness results, dropped groups and additional infos
+        survey_id: The id of the survey
     """
     happiness_results = {}
-    happiness_avg = 0
+    happiness_sum = 0
     for results in output_data:
         user_id = results[0][0]
         choice_id = results[2][0]
@@ -318,14 +319,14 @@ def get_happiness_data(output_data, survey_id):
         rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking, rejections)
         if happiness != gettext("Hylätty") and happiness != gettext("Ei järjestetty"):
-            happiness_avg += happiness
+            happiness_sum += happiness
         results.append(happiness)
         if happiness not in happiness_results:
             happiness_results[happiness] = 1
         else:
             happiness_results[happiness] += 1
 
-    return happiness_avg, happiness_results
+    return happiness_sum, happiness_results
 
 
 def get_happiness(survey_choice_id, user_ranking, user_rejections):
