@@ -8,17 +8,19 @@ const SurveysPage = () => {
   const [closedSurveys, setClosedSurveys] = useState([]);
   
   useEffect(() => {
-    Promise.all([
-      surveyService.getActiveSurveys(),
-      surveyService.getClosedSurveys()
-    ])
-    .then(([activeRes, closedRes]) => {
-        setActiveSurveys(activeRes.data);
-        setClosedSurveys(closedRes.data);
-    })
-    .catch(err => {
-      console.error("Error loading surveys", err);
-    });
+    const getSurveys = async () => {
+        try {
+        const [activeRes, closedRes] = await Promise.all([
+        surveyService.getActiveSurveys(),
+        surveyService.getClosedSurveys()
+      ])
+      setActiveSurveys(activeRes);
+      setClosedSurveys(closedRes);
+      } catch (err) {
+        console.error("Error loading surveys", err)
+      }
+    }
+    getSurveys()
   }, []);
   
   return (
@@ -33,7 +35,12 @@ const SurveysPage = () => {
         />
         &nbsp;Aiemmat kyselyt
       </h2>
-      <SurveysTable activeSurveys={activeSurveys} closedSurveys={closedSurveys} />
+      <SurveysTable 
+        activeSurveys={activeSurveys} 
+        closedSurveys={closedSurveys}
+        setActiveSurveys={setActiveSurveys}
+        setClosedSurveys={setClosedSurveys}
+      />
     </div>
   );
 };

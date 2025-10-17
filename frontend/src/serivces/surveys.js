@@ -1,27 +1,39 @@
 import axios from 'axios';
-const baseUrl = "http://localhost:5001"
+import { baseUrl } from '../utils/constants';
+import csrfService from './csrfService';
 
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+const getActiveSurveys = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/surveys/active`)
+    return response.data
+  } catch (error) {
+    throw error
+  }
 };
 
-const getActiveSurveys = () => (
-  axios.get(`${baseUrl}/surveys/active`)
-);
+const getClosedSurveys = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/surveys/closed`)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+};
 
-const getClosedSurveys = () => (
-  axios.get(`${baseUrl}/surveys/closed`)
-);
-
-const deleteSurvey = (surveyId) => (
-  axios.delete(`${baseUrl}/surveys/${surveyId}`, {
-    headers: {
-      'X-CSRFToken': getCookie('csrf_token')
-    }
-  })
-);
+const deleteSurvey = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken()
+    const response = await axios.delete(`${baseUrl}/surveys/${surveyId}`, {
+      headers: {
+        "X-CSRFToken": csrfToken
+      },
+         withCredentials: true
+    })
+    return response.data
+  } catch (error) {
+    throw error
+  }
+};
 
 export default {
   getActiveSurveys: getActiveSurveys,

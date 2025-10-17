@@ -4,7 +4,7 @@ import menu_white from "../../static/images/menu_white_36dp.svg";
 import insertDriveFileWhite from "../../static/images/insert_drive_file_white_36dp.svg";
 import insertPageBreakWhite from "../../static/images/insert_page_break_white_36dp.svg";
 
-const SurveyTableRow = ({ survey }) => {
+const SurveyTableRow = ({ survey, handleDeleteClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
 
   return (
@@ -51,7 +51,12 @@ const SurveyTableRow = ({ survey }) => {
             {moreInfoVisible ? "Piilota" : "Näytä"}
           </label>
         </div>
-        {moreInfoVisible && <SurveyMoreInfo survey={survey} />}
+        {moreInfoVisible && 
+          <SurveyMoreInfo 
+            survey={survey}
+            handleDeleteClick={handleDeleteClick} 
+          />
+        }
       </td>
       <td>{survey.time_end}</td>
     </tr>

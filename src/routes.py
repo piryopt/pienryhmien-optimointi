@@ -2,6 +2,7 @@ from random import shuffle
 from datetime import datetime
 from functools import wraps
 from flask import render_template, request, session, jsonify, redirect, Blueprint, current_app
+from flask_wtf.csrf import generate_csrf
 import markdown
 from pathlib import Path
 from flask_babel import gettext
@@ -275,6 +276,17 @@ def import_survey_choices():
     data = request.get_json()
     return jsonify(parser_csv_to_dict(data["uploadedFileContent"])["choices"])
 
+
+"""
+/CSRF_TOKEN ROUTE:
+"""
+
+@bp.route("/csrf_token", methods=["GET"])
+@ad_login
+def get_csrf():
+    csrf_token = generate_csrf()
+    response = {"csrfToken": csrf_token}
+    return jsonify(response)
 
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:
