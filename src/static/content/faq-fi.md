@@ -1,11 +1,22 @@
 # UKK
 
 ## Miten ryhmittelyalgoritmi toimii?
-- Ryhmäjaon tekemiseen käytetään unkarilaisena algoritmina tunnettua menetelmää.
+- Ryhmäjaon tekemiseen käytetään **unkarilaisena algoritmina** tunnettua menetelmää.
 - Kyselyn vastaaja saa järjestää vaihtoehdot sen mukaan, mikä häntä itseään kiinnostaa eniten.
 - Valinnat muunnetaan pisteiksi niin, että vastaaja antaa eniten pisteitä sille ryhmälle, jonka on sijoittanut ensimmäiseksi. Vähiten pisteitä saa viimeiseksi sijoitettu tai kokonaan ryhmittelyn ulkopuolelle jäänyt vaihtoehto.
 - Unkarilainen algoritmi tekee ryhmäjaon niin, että laskettaessa yhteen vastaajien omalle ryhmälleen antamat pisteet, saadaan mahdollisimman suuri luku.
-- [Jakajan githubissa](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md) voit tutustua tarkempaan (englanninkieliseen) selostukseen algoritmin toiminnasta.
+- Jos jokin ryhmä ei saavuta jaossa sille asetettua minimikokoa, se pudotetaan ja sen opiskelijat siirretään muihin ryhmiin.
+- [Jakajan GitHub-sivulta](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md) voit lukea tarkemman (englanninkielisen) selostuksen algoritmin toiminnasta.
 
-## Minulla on kysyttävää sovelluksesta, kehen voin olla yhteydessä?
+## Miten pakolliset ryhmät täytetään?
+- Jakaja pudottaa oletusarvoisesti ne ryhmät, jotka eivät ryhmäjaossa täyty minimikokoon asti. Kyselyn laatija voi kuitenkin määrittää ryhmän pakolliseksi. Tällöin kyseinen ryhmä täytetään vähintään minimikokoon asti vastauksista riippumatta.
+    - Tämä tarkoittaa, että ryhmään voidaan tarvittaessa sijoittaa myös sellaisia vastaajia, jotka eivät ole valinneet sitä. Ryhmään pyritään kuitenkin ensisijaisesti sijoittamaan ne vastaajat, jotka pitävät siitä eniten.
+- Pakolliseen ryhmään voidaan tarvittaessa pakottaa myös sellainen opiskelija, joka on **hylännyt** sen. 
+    - Tämä tehdään vain, jos ryhmän minimikokoa ei saada täyteen sellaisista opiskelijoista, jotka eivät ole hylänneet ryhmää.
+    - Tällöin kyselyn laatijan vastuulla on tarkastella vastaajien perusteluita hylkäykselle ja arvioida, voidaanko kyseinen opiskelija sijoittaa ryhmään.
+- **Pakollinen ryhmä voidaan kuitenkin edelleen pudottaa jaosta**, jos vastaajia on niin vähän, etteivät he riitä täyttämään kaikkia pakollisia ryhmiä minimikokoon asti.
+
+
+
+## Minulla on kysyttävää sovelluksesta – kehen voin olla yhteydessä?
 Jakajassa on palautesivu, jossa voit kysyä mitä vain.
