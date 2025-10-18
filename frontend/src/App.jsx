@@ -13,6 +13,14 @@ const App = () => {
             path="/multiphase/survey/create"
             element={<SurveyMultiphaseCreate />}
           />
+          <Route
+            path="/surveys"
+            element={<SurveysPage />}
+          />
+          <Route
+            path="/auth/login"
+            element={<LoginPage />}
+          />
         </Routes>
       </Layout>
     </BrowserRouter>

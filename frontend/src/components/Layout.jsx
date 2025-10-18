@@ -1,4 +1,5 @@
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const Layout = ({ children }) => (
   <div className="d-flex flex-column min-vh-100">
@@ -10,6 +11,7 @@ const Layout = ({ children }) => (
         </section>
       </div>
     </main>
+    <Footer />
   </div>
 );
 
