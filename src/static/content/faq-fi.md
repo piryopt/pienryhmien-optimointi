@@ -13,8 +13,9 @@
     - Tämä tarkoittaa, että ryhmään voidaan tarvittaessa sijoittaa myös sellaisia vastaajia, jotka eivät ole valinneet sitä. Ryhmään pyritään kuitenkin ensisijaisesti sijoittamaan ne vastaajat, jotka pitävät siitä eniten.
 - Pakolliseen ryhmään voidaan tarvittaessa pakottaa myös sellainen opiskelija, joka on **hylännyt** sen. 
     - Tämä tehdään vain, jos ryhmän minimikokoa ei saada täyteen sellaisista opiskelijoista, jotka eivät ole hylänneet ryhmää.
-    - Tällöin kyselyn laatijan vastuulla on tarkastella vastaajien perusteluita hylkäykselle ja arvioida, voidaanko kyseinen opiskelija sijoittaa ryhmään.
-- **Pakollinen ryhmä voidaan kuitenkin edelleen pudottaa jaosta**, jos vastaajia on niin vähän, etteivät he riitä täyttämään kaikkia pakollisia ryhmiä minimikokoon asti.
+    - Tällöin kyselyn laatijan vastuulla on tarkastella vastaajien perusteluita hylkäykselle ja arvioida, voidaanko kyseinen opiskelija todella sijoittaa ryhmään.
+
+**HUOM!** Pakollinen ryhmä voidaan kuitenkin edelleen pudottaa jaosta, jos vastaajia on niin vähän, etteivät he riitä täyttämään kaikkia pakollisia ryhmiä minimikokoon asti.
 
 
 

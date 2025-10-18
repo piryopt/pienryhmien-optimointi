@@ -14,7 +14,8 @@
 - In some cases, a student who has **rejected** a group may be assigned to it.
     - This happens only if the group cannot reach its minimum size with students who did not reject it.
     - In such cases, it is the survey creator’s responsibility to review the rejection reasons and decide whether assigning the student to that group is appropriate.
-- **A mandatory group can still be removed from the allocation** if there are too few respondents to fill all mandatory groups to their minimum size.
+
+**NOTE!** A mandatory group can still be removed from the allocation if there are too few respondents to fill all mandatory groups to their minimum size.
 
 ## I have questions – Who can I turn to?
 Jakaja has a feedback page where you can post your questions.

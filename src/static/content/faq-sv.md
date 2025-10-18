@@ -14,7 +14,8 @@
 - En student som har **avvisat** en grupp kan i vissa fall ändå placeras i den.
     - Detta sker endast om gruppen inte kan uppnå sin minimistorlek med deltagare som inte har avvisat den.
     - I sådana fall är det enkätskaparens ansvar att granska deltagarnas motiveringar till avvisningen och avgöra om studenten kan placeras i gruppen.
-- **En obligatorisk grupp kan ändå tas bort från fördelningen** om det finns så få deltagare att det inte går att fylla alla obligatoriska grupper till minimistorlek.
+
+**OBS!** En obligatorisk grupp kan ändå tas bort från fördelningen om det finns så få deltagare att det inte går att fylla alla obligatoriska grupper till minimistorlek.
 
 ## Jag har frågor – Vem kan jag vända mig till?
 Jakaja har en feedbacksida där du kan ställa dina frågor.
