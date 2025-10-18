@@ -1,0 +1,46 @@
+{
+    "surveyGroupname": "Testikysely JSON",
+    "choices": [
+      {
+        "mandatory": true,
+        "Nimi": "Toivo",
+        "Enimmäispaikat": "4",
+        "Ryhmän minimikoko": "1",
+        "Osoite": "Apteekkarinraitti 3",
+        "Postinumero": "00790"
+      },
+      {
+        "mandatory": false,
+        "Nimi": "Floora",
+        "Enimmäispaikat": "2",
+        "Ryhmän minimikoko": "1",
+        "Osoite": "Syyriankatu 4",
+        "Postinumero": "00560"
+      },
+      {
+        "mandatory": false,
+        "Nimi": "Kotikallio",
+        "Enimmäispaikat": "3",
+        "Ryhmän minimikoko": "1",
+        "Osoite": "Saarenkatu 4",
+        "Postinumero": "00550"
+      },
+      {
+        "mandatory": true,
+        "Nimi": "Nalli",
+        "Enimmäispaikat": "5",
+        "Ryhmän minimikoko": "1",
+        "Osoite": "Nallitie 3",
+        "Postinumero": "00940"
+      },
+      {
+        "mandatory": false,
+        "Nimi": "Hanna",
+        "Enimmäispaikat": "6",
+        "Ryhmän minimikoko": "1",
+        "Osoite": "Tyynylaivantie 19",
+        "Postinumero": "00980"
+      }
+    ],
+    "surveyInformation": "Tällä testataan kyselyn manuaalista luomista"
+  }

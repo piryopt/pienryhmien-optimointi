@@ -1,0 +1,22 @@
+{
+    "surveyGroupname": "Testikysely JSON",
+    "choices": [
+      {
+        "mandatory": true,
+        "Nimi": "Toivo",
+        "Enimmäispaikat": "4",
+        "Ryhmän minimikoko": "3",
+        "Osoite": "Apteekkarinraitti 3",
+        "Postinumero": "00790"
+      },
+      {
+        "mandatory": true,
+        "Nimi": "Nalli",
+        "Enimmäispaikat": "5",
+        "Ryhmän minimikoko": "2",
+        "Osoite": "Nallitie 3",
+        "Postinumero": "00940"
+      }
+    ],
+    "surveyInformation": "Tällä testataan kyselyn manuaalista luomista"
+  }
