@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import manageSearchWhite from "../../static/images/manage_search_white_36dp.svg";
 import contentCopyWhite from "../../static/images/content_copy_white_36dp.svg";
 import editWhite from "../../static/images/edit_white_36dp.svg";
@@ -5,6 +6,7 @@ import folderCopyWhite from "../../static/images/folder_copy_white_36dp.svg";
 import deleteWhite from "../../static/images/delete_white_36dp.svg";
 
 const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
+  const { t } = useTranslation();
   const handleCopyUrlClick = () => {
     const currUrl = window.location.href;
     navigator.clipboard.writeText(`${currUrl}/${survey.id}`);
@@ -23,7 +25,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           width="20"
           height="20"
         />
-        &nbsp;Tarkastele tuloksia
+        &nbsp;{t("Tarkastele tuloksia")}
       </a>
       {!survey.closed && 
         <>
@@ -40,7 +42,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
               width="20"
               height="20"
             />
-            &nbsp;Kopioi kyselyn osoite leikepöydälle
+            &nbsp;{t("Kopioi kyselyn osoite leikepöydälle")}
           </a>
         </>
       }
@@ -56,7 +58,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           width="20"
           height="20"
         />
-        &nbsp;Muokkaa kyselyä tai lisää siihen ylläpitäjä
+        &nbsp;{t("Muokkaa kyselyä tai lisää siihen ylläpitäjä")}
       </a>
       <br></br>
       <a
@@ -70,7 +72,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           width="20"
           height="20"
         />
-        &nbsp;Kopioi kysely
+        &nbsp;{t("Kopioi kysely")}
       </a>
       <br></br>
       <a
@@ -85,7 +87,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           width="20"
           height="20"
         />
-        &nbsp;Poista kysely
+        &nbsp;{t("Poista kysely")}
       </a>
     </div>
   );

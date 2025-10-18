@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import SurveyMoreInfo from "./SurveyMoreInfo";
 import menu_white from "../../static/images/menu_white_36dp.svg";
@@ -6,6 +7,7 @@ import insertPageBreakWhite from "../../static/images/insert_page_break_white_36
 
 const SurveyTableRow = ({ survey, handleDeleteClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
+  const { t } = useTranslation();
 
   return (
     <tr>
@@ -27,12 +29,12 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
         </td>
       <td>
         <p style={{color: survey.closed ? "orangered" : "green"}}>
-          {survey.closed ? "Suljettu" : "Avoin"}
+          {survey.closed ? t("Suljettu") : t("Avoin")}
         </p>
       </td>
       <td>
         <p style={{color: survey.results_saved && "green"}}>
-          {survey.results_saved ? "Kyllä" : "Ei"}
+          {survey.results_saved ? t("Kyllä") : t("Ei")}
         </p>
       </td>
       <td>
@@ -48,7 +50,7 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
               height="20"
             />
             &nbsp;
-            {moreInfoVisible ? "Piilota" : "Näytä"}
+            {moreInfoVisible ? t("Piilota") : t("Näytä")}
           </label>
         </div>
         {moreInfoVisible && 

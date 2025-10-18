@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import menuWhite from "../../static/images/menu_white_36dp.svg";
 import assignmentWhite from "../../static/images/assignment_white_36dp.svg";
 import toggleOnWhite from "../../static/images/toggle_on_white_36dp.svg";
@@ -5,6 +6,8 @@ import toggleOffWhite from "../../static/images/toggle_off_white_36dp.svg";
 import scheduleWhite from "../../static/images/schedule_white_36dp.svg";
 
 const SurveyTableHeaders = () => {
+  const { t } = useTranslation();
+
   return (
     <tr>
       <th>
@@ -16,8 +19,7 @@ const SurveyTableHeaders = () => {
             width="24"
             height="24"
           />
-          &nbsp;
-          Kysely
+          &nbsp;{t("Kysely")}
         </p>
       </th>
       <th>
@@ -29,8 +31,7 @@ const SurveyTableHeaders = () => {
             width="24"
             height="24"
           />
-          &nbsp;
-          Kyselyn tila
+          &nbsp;{t("Kyselyn tila")}
         </p>
       </th>
       <th>
@@ -42,8 +43,7 @@ const SurveyTableHeaders = () => {
             width="24"
             height="24"
           />
-          &nbsp;
-          Ryhmät luotu
+          &nbsp;{t("Ryhmät luotu")}
         </p>
       </th>
       <th style={{"min-width": "22em"}}>
@@ -55,8 +55,7 @@ const SurveyTableHeaders = () => {
             width="24"
             height="24"
             />
-          &nbsp;
-          Toiminnot
+          &nbsp;{t("Toiminnot")}
         </p>
       </th>
       <th>
@@ -68,8 +67,7 @@ const SurveyTableHeaders = () => {
             width="24"
             height="24"
           />
-          &nbsp;
-          Vastausaika päättyy
+          &nbsp;{t("Vastausaika päättyy")}
         </p>
       </th>
     </tr>

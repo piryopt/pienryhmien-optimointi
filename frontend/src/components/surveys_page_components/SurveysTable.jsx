@@ -1,10 +1,12 @@
+import { useTranslation } from "react-i18next";
 import SurveyTableRow from "./SurveyTableRow";
 import SurveyTableHeaders from "./SurveyTableHeaders";
-import surveyService from "../../serivces/surveys";
+import surveyService from "../../services/surveys";
 
 const SurveysTable = ({ activeSurveys, closedSurveys, setActiveSurveys, setClosedSurveys }) => {
+  const { t } = useTranslation();
   const handleDeleteClick = async (surveyId, closedStatus) => {
-    if (window.confirm("Haluatko varmasti poistaa kyselyn?")) {
+    if (window.confirm(t("Haluatko varmasti poistaa kyselyn?"))) {
       try {
         await surveyService.deleteSurvey(surveyId)
         if (!closedStatus) {
