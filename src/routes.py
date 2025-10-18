@@ -2,6 +2,7 @@ from random import shuffle
 from datetime import datetime
 from functools import wraps
 from flask import render_template, request, session, jsonify, redirect, Blueprint, current_app
+from flask_wtf.csrf import generate_csrf
 import markdown
 from pathlib import Path
 from flask_babel import gettext
@@ -17,6 +18,7 @@ from src.services.feedback_service import feedback_service
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, convert_date, convert_time, hungarian_results
 from src.tools.rankings_converter import convert_to_list, convert_to_string
 from src.tools.parsers import parser_csv_to_dict
+from src.tools.date_converter import format_datestring
 from src.entities.user import User
 # from src.tools.db_data_gen import gen_data
 
@@ -119,6 +121,31 @@ def frontpage() -> str:
 /SURVEYS/* ROUTES:
 """
 
+@bp.route("/surveys/active")
+@ad_login
+def surveys_active():
+    user_id = session.get("user_id", 0)
+    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
+    return jsonify([
+        {
+            key: format_datestring(val) if key == "time_end" else val
+            for key, val in survey._mapping.items()
+        }
+        for survey in active_surveys
+    ])
+
+@bp.route("/surveys/closed")
+@ad_login
+def surveys_closed():
+    user_id = session.get("user_id", 0)
+    closed_surveys = survey_service.get_list_closed_surveys(user_id)
+    return jsonify([
+        {
+            key: format_datestring(val) if key == "time_end" else val
+            for key, val in survey._mapping.items()
+        }
+        for survey in closed_surveys
+    ])
 
 @bp.route("/surveys")
 @ad_login
@@ -262,6 +289,17 @@ def import_survey_choices():
     data = request.get_json()
     return jsonify(parser_csv_to_dict(data["uploadedFileContent"])["choices"])
 
+
+"""
+/CSRF_TOKEN ROUTE:
+"""
+
+@bp.route("/csrf_token", methods=["GET"])
+@ad_login
+def get_csrf():
+    csrf_token = generate_csrf()
+    response = {"csrfToken": csrf_token}
+    return jsonify(response)
 
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:
@@ -509,6 +547,13 @@ def delete_survey(survey_id):
     survey_service.set_survey_deleted_true(survey_id)
     return redirect("/surveys")
 
+@bp.route("/surveys/<string:survey_id>", methods=["DELETE"])
+def delete_surveys_endpoint(survey_id):
+    if not check_if_owner(survey_id):
+        response = {"message": "No permission to delete survey"}
+        return jsonify(response), 403
+    survey_service.set_survey_deleted_true(survey_id)
+    return "", 204
 
 @bp.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
 def add_owner(survey_id, email):

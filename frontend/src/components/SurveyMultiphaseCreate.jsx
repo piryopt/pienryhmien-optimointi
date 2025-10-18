@@ -1,4 +1,3 @@
-import Navbar from "./Navbar";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 
