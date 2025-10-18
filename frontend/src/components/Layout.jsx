@@ -1,12 +1,18 @@
 import Navbar from "./Navbar";
-import Footer from "./Footer";
 
-const Layout = ({ children }) => (
-  <div className="d-flex flex-column min-vh-100">
-    <Navbar />
-    <main className="flex-shrink-0 container">{children}</main>
-    <Footer />
-  </div>
-);
+const Layout = ({ children }) => {
+  return (
+    <div>
+      <Navbar />
+      <main className="flex-shrink-0 container">
+        <div className="container">
+          <section className="content">
+            {children}
+          </section>
+        </div>
+      </main>
+    </div>
+  );
+};
 
-export default Layout;
+export default Layout

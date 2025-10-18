@@ -16,7 +16,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
     <div>
       <a 
         className="surveys_link"
-        href={`${survey.id}/answers`}
+        href={`/surveys/${survey.id}/answers`}
         >
         <img 
           src={manageSearchWhite}
@@ -48,7 +48,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
       }
       <br></br>
       <a
-        href={`${survey.id}/edit`}
+        href={`/surveys/${survey.id}/edit`}
         className="surveys_link"
         >
         <img 
@@ -63,7 +63,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
       <br></br>
       <a
         className="surveys_link"
-        href={`create?fromtemplate=${survey.id}`}
+        href={`/surveys/create?fromtemplate=${survey.id}`}
         >
         <img 
           src={folderCopyWhite}

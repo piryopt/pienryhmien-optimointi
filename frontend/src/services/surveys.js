@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { baseUrl } from '../utils/constants';
-import csrfService from './csrfService';
+import csrfService from './csrf';
 
 const getActiveSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/surveys/active`)
-    return response.data
+    const response = await axios.get(`${baseUrl}/surveys/active`, {
+      withCredentials: true
+    });
+    return response.data;
   } catch (error) {
     throw error
   }
@@ -13,8 +15,10 @@ const getActiveSurveys = async () => {
 
 const getClosedSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/surveys/closed`)
-    return response.data
+    const response = await axios.get(`${baseUrl}/surveys/closed`, {
+      withCredentials: true
+    });
+    return response.data;
   } catch (error) {
     throw error
   }
@@ -22,16 +26,16 @@ const getClosedSurveys = async () => {
 
 const deleteSurvey = async (surveyId) => {
   try {
-    const csrfToken = await csrfService.fetchCsrfToken()
+    const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.delete(`${baseUrl}/surveys/${surveyId}`, {
       headers: {
         "X-CSRFToken": csrfToken
       },
-         withCredentials: true
+      withCredentials: true
     })
-    return response.data
+    return response.data;
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 

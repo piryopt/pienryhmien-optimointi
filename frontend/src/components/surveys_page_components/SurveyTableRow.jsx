@@ -21,7 +21,7 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
           />
         <a 
           className="surveys_link"
-          href={`${survey.id}`}
+          href={`/surveys/${survey.id}`}
         >
           &nbsp;
           {survey.surveyname}

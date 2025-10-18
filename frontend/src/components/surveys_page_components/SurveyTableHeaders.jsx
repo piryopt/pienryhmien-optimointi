@@ -46,7 +46,7 @@ const SurveyTableHeaders = () => {
           &nbsp;{t("Ryhmät luotu")}
         </p>
       </th>
-      <th style={{"min-width": "22em"}}>
+      <th style={{"minWidth": "22em"}}>
         <p>
           <img 
             src={menuWhite}
