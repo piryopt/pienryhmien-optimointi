@@ -7,32 +7,39 @@ from src.repositories.user_repository import user_repository as ur
 from src.services.user_rankings_service import user_rankings_service as urs
 
 
+SURVEY3_FILE = "tests/test_files/test_survey3.json"
+SURVEY4_FILE = "tests/test_files/test_survey4.json"
+
+
+def _load_survey_json(path):
+    with open(path, "r") as f:
+        return json.load(f)
+
+
+def _create_survey_from_file(setup_db, path):
+    user = ur.get_user_data(setup_db["user_id"])
+    json_object = _load_survey_json(path)
+    survey_id = ss.create_new_survey_manual(
+        json_object["choices"],
+        json_object["surveyGroupname"],
+        user.id,
+        json_object["surveyInformation"],
+        1,
+        "01.01.2024",
+        "10:00",
+    )
+    setup_db["survey_id"] = survey_id
+    return setup_db
+
+
 @pytest.fixture()
 def setup_survey3(setup_db):
-    user = ur.get_user_data(setup_db["user_id"])
-
-    with open("tests/test_files/test_survey3.json", "r") as openfile:
-        json_object = json.load(openfile)
-    survey_id = ss.create_new_survey_manual(
-        json_object["choices"], json_object["surveyGroupname"], user.id, json_object["surveyInformation"], 1, "01.01.2024", "10:00"
-    )
-
-    setup_db["survey_id"] = survey_id
-    return setup_db
+    return _create_survey_from_file(setup_db, SURVEY3_FILE)
 
 
-@pytest.fixture
+@pytest.fixture()
 def setup_survey4(setup_db):
-    user = ur.get_user_data(setup_db["user_id"])
-
-    with open("tests/test_files/test_survey4.json", "r") as openfile:
-        json_object = json.load(openfile)
-    survey_id = ss.create_new_survey_manual(
-        json_object["choices"], json_object["surveyGroupname"], user.id, json_object["surveyInformation"], 1, "01.01.2024", "10:00"
-    )
-
-    setup_db["survey_id"] = survey_id
-    return setup_db
+    return _create_survey_from_file(setup_db, SURVEY4_FILE)
 
 
 def _group_ids_by_name(survey_choices):
@@ -53,6 +60,11 @@ def _run_hungarian_for(d, survey_choices):
 
 
 def test_run_hungarian_all_groups_ranked(setup_survey3):
+    """
+    Test  where all groups are ranked by students, but there are more seats than
+    students and two groups are mandatory.
+    variant 1
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -77,6 +89,12 @@ def test_run_hungarian_all_groups_ranked(setup_survey3):
 
 
 def test_run_hungarian_all_groups_ranked2(setup_survey3):
+    """
+    Test where all groups are ranked by students, but there are more seats than
+    students and two groups are mandatory.
+    variant 2
+    """
+
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -99,6 +117,9 @@ def test_run_hungarian_all_groups_ranked2(setup_survey3):
 
 
 def test_run_hungarian_all_students_have_same_ranking(setup_survey3):
+    """
+    Test case where all students have the same ranking for all groups.
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -120,6 +141,9 @@ def test_run_hungarian_all_students_have_same_ranking(setup_survey3):
 
 
 def test_run_hungarian_mandatory_group_rejected(setup_survey3):
+    """
+    Test case where one mandatory group is rejected by all students.
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -144,6 +168,9 @@ def test_run_hungarian_mandatory_group_rejected(setup_survey3):
 
 
 def test_run_hungarian_mandatory_groups_unranked(setup_survey3):
+    """
+    Test case where one mandatory group is unranked by all students.
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -168,6 +195,10 @@ def test_run_hungarian_mandatory_groups_unranked(setup_survey3):
 
 
 def test_run_hungarian_mandatory_groups_unranked2(setup_survey3):
+    """
+    Test case where one mandatory group is unranked by all students.
+    2. variant
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -193,6 +224,10 @@ def test_run_hungarian_mandatory_groups_unranked2(setup_survey3):
 
 
 def test_run_hungarian_mandatory_groups_unranked_and_rejected(setup_survey3):
+    """
+    Test case where one mandatory group is rejected by all students and another
+    mandatory group is rejected by two students but unranked by one student.
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -221,6 +256,9 @@ def test_run_hungarian_mandatory_groups_unranked_and_rejected(setup_survey3):
 
 
 def test_run_hungarian_not_enough_students_to_fill_all_mandatory_groups(setup_survey3):
+    """
+    Test case where there are not enough students to fill all mandatory groups.
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -242,6 +280,9 @@ def test_run_hungarian_not_enough_students_to_fill_all_mandatory_groups(setup_su
 
 
 def test_run_hungarian_not_enough_students_to_fill_any_mandatory_groups(setup_survey4):
+    """
+    Test case where there are not enough students to fill any of the mandatory groups.
+    """
     d = setup_survey4
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -259,6 +300,9 @@ def test_run_hungarian_not_enough_students_to_fill_any_mandatory_groups(setup_su
 
 
 def test_happiness_results(setup_survey3):
+    """
+    Test happiness results calculation.
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
@@ -284,6 +328,10 @@ def test_happiness_results(setup_survey3):
 
 
 def test_happiness_results_students_in_unranked_or_rejected(setup_survey3):
+    """
+    Test happiness results calculation where some students are placed in unranked
+    or rejected groups.
+    """
     d = setup_survey3
     survey_choices = scs.get_list_of_survey_choices(d["survey_id"])
     ids = _group_ids_by_name(survey_choices)
