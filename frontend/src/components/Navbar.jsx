@@ -1,6 +1,8 @@
 import hyLogo from "../static/images/hy_logo.svg";
+import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
+  const { t } = useTranslation();
   return (
     <nav className="navbar navbar-expand-lg navbar-dark">
       <div className="container-fluid">
@@ -12,17 +14,17 @@ const Navbar = () => {
             height="30"
             className="d-inline-block align-text-top"
           />
-          Jakaja
+          {t("Jakaja")}
         </a>
         <div className="collapse navbar-collapse" id="navbarNav">
           <a className="nav-link" href="#">
-            <small>Tilastot</small>
+            <small>{t("Tilastot")}</small>
           </a>
           <a className="nav-link" href="#">
-            <small>Palaute</small>
+            <small>{t("Palaute")}</small>
           </a>
           <a className="nav-link" href="#">
-            <small>Aktiiviset kyselyt</small>
+            <small>{t("Aktiiviset kyselyt")}</small>
           </a>
         </div>
         <div className="d-flex">
@@ -37,7 +39,7 @@ const Navbar = () => {
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
               <li>
                 <a className="dropdown-item" href="#">
-                  <small>Kirjaudu ulos</small>
+                  <small>{t("Kirjaudu ulos")}</small>
                 </a>
               </li>
             </ul>

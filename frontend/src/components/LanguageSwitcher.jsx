@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-
-const fi = "/static/images/fin.svg";
-const en = "/static/images/eng.svg";
-const sv = "/static/images/swe.svg";
+import finLogo from "../static/images/fin.svg";
+import enLogo from "../static/images/eng.svg";
+import swLogo from "../static/images/swe.svg";
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
@@ -13,27 +12,30 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <div>
+    <div className="language-switcher">
       <img
-        src={fi}
+        src={finLogo}
         height={30}
         width={30}
         alt="Finnish flag"
         onClick={() => changeLanguage("fi")}
+        style={{ cursor: "pointer" }}
       />
       <img
-        src={en}
+        src={enLogo}
         height={30}
         width={30}
         alt="British flag"
         onClick={() => changeLanguage("en")}
+        style={{ cursor: "pointer" }}
       />
       <img
-        src={sv}
+        src={swLogo}
         height={30}
         width={30}
         alt="Swedish flag"
         onClick={() => changeLanguage("sv")}
+        style={{ cursor: "pointer" }}
       />
     </div>
   );
