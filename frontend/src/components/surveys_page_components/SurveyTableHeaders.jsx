@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
-import menuWhite from "../../static/images/menu_white_36dp.svg";
-import assignmentWhite from "../../static/images/assignment_white_36dp.svg";
-import toggleOnWhite from "../../static/images/toggle_on_white_36dp.svg";
-import toggleOffWhite from "../../static/images/toggle_off_white_36dp.svg";
-import scheduleWhite from "../../static/images/schedule_white_36dp.svg";
+import menuWhite from "/images/menu_white_36dp.svg";
+import assignmentWhite from "/images/assignment_white_36dp.svg";
+import toggleOnWhite from "/images/toggle_on_white_36dp.svg";
+import toggleOffWhite from "/images/toggle_off_white_36dp.svg";
+import scheduleWhite from "/images/schedule_white_36dp.svg";
 
 const SurveyTableHeaders = () => {
   const { t } = useTranslation();

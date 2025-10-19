@@ -1,4 +1,4 @@
-import hyLogo from "../static/images/hy_logo.svg";
+import hyLogo from "/images/hy_logo.svg";
 import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
