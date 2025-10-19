@@ -13,7 +13,7 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <div className="language-switcher">
+    <>
       {Object.keys(languages)
         .filter(language => language !== currLanguage)
         .map((language, i) => 
@@ -28,7 +28,7 @@ const LanguageSwitcher = () => {
           />
         )
       }
-    </div>
+    </>
   );
 };
 
