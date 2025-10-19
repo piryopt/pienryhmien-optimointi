@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import LanguageSwitcher from "./LanguageSwitcher";
 
 const SurveyMultiphaseCreate = () => {
   const { t } = useTranslation();
