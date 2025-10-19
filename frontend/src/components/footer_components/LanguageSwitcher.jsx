@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import finLogo from "../static/images/fin.svg";
-import enLogo from "../static/images/eng.svg";
-import swLogo from "../static/images/swe.svg";
+import finLogo from "../../static/images/fin.svg";
+import enLogo from "../../static/images/eng.svg";
+import swLogo from "../../static/images/swe.svg";
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();

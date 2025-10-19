@@ -1,21 +1,22 @@
 import githubLogo from "../static/images/github-mark-white.png";
 import { useTranslation } from "react-i18next";
-import LanguageSwitcher from "./LanguageSwitcher";
+import LanguageSwitcher from "./footer_components/LanguageSwitcher";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const { t } = useTranslation();
   return (
     <footer className="footer mt-auto py-3 bg-dark">
       <div className="container">
-        <a href="#" className="text-muted">
+        <Link to="/faq" className="text-muted">
           {t("UKK")}
-        </a>
-        <a href="#" className="text-muted">
+        </Link>
+        <Link to="/feedback" className="text-muted">
           {t("Anna palautetta")}
-        </a>
-        <a href="#" className="text-muted">
+        </Link>
+        <Link to="/privacy-policy" className="text-muted">
           {t("Tietosuojaseloste")}
-        </a>
+        </Link>
         <LanguageSwitcher />
         <a href="https://github.com/piryopt/pienryhmien-optimointi">
           <img
