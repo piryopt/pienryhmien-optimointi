@@ -1,4 +1,4 @@
-import githubLogo from "../static/images/github-mark-white.png";
+import githubLogo from "/images/github-mark-white.png";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 
