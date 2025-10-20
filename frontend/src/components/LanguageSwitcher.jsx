@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { languages } from "../utils/constants";
 
 const LanguageSwitcher = () => {
-  const [currLanguage, setCurrLanguage] = useState(localStorage.getItem("i18nextLng") || "fi");
+  const [currLanguage, setCurrLanguage] = useState(localStorage.getItem("i18nextLng")?.split('-')[0] || "fi");
   const { i18n } = useTranslation();
   
   const changeLanguage = (lng) => {
