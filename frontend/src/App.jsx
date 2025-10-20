@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider";
-import SurveyMultiphaseCreate from "./components/SurveyMultiphaseCreate";
-import SurveysPage from "./components/SurveysPage";
-import LoginPage from "./components/LoginPage";
+import SurveyMultiphaseCreate from "./pages/SurveyMultiphaseCreate";
+import SurveysPage from "./pages/SurveysPage";
+import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
 import FAQ from "./components/footer_components/FAQ";
 import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
+import SurveyAnswersPage from "./pages/SurveyAnswerPage";
 import FrontPage from "./components/FrontPage";
 import RequireAuth from "./components/RequireAuth";
 
@@ -45,6 +46,12 @@ const App = () => {
                 </RequireAuth>
               }
             />
+            <Route
+              path="/surveys/:id/answers"
+              element={
+                <RequireAuth>
+                  <SurveyAnswersPage />
+                </RequireAuth>} />
           </Routes>
         </Layout>
       </BrowserRouter>

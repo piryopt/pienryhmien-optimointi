@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
-import SurveysTable from "./surveys_page_components/SurveysTable";
+import SurveysTable from "../components/surveys_page_components/SurveysTable";
 import listWhite from "/images/list_white_36dp.svg";
 
 const SurveysPage = () => {
