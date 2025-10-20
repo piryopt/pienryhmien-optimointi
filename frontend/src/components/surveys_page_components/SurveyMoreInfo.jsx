@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
-import manageSearchWhite from "../../static/images/manage_search_white_36dp.svg";
-import contentCopyWhite from "../../static/images/content_copy_white_36dp.svg";
-import editWhite from "../../static/images/edit_white_36dp.svg";
-import folderCopyWhite from "../../static/images/folder_copy_white_36dp.svg";
-import deleteWhite from "../../static/images/delete_white_36dp.svg";
+import manageSearchWhite from "/images/manage_search_white_36dp.svg";
+import contentCopyWhite from "/images/content_copy_white_36dp.svg";
+import editWhite from "/images/edit_white_36dp.svg";
+import folderCopyWhite from "/images/folder_copy_white_36dp.svg";
+import deleteWhite from "/images/delete_white_36dp.svg";
 
 const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
   const { t } = useTranslation();

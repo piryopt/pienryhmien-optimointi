@@ -1,43 +1,34 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import finLogo from "../../static/images/fin.svg";
-import enLogo from "../../static/images/eng.svg";
-import swLogo from "../../static/images/swe.svg";
+import { languages } from "../../utils/constants";
 
 const LanguageSwitcher = () => {
+  const [currLanguage, setCurrLanguage] = useState(localStorage.getItem("i18nextLng")?.split('-')[0] || "fi");
   const { i18n } = useTranslation();
-
+  
   const changeLanguage = (lng) => {
+    setCurrLanguage(lng)
     i18n.changeLanguage(lng);
     localStorage.setItem("i18nextLng", lng);
   };
 
   return (
-    <div className="language-switcher">
-      <img
-        src={finLogo}
-        height={30}
-        width={30}
-        alt="Finnish flag"
-        onClick={() => changeLanguage("fi")}
-        style={{ cursor: "pointer" }}
-      />
-      <img
-        src={enLogo}
-        height={30}
-        width={30}
-        alt="British flag"
-        onClick={() => changeLanguage("en")}
-        style={{ cursor: "pointer" }}
-      />
-      <img
-        src={swLogo}
-        height={30}
-        width={30}
-        alt="Swedish flag"
-        onClick={() => changeLanguage("sv")}
-        style={{ cursor: "pointer" }}
-      />
-    </div>
+    <>
+      {Object.keys(languages)
+        .filter(language => language !== currLanguage)
+        .map((language, i) => 
+          <img 
+            src={languages[language]["logo"]}
+            height="30"
+            width="30"
+            alt={languages[language]["alt"]}
+            onClick={() => changeLanguage(language)}
+            style={{ cursor: "pointer" }}
+            key={i}
+          />
+        )
+      }
+    </>
   );
 };
 

@@ -273,14 +273,6 @@ body,
   text-decoration: underline;
 }
 
-.language-switcher img {
-  margin-right: 70px;
-}
-
-.language-switcher img:last-child {
-  margin-right: 0;
-}
-
 main > div.container {
   margin-top: 40px;
   margin-bottom: 120px;

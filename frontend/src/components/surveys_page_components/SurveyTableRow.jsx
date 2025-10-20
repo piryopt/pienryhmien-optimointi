@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import SurveyMoreInfo from "./SurveyMoreInfo";
-import menu_white from "../../static/images/menu_white_36dp.svg";
-import insertDriveFileWhite from "../../static/images/insert_drive_file_white_36dp.svg";
-import insertPageBreakWhite from "../../static/images/insert_page_break_white_36dp.svg";
+import menu_white from "/images/menu_white_36dp.svg";
+import insertDriveFileWhite from "/images/insert_drive_file_white_36dp.svg";
+import insertPageBreakWhite from "/images/insert_page_break_white_36dp.svg";
 
 const SurveyTableRow = ({ survey, handleDeleteClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
