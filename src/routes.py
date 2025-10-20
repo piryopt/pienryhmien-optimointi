@@ -633,38 +633,39 @@ def post_group_sizes(survey_id):
 @ad_login
 def survey_answers(survey_id):
     """
-    For displaying the answers of a survey
+    Returns json data for displaying answers of a survey
     """
     if not check_if_owner(survey_id):
-        return redirect("/")
-    # If the results have been saved, redirect to the results page
-    if survey_service.check_if_survey_results_saved(survey_id):
-        return survey_results(survey_id)
-
+        response = {
+            "message": "Only owners can view survey answers"
+        }
+        return jsonify(response), 403
+    
     survey_name = survey_service.get_survey_name(survey_id)
     survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
-        choices_data.append([user_service.get_email(s.user_id), s.ranking, s.rejections, s.reason])
+        choices_data.append({
+            "email": user_service.get_email(s.user_id),
+            "ranking": s.ranking,
+            "rejections": s.rejections,
+            "reason": s.reason
+        })
 
     survey_answers_amount = len(survey_answers)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
-    error_message = gettext(
-        "Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus sivulta."
-    )
-    return render_template(
-        "survey_answers.html",
-        survey_name=survey_name,
-        survey_answers=choices_data,
-        survey_answers_amount=survey_answers_amount,
-        available_spaces=available_spaces,
-        survey_id=survey_id,
-        closed=closed,
-        answered=answers_saved,
-        error_message=error_message,
-    )
+
+    return jsonify({
+        "surveyName": survey_name,
+        "surveyAnswers": choices_data,
+        "surveyAnswersAmount": survey_answers_amount,
+        "availableSpaces": available_spaces,
+        "surveyId": survey_id,
+        "closed": closed,
+        "answered": answers_saved,
+    })
 
 
 @bp.route("/surveys/<string:survey_id>/results", methods=["GET", "POST"])

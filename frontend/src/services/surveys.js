@@ -39,8 +39,20 @@ const deleteSurvey = async (surveyId) => {
   }
 };
 
+const getSurveyAnswersData = async (surveyId) => {
+  try {
+   const response = await axios.get(`${baseUrl}/surveys/${surveyId}/answers`, {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    throw error
+  }
+}
+
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
-  deleteSurvey: deleteSurvey
+  deleteSurvey: deleteSurvey,
+  getSurveyAnswersData: getSurveyAnswersData,
 }
