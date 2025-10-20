@@ -1,7 +1,7 @@
 # Jakaja 2.0
 
 Jakaja is a group assignment optimization application originally developed in the Software Engineering Lab course at the University of Helsinki.  
-The system helps assign students into groups based on their preferences, using the **Hungarian Algorithm**. Teachers can create surveys, students submit their preferences, and after closing the survey, the system divides students into groups. Results can be exported to Excel.
+The system helps assign students into groups based on their preferences, using the **Hungarian Algorithm**. For simplicity's sake, survey creators will be referred to as teachers and responders as students. Teachers can create surveys, to which students submit their preferences for the selection. After the teacher closes the survey, the system divides students into groups based on their responses. The results can be exported to Excel.
 
 The goal of **Jakaja 2.0** is to extend and refine the original system to better handle real-world requirements and improve maintainability.
 
@@ -12,7 +12,7 @@ The goal of **Jakaja 2.0** is to extend and refine the original system to better
 - **Group size constraints:**
 
   - Teachers can define **minimum and maximum group sizes**
-  - Group size rules are **stronger than student preferences** (unpopular groups must still reach a minimum size)
+  - Group size rules are **stronger than student preferences** (Mandatory groups must still reach a minimum size)
 
 - **Multi-dimensional preferences:**
 
@@ -30,7 +30,7 @@ The goal of **Jakaja 2.0** is to extend and refine the original system to better
 
 ### Product documentation
 
-    - Current versions product documentation is up to date with the newest version of jakaja and it can be found in the root of this repo in the README.md.
+    - The product documentation of the previous version is up to date with the newest version of jakaja and it can be found in the root of this repository, in the README.md file.
 
 ### Project practicalities and progress documentation
 
@@ -39,13 +39,20 @@ The goal of **Jakaja 2.0** is to extend and refine the original system to better
 - Sprint backlogs
 
   - [Sprint 0](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=1494077212#gid=1494077212)
+  - [Sprint 1](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=1824336089#gid=1824336089)
+  - [Sprint 2](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=927574909#gid=927574909)
+  - [Sprint 3](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=407338365#gid=407338365)
+  - [Sprint 4](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=441830011#gid=441830011)
+  - [Sprint 5](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=266792610#gid=266792610)
+  - [Sprint 6](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=1919874456#gid=1919874456)
+  - [Sprint 7](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=1386915800#gid=1386915800)
 
 - [Working hours](https://docs.google.com/spreadsheets/d/1t5yTwkchwrcYQXv5IyxEG7nFUolOFOQFECdHL8PKsaw/edit?gid=1447160151#gid=1447160151)
 
 ### Project team communication
 
 - Telegram
-- meeting up at the university
+- Meeting up on campus
 
 ### The project team
 
