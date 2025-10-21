@@ -81,6 +81,38 @@ const getStudentRankings = async (surveyId, studentEmail) => {
   }
 }
 
+const openSurvey = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.post(`${baseUrl}/surveys/${surveyId}/open`, null, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": csrfToken
+      },
+      withCredentials: true
+    })
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const closeSurvey = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.post(`${baseUrl}/surveys/${surveyId}/close`, null, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": csrfToken
+      },
+      withCredentials: true
+    })
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
@@ -88,4 +120,6 @@ export default {
   getSurveyAnswersData: getSurveyAnswersData,
   deleteSurveyAnswer: deleteSurveyAnswer,
   getStudentRankings: getStudentRankings,
+  openSurvey: openSurvey,
+  closeSurvey: closeSurvey,
 }

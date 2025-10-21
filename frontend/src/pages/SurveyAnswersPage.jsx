@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import assignmentWhite from "/images/assignment_white_36dp.svg";
@@ -10,10 +10,12 @@ const SurveyAnswersPage = () => {
   const [filteredAnswers, setFilteredAnswers] = useState([]);
   const [surveyData, setSurveyData] = useState({});
   const [surveyAnswersAmount, setSurveyAnswersAmount] = useState(0);
+  const [surveyClosed, setSurveyClosed] = useState(false);
   const [searchEmail, setSearchEmail] = useState("");
 
   const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getSurveyAnswersData = async () => {
@@ -23,12 +25,13 @@ const SurveyAnswersPage = () => {
         setFilteredAnswers(responseData.surveyAnswers);
         setSurveyData(responseData);
         setSurveyAnswersAmount(Number(responseData.surveyAnswersAmount));
+        setSurveyClosed(responseData.closed)
       } catch (err) {
         console.error("Error loading survey data", err);
       }
     }
     getSurveyAnswersData();
-  }, []);
+  }, [surveyClosed]);
 
   const handleFilterChange = (event) => {
     const updatedSearchEmail = event.target.value;
@@ -37,6 +40,33 @@ const SurveyAnswersPage = () => {
       a => a.email.includes(updatedSearchEmail.toLowerCase())
     )
     setFilteredAnswers(updatedAnswers)
+  }
+
+  const handleOpenSurveyClick = async () => {
+    if (window.confirm(t("Haluatko varmasti avata kyselyn uudestaan?"))) {
+      try {
+        await surveyService.openSurvey(id);
+        navigate("/surveys");
+        // alert message?
+      } catch (err) {
+        console.error("error opening survey", err);
+      }
+    }
+  }
+
+  const handleCloseSurveyClick = async () => {
+    if (window.confirm(t("Haluatko varmasti sulkea kyselyn?"))) {
+      try {
+        await surveyService.closeSurvey(id)
+        setSurveyClosed(true)
+        // alert message?
+      } catch (err) {
+        console.error("error opening survey", err)
+      }
+    }
+  }
+
+  const handleAssignGroups = () => {
   }
 
   return (
@@ -66,12 +96,29 @@ const SurveyAnswersPage = () => {
       </a>
       <br />
       <br />
-      <button className="btn btn-outline-primary">
-        {t("Jaa ryhmiin")}
+      <button 
+        className="btn btn-outline-primary"
+        onClick={handleAssignGroups}
+        >
+          {t("Jaa ryhmiin")}
       </button>
-      <button className="btn btn-outline-warning" style={{ float: "right" }}>
-        {t("Avaa kysely uudelleen")}
-      </button>
+      {surveyClosed
+        ?
+          <button 
+            className="btn btn-outline-warning" 
+            style={{ float: "right" }}
+            onClick={handleOpenSurveyClick}
+            >
+              {t("Avaa kysely uudelleen")}
+          </button>
+        : <button
+            className="btn btn-outline-warning" 
+            style={{ float: "right" }}
+            onClick={handleCloseSurveyClick}
+            >
+              {t("Sulje kysely")}
+        </button>
+      }
       <br />
       <br />
       <p>

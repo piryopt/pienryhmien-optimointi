@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import SurveyAnswersTableHeaders from "./SurveyAnswerTableHeaders";
-import SurveyAnswersTableRow from "./SurveyAnswerTableRow";
+import SurveyAnswersTableHeaders from "./SurveyAnswersTableHeaders";
+import SurveyAnswersTableRow from "./SurveyAnswersTableRow";
 import surveyService from "../../services/surveys";
 
 const SurveyAnswersTable = (props) => {
