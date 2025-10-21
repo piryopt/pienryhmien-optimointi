@@ -751,10 +751,9 @@ def close_survey(survey_id):
     user_id = session.get("user_id", 0)
     closed = survey_service.close_survey(survey_id, user_id)
     if not closed:
-        msg = gettext("Kyselyn sulkeminen epäonnistui!")
-        response = {"status": "0", "msg": msg}
+        response = {"status": "0", "msg": "closing survey failed"}
         return jsonify(response)
-    return redirect(f"/surveys/{survey_id}/answers")
+    return jsonify({"status": "1", "msg": "Survey closed"})
 
 
 @bp.route("/surveys/<string:survey_id>/open", methods=["POST"])
@@ -765,10 +764,9 @@ def open_survey(survey_id):
     user_id = session.get("user_id", 0)
     opened = survey_service.open_survey(survey_id, user_id)
     if not opened:
-        msg = gettext("Kyselyn avaaminen epäonnistui!")
-        response = {"status": "0", "msg": msg}
+        response = {"status": "0", "msg": "Opening survey failed"}
         return jsonify(response)
-    return redirect(f"/surveys/{survey_id}/answers")
+    return jsonify({"status": "1", "msg": "Survey opened"})
 
 
 """
