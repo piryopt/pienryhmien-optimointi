@@ -177,12 +177,11 @@ def get_info():
     return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
 
 
-@bp.route("/surveys/<string:survey_id>/studentranking", methods=["POST"])
-def expand_ranking(survey_id):
+@bp.route("/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"])
+def expand_ranking(survey_id, email):
     """
-    When a ranking is clicked, display all rankings.
+    Return json data of user's choices and rejections
     """
-    email = request.get_json()
     user_id = user_service.get_user_id_by_email(email)
     user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     ranking_list = convert_to_list(user_ranking.ranking)
@@ -190,13 +189,13 @@ def expand_ranking(survey_id):
     choices = []
     for r in ranking_list:
         choice = survey_choices_service.get_survey_choice(r)
-        choices.append(choice)
+        choices.append(dict(choice._mapping))
     rejections = []
     if len(rejection_list) > 0:
         for r in rejection_list:
             choice = survey_choices_service.get_survey_choice(r)
-            rejections.append(choice)
-    return render_template("showrankings.html", choices=choices, rejections=rejections)
+            rejections.append(dict(choice._mapping))
+    return jsonify({"choices": choices, "rejections": rejections})
 
 
 @bp.route("/surveys/create", methods=["GET"])
@@ -475,13 +474,15 @@ def owner_deletes_submission(survey_id):
     e.g. if a student has dropped the course.
     """
     if not check_if_owner(survey_id):
-        return redirect("/")
+        response = {"message": "Only owners can delete survey answers"}
+        return jsonify(response), 403
     user_data = user_service.find_by_email(request.form["student_email"])
     user_id = user_data.id
-    user_rankings_service.delete_ranking(survey_id, user_id)
-    return redirect(f"/surveys/{survey_id}/answers")
-
-
+    success = user_rankings_service.delete_ranking(survey_id, user_id)
+    if not success:
+        return jsonify({"message": "Deleting answer failed"})
+    return "", 204
+    
 @bp.route("/surveys/<string:survey_id>/edit", methods=["GET"])
 def edit_survey_form(survey_id):
     """
@@ -636,9 +637,7 @@ def survey_answers(survey_id):
     Returns json data for displaying answers of a survey
     """
     if not check_if_owner(survey_id):
-        response = {
-            "message": "Only owners can view survey answers"
-        }
+        response = {"message": "Only owners can view survey answers"}
         return jsonify(response), 403
     
     survey_name = survey_service.get_survey_name(survey_id)
