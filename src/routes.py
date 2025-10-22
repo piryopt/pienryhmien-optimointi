@@ -775,6 +775,32 @@ def open_survey(survey_id):
 /AUTH/* ROUTES:
 """
 
+@bp.route("/api/config", methods=["GET"])
+def api_config():
+    """
+    Return to the frontend (DEBUG flag)
+    """
+    return jsonify({"debug": current_app.debug})
+
+@bp.route("/api/session", methods=["GET"])
+def api_session():
+    """
+     helper: return current session information as JSON.
+    """
+    user_id = session.get("user_id", 0)
+    if not user_id:
+        return jsonify({"logged_in": False})
+    return jsonify(
+        {
+            "logged_in": True,
+            "user_id": user_id,
+            "email": session.get("email"),
+            "full_name": session.get("full_name"),
+            "role": session.get("role"),
+            "language": session.get("language"),
+            "admin": session.get("admin", False),
+        }
+    )
 
 @bp.route("/auth/login", methods=["GET", "POST"])
 def login():
@@ -823,6 +849,14 @@ def logout():
         return redirect("/")
     else:
         return redirect("/Shibboleth.sso/Logout")
+
+@bp.route("/api/logout", methods=["POST"])
+def api_logout():
+    """
+    SPA logout: clear server session and return JSON.
+    """
+    user_service.logout()
+    return jsonify({"logged_out": True})
 
 
 """

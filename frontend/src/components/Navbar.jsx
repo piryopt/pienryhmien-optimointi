@@ -1,8 +1,27 @@
 import hyLogo from "/images/hy_logo.svg";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { t } = useTranslation();
+  const { user, loading, logout, debug } = useAuth();
+  const navigate = useNavigate();
+  console.log(user, debug);
+
+  const handleLogout = async (e) => {
+    e?.preventDefault();
+
+    if (debug) {
+      await logout();
+      navigate("/");
+    } else {
+      window.location.href = "/auth/logout";
+    }
+  };
+
+  const displayName = user && user.full_name ? user.full_name : "";
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark">
       <div className="container-fluid">
@@ -35,10 +54,12 @@ const Navbar = () => {
               id="dropdownMenuButton1"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-            ></button>
+            >
+              <b> {loading ? "" : displayName}</b>
+            </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
               <li>
-                <a className="dropdown-item" href="#">
+                <a className="dropdown-item" href="#" onClick={handleLogout}>
                   <small>{t("Kirjaudu ulos")}</small>
                 </a>
               </li>
