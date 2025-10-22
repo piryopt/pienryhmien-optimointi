@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";;
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider";
 import SurveyMultiphaseCreate from "./components/SurveyMultiphaseCreate";
 import SurveysPage from "./components/SurveysPage";
