@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import LoginPage from "./LoginPage";
+import LoginPage from "../pages/LoginPage";
 
 const RequireAuth = ({ children }) => {
   const { user, loading, debug } = useAuth();

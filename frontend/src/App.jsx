@@ -6,8 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
 import FAQ from "./components/footer_components/FAQ";
 import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
-import SurveyAnswersPage from "./pages/SurveyAnswerPage";
-import FrontPage from "./components/FrontPage";
+import SurveyAnswersPage from "./pages/SurveyAnswersPage";
+import FrontPage from "./pages/FrontPage";
 import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
