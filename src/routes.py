@@ -199,7 +199,7 @@ def expand_ranking(survey_id, email, stage):
         user_ranking = user_rankings_service.get_user_multistage_rankings_by_stage(survey_id, user_id, stage)
     else:
         user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
-    
+
     not_available = user_ranking.not_available or False
     ranking_list = convert_to_list(user_ranking.ranking)
     rejection_list = convert_to_list(user_ranking.rejections)
@@ -262,8 +262,8 @@ def multistage_survey_create():
         for stage in data["stages"]:
             for choice in stage["choices"]:
                 survey_choices_service.add_multistage_choice(
-                    **{**choice, 
-                       "survey_id": survey_id, 
+                    **{**choice,
+                       "survey_id": survey_id,
                        "stage": stage["name"],
                         "order_number": stage["id"]
                     }
@@ -597,24 +597,24 @@ def api_multistage_survey_submit(survey_id):
     """
     data = request.get_json()
     user_id = session.get("user_id", 0)
-    
+
     # no validations, refactoring needs to be done anyway
     for stage in data["stages"]:
         good_ids = stage["good"]
         bad_ids = stage["bad"]
         reason = stage.get("reason", "")
-    
+
         ranking = convert_to_string(good_ids)
         rejections = convert_to_string(bad_ids)
-        
+
         succesful_add = user_rankings_service.add_user_ranking(
-            user_id, survey_id, ranking, rejections, reason, 
+            user_id, survey_id, ranking, rejections, reason,
             stage=stage["stageId"], not_available=stage["notAvailable"],
             multistage_ranking=True
         )
         if not succesful_add:
             return jsonify({"status": "0", "message": "adding user ranking failed"})
-    
+
     return jsonify({"status": "1", "message": "success"})
 
 
@@ -886,6 +886,7 @@ def delete_survey(survey_id):
     if not check_if_owner(survey_id):
         return redirect("/")
     survey_service.set_survey_deleted_true(survey_id)
+    survey_choices_service.set_choices_deleted_true(survey_id)
     return redirect("/surveys")
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
@@ -1049,8 +1050,8 @@ def multistage_survey_answers(survey_id):
             choices_data.append(
                 {
                     "email": user_service.get_email(r.user_id),
-                    "ranking": r.ranking, 
-                    "rejections": r.rejections, 
+                    "ranking": r.ranking,
+                    "rejections": r.rejections,
                     "reason": r.reason,
                     "notAvailable": r.not_available
                 }
@@ -1411,7 +1412,7 @@ def api_admin_feedback_list():
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
-    
+
     rows = feedback_service.get_unsolved_feedback()
     items = []
     for r in rows:
@@ -1448,11 +1449,11 @@ def api_admin_feedback_get(feedback_id):
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
-    
+
     r = feedback_service.get_feedback(feedback_id)
     if not r:
         return jsonify({"success": False, "error": "not_found"}), 404
-    
+
     result = {
         "id": r[0],
         "title": r[1],
@@ -1470,11 +1471,11 @@ def api_admin_feedback_close(feedback_id):
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
-    
+
     success = feedback_service.mark_feedback_solved(feedback_id)
     if not success:
         return jsonify({"success": False, "error": "server_error"}), 500
-    
+
     return jsonify({"success": True, "msg": "feedback_closed"}), 200
 
 
@@ -1710,3 +1711,10 @@ def close_surveys():
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """
     survey_service.check_for_surveys_to_close()
+
+
+def delete_old_surveys():
+    """
+    Weekly check if surveys are over two years old. If so, delete said surveys.
+    """
+    survey_service.check_for_surveys_to_delete()

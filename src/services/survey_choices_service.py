@@ -100,7 +100,7 @@ class SurveyChoicesService:
         tally = sum(choice.max_spaces for choice in choices)
 
         return tally
-    
+
     def get_stages_available_spaces(self, survey_id):
         """
         Returns the total number of available space for each stage in the groups of a survey
@@ -190,7 +190,7 @@ class SurveyChoicesService:
         index = 0
         for row in rows:
             stage_id = row["stage"] or "no_stage"
-    
+
             if stage_id not in stageIndices:
                 stageIndices[stage_id] = index
                 stages.append({
@@ -201,7 +201,7 @@ class SurveyChoicesService:
                 })
                 index += 1
             choices = stages[stageIndices[stage_id]]["choices"]
-    
+
             matching_choices = [c for c in choices if c["id"] == row["choice_id"]]
             choice = matching_choices[0] if matching_choices else None
 
@@ -216,12 +216,21 @@ class SurveyChoicesService:
                     "infos": []
                 }
                 choices.append(choice)
-    
+
             if row.get("info_key"):
                 choice["infos"].append({
                     row["info_key"]: row["info_value"],
                     "hidden": row["hidden"]
                 })
         return sorted(stages, key=lambda s: s["orderNumber"])
+    def set_choices_deleted_true(self, survey_id):
+        """
+        Sets choices of survey to deleted status. Returns boolean.
+
+        Args:
+            survey_id: id for the survey
+        """
+        return self._survey_choices_repository.set_choices_deleted_true(survey_id)
+
 
 survey_choices_service = SurveyChoicesService()
