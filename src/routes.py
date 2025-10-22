@@ -177,12 +177,11 @@ def get_info():
     return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
 
 
-@bp.route("/surveys/<string:survey_id>/studentranking", methods=["POST"])
-def expand_ranking(survey_id):
+@bp.route("/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"])
+def expand_ranking(survey_id, email):
     """
-    When a ranking is clicked, display all rankings.
+    Return json data of user's choices and rejections
     """
-    email = request.get_json()
     user_id = user_service.get_user_id_by_email(email)
     user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     ranking_list = convert_to_list(user_ranking.ranking)
@@ -190,13 +189,13 @@ def expand_ranking(survey_id):
     choices = []
     for r in ranking_list:
         choice = survey_choices_service.get_survey_choice(r)
-        choices.append(choice)
+        choices.append(dict(choice._mapping))
     rejections = []
     if len(rejection_list) > 0:
         for r in rejection_list:
             choice = survey_choices_service.get_survey_choice(r)
-            rejections.append(choice)
-    return render_template("showrankings.html", choices=choices, rejections=rejections)
+            rejections.append(dict(choice._mapping))
+    return jsonify({"choices": choices, "rejections": rejections})
 
 
 @bp.route("/surveys/create", methods=["GET"])
@@ -475,13 +474,15 @@ def owner_deletes_submission(survey_id):
     e.g. if a student has dropped the course.
     """
     if not check_if_owner(survey_id):
-        return redirect("/")
+        response = {"message": "Only owners can delete survey answers"}
+        return jsonify(response), 403
     user_data = user_service.find_by_email(request.form["student_email"])
     user_id = user_data.id
-    user_rankings_service.delete_ranking(survey_id, user_id)
-    return redirect(f"/surveys/{survey_id}/answers")
-
-
+    success = user_rankings_service.delete_ranking(survey_id, user_id)
+    if not success:
+        return jsonify({"message": "Deleting answer failed"})
+    return "", 204
+    
 @bp.route("/surveys/<string:survey_id>/edit", methods=["GET"])
 def edit_survey_form(survey_id):
     """
@@ -633,38 +634,37 @@ def post_group_sizes(survey_id):
 @ad_login
 def survey_answers(survey_id):
     """
-    For displaying the answers of a survey
+    Returns json data for displaying answers of a survey
     """
     if not check_if_owner(survey_id):
-        return redirect("/")
-    # If the results have been saved, redirect to the results page
-    if survey_service.check_if_survey_results_saved(survey_id):
-        return survey_results(survey_id)
-
+        response = {"message": "Only owners can view survey answers"}
+        return jsonify(response), 403
+    
     survey_name = survey_service.get_survey_name(survey_id)
     survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
-        choices_data.append([user_service.get_email(s.user_id), s.ranking, s.rejections, s.reason])
+        choices_data.append({
+            "email": user_service.get_email(s.user_id),
+            "ranking": s.ranking,
+            "rejections": s.rejections,
+            "reason": s.reason
+        })
 
     survey_answers_amount = len(survey_answers)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
-    error_message = gettext(
-        "Ei voida luoda ryhmittelyä, koska vastauksia on enemmän kuin jaettavia paikkoja. Voit muuttaa jaettavien paikkojen määrän kyselyn muokkaus sivulta."
-    )
-    return render_template(
-        "survey_answers.html",
-        survey_name=survey_name,
-        survey_answers=choices_data,
-        survey_answers_amount=survey_answers_amount,
-        available_spaces=available_spaces,
-        survey_id=survey_id,
-        closed=closed,
-        answered=answers_saved,
-        error_message=error_message,
-    )
+
+    return jsonify({
+        "surveyName": survey_name,
+        "surveyAnswers": choices_data,
+        "surveyAnswersAmount": survey_answers_amount,
+        "availableSpaces": available_spaces,
+        "surveyId": survey_id,
+        "closed": closed,
+        "answered": answers_saved,
+    })
 
 
 @bp.route("/surveys/<string:survey_id>/results", methods=["GET", "POST"])
@@ -751,10 +751,9 @@ def close_survey(survey_id):
     user_id = session.get("user_id", 0)
     closed = survey_service.close_survey(survey_id, user_id)
     if not closed:
-        msg = gettext("Kyselyn sulkeminen epäonnistui!")
-        response = {"status": "0", "msg": msg}
+        response = {"status": "0", "msg": "closing survey failed"}
         return jsonify(response)
-    return redirect(f"/surveys/{survey_id}/answers")
+    return jsonify({"status": "1", "msg": "Survey closed"})
 
 
 @bp.route("/surveys/<string:survey_id>/open", methods=["POST"])
@@ -765,10 +764,9 @@ def open_survey(survey_id):
     user_id = session.get("user_id", 0)
     opened = survey_service.open_survey(survey_id, user_id)
     if not opened:
-        msg = gettext("Kyselyn avaaminen epäonnistui!")
-        response = {"status": "0", "msg": msg}
+        response = {"status": "0", "msg": "Opening survey failed"}
         return jsonify(response)
-    return redirect(f"/surveys/{survey_id}/answers")
+    return jsonify({"status": "1", "msg": "Survey opened"})
 
 
 """
