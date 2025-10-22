@@ -1,7 +1,7 @@
 from random import shuffle
 from datetime import datetime
 from functools import wraps
-from flask import render_template, request, session, jsonify, redirect, Blueprint, current_app
+from flask import app, render_template, request, session, jsonify, redirect, Blueprint, current_app
 from flask_wtf.csrf import generate_csrf
 import markdown
 from pathlib import Path
@@ -121,31 +121,22 @@ def frontpage() -> str:
 /SURVEYS/* ROUTES:
 """
 
+
 @bp.route("/surveys/active")
 @ad_login
 def surveys_active():
     user_id = session.get("user_id", 0)
     active_surveys = survey_repository.fetch_all_active_surveys(user_id)
-    return jsonify([
-        {
-            key: format_datestring(val) if key == "time_end" else val
-            for key, val in survey._mapping.items()
-        }
-        for survey in active_surveys
-    ])
+    return jsonify([{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in active_surveys])
+
 
 @bp.route("/surveys/closed")
 @ad_login
 def surveys_closed():
     user_id = session.get("user_id", 0)
     closed_surveys = survey_service.get_list_closed_surveys(user_id)
-    return jsonify([
-        {
-            key: format_datestring(val) if key == "time_end" else val
-            for key, val in survey._mapping.items()
-        }
-        for survey in closed_surveys
-    ])
+    return jsonify([{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in closed_surveys])
+
 
 @bp.route("/surveys")
 @ad_login
@@ -215,12 +206,10 @@ def new_survey_form(survey=None):
             return redirect("/")
         survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
+            column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
         ]
     return render_template("create_survey.html", survey=survey)
+
 
 @bp.route("/multiphase/survey/create", methods=["GET"])
 @ad_login
@@ -248,7 +237,7 @@ def new_survey_post():
 
     allowed_denied_choices = data["allowedDeniedChoices"]
     allow_search_visibility = data["allowSearchVisibility"]
- 
+
     date_string = f"{date_end} {time_end}"
     format_code = "%d.%m.%Y %H:%M"
 
@@ -294,12 +283,14 @@ def import_survey_choices():
 /CSRF_TOKEN ROUTE:
 """
 
+
 @bp.route("/csrf_token", methods=["GET"])
 @ad_login
 def get_csrf():
     csrf_token = generate_csrf()
     response = {"csrfToken": csrf_token}
     return jsonify(response)
+
 
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:
@@ -369,6 +360,63 @@ def surveys(survey_id):
     shuffled_choices = list(survey_all_info.values())
     shuffle(shuffled_choices)
     return render_template("survey.html", choices=shuffled_choices, survey=survey, additional_info=additional_info)
+
+
+@bp.route("/api/surveys/<string:survey_id>", methods=["GET"])
+def api_survey(survey_id):
+    """
+    API endpoint for fetching survey data
+    """
+    print("test")
+    print(survey_id)  # will now print the string ID
+    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
+    survey = survey_service.get_survey(survey_id)
+
+    if not survey_choices:
+        return jsonify({"error": "Survey not found"}), 404
+
+    # Merge choices with additional info
+    survey_all_info = {}
+    for row in survey_choices_info:
+        choice_id = str(row.choice_id)
+        if choice_id not in survey_all_info:
+            survey_all_info[choice_id] = {"infos": [{row.info_key: row.info_value}]}
+            survey_all_info[choice_id]["search"] = row.info_value
+        else:
+            survey_all_info[choice_id]["infos"].append({row.info_key: row.info_value})
+            survey_all_info[choice_id]["search"] += " " + row.info_value
+
+    for row in survey_choices:
+        choice_id = str(row.id)
+        if choice_id not in survey_all_info:
+            survey_all_info[choice_id] = {
+                "name": row.name,
+                "slots": row.max_spaces,
+                "id": choice_id,
+                "mandatory": row.mandatory,
+                "search": row.name,
+                "infos": [],
+                "min_size": row.min_size,
+            }
+        else:
+            survey_all_info[choice_id].update(
+                {
+                    "name": row.name,
+                    "mandatory": row.mandatory,
+                    "slots": row.max_spaces,
+                    "id": choice_id,
+                    "min_size": row.min_size,
+                }
+            )
+
+    return jsonify(
+        {
+            "survey": {"id": str(survey.id), "name": survey.surveyname},
+            "choices": list(survey_all_info.values()),
+            "additional_info": bool(survey_choices_info),
+        }
+    )
 
 
 @bp.route("/surveys/<string:survey_id>/answered")
@@ -495,11 +543,8 @@ def edit_survey_form(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
-        ]
+        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+    ]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -547,6 +592,7 @@ def delete_survey(survey_id):
     survey_service.set_survey_deleted_true(survey_id)
     return redirect("/surveys")
 
+
 @bp.route("/surveys/<string:survey_id>", methods=["DELETE"])
 def delete_surveys_endpoint(survey_id):
     if not check_if_owner(survey_id):
@@ -554,6 +600,7 @@ def delete_surveys_endpoint(survey_id):
         return jsonify(response), 403
     survey_service.set_survey_deleted_true(survey_id)
     return "", 204
+
 
 @bp.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
 def add_owner(survey_id, email):
@@ -582,11 +629,8 @@ def edit_group_sizes(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
-        ]
+        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+    ]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template(
@@ -775,6 +819,7 @@ def open_survey(survey_id):
 /AUTH/* ROUTES:
 """
 
+
 @bp.route("/api/config", methods=["GET"])
 def api_config():
     """
@@ -782,10 +827,11 @@ def api_config():
     """
     return jsonify({"debug": current_app.debug})
 
+
 @bp.route("/api/session", methods=["GET"])
 def api_session():
     """
-     helper: return current session information as JSON.
+    helper: return current session information as JSON.
     """
     user_id = session.get("user_id", 0)
     if not user_id:
@@ -801,6 +847,7 @@ def api_session():
             "admin": session.get("admin", False),
         }
     )
+
 
 @bp.route("/auth/login", methods=["GET", "POST"])
 def login():
@@ -849,6 +896,7 @@ def logout():
         return redirect("/")
     else:
         return redirect("/Shibboleth.sso/Logout")
+
 
 @bp.route("/api/logout", methods=["POST"])
 def api_logout():
