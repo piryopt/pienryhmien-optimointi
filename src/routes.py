@@ -804,7 +804,7 @@ def survey_answers(survey_id):
         "availableSpaces": available_spaces,
         "surveyId": survey_id,
         "closed": closed,
-        "answered": answers_saved,
+        "answersSaved": answers_saved,
     })
 
 

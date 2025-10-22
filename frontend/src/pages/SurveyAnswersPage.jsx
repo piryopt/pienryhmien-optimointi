@@ -21,6 +21,7 @@ const SurveyAnswersPage = () => {
     const getSurveyAnswersData = async () => {
       try {
         const responseData = await surveyService.getSurveyAnswersData(id);
+        if (responseData.answersSaved) navigate(`/surveys/${id}/results`);
         setAnswers(responseData.surveyAnswers);
         setFilteredAnswers(responseData.surveyAnswers);
         setSurveyData(responseData);
