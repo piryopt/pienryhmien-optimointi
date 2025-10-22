@@ -55,7 +55,7 @@ def create_app(test_config=None):
     if test_config is None or env != "testing":
         # initialize scheduler if not running tests
 
-        from src.routes import close_surveys
+        from src.routes import close_surveys, delete_old_surveys
 
         scheduler.init_app(app)
         scheduler.start()
@@ -64,6 +64,11 @@ def create_app(test_config=None):
         def scheduled_close_surveys():
             with app.app_context():
                 close_surveys()
+
+        @scheduler.task("cron", id="delete_old_surveys", week="*")
+        def scheduled_delete_old_surveys():
+            with app.app_context():
+                delete_old_surveys()
 
     # make format_datestring accessible from jinja templates
     app.jinja_env.globals.update(format_datestring=format_datestring)

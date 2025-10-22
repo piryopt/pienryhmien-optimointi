@@ -188,10 +188,7 @@ def new_survey_form(survey=None):
             return redirect("/")
         survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
+            column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
         ]
     return render_template("create_survey.html", survey=survey)
 
@@ -216,7 +213,7 @@ def new_survey_post():
 
     allowed_denied_choices = data["allowedDeniedChoices"]
     allow_search_visibility = data["allowSearchVisibility"]
- 
+
     date_string = f"{date_end} {time_end}"
     format_code = "%d.%m.%Y %H:%M"
 
@@ -452,11 +449,8 @@ def edit_survey_form(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
-        ]
+        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+    ]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -502,6 +496,7 @@ def delete_survey(survey_id):
     if not check_if_owner(survey_id):
         return redirect("/")
     survey_service.set_survey_deleted_true(survey_id)
+    survey_choices_service.set_choices_deleted_true(survey_id)
     return redirect("/surveys")
 
 
@@ -532,11 +527,8 @@ def edit_group_sizes(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
-        ]
+        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+    ]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template(
@@ -1079,3 +1071,10 @@ def close_surveys():
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """
     survey_service.check_for_surveys_to_close()
+
+
+def delete_old_surveys():
+    """
+    Weekly check if surveys are over two years old. If so, delete said surveys.
+    """
+    survey_service.check_for_surveys_to_delete()

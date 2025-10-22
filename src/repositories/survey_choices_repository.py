@@ -123,5 +123,21 @@ class SurveyChoicesRepository:
             print(e)
             return []
 
+    def set_choices_deleted_true(self, survey_id):
+        """
+        SQL code for setting survey choices deleted field true
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "UPDATE survey_choices SET deleted = True WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
 
 survey_choices_repository = SurveyChoicesRepository()

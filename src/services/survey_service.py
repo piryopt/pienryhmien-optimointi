@@ -13,6 +13,7 @@ from src.tools.constants import SURVEY_FIELDS
 
 class SurveyService:
     SURVEY_FIELDS = SURVEY_FIELDS
+
     def __init__(
         self,
         survey_repositroy=default_survey_repository,
@@ -293,6 +294,17 @@ class SurveyService:
             if closing_time:
                 self._survey_repository.close_survey(survey_id)
 
+    def check_for_surveys_to_delete(self):
+        """
+        Gets a list of all surveys and deletes them if they are over two years old.
+        """
+        surveys = self._survey_repository.get_all_active_surveys()
+
+        for survey in surveys:
+            closing_time = time_to_close(survey.time_end)
+            if closing_time:
+                self._survey_repository.close_survey(survey.id)
+
     def fetch_survey_responses(self, survey_id):
         """
         Gets a list of user_survey_rankings for the survey
@@ -301,7 +313,6 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
-        
 
     def get_choice_popularities(self, survey_id: str):
         """
@@ -342,11 +353,13 @@ class SurveyService:
         if "choices" in survey_dict:
             language = session.get("language", "fi")
             for choice in survey_dict["choices"]:
-                if choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä" \
-                or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä" \
-                or choice[SurveyService.SURVEY_FIELDS["min_size"][language]] == "tyhjä":
+                if (
+                    choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä"
+                    or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä"
+                    or choice[SurveyService.SURVEY_FIELDS["min_size"][language]] == "tyhjä"
+                ):
                     msg = gettext(
-                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi " \
+                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi "
                         "ilmestyy, kun asetat hiiren poistettavan rivin päälle."
                     )
                     return {"success": False, "message": {"status": "0", "msg": msg}}
@@ -407,9 +420,7 @@ class SurveyService:
         language = session.get("language", "fi")
         for choice in choices:
             success = self._choices_repository.edit_choice_group_size(
-                survey_id,
-                choice[SurveyService.SURVEY_FIELDS["name"][language]],
-                choice[SurveyService.SURVEY_FIELDS["spaces"][language]]
+                survey_id, choice[SurveyService.SURVEY_FIELDS["name"][language]], choice[SurveyService.SURVEY_FIELDS["spaces"][language]]
             )
             if not success:
                 if count > 0:
