@@ -67,7 +67,8 @@ const SurveyAnswersPage = () => {
   }
 
   const handleAssignGroups = () => {
-  }
+    navigate(`/surveys/${id}/results`);
+  };
 
   return (
     <div>
