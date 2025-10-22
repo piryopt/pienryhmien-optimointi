@@ -136,8 +136,10 @@ const SurveyAnswersPage = () => {
         />
       </p>
         <SurveyAnswersTable 
-          answers={filteredAnswers}
-          setAnswers={setFilteredAnswers}
+          answers={answers}
+          setAnswers={setAnswers}
+          filteredAnswers={filteredAnswers}
+          setFilteredAnswers={setFilteredAnswers}
           surveyId={id}
           setSurveyAnswersAmount={setSurveyAnswersAmount}
          />

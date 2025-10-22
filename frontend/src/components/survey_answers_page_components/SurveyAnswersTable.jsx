@@ -10,7 +10,10 @@ const SurveyAnswersTable = (props) => {
       try {
         surveyService.deleteSurveyAnswer(props.surveyId, email)
         const updatedAnswers = props.answers.filter(a => a.email !== email);
+        const updatedFilteredAnswers = props.filteredAnswers
+          .filter(a => a.email !== email);
         props.setAnswers(updatedAnswers);
+        props.setFilteredAnswers(updatedFilteredAnswers);
         props.setSurveyAnswersAmount(prev => prev - 1);
       } catch (err) {
         console.error("Error deleting answer:", err);
@@ -24,7 +27,7 @@ const SurveyAnswersTable = (props) => {
         <SurveyAnswersTableHeaders />
       </thead>
       <tbody>
-        {props.answers.map((answer, i) => 
+        {props.filteredAnswers.map((answer, i) => 
           <SurveyAnswersTableRow 
             answer={answer} 
             handleAnswerDelete={handleAnswerDelete}
