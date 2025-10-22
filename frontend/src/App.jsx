@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import FrontPage from "./components/FrontPage";
 import SurveyMultiphaseCreate from "./components/SurveyMultiphaseCreate";
 import SurveysPage from "./components/SurveysPage";
 import LoginPage from "./components/LoginPage";
@@ -10,6 +11,7 @@ const App = () => {
     <BrowserRouter>
       <Layout>
         <Routes>
+          <Route path="/" element={<FrontPage />} />
           <Route
             path="/multiphase/survey/create"
             element={<SurveyMultiphaseCreate />}
