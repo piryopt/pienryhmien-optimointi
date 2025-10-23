@@ -126,6 +126,17 @@ const closeSurvey = async (surveyId) => {
   }
 };
 
+const getSurveyResultsData = async (surveyId) => {
+   try {
+   const response = await axios.get(`${baseUrl}/surveys/${surveyId}/results`, {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    throw error
+  }
+}
+
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
@@ -134,5 +145,6 @@ export default {
   deleteSurveyAnswer: deleteSurveyAnswer,
   getStudentRankings: getStudentRankings,
   openSurvey: openSurvey,
-  closeSurvey: closeSurvey
-};
+  closeSurvey: closeSurvey,
+  getSurveyResultsData: getSurveyResultsData,
+}

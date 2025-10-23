@@ -8,6 +8,7 @@ import FAQ from "./components/footer_components/FAQ";
 import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
 import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
+import SurveyResultsPage from "./pages/SurveyResultsPage";
 import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
@@ -51,6 +52,14 @@ const App = () => {
               element={
                 <RequireAuth>
                   <SurveyAnswersPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/surveys/:id/results"
+              element={
+                <RequireAuth>
+                  <SurveyResultsPage />
                 </RequireAuth>
               }
             />
