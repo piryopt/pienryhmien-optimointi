@@ -844,17 +844,16 @@ def survey_results(survey_id):
     output_data = hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices)
 
     if request.method == "GET":
-        return render_template(
-            "results.html",
-            survey_id=survey_id,
-            results=output_data[0],
-            happiness_data=output_data[2],
-            happiness=output_data[1],
-            answered=saved_result_exists,
-            infos=output_data[4],
-            additional_info_keys=output_data[5],
-            dropped_groups=output_data[3],
-        )
+        return jsonify({
+            "surveyId": survey_id,
+            "results": output_data[0],
+            "happinessData": output_data[2],
+            "happiness": output_data[1],
+            "answered": saved_result_exists,
+            "infos": output_data[4],
+            "additionalInfoKeys": output_data[5],
+            "droppedGroups": output_data[3],
+        })
 
     return save_survey_results(survey_id, output_data)
 
