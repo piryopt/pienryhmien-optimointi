@@ -412,7 +412,15 @@ def api_survey(survey_id):
 
     return jsonify(
         {
-            "survey": {"id": str(survey.id), "name": survey.surveyname},
+            "survey": {
+                "id": str(survey.id),
+                "name": survey.surveyname,
+                "deadline": format_datestring(survey.time_end),
+                "description": survey.survey_description,
+                "min_choices": survey.min_choices,
+                "search_visibility": survey.allow_search_visibility,
+                "denied_allowed_choices": survey.allowed_denied_choices,
+            },
             "choices": list(survey_all_info.values()),
             "additional_info": bool(survey_choices_info),
         }
