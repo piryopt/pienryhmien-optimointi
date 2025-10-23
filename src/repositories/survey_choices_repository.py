@@ -228,7 +228,7 @@ class SurveyChoicesRepository:
             survey_id: The id of the survey
         """
         try:
-            sql = "UPDATE survey_choices SET deleted = True WHERE id=:survey_id"
+            sql = "UPDATE survey_choices SET deleted = True WHERE survey_id=:survey_id"
             db.session.execute(text(sql), {"survey_id": survey_id})
             db.session.commit()
             return True

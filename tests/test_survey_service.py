@@ -500,7 +500,8 @@ def test_dont_save_survey_edit_with_same_name(setup_env):
 
 def test_survey_deleted(setup_env):
     """
-    Test that after setting surveys as deleted it won't show up on list of active surveys
+    Test that after setting surveys as deleted it won't show up on list of active surveys.
+    Also tests that survey choices are set to deleted.
     """
     d = setup_env
     json_object = d["json_object"]
@@ -514,9 +515,15 @@ def test_survey_deleted(setup_env):
     surveys = ss.get_all_active_surveys()
     assert len(surveys) == 2
 
+    choices = scs.get_list_of_survey_choices(survey_id1)
+    assert len(choices) == 2
+
     ss.set_survey_deleted_true(survey_id1)
     surveys = ss.get_all_active_surveys()
     assert len(surveys) == 1
+
+    choices = scs.get_list_of_survey_choices(survey_id1)
+    assert len(choices) == 0
 
 
 def test_deleting_closed_survey_decreases_created_surveys_count(setup_env):
