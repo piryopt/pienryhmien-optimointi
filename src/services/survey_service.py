@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_babel import gettext
 from flask import session
 from src.repositories.survey_repository import survey_repository as default_survey_repository
@@ -318,14 +318,14 @@ class SurveyService:
 
     def check_for_surveys_to_delete(self):
         """
-        Gets a list of all surveys and deletes them if they are over two years old.
+        Gets a list of all surveys and deletes them and their related data if end time was over two years ago.
         """
+
         surveys = self._survey_repository.get_all_active_surveys()
 
         for survey in surveys:
-            closing_time = time_to_close(survey.time_end)
-            if closing_time:
-                self._survey_repository.close_survey(survey.id)
+            if survey.time_end <= datetime.now() - timedelta(days=365 * 2):
+                self._survey_repository.delete_survey_permanently(survey.id)
 
     def fetch_survey_responses(self, survey_id):
         """

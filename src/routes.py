@@ -1714,6 +1714,6 @@ def close_surveys():
 
 def delete_old_surveys():
     """
-    Weekly check if surveys are over two years old. If so, delete said surveys.
+    Weekly check if survey end time was over two year ago. If so, delete said surveys and all related data.
     """
     survey_service.check_for_surveys_to_delete()
