@@ -138,14 +138,5 @@ class SurveyChoicesService:
             return None
         return survey_choice.mandatory
 
-    def set_choices_deleted_true(self, survey_id):
-        """
-        Sets choices of survey to deleted status. Returns boolean.
-
-        Args:
-            survey_id: id for the survey
-        """
-        return self._survey_choices_repository.set_choices_deleted_true(survey_id)
-
 
 survey_choices_service = SurveyChoicesService()

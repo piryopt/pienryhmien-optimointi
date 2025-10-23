@@ -496,7 +496,6 @@ def delete_survey(survey_id):
     if not check_if_owner(survey_id):
         return redirect("/")
     survey_service.set_survey_deleted_true(survey_id)
-    survey_choices_service.set_choices_deleted_true(survey_id)
     return redirect("/surveys")
 
 
