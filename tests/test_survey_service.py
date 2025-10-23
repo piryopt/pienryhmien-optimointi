@@ -544,6 +544,78 @@ def test_deleting_closed_survey_decreases_created_surveys_count(setup_env):
     assert count_after_deletion == 0
 
 
+def test_new_enough_survey_not_deleted(setup_env):
+    """
+    Test that survey not old enough will not be deleted.
+    """
+    d = setup_env
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey delete old", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2025", "00:00"
+    )
+    sos.add_owner_to_survey(survey_id, d["user_email"])
+
+    ranking3 = "2,1,5,6,3,4"
+    ranking2 = "1,2,5,6,4,3"
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+
+    surveys = ss.get_active_surveys_and_response_count(d["user_id"])
+    assert surveys[0].response_count == 2
+
+    count_before = ss.count_surveys_created(d["user_id"])
+    assert count_before == 1
+
+    ss.check_for_surveys_to_delete()
+
+    count_after = ss.count_surveys_created(d["user_id"])
+    assert count_after == 1
+
+
+def test_deleting_old_survey_permanently_delete_all_related_data(setup_env):
+    """
+    Test that old enough survey and all related data are deleted from db.
+    """
+    d = setup_env
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey delete old", d["user_id"], d["json_object"]["surveyInformation"], 1, "01.01.2023", "00:00"
+    )
+    sos.add_owner_to_survey(survey_id, d["user_email"])
+
+    ranking3 = "2,1,5,6,3,4"
+    ranking2 = "1,2,5,6,4,3"
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+
+    surveys = ss.get_active_surveys_and_response_count(d["user_id"])
+    assert surveys[0].response_count == 2
+
+    count_before_deletion = ss.count_surveys_created(d["user_id"])
+    assert count_before_deletion == 1
+
+    owner = sos.check_if_user_is_survey_owner(survey_id, d["user_id"])
+    assert owner
+
+    choices = scs.get_list_of_survey_choices(survey_id)
+    assert len(choices) == 2
+
+    additional_info = scs.get_choice_additional_infos(choices[0].id)
+    assert "Keijukaistenpolku 14" in additional_info[0]
+
+    ss.check_for_surveys_to_delete()
+
+    surveys = ss.get_active_surveys_and_response_count(d["user_id"])
+    assert surveys == []
+
+    count_after_deletion = ss.count_surveys_created(d["user_id"])
+    assert count_after_deletion == 0
+
+    owner = sos.check_if_user_is_survey_owner(survey_id, d["user_id"])
+    assert not owner
+
+    choices = scs.get_list_of_survey_choices(survey_id)
+    assert len(choices) == 0
+
+
 def test_len_active_surveys(setup_env):
     """
     Test that the length of all active surveys is correct
