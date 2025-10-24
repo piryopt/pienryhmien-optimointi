@@ -1,8 +1,19 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import listIcon from "/images/assignment_white_36dp.svg";
+import { useEffect, useState } from "react";
+import listIcon from "/images/list_white_36dp.svg";
+import addIcon from "/images/note_add_white_36dp.svg";
+import multiAddIcon from "/images/note_stack_add_36dp.svg";
 
-const FrontPageButton = ({ path, imgSrc, mainText, additionalText }) => {
+const FrontPageButton = ({
+  path,
+  imgSrc,
+  mainText,
+  additionalText,
+  additionalVars
+}) => {
+  const { t } = useTranslation();
+
   return (
     <Link
       to={path}
@@ -19,29 +30,29 @@ const FrontPageButton = ({ path, imgSrc, mainText, additionalText }) => {
             className="d-inline-block align-text-top"
             style={{ marginRight: "8px" }}
           />
-          {mainText}
+          {t(mainText)}
         </h5>
       </div>
-      <small className="text-muted">{additionalText}</small>
+      <small className="text-muted">{t(additionalText, additionalVars)}</small>
     </Link>
   );
 };
 
 const FrontPage = () => {
-  const { t } = useTranslation();
+  const [createdSurveys, setCreatedSurveys] = useState(0);
 
   return (
     <div className="row">
       <div className="col-sm">
         <FrontPageButton
           path="/surveys/create"
-          imgSrc={listIcon}
+          imgSrc={addIcon}
           mainText="Luo uusi kysely"
           additionalText="Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta"
         />
         <FrontPageButton
           path="multiphase/survey/create"
-          imgSrc={listIcon}
+          imgSrc={multiAddIcon}
           mainText="Luo uusi monivaiheinen kysely"
           additionalText="Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot"
         />
@@ -52,6 +63,7 @@ const FrontPage = () => {
           imgSrc={listIcon}
           mainText="Näytä vanhat kyselyt"
           additionalText="Luotuja kyselyitä"
+          additionalVars={{ maara: createdSurveys }}
         />
       </div>
     </div>
