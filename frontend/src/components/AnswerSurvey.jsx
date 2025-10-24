@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import surveyService from '../services/surveys';
 import Button from 'react-bootstrap/Button';
 import GroupList from '../components/survey_answer_page_components/GroupList.jsx';
-
+import ReasonsBox from '../components/survey_answer_page_components/ReasonsBox.jsx';
 
 const AnswerSurvey = () => {
   const { surveyId } = useParams();
@@ -16,6 +16,7 @@ const AnswerSurvey = () => {
   const [additionalInfo, setAdditionalInfo] = useState(false);
   const [allInfo, setAllInfo] = useState({});
   const [expandedIds, setExpandedIds] = useState(new Set());
+  const [reason, setReason] = useState("");
 
   const mountedRef =  useRef(false);
 
@@ -79,13 +80,11 @@ const AnswerSurvey = () => {
     });
   };
 
-  
-
   if (loading) return <div className="text-center mt-5">Loading survey...</div>;
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>{survey.name}</h1>
+      <h1 style={{ fontSize: "25px"}}>{survey.name}</h1>
       <p>Vastausaika päättyy {survey.deadline}</p>
       <p>
         <i>Raahaa oikean reunan listasta vähintään {survey.min_choices} vaihtoehtoa vihreään laatikkoon.</i>
@@ -101,7 +100,13 @@ const AnswerSurvey = () => {
         <DragDropContext onDragEnd={handleDragEnd}>
           <div style={{ display: "flex", flexDirection: "column", marginRight: 20, flexShrink: 0 }}>
             <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} allInfo={allInfo} />
-            <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} allInfo={allInfo} />
+            { (survey.denied_allowed_choices ?? 0) !== 0 && (
+              <>
+                <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} allInfo={allInfo} />
+                <ReasonsBox reason={reason} setReason={setReason} />
+              </>
+            )}
+          
             <div style={{ width: "100%", display: "flex", justifyContent: "flex-start", marginTop: 8 }}>
               <Button variant="success" style={{ width: "auto" }} onClick={() => console.log("Submit Rankings", { good, bad, neutral })}>
                 Lähetä valinnat

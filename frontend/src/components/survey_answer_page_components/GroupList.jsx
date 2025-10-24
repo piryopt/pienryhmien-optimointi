@@ -10,12 +10,13 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, allInfo }) => {
           ref={provided.innerRef}
           {...provided.droppableProps}
           style={{
-            padding: 10,
-            marginBottom: 20,
+            padding: 5,
+            marginBottom: 25,
             width: 550,
             minHeight: 100,
             border: `2px solid ${borderColor}`,
-            marginRight: 20
+            marginRight: 20,
+            borderRadius: 6,
           }}
         >
           {items.map((item, index) => (
@@ -45,7 +46,7 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, allInfo }) => {
                 >
                   <h2 style={{ fontSize: "20px", margin: "7px 0 0 0" }}>{item.name}</h2>
                   <p style={{ fontSize: "15px", margin: "6px 0 0 0" }}>Ryhmän maksimikoko: {item.slots}</p>
-                  {item.mandatory && <p style={{ fontSize: "15px", margin: "0" }}>Ryhmän minimi koko: {item.min_size}</p>}
+                  {item.mandatory && <p style={{ fontSize: "15px", margin: "0" }}>Ryhmän minimikoko: {item.min_size}</p>}
 
                   {expandedIds.has(item.id.toString()) && (
                     <div style={{ marginTop: 8, paddingTop: 8, color: "#cfcfcf" }}>
