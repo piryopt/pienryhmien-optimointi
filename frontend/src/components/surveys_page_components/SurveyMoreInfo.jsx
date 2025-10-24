@@ -10,15 +10,12 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
   const handleCopyUrlClick = () => {
     const currUrl = window.location.href;
     navigator.clipboard.writeText(`${currUrl}/${survey.id}`);
-  }
-  
+  };
+
   return (
     <div>
-      <a 
-        className="surveys_link"
-        href={`/surveys/${survey.id}/answers`}
-        >
-        <img 
+      <a className="surveys_link" href={`/surveys/${survey.id}/answers`}>
+        <img
           src={manageSearchWhite}
           alt=""
           className="d-inline-block align-text-top"
@@ -27,15 +24,15 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
         />
         &nbsp;{t("Tarkastele tuloksia")}
       </a>
-      {!survey.closed && 
+      {!survey.closed && (
         <>
           <br />
           <a
             className="surveys_link"
             onClick={handleCopyUrlClick}
-            style={{"cursor": "pointer"}}
-            >
-            <img 
+            style={{ cursor: "pointer" }}
+          >
+            <img
               src={contentCopyWhite}
               alt=""
               className="d-inline-block align-text-top"
@@ -45,13 +42,10 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
             &nbsp;{t("Kopioi kyselyn osoite leikepöydälle")}
           </a>
         </>
-      }
+      )}
       <br></br>
-      <a
-        href={`/surveys/${survey.id}/edit`}
-        className="surveys_link"
-        >
-        <img 
+      <a href={`/surveys/${survey.id}/edit`} className="surveys_link">
+        <img
           src={editWhite}
           alt=""
           className="d-inline-block align-text-top"
@@ -64,8 +58,8 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
       <a
         className="surveys_link"
         href={`/surveys/create?fromtemplate=${survey.id}`}
-        >
-        <img 
+      >
+        <img
           src={folderCopyWhite}
           alt=""
           className="d-inline-block align-text-top"
@@ -76,11 +70,11 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
       </a>
       <br></br>
       <a
-        style={{"cursor": "pointer"}}
+        style={{ cursor: "pointer" }}
         className="surveys_link"
         onClick={() => handleDeleteClick(survey.id, survey.closed)}
-        >
-        <img 
+      >
+        <img
           src={deleteWhite}
           alt=""
           className="d-inline-block align-text-top"

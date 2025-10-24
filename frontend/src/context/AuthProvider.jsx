@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   const refreshSession = async () => {
     try {
       const res = await fetch(`${baseUrl}/api/session`, {
-        credentials: "include",
+        credentials: "include"
       });
       const data = await res.json();
       setUser(data.logged_in ? data : false);
@@ -47,9 +47,9 @@ export const AuthProvider = ({ children }) => {
       credentials: "include",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        "X-CSRFToken": csrfToken,
+        "X-CSRFToken": csrfToken
       },
-      body: body.toString(),
+      body: body.toString()
     });
     await refreshSession();
     return user;
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
       await fetch(`${baseUrl}/api/logout`, {
         method: "POST",
         credentials: "include",
-        headers: { "X-CSRFToken": csrf, "Content-Type": "application/json" },
+        headers: { "X-CSRFToken": csrf, "Content-Type": "application/json" }
       });
       await refreshSession();
       return;

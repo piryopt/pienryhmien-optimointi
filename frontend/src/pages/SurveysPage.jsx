@@ -11,20 +11,20 @@ const SurveysPage = () => {
 
   useEffect(() => {
     const getSurveys = async () => {
-        try {
+      try {
         const [activeRes, closedRes] = await Promise.all([
-        surveyService.getActiveSurveys(),
-        surveyService.getClosedSurveys()
-      ])
-      setActiveSurveys(activeRes);
-      setClosedSurveys(closedRes);
+          surveyService.getActiveSurveys(),
+          surveyService.getClosedSurveys()
+        ]);
+        setActiveSurveys(activeRes);
+        setClosedSurveys(closedRes);
       } catch (err) {
-        console.error("Error loading surveys", err)
+        console.error("Error loading surveys", err);
       }
-    }
-    getSurveys()
+    };
+    getSurveys();
   }, []);
-  
+
   return (
     <div>
       <br />
@@ -39,8 +39,8 @@ const SurveysPage = () => {
         &nbsp;{t("Aiemmat kyselyt")}
       </h2>
       <br />
-      <SurveysTable 
-        activeSurveys={activeSurveys} 
+      <SurveysTable
+        activeSurveys={activeSurveys}
         closedSurveys={closedSurveys}
         setActiveSurveys={setActiveSurveys}
         setClosedSurveys={setClosedSurveys}

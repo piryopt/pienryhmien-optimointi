@@ -12,7 +12,7 @@ const SurveyTableHeaders = () => {
     <tr>
       <th>
         <p>
-          <img 
+          <img
             src={assignmentWhite}
             alt=""
             className="d-inline-block align-text-top"
@@ -24,7 +24,7 @@ const SurveyTableHeaders = () => {
       </th>
       <th>
         <p>
-          <img 
+          <img
             src={toggleOnWhite}
             alt=""
             className="d-inline-block align-text-top"
@@ -36,7 +36,7 @@ const SurveyTableHeaders = () => {
       </th>
       <th>
         <p>
-          <img 
+          <img
             src={toggleOffWhite}
             alt=""
             className="d-inline-block align-text-top"
@@ -46,21 +46,21 @@ const SurveyTableHeaders = () => {
           &nbsp;{t("Ryhmät luotu")}
         </p>
       </th>
-      <th style={{"minWidth": "22em"}}>
+      <th style={{ minWidth: "22em" }}>
         <p>
-          <img 
+          <img
             src={menuWhite}
             alt=""
             className="d-inline-block align-text-top"
             width="24"
             height="24"
-            />
+          />
           &nbsp;{t("Toiminnot")}
         </p>
       </th>
       <th>
         <p>
-          <img 
+          <img
             src={scheduleWhite}
             alt=""
             className="d-inline-block align-text-top"

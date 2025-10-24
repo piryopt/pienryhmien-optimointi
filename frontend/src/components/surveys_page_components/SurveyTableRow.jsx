@@ -12,37 +12,32 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
   return (
     <tr>
       <td>
-        <img 
-            src={survey.closed ? insertPageBreakWhite : insertDriveFileWhite}
-            alt=""
-            className="d-inline-block align-text-top"
-            width="20"
-            height="20"
-          />
-        <a 
-          className="surveys_link"
-          href={`/surveys/${survey.id}`}
-        >
+        <img
+          src={survey.closed ? insertPageBreakWhite : insertDriveFileWhite}
+          alt=""
+          className="d-inline-block align-text-top"
+          width="20"
+          height="20"
+        />
+        <a className="surveys_link" href={`/surveys/${survey.id}`}>
           &nbsp;
           {survey.surveyname}
         </a>
-        </td>
+      </td>
       <td>
-        <p style={{color: survey.closed ? "orangered" : "green"}}>
+        <p style={{ color: survey.closed ? "orangered" : "green" }}>
           {survey.closed ? t("Suljettu") : t("Avoin")}
         </p>
       </td>
       <td>
-        <p style={{color: survey.results_saved && "green"}}>
+        <p style={{ color: survey.results_saved && "green" }}>
           {survey.results_saved ? t("Kyllä") : t("Ei")}
         </p>
       </td>
       <td>
-        <div 
-          onClick={() => setMoreInfoVisible(!moreInfoVisible)}
-          >
-          <label style={{"cursor": "pointer"}} className="surveys_link">
-            <img 
+        <div onClick={() => setMoreInfoVisible(!moreInfoVisible)}>
+          <label style={{ cursor: "pointer" }} className="surveys_link">
+            <img
               src={menu_white}
               alt=""
               className="d-inline-block align-text-top"
@@ -53,12 +48,12 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
             {moreInfoVisible ? t("Piilota") : t("Näytä")}
           </label>
         </div>
-        {moreInfoVisible && 
-          <SurveyMoreInfo 
+        {moreInfoVisible && (
+          <SurveyMoreInfo
             survey={survey}
-            handleDeleteClick={handleDeleteClick} 
+            handleDeleteClick={handleDeleteClick}
           />
-        }
+        )}
       </td>
       <td>{survey.time_end}</td>
     </tr>

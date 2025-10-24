@@ -1,11 +1,11 @@
-import { baseUrl } from '../utils/constants';
+import { baseUrl } from "../utils/constants";
 
 const fetchCsrfToken = async () => {
   const res = await fetch(`${baseUrl}/csrf_token`, {
-    credentials: 'include'
+    credentials: "include"
   });
   const data = await res.json();
-  return data.csrfToken; 
+  return data.csrfToken;
 };
 
 export default {

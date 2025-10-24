@@ -51,7 +51,9 @@ const App = () => {
               element={
                 <RequireAuth>
                   <SurveyAnswersPage />
-                </RequireAuth>} />
+                </RequireAuth>
+              }
+            />
           </Routes>
         </Layout>
       </BrowserRouter>
