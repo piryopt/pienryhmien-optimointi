@@ -8,14 +8,14 @@ const FrontPage = () => {
       <div>
         <a href="/surveys/create">
           {t(
-            "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
+            "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta"
           )}
         </a>
       </div>
       <div>
         <a href="/multiphase/survey/create">
           {t(
-            "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot",
+            "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot"
           )}
         </a>
       </div>

@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 const langToFile = {
   fi: "/content/faq-fi.md",
   en: "/content/faq-en.md",
-  sv: "/content/faq-sv.md",
+  sv: "/content/faq-sv.md"
 };
 
 const FAQ = () => {

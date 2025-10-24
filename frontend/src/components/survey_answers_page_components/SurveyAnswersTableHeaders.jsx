@@ -5,12 +5,12 @@ import questionAnswerWhite from "/images/question_answer_white_36dp.svg";
 import personOffWhite from "/images/person_off_white_36dp.svg";
 
 const SurveyAnswersTableHeaders = () => {
-	const { t } = useTranslation();
+  const { t } = useTranslation();
 
-	return (
-		<tr>
+  return (
+    <tr>
       <th>
-        <img 
+        <img
           src={emailWhite}
           alt=""
           width={24}
@@ -19,8 +19,8 @@ const SurveyAnswersTableHeaders = () => {
         />
         &nbsp;{t("Sähköposti")}
       </th>
-      <th style={{minWidth: "12em"}}>
-        <img 
+      <th style={{ minWidth: "12em" }}>
+        <img
           src={doneWhite}
           alt=""
           width={24}
@@ -30,7 +30,7 @@ const SurveyAnswersTableHeaders = () => {
         &nbsp;{t("Valinnat")}
       </th>
       <th>
-        <img 
+        <img
           src={questionAnswerWhite}
           alt=""
           width={24}
@@ -40,7 +40,7 @@ const SurveyAnswersTableHeaders = () => {
         &nbsp;{t("Perustelut")}
       </th>
       <th>
-        <img 
+        <img
           src={personOffWhite}
           alt=""
           width={24}
@@ -50,7 +50,7 @@ const SurveyAnswersTableHeaders = () => {
         &nbsp;{t("Vastauksen poistaminen")}
       </th>
     </tr>
-	);
+  );
 };
 
 export default SurveyAnswersTableHeaders;
