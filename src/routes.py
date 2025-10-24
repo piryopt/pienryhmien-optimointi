@@ -827,9 +827,14 @@ def login():
                 email = user.email
                 name = user.name
                 role_bool = user.isteacher
+                break
 
+        if not email:
+            return jsonify({"message": "Invalid username"}), 401
+        
         if not user_service.find_by_email(email):  # account doesn't exist, register
             user_service.create_user(name, email, role_bool)  # actual registration
+
         if user_service.check_credentials(email):  # log in, update session etc.
             if role_bool:
                 user_service.make_user_teacher(email)
