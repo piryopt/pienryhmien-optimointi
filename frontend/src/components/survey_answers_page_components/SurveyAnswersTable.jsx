@@ -1,10 +1,21 @@
 import { useTranslation } from "react-i18next";
-import SurveyAnswersTableHeaders from "./SurveyAnswersTableHeaders";
-import SurveyAnswersTableRow from "./SurveyAnswersTableRow";
 import surveyService from "../../services/surveys";
+import Table from "../Table";
+import SurveyAnswersTableRow from "./SurveyAnswersTableRow";
+import emailWhite from "/images/email_white_36dp.svg";
+import doneWhite from "/images/done_white_36dp.svg";
+import questionAnswerWhite from "/images/question_answer_white_36dp.svg";
+import personOffWhite from "/images/person_off_white_36dp.svg";
 
 const SurveyAnswersTable = (props) => {
   const { t } = useTranslation();
+  const columns = [
+    { title: t("Sähköposti"), logo: emailWhite },
+    { title: t("Valinnat"), logo: doneWhite, style: { minWidth: "12em" } },
+    { title: t("Perustelut"), logo: questionAnswerWhite },
+    { title: t("Vastauksen poistaminen"), logo: personOffWhite }
+  ];
+
   const handleAnswerDelete = (email) => {
     if (window.confirm(t("Haluatko varmasti poistaa vastauksen?"))) {
       try {
@@ -23,21 +34,18 @@ const SurveyAnswersTable = (props) => {
   };
 
   return (
-    <table cellSpacing={10} className="table table-striped">
-      <thead className="table-dark">
-        <SurveyAnswersTableHeaders />
-      </thead>
-      <tbody>
-        {props.filteredAnswers.map((answer, i) => (
-          <SurveyAnswersTableRow
-            answer={answer}
-            handleAnswerDelete={handleAnswerDelete}
-            surveyId={props.surveyId}
-            key={i}
-          />
-        ))}
-      </tbody>
-    </table>
+    <Table
+      columns={columns}
+      data={props.filteredAnswers}
+      renderRow={(answer, i) => (
+        <SurveyAnswersTableRow
+          key={i}
+          answer={answer}
+          surveyId={props.surveyId}
+          handleAnswerDelete={handleAnswerDelete}
+        />
+      )}
+    />
   );
 };
 

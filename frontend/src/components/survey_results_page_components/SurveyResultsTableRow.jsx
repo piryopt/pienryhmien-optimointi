@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import surveyService from "../../services/surveys";
-import menuWhite from "/images/menu_white_36dp.svg";
-import deleteWhite from "/images/delete_white_36dp.svg";
 import UserRankings from "../UserRankings";
+import menuWhite from "/images/menu_white_36dp.svg";
 
-const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
+const SurveyResultsTableRow = ({ result, surveyId }) => {
   const [rankingsVisible, setRankingsVisible] = useState(false);
   const [rankings, setRankings] = useState([]);
   const [rejections, setRejections] = useState([]);
@@ -15,7 +14,7 @@ const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
     try {
       const response = await surveyService.getStudentRankings(
         surveyId,
-        answer.email
+        result[1] // email
       );
       setRankings(response.choices);
       setRejections(response.rejections);
@@ -24,11 +23,20 @@ const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
       console.error("Error showing rankings", err);
     }
   };
-
   return (
     <tr>
+      {/* result = [[userId, username], email, [surveyChoiceId, name]] */}
       <td>
-        <p>{answer.email}</p>
+        <p>{result[0][1]}</p>
+      </td>
+      <td>
+        <p>{result[1]}</p>
+      </td>
+      <td>
+        <p>{result[2][1]}</p>
+      </td>
+      <td>
+        <p>{result[3]}</p>
       </td>
       <td>
         <a
@@ -43,20 +51,8 @@ const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
           <UserRankings rankings={rankings} rejections={rejections} />
         )}
       </td>
-      <td>
-        <p>{answer.reason}</p>
-      </td>
-      <td>
-        <a
-          style={{ cursor: "pointer" }}
-          className="surveys_link"
-          onClick={() => handleAnswerDelete(answer.email)}
-        >
-          <img src={deleteWhite} alt="" width={30} height={24} />
-        </a>
-      </td>
     </tr>
   );
 };
 
-export default SurveyAnswersTableRow;
+export default SurveyResultsTableRow;

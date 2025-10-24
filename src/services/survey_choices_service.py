@@ -68,8 +68,6 @@ class SurveyChoicesService:
             choice_id: The id of the survey choice
         """
         additional_infos = self._survey_choices_repository.get_choice_additional_infos(choice_id)
-        if not additional_infos:
-            raise ValueError("Expected row object, got None")
         return [dict(row._mapping) for row in additional_infos]
 
     def get_choice_additional_infos_not_hidden(self, choice_id: int):

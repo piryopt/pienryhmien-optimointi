@@ -22,7 +22,8 @@ const SurveyAnswersPage = () => {
     const getSurveyAnswersData = async () => {
       try {
         const responseData = await surveyService.getSurveyAnswersData(id);
-        if (responseData.answersSaved) navigate(`/surveys/${id}/results`, { replace: true });
+        if (responseData.answersSaved)
+          navigate(`/surveys/${id}/results`, { replace: true });
         setAnswers(responseData.surveyAnswers);
         setFilteredAnswers(responseData.surveyAnswers);
         setSurveyData(responseData);
@@ -32,7 +33,9 @@ const SurveyAnswersPage = () => {
         console.error("Error loading survey data", err);
       } finally {
         // fixes bug where the default content flashes before navigation
-        setTimeout(() => {setLoading(false)}, 1)
+        setTimeout(() => {
+          setLoading(false);
+        }, 1);
       }
     };
     getSurveyAnswersData();
@@ -51,7 +54,7 @@ const SurveyAnswersPage = () => {
     if (window.confirm(t("Haluatko varmasti avata kyselyn uudestaan?"))) {
       try {
         await surveyService.openSurvey(id);
-        setSurveyClosed(false)
+        setSurveyClosed(false);
         // alert message?
       } catch (err) {
         console.error("error opening survey", err);
@@ -72,6 +75,10 @@ const SurveyAnswersPage = () => {
   };
 
   const handleAssignGroups = () => {
+    if (answers.length === 0) {
+      // alert message that groups can't be assigned
+      return;
+    }
     navigate(`/surveys/${id}/results`);
   };
 
@@ -99,31 +106,31 @@ const SurveyAnswersPage = () => {
       </a>
       <br />
       <br />
-      {surveyClosed
-        ?
-          <>
-            <button 
-              className="btn btn-outline-warning" 
-              style={{ float: "right" }}
-              onClick={handleOpenSurveyClick}
-              >
-                {t("Avaa kysely uudelleen")}
-            </button>
-            <button 
-              className="btn btn-outline-primary"
-              onClick={handleAssignGroups}
-              >
-                {t("Jaa ryhmiin")}
-            </button>
-          </>
-        : <button
-            className="btn btn-outline-warning" 
+      {surveyClosed ? (
+        <>
+          <button
+            className="btn btn-outline-warning"
             style={{ float: "right" }}
-            onClick={handleCloseSurveyClick}
-            >
-              {t("Sulje kysely")}
+            onClick={handleOpenSurveyClick}
+          >
+            {t("Avaa kysely uudelleen")}
+          </button>
+          <button
+            className="btn btn-outline-primary"
+            onClick={handleAssignGroups}
+          >
+            {t("Jaa ryhmiin")}
+          </button>
+        </>
+      ) : (
+        <button
+          className="btn btn-outline-warning"
+          style={{ float: "right" }}
+          onClick={handleCloseSurveyClick}
+        >
+          {t("Sulje kysely")}
         </button>
-      }
+      )}
       <br />
       <br />
       <p>

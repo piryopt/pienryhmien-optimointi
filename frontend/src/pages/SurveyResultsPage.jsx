@@ -9,10 +9,11 @@ const SurveyResultsPage = () => {
   const [droppedGroups, setDroppedGroups] = useState([]);
   const [happinessData, setHappinessData] = useState([]);
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const { t } = useTranslation();
   const { id } = useParams();
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getSurveyResults = async () => {
@@ -20,7 +21,7 @@ const SurveyResultsPage = () => {
         const response = await surveyService.getSurveyResultsData(id);
         if (!response.results) {
           // notification here
-          navigate("/surveys/id/answers");
+          navigate(`/surveys/${id}/answers`, { replace: true });
         }
         setSurveyResultsData(response);
         setDroppedGroups(response.droppedGroups);
@@ -29,10 +30,16 @@ const SurveyResultsPage = () => {
         console.log(response);
       } catch (err) {
         console.error("error loading survey results", err);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 1);
       }
     };
     getSurveyResults();
   }, []);
+
+  if (loading) return null;
 
   return (
     <div>
@@ -84,7 +91,7 @@ const SurveyResultsPage = () => {
       <p>
         <b>{t("Opiskelijat on lajiteltu ryhmiin seuraavasti")}:</b>
       </p>
-      <SurveyResultsTable results={results} />
+      <SurveyResultsTable results={results} surveyId={id} />
     </div>
   );
 };
