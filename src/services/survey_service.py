@@ -6,7 +6,7 @@ from src.repositories.survey_owners_repository import survey_owners_repository a
 from src.repositories.survey_choices_repository import survey_choices_repository as default_survey_choices_repository
 from src.services.user_service import user_service as default_user_service
 from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
-from src.tools.date_converter import time_to_close
+from src.tools.date_converter import time_to_close, format_datestring
 from src.tools.parsers import date_to_sql_valid
 from src.tools.constants import SURVEY_FIELDS
 
@@ -116,7 +116,14 @@ class SurveyService:
         args:
             user_id: The id of the user whose active surveys we want
         """
-        return self._survey_repository.get_active_surveys(user_id)
+        surveys = self._survey_repository.get_active_surveys(user_id)
+        return [
+        {
+            key: format_datestring(val) if key == "time_end" else val
+            for key, val in survey._mapping.items()
+        }
+        for survey in surveys
+        ]
 
     def get_active_surveys_and_response_count(self, user_id):
         """
@@ -147,7 +154,14 @@ class SurveyService:
         args:
             user_id: The id of the user whose closed surveys we want
         """
-        return self._survey_repository.get_closed_surveys(user_id)
+        surveys = self._survey_repository.get_closed_surveys(user_id)
+        return [
+            {
+                key: format_datestring(val) if key == "time_end" else val
+                for key, val in survey._mapping.items()
+            }
+            for survey in surveys
+        ]
 
     def update_survey_answered(self, survey_id):
         """

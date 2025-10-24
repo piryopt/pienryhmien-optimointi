@@ -288,16 +288,16 @@ def get_additional_infos(survey_choices):
     """
     additional_infos = {}
     for row in survey_choices:
-        additional_infos[str(row[0])] = []
+        additional_infos[str(row.id)] = []
 
-        cinfos = survey_choices_service.get_choice_additional_infos(row[0])
+        cinfos = survey_choices_service.get_choice_additional_infos(row.id)
         for i in cinfos:
-            additional_infos[str(row[0])].append(i[1])
+            additional_infos[str(row.id)].append(i["info_value"])
 
-        mandatory = survey_choices_service.get_survey_choice_mandatory(row[0])
-        min_size = survey_choices_service.get_survey_choice_min_size(row[0])
+        mandatory = survey_choices_service.get_survey_choice_mandatory(row.id)
+        min_size = survey_choices_service.get_survey_choice_min_size(row.id)
         if mandatory:
-            additional_infos[str(row[0])].append(f"Minimikoko: {min_size}")
+            additional_infos[str(row.id)].append(f"Minimikoko: {min_size}")
 
     return additional_infos, cinfos
 
@@ -383,7 +383,7 @@ def dropped_group_names(dropped_groups_id):
     dropped_groups = []
     for group_id in dropped_groups_id:
         group = survey_choices_service.get_survey_choice(group_id)
-        dropped_groups.append(group.name)
+        dropped_groups.append(group["name"])
 
     return dropped_groups
 

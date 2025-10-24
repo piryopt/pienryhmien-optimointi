@@ -126,17 +126,15 @@ def frontpage() -> str:
 @ad_login
 def surveys_active():
     user_id = session.get("user_id", 0)
-    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
-    return jsonify([{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in active_surveys])
-
+    active_surveys = survey_service.get_active_surveys(user_id)
+    return jsonify(active_surveys)
 
 @bp.route("/surveys/closed")
 @ad_login
 def surveys_closed():
     user_id = session.get("user_id", 0)
     closed_surveys = survey_service.get_list_closed_surveys(user_id)
-    return jsonify([{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in closed_surveys])
-
+    return jsonify(closed_surveys)
 
 @bp.route("/surveys")
 @ad_login
@@ -180,12 +178,12 @@ def expand_ranking(survey_id, email):
     choices = []
     for r in ranking_list:
         choice = survey_choices_service.get_survey_choice(r)
-        choices.append(dict(choice._mapping))
+        choices.append(choice)
     rejections = []
     if len(rejection_list) > 0:
         for r in rejection_list:
             choice = survey_choices_service.get_survey_choice(r)
-            rejections.append(dict(choice._mapping))
+            rejections.append(choice)
     return jsonify({"choices": choices, "rejections": rejections})
 
 

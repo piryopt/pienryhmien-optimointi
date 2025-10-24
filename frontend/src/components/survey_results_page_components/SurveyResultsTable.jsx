@@ -18,10 +18,10 @@ const SurveyResultsTable = ({ results }) => {
           </tr>
         </thead>
         <tbody>
-          {results.map(result => (
-            /* for some reason
+          {results.map((result, i) => (
+            /* for some reason,
               result = [[userId, username], email, [surveyChoiceId, name]] */
-            <tr>
+            <tr key={i}>
               <td>
                 <p>
                   {result[0][1]}
