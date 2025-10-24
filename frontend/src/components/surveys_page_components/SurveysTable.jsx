@@ -31,11 +31,11 @@ const SurveysTable = ({
 
   const allSurveys = [...activeSurveys, ...closedSurveys];
   const columns = [
-    { title: t("Kysely"), logo: assignmentWhite },
-    { title: t("Kyselyn tila"), logo: toggleOnWhite },
-    { title: t("Ryhmät luotu"), logo: toggleOffWhite },
-    { title: t("Toiminnot"), logo: menuWhite, style: { minWidth: "22em" } },
-    { title: t("Vastausaika päättyy"), logo: scheduleWhite }
+    { title: t("Kysely"), icon: assignmentWhite },
+    { title: t("Kyselyn tila"), icon: toggleOnWhite },
+    { title: t("Ryhmät luotu"), icon: toggleOffWhite },
+    { title: t("Toiminnot"), icon: menuWhite, style: { minWidth: "22em" } },
+    { title: t("Vastausaika päättyy"), icon: scheduleWhite }
   ];
 
   return (

@@ -13,7 +13,7 @@ const Table = ({
             <th key={i} style={col.style || null}>
               <p>
                 <img
-                  src={col.logo}
+                  src={col.icon}
                   width={24}
                   height={24}
                   className="d-inline-block align-text-top"
