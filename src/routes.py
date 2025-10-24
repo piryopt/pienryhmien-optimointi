@@ -423,6 +423,7 @@ def api_survey(survey_id):
             },
             "choices": list(survey_all_info.values()),
             "additional_info": bool(survey_choices_info),
+            "all_info": survey_all_info,
         }
     )
 

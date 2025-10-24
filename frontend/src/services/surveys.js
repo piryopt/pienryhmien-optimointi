@@ -24,6 +24,17 @@ const getClosedSurveys = async () => {
   }
 };
 
+const getSurvey = async (surveyId) => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/surveys/${surveyId}`, {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 const deleteSurvey = async (surveyId) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
@@ -42,5 +53,6 @@ const deleteSurvey = async (surveyId) => {
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
+  getSurvey: getSurvey,
   deleteSurvey: deleteSurvey
 }
