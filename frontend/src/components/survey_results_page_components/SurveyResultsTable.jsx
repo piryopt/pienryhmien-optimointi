@@ -1,55 +1,27 @@
 import { useTranslation } from "react-i18next";
+import Table from "../Table";
+import SurveyResultsTableRow from "./SurveyResultsTableRow";
 
-const SurveyResultsTable = ({ results }) => {
+const SurveyResultsTable = ({ results, surveyId }) => {
   const { t } = useTranslation();
 
+  const columns = [
+    { title: t("Nimi"), logo: "" },
+    { title: t("Sähköposti"), logo: "" },
+    { title: t("Ryhmä"), logo: "" },
+    { title: t("Monesko valinta"), logo: "" },
+    { title: t("Valinnat"), logo: "", style: { minWidth: "12em" } }
+  ];
+
   return (
-    <table 
-      style={{ cellspacing: 10 }}
-      className="table table-striped"
-      >
-        <thead className="table-dark">
-          <tr>
-            <th>{t("Nimi")}</th>
-            <th>{t("Sähköposti")}</th>
-            <th>{t("Ryhmä")}</th>
-            <th>{t("Monesko valinta")}</th>
-            <th>{t("Valinnat")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((result, i) => (
-            /* for some reason,
-              result = [[userId, username], email, [surveyChoiceId, name]] */
-            <tr key={i}>
-              <td>
-                <p>
-                  {result[0][1]}
-                </p>
-              </td>
-              <td>
-                <p>
-                  {result[1]}
-                </p>
-              </td>
-              <td>
-                <p>
-                  {result[2][1]}
-                </p>
-              </td>
-              <td>
-                <p>
-                  {result[3]}
-                </p>
-              </td>
-              <td>
-                Näytä
-              </td>
-            </tr>
-          ))}
-        </tbody>
-    </table>
-  )
-}
+    <Table
+      columns={columns}
+      data={results}
+      renderRow={(result, i) => (
+        <SurveyResultsTableRow key={i} result={result} surveyId={surveyId} />
+      )}
+    />
+  );
+};
 
 export default SurveyResultsTable;
