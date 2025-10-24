@@ -25,22 +25,22 @@ const SurveyAnswersPage = () => {
         setFilteredAnswers(responseData.surveyAnswers);
         setSurveyData(responseData);
         setSurveyAnswersAmount(Number(responseData.surveyAnswersAmount));
-        setSurveyClosed(responseData.closed)
+        setSurveyClosed(responseData.closed);
       } catch (err) {
         console.error("Error loading survey data", err);
       }
-    }
+    };
     getSurveyAnswersData();
   }, [surveyClosed]);
 
   const handleFilterChange = (event) => {
     const updatedSearchEmail = event.target.value;
     setSearchEmail(updatedSearchEmail);
-    const updatedAnswers = answers.filter(
-      a => a.email.includes(updatedSearchEmail.toLowerCase())
-    )
-    setFilteredAnswers(updatedAnswers)
-  }
+    const updatedAnswers = answers.filter((a) =>
+      a.email.includes(updatedSearchEmail.toLowerCase())
+    );
+    setFilteredAnswers(updatedAnswers);
+  };
 
   const handleOpenSurveyClick = async () => {
     if (window.confirm(t("Haluatko varmasti avata kyselyn uudestaan?"))) {
@@ -52,73 +52,64 @@ const SurveyAnswersPage = () => {
         console.error("error opening survey", err);
       }
     }
-  }
+  };
 
   const handleCloseSurveyClick = async () => {
     if (window.confirm(t("Haluatko varmasti sulkea kyselyn?"))) {
       try {
-        await surveyService.closeSurvey(id)
-        setSurveyClosed(true)
+        await surveyService.closeSurvey(id);
+        setSurveyClosed(true);
         // alert message?
       } catch (err) {
-        console.error("error opening survey", err)
+        console.error("error opening survey", err);
       }
     }
-  }
+  };
 
-  const handleAssignGroups = () => {
-  }
+  const handleAssignGroups = () => {};
 
   return (
     <div>
       <br />
       <h5>
-        <img 
-          src={assignmentWhite}
-          alt=""
-          width={34}
-          height={30}
-        />
+        <img src={assignmentWhite} alt="" width={34} height={30} />
         &nbsp;{surveyData.surveyName}
       </h5>
       <br />
-      <i>{t("Vastauksia")}: {surveyAnswersAmount}</i>
+      <i>
+        {t("Vastauksia")}: {surveyAnswersAmount}
+      </i>
       <br />
-      <i>{t("Jaettavia paikkoja")}: {surveyData.availableSpaces}</i>
+      <i>
+        {t("Jaettavia paikkoja")}: {surveyData.availableSpaces}
+      </i>
       <br />
       <br />
-      <a 
-        href="/surveys"
-        className="surveys_link"
-        style={{ float: "right" }}
-        >
-          {t("Palaa kyselylistaan")}  
+      <a href="/surveys" className="surveys_link" style={{ float: "right" }}>
+        {t("Palaa kyselylistaan")}
       </a>
       <br />
       <br />
-      <button 
-        className="btn btn-outline-primary"
-        onClick={handleAssignGroups}
-        >
-          {t("Jaa ryhmiin")}
+      <button className="btn btn-outline-primary" onClick={handleAssignGroups}>
+        {t("Jaa ryhmiin")}
       </button>
-      {surveyClosed
-        ?
-          <button 
-            className="btn btn-outline-warning" 
-            style={{ float: "right" }}
-            onClick={handleOpenSurveyClick}
-            >
-              {t("Avaa kysely uudelleen")}
-          </button>
-        : <button
-            className="btn btn-outline-warning" 
-            style={{ float: "right" }}
-            onClick={handleCloseSurveyClick}
-            >
-              {t("Sulje kysely")}
+      {surveyClosed ? (
+        <button
+          className="btn btn-outline-warning"
+          style={{ float: "right" }}
+          onClick={handleOpenSurveyClick}
+        >
+          {t("Avaa kysely uudelleen")}
         </button>
-      }
+      ) : (
+        <button
+          className="btn btn-outline-warning"
+          style={{ float: "right" }}
+          onClick={handleCloseSurveyClick}
+        >
+          {t("Sulje kysely")}
+        </button>
+      )}
       <br />
       <br />
       <p>
@@ -127,7 +118,7 @@ const SurveyAnswersPage = () => {
             vastaajan sähköposti tai osa siitä`)}
         </i>
         <br />
-        <input 
+        <input
           type="email"
           name="search_email"
           id="search_email"
@@ -135,16 +126,16 @@ const SurveyAnswersPage = () => {
           value={searchEmail}
         />
       </p>
-        <SurveyAnswersTable 
-          answers={answers}
-          setAnswers={setAnswers}
-          filteredAnswers={filteredAnswers}
-          setFilteredAnswers={setFilteredAnswers}
-          surveyId={id}
-          setSurveyAnswersAmount={setSurveyAnswersAmount}
-         />
+      <SurveyAnswersTable
+        answers={answers}
+        setAnswers={setAnswers}
+        filteredAnswers={filteredAnswers}
+        setFilteredAnswers={setFilteredAnswers}
+        surveyId={id}
+        setSurveyAnswersAmount={setSurveyAnswersAmount}
+      />
     </div>
-  )
+  );
 };
 
 export default SurveyAnswersPage;
