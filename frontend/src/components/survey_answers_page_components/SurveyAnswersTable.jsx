@@ -10,10 +10,10 @@ import personOffWhite from "/images/person_off_white_36dp.svg";
 const SurveyAnswersTable = (props) => {
   const { t } = useTranslation();
   const columns = [
-    { title: t("Sähköposti"), logo: emailWhite },
-    { title: t("Valinnat"), logo: doneWhite, style: { minWidth: "12em" } },
-    { title: t("Perustelut"), logo: questionAnswerWhite },
-    { title: t("Vastauksen poistaminen"), logo: personOffWhite }
+    { title: t("Sähköposti"), icon: emailWhite },
+    { title: t("Valinnat"), icon: doneWhite, style: { minWidth: "12em" } },
+    { title: t("Perustelut"), icon: questionAnswerWhite },
+    { title: t("Vastauksen poistaminen"), icon: personOffWhite }
   ];
 
   const handleAnswerDelete = (email) => {
