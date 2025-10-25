@@ -1,5 +1,7 @@
+import os
 from sqlalchemy import text
 from src import db
+from flask import current_app
 
 
 class UserRepository:
@@ -32,9 +34,27 @@ class UserRepository:
             print(f"The user with the email {user.email} already exists!")
             return None
         try:
-            sql = "INSERT INTO users (name, email, isteacher, admin, language)VALUES (:name, :email, :isteacher, False, :language)"
-            db.session.execute(text(sql), {"name": user.name, "email": user.email, "isteacher": user.isteacher, "language": "fi"})
+            # Only allow automatic dev admin granting when running in debug and when
+            # DEV_ADMIN_NAME is explicitly set.
+            admin_flag = False
+            try:
+                if current_app and current_app.debug and os.getenv("DEV_ADMIN_NAME"):
+                    admin_flag = os.getenv("DEV_ADMIN_NAME") == user.name
+            except RuntimeError:
+                # no app context -> don't grant admin
+                admin_flag = False
+
+            sql = "INSERT INTO users (name, email, isteacher, admin, language) VALUES (:name, :email, :isteacher, :admin, :language)"
+            db.session.execute(
+                text(sql),
+                {"name": user.name, "email": user.email, "isteacher": user.isteacher, "admin": admin_flag, "language": "fi"},
+            )
             db.session.commit()
+            # Reflect admin flag on returned entity so callers see it
+            try:
+                user.admin = admin_flag
+            except Exception:
+                pass
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return None

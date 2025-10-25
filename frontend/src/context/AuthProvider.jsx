@@ -42,7 +42,8 @@ export const AuthProvider = ({ children }) => {
     const body = new URLSearchParams();
     body.append("username", username);
     body.append("password", password);
-    await fetch(`${baseUrl}/auth/login`, {
+
+    const res = await fetch(`${baseUrl}/auth/login`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -51,6 +52,12 @@ export const AuthProvider = ({ children }) => {
       },
       body: body.toString(),
     });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: res.statusText }));
+      throw new Error(err?.message || "Login failed");
+    }
+
     await refreshSession();
     return user;
   };
