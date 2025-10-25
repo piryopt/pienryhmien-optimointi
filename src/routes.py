@@ -1,7 +1,7 @@
 from random import shuffle
 from datetime import datetime
 from functools import wraps
-from flask import render_template, request, session, jsonify, redirect, Blueprint, current_app
+from flask import app, render_template, request, session, jsonify, redirect, Blueprint, current_app
 from flask_wtf.csrf import generate_csrf
 import markdown
 from pathlib import Path
@@ -121,31 +121,22 @@ def frontpage() -> str:
 /SURVEYS/* ROUTES:
 """
 
+
 @bp.route("/surveys/active")
 @ad_login
 def surveys_active():
     user_id = session.get("user_id", 0)
     active_surveys = survey_repository.fetch_all_active_surveys(user_id)
-    return jsonify([
-        {
-            key: format_datestring(val) if key == "time_end" else val
-            for key, val in survey._mapping.items()
-        }
-        for survey in active_surveys
-    ])
+    return jsonify([{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in active_surveys])
+
 
 @bp.route("/surveys/closed")
 @ad_login
 def surveys_closed():
     user_id = session.get("user_id", 0)
     closed_surveys = survey_service.get_list_closed_surveys(user_id)
-    return jsonify([
-        {
-            key: format_datestring(val) if key == "time_end" else val
-            for key, val in survey._mapping.items()
-        }
-        for survey in closed_surveys
-    ])
+    return jsonify([{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in closed_surveys])
+
 
 @bp.route("/surveys")
 @ad_login
@@ -214,12 +205,10 @@ def new_survey_form(survey=None):
             return redirect("/")
         survey = survey_service.get_survey_as_dict(survey_id)
         survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
+            column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
         ]
     return render_template("create_survey.html", survey=survey)
+
 
 @bp.route("/multiphase/survey/create", methods=["GET"])
 @ad_login
@@ -247,7 +236,7 @@ def new_survey_post():
 
     allowed_denied_choices = data["allowedDeniedChoices"]
     allow_search_visibility = data["allowSearchVisibility"]
- 
+
     date_string = f"{date_end} {time_end}"
     format_code = "%d.%m.%Y %H:%M"
 
@@ -293,12 +282,14 @@ def import_survey_choices():
 /CSRF_TOKEN ROUTE:
 """
 
+
 @bp.route("/csrf_token", methods=["GET"])
 @ad_login
 def get_csrf():
     csrf_token = generate_csrf()
     response = {"csrfToken": csrf_token}
     return jsonify(response)
+
 
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:
@@ -368,6 +359,160 @@ def surveys(survey_id):
     shuffled_choices = list(survey_all_info.values())
     shuffle(shuffled_choices)
     return render_template("survey.html", choices=shuffled_choices, survey=survey, additional_info=additional_info)
+
+
+@bp.route("/api/surveys/<string:survey_id>", methods=["GET"])
+def api_survey(survey_id):
+    """
+    API endpoint for fetching survey data
+    """
+    user_id = session.get("user_id", 0)
+    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
+    survey = survey_service.get_survey(survey_id)
+
+    additional_info = False
+    if len(survey_choices_info) > 0:
+        additional_info = True
+
+    if not survey_choices:
+        return jsonify({"error": "Survey not found"}), 404
+
+    survey_all_info = {}
+    for row in survey_choices_info:
+        choice_id = str(row.choice_id)
+        if choice_id not in survey_all_info:
+            survey_all_info[choice_id] = {"infos": [{row.info_key: row.info_value}]}
+            survey_all_info[choice_id]["search"] = row.info_value
+        else:
+            survey_all_info[choice_id]["infos"].append({row.info_key: row.info_value})
+            survey_all_info[choice_id]["search"] += " " + row.info_value
+
+    for row in survey_choices:
+        choice_id = str(row.id)
+        if choice_id not in survey_all_info:
+            survey_all_info[choice_id] = {
+                "name": row.name,
+                "slots": row.max_spaces,
+                "id": choice_id,
+                "mandatory": row.mandatory,
+                "search": row.name,
+                "infos": [],
+                "min_size": row.min_size,
+            }
+        else:
+            survey_all_info[choice_id].update(
+                {
+                    "name": row.name,
+                    "mandatory": row.mandatory,
+                    "slots": row.max_spaces,
+                    "id": choice_id,
+                    "min_size": row.min_size,
+                }
+            )
+
+    choices = list(survey_all_info.values())
+
+    user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
+    if user_survey_ranking:
+        user_rankings = user_survey_ranking.ranking
+        rejections = user_survey_ranking.rejections
+        reason = user_survey_ranking.reason
+
+        return jsonify(
+            {
+                "survey": {
+                    "id": str(survey.id),
+                    "name": survey.surveyname,
+                    "deadline": format_datestring(survey.time_end),
+                    "description": survey.survey_description,
+                    "min_choices": survey.min_choices,
+                    "search_visibility": survey.allow_search_visibility,
+                    "denied_allowed_choices": survey.allowed_denied_choices,
+                },
+                "additional_info": additional_info,
+                "choices": choices,
+                "existing": "1",
+                "goodChoices": convert_to_list(user_rankings),
+                "badChoices": convert_to_list(rejections),
+                "reason": reason,
+            }
+        )
+
+    shuffle(choices)
+
+    return jsonify(
+        {
+            "survey": {
+                "id": str(survey.id),
+                "name": survey.surveyname,
+                "deadline": format_datestring(survey.time_end),
+                "description": survey.survey_description,
+                "min_choices": survey.min_choices,
+                "search_visibility": survey.allow_search_visibility,
+                "denied_allowed_choices": survey.allowed_denied_choices,
+            },
+            "additional_info": additional_info,
+            "choices": choices,
+            "existing": "0",
+        }
+    )
+
+
+@bp.route("/api/surveys/<string:survey_id>", methods=["POST"])
+def api_survey_submit(survey_id):
+    """
+    API endpoint for submitting survey answers
+    """
+    raw_data = request.get_json()
+
+    bad_ids = raw_data["badIDs"]
+    good_ids = raw_data["goodIDs"]
+
+    reason = raw_data["reasons"]
+
+    min_choices = int(raw_data["minChoices"])
+    allowed_denied_choices = int(raw_data["maxBadChoices"])
+
+    if len(good_ids) < min_choices:
+        msg = gettext("Tallennus epäonnistui. Valitse vähintään ")
+        response = {"status": "0", "msg": msg + str(min_choices)}
+        return jsonify(response)
+
+    if len(bad_ids) > allowed_denied_choices:
+        msg = gettext("Tallennus epäonnistui. Voit hylätä enintään ")
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
+
+    ranking = convert_to_string(good_ids)
+    rejections = convert_to_string(bad_ids)
+
+    # Verify that if user has rejections, they have also added a reasoning for them.
+    if len(bad_ids) == 0 and len(reason) > 0:
+        msg = gettext("Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui.")
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
+
+    # Verify that the reasoning isn't too long or short.
+    if len(reason) > 300:
+        msg = gettext(
+            "Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."
+        )
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
+    if len(reason) < 10 and len(bad_ids) > 0:
+        msg = gettext("Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10.")
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
+
+    user_id = session.get("user_id", 0)
+    submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking, rejections, reason)
+    msg = gettext("Tallennus onnistui.")
+    response = {"status": "1", "msg": msg}
+    if not submission:
+        msg = gettext("Tallennus epäonnistui")
+        response = {"status": "0", "msg": msg}
+    return jsonify(response)
 
 
 @bp.route("/surveys/<string:survey_id>/answered")
@@ -496,11 +641,8 @@ def edit_survey_form(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
-        ]
+        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+    ]
 
     # Check if the survey has answers. If it has, survey choices cannot be edited.
     survey_answers = survey_service.fetch_survey_responses(survey_id)
@@ -548,6 +690,7 @@ def delete_survey(survey_id):
     survey_service.set_survey_deleted_true(survey_id)
     return redirect("/surveys")
 
+
 @bp.route("/surveys/<string:survey_id>", methods=["DELETE"])
 def delete_surveys_endpoint(survey_id):
     if not check_if_owner(survey_id):
@@ -555,6 +698,7 @@ def delete_surveys_endpoint(survey_id):
         return jsonify(response), 403
     survey_service.set_survey_deleted_true(survey_id)
     return "", 204
+
 
 @bp.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
 def add_owner(survey_id, email):
@@ -583,11 +727,8 @@ def edit_group_sizes(survey_id):
         return redirect("/")
     survey = survey_service.get_survey_as_dict(survey_id)
     survey["variable_columns"] = [
-            column for column in survey["choices"][0]
-            if (column not in
-                {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"}
-            )
-        ]
+        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
+    ]
     (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     return render_template(
@@ -773,6 +914,7 @@ def open_survey(survey_id):
 /AUTH/* ROUTES:
 """
 
+
 @bp.route("/api/config", methods=["GET"])
 def api_config():
     """
@@ -780,10 +922,11 @@ def api_config():
     """
     return jsonify({"debug": current_app.debug})
 
+
 @bp.route("/api/session", methods=["GET"])
 def api_session():
     """
-     helper: return current session information as JSON.
+    helper: return current session information as JSON.
     """
     user_id = session.get("user_id", 0)
     if not user_id:
@@ -799,6 +942,7 @@ def api_session():
             "admin": session.get("admin", False),
         }
     )
+
 
 @bp.route("/auth/login", methods=["GET", "POST"])
 def login():
@@ -827,9 +971,14 @@ def login():
                 email = user.email
                 name = user.name
                 role_bool = user.isteacher
+                break
 
+        if not email:
+            return jsonify({"message": "Invalid username"}), 401
+        
         if not user_service.find_by_email(email):  # account doesn't exist, register
             user_service.create_user(name, email, role_bool)  # actual registration
+
         if user_service.check_credentials(email):  # log in, update session etc.
             if role_bool:
                 user_service.make_user_teacher(email)
@@ -847,6 +996,7 @@ def logout():
         return redirect("/")
     else:
         return redirect("/Shibboleth.sso/Logout")
+
 
 @bp.route("/api/logout", methods=["POST"])
 def api_logout():

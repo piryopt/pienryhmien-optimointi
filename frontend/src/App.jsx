@@ -9,6 +9,7 @@ import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
 import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
 import RequireAuth from "./components/RequireAuth";
+import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 
 const App = () => {
   return (
@@ -29,6 +30,14 @@ const App = () => {
               element={
                 <RequireAuth>
                   <SurveysPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/surveys/:surveyId"
+              element={
+                <RequireAuth>
+                  <AnswerSurveyPage />
                 </RequireAuth>
               }
             />

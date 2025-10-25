@@ -2,9 +2,11 @@ import hyLogo from "/images/hy_logo.svg";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { useNotification } from "../context/NotificationContext";
 
 const Navbar = () => {
   const { t } = useTranslation();
+  const { showNotification } = useNotification();
   const { user, loading, logout, debug } = useAuth();
   const navigate = useNavigate();
 
@@ -13,6 +15,7 @@ const Navbar = () => {
 
     if (debug) {
       await logout();
+      showNotification(t("Kirjautuminen ulos onnistui"), "success");
       navigate("/");
     } else {
       window.location.href = "/auth/logout";
