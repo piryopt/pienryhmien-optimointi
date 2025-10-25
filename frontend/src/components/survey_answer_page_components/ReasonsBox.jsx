@@ -1,3 +1,4 @@
+import '../../static/css/answerPage.css';
 
 const ReasonsBox = ({ reason, setReason }) => {
   return (
@@ -5,20 +6,11 @@ const ReasonsBox = ({ reason, setReason }) => {
 
       <textarea
         id="bad-reason"
+        className="reason-textarea"
         value={reason}
         onChange={(e) => setReason(e.target.value)}
         maxLength={300}
         placeholder="Kirjoita tähän perustelut hylkäyksille..."
-        style={{
-          width: "550px",
-          minHeight: 80,
-          resize: "vertical",
-          padding: 8,
-          borderRadius: 6,
-          border: "1px solid rgba(255,255,255,0.08)",
-          background: "rgba(54, 54, 54, 0.4)",
-          color: "#fff",
-        }}
       />
       <div style={{ margin: 6, fontSize: 12, color: "#bbb" }}>
         {reason.length}/300 merkkiä

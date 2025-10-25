@@ -1,4 +1,5 @@
 import { Droppable, Draggable } from "@hello-pangea/dnd";
+import '../../static/css/answerPage.css';
 
 const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) => {
   const borderColor = id === "good" ? "green" : id === "bad" ? "darkred" : "gray";
@@ -11,18 +12,10 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          style={{
-            padding: 5,
-            marginBottom: 25,
-            width: 550,
-            minHeight: 100,
-            border: `2px solid ${borderColor}`,
-            marginRight: 20,
-            borderRadius: 6,
-          }}
+          className="group-container"
+          style={{ border: `2px solid ${borderColor}` }} // keep dynamic border color inline
         >
           {items.map((item, index) => {
-            // prefer map lookup, fall back to item.infos if present
             const choice = choiceMap.get(String(item.id)) || (item.infos ? item : null);
 
             return (
@@ -35,53 +28,33 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
                     onClick={() => toggleExpand(String(item.id))}
                     role="button"
                     tabIndex={0}
-                    style={{
-                      borderRadius: "12px",
-                      paddingLeft: "12px",
-                      paddingBottom: "8px",
-                      marginBottom: "6px",
-                      border: "1px solid #5c5c5cff",
-                      WebkitBoxShadow: "0px 2px 7px 0px rgba(0,0,0,0.75)",
-                      MozBoxShadow: "0px 2px 1px 0px rgba(0,0,0,0.75)",
-                      boxShadow: "0px 2px 7px 0px rgba(0,0,0,0.75)",
-                      backgroundColor: "rgb(24, 26, 27)",
-                      cursor: "pointer",
-                      userSelect: "none",
-                      ...provided.draggableProps.style,
-                    }}
+                    className="group-item"
+                    style={provided.draggableProps.style} // keep drag transform/position
                   >
-                    <h2
-                      style={{
-                        fontSize: "20px",
-                        margin: "8px 0 0 0",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                      }}
-                    >
-                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom:4 }}>{item.name}</span>
+                    <h2 className="group-item-title">
+                      <span className="group-name">{item.name}</span>
                       {item.mandatory && (
-                        <span style={{ fontSize: 15, color: "orange", marginRight: 14 }}>Pakollinen</span>
+                        <span className="group-mandatory">Pakollinen</span>
                       )}
                     </h2>
-                    <p style={{ fontSize: "15px", margin: "6px 0 0 0" }}>Ryhmän maksimikoko: {item.slots}</p>
-                    {item.mandatory && <p style={{ fontSize: "15px", margin: "0", color: "orange" }}>Ryhmän minimikoko: {item.min_size}</p>}
+                    <p className="group-slots">Ryhmän maksimikoko: {item.slots}</p>
+                    {item.mandatory && <p className="group-minsize">Ryhmän minimikoko: {item.min_size}</p>}
 
                     {expandedIds.has(String(item.id)) && (
-                      <div style={{ marginTop: 8, paddingTop: 8, color: "#cfcfcf", borderTop: "1px dashed #575757d5", marginRight: 12, boxSizing: "border-box" }}>
+                      <div className="group-expanded">
                         {choice && Array.isArray(choice.infos) && choice.infos.length > 0 ? (
                           choice.infos.map((infoObj, idx) => {
                             const entries = Object.entries(infoObj);
                             const [key, value] = entries.length ? entries[0] : ["", ""];
                             return (
-                              <div key={idx} style={{ marginBottom: 6, fontSize: 14 }}>
-                                <strong style={{ marginRight: 6 }}>{key}:</strong>
-                                <span>{value}</span>
+                              <div key={idx} className="info-entry">
+                                <strong className="info-key">{key}:</strong>
+                                <span className="info-value">{value}</span>
                               </div>
                             );
                           })
                         ) : (
-                          <p style={{ margin: 0, fontSize: 14 }}>Lisätietoa ei saatavilla.</p>
+                          <p className="no-info">Lisätietoa ei saatavilla.</p>
                         )}
                       </div>
                     )}
@@ -96,5 +69,6 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
     </Droppable>
   );
 };
+
 
 export default GroupList;

@@ -1,13 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useParams } from "react-router-dom";
-import surveyService from '../services/surveys';
+import { useNotification } from "../context/NotificationContext.jsx";
+import { useTranslation } from "react-i18next";
+import surveyService from '../services/surveys.js';
 import Button from 'react-bootstrap/Button';
 import GroupList from '../components/survey_answer_page_components/GroupList.jsx';
 import ReasonsBox from '../components/survey_answer_page_components/ReasonsBox.jsx';
+import assignmentIcon from '/images/assignment_white_36dp.svg';
+import '../static/css/answerPage.css'; 
+  
 
-const AnswerSurvey = () => {
+const AnswerSurveyPage = () => {
   const { surveyId } = useParams();
+  const { showNotification } = useNotification();
+  const { t } = useTranslation();
   const [neutral, setNeutral] = useState([]);
   const [good, setGood] = useState([]);
   const [bad, setBad] = useState([]);
@@ -105,35 +112,43 @@ const AnswerSurvey = () => {
 
   const handleSubmit = async () => {
     try {
-      await surveyService.submitSurveyAnswer({ surveyId: surveyId, good: good.map(c => c.id), bad: bad.map(c => c.id), neutral: neutral.map(c => c.id), reason, minChoices: survey.min_choices, deniedAllowedChoices: survey.denied_allowed_choices })
-      .then((result) => {
-        alert(result.msg);
-      });
+      const result = await surveyService.submitSurveyAnswer({ surveyId: surveyId, good: good.map(c => c.id), bad: bad.map(c => c.id), neutral: neutral.map(c => c.id), reason, minChoices: survey.min_choices, deniedAllowedChoices: survey.denied_allowed_choices })
+      if (result.status === "0") throw new Error(result.msg);
+      showNotification(t(result.msg), "success");
     } catch (error) {
-      alert(error);
+      showNotification(t(error.message), "error");
+      console.error("Error submitting survey", error);
     }
   };
+
 
   if (loading) return <div className="text-center mt-5">Loading survey...</div>;
 
   return (
-    <div style={{ padding: 20, marginLeft: 40 }}>
+    <div className="answer-page">
       <div>
-        <h1 style={{ fontSize: "25px" }}>{survey.name}</h1>
-        <p>Vastausaika päättyy {survey.deadline}</p>
-        <p>
-          <i>Raahaa oikean reunan listasta vähintään {survey.min_choices} vaihtoehtoa <span style={{ color: "#0bdb2ed6" }}>vihreään</span> laatikkoon.</i>
-        {additionalInfo ? (
-          <i> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
-        ) : (
-          <></>
-        )}
+        <h1 className="answer-title">
+          <img src={assignmentIcon} alt="" className="assignment-icon" />
+          {survey.name}
+        </h1>
+        <p className="deadline">Vastausaika päättyy {survey.deadline}</p>
+        <p className="instructions">
+          <i>
+            Raahaa oikean reunan listasta vähintään {survey.min_choices} vaihtoehtoa
+            <span className="highlight"> vihreään</span> laatikkoon.
+          </i>
+          {additionalInfo ? (
+            <i> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
+          ) : null}
         </p>
-        <p>HUOM! <span style={{ color: "orange" }}>Pakolliseksi</span> merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.</p>
+        <p className="note">
+          HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.
+        </p>
       </div>
-      <div style={{ display: "flex", minHeight: "100vh", paddingTop: 20 }}>
+
+      <div className="answer-layout">
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div style={{ display: "flex", flexDirection: "column", marginRight: 20, flexShrink: 0 }}>
+          <div className="left-column">
             <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
             { (survey.denied_allowed_choices ?? 0) !== 0 && (
               <>
@@ -141,14 +156,15 @@ const AnswerSurvey = () => {
                 <ReasonsBox reason={reason} setReason={setReason} />
               </>
             )}
-          
-            <div style={{ width: "100%", display: "flex", justifyContent: "flex-start", marginTop: 8 }}>
-              <Button variant="success" style={{ width: "auto", marginTop: 8 }} onClick={handleSubmit}>
+
+            <div className="submit-row">
+              <Button variant="success" className="submit-btn" onClick={handleSubmit}>
                 Lähetä valinnat
               </Button>
             </div>
           </div>
-          <div style={{ flex: 1 }}>
+
+          <div className="right-column">
             <GroupList id="neutral" items={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
           </div>
         </DragDropContext>
@@ -157,4 +173,4 @@ const AnswerSurvey = () => {
   );
 };
 
-export default AnswerSurvey;
+export default AnswerSurveyPage;
