@@ -25,15 +25,40 @@ const AnswerSurvey = () => {
       try {
         const data = await surveyService.getSurvey(surveyId);
         if (!mountedRef.current) return;
-        setNeutral(data.choices || []);
+
+        const choices = data.choices || [];
+        let neutralChoices = [...choices];
+        let goodChoices = [];
+        let badChoices = [];
+
+        if (data.existing === "1") {
+          const goodIds = data.goodChoices || [];
+          const badIds = data.badChoices || [];
+          // ensure ids are strings for comparison
+          const goodIdSet = new Set((goodIds || []).map(String));
+          const badIdSet = new Set((badIds || []).map(String));
+
+          goodChoices = choices.filter((c) => goodIdSet.has(String(c.id)));
+          badChoices = choices.filter((c) => badIdSet.has(String(c.id)));
+          
+          const used = new Set([...goodChoices, ...badChoices].map((c) => String(c.id)));
+          neutralChoices = choices.filter((c) => !used.has(String(c.id)));
+          
+          setReason(data.reason || "");
+        }
+
+        setNeutral(neutralChoices);
+        setGood(goodChoices);
+        setBad(badChoices);
         setSurvey(data.survey || {});
         setAdditionalInfo(data.additional_info || false);
+
       } catch (err) {
         console.error(err);
       } finally {
         if (mountedRef.current) setLoading(false);
       }
-    })();
+      })();
     return () => { mountedRef.current = false; };
   }, [surveyId]);
 

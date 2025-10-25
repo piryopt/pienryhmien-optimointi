@@ -367,9 +367,14 @@ def api_survey(survey_id):
     """
     API endpoint for fetching survey data
     """
+    user_id = session.get("user_id", 0)
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
     survey = survey_service.get_survey(survey_id)
+
+    additional_info = False
+    if len(survey_choices_info) > 0:
+        additional_info = True
 
     if not survey_choices:
         return jsonify({"error": "Survey not found"}), 404
@@ -408,6 +413,33 @@ def api_survey(survey_id):
             )
 
     choices = list(survey_all_info.values())
+
+    user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
+    if user_survey_ranking:
+        user_rankings = user_survey_ranking.ranking
+        rejections = user_survey_ranking.rejections
+        reason = user_survey_ranking.reason
+
+        return jsonify(
+            {
+                "survey": {
+                    "id": str(survey.id),
+                    "name": survey.surveyname,
+                    "deadline": format_datestring(survey.time_end),
+                    "description": survey.survey_description,
+                    "min_choices": survey.min_choices,
+                    "search_visibility": survey.allow_search_visibility,
+                    "denied_allowed_choices": survey.allowed_denied_choices,
+                },
+                "additional_info": additional_info,
+                "choices": choices,
+                "existing": "1",
+                "goodChoices": convert_to_list(user_rankings),
+                "badChoices": convert_to_list(rejections),
+                "reason": reason,
+            }
+        )
+
     shuffle(choices)
 
     return jsonify(
@@ -421,8 +453,9 @@ def api_survey(survey_id):
                 "search_visibility": survey.allow_search_visibility,
                 "denied_allowed_choices": survey.allowed_denied_choices,
             },
-            "additional_info": bool(survey_choices_info),
+            "additional_info": additional_info,
             "choices": choices,
+            "existing": "0",
         }
     )
 
