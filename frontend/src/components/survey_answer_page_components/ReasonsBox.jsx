@@ -20,7 +20,7 @@ const ReasonsBox = ({ reason, setReason }) => {
           color: "#fff",
         }}
       />
-      <div style={{ marginTop: 6, fontSize: 12, color: "#bbb" }}>
+      <div style={{ margin: 6, fontSize: 12, color: "#bbb" }}>
         {reason.length}/300 merkkiä
       </div>
     </div>

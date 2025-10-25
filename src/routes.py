@@ -367,8 +367,6 @@ def api_survey(survey_id):
     """
     API endpoint for fetching survey data
     """
-    print("test")
-    print(survey_id)  # will now print the string ID
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
     survey = survey_service.get_survey(survey_id)
@@ -376,7 +374,6 @@ def api_survey(survey_id):
     if not survey_choices:
         return jsonify({"error": "Survey not found"}), 404
 
-    # Merge choices with additional info
     survey_all_info = {}
     for row in survey_choices_info:
         choice_id = str(row.choice_id)
@@ -410,6 +407,8 @@ def api_survey(survey_id):
                 }
             )
 
+    shuffled_choices = shuffle(list(survey_all_info.values()))
+
     return jsonify(
         {
             "survey": {
@@ -421,9 +420,8 @@ def api_survey(survey_id):
                 "search_visibility": survey.allow_search_visibility,
                 "denied_allowed_choices": survey.allowed_denied_choices,
             },
-            "choices": list(survey_all_info.values()),
             "additional_info": bool(survey_choices_info),
-            "all_info": survey_all_info,
+            "choices": list(shuffled_choices),
         }
     )
 

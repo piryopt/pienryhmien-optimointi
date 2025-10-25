@@ -14,7 +14,6 @@ const AnswerSurvey = () => {
   const [loading, setLoading] = useState(true);
   const [survey, setSurvey] = useState({});
   const [additionalInfo, setAdditionalInfo] = useState(false);
-  const [allInfo, setAllInfo] = useState({});
   const [expandedIds, setExpandedIds] = useState(new Set());
   const [reason, setReason] = useState("");
 
@@ -29,7 +28,6 @@ const AnswerSurvey = () => {
         setNeutral(data.choices || []);
         setSurvey(data.survey || {});
         setAdditionalInfo(data.additional_info || false);
-        setAllInfo(data.all_info || {});
       } catch (err) {
         console.error(err);
       } finally {
@@ -94,27 +92,27 @@ const AnswerSurvey = () => {
          <></>
       )}
       </p>
-      <p>HUOM! Tärkeäksi merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.</p>
+      <p>HUOM! Pakolliseksi merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.</p>
 
       <div style={{ display: "flex", minHeight: "100vh", paddingTop: 20 }}>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div style={{ display: "flex", flexDirection: "column", marginRight: 20, flexShrink: 0 }}>
-            <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} allInfo={allInfo} />
+            <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
             { (survey.denied_allowed_choices ?? 0) !== 0 && (
               <>
-                <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} allInfo={allInfo} />
+                <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
                 <ReasonsBox reason={reason} setReason={setReason} />
               </>
             )}
           
             <div style={{ width: "100%", display: "flex", justifyContent: "flex-start", marginTop: 8 }}>
-              <Button variant="success" style={{ width: "auto" }} onClick={() => console.log("Submit Rankings", { good, bad, neutral })}>
+              <Button variant="success" style={{ width: "auto", marginTop: 8 }} onClick={() => console.log("Submit Rankings", { good, bad, neutral }, "Reason:", reason)}>
                 Lähetä valinnat
               </Button>
             </div>
           </div>
           <div style={{ flex: 1 }}>
-            <GroupList id="neutral" items={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} allInfo={allInfo} />
+            <GroupList id="neutral" items={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
           </div>
         </DragDropContext>
       </div>
