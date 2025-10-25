@@ -25,7 +25,7 @@ const SurveyResultsTableRow = ({ result, surveyId }) => {
   };
   return (
     <tr>
-      {/* result = [[userId, username], email, [surveyChoiceId, name]] */}
+      {/* result = [[userId, username], email, [surveyChoiceId, surveyChoiceName], ordinalChoice] */}
       <td>
         <p>{result[0][1]}</p>
       </td>

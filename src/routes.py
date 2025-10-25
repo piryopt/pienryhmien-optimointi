@@ -840,7 +840,6 @@ def survey_results(survey_id):
     students_dict = convert_users_students(user_rankings)
 
     output_data = hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices)
-
     if request.method == "GET":
         return jsonify({
             "surveyId": survey_id,
