@@ -1,10 +1,8 @@
-// ...existing code...
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 
 const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) => {
   const borderColor = id === "good" ? "green" : id === "bad" ? "darkred" : "gray";
 
-  // create a fast lookup map and ensure keys are strings
   const choiceMap = new Map(choices.map((c) => [String(c.id), c]));
 
   return (
@@ -61,7 +59,7 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
                         alignItems: "flex-start",
                       }}
                     >
-                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.name}</span>
+                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom:4 }}>{item.name}</span>
                       {item.mandatory && (
                         <span style={{ fontSize: 15, color: "orange", marginRight: 14 }}>Pakollinen</span>
                       )}
@@ -70,7 +68,7 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
                     {item.mandatory && <p style={{ fontSize: "15px", margin: "0", color: "orange" }}>Ryhmän minimikoko: {item.min_size}</p>}
 
                     {expandedIds.has(String(item.id)) && (
-                      <div style={{ marginTop: 8, paddingTop: 8, color: "#cfcfcf" }}>
+                      <div style={{ marginTop: 8, paddingTop: 8, color: "#cfcfcf", borderTop: "1px dashed #575757d5", marginRight: 12, boxSizing: "border-box" }}>
                         {choice && Array.isArray(choice.infos) && choice.infos.length > 0 ? (
                           choice.infos.map((infoObj, idx) => {
                             const entries = Object.entries(infoObj);
@@ -100,4 +98,3 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
 };
 
 export default GroupList;
-// ...existing code...

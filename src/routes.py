@@ -407,7 +407,8 @@ def api_survey(survey_id):
                 }
             )
 
-    shuffled_choices = shuffle(list(survey_all_info.values()))
+    choices = list(survey_all_info.values())
+    shuffle(choices)
 
     return jsonify(
         {
@@ -421,7 +422,7 @@ def api_survey(survey_id):
                 "denied_allowed_choices": survey.allowed_denied_choices,
             },
             "additional_info": bool(survey_choices_info),
-            "choices": list(shuffled_choices),
+            "choices": choices,
         }
     )
 

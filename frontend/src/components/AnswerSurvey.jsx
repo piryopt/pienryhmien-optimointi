@@ -26,6 +26,7 @@ const AnswerSurvey = () => {
         const data = await surveyService.getSurvey(surveyId);
         if (!mountedRef.current) return;
         setNeutral(data.choices || []);
+        console.log(data.choices)
         setSurvey(data.survey || {});
         setAdditionalInfo(data.additional_info || false);
       } catch (err) {
@@ -81,19 +82,20 @@ const AnswerSurvey = () => {
   if (loading) return <div className="text-center mt-5">Loading survey...</div>;
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1 style={{ fontSize: "25px"}}>{survey.name}</h1>
-      <p>Vastausaika päättyy {survey.deadline}</p>
-      <p>
-        <i>Raahaa oikean reunan listasta vähintään {survey.min_choices} vaihtoehtoa vihreään laatikkoon.</i>
-      {additionalInfo ? (
-         <i style={{ color: "#0bdb2ed6" }}> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
-      ) : (
-         <></>
-      )}
-      </p>
-      <p>HUOM! Pakolliseksi merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.</p>
-
+    <div style={{ padding: 20, marginLeft: 40 }}>
+      <div>
+        <h1 style={{ fontSize: "25px" }}>{survey.name}</h1>
+        <p>Vastausaika päättyy {survey.deadline}</p>
+        <p>
+          <i>Raahaa oikean reunan listasta vähintään {survey.min_choices} vaihtoehtoa <span style={{ color: "#0bdb2ed6" }}>vihreään</span> laatikkoon.</i>
+        {additionalInfo ? (
+          <i> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
+        ) : (
+          <></>
+        )}
+        </p>
+        <p>HUOM! <span style={{ color: "orange" }}>Pakolliseksi</span> merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.</p>
+      </div>
       <div style={{ display: "flex", minHeight: "100vh", paddingTop: 20 }}>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div style={{ display: "flex", flexDirection: "column", marginRight: 20, flexShrink: 0 }}>
