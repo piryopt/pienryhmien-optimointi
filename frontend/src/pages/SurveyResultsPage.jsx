@@ -1,12 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import * as XLSX from "xlsx";
 import surveyService from "../services/surveys";
 import SurveyResultsTable from "../components/survey_results_page_components/SurveyResultsTable";
 
 const SurveyResultsPage = () => {
   const [surveyResultsData, setSurveyResultsData] = useState({});
   const [droppedGroups, setDroppedGroups] = useState([]);
+  const [infoKeys, setInfoKeys] = useState([]);
+  const [additionalInfos, setAdditionalInfos] = useState([]);
   const [happinessData, setHappinessData] = useState([]);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +30,8 @@ const SurveyResultsPage = () => {
         setDroppedGroups(response.droppedGroups);
         setResults(response.results);
         setHappinessData(response.happinessData);
-        console.log(response);
+        setInfoKeys(response.infos);
+        setAdditionalInfos(response.additionalInfoKeys);
       } catch (err) {
         console.error("error loading survey results", err);
       } finally {
@@ -38,6 +42,25 @@ const SurveyResultsPage = () => {
     };
     getSurveyResults();
   }, []);
+
+  const handleToExcelFile = () => {
+    const groupData = results.map((res) => ({
+      [t("Nimi")]: res[0][1],
+      [t("Sähköposti")]: res[1],
+      [t("Ryhmä")]: res[2][1],
+      [t("Monesko valinta")]: res[3],
+      ...Object.fromEntries(
+        infoKeys.map((pair, index) => [
+          pair.info_key,
+          additionalInfos[res[2][0]][index]
+        ])
+      )
+    }));
+    const ws = XLSX.utils.json_to_sheet(groupData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, t("Tulokset"));
+    XLSX.writeFile(wb, `${t("tulokset")}.xlsx`);
+  };
 
   if (loading) return null;
 
@@ -61,6 +84,7 @@ const SurveyResultsPage = () => {
       <div>
         <button
           className="btn btn-outline-primary"
+          onClick={handleToExcelFile}
           style={{ marginTop: "1em" }}
         >
           {t("Vie tulokset Excel-taulukkoon")}
