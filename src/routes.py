@@ -427,6 +427,62 @@ def api_survey(survey_id):
     )
 
 
+@bp.route("/api/surveys/<string:survey_id>", methods=["POST"])
+def api_survey_submit(survey_id):
+    """
+    API endpoint for submitting survey answers
+    """
+    raw_data = request.get_json()
+
+    bad_ids = raw_data["badIDs"]
+    good_ids = raw_data["goodIDs"]
+
+    reason = raw_data["reasons"]
+
+    min_choices = int(raw_data["minChoices"])
+    allowed_denied_choices = int(raw_data["maxBadChoices"])
+
+    if len(good_ids) < min_choices:
+        msg = gettext("Tallennus epäonnistui. Valitse vähintään ")
+        response = {"status": "0", "msg": msg + str(min_choices)}
+        return jsonify(response)
+
+    if len(bad_ids) > allowed_denied_choices:
+        msg = gettext("Tallennus epäonnistui. Voit hylätä enintään ")
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
+
+    ranking = convert_to_string(good_ids)
+    rejections = convert_to_string(bad_ids)
+
+    # Verify that if user has rejections, they have also added a reasoning for them.
+    if len(bad_ids) == 0 and len(reason) > 0:
+        msg = gettext("Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui.")
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
+
+    # Verify that the reasoning isn't too long or short.
+    if len(reason) > 300:
+        msg = gettext(
+            "Perustelu on liian pitkä, tallenus epäonnistui. Merkkejä saa olla korkeintaan 300. Tarvittaessa ota yhteys kyselyn järjestäjään."
+        )
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
+    if len(reason) < 10 and len(bad_ids) > 0:
+        msg = gettext("Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10.")
+        response = {"status": "0", "msg": msg}
+        return jsonify(response)
+
+    user_id = session.get("user_id", 0)
+    submission = user_rankings_service.add_user_ranking(user_id, survey_id, ranking, rejections, reason)
+    msg = gettext("Tallennus onnistui.")
+    response = {"status": "1", "msg": msg}
+    if not submission:
+        msg = gettext("Tallennus epäonnistui")
+        response = {"status": "0", "msg": msg}
+    return jsonify(response)
+
+
 @bp.route("/surveys/<string:survey_id>/answered")
 def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     """

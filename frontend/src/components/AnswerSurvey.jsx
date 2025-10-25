@@ -26,7 +26,6 @@ const AnswerSurvey = () => {
         const data = await surveyService.getSurvey(surveyId);
         if (!mountedRef.current) return;
         setNeutral(data.choices || []);
-        console.log(data.choices)
         setSurvey(data.survey || {});
         setAdditionalInfo(data.additional_info || false);
       } catch (err) {
@@ -79,6 +78,17 @@ const AnswerSurvey = () => {
     });
   };
 
+  const handleSubmit = async () => {
+    try {
+      await surveyService.submitSurveyAnswer({ surveyId: surveyId, good: good.map(c => c.id), bad: bad.map(c => c.id), neutral: neutral.map(c => c.id), reason, minChoices: survey.min_choices, deniedAllowedChoices: survey.denied_allowed_choices })
+      .then((result) => {
+        alert(result.msg);
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   if (loading) return <div className="text-center mt-5">Loading survey...</div>;
 
   return (
@@ -108,7 +118,7 @@ const AnswerSurvey = () => {
             )}
           
             <div style={{ width: "100%", display: "flex", justifyContent: "flex-start", marginTop: 8 }}>
-              <Button variant="success" style={{ width: "auto", marginTop: 8 }} onClick={() => console.log("Submit Rankings", { good, bad, neutral }, "Reason:", reason)}>
+              <Button variant="success" style={{ width: "auto", marginTop: 8 }} onClick={handleSubmit}>
                 Lähetä valinnat
               </Button>
             </div>
