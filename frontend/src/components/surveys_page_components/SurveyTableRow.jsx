@@ -10,6 +10,17 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
   const { t } = useTranslation();
 
+  if (survey.id === "separatingRow") {
+    return (
+      <tr>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+      </tr>
+    );
+  }
   return (
     <tr>
       <td>

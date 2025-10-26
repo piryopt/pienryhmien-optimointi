@@ -15,7 +15,8 @@ const SurveysPage = () => {
           surveyService.getActiveSurveys(),
           surveyService.getClosedSurveys()
         ]);
-        const updatedSurveys = [...activeRes, ...closedRes];
+        const separatingRow = { id: "separatingRow" };
+        const updatedSurveys = [...activeRes, separatingRow, ...closedRes];
         setSurveys(updatedSurveys);
       } catch (err) {
         console.error("Error loading surveys", err);
