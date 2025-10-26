@@ -22,6 +22,7 @@
   "Kyllä": "Kyllä",
   "Kysely": "Kysely",
   "Kyselyn tila": "Kyselyn tila",
+  "Käynnissä olevat kyselyt": "Käynnissä olevat kyselyt",
   "Luotuja kyselyitä": "Luotuja kyselyitä: {{maara}}",
   "Luo uusi kysely": "Luo uusi kysely",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
@@ -48,6 +49,7 @@
   "UKK": "UKK",
   "Valinnat": "Valinnat",
   "Vastauksen poistaminen": "Vastauksen poistaminen",
+  "Vastaukset": "Vastaukset: {{maara}}",
   "Vastauksia": "Vastauksia",
   "Vastausaika päättyy": "Vastausaika päättyy"
 }

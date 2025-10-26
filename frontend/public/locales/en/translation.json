@@ -22,6 +22,7 @@
   "Kyllä": "",
   "Kysely": "",
   "Kyselyn tila": "",
+  "Käynnissä olevat kyselyt": "Ongoing surveys",
   "Luotuja kyselyitä": "Created surveys: {{maara}}",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Create a new survey or import existing response options from a CSV file",
   "Luo uusi kysely": "Create a new survey",
@@ -44,10 +45,11 @@
   "Tarkastele tuloksia": "",
   "Tietosuojaseloste": "Privacy Policy",
   "Tilastot": "Statistics",
-  "Toiminnot": "",
+  "Toiminnot": "Actions",
   "UKK": "FAQ",
   "Valinnat": "",
   "Vastauksen poistaminen": "",
+  "Vastaukset": "Answers: {{maara}}",
   "Vastauksia": "",
   "Vastausaika päättyy": ""
 }

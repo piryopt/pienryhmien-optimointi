@@ -117,6 +117,22 @@ def frontpage() -> str:
     return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
 
+@bp.route("/api/frontpage", methods=["GET"])
+@ad_login
+def frontpage_data():
+    """
+    Returns data displayed on the frontpage.
+    """
+    user_id = session.get("user_id", 0)
+    created_surveys = survey_service.count_surveys_created(user_id)
+    active_survey_rows = survey_service.get_active_surveys_and_response_count(user_id)
+
+    active_surveys = [row._asdict() for row in active_survey_rows]
+
+    return jsonify({"createdSurveys": created_surveys, "activeSurveys": active_surveys})
+    # return jsonify({"createdSurveys": 5, "activeSurveys": {"eka": 0}})
+
+
 """
 /SURVEYS/* ROUTES:
 """
@@ -627,7 +643,8 @@ def owner_deletes_submission(survey_id):
     if not success:
         return jsonify({"message": "Deleting answer failed"})
     return "", 204
-    
+
+
 @bp.route("/surveys/<string:survey_id>/edit", methods=["GET"])
 def edit_survey_form(survey_id):
     """
@@ -780,32 +797,29 @@ def survey_answers(survey_id):
     if not check_if_owner(survey_id):
         response = {"message": "Only owners can view survey answers"}
         return jsonify(response), 403
-    
+
     survey_name = survey_service.get_survey_name(survey_id)
     survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
-        choices_data.append({
-            "email": user_service.get_email(s.user_id),
-            "ranking": s.ranking,
-            "rejections": s.rejections,
-            "reason": s.reason
-        })
+        choices_data.append({"email": user_service.get_email(s.user_id), "ranking": s.ranking, "rejections": s.rejections, "reason": s.reason})
 
     survey_answers_amount = len(survey_answers)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
 
-    return jsonify({
-        "surveyName": survey_name,
-        "surveyAnswers": choices_data,
-        "surveyAnswersAmount": survey_answers_amount,
-        "availableSpaces": available_spaces,
-        "surveyId": survey_id,
-        "closed": closed,
-        "answered": answers_saved,
-    })
+    return jsonify(
+        {
+            "surveyName": survey_name,
+            "surveyAnswers": choices_data,
+            "surveyAnswersAmount": survey_answers_amount,
+            "availableSpaces": available_spaces,
+            "surveyId": survey_id,
+            "closed": closed,
+            "answered": answers_saved,
+        }
+    )
 
 
 @bp.route("/surveys/<string:survey_id>/results", methods=["GET", "POST"])
@@ -975,7 +989,7 @@ def login():
 
         if not email:
             return jsonify({"message": "Invalid username"}), 401
-        
+
         if not user_service.find_by_email(email):  # account doesn't exist, register
             user_service.create_user(name, email, role_bool)  # actual registration
 

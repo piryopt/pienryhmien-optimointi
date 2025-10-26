@@ -22,6 +22,7 @@
   "Kyllä": "",
   "Kysely": "",
   "Kyselyn tila": "",
+  "Käynnissä olevat kyselyt": "Pågående enkäter",
   "Luotuja kyselyitä": "Skapade enkäter: {{maara}}",
   "Luo uusi kysely": "Skapa en ny enkät",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Skapa en ny enkät eller importera färdiga svarsalternativ från en CSV-fil",
@@ -44,10 +45,11 @@
   "Tarkastele tuloksia": "",
   "Tietosuojaseloste": "Integritetspolicy",
   "Tilastot": "Statistik",
-  "Toiminnot": "",
+  "Toiminnot": "Åtgärder",
   "UKK": "FAQ",
   "Valinnat": "",
   "Vastauksen poistaminen": "",
+  "Vastaukset": "Svar: {{maara}}",
   "Vastauksia": "",
   "Vastausaika päättyy": ""
 }
