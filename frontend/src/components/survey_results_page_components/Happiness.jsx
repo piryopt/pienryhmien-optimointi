@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 
 const Happiness = ({ happinessData, average }) => {
   const { t } = useTranslation();
-
   return (
     <>
       <b>
@@ -18,7 +17,6 @@ const Happiness = ({ happinessData, average }) => {
         </p>
       )}
       <div>
-        {/* translations will fail here */}
         {happinessData.map((h, i) => (
           <div key={i}>
             <label
@@ -31,8 +29,9 @@ const Happiness = ({ happinessData, average }) => {
                       : ""
               }}
             >
-              {h[0]}
-              {h[1]}
+              {typeof h[0] === "number" ? h[0] : t(h[0])}
+              {t(h[1])}
+              {h[2]}
             </label>
           </div>
         ))}
