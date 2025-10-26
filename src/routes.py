@@ -815,18 +815,21 @@ def survey_results(survey_id):
     """
 
     if not check_if_owner(survey_id):
-        return redirect("/")
+        return jsonify({"msg": "Only survey owners can get survey results"})
+
 
     # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
-        return redirect("/")
+        return jsonify({"msg": "Survey must be closed for group assignment"})
+
     # Check if the answers are already saved to the database. This determines which operations are available to the owner.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
 
     user_rankings = survey_service.fetch_survey_responses(survey_id)
 
     if not user_rankings:
-        return redirect(f"/surveys/{survey_id}/answers")
+        return jsonify({"msg": "Error: Survey answers not found"})
+
     survey_answers_amount = len(user_rankings)
 
     # Check that the amount of answers is greater than the smallest min_size of a group
@@ -846,7 +849,7 @@ def survey_results(survey_id):
             "results": output_data[0],
             "happinessData": output_data[2],
             "happiness": output_data[1],
-            "answered": saved_result_exists,
+            "resultsSaved": saved_result_exists,
             "infos": output_data[4],
             "additionalInfoKeys": output_data[5],
             "droppedGroups": output_data[3],
@@ -858,16 +861,17 @@ def survey_results(survey_id):
 @bp.route("/surveys/<string:survey_id>/results/save")
 def save_survey_results(survey_id, output_data):
     if not check_if_owner(survey_id):
-        return redirect("/")
+        return jsonify({"msg": "Only survey owners can save results"})
     # Check if results have been saved. If they have, redirect to previous_surveys page.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
     if saved_result_exists:
-        return redirect("/surveys")
+        return jsonify({"msg": "Survey has already been saved"})
 
     # Update the database entry for the survey, so that result_saved = True.
     survey_answered = survey_service.update_survey_answered(survey_id)
     if not survey_answered:
-        return redirect("/surveys")
+        return jsonify({"msg": "Saving survey failed"})
+
 
     # Create new database entrys for final groups of the sorted students.
     for results in output_data[0]:
@@ -877,7 +881,8 @@ def save_survey_results(survey_id, output_data):
         if not saved:
             response = {"msg": f"ERROR IN SAVING {results[0][1]} RESULTS!"}
             return jsonify(response)
-    return redirect(f"/surveys/{survey_id}/results")
+        return jsonify({"msg": "Survey saved"})
+
 
 
 @bp.route("/surveys/<string:survey_id>/close", methods=["POST"])

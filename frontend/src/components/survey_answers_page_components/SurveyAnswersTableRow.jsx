@@ -31,14 +31,14 @@ const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
         <p>{answer.email}</p>
       </td>
       <td>
-        <a
+        <span
           className="surveys_link"
           style={{ cursor: "pointer" }}
           onClick={handleRankingClick}
         >
           <img src={menuWhite} alt="" width={20} height={20} />
           &nbsp;{rankingsVisible ? t("Piilota") : t("Näytä")}
-        </a>
+        </span>
         {rankingsVisible && (
           <UserRankings rankings={rankings} rejections={rejections} />
         )}
@@ -47,13 +47,13 @@ const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
         <p>{answer.reason}</p>
       </td>
       <td>
-        <a
+        <span
           style={{ cursor: "pointer" }}
           className="surveys_link"
           onClick={() => handleAnswerDelete(answer.email)}
         >
           <img src={deleteWhite} alt="" width={30} height={24} />
-        </a>
+        </span>
       </td>
     </tr>
   );

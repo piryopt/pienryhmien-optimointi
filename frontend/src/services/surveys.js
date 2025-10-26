@@ -175,15 +175,35 @@ const closeSurvey = async (surveyId) => {
 };
 
 const getSurveyResultsData = async (surveyId) => {
-   try {
-   const response = await axios.get(`${baseUrl}/surveys/${surveyId}/results`, {
+  try {
+    const response = await axios.get(`${baseUrl}/surveys/${surveyId}/results`, {
       withCredentials: true
     });
     return response.data;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
+
+const saveResults = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.post(
+      `${baseUrl}/surveys/${surveyId}/results`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export default {
   getActiveSurveys: getActiveSurveys,
@@ -198,4 +218,5 @@ export default {
   openSurvey: openSurvey,
   closeSurvey: closeSurvey,
   getSurveyResultsData: getSurveyResultsData,
-}
+  saveResults: saveResults
+};

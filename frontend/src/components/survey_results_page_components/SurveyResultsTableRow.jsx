@@ -39,14 +39,14 @@ const SurveyResultsTableRow = ({ result, surveyId }) => {
         <p>{result[3]}</p>
       </td>
       <td>
-        <a
+        <span
           className="surveys_link"
           style={{ cursor: "pointer" }}
           onClick={handleRankingClick}
         >
           <img src={menuWhite} alt="" width={20} height={20} />
           &nbsp;{rankingsVisible ? t("Piilota") : t("Näytä")}
-        </a>
+        </span>
         {rankingsVisible && (
           <UserRankings rankings={rankings} rejections={rejections} />
         )}

@@ -12,6 +12,7 @@ const SurveyResultsPage = () => {
   const [additionalInfos, setAdditionalInfos] = useState([]);
   const [happinessData, setHappinessData] = useState([]);
   const [results, setResults] = useState([]);
+  const [resultsSaved, setResultsSaved] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const { t } = useTranslation();
@@ -32,6 +33,7 @@ const SurveyResultsPage = () => {
         setHappinessData(response.happinessData);
         setInfoKeys(response.infos);
         setAdditionalInfos(response.additionalInfoKeys);
+        setResultsSaved(response.resultsSaved);
       } catch (err) {
         console.error("error loading survey results", err);
       } finally {
@@ -62,6 +64,17 @@ const SurveyResultsPage = () => {
     XLSX.writeFile(wb, `${t("tulokset")}.xlsx`);
   };
 
+  const handleSaveResults = () => {
+    try {
+      surveyService.saveResults(id);
+      // success notification here
+      setResultsSaved(true);
+    } catch (err) {
+      // error notification here
+      console.error("Error saving results", err);
+    }
+  };
+
   if (loading) return null;
 
   return (
@@ -85,18 +98,21 @@ const SurveyResultsPage = () => {
         <button
           className="btn btn-outline-primary"
           onClick={handleToExcelFile}
-          style={{ marginTop: "1em" }}
+          style={{ marginTop: "1em", marginBottom: "1em" }}
         >
           {t("Vie tulokset Excel-taulukkoon")}
         </button>
       </div>
       <div>
-        <button
-          className="btn btn-outline-success"
-          style={{ marginTop: "1em", marginBottom: "2em" }}
-        >
-          {t("Tallenna tulokset")}
-        </button>
+        {!resultsSaved && (
+          <button
+            className="btn btn-outline-success"
+            onClick={handleSaveResults}
+            style={{ marginBottom: "2em" }}
+          >
+            {t("Tallenna tulokset")}
+          </button>
+        )}
       </div>
       {droppedGroups.length > 0 && (
         <div>

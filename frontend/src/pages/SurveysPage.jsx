@@ -5,8 +5,7 @@ import SurveysTable from "../components/surveys_page_components/SurveysTable";
 import listWhite from "/images/list_white_36dp.svg";
 
 const SurveysPage = () => {
-  const [activeSurveys, setActiveSurveys] = useState([]);
-  const [closedSurveys, setClosedSurveys] = useState([]);
+  const [surveys, setSurveys] = useState([]);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -16,8 +15,8 @@ const SurveysPage = () => {
           surveyService.getActiveSurveys(),
           surveyService.getClosedSurveys()
         ]);
-        setActiveSurveys(activeRes);
-        setClosedSurveys(closedRes);
+        const updatedSurveys = [...activeRes, ...closedRes];
+        setSurveys(updatedSurveys);
       } catch (err) {
         console.error("Error loading surveys", err);
       }
@@ -39,12 +38,7 @@ const SurveysPage = () => {
         &nbsp;{t("Aiemmat kyselyt")}
       </h2>
       <br />
-      <SurveysTable
-        activeSurveys={activeSurveys}
-        closedSurveys={closedSurveys}
-        setActiveSurveys={setActiveSurveys}
-        setClosedSurveys={setClosedSurveys}
-      />
+      <SurveysTable surveys={surveys} setSurveys={setSurveys} />
     </div>
   );
 };

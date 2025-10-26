@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import assignmentWhite from "/images/assignment_white_36dp.svg";
@@ -101,9 +101,9 @@ const SurveyAnswersPage = () => {
       </i>
       <br />
       <br />
-      <a href="/surveys" className="surveys_link" style={{ float: "right" }}>
+      <Link to="/surveys" className="surveys_link" style={{ float: "right" }}>
         {t("Palaa kyselylistaan")}
-      </a>
+      </Link>
       <br />
       <br />
       {surveyClosed ? (
