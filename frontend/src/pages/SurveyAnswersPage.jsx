@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import assignmentWhite from "/images/assignment_white_36dp.svg";
 import SurveyAnswersTable from "../components/survey_answers_page_components/SurveyAnswersTable";
+import { useNotification } from "../context/NotificationContext";
 
 const SurveyAnswersPage = () => {
   const [answers, setAnswers] = useState([]);
@@ -16,6 +17,7 @@ const SurveyAnswersPage = () => {
 
   const { id } = useParams();
   const { t } = useTranslation();
+  const { showNotification } = useNotification();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,7 +57,7 @@ const SurveyAnswersPage = () => {
       try {
         await surveyService.openSurvey(id);
         setSurveyClosed(false);
-        // alert message?
+        showNotification(t("Kysely avattu"), "success");
       } catch (err) {
         console.error("error opening survey", err);
       }
@@ -67,7 +69,7 @@ const SurveyAnswersPage = () => {
       try {
         await surveyService.closeSurvey(id);
         setSurveyClosed(true);
-        // alert message?
+        showNotification(t("Kysely suljettu"), "success");
       } catch (err) {
         console.error("error opening survey", err);
       }
@@ -76,7 +78,10 @@ const SurveyAnswersPage = () => {
 
   const handleAssignGroups = () => {
     if (answers.length === 0) {
-      // alert message that groups can't be assigned
+      showNotification(
+        t("Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia"),
+        "error"
+      );
       return;
     }
     navigate(`/surveys/${id}/results`);

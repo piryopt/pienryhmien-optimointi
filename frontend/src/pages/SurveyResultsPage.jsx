@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
+import { useNotification } from "../context/NotificationContext";
 import surveyService from "../services/surveys";
 import SurveyResultsTable from "../components/survey_results_page_components/SurveyResultsTable";
 
@@ -17,6 +18,7 @@ const SurveyResultsPage = () => {
 
   const { t } = useTranslation();
   const { id } = useParams();
+  const { showNotification } = useNotification();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +26,6 @@ const SurveyResultsPage = () => {
       try {
         const response = await surveyService.getSurveyResultsData(id);
         if (!response.results) {
-          // notification here
           navigate(`/surveys/${id}/answers`, { replace: true });
         }
         setSurveyResultsData(response);
@@ -67,10 +68,10 @@ const SurveyResultsPage = () => {
   const handleSaveResults = () => {
     try {
       surveyService.saveResults(id);
-      // success notification here
+      showNotification(t("Ryhmäjako tallennettu"), "success");
       setResultsSaved(true);
     } catch (err) {
-      // error notification here
+      showNotification(t("Ryhmäjaon tallennus epäonnistui"), "error");
       console.error("Error saving results", err);
     }
   };

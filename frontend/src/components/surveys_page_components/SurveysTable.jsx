@@ -7,16 +7,20 @@ import toggleOffWhite from "/images/toggle_off_white_36dp.svg";
 import scheduleWhite from "/images/schedule_white_36dp.svg";
 import menuWhite from "/images/menu_white_36dp.svg";
 import surveyService from "../../services/surveys";
+import { useNotification } from "../../context/NotificationContext";
 
 const SurveysTable = ({ surveys, setSurveys }) => {
   const { t } = useTranslation();
+  const { showNotification } = useNotification();
 
   const handleDeleteClick = async (surveyId) => {
     if (window.confirm(t("Haluatko varmasti poistaa kyselyn?"))) {
       try {
         await surveyService.deleteSurvey(surveyId);
         setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
+        showNotification(t("Kysely poistettu"), "success");
       } catch (err) {
+        showNotification(t("Kyselyn poistaminen epäonnistui"), "error");
         console.error("Error deleting survey:", err);
       }
     }

@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useNotification } from "../../context/NotificationContext";
 import surveyService from "../../services/surveys";
 import Table from "../Table";
 import SurveyAnswersTableRow from "./SurveyAnswersTableRow";
@@ -9,6 +10,8 @@ import personOffWhite from "/images/person_off_white_36dp.svg";
 
 const SurveyAnswersTable = (props) => {
   const { t } = useTranslation();
+  const { showNotification } = useNotification();
+
   const columns = [
     { title: t("Sähköposti"), icon: emailWhite },
     { title: t("Valinnat"), icon: doneWhite, style: { minWidth: "12em" } },
@@ -27,7 +30,9 @@ const SurveyAnswersTable = (props) => {
         props.setAnswers(updatedAnswers);
         props.setFilteredAnswers(updatedFilteredAnswers);
         props.setSurveyAnswersAmount((prev) => prev - 1);
+        showNotification(t("Vastaus poistettu"), "success");
       } catch (err) {
+        showNotification(t("Vastauksen poistaminen epäonnistui"), "error");
         console.error("Error deleting answer:", err);
       }
     }

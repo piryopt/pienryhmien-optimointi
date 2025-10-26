@@ -5,12 +5,16 @@ import contentCopyWhite from "/images/content_copy_white_36dp.svg";
 import editWhite from "/images/edit_white_36dp.svg";
 import folderCopyWhite from "/images/folder_copy_white_36dp.svg";
 import deleteWhite from "/images/delete_white_36dp.svg";
+import { useNotification } from "../../context/NotificationContext";
 
 const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
   const { t } = useTranslation();
+  const { showNotification } = useNotification();
+
   const handleCopyUrlClick = () => {
     const currUrl = window.location.href;
     navigator.clipboard.writeText(`${currUrl}/${survey.id}`);
+    showNotification(t("Kyselyn osoite kopioitu leikepöydälle"), "success");
   };
 
   return (
