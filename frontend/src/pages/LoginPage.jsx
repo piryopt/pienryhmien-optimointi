@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthProvider";
+import { useNotification } from "../context/NotificationContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login, debug } = useAuth();
+  const { showNotification } = useNotification();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -14,8 +16,10 @@ const Login = () => {
     e.preventDefault();
     try {
       await login({ username, password });
+      showNotification(t("Kirjautuminen onnistui"), "success");
       navigate("/"); // go to frontpage after login
     } catch (err) {
+      showNotification(t("Kirjautuminen epäonnistui"), "error");
       console.error("Login failed", err);
     }
   };
