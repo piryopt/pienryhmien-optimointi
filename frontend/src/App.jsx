@@ -9,6 +9,7 @@ import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
 import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
 import SurveyResultsPage from "./pages/SurveyResultsPage";
+import FeedbackPage from "./pages/FeedbackPage";
 import RequireAuth from "./components/RequireAuth";
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 
@@ -69,6 +70,14 @@ const App = () => {
               element={
                 <RequireAuth>
                   <SurveyResultsPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/feedback"
+              element={
+                <RequireAuth>
+                  <FeedbackPage />
                 </RequireAuth>
               }
             />
