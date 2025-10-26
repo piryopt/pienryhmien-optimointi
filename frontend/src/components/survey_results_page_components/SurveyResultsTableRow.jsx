@@ -23,6 +23,16 @@ const SurveyResultsTableRow = ({ result, surveyId }) => {
       console.error("Error showing rankings", err);
     }
   };
+
+  const rankingStyle = {
+    color:
+      result[3] === "Hylätty"
+        ? "red"
+        : result[3] === "Ei järjestetty"
+          ? "yellow"
+          : ""
+  };
+
   return (
     <tr>
       {/* result = [[userId, username], email, [surveyChoiceId, surveyChoiceName], ordinalChoice] */}
@@ -36,7 +46,7 @@ const SurveyResultsTableRow = ({ result, surveyId }) => {
         <p>{result[2][1]}</p>
       </td>
       <td>
-        <p>{result[3]}</p>
+        <p style={rankingStyle}>{result[3]}</p>
       </td>
       <td>
         <span

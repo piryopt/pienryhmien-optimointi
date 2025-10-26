@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 import { useNotification } from "../context/NotificationContext";
 import surveyService from "../services/surveys";
 import SurveyResultsTable from "../components/survey_results_page_components/SurveyResultsTable";
+import Happiness from "../components/survey_results_page_components/Happiness";
 
 const SurveyResultsPage = () => {
   const [surveyResultsData, setSurveyResultsData] = useState({});
@@ -81,20 +82,10 @@ const SurveyResultsPage = () => {
   return (
     <div>
       <h2>{t("Lajittelun tulokset")}</h2>
-      <b>
-        {t("Ryhmävalintojen keskiarvo")}: {surveyResultsData.happiness}
-      </b>
-      <div>
-        {/* translations will fail here */}
-        {happinessData.map((h, i) => (
-          <div key={i}>
-            <label>
-              {h[0]}
-              {h[1]}
-            </label>
-          </div>
-        ))}
-      </div>
+      <Happiness
+        average={surveyResultsData.happiness}
+        happinessData={happinessData}
+      />
       <div>
         <button
           className="btn btn-outline-primary"

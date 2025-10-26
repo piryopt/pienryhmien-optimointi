@@ -83,6 +83,8 @@ const SurveyAnswersPage = () => {
         "error"
       );
       return;
+    } else if (answers.length > surveyData.availableSpaces) {
+      navigate(`/surveys/${id}/group_sizes`);
     }
     navigate(`/surveys/${id}/results`);
   };
