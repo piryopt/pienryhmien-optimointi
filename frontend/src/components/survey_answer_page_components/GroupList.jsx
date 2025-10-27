@@ -1,8 +1,25 @@
 import { Droppable, Draggable } from "@hello-pangea/dnd";
-import '../../static/css/answerPage.css';
+import "../../static/css/answerPage.css";
 
-const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) => {
-  const borderColor = id === "good" ? "green" : id === "bad" ? "darkred" : "gray";
+const GroupList = ({
+  id,
+  items = [],
+  expandedIds,
+  toggleExpand,
+  choices = [],
+  multiphase = false
+}) => {
+  const borderColor = multiphase
+    ? id.endsWith("good")
+      ? "green"
+      : id.endsWith("bad")
+        ? "darkred"
+        : "gray"
+    : id === "good"
+      ? "green"
+      : id === "bad"
+        ? "darkred"
+        : "gray";
 
   const choiceMap = new Map(choices.map((c) => [String(c.id), c]));
 
@@ -13,13 +30,18 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
           ref={provided.innerRef}
           {...provided.droppableProps}
           className="group-container"
-          style={{ border: `2px solid ${borderColor}` }} // keep dynamic border color inline
+          style={{ border: `2px solid ${borderColor}` }}
         >
           {items.map((item, index) => {
-            const choice = choiceMap.get(String(item.id)) || (item.infos ? item : null);
+            const choice =
+              choiceMap.get(String(item.id)) || (item.infos ? item : null);
 
             return (
-              <Draggable key={String(item.id)} draggableId={String(item.id)} index={index}>
+              <Draggable
+                key={String(item.id)}
+                draggableId={String(item.id)}
+                index={index}
+              >
                 {(provided) => (
                   <div
                     ref={provided.innerRef}
@@ -29,23 +51,43 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
                     role="button"
                     tabIndex={0}
                     className="group-item"
-                    style={provided.draggableProps.style} // keep drag transform/position
+                    style={provided.draggableProps.style}
                   >
                     <h2 className="group-item-title">
-                      <span className="group-name">{item.name}</span>
+                      {id.endsWith("good") && (
+                        <span className="rank-number">{index + 1}. </span>
+                      )}
+                      <span
+                        style={{
+                          marginLeft: id.endsWith("good") ? "10px" : "0px"
+                        }}
+                        className="group-name"
+                      >
+                        {item.name}
+                      </span>
                       {item.mandatory && (
                         <span className="group-mandatory">Pakollinen</span>
                       )}
                     </h2>
-                    <p className="group-slots">Ryhmän maksimikoko: {item.slots}</p>
-                    {item.mandatory && <p className="group-minsize">Ryhmän minimikoko: {item.min_size}</p>}
+                    <p className="group-slots">
+                      Ryhmän maksimikoko: {item.slots}
+                    </p>
+                    {item.mandatory && (
+                      <p className="group-minsize">
+                        Ryhmän minimikoko: {item.min_size}
+                      </p>
+                    )}
 
                     {expandedIds.has(String(item.id)) && (
                       <div className="group-expanded">
-                        {choice && Array.isArray(choice.infos) && choice.infos.length > 0 ? (
+                        {choice &&
+                        Array.isArray(choice.infos) &&
+                        choice.infos.length > 0 ? (
                           choice.infos.map((infoObj, idx) => {
                             const entries = Object.entries(infoObj);
-                            const [key, value] = entries.length ? entries[0] : ["", ""];
+                            const [key, value] = entries.length
+                              ? entries[0]
+                              : ["", ""];
                             return (
                               <div key={idx} className="info-entry">
                                 <strong className="info-key">{key}:</strong>
@@ -69,6 +111,5 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [] }) 
     </Droppable>
   );
 };
-
 
 export default GroupList;
