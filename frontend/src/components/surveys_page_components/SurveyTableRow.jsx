@@ -4,11 +4,23 @@ import SurveyMoreInfo from "./SurveyMoreInfo";
 import menu_white from "/images/menu_white_36dp.svg";
 import insertDriveFileWhite from "/images/insert_drive_file_white_36dp.svg";
 import insertPageBreakWhite from "/images/insert_page_break_white_36dp.svg";
+import { Link } from "react-router-dom";
 
 const SurveyTableRow = ({ survey, handleDeleteClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
   const { t } = useTranslation();
 
+  if (survey.id === "separatingRow") {
+    return (
+      <tr>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+      </tr>
+    );
+  }
   return (
     <tr>
       <td>
@@ -19,10 +31,10 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
           width="20"
           height="20"
         />
-        <a className="surveys_link" href={`/surveys/${survey.id}`}>
+        <Link className="surveys_link" to={`/surveys/${survey.id}`}>
           &nbsp;
           {survey.surveyname}
-        </a>
+        </Link>
       </td>
       <td>
         <p style={{ color: survey.closed ? "orangered" : "green" }}>

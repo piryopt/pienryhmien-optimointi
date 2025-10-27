@@ -1,20 +1,25 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import manageSearchWhite from "/images/manage_search_white_36dp.svg";
 import contentCopyWhite from "/images/content_copy_white_36dp.svg";
 import editWhite from "/images/edit_white_36dp.svg";
 import folderCopyWhite from "/images/folder_copy_white_36dp.svg";
 import deleteWhite from "/images/delete_white_36dp.svg";
+import { useNotification } from "../../context/NotificationContext";
 
 const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
   const { t } = useTranslation();
+  const { showNotification } = useNotification();
+
   const handleCopyUrlClick = () => {
     const currUrl = window.location.href;
     navigator.clipboard.writeText(`${currUrl}/${survey.id}`);
+    showNotification(t("Kyselyn osoite kopioitu leikepöydälle"), "success");
   };
 
   return (
     <div>
-      <a className="surveys_link" href={`/surveys/${survey.id}/answers`}>
+      <Link className="surveys_link" to={`/surveys/${survey.id}/answers`}>
         <img
           src={manageSearchWhite}
           alt=""
@@ -23,11 +28,11 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           height="20"
         />
         &nbsp;{t("Tarkastele tuloksia")}
-      </a>
+      </Link>
       {!survey.closed && (
         <>
           <br />
-          <a
+          <span
             className="surveys_link"
             onClick={handleCopyUrlClick}
             style={{ cursor: "pointer" }}
@@ -40,11 +45,11 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
               height="20"
             />
             &nbsp;{t("Kopioi kyselyn osoite leikepöydälle")}
-          </a>
+          </span>
         </>
       )}
       <br></br>
-      <a href={`/surveys/${survey.id}/edit`} className="surveys_link">
+      <Link to={`/surveys/${survey.id}/edit`} className="surveys_link">
         <img
           src={editWhite}
           alt=""
@@ -53,11 +58,11 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           height="20"
         />
         &nbsp;{t("Muokkaa kyselyä tai lisää siihen ylläpitäjä")}
-      </a>
+      </Link>
       <br></br>
-      <a
+      <Link
         className="surveys_link"
-        href={`/surveys/create?fromtemplate=${survey.id}`}
+        to={`/surveys/create?fromtemplate=${survey.id}`}
       >
         <img
           src={folderCopyWhite}
@@ -67,9 +72,9 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           height="20"
         />
         &nbsp;{t("Kopioi kysely")}
-      </a>
+      </Link>
       <br></br>
-      <a
+      <span
         style={{ cursor: "pointer" }}
         className="surveys_link"
         onClick={() => handleDeleteClick(survey.id, survey.closed)}
@@ -82,7 +87,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           height="20"
         />
         &nbsp;{t("Poista kysely")}
-      </a>
+      </span>
     </div>
   );
 };

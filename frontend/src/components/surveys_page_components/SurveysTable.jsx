@@ -1,61 +1,51 @@
 import { useTranslation } from "react-i18next";
+import Table from "../Table";
 import SurveyTableRow from "./SurveyTableRow";
-import SurveyTableHeaders from "./SurveyTableHeaders";
+import assignmentWhite from "/images/assignment_white_36dp.svg";
+import toggleOnWhite from "/images/toggle_on_white_36dp.svg";
+import toggleOffWhite from "/images/toggle_off_white_36dp.svg";
+import scheduleWhite from "/images/schedule_white_36dp.svg";
+import menuWhite from "/images/menu_white_36dp.svg";
 import surveyService from "../../services/surveys";
+import { useNotification } from "../../context/NotificationContext";
 
-const SurveysTable = ({
-  activeSurveys,
-  closedSurveys,
-  setActiveSurveys,
-  setClosedSurveys
-}) => {
+const SurveysTable = ({ surveys, setSurveys }) => {
   const { t } = useTranslation();
-  const handleDeleteClick = async (surveyId, closedStatus) => {
+  const { showNotification } = useNotification();
+
+  const handleDeleteClick = async (surveyId) => {
     if (window.confirm(t("Haluatko varmasti poistaa kyselyn?"))) {
       try {
         await surveyService.deleteSurvey(surveyId);
-        if (!closedStatus) {
-          const updatedSurveys = activeSurveys.filter((s) => s.id !== surveyId);
-          setActiveSurveys(updatedSurveys);
-        } else {
-          const updatedSurveys = closedSurveys.filter((s) => s.id !== surveyId);
-          setClosedSurveys(updatedSurveys);
-        }
+        setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
+        showNotification(t("Kysely poistettu"), "success");
       } catch (err) {
+        showNotification(t("Kyselyn poistaminen epäonnistui"), "error");
         console.error("Error deleting survey:", err);
       }
     }
   };
 
+  const columns = [
+    { title: t("Kysely"), icon: assignmentWhite },
+    { title: t("Kyselyn tila"), icon: toggleOnWhite },
+    { title: t("Ryhmät luotu"), icon: toggleOffWhite },
+    { title: t("Toiminnot"), icon: menuWhite, style: { minWidth: "22em" } },
+    { title: t("Vastausaika päättyy"), icon: scheduleWhite }
+  ];
+
   return (
-    <table className="table table-striped">
-      <thead className="table-dark">
-        <SurveyTableHeaders />
-      </thead>
-      <tbody>
-        {activeSurveys.map((survey, i) => (
-          <SurveyTableRow
-            survey={survey}
-            key={i}
-            handleDeleteClick={handleDeleteClick}
-          />
-        ))}
-        <tr>
-          <td>---</td>
-          <td>---</td>
-          <td>---</td>
-          <td>---</td>
-          <td>---</td>
-        </tr>
-        {closedSurveys.map((survey, i) => (
-          <SurveyTableRow
-            survey={survey}
-            key={i}
-            handleDeleteClick={handleDeleteClick}
-          />
-        ))}
-      </tbody>
-    </table>
+    <Table
+      columns={columns}
+      data={surveys}
+      renderRow={(survey, i) => (
+        <SurveyTableRow
+          key={i}
+          survey={survey}
+          handleDeleteClick={handleDeleteClick}
+        />
+      )}
+    />
   );
 };
 
