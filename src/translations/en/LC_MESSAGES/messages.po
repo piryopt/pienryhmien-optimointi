@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 13:21+0300\n"
-"PO-Revision-Date: 2025-10-22 13:30+0300\n"
+"POT-Creation-Date: 2025-10-28 12:32+0200\n"
+"PO-Revision-Date: 2025-10-28 12:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: en <LL@li.org>\n"
 "Language: en\n"
@@ -350,7 +350,7 @@ msgid "Otsikko"
 msgstr "Title"
 
 #: src/templates/feedback.html:16 src/templates/feedback.html:18
-msgid "Palutteen tyyppi"
+msgid "Palautteen tyyppi"
 msgstr "Type of feedback"
 
 #: src/templates/feedback.html:20
