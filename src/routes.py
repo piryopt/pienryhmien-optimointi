@@ -501,9 +501,17 @@ def api_survey(survey_id):
         }
     )
 
+@bp.route("/api/surveys/multiphase/<string:survey_id>", methods=["POST"])
+def api_survey_submit(survey_id):
+    """
+    API endpoint for submitting multiphase survey answers
+    """
+    print(request.data)
+    return jsonify({"status": 1, "message": "success"})
+
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["POST"])
-def api_survey_submit(survey_id):
+def api_multiphase_survey_submit(survey_id):
     """
     API endpoint for submitting survey answers
     """
