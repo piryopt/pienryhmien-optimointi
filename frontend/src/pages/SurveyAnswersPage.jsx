@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import assignmentWhite from "/images/assignment_white_36dp.svg";
 import SurveyAnswersTable from "../components/survey_answers_page_components/SurveyAnswersTable";
+import { useNotification } from "../context/NotificationContext";
 
 const SurveyAnswersPage = () => {
   const [answers, setAnswers] = useState([]);
@@ -12,15 +13,19 @@ const SurveyAnswersPage = () => {
   const [surveyAnswersAmount, setSurveyAnswersAmount] = useState(0);
   const [surveyClosed, setSurveyClosed] = useState(false);
   const [searchEmail, setSearchEmail] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
   const { t } = useTranslation();
+  const { showNotification } = useNotification();
   const navigate = useNavigate();
 
   useEffect(() => {
     const getSurveyAnswersData = async () => {
       try {
         const responseData = await surveyService.getSurveyAnswersData(id);
+        if (responseData.answersSaved)
+          navigate(`/surveys/${id}/results`, { replace: true });
         setAnswers(responseData.surveyAnswers);
         setFilteredAnswers(responseData.surveyAnswers);
         setSurveyData(responseData);
@@ -28,6 +33,11 @@ const SurveyAnswersPage = () => {
         setSurveyClosed(responseData.closed);
       } catch (err) {
         console.error("Error loading survey data", err);
+      } finally {
+        // fixes bug where the default content flashes before navigation
+        setTimeout(() => {
+          setLoading(false);
+        }, 1);
       }
     };
     getSurveyAnswersData();
@@ -46,8 +56,8 @@ const SurveyAnswersPage = () => {
     if (window.confirm(t("Haluatko varmasti avata kyselyn uudestaan?"))) {
       try {
         await surveyService.openSurvey(id);
-        navigate("/surveys");
-        // alert message?
+        setSurveyClosed(false);
+        showNotification(t("Kysely avattu"), "success");
       } catch (err) {
         console.error("error opening survey", err);
       }
@@ -59,14 +69,27 @@ const SurveyAnswersPage = () => {
       try {
         await surveyService.closeSurvey(id);
         setSurveyClosed(true);
-        // alert message?
+        showNotification(t("Kysely suljettu"), "success");
       } catch (err) {
         console.error("error opening survey", err);
       }
     }
   };
 
-  const handleAssignGroups = () => {};
+  const handleAssignGroups = () => {
+    if (answers.length === 0) {
+      showNotification(
+        t("Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia"),
+        "error"
+      );
+      return;
+    } else if (answers.length > surveyData.availableSpaces) {
+      navigate(`/surveys/${id}/group_sizes`);
+    }
+    navigate(`/surveys/${id}/results`);
+  };
+
+  if (loading) return null;
 
   return (
     <div>
@@ -85,22 +108,27 @@ const SurveyAnswersPage = () => {
       </i>
       <br />
       <br />
-      <a href="/surveys" className="surveys_link" style={{ float: "right" }}>
+      <Link to="/surveys" className="surveys_link" style={{ float: "right" }}>
         {t("Palaa kyselylistaan")}
-      </a>
+      </Link>
       <br />
       <br />
-      <button className="btn btn-outline-primary" onClick={handleAssignGroups}>
-        {t("Jaa ryhmiin")}
-      </button>
       {surveyClosed ? (
-        <button
-          className="btn btn-outline-warning"
-          style={{ float: "right" }}
-          onClick={handleOpenSurveyClick}
-        >
-          {t("Avaa kysely uudelleen")}
-        </button>
+        <>
+          <button
+            className="btn btn-outline-warning"
+            style={{ float: "right" }}
+            onClick={handleOpenSurveyClick}
+          >
+            {t("Avaa kysely uudelleen")}
+          </button>
+          <button
+            className="btn btn-outline-primary"
+            onClick={handleAssignGroups}
+          >
+            {t("Jaa ryhmiin")}
+          </button>
+        </>
       ) : (
         <button
           className="btn btn-outline-warning"

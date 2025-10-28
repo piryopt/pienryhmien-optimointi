@@ -32,7 +32,8 @@ class SurveyChoicesService:
         args:
             survey_choice_id: The id of the survey choice
         """
-        return self._survey_choices_repository.get_survey_choice(survey_choice_id)
+        survey_choice = self._survey_choices_repository.get_survey_choice(survey_choice_id)
+        return dict(survey_choice._mapping)
 
     def get_survey_choice_min_size(self, survey_choice_id: int):
         """
@@ -66,7 +67,8 @@ class SurveyChoicesService:
         args:
             choice_id: The id of the survey choice
         """
-        return self._survey_choices_repository.get_choice_additional_infos(choice_id)
+        additional_infos = self._survey_choices_repository.get_choice_additional_infos(choice_id)
+        return [dict(row._mapping) for row in additional_infos]
 
     def get_choice_additional_infos_not_hidden(self, choice_id: int):
         """

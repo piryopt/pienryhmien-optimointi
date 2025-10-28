@@ -12,7 +12,8 @@ li {
   opacity: 0.8;
 }
 
-a.surveys_link {
+a.surveys_link,
+span.surveys_link {
   color: rgb(255, 255, 255);
   opacity: 0.8;
   text-decoration: none;
@@ -278,7 +279,8 @@ main > div.container {
   margin-bottom: 120px;
 }
 
-a.surveys_link:hover {
+a.surveys_link:hover,
+span.surveys_link:hover {
   color: #ffffff;
   text-decoration: none;
   opacity: 0.5;
