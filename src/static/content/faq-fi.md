@@ -11,9 +11,9 @@
 ## Miten pakolliset ryhmät täytetään?
 - Jakaja pudottaa oletusarvoisesti ne ryhmät, jotka eivät ryhmäjaossa täyty minimikokoon asti. Kyselyn laatija voi kuitenkin määrittää ryhmän pakolliseksi. Tällöin kyseinen ryhmä täytetään vähintään minimikokoon asti vastauksista riippumatta.
     - Tämä tarkoittaa, että ryhmään voidaan tarvittaessa sijoittaa myös sellaisia vastaajia, jotka eivät ole valinneet sitä. Ryhmään pyritään kuitenkin ensisijaisesti sijoittamaan ne vastaajat, jotka pitävät siitä eniten.
-- Pakolliseen ryhmään voidaan tarvittaessa pakottaa myös sellainen opiskelija, joka on **hylännyt** sen. 
-    - Tämä tehdään vain, jos ryhmän minimikokoa ei saada täyteen sellaisista opiskelijoista, jotka eivät ole hylänneet ryhmää.
-    - Tällöin kyselyn laatijan vastuulla on tarkastella vastaajien perusteluita hylkäykselle ja arvioida, voidaanko kyseinen opiskelija todella sijoittaa ryhmään.
+- Pakolliseen ryhmään voidaan tarvittaessa pakottaa myös sellainen opiskelija, joka on **kieltänyt** sen. 
+    - Tämä tehdään vain, jos ryhmän minimikokoa ei saada täyteen sellaisista opiskelijoista, jotka eivät ole kieltäneet ryhmää.
+    - Tällöin kyselyn laatijan vastuulla on tarkastella vastaajien perusteluita kiellolle ja arvioida, voidaanko kyseinen opiskelija todella sijoittaa ryhmään.
 
 **HUOM!** Pakollinen ryhmä voidaan kuitenkin edelleen pudottaa jaosta, jos vastaajia on niin vähän, etteivät he riitä täyttämään kaikkia pakollisia ryhmiä minimikokoon asti.
 
