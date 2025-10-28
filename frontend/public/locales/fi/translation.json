@@ -23,7 +23,7 @@
   "Kysely": "Kysely",
   "Kyselyn tila": "Kyselyn tila",
   "Käynnissä olevat kyselyt": "Käynnissä olevat kyselyt",
-  "Luotuja kyselyitä": "Luotuja kyselyitä: {{maara}}",
+  "Luotuja kyselyitä": "Luotuja kyselyitä: {{count}}",
   "Luo uusi kysely": "Luo uusi kysely",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
   "Luo uusi monivaiheinen kysely": "Luo uusi monivaiheinen kysely",
@@ -49,7 +49,7 @@
   "UKK": "UKK",
   "Valinnat": "Valinnat",
   "Vastauksen poistaminen": "Vastauksen poistaminen",
-  "Vastaukset": "Vastaukset: {{maara}}",
+  "Vastaukset": "Vastaukset: {{count}}",
   "Vastauksia": "Vastauksia",
-  "Vastausaika päättyy": "Vastausaika päättyy"
+  "Vastausaika päättyy": "Vastausaika päättyy: {{timeEnd}}"
 }

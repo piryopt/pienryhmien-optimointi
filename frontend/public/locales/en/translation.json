@@ -23,7 +23,7 @@
   "Kysely": "",
   "Kyselyn tila": "",
   "Käynnissä olevat kyselyt": "Ongoing surveys",
-  "Luotuja kyselyitä": "Created surveys: {{maara}}",
+  "Luotuja kyselyitä": "Created surveys: {{count}}",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Create a new survey or import existing response options from a CSV file",
   "Luo uusi kysely": "Create a new survey",
   "Luo uusi monivaiheinen kysely": "Create a new multiphase survey",
@@ -49,7 +49,7 @@
   "UKK": "FAQ",
   "Valinnat": "",
   "Vastauksen poistaminen": "",
-  "Vastaukset": "Answers: {{maara}}",
+  "Vastaukset": "Answers: {{count}}",
   "Vastauksia": "",
-  "Vastausaika päättyy": ""
+  "Vastausaika päättyy": "Response time expires: {{timeEnd}}"
 }

@@ -12,6 +12,7 @@ const FrontPageButton = ({
   imgSrc,
   mainText,
   additionalText,
+  topRightText,
   additionalVars
 }) => {
   const { t } = useTranslation();
@@ -22,16 +23,24 @@ const FrontPageButton = ({
       className="list-group-item list-group-item-action"
       style={{ borderRadius: "12px" }}
     >
-      <div className="d-flex w-100">
-        <img
-          src={imgSrc}
-          alt=""
-          width="34"
-          height="30"
-          className="d-inline-block align-text-top"
-          style={{ marginRight: "8px" }}
-        />
-        <p style={{ fontSize: "130%" }}>{t(mainText)}</p>
+      <div className="d-flex w-100 justify-content-between">
+        <div className="d-flex w-100">
+          <img
+            src={imgSrc}
+            alt=""
+            width="34"
+            height="30"
+            className=""
+            style={{ marginRight: "8px" }}
+          />
+          <p style={{ fontSize: "130%" }}>{t(mainText, additionalVars)}</p>
+        </div>
+
+        {topRightText && (
+          <small className="text-muted">
+            {t(topRightText, additionalVars)}
+          </small>
+        )}
       </div>
       <small className="text-muted">{t(additionalText, additionalVars)}</small>
     </Link>
@@ -81,7 +90,7 @@ const FrontPage = () => {
             imgSrc={listIcon}
             mainText="Näytä vanhat kyselyt"
             additionalText="Luotuja kyselyitä"
-            additionalVars={{ maara: createdSurveys }}
+            additionalVars={{ count: createdSurveys }}
           />
         </div>
       </div>
@@ -90,11 +99,16 @@ const FrontPage = () => {
       <div className="row">
         {activeSurveys.map((survey) => (
           <FrontPageButton
+            key={survey.id}
             path={`surveys/${survey.id}`}
             imgSrc={surveyIcon}
             mainText={survey.surveyname}
             additionalText="Vastaukset"
-            additionalVars={{ maara: createdSurveys }}
+            topRightText="Vastausaika päättyy"
+            additionalVars={{
+              timeEnd: survey.time_end,
+              count: survey.response_count
+            }}
           />
         ))}
       </div>
