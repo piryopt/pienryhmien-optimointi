@@ -25,6 +25,18 @@ export const buildCreateSurveySchema = (t) => {
           combined.setHours(hh || 0, mm || 0, 0, 0);
           return combined.getTime() > Date.now();
         }
-      )
+      ),
+    minChoicesSetting: yup.string().oneOf(["all", "custom"]).required(),
+    minchoices: yup
+      .number()
+      .typeError(t("Kentän tulee olla kokonaisluku"))
+      .integer(t("Kentän tulee olla kokonaisluku"))
+      .min(0, t("Kentän tulee olla vähintään 0"))
+      .when("minChoicesSetting", {
+        is: "custom",
+        then: (schema) =>
+          schema.required(t("Priorisoitujen ryhmien vähimmäismäärä vaaditaan")),
+        otherwise: (schema) => schema.notRequired().default(1)
+      })
   });
 };

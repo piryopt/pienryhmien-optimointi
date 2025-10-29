@@ -26,6 +26,8 @@
     "react-i18next": "^16.0.1",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.4",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
     "xlsx": "^0.18.5",
     "yup": "^1.7.1"
   },

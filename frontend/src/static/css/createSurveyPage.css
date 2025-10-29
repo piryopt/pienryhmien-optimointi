@@ -16,11 +16,6 @@ section {
   cursor: not-allowed;
 }
 
-th:hover,
-td:hover {
-  background-color: #99999b;
-}
-
 #table-headers {
   white-space: nowrap;
 }

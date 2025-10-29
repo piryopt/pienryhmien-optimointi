@@ -9,6 +9,11 @@ import csrfService from "../services/csrf";
 import Header from "../components/create_survey_page_components/Header";
 import SurveyNameInput from "../components/create_survey_page_components/SurveyNameInput";
 import SurveyDateOfClosing from "../components/create_survey_page_components/SurveyDateOfClosing";
+import SurveyDescription from "../components/create_survey_page_components/SurveyDescription";
+import MinChoicesSection from "../components/create_survey_page_components/MinChoicesSection";
+import DenyChoicesSection from "../components/create_survey_page_components/DenyChoicesSection";
+import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
+import PrioritizedGroupsDescription from "../components/create_survey_page_components/PrioritizedGroupsDescription";
 import "../static/css/createSurveyPage.css";
 
 const CreateSurveyPage = () => {
@@ -26,7 +31,10 @@ const CreateSurveyPage = () => {
       choices: [],
       minchoices: 1,
       surveyInformation: "",
-      allowedDeniedChoices: [],
+      // radio setting defaults
+      minChoicesSetting: "all",
+      denyChoicesSetting: "hide",
+      allowedDeniedChoices: "",
       allowSearchVisibility: false
     },
     mode: "onBlur"
@@ -104,6 +112,11 @@ const CreateSurveyPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <SurveyNameInput />
           <SurveyDateOfClosing />
+          <SurveyDescription />
+          <MinChoicesSection />
+          <DenyChoicesSection />
+          <SearchVisibilitySection />
+          <PrioritizedGroupsDescription />
           <button type="submit" className="btn btn-primary">
             {t("Luo kysely")}
           </button>
