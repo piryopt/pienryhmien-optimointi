@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const FrontPage = () => {
   const { t } = useTranslation();
@@ -6,21 +7,21 @@ const FrontPage = () => {
   return (
     <div>
       <div>
-        <a href="/surveys/create">
+        <Link to="/surveys/create">
           {t(
             "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta"
           )}
-        </a>
+        </Link>
       </div>
       <div>
-        <a href="/multiphase/survey/create">
+        <Link to="/multiphase/survey/create">
           {t(
             "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot"
           )}
-        </a>
+        </Link>
       </div>
       <div>
-        <a href="/surveys">{t("Näytä vanhat kyselyt")}</a>
+        <Link to="/surveys">{t("Näytä vanhat kyselyt")}</Link>
       </div>
     </div>
   );

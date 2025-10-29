@@ -219,52 +219,60 @@ def new_survey_post():
     """
     Post method for creating a new survey.
     """
-    data = request.get_json()
-    validation = survey_service.validate_created_survey(data)
-    if not validation["success"]:
-        return jsonify(validation["message"])
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 
-    survey_name = data["surveyGroupname"]
-    description = data["surveyInformation"]
-    user_id = session.get("user_id", 0)
-    survey_choices = data["choices"]
-    minchoices = data["minchoices"]
-    date_end = data["enddate"]
-    time_end = data["endtime"]
+        validation = survey_service.validate_created_survey(data)
+        if not validation["success"]:
+            # return validation message in consistent JSON + 400
+            return jsonify({"status": "0", "msg": validation["message"]}), 400
 
-    allowed_denied_choices = data["allowedDeniedChoices"]
-    allow_search_visibility = data["allowSearchVisibility"]
+        survey_name = data.get("surveyGroupname", "")
+        description = data.get("surveyInformation", "")
+        user_id = session.get("user_id", 0)
+        survey_choices = data.get("choices", [])
+        minchoices = data.get("minchoices", 0)
+        date_end = data.get("enddate", "")
+        time_end = data.get("endtime", "")
+        allowed_denied_choices = data.get("allowedDeniedChoices", [])
+        allow_search_visibility = data.get("allowSearchVisibility", False)
 
-    date_string = f"{date_end} {time_end}"
-    format_code = "%d.%m.%Y %H:%M"
+        date_string = f"{date_end} {time_end}"
+        format_code = "%d.%m.%Y %H:%M"
+        try:
+            parsed_time = datetime.strptime(date_string, format_code)
+        except Exception:
+            return jsonify({"status": "0", "msg": gettext("Invalid date/time format")}), 400
 
-    parsed_time = datetime.strptime(date_string, format_code)
+        if parsed_time <= datetime.now():
+            msg = gettext("Vastausajan päättyminen ei voi olla menneisyydessä")
+            return jsonify({"status": "0", "msg": msg}), 400
 
-    if parsed_time <= datetime.now():
-        msg = gettext("Vastausajan päättyminen ei voi olla menneisyydessä")
-        response = {"status": "0", "msg": msg}
-        return jsonify(response)
+        if minchoices > len(survey_choices):
+            msg = gettext("Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmäismäärä! Kyselyn luominen epäonnistui!")
+            return jsonify({"status": "0", "msg": msg}), 400
 
-    if minchoices > len(survey_choices):
-        msg = gettext("Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmiäismäärä! Kyselyn luominen epäonnistui!")
-        response = {"status": "0", "msg": msg}
-        return jsonify(response)
+        survey_id = survey_service.create_new_survey_manual(
+            survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility
+        )
+        if not survey_id:
+            msg = gettext("Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!")
+            return jsonify({"status": "0", "msg": msg}), 409
 
-    survey_id = survey_service.create_new_survey_manual(
-        survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility
-    )
-    if not survey_id:
-        msg = gettext("Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!")
-        response = {"status": "0", "msg": msg}
-        return jsonify(response)
-    email = user_service.get_email(user_id)
-    (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
-    if not success:
-        response = {"status": "0", "msg": message}
-        return jsonify(response)
-    msg = gettext("Uusi kysely luotu!")
-    response = {"status": "1", "msg": msg}
-    return jsonify(response)
+        email = user_service.get_email(user_id)
+        (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
+        if not success:
+            return jsonify({"status": "0", "msg": message}), 400
+
+        msg = gettext("Uusi kysely luotu!")
+        response = {"status": "1", "msg": msg, "survey_id": survey_id}
+        return jsonify(response), 200
+
+    except Exception as e:
+        current_app.logger.exception("Error creating survey")
+        return jsonify({"status": "0", "msg": gettext("Server error")}), 500
 
 
 @bp.route("/surveys/create/import", methods=["POST"])

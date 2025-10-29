@@ -11,6 +11,7 @@ import FrontPage from "./pages/FrontPage";
 import SurveyResultsPage from "./pages/SurveyResultsPage";
 import RequireAuth from "./components/RequireAuth";
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
+import CreateSurveyPage from "./pages/CreateSurveyPage";
 
 const App = () => {
   return (
@@ -23,6 +24,14 @@ const App = () => {
               element={
                 <RequireAuth>
                   <SurveyMultiphaseCreate />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/surveys/create"
+              element={
+                <RequireAuth>
+                  <CreateSurveyPage />
                 </RequireAuth>
               }
             />
