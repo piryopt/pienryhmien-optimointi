@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import SurveyForm from "../components/create_survey_components/SurveyForm";
+import SurveyForm from "../components/create_survey_components/SurveyForm/SurveyForm";
 import "../static/css/create_survey.css";
 
 const CreateSurvey = () => {
