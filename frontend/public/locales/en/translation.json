@@ -51,5 +51,6 @@
   "Vastauksen poistaminen": "",
   "Vastaukset": "Answers: {{count}}",
   "Vastauksia": "",
-  "Vastausaika päättyy": "Response time expires: {{timeEnd}}"
+  "Vastausaika päättyy": "Response time expires",
+  "Vastausaika päättyy:": "Response time expires: {{timeEnd}}"
 }

@@ -23,7 +23,7 @@ const FrontPageButton = ({
       className="list-group-item list-group-item-action"
       style={{ borderRadius: "12px" }}
     >
-      <div className="d-flex w-100 justify-content-between">
+      <div className="d-flex w-100">
         <div className="d-flex w-100">
           <img
             src={imgSrc}
@@ -37,7 +37,7 @@ const FrontPageButton = ({
         </div>
 
         {topRightText && (
-          <small className="text-muted">
+          <small className="text-muted text-nowrap">
             {t(topRightText, additionalVars)}
           </small>
         )}
@@ -68,7 +68,7 @@ const FrontPage = () => {
   return (
     <>
       <p>{t("Toiminnot")}</p>
-      <div className="row">
+      <div className="row mb-5">
         <div className="col-sm">
           <FrontPageButton
             path="/surveys/create"
@@ -95,22 +95,26 @@ const FrontPage = () => {
         </div>
       </div>
       <p>{t("Käynnissä olevat kyselyt")}</p>
-
       <div className="row">
-        {activeSurveys.map((survey) => (
-          <FrontPageButton
-            key={survey.id}
-            path={`surveys/${survey.id}`}
-            imgSrc={surveyIcon}
-            mainText={survey.surveyname}
-            additionalText="Vastaukset"
-            topRightText="Vastausaika päättyy"
-            additionalVars={{
-              timeEnd: survey.time_end,
-              count: survey.response_count
-            }}
-          />
-        ))}
+        <div className="col-sm">
+          {activeSurveys.map((survey) => (
+            <div key={survey.id} className="mb-4">
+              <FrontPageButton
+                key={survey.id}
+                path={`surveys/${survey.id}`}
+                imgSrc={surveyIcon}
+                mainText={survey.surveyname}
+                additionalText="Vastaukset"
+                topRightText="Vastausaika päättyy:"
+                additionalVars={{
+                  timeEnd: survey.time_end,
+                  count: survey.response_count
+                }}
+              />
+            </div>
+          ))}
+          <br></br>
+        </div>
       </div>
     </>
   );

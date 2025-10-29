@@ -51,5 +51,6 @@
   "Vastauksen poistaminen": "",
   "Vastaukset": "Svar: {{count}}",
   "Vastauksia": "",
-  "Vastausaika päättyy": "Svarstid utgår: {{timeEnd}}"
+  "Vastausaika päättyy": "Svarstid utgår",
+  "Vastausaika päättyy:": "Svarstid utgår: {{timeEnd}}"
 }

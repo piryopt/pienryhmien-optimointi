@@ -51,5 +51,6 @@
   "Vastauksen poistaminen": "Vastauksen poistaminen",
   "Vastaukset": "Vastaukset: {{count}}",
   "Vastauksia": "Vastauksia",
-  "Vastausaika päättyy": "Vastausaika päättyy: {{timeEnd}}"
+  "Vastausaika päättyy": "Vastausaika päättyy",
+  "Vastausaika päättyy:": "Vastausaika päättyy: {{timeEnd}}"
 }
