@@ -21,7 +21,7 @@
 
 {% set unranked_or_rejected = [] %}
 {% for h in happiness_data %}
-    {% if h[0] in ["Ei järjestettyyn", "Unranked", "Ej placerad", "Hylättyyn", "Rejected", "Avvisad"] %}
+    {% if h[0] in ["Ei järjestettyyn", "Unranked", "Ej placerad", "Kiellettyyn", "Rejected", "Avvisad"] %}
         {% set _ = unranked_or_rejected.append(1) %}
     {% endif %}
 {% endfor %}
@@ -29,14 +29,14 @@
 <b>{{ _('Ryhmänvalintojen keskiarvo') }}: {{ happiness }}</b></br>
 {% if unranked_or_rejected|length > 0 %}
     <p>
-        {{ _('Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon.') }}
+        {{ _('Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon.') }}
     </p>
 {% endif %}
 
 {% for h in happiness_data %}
     {% if h[0] == "Ei järjestettyyn" or h[0] == "Unranked" or h[0] == "Ej placerad" %}
         <label style="color:rgb(255, 255, 45)">{{ h[0] }}{{ h[1] }}</label></br>
-    {% elif h[0] == "Hylättyyn" or  h[0] == "Rejected" or h[0] == "Avvisad" %}
+    {% elif h[0] == "Kiellettyyn" or  h[0] == "Rejected" or h[0] == "Avvisad" %}
         <label style="color:rgb(255, 18, 18)">{{ h[0] }}{{ h[1] }}</label></br>
     {% else %}
         <label>{{ h[0] }}{{ h[1] }}</label></br>
@@ -89,7 +89,7 @@
         </td>       <!--assigned group--> 
         <td>
             {%if row[2][1] != "Tyhjä" %}
-                {% if row[3] == "Hylätty" or  row[3] == "Rejected" or row[3] == "Avvisad" %}
+                {% if row[3] == "Kielletty" or  row[3] == "Rejected" or row[3] == "Avvisad" %}
                     <p style="color:rgb(255, 18, 18)">{{ row[3] }}</p>
                 {% elif row[3] == "Ei järjestetty" or row[3] == "Unranked" or row[3] == "Ej placerad" %}
                     <p style="color:rgb(255, 255, 45)">{{ row[3] }}</p>

@@ -366,5 +366,5 @@ def test_happiness_results_students_in_unranked_or_rejected(setup_survey3):
     assert happiness_results_list == [
         (1, ". valintaansa sijoitetut käyttäjät: 1"),
         ("Ei järjestettyyn", " valintaan sijoitetut käyttäjät: 1"),
-        ("Hylättyyn", " valintaan sijoitetut käyttäjät: 1"),
+        ("Kiellettyyn", " valintaan sijoitetut käyttäjät: 1"),
     ]

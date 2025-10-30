@@ -129,7 +129,7 @@ msgstr "Average of group selections"
 
 #: src/templates/results.html:32
 msgid ""
-"Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-"
+"Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-"
 "järjestettyihin valintoihin ei vaikuta keskiarvoon."
 msgstr ""
 "Note! The fact that some students have been placed in rejected or unranked "
@@ -217,7 +217,7 @@ msgid "Vastaukset"
 msgstr "Answers"
 
 #: src/templates/showrankings.html:9
-msgid "Hylkäykset"
+msgid "Kielletyt"
 msgstr "Rejections"
 
 #: src/templates/survey_answers.html:3
@@ -842,11 +842,11 @@ msgstr "Giving feedback was successful"
 
 #: src/tools/survey_result_helper.py:39 src/tools/survey_result_helper.py:321
 #: src/tools/survey_result_helper.py:344
-msgid "Hylätty"
+msgid "Kielletty"
 msgstr "Rejected"
 
 #: src/tools/survey_result_helper.py:40 src/tools/survey_result_helper.py:366
-msgid "Hylättyyn"
+msgid "Kiellettyyn"
 msgstr "Rejected"
 
 #: src/tools/survey_result_helper.py:41 src/tools/survey_result_helper.py:44

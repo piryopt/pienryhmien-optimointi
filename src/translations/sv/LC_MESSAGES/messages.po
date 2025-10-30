@@ -126,7 +126,7 @@ msgstr "Genomsnitt för gruppval"
 
 #: src/templates/results.html:32
 msgid ""
-"Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-"
+"Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-"
 "järjestettyihin valintoihin ei vaikuta keskiarvoon."
 msgstr ""
 "Obs! Att vissa studenter har placerats i avvisade eller ej valda alternativ "
@@ -214,7 +214,7 @@ msgid "Vastaukset"
 msgstr "Svar"
 
 #: src/templates/showrankings.html:9
-msgid "Hylkäykset"
+msgid "Kielletyt"
 msgstr "Avvisningar"
 
 #: src/templates/survey_answers.html:3
@@ -830,11 +830,11 @@ msgstr "Feedback gavs framgångsrikt"
 
 #: src/tools/survey_result_helper.py:39 src/tools/survey_result_helper.py:321
 #: src/tools/survey_result_helper.py:344
-msgid "Hylätty"
+msgid "Kielletty"
 msgstr "Avvisad"
 
 #: src/tools/survey_result_helper.py:40 src/tools/survey_result_helper.py:366
-msgid "Hylättyyn"
+msgid "Kiellettyyn"
 msgstr "Avvisad"
 
 #: src/tools/survey_result_helper.py:41 src/tools/survey_result_helper.py:44
