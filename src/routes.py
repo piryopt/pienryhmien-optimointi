@@ -221,6 +221,7 @@ def new_survey_post():
     """
     try:
         data = request.get_json()
+        print("Choices: ",data.get("choices", []))
         if not data:
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 

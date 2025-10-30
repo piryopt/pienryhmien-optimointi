@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
@@ -14,6 +14,7 @@ import MinChoicesSection from "../components/create_survey_page_components/MinCh
 import DenyChoicesSection from "../components/create_survey_page_components/DenyChoicesSection";
 import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
 import PrioritizedGroupsDescription from "../components/create_survey_page_components/PrioritizedGroupsDescription";
+import ChoiceTable from "../components/create_survey_page_components/ChoiceTable";
 import "../static/css/createSurveyPage.css";
 
 const CreateSurveyPage = () => {
@@ -21,6 +22,66 @@ const CreateSurveyPage = () => {
   const { showNotification } = useNotification();
 
   const schema = buildCreateSurveySchema(t);
+
+  const nextRowId = useRef(1);
+  const [columns, setColumns] = useState([]);
+  const [rows, setRows] = useState([
+    { id: 1, mandatory: false, name: "", max_spaces: "", min_size: "" }
+  ]);
+  const [selectAllMandatory, setSelectAllMandatory] = useState(false);
+
+  useEffect(() => {
+    setRows((r) => r.map((x) => ({ ...x, mandatory: selectAllMandatory })));
+  }, [selectAllMandatory]);
+
+  const addRow = () => {
+    const id = ++nextRowId.current;
+    const extra = columns.reduce((a, c) => ({ ...a, [c.name]: "" }), {});
+    setRows((r) => [
+      ...r,
+      { id, mandatory: false, name: "", max_spaces: "", min_size: "", ...extra }
+    ]);
+  };
+
+  const deleteRow = (id) => setRows((r) => r.filter((x) => x.id !== id));
+  const updateCell = (id, key, value) =>
+    setRows((r) =>
+      r.map((row) => (row.id === id ? { ...row, [key]: value } : row))
+    );
+
+  const addColumn = (name) => {
+    if (!name || columns.find((c) => c.name === name)) return;
+    setColumns((c) => [
+      ...c,
+      { name, validationRegex: "", validationText: "" }
+    ]);
+    setRows((rs) => rs.map((r) => ({ ...r, [name]: "" })));
+  };
+
+  const removeColumn = (name) => {
+    setColumns((c) => c.filter((x) => x.name !== name));
+    setRows((rs) =>
+      rs.map((r) => {
+        const copy = { ...r };
+        delete copy[name];
+        return copy;
+      })
+    );
+  };
+
+  const setChoices = () => {
+    const choicesEntry = rows.map((r) => {
+      const base = {
+        mandatory: !!r.mandatory,
+        name: r.name,
+        max_spaces: Number(r.max_spaces) || 0,
+        min_size: Number(r.min_size) || 0
+      };
+      columns.forEach((c) => (base[c.name] = r[c.name] ?? ""));
+      return base;
+    });
+    return choicesEntry;
+  };
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -47,7 +108,7 @@ const CreateSurveyPage = () => {
     const payload = {
       surveyGroupname: data.groupname,
       surveyInformation: data.surveyInformation || "",
-      choices: data.choices || [],
+      choices: setChoices() || [],
       minchoices: data.minchoices ?? 1,
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
@@ -67,6 +128,7 @@ const CreateSurveyPage = () => {
     };
 
     try {
+      console.log(payload.choices);
       const res = await fetch("http://localhost:5001/surveys/create", {
         method: "POST",
         credentials: "include",
@@ -117,6 +179,17 @@ const CreateSurveyPage = () => {
           <DenyChoicesSection />
           <SearchVisibilitySection />
           <PrioritizedGroupsDescription />
+          <ChoiceTable
+            columns={columns}
+            rows={rows}
+            addRow={addRow}
+            deleteRow={deleteRow}
+            addColumn={addColumn}
+            removeColumn={removeColumn}
+            updateCell={updateCell}
+            setSelectAllMandatory={setSelectAllMandatory}
+            selectAllMandatory={selectAllMandatory}
+          />
           <button type="submit" className="btn btn-primary">
             {t("Luo kysely")}
           </button>

@@ -355,6 +355,7 @@ class SurveyService:
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
             language = session.get("language", "fi")
+            print("Survey choices react: ", survey_dict["choices"])
             for choice in survey_dict["choices"]:
                 if choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä" \
                 or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä" \
