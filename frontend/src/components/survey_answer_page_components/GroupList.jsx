@@ -13,7 +13,7 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [], re
     });
 
     return (
-      <div className="group-container" style={{ border: `2px solid ${borderColor}` }}>
+      <div className="group-container" style={{marginBottom: 7}}>
         {filteredItems.map((item) => (
           <ReadOnlyGroupItem
             key={String(item.id)}

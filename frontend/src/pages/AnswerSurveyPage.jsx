@@ -124,50 +124,59 @@ const AnswerSurveyPage = () => {
 
   return (
     <div className="answer-page">
-        {readOnly && (
-          <ClosedSurveyNotification existing={existing} />
-        )}
       <div>
         <h1 className="answer-title">
           <img src={assignmentIcon} alt="" className="assignment-icon" />
           {survey.name}
         </h1>
-        <p className="deadline">Vastausaika päättyy {survey.deadline}</p>
+        {readOnly && (
+          <ClosedSurveyNotification existing={existing} />
+        )}
+        {!readOnly && (
+          <>
+            <p className="deadline">Vastausaika päättyy {survey.deadline}</p>
             <p className="instructions">
-            {!readOnly && (
-                <i>
+              <i>
                 Raahaa oikean reunan listasta vähintään {survey.min_choices} vaihtoehtoa
                 <span className="highlight"> vihreään</span> laatikkoon.
               </i>
-            )}
-            {additionalInfo ? (
-              <i> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
-            ) : null}
-          </p>
-          <p className="note">
-            HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.
-          </p>
+              {additionalInfo ? (
+                <i> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
+              ) : null}
+            </p>
+            <p className="note">
+              HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.
+            </p>
+          </>
+          )}
       </div>
       <div className="answer-layout">
-      {readOnly && existing ? (
+      {readOnly ? (
         <>
-            <div className="left-column">
+          <div className="left-column">
+            {good.length > 0 && (
+            <>
+              <h2 className="closed-survey-title">Valinnat</h2>
               <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} readOnly />
-              { (survey.denied_allowed_choices ?? 0) !== 0 && (
-                <>
-                  <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} readOnly />
-                    {reason && reason.length > 0 ? (
-                        <p>Perustelut hylkäyksille: {reason}</p>
-                    ) : null}
-                </>
-              )}
-            </div>
+            </>
+            )}
+          </div>
 
-            <div className="right-column">
-              <GroupList id="neutral" items={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} readOnly />
-            </div>
-          </>
-      ): (
+          <div className="right-column" style={{marginLeft: 15}}>
+            {bad.length > 0 && (
+              <>
+                <h2 className="closed-survey-title">Hylkäykset</h2>
+                <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} readOnly />
+                  {reason && reason.length > 0 ? (
+                    <div style={{ paddingLeft: 11 }}>
+                      <p>Perustelut hylkäyksille:<br></br> {reason}</p>
+                    </div>
+                  ) : null}
+              </>
+            )}
+          </div>
+        </>
+      ):(
         <DragDropContext onDragEnd={handleDragEnd} context={ReactReduxContext}>
           <div className="left-column">
             <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
