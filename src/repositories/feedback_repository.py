@@ -14,8 +14,15 @@ class FeedbackRepository:
             content: The content of the feedback
         """
         try:
-            sql = "INSERT INTO feedback (user_id, title, type, content, solved) VALUES (:user_id, :title, :type, :content, False)"
-            db.session.execute(text(sql), {"user_id": user_id, "title": title, "type": type, "content": content})
+            sql = "INSERT INTO feedback (user_id, title, type, content, solved) VALUES (:user_id, :title, :type, :content, :solved)"
+            parameters = {
+                "user_id": user_id if user_id != 0 else None,
+                "title": title,
+                "type": type,
+                "content": content,
+                "solved": False,
+            }
+            db.session.execute(text(sql), parameters)
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718

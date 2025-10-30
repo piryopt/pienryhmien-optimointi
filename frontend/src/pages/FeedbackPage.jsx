@@ -18,12 +18,20 @@ const FeedbackPage = () => {
       const result = await feedbackService.createFeedback({ title, type, content })
 
       if (!result.success) {
-        const msg = result.key ? t(result.key) : result.message
+        const msg = 
+          (result.key ? t(result.key) : null) ||
+          result.message ||
+          t("Palautteen lähetys epäonnistui")
         showNotification(msg, "error")
         return
       }
 
-      showNotification(t("Palaute lähetetty"), "success")
+      const successMsg =
+        (result.key ? t(result.key) : null) ||
+        result.message ||
+        t("Palaute lähetetty")
+      showNotification(successMsg, "success")
+
       setTitle("")
       setType("palaute")
       setContent("")
