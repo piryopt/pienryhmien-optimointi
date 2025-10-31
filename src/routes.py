@@ -1349,9 +1349,18 @@ def feedback():
     except Exception:
         data = {}
     user_id = session.get("user_id", 0)
-    success, key, msg = feedback_service.new_feedback(user_id, data)
+
+    res = feedback_service.new_feedback(user_id, data)
+    # res is (success, key, msg) or (success, key, msg, id)
+    success = res[0]
+    key = res[1] if len(res) > 1 else None
+    msg = res[2] if len(res) > 2 else None
+    fid = res[3] if len(res) > 3 else None
     status = "1" if success else "0"
-    return jsonify({"success": success, "status": status, "key": key, "msg": msg})
+    payload = {"success": success, "status": status, "key": key, "msg": msg}
+    if fid:
+        payload["id"] = fid
+    return jsonify(payload)
 
 
 @bp.route("/language/en")

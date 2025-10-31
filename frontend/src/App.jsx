@@ -10,7 +10,11 @@ import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
 import SurveyResultsPage from "./pages/SurveyResultsPage";
 import FeedbackPage from "./pages/FeedbackPage";
+import AdminFeedbackList from "./pages/admintools/AdminFeedbackList"
+import AdminClosedFeedbackList from "./pages/admintools/AdminClosedFeedbackList"
+import AdminFeedbackDetail from "./pages/admintools/AdminFeedbackDetail"
 import RequireAuth from "./components/RequireAuth";
+import RequireAdmin from "./components/RequireAdmin"
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 
 const App = () => {
@@ -78,6 +82,36 @@ const App = () => {
               element={
                 <RequireAuth>
                   <FeedbackPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/admintools/feedback"
+              element={
+                <RequireAuth>
+                  <RequireAdmin>
+                    <AdminFeedbackList />
+                  </RequireAdmin>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/admintools/feedback/closed"
+              element={
+                <RequireAuth>
+                  <RequireAdmin>
+                    <AdminClosedFeedbackList />
+                  </RequireAdmin>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/admintools/feedback/:id"
+              element={
+                <RequireAuth>
+                  <RequireAdmin>
+                    <AdminFeedbackDetail />
+                  </RequireAdmin>
                 </RequireAuth>
               }
             />

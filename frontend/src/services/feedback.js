@@ -45,6 +45,7 @@ const createFeedback = async ({ title, type = "palaute", content }) => {
     if (data.status === "1" || data.success === true) {
       return {
         success: true,
+        id: data.id || null,
         key: data.key || "feedback_sent",
         message: data.msg || data.message || "Palaute lähetetty"
       }
@@ -137,7 +138,7 @@ const closeFeedback = async (id) => {
       }
     )
     const data = response?.data || {}
-    return { success: data?.success !== true, data }
+    return { success: data?.success === true, data }
   } catch (err) {
     return {
       success: false,

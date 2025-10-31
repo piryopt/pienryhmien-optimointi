@@ -14,7 +14,7 @@ class FeedbackRepository:
             content: The content of the feedback
         """
         try:
-            sql = "INSERT INTO feedback (user_id, title, type, content, solved) VALUES (:user_id, :title, :type, :content, :solved)"
+            sql = "INSERT INTO feedback (user_id, title, type, content, solved) VALUES (:user_id, :title, :type, :content, :solved) RETURNING id"
             parameters = {
                 "user_id": user_id if user_id != 0 else None,
                 "title": title,
@@ -22,12 +22,16 @@ class FeedbackRepository:
                 "content": content,
                 "solved": False,
             }
-            db.session.execute(text(sql), parameters)
+            result = db.session.execute(text(sql), parameters)
+            new_id_row = result.fetchone()
             db.session.commit()
-            return True
+            if new_id_row:
+                return new_id_row[0]
+            return None
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            return False
+            db.session.rollback()
+            return None
 
     def get_feedback(self, feedback_id):
         """

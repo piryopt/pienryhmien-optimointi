@@ -53,15 +53,15 @@ class FeedbackService:
             msg = gettext("Olet jo luonut palautteen tällä otsikolla!")
             return (False, key, msg)
 
-        success = self._feedback_repository.new_feedback(user_id, title, feedback_type, content)
-        if not success:
+        inserted_id = self._feedback_repository.new_feedback(user_id, title, feedback_type, content)
+        if not inserted_id:
             key = "server_error"
             msg = gettext("Palautteen antamisessa oli ongelma!")
             return (False, key, msg)
         
         key = "feedback_sent"
         msg = gettext("Palautteen antaminen onnistui")
-        return (True, key, msg)
+        return (True, key, msg, inserted_id)
 
     def get_feedback(self, feedback_id):
         """

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import feedbackService from "../../services/feedback"
 import { useNotification } from "../../context/NotificationContext"
 
 const AdminFeedbackList = () => {
+  const { t } = useTranslation()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const { showNotification } = useNotification()
@@ -14,7 +16,7 @@ const AdminFeedbackList = () => {
       setLoading(true)
       const res = await feedbackService.fetchOpenFeedbacks()
       if (!res.success) {
-        showNotification(res.message || "Failed to load feedbacks", "error")
+        showNotification(res.message || t("Palautteiden lataus epäonnistui"), "error")
       } else if (mounted) {
         setItems(res.data)
       }
@@ -22,31 +24,35 @@ const AdminFeedbackList = () => {
     }
     load()
     return () => { mounted = false }
-  }, [])
+  }, [showNotification, t])
 
   return (
     <div>
-      <h2>Avoimet palautteet</h2>
-      {loading ? <p>Loading...</p> : (
-        <table className="table table-striped">
-          <thead className="table-dark">
-            <tr>
-              <th>Otsikko</th><th>Tyyppi</th><th>Sähköposti</th><th>Tarkastele</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map(f => (
-              <tr key={f[0] || f.id}>
-                <td>{f[1] || f.title}</td>
-                <td>{f[2] || f.type}</td>
-                <td>{f[3] || f.email}</td>
-                <td>
-                  <Link to={`/admintools/feedback/${f[0] || f.id}`}>Lisää</Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <h2>{t("Avoimet palautteet")}</h2>
+      {loading ? <p>{t("Ladataan…")}</p> : (
+        <>
+          {items.length === 0 ? <p>{t("Ei palautteita")}</p> : (
+            <table className="table table-striped">
+              <thead className="table-dark">
+                <tr>
+                  <th>{t("Otsikko")}</th><th>{t("Palautteen tyyppi")}</th><th>{t("Sähköposti")}</th><th>{t("Toiminnot")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map(f => (
+                  <tr key={f.id}>
+                    <td>{f.title}</td>
+                    <td>{f.type}</td>
+                    <td>{f.email}</td>
+                    <td>
+                      <Link to={`/admintools/feedback/${f.id}`}>{t("Tarkastele")}</Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
       )}
     </div>
   )
