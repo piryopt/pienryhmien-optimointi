@@ -1,6 +1,6 @@
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import '../../static/css/answerPage.css';
-import ReadOnlyGroupItem from "./GroupItem";
+import GroupItem from "./GroupItem";
 
 const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [], readOnly = false }) => {
    const borderColor = id === "good" ? "green" : id === "bad" ? "darkred" : "gray";
@@ -15,7 +15,7 @@ const GroupList = ({ id, items = [], expandedIds, toggleExpand, choices = [], re
     return (
       <div className="group-container" style={{marginBottom: 7}}>
         {filteredItems.map((item) => (
-          <ReadOnlyGroupItem
+          <GroupItem
             key={String(item.id)}
             item={item}
             choice={choiceMap.get(String(item.id)) || (item.infos ? item : null)}

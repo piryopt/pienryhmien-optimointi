@@ -1,6 +1,6 @@
 import '../../static/css/answerPage.css';
 
-const ReadOnlyGroupItem = ({ item, choice, expanded, onToggle }) => {
+const GroupItem = ({ item, choice, expanded, onToggle }) => {
   return (
     <div
       key={String(item.id)}
@@ -39,4 +39,4 @@ const ReadOnlyGroupItem = ({ item, choice, expanded, onToggle }) => {
   );
 };
 
-export default ReadOnlyGroupItem;
+export default GroupItem;

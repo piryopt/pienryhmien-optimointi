@@ -9,8 +9,9 @@ import ReasonsBox from '../components/survey_answer_page_components/ReasonsBox.j
 import assignmentIcon from '/images/assignment_white_36dp.svg';
 import '../static/css/answerPage.css'; 
 import { ReactReduxContext } from "react-redux";
-import ClosedSurveyNotification from "../components/survey_answer_page_components/ClosedSurveyNotification.jsx";
-  
+import ClosedSurveyView from "../components/survey_answer_page_components/ClosedSurveyView.jsx";
+import SurveyInfo from "../components/survey_answer_page_components/SurveyInfo.jsx";
+
 
 const AnswerSurveyPage = () => {
   const { surveyId } = useParams();
@@ -57,7 +58,7 @@ const AnswerSurveyPage = () => {
         setBad(badChoices);
         setSurvey(data.survey || {});
         setAdditionalInfo(data.additional_info || false);
-
+        
       } catch (err) {
         console.error(err);
       } finally {
@@ -113,15 +114,28 @@ const AnswerSurveyPage = () => {
       const result = await surveyService.submitSurveyAnswer({ surveyId: surveyId, good: good.map(c => c.id), bad: bad.map(c => c.id), neutral: neutral.map(c => c.id), reason, minChoices: survey.min_choices, deniedAllowedChoices: survey.denied_allowed_choices })
       if (result.status === "0") throw new Error(result.msg);
       showNotification(result.msg, "success");
+      setExisting("1")
     } catch (error) {
       showNotification(error.message, "error");
       console.error("Error submitting survey", error);
     }
   };
 
-  if (loading) return <div className="text-center mt-5">Loading survey...</div>;
+  const handleDelete = async () => {
+    try {
+      const result = await surveyService.deleteSurveyAnswer(surveyId);
+      if (result.status === "0") throw new Error(result.msg);
+      showNotification(result.msg, "success");
+    } catch (error) {
+      showNotification(error.message, "error");
+      console.error("Error deleting survey", error);
+    }
+  };
+
   const readOnly = Boolean(survey.closed);
 
+  if (loading) return <div className="text-center mt-5">Loading survey...</div>;
+  
   return (
     <div className="answer-page">
       <div>
@@ -129,76 +143,36 @@ const AnswerSurveyPage = () => {
           <img src={assignmentIcon} alt="" className="assignment-icon" />
           {survey.name}
         </h1>
-        {readOnly && (
-          <ClosedSurveyNotification existing={existing} />
-        )}
-        {!readOnly && (
-          <>
-            <p className="deadline">Vastausaika päättyy {survey.deadline}</p>
-            <p className="instructions">
-              <i>
-                Raahaa oikean reunan listasta vähintään {survey.min_choices} vaihtoehtoa
-                <span className="highlight"> vihreään</span> laatikkoon.
-              </i>
-              {additionalInfo ? (
-                <i> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
-              ) : null}
-            </p>
-            <p className="note">
-              HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.
-            </p>
-          </>
-          )}
+        {!readOnly && ( <SurveyInfo from survey={survey} additionalInfo={additionalInfo} />)}
       </div>
-      <div className="answer-layout">
       {readOnly ? (
-        <>
-          <div className="left-column">
-            {good.length > 0 && (
-            <>
-              <h2 className="closed-survey-title">Valinnat</h2>
-              <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} readOnly />
-            </>
-            )}
-          </div>
-
-          <div className="right-column" style={{marginLeft: 15}}>
-            {bad.length > 0 && (
-              <>
-                <h2 className="closed-survey-title">Hylkäykset</h2>
-                <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} readOnly />
-                  {reason && reason.length > 0 ? (
-                    <div style={{ paddingLeft: 11 }}>
-                      <p>Perustelut hylkäyksille:<br></br> {reason}</p>
-                    </div>
-                  ) : null}
-              </>
-            )}
-          </div>
-        </>
-      ):(
-        <DragDropContext onDragEnd={handleDragEnd} context={ReactReduxContext}>
-          <div className="left-column">
-            <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
-            { (survey.denied_allowed_choices ?? 0) !== 0 && (
-              <>
-                <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
-                <ReasonsBox reason={reason} setReason={setReason} />
-              </>
-            )}
-
-            <div className="submit-row">
-              <Button variant="success" className="submit-btn" onClick={handleSubmit}>
-                Lähetä valinnat
-              </Button>
+        <ClosedSurveyView good={good} bad={bad} neutral={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} reason={reason} existing={existing} />
+      ) : (
+        <div className="answer-layout">
+          <DragDropContext onDragEnd={handleDragEnd} context={ReactReduxContext}>
+            <div className="left-column">
+              <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
+              { (survey.denied_allowed_choices ?? 0) !== 0 && (
+                <>
+                  <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
+                  <ReasonsBox reason={reason} setReason={setReason} />
+                </>
+              )}
+              <div className="submit-row">
+                <Button variant="success" className="submit-btn" onClick={handleSubmit}>
+                  Lähetä valinnat
+                </Button>
+                  <Button variant="danger" className="submit-btn" onClick={handleDelete} style={{marginLeft: '15px'}}>
+                    Poista valinnat
+                  </Button>
+              </div>
             </div>
-          </div>
-          <div className="right-column">
-            <GroupList id="neutral" items={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
-          </div>
-        </DragDropContext>
+            <div className="right-column">
+              <GroupList id="neutral" items={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
+            </div>
+          </DragDropContext>
+        </div>
         )}
-      </div>
     </div>
   );
 };

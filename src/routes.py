@@ -518,6 +518,22 @@ def api_survey_submit(survey_id):
     return jsonify(response)
 
 
+@bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
+def api_delete_submission(survey_id):
+    """
+    Delete the current ranking of the student.
+    """
+    msg = gettext("Poistaminen epäonnistui!")
+    response = {"status": "0", "msg": msg}
+    current_user_id = session.get("user_id", 0)
+
+    if user_rankings_service.delete_ranking(survey_id, current_user_id):
+        msg = gettext("Valinnat poistettu")
+        response = {"status": "1", "msg": msg}
+
+    return jsonify(response)
+
+
 @bp.route("/surveys/<string:survey_id>/answered")
 def surveys_answer_exists(survey_id, survey_all_info, additional_info):
     """
