@@ -10,7 +10,7 @@ const ChoiceTable = ({
   removeColumn,
   updateCell,
   setSelectAllMandatory,
-  selectAllMandatory
+  selectAllMandatory,
 }) => {
   const { t } = useTranslation();
 
@@ -21,47 +21,79 @@ const ChoiceTable = ({
   };
 
   return (
-    <div>
+    <div className="choice-table-wrapper">
       <table className="table table-dark table-striped table-hover choice-table-main">
         <thead>
-          <tr>
+          <tr id="column-delete-btns">
+            <td colSpan="4"></td>
+            {columns.map(({ name }) => (
+              <th key={name} className="variable-header">
+                <div
+                  className="delete-col-btn-visible"
+                  onClick={() => removeColumn(name)}
+                  title={t("Poista sarake")}
+                ></div>
+                <span>{name}</span>
+              </th>
+
+            ))}
+            <td></td>
+          </tr>
+
+          <tr id="choice-table-headers">
             <th>
-              {t("Pakota minimikoko")}
-              <label style={{ display: "flex", alignItems: "center" }}>
-                <input
-                  type="checkbox"
-                  checked={!!selectAllMandatory}
-                  onChange={(e) => setSelectAllMandatory?.(e.target.checked)}
-                />
-              </label>
+              <label>{t("Pakota minimikoko")}</label>
+              <input
+                type="checkbox"
+                id="select-all-choices"
+                checked={!!selectAllMandatory}
+                onChange={(e) => setSelectAllMandatory?.(e.target.checked)}
+              />
             </th>
 
-            <th>{t("Nimi")}</th>
-            <th>{t("Enimmäispaikat")}</th>
-            <th>{t("Ryhmän minimikoko")}</th>
+            <th
+              className="constant-header"
+              col-validation-regex=".{5,}"
+              validation-text={t("yli 5 merkkiä pitkiä")}
+            >
+              {t("Nimi")}
+            </th>
+
+            <th
+              className="constant-header"
+              col-validation-regex="\d+"
+              validation-text={t("kokonaislukuja")}
+            >
+              {t("Enimmäispaikat")}
+            </th>
+
+            <th
+              className="constant-header"
+              col-validation-regex="\d+"
+              validation-text={t("kokonaislukuja")}
+            >
+              {t("Ryhmän minimikoko")}
+            </th>
 
             {columns.map(({ name }) => (
-              <th key={name}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span>{name}</span>
-                  <button type="button" onClick={() => removeColumn(name)}>
-                    ✖
-                  </button>
-                </div>
+              <th key={name} className="variable-header">
+                {name}
               </th>
             ))}
 
-            <th>
-              <button type="button" onClick={handleAddColumn}>
+            <th className="variable-header" id="add-column-header">
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-light"
+                onClick={handleAddColumn}
+              >
                 + {t("Lisää tietokenttä")}
               </button>
             </th>
-
-            <th></th>
           </tr>
         </thead>
 
-        <tbody>
+        <tbody id="choiceTable">
           {rows.map((row) => (
             <ChoiceRow
               key={row.id}
