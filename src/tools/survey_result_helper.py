@@ -33,6 +33,11 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_sum, happiness_results = get_happiness_data(output_data, survey_id)
     happiness_avg = happiness_sum / (len(students_dict) - unranked_or_rejected) if (len(students_dict) - unranked_or_rejected) > 0 else 1
 
+    infos = survey_choices_service.get_choice_additional_infos(survey_choices[0].id)
+    
+    additional_info_keys = list(map(lambda i: i.info_key, infos))
+    infos = list(map(lambda i: i.info_value, infos))
+
     happiness_results_list = []
     for k, v in happiness_results.items():
         if v > 0:
@@ -49,7 +54,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_results_list.sort(key=happiness_sort_key)
     dropped_groups = dropped_group_names(dropped_groups_id)
 
-    output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, cinfos, additional_infos)
+    output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, infos, additional_info_keys)
     return output_data
 
 
