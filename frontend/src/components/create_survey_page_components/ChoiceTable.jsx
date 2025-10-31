@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ChoiceRow from "./ChoiceRow";
 import { useTranslation } from "react-i18next";
 
@@ -14,10 +15,20 @@ const ChoiceTable = ({
 }) => {
   const { t } = useTranslation();
 
-  const handleAddColumn = () => {
-    const name = window.prompt(t("Anna sarakkeen nimi"));
-    if (!name) return;
-    addColumn(name.trim());
+  const [isAddingColumn, setIsAddingColumn] = useState(false);
+  const [newColumnName, setNewColumnName] = useState("");
+
+  const handleAddColumnSubmit = () => {
+    if (newColumnName.trim() !== "") {
+      addColumn(newColumnName.trim());
+      setNewColumnName("");
+      setIsAddingColumn(false);
+    }
+  };
+
+  const handleCancelAddColumn = () => {
+    setNewColumnName("");
+    setIsAddingColumn(false);
   };
 
   return (
@@ -35,7 +46,6 @@ const ChoiceTable = ({
                 ></div>
                 <span>{name}</span>
               </th>
-
             ))}
             <td></td>
           </tr>
@@ -82,13 +92,30 @@ const ChoiceTable = ({
             ))}
 
             <th className="variable-header" id="add-column-header">
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-light"
-                onClick={handleAddColumn}
-              >
-                + {t("Lisää tietokenttä")}
-              </button>
+              {isAddingColumn ? (
+                <div className="d-flex align-items-center gap-2">
+                  <input
+                    type="text"
+                    autoFocus
+                    value={newColumnName}
+                    className="form-control form-control-sm bg-dark text-light"
+                    onChange={(e) => setNewColumnName(e.target.value)}
+                    onBlur={handleCancelAddColumn}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAddColumnSubmit();
+                      if (e.key === "Escape") handleCancelAddColumn();
+                    }}
+                  />
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-light"
+                  onClick={() => setIsAddingColumn(true)}
+                >
+                  + {t("Lisää tietokenttä")}
+                </button>
+              )}
             </th>
           </tr>
         </thead>
