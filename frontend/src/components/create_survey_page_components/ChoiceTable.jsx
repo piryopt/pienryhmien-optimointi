@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ChoiceRow from "./ChoiceRow";
 import { useTranslation } from "react-i18next";
 
@@ -10,58 +11,116 @@ const ChoiceTable = ({
   removeColumn,
   updateCell,
   setSelectAllMandatory,
-  selectAllMandatory
+  selectAllMandatory,
 }) => {
   const { t } = useTranslation();
 
-  const handleAddColumn = () => {
-    const name = window.prompt(t("Anna sarakkeen nimi"));
-    if (!name) return;
-    addColumn(name.trim());
+  const [isAddingColumn, setIsAddingColumn] = useState(false);
+  const [newColumnName, setNewColumnName] = useState("");
+
+  const handleAddColumnSubmit = () => {
+    if (newColumnName.trim() !== "") {
+      addColumn(newColumnName.trim());
+      setNewColumnName("");
+      setIsAddingColumn(false);
+    }
+  };
+
+  const handleCancelAddColumn = () => {
+    setNewColumnName("");
+    setIsAddingColumn(false);
   };
 
   return (
-    <div>
+    <div className="choice-table-wrapper">
       <table className="table table-dark table-striped table-hover choice-table-main">
         <thead>
-          <tr>
+          <tr id="column-delete-btns">
+            <td colSpan="4"></td>
+            {columns.map(({ name }) => (
+              <th key={name} className="variable-header">
+                <div
+                  className="delete-col-btn-visible"
+                  onClick={() => removeColumn(name)}
+                  title={t("Poista sarake")}
+                ></div>
+                <span>{name}</span>
+              </th>
+            ))}
+            <td></td>
+          </tr>
+
+          <tr id="choice-table-headers">
             <th>
-              {t("Pakota minimikoko")}
-              <label style={{ display: "flex", alignItems: "center" }}>
-                <input
-                  type="checkbox"
-                  checked={!!selectAllMandatory}
-                  onChange={(e) => setSelectAllMandatory?.(e.target.checked)}
-                />
-              </label>
+              <label>{t("Pakota minimikoko")}</label>
+              <input
+                type="checkbox"
+                id="select-all-choices"
+                checked={!!selectAllMandatory}
+                onChange={(e) => setSelectAllMandatory?.(e.target.checked)}
+              />
             </th>
 
-            <th>{t("Nimi")}</th>
-            <th>{t("Enimmäispaikat")}</th>
-            <th>{t("Ryhmän minimikoko")}</th>
+            <th
+              className="constant-header"
+              col-validation-regex=".{5,}"
+              validation-text={t("yli 5 merkkiä pitkiä")}
+            >
+              {t("Nimi")}
+            </th>
+
+            <th
+              className="constant-header"
+              col-validation-regex="\d+"
+              validation-text={t("kokonaislukuja")}
+            >
+              {t("Enimmäispaikat")}
+            </th>
+
+            <th
+              className="constant-header"
+              col-validation-regex="\d+"
+              validation-text={t("kokonaislukuja")}
+            >
+              {t("Ryhmän minimikoko")}
+            </th>
 
             {columns.map(({ name }) => (
-              <th key={name}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span>{name}</span>
-                  <button type="button" onClick={() => removeColumn(name)}>
-                    ✖
-                  </button>
-                </div>
+              <th key={name} className="variable-header">
+                {name}
               </th>
             ))}
 
-            <th>
-              <button type="button" onClick={handleAddColumn}>
-                + {t("Lisää tietokenttä")}
-              </button>
+            <th className="variable-header" id="add-column-header">
+              {isAddingColumn ? (
+                <div className="d-flex align-items-center gap-2">
+                  <input
+                    type="text"
+                    autoFocus
+                    value={newColumnName}
+                    className="form-control form-control-sm bg-dark text-light"
+                    onChange={(e) => setNewColumnName(e.target.value)}
+                    onBlur={handleCancelAddColumn}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAddColumnSubmit();
+                      if (e.key === "Escape") handleCancelAddColumn();
+                    }}
+                  />
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-light"
+                  onClick={() => setIsAddingColumn(true)}
+                >
+                  + {t("Lisää tietokenttä")}
+                </button>
+              )}
             </th>
-
-            <th></th>
           </tr>
         </thead>
 
-        <tbody>
+        <tbody id="choiceTable">
           {rows.map((row) => (
             <ChoiceRow
               key={row.id}
