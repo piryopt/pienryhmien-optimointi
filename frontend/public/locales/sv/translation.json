@@ -22,9 +22,12 @@
   "Kyllä": "",
   "Kysely": "",
   "Kyselyn tila": "",
+  "Käynnissä olevat kyselyt": "Pågående enkäter",
+  "Luotuja kyselyitä": "Skapade enkäter: {{count}}",
+  "Luo uusi kysely": "Skapa en ny enkät",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Skapa en ny enkät eller importera färdiga svarsalternativ från en CSV-fil",
   "Luo uusi monivaiheinen kysely": "Skapa ny flerfasundersökning",
-  "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "",
+  "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Skapa en ny enkät i flera steg och ange svarsalternativ för varje steg",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "",
   "Näytä": "",
   "Näytä vanhat kyselyt": "Visa gamla enkäter",
@@ -42,10 +45,12 @@
   "Tarkastele tuloksia": "",
   "Tietosuojaseloste": "Integritetspolicy",
   "Tilastot": "Statistik",
-  "Toiminnot": "",
+  "Toiminnot": "Åtgärder",
   "UKK": "FAQ",
   "Valinnat": "",
   "Vastauksen poistaminen": "",
+  "Vastaukset": "Svar: {{count}}",
   "Vastauksia": "",
-  "Vastausaika päättyy": ""
+  "Vastausaika päättyy": "Svarstid utgår",
+  "Vastausaika päättyy:": "Svarstid utgår: {{timeEnd}}"
 }

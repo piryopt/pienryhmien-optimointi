@@ -117,6 +117,19 @@ def frontpage() -> str:
     return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
 
+@bp.route("/api/frontpage", methods=["GET"])
+@ad_login
+def frontpage_data():
+    """
+    Returns data displayed on the frontpage.
+    """
+    user_id = session.get("user_id", 0)
+    created_surveys = survey_service.count_surveys_created(user_id)
+    active_surveys = survey_service.get_active_surveys_and_response_count(user_id)
+
+    return jsonify({"createdSurveys": created_surveys, "activeSurveys": active_surveys})
+
+
 """
 /SURVEYS/* ROUTES:
 """

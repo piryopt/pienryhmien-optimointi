@@ -132,7 +132,15 @@ class SurveyService:
         args:
             user_id: The id of the user whose active surveys we want
         """
-        return self._survey_repository.get_active_surveys_and_response_count(user_id)
+
+        surveys = self._survey_repository.get_active_surveys_and_response_count(user_id)
+        return [
+        {
+            key: format_datestring(val) if key == "time_end" else val
+            for key, val in survey._mapping.items()
+        }
+        for survey in surveys
+        ]
 
     def check_if_survey_closed(self, survey_id):
         """
