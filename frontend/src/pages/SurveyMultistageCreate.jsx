@@ -4,20 +4,19 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNotification } from "../context/NotificationContext";
 import { buildCreateSurveySchema } from "../utils/validations/createSurveyValidations";
-import Header from "../components/create_survey_page_components/Header";
+import MultistageSurveyHeader from "../components/create_multistage_survey_components/MultistageSurveyHeader";
 import SurveyNameInput from "../components/create_survey_page_components/SurveyNameInput";
-import StageNameInput from "../components/create_survey_page_components/StageNameInput";
 import SurveyDateOfClosing from "../components/create_survey_page_components/SurveyDateOfClosing";
 import SurveyDescription from "../components/create_survey_page_components/SurveyDescription";
 import MinChoicesSection from "../components/create_survey_page_components/MinChoicesSection";
 import DenyChoicesSection from "../components/create_survey_page_components/DenyChoicesSection";
 import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
-import PrioritizedGroupsDescription from "../components/create_survey_page_components/PrioritizedGroupsDescription";
-import ChoiceTable from "../components/create_survey_page_components/ChoiceTable";
-import "../static/css/createSurveyPage.css";
+import MultistageSurveyPrioritizedGroupsDescription from "../components/create_multistage_survey_components/MultistageSurveyPrioritizedGroupsDescription";
+import StageTables from "../components/create_multistage_survey_components/StageTables";
 import Button from 'react-bootstrap/Button';
+import "../static/css/createSurveyPage.css";
 
-const SurveyMultiphaseCreate = () => {
+const SurveyMultistageCreate = () => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
 
@@ -26,16 +25,7 @@ const SurveyMultiphaseCreate = () => {
   // Manage multiple choice tables (stages)
   const stageNextId = useRef(1);
   const [newStageName, setNewStageName] = useState("");
-  const [tables, setTables] = useState([
-    {
-      id: 1,
-      name: "", // stage name
-      nextRowId: 1,
-      columns: [],
-      rows: [{ id: 1, mandatory: false, name: "", max_spaces: "", min_size: "" }],
-      selectAllMandatory: false
-    }
-  ]);
+  const [tables, setTables] = useState([]);
 
   const addStage = () => {
     const id = ++stageNextId.current;
@@ -169,7 +159,7 @@ const SurveyMultiphaseCreate = () => {
 
   return (
     <div>
-      <Header />
+      <MultistageSurveyHeader />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <SurveyNameInput />
@@ -178,37 +168,18 @@ const SurveyMultiphaseCreate = () => {
           <MinChoicesSection />
           <DenyChoicesSection />
           <SearchVisibilitySection />
-          <PrioritizedGroupsDescription />
-
-          {tables.map((table) => (
-            <div key={table.id} style={{ marginBottom: "65px" }}>
-              <div className="d-flex align-items-left mb-4">
-                <div className="column" style={{ marginRight: '10px' }}>
-                  <StageNameInput
-                    value={table.name}
-                    onChange={(val) => updateStageName(table.id, val)}
-                    placeholder={t("Vaiheen tunniste")}
-                  />
-                </div>
-                <div className="column">
-                <Button variant="danger" onClick={() => setTables((ts) => ts.filter((t) => t.id !== table.id))}>
-                    {t("Poista vaihe")}
-                  </Button>
-                </div>
-              </div>
-              <ChoiceTable
-                columns={table.columns}
-                rows={table.rows}
-                addRow={() => addRow(table.id)}
-                deleteRow={(rowId) => deleteRow(table.id, rowId)}
-                addColumn={(name) => addColumn(table.id, name)}
-                removeColumn={(name) => removeColumn(table.id, name)}
-                updateCell={(rowId, key, value) => updateCell(table.id, rowId, key, value)}
-                setSelectAllMandatory={(val) => setTableSelectAllMandatory(table.id, val)}
-                selectAllMandatory={table.selectAllMandatory}
-              />
-            </div>
-          ))}
+          <MultistageSurveyPrioritizedGroupsDescription />
+          <StageTables
+            tables={tables} 
+            updateStageName={updateStageName}
+            setTables={setTables}
+            addRow={addRow}
+            deleteRow={deleteRow}
+            addColumn={addColumn}
+            removeColumn={removeColumn}
+            updateCell={updateCell}
+            setTableSelectAllMandatory={setTableSelectAllMandatory} 
+          />
           <div className="mb-4" style={{ marginTop: "40px" }}>
               <Button variant="primary" onClick={addStage}>
                 + {t("Lisää vaihe")}
@@ -223,4 +194,4 @@ const SurveyMultiphaseCreate = () => {
   );
 };
 
-export default SurveyMultiphaseCreate;
+export default SurveyMultistageCreate;

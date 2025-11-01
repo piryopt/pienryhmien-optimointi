@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider";
-import SurveyMultiphaseCreate from "./pages/SurveyMultiphaseCreate";
+import SurveyMultistageCreate from "./pages/SurveyMultistageCreate";
 import SurveysPage from "./pages/SurveysPage";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
@@ -24,7 +24,7 @@ const App = () => {
               path="/multistage/survey/create"
               element={
                 <RequireAuth>
-                  <SurveyMultiphaseCreate />
+                  <SurveyMultistageCreate />
                 </RequireAuth>
               }
             />
