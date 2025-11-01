@@ -221,7 +221,6 @@ const SurveyMultistageCreate = () => {
       }
     };
 
-
   return (
     <div>
       <MultistageSurveyHeader />
@@ -245,11 +244,11 @@ const SurveyMultistageCreate = () => {
             updateCell={updateCell}
             setTableSelectAllMandatory={setTableSelectAllMandatory} 
           />
-          <div className="mb-4" style={{ marginTop: "40px" }}>
+          <div className="mb-4">
               <Button variant="primary" onClick={addStage}>
                 + {t("Lisää vaihe")}
               </Button>
-            </div>
+          </div>
           <button type="submit" className="btn btn-success">
             {t("Luo kysely")}
           </button>

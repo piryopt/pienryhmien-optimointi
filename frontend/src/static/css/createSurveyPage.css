@@ -3,6 +3,10 @@ section {
   margin-bottom: 40px;
 }
 
+p {
+  font-size: 12.5pt;
+}
+
 /* Styles for choice table */
 .variable-header:hover {
   cursor: pointer;
@@ -214,8 +218,10 @@ div.delete-col-btn-visible {
   background-repeat: no-repeat;
 }
 
+
+/* Styles for stages */
 .stage-name-input {
-  margin-right: 15px
+  margin-right: 15px;
 
 }
 
@@ -232,4 +238,22 @@ div.delete-col-btn-visible {
 .stage {
   margin-top: 10px;
   margin-bottom: 70px;
+}
+
+input[type="radio"] {
+  margin-left: 3px;
+}
+
+.deadline {
+  margin-bottom: 5px;
+}
+
+label {
+  margin-left: 5px;
+  margin-right: 18px;
+}
+
+.input-label {
+  margin-top: 17px;
+  margin-bottom: 5px;
 }

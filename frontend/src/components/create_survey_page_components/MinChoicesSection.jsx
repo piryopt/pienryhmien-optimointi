@@ -37,7 +37,7 @@ const MinChoicesSection = () => {
 
       {setting === "custom" && (
         <div className="min-choices-section">
-          <label htmlFor="minchoices">
+          <label htmlFor="minchoices" className="input-label">
             {t("Priorisoitujen ryhmien vähimmäismäärä")}
           </label>
           <input
