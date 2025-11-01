@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import ChoiceTable from "../create_survey_page_components/ChoiceTable";
 import StageNameInput from "../create_survey_page_components/StageNameInput";
 
-const StageTables = ({ tables, updateStageName, setTables, addRow, deleteRow, addColumn, removeColumn, updateCell, setTableSelectAllMandatory }) => {
+const StageTables = ({ tables, updateStageName, setTables, addRow, deleteRow, addColumn, removeColumn, updateCell, setTableSelectAllMandatory, importCsv }) => {
   const { t } = useTranslation();
   
   return (
@@ -29,6 +29,12 @@ const StageTables = ({ tables, updateStageName, setTables, addRow, deleteRow, ad
               type="file"
               accept=".csv,text/csv"
               style={{ display: "none" }}
+              onChange={(e) => {
+                const f = e.target.files && e.target.files[0];
+                if (f && importCsv) importCsv(table.id, f);
+                // reset so the same file can be re-selected later
+                e.target.value = "";
+              }}
             />
             <label
               htmlFor={`choiceFileInput-${table.id}`}

@@ -17,6 +17,7 @@ import Button from 'react-bootstrap/Button';
 import { format } from "date-fns";
 import csrfService from "../services/csrf";
 import "../static/css/createSurveyPage.css";
+import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 
 const SurveyMultistageCreate = () => {
   const { t } = useTranslation();
@@ -131,6 +132,28 @@ const SurveyMultistageCreate = () => {
     mode: "onBlur"
   });
 
+  const importCsvToTable = async (tableId, file) => {
+    if (!file) return;
+    const parsed = await parseCsvFile(file);
+    if (!parsed || parsed.length <= 1) return;
+
+    const headers = parsed[0].map((h) => (h ?? "").toString().trim());
+    const rowsToParse = parsed.slice(1).filter((r) => r.some((c) => String(c || "").trim() !== ""));
+
+    setTables((ts) =>
+      ts.map((t) => {
+        if (t.id !== tableId) return t;
+        const update = updateTableFromCSV(headers, rowsToParse, t);
+        return {
+          ...t,
+          columns: update.columns,
+          rows: [...t.rows, ...update.rows],
+          nextRowId: update.nextRowId
+        };
+      })
+    );
+  };
+
   const { handleSubmit } = methods;
   
     const onSubmit = async (data) => {
@@ -221,6 +244,7 @@ const SurveyMultistageCreate = () => {
       }
     };
 
+
   return (
     <div>
       <MultistageSurveyHeader />
@@ -242,7 +266,8 @@ const SurveyMultistageCreate = () => {
             addColumn={addColumn}
             removeColumn={removeColumn}
             updateCell={updateCell}
-            setTableSelectAllMandatory={setTableSelectAllMandatory} 
+            setTableSelectAllMandatory={setTableSelectAllMandatory}
+            importCsv={importCsvToTable}
           />
           <div className="mb-4">
               <Button variant="primary" onClick={addStage}>
