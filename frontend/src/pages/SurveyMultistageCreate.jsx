@@ -14,6 +14,8 @@ import SearchVisibilitySection from "../components/create_survey_page_components
 import MultistageSurveyPrioritizedGroupsDescription from "../components/create_multistage_survey_components/MultistageSurveyPrioritizedGroupsDescription";
 import StageTables from "../components/create_multistage_survey_components/StageTables";
 import Button from 'react-bootstrap/Button';
+import { format } from "date-fns";
+import csrfService from "../services/csrf";
 import "../static/css/createSurveyPage.css";
 
 const SurveyMultistageCreate = () => {
@@ -22,7 +24,6 @@ const SurveyMultistageCreate = () => {
 
   const schema = buildCreateSurveySchema(t);
 
-  // Manage multiple choice tables (stages)
   const stageNextId = useRef(1);
   const [newStageName, setNewStageName] = useState("");
   const [tables, setTables] = useState([]);
@@ -113,25 +114,6 @@ const SurveyMultistageCreate = () => {
       )
     );
 
-  const setChoices = () => {
-    // Combine choices from all tables; include stageId and stageName
-    const choicesEntry = tables.flatMap((t) =>
-      t.rows.map((r) => {
-        const base = {
-          stageId: t.id,
-          stageName: t.name ?? "",
-          mandatory: !!r.mandatory,
-          name: r.name,
-          max_spaces: Number(r.max_spaces) || 0,
-          min_size: Number(r.min_size) || 0
-        };
-        t.columns.forEach((c) => (base[c.name] = r[c.name] ?? ""));
-        return base;
-      })
-    );
-    return choicesEntry;
-  };
-
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -150,12 +132,95 @@ const SurveyMultistageCreate = () => {
   });
 
   const { handleSubmit } = methods;
+  
+    const onSubmit = async (data) => {
+      const csrfToken = await csrfService.fetchCsrfToken();
 
-  const onSubmit = async (data) => {
-    const choices = setChoices();
-    const payload = { ...data, choices };
-    console.log("Submitting survey with payload:", payload);
-  };
+      const stages = tables.map((t) => ({
+        id: t.id,
+        name: t.name || "",
+        columns: t.columns.map((c) => ({ ...c })),
+        choices: t.rows.map((r) => {
+          const choice = {
+            mandatory: !!r.mandatory,
+            name: r.name || "",
+            max_spaces: Number(r.max_spaces) || 0,
+            min_size: Number(r.min_size) || 0
+          };
+          t.columns.forEach((c) => {
+            choice[c.name] = r[c.name] ?? "";
+          });
+          return choice;
+        })
+      }));
+
+      const allowedDenied = Array.isArray(data.allowedDeniedChoices)
+        ? data.allowedDeniedChoices
+        : data.allowedDeniedChoices
+        ? [data.allowedDeniedChoices]
+        : [];
+
+      const payload = {
+        surveyGroupname: data.groupname,
+        surveyInformation: data.surveyInformation || "",
+        stages,
+        minchoices: data.minchoices ?? 1,
+        enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
+        endtime: data.endtime || "",
+        allowedDeniedChoices: allowedDenied,
+        allowSearchVisibility: data.allowSearchVisibility || false
+      };
+      
+    const extractMessage = (json, res) => {
+        if (!json) return res?.statusText || t("Kyselyn luonti epäonnistui");
+        if (typeof json === "string") return json;
+        return (
+          json.msg ||
+          json.message ||
+          res?.statusText ||
+          t("Kyselyn luonti epäonnistui")
+        );
+      };
+  
+      try {
+        const res = await fetch("http://localhost:5001/api/multistage/survey/create", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
+          },
+          body: JSON.stringify(payload)
+        });
+  
+        let json = null;
+        try {
+          json = await res.json();
+        } catch {
+          json = null;
+        }
+  
+        if (!res.ok) {
+          const msg = extractMessage(json, res);
+          showNotification(msg, "error");
+          return;
+        }
+  
+        if (!json || String(json.status) !== "1") {
+          const msg = extractMessage(json, res);
+          showNotification(msg, "error");
+          return;
+        }
+  
+        showNotification(json.msg || t("Kysely luotu onnistuneesti"), "success");
+      } catch (err) {
+        showNotification(
+          err?.message || t("Kyselyn luonti epäonnistui"),
+          "error"
+        );
+      }
+    };
+
 
   return (
     <div>

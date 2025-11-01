@@ -14,7 +14,7 @@ const FrontPage = () => {
         </Link>
       </div>
       <div>
-        <Link to="/multiphase/survey/create">
+        <Link to="/multistage/survey/create">
           {t(
             "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot"
           )}

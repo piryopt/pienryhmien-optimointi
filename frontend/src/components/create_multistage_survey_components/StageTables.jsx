@@ -24,10 +24,19 @@ const StageTables = ({ tables, updateStageName, setTables, addRow, deleteRow, ad
             </Button>
           </div>
           <div className="column">
-            <input id="choiceFileInput" type="file" style={{ display: "none" }} />
-            <button className="btn btn-secondary" name="uploadChoiceFile">
+            <input
+              id={`choiceFileInput-${table.id}`}
+              type="file"
+              accept=".csv,text/csv"
+              style={{ display: "none" }}
+            />
+            <label
+              htmlFor={`choiceFileInput-${table.id}`}
+              className="btn btn-secondary"
+              role="button"
+            >
               {t("Tuo valinnat CSV-tiedostosta")}
-            </button>
+            </label>
           </div>
         </div>
         <div style={{ marginTop: "0px" }}>
