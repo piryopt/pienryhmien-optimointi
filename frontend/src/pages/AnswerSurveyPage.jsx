@@ -8,8 +8,8 @@ import Button from 'react-bootstrap/Button';
 import GroupList from '../components/survey_answer_page_components/GroupList.jsx';
 import ReasonsBox from '../components/survey_answer_page_components/ReasonsBox.jsx';
 import assignmentIcon from '/images/assignment_white_36dp.svg';
-import '../static/css/answerPage.css'; 
-  
+import '../static/css/answerPage.css';
+
 
 const AnswerSurveyPage = () => {
   const { surveyId } = useParams();
@@ -163,7 +163,6 @@ const AnswerSurveyPage = () => {
               </Button>
             </div>
           </div>
-
           <div className="right-column">
             <GroupList id="neutral" items={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
           </div>

@@ -21,7 +21,7 @@ const App = () => {
         <Layout>
           <Routes>
             <Route
-              path="/multiphase/survey/create"
+              path="/multistage/survey/create"
               element={
                 <RequireAuth>
                   <SurveyMultiphaseCreate />

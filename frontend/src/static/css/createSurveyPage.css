@@ -213,3 +213,13 @@ div.delete-col-btn-visible {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.stage-name-input {
+  background-color: #212325;
+  border: 1px solid #63666b;
+  border-color: #63666b;
+  width: 300px;
+  color: white;
+  border-radius: 6px;
+  height: 38px;
+}
