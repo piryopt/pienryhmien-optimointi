@@ -106,14 +106,11 @@ const submitSurveyAnswer = async ({
   }
 };
 
-const deleteSurveyAnswer = async (surveyId, studentEmail) => {
+const deleteSurveyAnswer = async (surveyId) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
-    const response = await axios.post(
-      `${baseUrl}/surveys/${surveyId}/answers/delete`,
-      {
-        student_email: studentEmail
-      },
+    const response = await axios.delete(
+      `${baseUrl}/api/surveys/${surveyId}`,
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -231,9 +228,9 @@ export default {
   getFrontPageData: getFrontPageData,
   deleteSurvey: deleteSurvey,
   submitSurveyAnswer: submitSurveyAnswer,
+  deleteSurveyAnswer: deleteSurveyAnswer,
   deleteSurvey: deleteSurvey,
   getSurveyAnswersData: getSurveyAnswersData,
-  deleteSurveyAnswer: deleteSurveyAnswer,
   getStudentRankings: getStudentRankings,
   openSurvey: openSurvey,
   closeSurvey: closeSurvey,
