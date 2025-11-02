@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider";
-import SurveyMultiphaseCreate from "./pages/SurveyMultiphaseCreate";
+import SurveyMultistageCreate from "./pages/SurveyMultistageCreate";
 import SurveysPage from "./pages/SurveysPage";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
@@ -18,12 +18,20 @@ const App = () => {
   return (
     <AuthProvider>
       <Layout>
-        <Routes>
+        <Routes>      
           <Route
-            path="/multiphase/survey/create"
+            path="/multistage/survey/create"
             element={
               <RequireAuth>
-                <SurveyMultiphaseCreate />
+                <SurveyMultistageCreate />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/create"
+            element={
+              <RequireAuth>
+                <CreateSurveyPage />
               </RequireAuth>
             }
           />
@@ -46,6 +54,14 @@ const App = () => {
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route
+            path="/csv-instructions"
+            element={
+              <RequireAuth>
+                <CSVInstructionsPage />
+              </RequireAuth>
+            }
+          />
           <Route
             path="/"
             element={

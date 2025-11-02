@@ -22,7 +22,7 @@ const SurveyDateOfClosing = () => {
         )}
       </p>
 
-      <label>{t("Vastausaika päättyy")}:</label>
+      <label className="deadline">{t("Vastausaika päättyy")}:</label>
 
       <div className="datetime-controls">
         <div className="datetime-field datetime-date">
