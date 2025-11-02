@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider";
 import SurveyMultiphaseCreate from "./pages/SurveyMultiphaseCreate";
 import SurveysPage from "./pages/SurveysPage";
@@ -17,83 +17,61 @@ import CSVInstructionsPage from "./components/create_survey_page_components/CSVI
 const App = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route
-              path="/multiphase/survey/create"
-              element={
-                <RequireAuth>
-                  <SurveyMultiphaseCreate />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys/create"
-              element={
-                <RequireAuth>
-                  <CreateSurveyPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys"
-              element={
-                <RequireAuth>
-                  <SurveysPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys/:surveyId"
-              element={
-                <RequireAuth>
-                  <AnswerSurveyPage />
-                </RequireAuth>
-              }
-            />
-            <Route path="/auth/login" element={<LoginPage />} />
-
-            <Route path="/faq" element={<FAQ />} />
-
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-
-            <Route
-              path="/csv-instructions"
-              element={
-                <RequireAuth>
-                  <CSVInstructionsPage />
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <FrontPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys/:id/answers"
-              element={
-                <RequireAuth>
-                  <SurveyAnswersPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys/:id/results"
-              element={
-                <RequireAuth>
-                  <SurveyResultsPage />
-                </RequireAuth>
-              }
-            />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route
+            path="/multiphase/survey/create"
+            element={
+              <RequireAuth>
+                <SurveyMultiphaseCreate />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys"
+            element={
+              <RequireAuth>
+                <SurveysPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/:surveyId"
+            element={
+              <RequireAuth>
+                <AnswerSurveyPage />
+              </RequireAuth>
+            }
+          />
+          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <FrontPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/:id/answers"
+            element={
+              <RequireAuth>
+                <SurveyAnswersPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/:id/results"
+            element={
+              <RequireAuth>
+                <SurveyResultsPage />
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </Layout>
     </AuthProvider>
   );
 };
