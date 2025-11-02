@@ -11,6 +11,8 @@ import FrontPage from "./pages/FrontPage";
 import SurveyResultsPage from "./pages/SurveyResultsPage";
 import RequireAuth from "./components/RequireAuth";
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
+import CreateSurveyPage from "./pages/CreateSurveyPage";
+import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";
 
 const App = () => {
   return (

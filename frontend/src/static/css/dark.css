@@ -162,8 +162,10 @@ body {
 }
 
 .page-title {
+  display: flex;
   margin-top: 20px;
   margin-bottom: 40px;
+  gap: 12px;
 }
 
 td.empty {
