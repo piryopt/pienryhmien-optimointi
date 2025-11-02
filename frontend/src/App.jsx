@@ -16,6 +16,8 @@ import AdminFeedbackDetail from "./pages/admintools/AdminFeedbackDetail"
 import RequireAuth from "./components/RequireAuth";
 import RequireAdmin from "./components/RequireAdmin"
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
+import CreateSurveyPage from "./pages/CreateSurveyPage";
+import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";
 
 const App = () => {
   return (

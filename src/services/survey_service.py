@@ -132,7 +132,15 @@ class SurveyService:
         args:
             user_id: The id of the user whose active surveys we want
         """
-        return self._survey_repository.get_active_surveys_and_response_count(user_id)
+
+        surveys = self._survey_repository.get_active_surveys_and_response_count(user_id)
+        return [
+        {
+            key: format_datestring(val) if key == "time_end" else val
+            for key, val in survey._mapping.items()
+        }
+        for survey in surveys
+        ]
 
     def check_if_survey_closed(self, survey_id):
         """
@@ -355,6 +363,7 @@ class SurveyService:
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
             language = session.get("language", "fi")
+            print("Survey choices react: ", survey_dict["choices"])
             for choice in survey_dict["choices"]:
                 if choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä" \
                 or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä" \

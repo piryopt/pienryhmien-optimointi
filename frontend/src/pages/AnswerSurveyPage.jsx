@@ -1,20 +1,20 @@
 import { useState, useEffect, useRef } from "react";
-import { DragDropContext } from "@hello-pangea/dnd";
 import { useParams } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext.jsx";
-import { useTranslation } from "react-i18next";
 import surveyService from '../services/surveys.js';
-import Button from 'react-bootstrap/Button';
+import Header from '../components/survey_answer_page_components/Header.jsx';
+import '../static/css/answerPage.css'; 
+import ClosedSurveyView from "../components/survey_answer_page_components/ClosedSurveyView.jsx";
+import SurveyInfo from "../components/survey_answer_page_components/SurveyInfo.jsx";
+import { DragDropContext } from "@hello-pangea/dnd";
+import { ReactReduxContext } from "react-redux";
 import GroupList from '../components/survey_answer_page_components/GroupList.jsx';
 import ReasonsBox from '../components/survey_answer_page_components/ReasonsBox.jsx';
-import assignmentIcon from '/images/assignment_white_36dp.svg';
-import '../static/css/answerPage.css'; 
-  
+import ButtonRow from '../components/survey_answer_page_components/ButtonRow.jsx';
 
 const AnswerSurveyPage = () => {
   const { surveyId } = useParams();
   const { showNotification } = useNotification();
-  const { t } = useTranslation();
   const [neutral, setNeutral] = useState([]);
   const [good, setGood] = useState([]);
   const [bad, setBad] = useState([]);
@@ -23,7 +23,7 @@ const AnswerSurveyPage = () => {
   const [additionalInfo, setAdditionalInfo] = useState(false);
   const [expandedIds, setExpandedIds] = useState(new Set());
   const [reason, setReason] = useState("");
-
+  const [existing, setExisting] = useState(false);
   const mountedRef =  useRef(false);
 
   useEffect(() => {
@@ -39,12 +39,11 @@ const AnswerSurveyPage = () => {
         let badChoices = [];
 
         if (data.existing === "1") {
+          setExisting(true);
           const goodIds = data.goodChoices || [];
           const badIds = data.badChoices || [];
-          // ensure ids are strings for comparison
           const goodIdSet = new Set((goodIds || []).map(String));
           const badIdSet = new Set((badIds || []).map(String));
-
           goodChoices = choices.filter((c) => goodIdSet.has(String(c.id)));
           badChoices = choices.filter((c) => badIdSet.has(String(c.id)));
           
@@ -53,13 +52,12 @@ const AnswerSurveyPage = () => {
           
           setReason(data.reason || "");
         }
-
         setNeutral(neutralChoices);
         setGood(goodChoices);
         setBad(badChoices);
         setSurvey(data.survey || {});
         setAdditionalInfo(data.additional_info || false);
-
+        
       } catch (err) {
         console.error(err);
       } finally {
@@ -71,7 +69,7 @@ const AnswerSurveyPage = () => {
 
   const handleDragEnd = (result) => {
     const { source, destination } = result;
-    if (!destination) return;
+      if (!destination) return;
 
     const sourceList = getList(source.droppableId);
     const destList = getList(destination.droppableId);
@@ -114,62 +112,80 @@ const AnswerSurveyPage = () => {
     try {
       const result = await surveyService.submitSurveyAnswer({ surveyId: surveyId, good: good.map(c => c.id), bad: bad.map(c => c.id), neutral: neutral.map(c => c.id), reason, minChoices: survey.min_choices, deniedAllowedChoices: survey.denied_allowed_choices })
       if (result.status === "0") throw new Error(result.msg);
-      showNotification(t(result.msg), "success");
+      showNotification(result.msg, "success");
+      setExisting(true)
     } catch (error) {
-      showNotification(t(error.message), "error");
+      showNotification(error.message, "error");
       console.error("Error submitting survey", error);
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const result = await surveyService.deleteSurveyAnswer(surveyId);
+      if (result.status === "0") throw new Error(result.msg);
+      showNotification(result.msg, "success");
+      setExisting(false);
+      setNeutral([...neutral, ...good, ...bad]);
+      setGood([]);
+      setBad([]);
+      setReason("");
+    } catch (error) {
+      showNotification(error.message, "error");
+      console.error("Error deleting survey", error);
+    }
+  };
+
+  const readOnly = Boolean(survey.closed);
 
   if (loading) return <div className="text-center mt-5">Loading survey...</div>;
-
+  
   return (
     <div className="answer-page">
       <div>
-        <h1 className="answer-title">
-          <img src={assignmentIcon} alt="" className="assignment-icon" />
-          {survey.name}
-        </h1>
-        <p className="deadline">Vastausaika päättyy {survey.deadline}</p>
-        <p className="instructions">
-          <i>
-            Raahaa oikean reunan listasta vähintään {survey.min_choices} vaihtoehtoa
-            <span className="highlight"> vihreään</span> laatikkoon.
-          </i>
-          {additionalInfo ? (
-            <i> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
-          ) : null}
-        </p>
-        <p className="note">
-          HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.
-        </p>
+        <Header surveyName={survey.name} />
+        {!readOnly && ( <SurveyInfo survey={survey} additionalInfo={additionalInfo} />)}
       </div>
-
-      <div className="answer-layout">
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <div className="left-column">
-            <GroupList id="good" items={good} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
-            { (survey.denied_allowed_choices ?? 0) !== 0 && (
-              <>
-                <GroupList id="bad" items={bad} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
-                <ReasonsBox reason={reason} setReason={setReason} />
-              </>
-            )}
-
-            <div className="submit-row">
-              <Button variant="success" className="submit-btn" onClick={handleSubmit}>
-                Lähetä valinnat
-              </Button>
+      {readOnly ? (
+        <ClosedSurveyView good={good} bad={bad} neutral={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} reason={reason} existing={existing} />
+      ) : (
+        <div className="answer-layout">
+          <DragDropContext onDragEnd={handleDragEnd} context={ReactReduxContext}>
+            <div className="left-column">
+              <GroupList
+              id="good"
+                items={good}
+                expandedIds={expandedIds}
+                toggleExpand={toggleExpand}
+                choices={neutral} 
+              />
+              { (survey.denied_allowed_choices ?? 0) !== 0 && (
+                <>
+                  <GroupList
+                    id="bad"
+                    items={bad}
+                    expandedIds={expandedIds}
+                    toggleExpand={toggleExpand}
+                    choices={neutral}
+                  />
+                  <ReasonsBox reason={reason} setReason={setReason} />
+                </>
+              )}
+              <ButtonRow handleSubmit={handleSubmit} handleDelete={handleDelete} existing={existing} />
             </div>
-          </div>
-
-          <div className="right-column">
-            <GroupList id="neutral" items={neutral} expandedIds={expandedIds} toggleExpand={toggleExpand} choices={neutral} />
-          </div>
-        </DragDropContext>
-      </div>
-    </div>
+            <div className="right-column">
+              <GroupList
+                id="neutral"
+                items={neutral}
+                expandedIds={expandedIds}
+                toggleExpand={toggleExpand}
+                choices={neutral}
+              />
+            </div>
+          </DragDropContext>
+        </div>
+      )}
+  </div>
   );
 };
 
