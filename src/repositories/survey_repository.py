@@ -160,7 +160,7 @@ class SurveyRepository:
             print(e)
             return False
 
-    def create_new_survey(self, surveyname, min_choices, description, enddate, allowed_denied_choices=0, allow_search_visibility=True):
+    def create_new_survey(self, surveyname, min_choices, description, enddate, allowed_denied_choices=0, allow_search_visibility=True, user_id=None):
         """
         Creates a new survey, updates just surveys table
         RETURNS created survey's id

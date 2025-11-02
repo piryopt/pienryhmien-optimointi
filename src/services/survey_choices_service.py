@@ -140,5 +140,34 @@ class SurveyChoicesService:
             return None
         return survey_choice.mandatory
 
+    def add_multistage_choice(self, **kwargs):
+        """
+        Adds a new multistage choice (e.g., a recurring group) to a survey.
+
+        Expected keyword arguments (**kwargs):
+            survey_id (str): The ID of the survey the choice belongs to.
+            name (str): The display name of the choice.
+            max_spaces (int): Maximum number of participants allowed.
+            min_size (int): Minimum number of participants required.
+            stages (list[str]): A list of stage identifiers (e.g., ["week1", "week2"]).
+            mandatory (bool): Whether the group is mandatory. Defaults to False.
+
+        Returns:
+            dict: A result dictionary with keys:
+                - success (bool): True if creation succeeded.
+                - message (str): Informational message.
+        """
+        try:
+            required_fields = ["survey_id", "name", "max_spaces", "min_size", "mandatory", "stage"]
+            choice_id = self._survey_choices_repository.create_new_multistage_choice(**kwargs)
+            for key, val in kwargs.items():
+                if key not in required_fields:
+                    # no hidden field feature implemented yet
+                    self._survey_choices_repository.create_new_choice_info(choice_id, key, val, False)
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Unexpected service error: {e}"
+            }
 
 survey_choices_service = SurveyChoicesService()

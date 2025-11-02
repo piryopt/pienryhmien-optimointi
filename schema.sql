@@ -36,6 +36,13 @@ CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
 	mandatory BOOLEAN DEFAULT FALSE -- group must be filled
 );
 
+CREATE TABLE survey_stages (
+	survey_id VARCHAR(10) REFERENCES surveys,
+	choice_id INTEGER REFERENCES survey_choices,
+	stage TEXT NOT NULL,
+	PRIMARY KEY (survey_id, choice_id, stage)
+);
+
 CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices
 	id SERIAL PRIMARY KEY,
 	choice_id INTEGER REFERENCES survey_choices,

@@ -123,5 +123,46 @@ class SurveyChoicesRepository:
             print(e)
             return []
 
+    def create_new_multistage_choice(self, **kwargs):
+        """
+        Creates a new multistage survey choice
+        Expected keyword arguments (**kwargs):
+            survey_id (str): The ID of the survey this choice belongs to.
+            name (str): The display name of the choice (e.g., group or class name).
+            max_spaces (int): The maximum number of participants allowed in this choice.
+            min_size (int): The minimum required size for the group.
+            mandatory (bool, optional): Whether the group is mandatory to fill. Defaults to False.
+            stage (str): Stage identifier.
+        """
+        try:
+            sql = """
+            WITH new_choice AS (
+                INSERT INTO survey_choices (survey_id, name, max_spaces, min_size, mandatory, deleted)
+                VALUES (:survey_id, :name, :max_spaces, :min_size, :mandatory, FALSE)
+                RETURNING id
+            )
+            INSERT INTO survey_stages (survey_id, choice_id, stage)
+            SELECT :survey_id, id, :stage FROM new_choice
+            RETURNING choice_id;
+            """
+
+            res = db.session.execute(
+                text(sql),
+                {
+                    "survey_id": kwargs.get("survey_id"),
+                    "name": kwargs.get("name"),
+                    "max_spaces": kwargs.get("max_spaces"),
+                    "min_size": kwargs.get("min_size"),
+                    "mandatory": kwargs.get("mandatory", False),
+                    "stage": kwargs.get("stage")
+                }
+            )
+            new_choice_id = res.fetchone()[0]
+            db.session.commit()
+            return new_choice_id
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            return None
 
 survey_choices_repository = SurveyChoicesRepository()

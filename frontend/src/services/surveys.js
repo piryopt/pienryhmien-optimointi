@@ -218,18 +218,17 @@ const saveResults = async (surveyId) => {
   }
 };
 
-const submitMultiWeekAnswers = async (payload) => {
+const submitMultiStageAnswers = async (payload) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.post(
-      `${baseUrl}/api/surveys/multiphase/${payload.surveyId}`,
+      `${baseUrl}/api/surveys/multistage/${payload.surveyId}`,
       {
-        weeks: payload.weeks,
+        stages: payload.stages,
         reason: payload.reason
       },
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
           "X-CSRFToken": csrfToken
         },
         withCredentials: true
@@ -264,5 +263,5 @@ export default {
   closeSurvey: closeSurvey,
   getSurveyResultsData: getSurveyResultsData,
   saveResults: saveResults,
-  submitMultiWeekAnswers: submitMultiWeekAnswers
+  submitMultiStageAnswers: submitMultiStageAnswers
 };

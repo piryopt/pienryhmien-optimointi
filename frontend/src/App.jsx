@@ -18,7 +18,7 @@ import RequireAdmin from "./components/RequireAdmin";
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 import CreateSurveyPage from "./pages/CreateSurveyPage";
 import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";
-import MultiWeekAnswerPage from "./pages/MultiWeekAnswerPage";
+import MultiStageAnswerPage from "./pages/MultiStageAnswerPage";
 
 const App = () => {
   return (
@@ -66,10 +66,10 @@ const App = () => {
             }
           />
           <Route
-            path="/surveys/multiphase/:surveyId"
+            path="/surveys/multistage/:surveyId"
             element={
               <RequireAuth>
-                <MultiWeekAnswerPage />
+                <MultiStageAnswerPage />
               </RequireAuth>
             }
           />

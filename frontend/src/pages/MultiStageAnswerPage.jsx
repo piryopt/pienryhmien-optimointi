@@ -13,18 +13,18 @@ import ReasonsBox from "../components/survey_answer_page_components/ReasonsBox.j
 import assignmentIcon from "/images/assignment_white_36dp.svg";
 import "../static/css/answerPage.css";
 
-const MultiWeekAnswerPage = () => {
+const MultiStageAnswerPage = () => {
   const { surveyId } = useParams();
   const { showNotification } = useNotification();
   const { t } = useTranslation();
 
-  const [weeks, setWeeks] = useState({});
+  const [stages, setStages] = useState({});
   const [survey, setSurvey] = useState({});
   const [loading, setLoading] = useState(true);
   const [expandedIds, setExpandedIds] = useState(new Set());
   const [reason, setReason] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState(false);
-  const [activeWeek, setActiveWeek] = useState(null);
+  const [activeStage, setActiveStage] = useState(null);
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -42,10 +42,10 @@ const MultiWeekAnswerPage = () => {
           },
           reason: "",
           additional_info: true,
-          weeks: [
+          stages: [
             {
               id: "1",
-              name: "Viikko 1",
+              name: "Vaihe 1",
               existing: "0",
               choices: [
                 {
@@ -72,7 +72,7 @@ const MultiWeekAnswerPage = () => {
             },
             {
               id: "2",
-              name: "Viikko 2",
+              name: "Vaihe 2",
               existing: "0",
               choices: [
                 {
@@ -99,7 +99,7 @@ const MultiWeekAnswerPage = () => {
             },
             {
               id: "3",
-              name: "Viikko 3",
+              name: "Vaihe 3",
               existing: "1",
               choices: [
                 {
@@ -129,29 +129,31 @@ const MultiWeekAnswerPage = () => {
 
         if (!mountedRef.current) return;
 
-        const weeksData = {};
-        for (const week of data.weeks || []) {
-          let neutralChoices = [...(week.choices || [])];
+        const stagesData = {};
+        for (const stage of data.stages || []) {
+          let neutralChoices = [...(stage.choices || [])];
           let goodChoices = [];
           let badChoices = [];
 
-          if (week.existing === "1") {
-            const goodIds = new Set((week.goodChoices || []).map(String));
-            const badIds = new Set((week.badChoices || []).map(String));
+          if (stage.existing === "1") {
+            const goodIds = new Set((stage.goodChoices || []).map(String));
+            const badIds = new Set((stage.badChoices || []).map(String));
 
-            goodChoices = week.choices.filter((c) => goodIds.has(String(c.id)));
-            badChoices = week.choices.filter((c) => badIds.has(String(c.id)));
+            goodChoices = stage.choices.filter((c) =>
+              goodIds.has(String(c.id))
+            );
+            badChoices = stage.choices.filter((c) => badIds.has(String(c.id)));
 
             const used = new Set(
               [...goodChoices, ...badChoices].map((c) => String(c.id))
             );
-            neutralChoices = week.choices.filter(
+            neutralChoices = stage.choices.filter(
               (c) => !used.has(String(c.id))
             );
           }
 
-          weeksData[week.id] = {
-            name: week.name || `Viikko ${week.id}`,
+          stagesData[stage.id] = {
+            name: stage.name || `Vaihe ${stage.id}`,
             neutral: neutralChoices,
             good: goodChoices,
             bad: badChoices,
@@ -159,11 +161,11 @@ const MultiWeekAnswerPage = () => {
           };
         }
 
-        setWeeks(weeksData);
+        setStages(stagesData);
         setSurvey(data.survey || {});
         setReason(data.reason || "");
         setAdditionalInfo(data.additional_info || false);
-        setActiveWeek(Object.keys(weeksData)[0] || null);
+        setActiveStage(Object.keys(stagesData)[0] || null);
       } catch (err) {
         console.error(err);
       } finally {
@@ -181,40 +183,40 @@ const MultiWeekAnswerPage = () => {
     if (!destination) return;
 
     const sourceParts = source.droppableId.split("-");
-    const sourceWeek = sourceParts.length === 2 ? sourceParts[0] : "single";
+    const sourceStage = sourceParts.length === 2 ? sourceParts[0] : "single";
     const sourceListId =
       sourceParts.length === 2 ? sourceParts[1] : sourceParts[0];
 
     const destParts = destination.droppableId.split("-");
-    const destWeek = destParts.length === 2 ? destParts[0] : "single";
+    const destStage = destParts.length === 2 ? destParts[0] : "single";
     const destListId = destParts.length === 2 ? destParts[1] : destParts[0];
 
-    if (!weeks[sourceWeek] || !weeks[destWeek]) return;
+    if (!stages[sourceStage] || !stages[destStage]) return;
 
-    const sourceList = [...(weeks[sourceWeek][sourceListId] || [])];
+    const sourceList = [...(stages[sourceStage][sourceListId] || [])];
     const destList =
-      sourceWeek === destWeek && sourceListId === destListId
+      sourceStage === destStage && sourceListId === destListId
         ? sourceList
-        : [...(weeks[destWeek][destListId] || [])];
+        : [...(stages[destStage][destListId] || [])];
 
     const [moved] = sourceList.splice(source.index, 1);
 
-    if (!(sourceWeek === destWeek && sourceListId === destListId)) {
+    if (!(sourceStage === destStage && sourceListId === destListId)) {
       ["good", "bad", "neutral"].forEach((listId) => {
         if (listId !== destListId) {
-          weeks[sourceWeek][listId] = (weeks[sourceWeek][listId] || []).filter(
-            (x) => x.id !== moved.id
-          );
+          stages[sourceStage][listId] = (
+            stages[sourceStage][listId] || []
+          ).filter((x) => x.id !== moved.id);
         }
       });
     }
 
     destList.splice(destination.index, 0, moved);
 
-    setWeeks((prev) => ({
+    setStages((prev) => ({
       ...prev,
-      [sourceWeek]: {
-        ...prev[sourceWeek],
+      [sourceStage]: {
+        ...prev[sourceStage],
         [sourceListId]: sourceList,
         [destListId]: destList
       }
@@ -231,26 +233,26 @@ const MultiWeekAnswerPage = () => {
     });
   };
 
-  const toggleNotAvailable = (weekId) => {
-    setWeeks((prev) => ({
+  const toggleNotAvailable = (stageId) => {
+    setStages((prev) => ({
       ...prev,
-      [weekId]: { ...prev[weekId], notAvailable: !prev[weekId].notAvailable }
+      [stageId]: { ...prev[stageId], notAvailable: !prev[stageId].notAvailable }
     }));
   };
 
   const handleSubmit = async () => {
     try {
-      const payload = Object.entries(weeks).map(([weekId, lists]) => ({
-        weekId,
+      const payload = Object.entries(stages).map(([stageId, lists]) => ({
+        stageId,
         notAvailable: lists.notAvailable,
         good: lists.good.map((c) => c.id),
         bad: lists.bad.map((c) => c.id),
         neutral: lists.neutral.map((c) => c.id)
       }));
 
-      const result = await surveyService.submitMultiWeekAnswers({
+      const result = await surveyService.submitMultiStageAnswers({
         surveyId,
-        weeks: payload,
+        stages: payload,
         reason
       });
 
@@ -264,7 +266,7 @@ const MultiWeekAnswerPage = () => {
 
   if (loading)
     return <div className="text-center mt-5">Ladataan kyselyä...</div>;
-  if (!activeWeek) return <div>Ei viikkoja ladattuna</div>;
+  if (!activeStage) return <div>Ei vaiheita ladattuna</div>;
 
   return (
     <div className="answer-page">
@@ -276,7 +278,7 @@ const MultiWeekAnswerPage = () => {
         <p className="deadline">Vastausaika päättyy {survey.deadline}</p>
         <p className="instructions">
           <i>
-            Raahaa jokaiselta viikolta vähintään {survey.min_choices}{" "}
+            Raahaa jokaisesta vaiheesta vähintään {survey.min_choices}{" "}
             vaihtoehtoa <span className="highlight">vihreään</span> laatikkoon.
           </i>
           {additionalInfo && (
@@ -286,11 +288,11 @@ const MultiWeekAnswerPage = () => {
       </div>
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Tab.Container activeKey={activeWeek} onSelect={setActiveWeek}>
+        <Tab.Container activeKey={activeStage} onSelect={setActiveStage}>
           <Nav variant="tabs" className="mb-3 justify-content-center">
-            {Object.entries(weeks).map(([weekId, { name, notAvailable }]) => (
-              <Nav.Item key={weekId}>
-                <Nav.Link eventKey={weekId}>
+            {Object.entries(stages).map(([stageId, { name, notAvailable }]) => (
+              <Nav.Item key={stageId}>
+                <Nav.Link eventKey={stageId}>
                   {name}
                   {notAvailable ? " (poissa)" : ""}
                 </Nav.Link>
@@ -299,17 +301,17 @@ const MultiWeekAnswerPage = () => {
           </Nav>
 
           <Tab.Content>
-            {Object.entries(weeks).map(([weekId, week]) => (
-              <Tab.Pane key={weekId} eventKey={weekId}>
-                <div className="week-section">
+            {Object.entries(stages).map(([stageId, stage]) => (
+              <Tab.Pane key={stageId} eventKey={stageId}>
+                <div className="stage-section">
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h2 className="week-title">{week.name}</h2>
+                    <h2 className="stage-title">{stage.name}</h2>
                     <Form.Check
                       type="switch"
-                      id={`not-available-${weekId}`}
-                      label="En ole paikalla tällä viikolla"
-                      checked={week.notAvailable}
-                      onChange={() => toggleNotAvailable(weekId)}
+                      id={`not-available-${stageId}`}
+                      label="En ole paikalla tässä vaiheessa"
+                      checked={stage.notAvailable}
+                      onChange={() => toggleNotAvailable(stageId)}
                     />
                   </div>
                   <p
@@ -325,26 +327,26 @@ const MultiWeekAnswerPage = () => {
                     itsesi poissaolevaksi.
                   </p>
 
-                  {!week.notAvailable ? (
+                  {!stage.notAvailable ? (
                     <div className="answer-layout">
                       <div className="left-column">
                         <GroupList
-                          id={`${weekId}-good`}
-                          items={week.good}
+                          id={`${stageId}-good`}
+                          items={stage.good}
                           expandedIds={expandedIds}
                           toggleExpand={toggleExpand}
-                          choices={week.neutral}
-                          weekId={weekId}
+                          choices={stage.neutral}
+                          stageId={stageId}
                           multiphase={true}
                         />
                         {(survey.denied_allowed_choices ?? 0) !== 0 && (
                           <GroupList
-                            id={`${weekId}-bad`}
-                            items={week.bad}
+                            id={`${stageId}-bad`}
+                            items={stage.bad}
                             expandedIds={expandedIds}
                             toggleExpand={toggleExpand}
-                            choices={week.neutral}
-                            weekId={weekId}
+                            choices={stage.neutral}
+                            stageId={stageId}
                             multiphase={true}
                           />
                         )}
@@ -352,12 +354,12 @@ const MultiWeekAnswerPage = () => {
 
                       <div className="right-column">
                         <GroupList
-                          id={`${weekId}-neutral`}
-                          items={week.neutral}
+                          id={`${stageId}-neutral`}
+                          items={stage.neutral}
                           expandedIds={expandedIds}
                           toggleExpand={toggleExpand}
-                          choices={week.neutral}
-                          weekId={weekId}
+                          choices={stage.neutral}
+                          stageId={stageId}
                           multiphase={true}
                         />
                       </div>
@@ -370,7 +372,7 @@ const MultiWeekAnswerPage = () => {
                         margin: "3em 0"
                       }}
                     >
-                      Olet ilmoittanut olevasi poissa tällä viikolla.
+                      Olet ilmoittanut olevasi poissa tässä vaiheessa.
                     </div>
                   )}
                 </div>
@@ -386,11 +388,11 @@ const MultiWeekAnswerPage = () => {
 
       <div className="submit-row mt-4">
         <Button variant="success" className="submit-btn" onClick={handleSubmit}>
-          Lähetä kaikki viikkovalinnat
+          Lähetä kaikki vaihevalinnat
         </Button>
       </div>
     </div>
   );
 };
 
-export default MultiWeekAnswerPage;
+export default MultiStageAnswerPage;
