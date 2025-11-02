@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import feedbackService from "../../services/feedback"
 import { useNotification } from "../../context/NotificationContext"
+import FeedbackTable from "../../components/feedback_components/FeedbackTable"
 
 const AdminFeedbackList = () => {
   const { t } = useTranslation()
@@ -31,27 +31,7 @@ const AdminFeedbackList = () => {
       <h2>{t("Avoimet palautteet")}</h2>
       {loading ? <p>{t("Ladataan…")}</p> : (
         <>
-          {items.length === 0 ? <p>{t("Ei palautteita")}</p> : (
-            <table className="table table-striped">
-              <thead className="table-dark">
-                <tr>
-                  <th>{t("Otsikko")}</th><th>{t("Palautteen tyyppi")}</th><th>{t("Sähköposti")}</th><th>{t("Toiminnot")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map(f => (
-                  <tr key={f.id}>
-                    <td>{f.title}</td>
-                    <td>{f.type}</td>
-                    <td>{f.email}</td>
-                    <td>
-                      <Link to={`/admintools/feedback/${f.id}`}>{t("Tarkastele")}</Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          {items.length === 0 ? <p>{t("Ei palautteita")}</p> : <FeedbackTable items={items} />}
         </>
       )}
     </div>
