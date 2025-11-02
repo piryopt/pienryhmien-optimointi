@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { useParams, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import feedbackService from "../../services/feedback"
@@ -45,9 +46,18 @@ const AdminFeedbackDetail = () => {
   if (loading) return <p>{t("Ladataan...")}</p>
   if (!feedback) return <p>{t("Ei palautetta")}</p>
 
+  const backPath = feedback.solved ? "/admintools/feedback/closed" : "/admintools/feedback"
+
   return (
     <div>
-      <h2>{feedback[1] || feedback.title}</h2>
+      <br />
+      <div style={{ marginBottom: 8 }}>
+        <Link to={backPath}>
+          <small>{t("Palaa listaan")}</small>
+        </Link>
+      </div>
+
+      <h2>{feedback.title}</h2>
       <p><strong>{t("Palautteen tyyppi")}</strong> {feedback.type}</p>
       <p><strong>{t("Palautteen lähettäjä")}:</strong> {feedback.email || "-"}</p>
       <div><p>{feedback.content}</p></div>
