@@ -78,7 +78,7 @@ const FrontPage = () => {
           />
           <br></br>
           <FrontPageButton
-            path="multiphase/survey/create"
+            path="multistage/survey/create"
             imgSrc={multiAddIcon}
             mainText="Luo uusi monivaiheinen kysely"
             additionalText="Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot"

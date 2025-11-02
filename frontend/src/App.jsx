@@ -1,6 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider";
-import SurveyMultiphaseCreate from "./pages/SurveyMultiphaseCreate";
+import SurveyMultistageCreate from "./pages/SurveyMultistageCreate";
 import SurveysPage from "./pages/SurveysPage";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
@@ -10,11 +10,11 @@ import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
 import SurveyResultsPage from "./pages/SurveyResultsPage";
 import FeedbackPage from "./pages/FeedbackPage";
-import AdminFeedbackList from "./pages/admintools/AdminFeedbackList"
-import AdminClosedFeedbackList from "./pages/admintools/AdminClosedFeedbackList"
-import AdminFeedbackDetail from "./pages/admintools/AdminFeedbackDetail"
+import AdminFeedbackList from "./pages/admintools/AdminFeedbackList";
+import AdminClosedFeedbackList from "./pages/admintools/AdminClosedFeedbackList";
+import AdminFeedbackDetail from "./pages/admintools/AdminFeedbackDetail";
 import RequireAuth from "./components/RequireAuth";
-import RequireAdmin from "./components/RequireAdmin"
+import RequireAdmin from "./components/RequireAdmin";
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 import CreateSurveyPage from "./pages/CreateSurveyPage";
 import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";

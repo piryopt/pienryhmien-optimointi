@@ -223,10 +223,28 @@ def new_survey_form(survey=None):
     return render_template("create_survey.html", survey=survey)
 
 
-@bp.route("/multiphase/survey/create", methods=["GET"])
+@bp.route("/api/multistage/survey/create", methods=["POST"])
 @ad_login
-def multiphase_survey_create():
-    return render_template("create_multiphase_survey.html")
+def multistage_survey_create():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
+
+        # Add validation
+
+        # Add creation logic
+
+        survey_stages = data.get("stages", [])
+        print(survey_stages)
+
+        # test sending back response
+        survey_name = data.get("surveyGroupname", "")
+        return jsonify({"status": "1", "msg": f"Survey {survey_name} received"}), 200
+
+    except Exception as e:
+        current_app.logger.exception("Error creating survey")
+        return jsonify({"status": "0", "msg": gettext("Server error")}), 500
 
 
 @bp.route("/surveys/create", methods=["POST"])
@@ -236,7 +254,7 @@ def new_survey_post():
     """
     try:
         data = request.get_json()
-        print("Choices: ",data.get("choices", []))
+        print("Choices: ", data.get("choices", []))
         if not data:
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 

@@ -32,7 +32,7 @@ const DenyChoicesSection = () => {
 
       {setting === "show" && (
         <div className="deny-choices-section">
-          <label htmlFor="allowedDeniedChoices">
+          <label htmlFor="allowedDeniedChoices" className="input-label">
             {t("Sallittu kiellettyjen ryhmien määrä")}
           </label>
           <input
