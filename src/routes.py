@@ -117,6 +117,19 @@ def frontpage() -> str:
     return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
 
+@bp.route("/api/frontpage", methods=["GET"])
+@ad_login
+def frontpage_data():
+    """
+    Returns data displayed on the frontpage.
+    """
+    user_id = session.get("user_id", 0)
+    created_surveys = survey_service.count_surveys_created(user_id)
+    active_surveys = survey_service.get_active_surveys_and_response_count(user_id)
+
+    return jsonify({"createdSurveys": created_surveys, "activeSurveys": active_surveys})
+
+
 """
 /SURVEYS/* ROUTES:
 """
@@ -440,6 +453,7 @@ def api_survey(survey_id):
 
     choices = list(survey_all_info.values())
 
+    closed = survey_service.check_if_survey_closed(survey_id)
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
     if user_survey_ranking:
         user_rankings = user_survey_ranking.ranking
@@ -456,6 +470,7 @@ def api_survey(survey_id):
                     "min_choices": survey.min_choices,
                     "search_visibility": survey.allow_search_visibility,
                     "denied_allowed_choices": survey.allowed_denied_choices,
+                    "closed": closed,
                 },
                 "additional_info": additional_info,
                 "choices": choices,
@@ -478,6 +493,7 @@ def api_survey(survey_id):
                 "min_choices": survey.min_choices,
                 "search_visibility": survey.allow_search_visibility,
                 "denied_allowed_choices": survey.allowed_denied_choices,
+                "closed": closed,
             },
             "additional_info": additional_info,
             "choices": choices,
@@ -539,6 +555,22 @@ def api_survey_submit(survey_id):
     if not submission:
         msg = gettext("Tallennus epäonnistui")
         response = {"status": "0", "msg": msg}
+    return jsonify(response)
+
+
+@bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
+def api_delete_submission(survey_id):
+    """
+    Delete the current ranking of the student.
+    """
+    msg = gettext("Poistaminen epäonnistui!")
+    response = {"status": "0", "msg": msg}
+    current_user_id = session.get("user_id", 0)
+
+    if user_rankings_service.delete_ranking(survey_id, current_user_id):
+        msg = gettext("Valinnat poistettu")
+        response = {"status": "1", "msg": msg}
+
     return jsonify(response)
 
 

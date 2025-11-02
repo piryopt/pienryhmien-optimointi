@@ -33,7 +33,18 @@ const getSurvey = async (surveyId) => {
   } catch (error) {
     throw error;
   }
-}
+};
+
+const getFrontPageData = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/frontpage`, {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const deleteSurvey = async (surveyId) => {
   try {
@@ -50,51 +61,56 @@ const deleteSurvey = async (surveyId) => {
   }
 };
 
-const submitSurveyAnswer = async ({surveyId, good, bad, neutral, reason, minChoices, deniedAllowedChoices }) =>  {
-    const maxBadChoices = deniedAllowedChoices;
-    const minC = minChoices;
-    const neutralIds = neutral;
-    const goodIds = good;
-    const badIds = (maxBadChoices > 0) ? bad : [];
-    const reasons = (maxBadChoices > 0) ? reason : "";
+const submitSurveyAnswer = async ({
+  surveyId,
+  good,
+  bad,
+  neutral,
+  reason,
+  minChoices,
+  deniedAllowedChoices
+}) => {
+  const maxBadChoices = deniedAllowedChoices;
+  const minC = minChoices;
+  const neutralIds = neutral;
+  const goodIds = good;
+  const badIds = maxBadChoices > 0 ? bad : [];
+  const reasons = maxBadChoices > 0 ? reason : "";
 
-    const payload = {
-        neutralIDs: neutralIds,
-        goodIDs: goodIds,
-        badIDs: badIds,
-        allIDs: neutralIds.concat(goodIds, badIds),
-        minChoices: minC,
-        maxBadChoices: maxBadChoices,
-        reasons: reasons
-    };
+  const payload = {
+    neutralIDs: neutralIds,
+    goodIDs: goodIds,
+    badIDs: badIds,
+    allIDs: neutralIds.concat(goodIds, badIds),
+    minChoices: minC,
+    maxBadChoices: maxBadChoices,
+    reasons: reasons
+  };
 
-    try {
-      const csrfToken = await csrfService.fetchCsrfToken();
-      const response = await axios.post(
-        `${baseUrl}/api/surveys/${surveyId}`,
-        payload,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken
-          }
-        }
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-};
-
-const deleteSurveyAnswer = async (surveyId, studentEmail) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.post(
-      `${baseUrl}/surveys/${surveyId}/answers/delete`,
+      `${baseUrl}/api/surveys/${surveyId}`,
+      payload,
       {
-        student_email: studentEmail
-      },
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteSurveyAnswer = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.delete(
+      `${baseUrl}/api/surveys/${surveyId}`,
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -209,11 +225,12 @@ export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
   getSurvey: getSurvey,
+  getFrontPageData: getFrontPageData,
   deleteSurvey: deleteSurvey,
   submitSurveyAnswer: submitSurveyAnswer,
+  deleteSurveyAnswer: deleteSurveyAnswer,
   deleteSurvey: deleteSurvey,
   getSurveyAnswersData: getSurveyAnswersData,
-  deleteSurveyAnswer: deleteSurveyAnswer,
   getStudentRankings: getStudentRankings,
   openSurvey: openSurvey,
   closeSurvey: closeSurvey,

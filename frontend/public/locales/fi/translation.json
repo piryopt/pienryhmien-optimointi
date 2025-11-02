@@ -22,6 +22,9 @@
   "Kyllä": "Kyllä",
   "Kysely": "Kysely",
   "Kyselyn tila": "Kyselyn tila",
+  "Käynnissä olevat kyselyt": "Käynnissä olevat kyselyt",
+  "Luotuja kyselyitä": "Luotuja kyselyitä: {{count}}",
+  "Luo uusi kysely": "Luo uusi kysely",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
   "Luo uusi monivaiheinen kysely": "Luo uusi monivaiheinen kysely",
   "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot",
@@ -46,6 +49,8 @@
   "UKK": "UKK",
   "Valinnat": "Valinnat",
   "Vastauksen poistaminen": "Vastauksen poistaminen",
+  "Vastaukset": "Vastaukset: {{count}}",
   "Vastauksia": "Vastauksia",
-  "Vastausaika päättyy": "Vastausaika päättyy"
+  "Vastausaika päättyy": "Vastausaika päättyy",
+  "Vastausaika päättyy:": "Vastausaika päättyy: {{timeEnd}}"
 }
