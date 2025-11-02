@@ -32,6 +32,7 @@ const MultiStageAnswerPage = () => {
 
     (async () => {
       try {
+        // const data = surveyService.getSurvey(surveyId);
         const data = {
           survey: {
             id: "123",
