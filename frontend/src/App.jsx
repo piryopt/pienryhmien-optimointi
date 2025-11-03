@@ -22,106 +22,118 @@ import CSVInstructionsPage from "./components/create_survey_page_components/CSVI
 const App = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route
-              path="/multiphase/survey/create"
-              element={
-                <RequireAuth>
-                  <SurveyMultiphaseCreate />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys"
-              element={
-                <RequireAuth>
-                  <SurveysPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys/:surveyId"
-              element={
-                <RequireAuth>
-                  <AnswerSurveyPage />
-                </RequireAuth>
-              }
-            />
-            <Route path="/auth/login" element={<LoginPage />} />
-
-            <Route path="/faq" element={<FAQ />} />
-
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <FrontPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys/:id/answers"
-              element={
-                <RequireAuth>
-                  <SurveyAnswersPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/surveys/:id/results"
-              element={
-                <RequireAuth>
-                  <SurveyResultsPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/feedback"
-              element={
-                <RequireAuth>
-                  <FeedbackPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/admintools/feedback"
-              element={
-                <RequireAuth>
-                  <RequireAdmin>
-                    <AdminFeedbackList />
-                  </RequireAdmin>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/admintools/feedback/closed"
-              element={
-                <RequireAuth>
-                  <RequireAdmin>
-                    <AdminClosedFeedbackList />
-                  </RequireAdmin>
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/admintools/feedback/:id"
-              element={
-                <RequireAuth>
-                  <RequireAdmin>
-                    <AdminFeedbackDetail />
-                  </RequireAdmin>
-                </RequireAuth>
-              }
-            />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <FrontPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys"
+            element={
+              <RequireAuth>
+                <SurveysPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/multistage/survey/create"
+            element={
+              <RequireAuth>
+                <SurveyMultistageCreate />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/create"
+            element={
+              <RequireAuth>
+                <CreateSurveyPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/:surveyId"
+            element={
+              <RequireAuth>
+                <AnswerSurveyPage />
+              </RequireAuth>
+            }
+          />
+          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route
+            path="/csv-instructions"
+            element={
+              <RequireAuth>
+                <CSVInstructionsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/:id/answers"
+            element={
+              <RequireAuth>
+                <SurveyAnswersPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/:id/results"
+            element={
+              <RequireAuth>
+                <SurveyResultsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/feedback"
+            element={
+              <RequireAuth>
+                <FeedbackPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admintools/feedback"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AdminFeedbackList />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admintools/feedback/closed"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AdminClosedFeedbackList />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admintools/feedback/:id"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AdminFeedbackDetail />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </Layout>
     </AuthProvider>
   );
 };
 
 export default App;
+
