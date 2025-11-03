@@ -9,6 +9,8 @@ import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
 import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
 import SurveyResultsPage from "./pages/SurveyResultsPage";
+import AdminAnalytics from "./pages/admintools/AdminAnalytics";
+import AdminSurveyList from "./pages/admintools/AdminSurveyList";
 import FeedbackPage from "./pages/FeedbackPage";
 import AdminFeedbackList from "./pages/admintools/AdminFeedbackList";
 import AdminClosedFeedbackList from "./pages/admintools/AdminClosedFeedbackList";
@@ -125,6 +127,26 @@ const App = () => {
               <RequireAuth>
                 <RequireAdmin>
                   <AdminFeedbackDetail />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admintools/analytics"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AdminAnalytics />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admintools/surveys"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AdminAnalytics />
                 </RequireAdmin>
               </RequireAuth>
             }
