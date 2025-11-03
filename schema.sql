@@ -40,6 +40,7 @@ CREATE TABLE survey_stages (
 	survey_id VARCHAR(10) REFERENCES surveys,
 	choice_id INTEGER REFERENCES survey_choices,
 	stage TEXT NOT NULL,
+	order_number INTEGER,
 	PRIMARY KEY (survey_id, choice_id, stage)
 );
 

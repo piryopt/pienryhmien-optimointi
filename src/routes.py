@@ -248,7 +248,11 @@ def multistage_survey_create():
         for stage in data["stages"]:
             for choice in stage["choices"]:
                 survey_choices_service.add_multistage_choice(
-                    **{**choice, "survey_id": survey_id, "stage": stage["name"]}
+                    **{**choice, 
+                       "survey_id": survey_id, 
+                       "stage": stage["name"],
+                        "order_number": stage["id"]
+                    }
                 )
 
         # Add survey owner :
@@ -517,6 +521,27 @@ def api_survey(survey_id):
             "existing": "0",
         }
     )
+
+@bp.route("/api/surveys/multistage/<string:survey_id>", methods=["GET"])
+def api_multistage_survey_choices(survey_id):
+    user_id = session.get("user_id", 0)
+    stages = survey_choices_service.get_survey_choices_by_stage(survey_id)
+    survey = survey_service.get_survey(survey_id)
+
+    return jsonify(
+        {
+            "survey": {
+                "id": str(survey.id),
+                "name": survey.surveyname,
+                "deadline": format_datestring(survey.time_end),
+                "description": survey.survey_description,
+                "min_choices": survey.min_choices,
+                "search_visibility": survey.allow_search_visibility,
+                "denied_allowed_choices": survey.allowed_denied_choices,
+                "closed": survey.closed,
+            },
+            "stages": stages
+        })
 
 @bp.route("/api/surveys/multistage/<string:survey_id>", methods=["POST"])
 def api_multistage_survey_submit(survey_id):

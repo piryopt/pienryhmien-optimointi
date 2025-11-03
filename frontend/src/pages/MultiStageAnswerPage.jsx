@@ -32,107 +32,15 @@ const MultiStageAnswerPage = () => {
 
     (async () => {
       try {
-        // const data = surveyService.getSurvey(surveyId);
-        const data = {
-          survey: {
-            id: "123",
-            name: "Kurssivalinnat keväälle 2025",
-            deadline: "31.10.2025",
-            min_choices: 2,
-            denied_allowed_choices: 1
-          },
-          reason: "",
-          additional_info: true,
-          stages: [
-            {
-              id: "1",
-              name: "Vaihe 1",
-              existing: "0",
-              choices: [
-                {
-                  id: "a1",
-                  name: "Ohjelmointi 1",
-                  mandatory: false,
-                  description: "Johdatus ohjelmointiin."
-                },
-                {
-                  id: "a2",
-                  name: "Matematiikka 1",
-                  mandatory: true,
-                  description: "Perusmatematiikkaa insinööreille."
-                },
-                {
-                  id: "a3",
-                  name: "Englanti A",
-                  mandatory: false,
-                  description: "Akateemista englantia."
-                }
-              ],
-              goodChoices: [],
-              badChoices: []
-            },
-            {
-              id: "2",
-              name: "Vaihe 2",
-              existing: "0",
-              choices: [
-                {
-                  id: "b1",
-                  name: "Tietokannat",
-                  mandatory: false,
-                  description: "SQL ja relaatiomallit."
-                },
-                {
-                  id: "b2",
-                  name: "Ohjelmointi 2",
-                  mandatory: false,
-                  description: "Jatkokurssi ohjelmointiin."
-                },
-                {
-                  id: "b3",
-                  name: "Ruotsi B",
-                  mandatory: false,
-                  description: "Ruotsin kielen perusteet."
-                }
-              ],
-              goodChoices: [],
-              badChoices: []
-            },
-            {
-              id: "3",
-              name: "Vaihe 3",
-              existing: "1",
-              choices: [
-                {
-                  id: "c1",
-                  name: "Web-sovelluskehitys",
-                  mandatory: false,
-                  description: "React, Node.js ja REST-rajapinnat."
-                },
-                {
-                  id: "c2",
-                  name: "Tietoturva",
-                  mandatory: true,
-                  description: "Kyberturvallisuuden perusteet."
-                },
-                {
-                  id: "c3",
-                  name: "Projektityö",
-                  mandatory: false,
-                  description: "Ryhmätyö projektimuotoisesti."
-                }
-              ],
-              goodChoices: [],
-              badChoices: []
-            }
-          ]
-        };
-
+        const data = await surveyService.getMultiStageSurvey(surveyId);
+        console.log(data);
         if (!mountedRef.current) return;
 
         const stagesData = {};
-        for (const stage of data.stages || []) {
-          let neutralChoices = [...(stage.choices || [])];
+
+        for (const [stageId, stage] of Object.entries(data.stages || {})) {
+          const choices = stage.choices || [];
+          let neutralChoices = [...choices];
           let goodChoices = [];
           let badChoices = [];
 
@@ -140,32 +48,26 @@ const MultiStageAnswerPage = () => {
             const goodIds = new Set((stage.goodChoices || []).map(String));
             const badIds = new Set((stage.badChoices || []).map(String));
 
-            goodChoices = stage.choices.filter((c) =>
-              goodIds.has(String(c.id))
-            );
-            badChoices = stage.choices.filter((c) => badIds.has(String(c.id)));
+            goodChoices = choices.filter((c) => goodIds.has(String(c.id)));
+            badChoices = choices.filter((c) => badIds.has(String(c.id)));
 
             const used = new Set(
               [...goodChoices, ...badChoices].map((c) => String(c.id))
             );
-            neutralChoices = stage.choices.filter(
-              (c) => !used.has(String(c.id))
-            );
+            neutralChoices = choices.filter((c) => !used.has(String(c.id)));
           }
 
-          stagesData[stage.id] = {
-            name: stage.name || `Vaihe ${stage.id}`,
+          stagesData[stageId] = {
+            name: stageId,
             neutral: neutralChoices,
             good: goodChoices,
             bad: badChoices,
-            notAvailable: false
+            notAvailable: !!stage.notAvailable
           };
         }
 
         setStages(stagesData);
         setSurvey(data.survey || {});
-        setReason(data.reason || "");
-        setAdditionalInfo(data.additional_info || false);
         setActiveStage(Object.keys(stagesData)[0] || null);
       } catch (err) {
         console.error(err);
@@ -389,7 +291,7 @@ const MultiStageAnswerPage = () => {
 
       <div className="submit-row mt-4">
         <Button variant="success" className="submit-btn" onClick={handleSubmit}>
-          Lähetä kaikki vaihevalinnat
+          Lähetä kaikki valinnat
         </Button>
       </div>
     </div>

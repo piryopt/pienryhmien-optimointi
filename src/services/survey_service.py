@@ -489,7 +489,6 @@ class SurveyService:
     def create_new_multiphase_survey(self, **kwargs):
         if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):
             return None
-        print(kwargs["enddate"])
         survey_id = self._survey_repository.create_new_survey(**kwargs)
         return survey_id
 

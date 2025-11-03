@@ -248,6 +248,20 @@ const submitMultiStageAnswers = async (payload) => {
   }
 };
 
+const getMultiStageSurvey = async (surveyId) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/api/surveys/multistage/${surveyId}`,
+      {
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
@@ -263,5 +277,6 @@ export default {
   closeSurvey: closeSurvey,
   getSurveyResultsData: getSurveyResultsData,
   saveResults: saveResults,
-  submitMultiStageAnswers: submitMultiStageAnswers
+  submitMultiStageAnswers: submitMultiStageAnswers,
+  getMultiStageSurvey: getMultiStageSurvey
 };
