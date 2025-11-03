@@ -270,7 +270,7 @@ def new_survey_post():
         minchoices = data.get("minchoices", 0)
         date_end = data.get("enddate", "")
         time_end = data.get("endtime", "")
-        allowed_denied_choices = data.get("allowedDeniedChoices", [])
+        allowed_denied_choices = data.get("allowedDeniedChoices", 0)
         allow_search_visibility = data.get("allowSearchVisibility", False)
 
         date_string = f"{date_end} {time_end}"

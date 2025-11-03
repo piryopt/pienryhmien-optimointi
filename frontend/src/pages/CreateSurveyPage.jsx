@@ -95,7 +95,7 @@ const CreateSurveyPage = () => {
       // radio setting defaults
       minChoicesSetting: "all",
       denyChoicesSetting: "hide",
-      allowedDeniedChoices: "",
+      allowedDeniedChoices: 0,
       allowSearchVisibility: false
     },
     mode: "onBlur"
@@ -112,7 +112,7 @@ const CreateSurveyPage = () => {
       minchoices: data.minchoices ?? 1,
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
-      allowedDeniedChoices: data.allowedDeniedChoices || [],
+      allowedDeniedChoices: data.allowedDeniedChoices || 0,
       allowSearchVisibility: data.allowSearchVisibility || false
     };
 

@@ -362,15 +362,11 @@ class SurveyService:
                 msg = gettext("Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!")
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
-            language = session.get("language", "fi")
             print("Survey choices react: ", survey_dict["choices"])
             for choice in survey_dict["choices"]:
-                if choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä" \
-                or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä" \
-                or choice[SurveyService.SURVEY_FIELDS["min_size"][language]] == "tyhjä":
+                if choice["name"] == "":
                     msg = gettext(
-                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi " \
-                        "ilmestyy, kun asetat hiiren poistettavan rivin päälle."
+                        "Ryhmä vaatii nimen joka on vähintään 5 merkkiä pitkä"
                     )
                     return {"success": False, "message": {"status": "0", "msg": msg}}
         return {"success": True}

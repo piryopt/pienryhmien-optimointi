@@ -1,4 +1,4 @@
-import noteAddLogo from "/images/note_add_white_36dp.svg";
+import multiAddIcon from "/images/note_stack_add_36dp.svg";
 import { useTranslation } from "react-i18next";
 
 const MultistageSurveyHeader = () => {
@@ -6,7 +6,7 @@ const MultistageSurveyHeader = () => {
   return (
     <h1 className="page-title">
       <img
-        src={noteAddLogo}
+        src={multiAddIcon}
         alt="note add logo"
         className="d-inline-block align-text-middle"
       />
