@@ -9,7 +9,12 @@ import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
 import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
 import SurveyResultsPage from "./pages/SurveyResultsPage";
+import FeedbackPage from "./pages/FeedbackPage";
+import AdminFeedbackList from "./pages/admintools/AdminFeedbackList";
+import AdminClosedFeedbackList from "./pages/admintools/AdminClosedFeedbackList";
+import AdminFeedbackDetail from "./pages/admintools/AdminFeedbackDetail";
 import RequireAuth from "./components/RequireAuth";
+import RequireAdmin from "./components/RequireAdmin";
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 import CreateSurveyPage from "./pages/CreateSurveyPage";
 import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";
@@ -18,7 +23,23 @@ const App = () => {
   return (
     <AuthProvider>
       <Layout>
-        <Routes>      
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <FrontPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys"
+            element={
+              <RequireAuth>
+                <SurveysPage />
+              </RequireAuth>
+            }
+          />
           <Route
             path="/multistage/survey/create"
             element={
@@ -32,14 +53,6 @@ const App = () => {
             element={
               <RequireAuth>
                 <CreateSurveyPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/surveys"
-            element={
-              <RequireAuth>
-                <SurveysPage />
               </RequireAuth>
             }
           />
@@ -63,14 +76,6 @@ const App = () => {
             }
           />
           <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <FrontPage />
-              </RequireAuth>
-            }
-          />
-          <Route
             path="/surveys/:id/answers"
             element={
               <RequireAuth>
@@ -86,6 +91,44 @@ const App = () => {
               </RequireAuth>
             }
           />
+          <Route
+            path="/feedback"
+            element={
+              <RequireAuth>
+                <FeedbackPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admintools/feedback"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AdminFeedbackList />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admintools/feedback/closed"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AdminClosedFeedbackList />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/admintools/feedback/:id"
+            element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <AdminFeedbackDetail />
+                </RequireAdmin>
+              </RequireAuth>
+            }
+          />
         </Routes>
       </Layout>
     </AuthProvider>
@@ -93,3 +136,4 @@ const App = () => {
 };
 
 export default App;
+
