@@ -146,7 +146,7 @@ const App = () => {
             element={
               <RequireAuth>
                 <RequireAdmin>
-                  <AdminAnalytics />
+                  <AdminSurveyList />
                 </RequireAdmin>
               </RequireAuth>
             }
