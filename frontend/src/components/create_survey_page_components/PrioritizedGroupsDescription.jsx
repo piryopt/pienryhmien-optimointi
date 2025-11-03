@@ -1,8 +1,17 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useRef } from "react";
 
-const PrioritizedGroupsDescription = () => {
+const PrioritizedGroupsDescription = ({ importCsv }) => {
   const { t } = useTranslation();
+  const fileInputRef = useRef(null);
+  const openFilePicker = () => fileInputRef.current?.click();
+
+  const onFileChange = (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (f && importCsv) importCsv(f);
+    e.target.value = ""; // allow reselect same file
+  };
 
   return (
     <section>
@@ -19,8 +28,20 @@ const PrioritizedGroupsDescription = () => {
         {t("CSV-ohje")}
       </Link>
       <br />
-      <input id="choiceFileInput" type="file" style={{ display: "none" }} />
-      <button className="btn btn-secondary" name="uploadChoiceFile">
+      <input
+        id="choiceFileInput"
+        type="file"
+        accept=".csv,text/csv"
+        style={{ display: "none" }}
+        ref={fileInputRef}
+        onChange={onFileChange}
+      />
+      <button
+        type="button"
+        className="btn btn-secondary"
+        name="uploadChoiceFile"
+        onClick={openFilePicker}
+      >
         {t("Tuo valinnat CSV-tiedostosta")}
       </button>
       <br />
