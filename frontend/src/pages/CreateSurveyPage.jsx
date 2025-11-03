@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,7 @@ import DenyChoicesSection from "../components/create_survey_page_components/Deny
 import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
 import PrioritizedGroupsDescription from "../components/create_survey_page_components/PrioritizedGroupsDescription";
 import ChoiceTable from "../components/create_survey_page_components/ChoiceTable";
+import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 import "../static/css/createSurveyPage.css";
 
 const CreateSurveyPage = () => {
@@ -82,6 +83,26 @@ const CreateSurveyPage = () => {
     });
     return choicesEntry;
   };
+
+  const importCsv = useCallback(
+    async (file) => {
+      try {
+        const parsed = await parseCsvFile(file); // returns array-of-arrays
+        if (!parsed || parsed.length < 2) return;
+        const headers = parsed[0].map((h) => (h ?? "").toString().trim());
+        const dataRows = parsed.slice(1);
+        const existingTable = { columns, rows, nextRowId: nextRowId.current };
+        const merged = updateTableFromCSV(headers, dataRows, existingTable);
+        setColumns(merged.columns);
+        setRows(merged.rows);
+        nextRowId.current = merged.nextRowId;
+      } catch (err) {
+        // handle error (toast/log)
+        console.error("CSV import failed", err);
+      }
+    },
+    [columns, rows]
+  );
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -178,7 +199,7 @@ const CreateSurveyPage = () => {
           <MinChoicesSection />
           <DenyChoicesSection />
           <SearchVisibilitySection />
-          <PrioritizedGroupsDescription />
+          <PrioritizedGroupsDescription importCsv={importCsv} />
           <ChoiceTable
             columns={columns}
             rows={rows}
@@ -190,6 +211,7 @@ const CreateSurveyPage = () => {
             setSelectAllMandatory={setSelectAllMandatory}
             selectAllMandatory={selectAllMandatory}
           />
+          <br />
           <button type="submit" className="btn btn-primary">
             {t("Luo kysely")}
           </button>
