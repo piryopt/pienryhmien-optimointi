@@ -1148,6 +1148,84 @@ def admin_feedback_close_feedback(feedback_id):
     return redirect("/admintools/feedback")
 
 
+"""
+API ADMINTOOLS
+"""
+
+
+@bp.route("/api/admintools/feedback")
+def api_admin_feedback_list():
+    # Only admins permitted!
+    user_id = session.get("user_id", 0)
+    if not user_service.check_if_admin(user_id):
+        return jsonify({"success": False, "error": "unauthorized"}), 403
+    
+    rows = feedback_service.get_unsolved_feedback()
+    items = []
+    for r in rows:
+        items.append({
+            "id": r[0],
+            "title": r[1],
+            "type": r[2],
+            "email": r[3]
+        })
+    return jsonify({"success": True, "data": items}), 200
+
+
+@bp.route("/api/admintools/feedback/closed")
+def api_admin_feedback_closed_list():
+    # Only admins permitted!
+    user_id = session.get("user_id", 0)
+    if not user_service.check_if_admin(user_id):
+        return jsonify({"success": False, "error": "unauthorized"}), 403
+
+    rows = feedback_service.get_solved_feedback()
+    items = []
+    for r in rows:
+        items.append({
+            "id": r[0],
+            "title": r[1],
+            "type": r[2],
+            "email": r[3]
+        })
+    return jsonify({"success": True, "data": items}), 200
+
+
+@bp.route("/api/admintools/feedback/<int:feedback_id>")
+def api_admin_feedback_get(feedback_id):
+    user_id = session.get("user_id", 0)
+    if not user_service.check_if_admin(user_id):
+        return jsonify({"success": False, "error": "unauthorized"}), 403
+    
+    r = feedback_service.get_feedback(feedback_id)
+    if not r:
+        return jsonify({"success": False, "error": "not_found"}), 404
+    
+    result = {
+        "id": r[0],
+        "title": r[1],
+        "type": r[2],
+        "email": r[3],
+        "content": r[4],
+        "solved": bool(r[5])
+    }
+    return jsonify({"success": True, "data": result}), 200
+
+
+@bp.route("/api/admintools/feedback/<int:feedback_id>/close", methods=["POST"])
+def api_admin_feedback_close(feedback_id):
+    # Only admins permitted!
+    user_id = session.get("user_id", 0)
+    if not user_service.check_if_admin(user_id):
+        return jsonify({"success": False, "error": "unauthorized"}), 403
+    
+    success = feedback_service.mark_feedback_solved(feedback_id)
+    if not success:
+        return jsonify({"success": False, "error": "server_error"}), 500
+    
+    return jsonify({"success": True, "msg": "feedback_closed"}), 200
+
+
 @bp.route("/admintools/surveys", methods=["GET"])
 def admin_all_active_surveys():
     # Only admins permitted!
@@ -1323,14 +1401,24 @@ def get_choices(survey_id):
 @bp.route("/feedback", methods=["GET", "POST"])
 def feedback():
     if request.method == "GET":
-        return render_template("feedback.html")
+        return jsonify({"success": False, "status": "0", "key": "use_react", "msg": gettext("Please use the React frontend for feedback")}), 200
+    try:
+        data = request.get_json(force=True)
+    except Exception:
+        data = {}
     user_id = session.get("user_id", 0)
-    data = request.get_json()
-    (success, message) = feedback_service.new_feedback(user_id, data)
-    response = {"status": "1", "msg": message}
-    if not success:
-        response = {"status": "0", "msg": message}
-    return jsonify(response)
+
+    res = feedback_service.new_feedback(user_id, data)
+    # res is (success, key, msg) or (success, key, msg, id)
+    success = res[0]
+    key = res[1] if len(res) > 1 else None
+    msg = res[2] if len(res) > 2 else None
+    fid = res[3] if len(res) > 3 else None
+    status = "1" if success else "0"
+    payload = {"success": success, "status": status, "key": key, "msg": msg}
+    if fid:
+        payload["id"] = fid
+    return jsonify(payload)
 
 
 @bp.route("/language/en")

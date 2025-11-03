@@ -25,35 +25,43 @@ class FeedbackService:
             user_id: The id of the user submitting the feedback
             data: A dictionary containing the data from the form. Contains the title, type and content
         """
-        title = data["title"]
+        title = data.get("title", "") or ""
         if len(title) < 3:
-            message = gettext("Otsikko on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 3.")
-            return (False, message)
+            key = "title_too_short"
+            msg = gettext("Otsikko on liian lyhyt! Merkkimäärän täytyy olla vähintään 3.")
+            return (False, key, msg)
         if len(title) > 50:
-            message = gettext("Otsikko on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 50.")
-            return (False, message)
+            key = "title_too_long"
+            msg = gettext("Otsikko on liian pitkä! Merkkimäärä saa olla enintään 50.")
+            return (False, key, msg)
 
-        content = data["content"]
+        content = data.get("content", "") or ""
         if len(content) < 5:
-            message = gettext("Sisältö on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 5.")
-            return (False, message)
+            key = "content_too_short"
+            msg = gettext("Sisältö on liian lyhyt! Merkkimäärän täytyy olla vähintään 5.")
+            return (False, key, msg)
         if len(content) > 1500:
-            message = gettext("Sisältö on liian pitkä! Merkkimäärän täytyy olla pienempi kuin 1500. Merkkejä oli ")
-            return (False, message + str(len(content)))
+            key = "content_too_long"
+            msg = gettext("Sisältö on liian pitkä! Merkkimäärä saa olla enintään 1500.")
+            return (False, key, msg)
 
-        feedback_type = data["type"]
+        feedback_type = data.get("type", "palaute")
 
         check_title = self._feedback_repository.check_unsolved_title_doesnt_exist(user_id, title)
         if not check_title:
-            message = gettext("Olet jo luonut palautteen tällä otsikolla!")
-            return (False, message)
+            key = "duplicate_title"
+            msg = gettext("Olet jo luonut palautteen tällä otsikolla!")
+            return (False, key, msg)
 
-        success = self._feedback_repository.new_feedback(user_id, title, feedback_type, content)
-        if not success:
-            message = gettext("Palautteen antamisessa oli ongelma!")
-            return (False, message)
-        message = gettext("Palautteen antaminen onnistui")
-        return (True, message)
+        inserted_id = self._feedback_repository.new_feedback(user_id, title, feedback_type, content)
+        if not inserted_id:
+            key = "server_error"
+            msg = gettext("Palautteen antamisessa oli ongelma!")
+            return (False, key, msg)
+        
+        key = "feedback_sent"
+        msg = gettext("Palautteen antaminen onnistui")
+        return (True, key, msg, inserted_id)
 
     def get_feedback(self, feedback_id):
         """
