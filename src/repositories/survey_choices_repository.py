@@ -123,5 +123,80 @@ class SurveyChoicesRepository:
             print(e)
             return []
 
+    def create_new_multistage_choice(self, **kwargs):
+        """
+        Creates a new multistage survey choice
+        Expected keyword arguments (**kwargs):
+            survey_id (str): The ID of the survey this choice belongs to.
+            name (str): The display name of the choice (e.g., group or class name).
+            max_spaces (int): The maximum number of participants allowed in this choice.
+            min_size (int): The minimum required size for the group.
+            mandatory (bool, optional): Whether the group is mandatory to fill. Defaults to False.
+            stage (str): Stage identifier.
+        """
+        try:
+            sql = """
+            WITH new_choice AS (
+                INSERT INTO survey_choices (survey_id, name, max_spaces, min_size, mandatory, deleted)
+                VALUES (:survey_id, :name, :max_spaces, :min_size, :mandatory, FALSE)
+                RETURNING id
+            )
+            INSERT INTO survey_stages (survey_id, choice_id, stage, order_number)
+            SELECT :survey_id, id, :stage, :order_number FROM new_choice
+            RETURNING choice_id;
+            """
+
+            res = db.session.execute(
+                text(sql),
+                {
+                    "survey_id": kwargs.get("survey_id"),
+                    "name": kwargs.get("name"),
+                    "max_spaces": kwargs.get("max_spaces"),
+                    "min_size": kwargs.get("min_size"),
+                    "mandatory": kwargs.get("mandatory", False),
+                    "stage": kwargs.get("stage"),
+                    "order_number": kwargs.get("order_number")
+                }
+            )
+            new_choice_id = res.fetchone()[0]
+            db.session.commit()
+            return new_choice_id
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            return None
+
+    def get_choices_grouped_by_stage(self, survey_id):
+        """
+        Fetches all survey choices grouped by stage for a given survey.
+        Returns a list of rows including stage, choice info, and order number.
+        """
+        try:
+            sql = """
+                SELECT 
+                    sc.id AS choice_id,
+                    sc.name AS choice_name,
+                    sc.max_spaces,
+                    sc.min_size,
+                    sc.mandatory,
+                    sc.deleted,
+                    ss.stage,
+                    ss.order_number,
+                    ci.info_key,
+                    ci.info_value,
+                    ci.hidden
+                FROM survey_choices sc
+                LEFT JOIN survey_stages ss 
+                    ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
+                LEFT JOIN choice_infos ci 
+                    ON ci.choice_id = sc.id
+                WHERE sc.survey_id = :survey_id
+                ORDER BY ss.stage, ss.order_number NULLS LAST, sc.id;
+            """
+            result = db.session.execute(text(sql), {"survey_id": survey_id}).mappings().all()
+            return result
+        except Exception as e:
+            print(e)
+            return []
 
 survey_choices_repository = SurveyChoicesRepository()

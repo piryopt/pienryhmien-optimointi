@@ -109,16 +109,13 @@ const submitSurveyAnswer = async ({
 const deleteSurveyAnswer = async (surveyId) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
-    const response = await axios.delete(
-      `${baseUrl}/api/surveys/${surveyId}`,
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-CSRFToken": csrfToken
-        },
-        withCredentials: true
-      }
-    );
+    const response = await axios.delete(`${baseUrl}/api/surveys/${surveyId}`, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": csrfToken
+      },
+      withCredentials: true
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -221,6 +218,50 @@ const saveResults = async (surveyId) => {
   }
 };
 
+const submitMultiStageAnswers = async (payload) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.post(
+      `${baseUrl}/api/surveys/multistage/${payload.surveyId}`,
+      {
+        stages: payload.stages,
+        reason: payload.reason
+      },
+      {
+        headers: {
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    );
+
+    if (response.data.success) {
+      return { status: "1", msg: response.data.message || "success" };
+    } else {
+      return {
+        status: "0",
+        msg: response.data.message || "Error saving answers"
+      };
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getMultiStageSurvey = async (surveyId) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/api/surveys/multistage/${surveyId}`,
+      {
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
@@ -235,5 +276,7 @@ export default {
   openSurvey: openSurvey,
   closeSurvey: closeSurvey,
   getSurveyResultsData: getSurveyResultsData,
-  saveResults: saveResults
+  saveResults: saveResults,
+  submitMultiStageAnswers: submitMultiStageAnswers,
+  getMultiStageSurvey: getMultiStageSurvey
 };

@@ -15,13 +15,19 @@ const Notification = ({ notification, onClose }) => {
   }
 
   const style = {
-    backgroundColor: "lightgrey",
-    margin: "10px",
-    padding: "10px",
-    border: "2px solid",
-    borderColor: notification.type === "success" ? "green" : "red",
-    borderRadius: "5px",
+    bottom: 0,
+    background: notification.type === "success" ? "green" : "red",
+    height: "50px",
+    width: "100%",
+    margin: "0 auto",
+    color: "rgb(255, 255, 255)",
+    opacity: 0.9,
+    textAlign: "center",
+    paddingTop: "10px",
+    position: "fixed",
+    WebkitBoxShadow: "0px 1px 0px rgba(0, 0, 0, 0.2)"
   };
+
   return <div style={style}>{notification.message}</div>;
 };
 

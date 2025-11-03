@@ -140,5 +140,74 @@ class SurveyChoicesService:
             return None
         return survey_choice.mandatory
 
+    def add_multistage_choice(self, **kwargs):
+        """
+        Adds a new multistage choice (e.g., a recurring group) to a survey.
+
+        Expected keyword arguments (**kwargs):
+            survey_id (str): The ID of the survey the choice belongs to.
+            name (str): The display name of the choice.
+            max_spaces (int): Maximum number of participants allowed.
+            min_size (int): Minimum number of participants required.
+            stages (list[str]): A list of stage identifiers (e.g., ["week1", "week2"]).
+            mandatory (bool): Whether the group is mandatory. Defaults to False.
+
+        Returns:
+            dict: A result dictionary with keys:
+                - success (bool): True if creation succeeded.
+                - message (str): Informational message.
+        """
+        try:
+            required_fields = ["survey_id", "name", "max_spaces", "min_size", "mandatory", "stage"]
+            choice_id = self._survey_choices_repository.create_new_multistage_choice(**kwargs)
+            for key, val in kwargs.items():
+                if key not in required_fields:
+                    # no hidden field feature implemented yet
+                    self._survey_choices_repository.create_new_choice_info(choice_id, key, val, False)
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Unexpected service error: {e}"
+            }
+
+    def get_survey_choices_by_stage(self, survey_id):
+        """
+        Returns survey choices grouped by stage in structured form
+        """
+        rows = self._survey_choices_repository.get_choices_grouped_by_stage(survey_id)
+        stages = {}
+    
+        for row in rows:
+            stage_id = row["stage"] or "no_stage"
+    
+            if stage_id not in stages:
+                stages[stage_id] = {
+                    "order_number": row["order_number"],
+                    "choices": []
+                }
+    
+            choices = stages[stage_id]["choices"]
+    
+            choice = next((c for c in choices if c["id"] == row["choice_id"]), None)
+            if not choice:
+                choice = {
+                    "id": row["choice_id"],
+                    "name": row["choice_name"],
+                    "max_spaces": row["max_spaces"],
+                    "min_size": row["min_size"],
+                    "mandatory": row["mandatory"],
+                    "deleted": row["deleted"],
+                    "infos": []
+                }
+                choices.append(choice)
+    
+            if row.get("info_key"):
+                choice["infos"].append({
+                    "key": row["info_key"],
+                    "value": row["info_value"],
+                    "hidden": row["hidden"]
+                })
+    
+        return stages
 
 survey_choices_service = SurveyChoicesService()

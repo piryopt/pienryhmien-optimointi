@@ -13,7 +13,7 @@ import DenyChoicesSection from "../components/create_survey_page_components/Deny
 import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
 import MultistageSurveyPrioritizedGroupsDescription from "../components/create_multistage_survey_components/MultistageSurveyPrioritizedGroupsDescription";
 import StageTables from "../components/create_multistage_survey_components/StageTables";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import { format } from "date-fns";
 import csrfService from "../services/csrf";
 import "../static/css/createSurveyPage.css";
@@ -30,7 +30,7 @@ const SurveyMultistageCreate = () => {
   const [tables, setTables] = useState([]);
 
   const addStage = () => {
-    const id = ++stageNextId.current;
+    const id = stageNextId.current++;
     setTables((ts) => [
       ...ts,
       {
@@ -38,7 +38,9 @@ const SurveyMultistageCreate = () => {
         name: newStageName || "",
         nextRowId: 1,
         columns: [],
-        rows: [{ id: 1, mandatory: false, name: "", max_spaces: "", min_size: "" }],
+        rows: [
+          { id: 1, mandatory: false, name: "", max_spaces: "", min_size: "" }
+        ],
         selectAllMandatory: false
       }
     ]);
@@ -57,7 +59,17 @@ const SurveyMultistageCreate = () => {
         return {
           ...t,
           nextRowId: id,
-          rows: [...t.rows, { id, mandatory: false, name: "", max_spaces: "", min_size: "", ...extra }]
+          rows: [
+            ...t.rows,
+            {
+              id,
+              mandatory: false,
+              name: "",
+              max_spaces: "",
+              min_size: "",
+              ...extra
+            }
+          ]
         };
       })
     );
@@ -65,7 +77,9 @@ const SurveyMultistageCreate = () => {
 
   const deleteRow = (tableId, id) =>
     setTables((ts) =>
-      ts.map((t) => (t.id !== tableId ? t : { ...t, rows: t.rows.filter((r) => r.id !== id) }))
+      ts.map((t) =>
+        t.id !== tableId ? t : { ...t, rows: t.rows.filter((r) => r.id !== id) }
+      )
     );
 
   const updateCell = (tableId, id, key, value) =>
@@ -73,7 +87,12 @@ const SurveyMultistageCreate = () => {
       ts.map((t) =>
         t.id !== tableId
           ? t
-          : { ...t, rows: t.rows.map((row) => (row.id === id ? { ...row, [key]: value } : row)) }
+          : {
+              ...t,
+              rows: t.rows.map((row) =>
+                row.id === id ? { ...row, [key]: value } : row
+              )
+            }
       )
     );
 
@@ -85,7 +104,10 @@ const SurveyMultistageCreate = () => {
         if (t.columns.find((c) => c.name === name)) return t;
         return {
           ...t,
-          columns: [...t.columns, { name, validationRegex: "", validationText: "" }],
+          columns: [
+            ...t.columns,
+            { name, validationRegex: "", validationText: "" }
+          ],
           rows: t.rows.map((r) => ({ ...r, [name]: "" }))
         };
       })
@@ -111,7 +133,13 @@ const SurveyMultistageCreate = () => {
   const setTableSelectAllMandatory = (tableId, value) =>
     setTables((ts) =>
       ts.map((t) =>
-        t.id !== tableId ? t : { ...t, selectAllMandatory: value, rows: t.rows.map((r) => ({ ...r, mandatory: value })) }
+        t.id !== tableId
+          ? t
+          : {
+              ...t,
+              selectAllMandatory: value,
+              rows: t.rows.map((r) => ({ ...r, mandatory: value }))
+            }
       )
     );
 
@@ -138,7 +166,9 @@ const SurveyMultistageCreate = () => {
     if (!parsed || parsed.length <= 1) return;
 
     const headers = parsed[0].map((h) => (h ?? "").toString().trim());
-    const rowsToParse = parsed.slice(1).filter((r) => r.some((c) => String(c || "").trim() !== ""));
+    const rowsToParse = parsed
+      .slice(1)
+      .filter((r) => r.some((c) => String(c || "").trim() !== ""));
 
     setTables((ts) =>
       ts.map((t) => {
@@ -155,58 +185,60 @@ const SurveyMultistageCreate = () => {
   };
 
   const { handleSubmit } = methods;
-  
-    const onSubmit = async (data) => {
-      const csrfToken = await csrfService.fetchCsrfToken();
 
-      const stages = tables.map((t) => ({
-        id: t.id,
-        name: t.name || "",
-        columns: t.columns.map((c) => ({ ...c })),
-        choices: t.rows.map((r) => {
-          const choice = {
-            mandatory: !!r.mandatory,
-            name: r.name || "",
-            max_spaces: Number(r.max_spaces) || 0,
-            min_size: Number(r.min_size) || 0
-          };
-          t.columns.forEach((c) => {
-            choice[c.name] = r[c.name] ?? "";
-          });
-          return choice;
-        })
-      }));
+  const onSubmit = async (data) => {
+    const csrfToken = await csrfService.fetchCsrfToken();
 
-      const allowedDenied = Array.isArray(data.allowedDeniedChoices)
-        ? data.allowedDeniedChoices
-        : data.allowedDeniedChoices
+    const stages = tables.map((t) => ({
+      id: t.id,
+      name: t.name || "",
+      columns: t.columns.map((c) => ({ ...c })),
+      choices: t.rows.map((r) => {
+        const choice = {
+          mandatory: !!r.mandatory,
+          name: r.name || "",
+          max_spaces: Number(r.max_spaces) || 0,
+          min_size: Number(r.min_size) || 0
+        };
+        t.columns.forEach((c) => {
+          choice[c.name] = r[c.name] ?? "";
+        });
+        return choice;
+      })
+    }));
+
+    const allowedDenied = Array.isArray(data.allowedDeniedChoices)
+      ? data.allowedDeniedChoices
+      : data.allowedDeniedChoices
         ? [data.allowedDeniedChoices]
         : [];
 
-      const payload = {
-        surveyGroupname: data.groupname,
-        surveyInformation: data.surveyInformation || "",
-        stages,
-        minchoices: data.minchoices ?? 1,
-        enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
-        endtime: data.endtime || "",
-        allowedDeniedChoices: allowedDenied,
-        allowSearchVisibility: data.allowSearchVisibility || false
-      };
-      
+    const payload = {
+      surveyGroupname: data.groupname,
+      surveyInformation: data.surveyInformation || "",
+      stages,
+      minchoices: data.minchoices ?? 1,
+      enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
+      endtime: data.endtime || "",
+      allowedDeniedChoices: allowedDenied,
+      allowSearchVisibility: data.allowSearchVisibility || false
+    };
+
     const extractMessage = (json, res) => {
-        if (!json) return res?.statusText || t("Kyselyn luonti epäonnistui");
-        if (typeof json === "string") return json;
-        return (
-          json.msg ||
-          json.message ||
-          res?.statusText ||
-          t("Kyselyn luonti epäonnistui")
-        );
-      };
-  
-      try {
-        const res = await fetch("http://localhost:5001/api/multistage/survey/create", {
+      if (!json) return res?.statusText || t("Kyselyn luonti epäonnistui");
+      if (typeof json === "string") return json;
+      return (
+        json.msg ||
+        json.message ||
+        res?.statusText ||
+        t("Kyselyn luonti epäonnistui")
+      );
+    };
+
+    try {
+      const res = await fetch(
+        "http://localhost:5001/api/multistage/survey/create",
+        {
           method: "POST",
           credentials: "include",
           headers: {
@@ -214,36 +246,36 @@ const SurveyMultistageCreate = () => {
             "X-CSRFToken": csrfToken
           },
           body: JSON.stringify(payload)
-        });
-  
-        let json = null;
-        try {
-          json = await res.json();
-        } catch {
-          json = null;
         }
-  
-        if (!res.ok) {
-          const msg = extractMessage(json, res);
-          showNotification(msg, "error");
-          return;
-        }
-  
-        if (!json || String(json.status) !== "1") {
-          const msg = extractMessage(json, res);
-          showNotification(msg, "error");
-          return;
-        }
-  
-        showNotification(json.msg || t("Kysely luotu onnistuneesti"), "success");
-      } catch (err) {
-        showNotification(
-          err?.message || t("Kyselyn luonti epäonnistui"),
-          "error"
-        );
-      }
-    };
+      );
 
+      let json = null;
+      try {
+        json = await res.json();
+      } catch {
+        json = null;
+      }
+
+      if (!res.ok) {
+        const msg = extractMessage(json, res);
+        showNotification(msg, "error");
+        return;
+      }
+
+      if (!json || String(json.status) !== "1") {
+        const msg = extractMessage(json, res);
+        showNotification(msg, "error");
+        return;
+      }
+
+      showNotification(json.msg || t("Kysely luotu onnistuneesti"), "success");
+    } catch (err) {
+      showNotification(
+        err?.message || t("Kyselyn luonti epäonnistui"),
+        "error"
+      );
+    }
+  };
 
   return (
     <div>
@@ -258,7 +290,7 @@ const SurveyMultistageCreate = () => {
           <SearchVisibilitySection />
           <MultistageSurveyPrioritizedGroupsDescription />
           <StageTables
-            tables={tables} 
+            tables={tables}
             updateStageName={updateStageName}
             setTables={setTables}
             addRow={addRow}
@@ -270,9 +302,9 @@ const SurveyMultistageCreate = () => {
             importCsv={importCsvToTable}
           />
           <div className="mb-4">
-              <Button variant="primary" onClick={addStage}>
-                + {t("Lisää vaihe")}
-              </Button>
+            <Button variant="primary" onClick={addStage}>
+              + {t("Lisää vaihe")}
+            </Button>
           </div>
           <button type="submit" className="btn btn-success">
             {t("Luo kysely")}

@@ -32,19 +32,29 @@ li {
   vertical-align: top;
 }
 
-.deadline { margin-top: 6px; }
+.deadline {
+  margin-top: 6px;
+}
 
-.instructions { margin: 6px 0; font-style: italic; }
+.instructions {
+  margin: 6px 0;
+  font-style: italic;
+}
 
-.highlight { color: #0bdb2ed6; }
+.highlight {
+  color: #0bdb2ed6;
+}
 
-.note { margin-top: 8px; }
+.note {
+  margin-top: 8px;
+}
 
-.mandatory { color: orange; }
+.mandatory {
+  color: orange;
+}
 
 .answer-layout {
   display: flex;
-  min-height: 100vh;
   padding-top: 20px;
 }
 
@@ -55,7 +65,9 @@ li {
   flex-shrink: 0;
 }
 
-.right-column { flex: 1; }
+.right-column {
+  flex: 1;
+}
 
 .submit-row {
   width: 100%;
@@ -87,13 +99,15 @@ li {
   padding-bottom: 8px;
   margin-bottom: 6px;
   border: 1px solid #5c5c5cff;
-  -webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.75);
-  box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.75);
   background-color: rgb(24, 26, 27);
   cursor: pointer;
   user-select: none;
   box-sizing: border-box;
+  position: relative;
+  padding-left: 2rem;
 }
 
 .group-item-readonly {
@@ -102,9 +116,9 @@ li {
   padding-bottom: 8px;
   margin-bottom: 6px;
   border: 1px solid #5c5c5cff;
-  -webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.75);
-  box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.75);
   background-color: rgb(24, 26, 27);
   cursor: pointer;
   user-select: none;
@@ -188,4 +202,20 @@ li {
 .closed-survey-title {
   font-size: 25px;
   margin-left: 7px;
+}
+.rank-number {
+  position: absolute;
+  margin-right: 10em;
+  top: 8px;
+  left: 10px;
+  padding: 2px 6px;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
 }

@@ -17,7 +17,7 @@ from src.services.survey_owners_service import survey_owners_service
 from src.services.feedback_service import feedback_service
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, convert_date, convert_time, hungarian_results
 from src.tools.rankings_converter import convert_to_list, convert_to_string
-from src.tools.parsers import parser_csv_to_dict
+from src.tools.parsers import parser_csv_to_dict, date_to_sql_valid
 from src.tools.date_converter import format_datestring
 from src.entities.user import User
 # from src.tools.db_data_gen import gen_data
@@ -228,19 +228,40 @@ def new_survey_form(survey=None):
 def multistage_survey_create():
     try:
         data = request.get_json()
+        user_id = session.get("user_id", 0)
         if not data:
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 
         # Add validation
 
-        # Add creation logic
+        # Add to surveys table
+        survey_id = survey_service.create_new_multiphase_survey(
+            surveyname=data["surveyGroupname"],
+            min_choices=data["minchoices"],
+            description=data["surveyInformation"],
+            enddate=f"{date_to_sql_valid(data["enddate"])} {data["endtime"]}",
+            allowed_denied_choices=len(data["allowedDeniedChoices"]),
+            allow_search_visibility=data["allowSearchVisibility"],
+            user_id=user_id
+        )
+        # Add choices
+        for stage in data["stages"]:
+            for choice in stage["choices"]:
+                survey_choices_service.add_multistage_choice(
+                    **{**choice, 
+                       "survey_id": survey_id, 
+                       "stage": stage["name"],
+                        "order_number": stage["id"]
+                    }
+                )
 
-        survey_stages = data.get("stages", [])
-        print(survey_stages)
+        # Add survey owner :
+        email = user_service.get_email(user_id)
+        (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
+        if not success:
+            return jsonify({"status": "0", "msg": message}), 400
 
-        # test sending back response
-        survey_name = data.get("surveyGroupname", "")
-        return jsonify({"status": "1", "msg": f"Survey {survey_name} received"}), 200
+        return jsonify({"status": "1", "msg": f"Survey created"}), 200
 
     except Exception as e:
         current_app.logger.exception("Error creating survey")
@@ -500,6 +521,35 @@ def api_survey(survey_id):
             "existing": "0",
         }
     )
+
+@bp.route("/api/surveys/multistage/<string:survey_id>", methods=["GET"])
+def api_multistage_survey_choices(survey_id):
+    user_id = session.get("user_id", 0)
+    stages = survey_choices_service.get_survey_choices_by_stage(survey_id)
+    survey = survey_service.get_survey(survey_id)
+
+    return jsonify(
+        {
+            "survey": {
+                "id": str(survey.id),
+                "name": survey.surveyname,
+                "deadline": format_datestring(survey.time_end),
+                "description": survey.survey_description,
+                "min_choices": survey.min_choices,
+                "search_visibility": survey.allow_search_visibility,
+                "denied_allowed_choices": survey.allowed_denied_choices,
+                "closed": survey.closed,
+            },
+            "stages": stages
+        })
+
+@bp.route("/api/surveys/multistage/<string:survey_id>", methods=["POST"])
+def api_multistage_survey_submit(survey_id):
+    """
+    API endpoint for submitting multiphase survey answers
+    """
+    print(request.get_json())
+    return jsonify({"status": 1, "message": "success"})
 
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["POST"])
