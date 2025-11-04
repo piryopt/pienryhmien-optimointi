@@ -23,7 +23,7 @@ const MultiStageAnswerPage = () => {
   const [survey, setSurvey] = useState({});
   const [loading, setLoading] = useState(true);
   const [expandedIds, setExpandedIds] = useState(new Set());
-  const [reason, setReason] = useState("");
+  const [reasons, setReasons] = useState({});
   const [additionalInfo, setAdditionalInfo] = useState(false);
   const [activeStage, setActiveStage] = useState(null);
   const mountedRef = useRef(false);
@@ -43,11 +43,13 @@ const MultiStageAnswerPage = () => {
           let neutralChoices = [...choices];
           let goodChoices = [];
           let badChoices = [];
-
-          if (stage.existing === "1") {
-            const goodIds = new Set((stage.goodChoices || []).map(String));
-            const badIds = new Set((stage.badChoices || []).map(String));
-
+          if (data.existing === "1") {
+            const goodIds = new Set(
+              (data.rankedStages[stageId].goodChoices || []).map(String)
+            );
+            const badIds = new Set(
+              (data.rankedStages[stageId].badChoices || []).map(String)
+            );
             goodChoices = choices.filter((c) => goodIds.has(String(c.id)));
             badChoices = choices.filter((c) => badIds.has(String(c.id)));
 
@@ -62,7 +64,7 @@ const MultiStageAnswerPage = () => {
             neutral: neutralChoices,
             good: goodChoices,
             bad: badChoices,
-            notAvailable: !!stage.notAvailable,
+            notAvailable: !!data.rankedStages?.[stageId]["notAvailable"],
             hasMandatory: stage.hasMandatory
           };
         }
@@ -152,20 +154,24 @@ const MultiStageAnswerPage = () => {
         notAvailable: lists.notAvailable,
         good: lists.good.map((c) => c.id),
         bad: lists.bad.map((c) => c.id),
-        neutral: lists.neutral.map((c) => c.id)
+        neutral: lists.neutral.map((c) => c.id),
+        reason: reasons[stageId]
       }));
 
       const result = await surveyService.submitMultiStageAnswers({
         surveyId,
-        stages: payload,
-        reason
+        minChoices: survey.min_choices,
+        deniedAllowedChoices: survey.denied_allowed_choices,
+        stages: payload
       });
-
       if (result.status === "0") throw new Error(result.msg);
-      showNotification(t(result.msg), "success");
+      showNotification(t("Kyselyn vastaukset tallennettu."), "success");
     } catch (error) {
       console.error("Error submitting survey", error);
-      showNotification(t(error.message), "error");
+      showNotification(
+        t("Kyselyn vastauksien tallennus epäonnistui."),
+        "error"
+      );
     }
   };
 
@@ -222,7 +228,7 @@ const MultiStageAnswerPage = () => {
                     Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse
                     itsesi poissaolevaksi.
                   </p>
-                  {stage.hasMandatory && (
+                  {stage.hasMandatory && !stage.notAvailable && (
                     <p className="note">
                       HUOM! <span className="mandatory">{"Pakolliseksi"}</span>{" "}
                       merkityt ryhmät priorisoidaan jakamisprosessissa. Ne
@@ -280,15 +286,20 @@ const MultiStageAnswerPage = () => {
                     </div>
                   )}
                 </div>
+                {(survey.denied_allowed_choices ?? 0) !== 0 && (
+                  <ReasonsBox
+                    key={stageId}
+                    reason={reasons[stageId] || ""}
+                    setReason={(value) =>
+                      setReasons({ ...reasons, [stageId]: value })
+                    }
+                  />
+                )}
               </Tab.Pane>
             ))}
           </Tab.Content>
         </Tab.Container>
       </DragDropContext>
-
-      {(survey.denied_allowed_choices ?? 0) !== 0 && (
-        <ReasonsBox reason={reason} setReason={setReason} />
-      )}
 
       <div className="submit-row mt-4">
         <Button variant="success" className="submit-btn" onClick={handleSubmit}>

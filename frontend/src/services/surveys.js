@@ -225,7 +225,8 @@ const submitMultiStageAnswers = async (payload) => {
       `${baseUrl}/api/surveys/multistage/${payload.surveyId}`,
       {
         stages: payload.stages,
-        reason: payload.reason
+        minChoices: payload.minChoices,
+        deniedAllowedChoices: payload.deniedAllowedChoices
       },
       {
         headers: {
@@ -235,7 +236,7 @@ const submitMultiStageAnswers = async (payload) => {
       }
     );
 
-    if (response.data.success) {
+    if (response.data.status === "1") {
       return { status: "1", msg: response.data.message || "success" };
     } else {
       return {

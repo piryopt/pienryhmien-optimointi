@@ -529,6 +529,37 @@ def api_multistage_survey_choices(survey_id):
     survey = survey_service.get_survey(survey_id)
     additional_info = len(survey_choices_service.survey_all_additional_infos(survey_id)) > 0
 
+    closed = survey_service.check_if_survey_closed(survey_id)
+    user_survey_ranking = user_rankings_service.get_user_multistage_rankings(survey_id, user_id)
+    if user_survey_ranking:
+        print(user_survey_ranking)
+        ranked_stages = {
+        stage_id: {
+            "goodChoices": convert_to_list(data["ranking"]),
+            "badChoices": convert_to_list(data["rejections"]),
+            "reason": data["reason"],
+            "notAvailable": data["not_available"]
+        }
+        for stage_id, data in user_survey_ranking.items()
+        }
+        return jsonify(
+            {
+                "survey": {
+                    "id": str(survey.id),
+                    "name": survey.surveyname,
+                    "deadline": format_datestring(survey.time_end),
+                    "description": survey.survey_description,
+                    "min_choices": survey.min_choices,
+                    "search_visibility": survey.allow_search_visibility,
+                    "denied_allowed_choices": survey.allowed_denied_choices,
+                    "closed": closed,
+                },
+                "additional_info": additional_info,
+                "stages": stages,
+                "rankedStages": ranked_stages,
+                "existing": "1",
+            }
+        )
     return jsonify(
         {
             "survey": {
@@ -542,7 +573,8 @@ def api_multistage_survey_choices(survey_id):
                 "closed": survey.closed,
                 "additionalInfo": additional_info
             },
-            "stages": stages
+            "stages": stages,
+            "existing": "0"
         })
 
 @bp.route("/api/surveys/multistage/<string:survey_id>", methods=["POST"])
@@ -550,8 +582,27 @@ def api_multistage_survey_submit(survey_id):
     """
     API endpoint for submitting multiphase survey answers
     """
-    print(request.get_json())
-    return jsonify({"status": 1, "message": "success"})
+    data = request.get_json()
+    user_id = session.get("user_id", 0)
+    
+    # no validations, refactoring needs to be done anyway
+    for stage in data["stages"]:
+        good_ids = stage["good"]
+        bad_ids = stage["bad"]
+        reason = stage.get("reason", "")
+    
+        ranking = convert_to_string(good_ids)
+        rejections = convert_to_string(bad_ids)
+        
+        succesful_add = user_rankings_service.add_user_ranking(
+            user_id, survey_id, ranking, rejections, reason, 
+            stage=stage["stageId"], not_available=stage["notAvailable"],
+            multistage_ranking=True
+        )
+        if not succesful_add:
+            return jsonify({"status": "0", "message": "adding user ranking failed"})
+    
+    return jsonify({"status": "1", "message": "success"})
 
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["POST"])

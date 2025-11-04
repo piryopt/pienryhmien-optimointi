@@ -16,14 +16,58 @@ class UserRankingsRepository:
         """
         try:
             sql = """
-                INSERT INTO user_survey_rankings (user_id, survey_id, ranking, rejections, reason, deleted) 
-                VALUES (:user_id, :survey_id, :ranking, :rejections, :reason, :deleted) 
-                ON CONFLICT (user_id, survey_id) 
-                DO UPDATE SET ranking=:ranking, rejections=:rejections, reason=:reason, deleted=:deleted
+                WITH updated AS (
+                UPDATE user_survey_rankings
+                SET ranking = :ranking,
+                    rejections = :rejections,
+                    reason = :reason,
+                    deleted = :deleted
+                WHERE user_id = :user_id
+                  AND survey_id = :survey_id
+                RETURNING id
+                )
+                INSERT INTO user_survey_rankings (user_id, survey_id, ranking, rejections, reason, deleted)
+                SELECT :user_id, :survey_id, :ranking, :rejections, :reason, :deleted
+                WHERE NOT EXISTS (SELECT 1 FROM updated);
                 """
             db.session.execute(
                 text(sql),
                 {"user_id": user_id, "survey_id": survey_id, "ranking": ranking, "rejections": rejections, "reason": reason, "deleted": False},
+            )
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
+    def add_multistage_user_ranking(self, user_id, survey_id, ranking, rejections, reason, stage, not_available):
+        """
+        SQL code for adding a new entry into user_survey_rankings table
+
+        args:
+            user_id: The id of the user
+            survey_id: The id of the survey
+            ranking: The ranking of the user for the survey in question
+            rejections: The rejections of the user for the survey in question
+            reason: The reason of the user for the rejections of the survey in question
+        """
+        try:
+            sql = """
+                INSERT INTO user_survey_rankings (user_id, survey_id, ranking, rejections, 
+                    reason, deleted, stage, not_available) 
+                VALUES (:user_id, :survey_id, :ranking, :rejections, :reason, :deleted,
+                    :stage, :not_available) 
+                ON CONFLICT (user_id, survey_id, stage) 
+                DO UPDATE SET ranking=:ranking, rejections=:rejections, reason=:reason, deleted=:deleted,
+                    stage=:stage, not_available=:not_available
+                """
+            db.session.execute(
+                text(sql),
+                {"user_id": user_id, "survey_id": survey_id, 
+                 "ranking": ranking, "rejections": rejections, 
+                 "reason": reason, "deleted": False,
+                 "stage": stage, "not_available": not_available
+                 },
             )
             db.session.commit()
             return True
@@ -47,6 +91,36 @@ class UserRankingsRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return None
+
+    def get_user_multistage_rankings(self, survey_id, user_id):
+        """
+        Fetches user's multistage rankings for given survey.
+        Returns all stages and their answers.
+        """
+        try:
+            sql = """
+                SELECT 
+                usr.survey_id,
+                usr.user_id,
+                usr.stage,
+                usr.ranking,
+                usr.rejections,
+                usr.reason,
+                usr.not_available
+                FROM user_survey_rankings usr
+                LEFT JOIN survey_stages ss
+                    ON usr.survey_id = ss.survey_id
+                   AND usr.stage = ss.stage
+                WHERE usr.survey_id = :survey_id
+                  AND usr.user_id = :user_id
+                  AND usr.deleted = FALSE
+                ORDER BY ss.order_number NULLS LAST, usr.stage;
+            """
+            result = db.session.execute(text(sql), {"survey_id": survey_id, "user_id": user_id})
+            return result.fetchall()
+        except Exception as e:
+            print(e)
+            return []
 
     def delete_user_ranking(self, user_id, survey_id):
         """
