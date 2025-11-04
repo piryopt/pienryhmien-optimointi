@@ -10,9 +10,6 @@ const SurveyInfo = ({ survey, additionalInfo }) => (
         <i> Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa.</i>
       ) : null}
     </p>
-    <p className="note">
-      HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.
-    </p>
   </>
 );
 

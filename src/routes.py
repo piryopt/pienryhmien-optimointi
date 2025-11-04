@@ -135,7 +135,7 @@ def frontpage_data():
 """
 
 
-@bp.route("/surveys/active")
+@bp.route("/api/surveys/active")
 @ad_login
 def surveys_active():
     user_id = session.get("user_id", 0)
@@ -143,7 +143,7 @@ def surveys_active():
     return jsonify(active_surveys)
 
 
-@bp.route("/surveys/closed")
+@bp.route("/api/surveys/closed")
 @ad_login
 def surveys_closed():
     user_id = session.get("user_id", 0)
@@ -527,6 +527,7 @@ def api_multistage_survey_choices(survey_id):
     user_id = session.get("user_id", 0)
     stages = survey_choices_service.get_survey_choices_by_stage(survey_id)
     survey = survey_service.get_survey(survey_id)
+    additional_info = len(survey_choices_service.survey_all_additional_infos(survey_id)) > 0
 
     return jsonify(
         {
@@ -539,6 +540,7 @@ def api_multistage_survey_choices(survey_id):
                 "search_visibility": survey.allow_search_visibility,
                 "denied_allowed_choices": survey.allowed_denied_choices,
                 "closed": survey.closed,
+                "additionalInfo": additional_info
             },
             "stages": stages
         })

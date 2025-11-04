@@ -11,6 +11,7 @@ import Form from "react-bootstrap/Form";
 import GroupList from "../components/survey_answer_page_components/GroupList.jsx";
 import ReasonsBox from "../components/survey_answer_page_components/ReasonsBox.jsx";
 import assignmentIcon from "/images/assignment_white_36dp.svg";
+import SurveyInfo from "../components/survey_answer_page_components/SurveyInfo.jsx";
 import "../static/css/answerPage.css";
 
 const MultiStageAnswerPage = () => {
@@ -33,7 +34,6 @@ const MultiStageAnswerPage = () => {
     (async () => {
       try {
         const data = await surveyService.getMultiStageSurvey(surveyId);
-        console.log(data);
         if (!mountedRef.current) return;
 
         const stagesData = {};
@@ -62,11 +62,13 @@ const MultiStageAnswerPage = () => {
             neutral: neutralChoices,
             good: goodChoices,
             bad: badChoices,
-            notAvailable: !!stage.notAvailable
+            notAvailable: !!stage.notAvailable,
+            hasMandatory: stage.hasMandatory
           };
         }
 
         setStages(stagesData);
+        setAdditionalInfo(data.survey.additionalInfo || false);
         setSurvey(data.survey || {});
         setActiveStage(Object.keys(stagesData)[0] || null);
       } catch (err) {
@@ -178,16 +180,7 @@ const MultiStageAnswerPage = () => {
           <img src={assignmentIcon} alt="" className="assignment-icon" />
           {survey.name}
         </h1>
-        <p className="deadline">Vastausaika päättyy {survey.deadline}</p>
-        <p className="instructions">
-          <i>
-            Raahaa jokaisesta vaiheesta vähintään {survey.min_choices}{" "}
-            vaihtoehtoa <span className="highlight">vihreään</span> laatikkoon.
-          </i>
-          {additionalInfo && (
-            <i> Klikkaa valintavaihtoehtoa nähdäksesi lisätietoa.</i>
-          )}
-        </p>
+        <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
       </div>
 
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -229,6 +222,14 @@ const MultiStageAnswerPage = () => {
                     Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse
                     itsesi poissaolevaksi.
                   </p>
+                  {stage.hasMandatory && (
+                    <p className="note">
+                      HUOM! <span className="mandatory">{"Pakolliseksi"}</span>{" "}
+                      merkityt ryhmät priorisoidaan jakamisprosessissa. Ne
+                      täytetään aina vähintään minimikokoon asti vastauksista
+                      riippumatta.
+                    </p>
+                  )}
 
                   {!stage.notAvailable ? (
                     <div className="answer-layout">

@@ -11,7 +11,6 @@ const GroupList = ({
   readOnly = false,
   multiphase = false
 }) => {
-  console.log(items);
   const borderColor = multiphase
     ? id.endsWith("good")
       ? "green"

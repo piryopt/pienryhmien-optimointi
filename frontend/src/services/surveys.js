@@ -4,7 +4,7 @@ import csrfService from "./csrf";
 
 const getActiveSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/surveys/active`, {
+    const response = await axios.get(`${baseUrl}/api/surveys/active`, {
       withCredentials: true
     });
     return response.data;
@@ -15,7 +15,7 @@ const getActiveSurveys = async () => {
 
 const getClosedSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/surveys/closed`, {
+    const response = await axios.get(`${baseUrl}/api/surveys/closed`, {
       withCredentials: true
     });
     return response.data;

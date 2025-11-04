@@ -31,7 +31,14 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
           width="20"
           height="20"
         />
-        <Link className="surveys_link" to={`/surveys/${survey.id}`}>
+        <Link
+          className="surveys_link"
+          to={
+            survey.is_multistage
+              ? `/surveys/multistage/${survey.id}`
+              : `/surveys/${survey.id}`
+          }
+        >
           &nbsp;
           {survey.surveyname}
         </Link>

@@ -176,13 +176,13 @@ class SurveyChoicesService:
         """
         rows = self._survey_choices_repository.get_choices_grouped_by_stage(survey_id)
         stages = {}
-        print(rows)
         for row in rows:
             stage_id = row["stage"] or "no_stage"
     
             if stage_id not in stages:
                 stages[stage_id] = {
-                    "order_number": row["order_number"],
+                    "orderNumber": row["order_number"],
+                    "hasMandatory": any(map(lambda r: r["mandatory"] if r["stage"] == stage_id else False, rows)),
                     "choices": []
                 }
     

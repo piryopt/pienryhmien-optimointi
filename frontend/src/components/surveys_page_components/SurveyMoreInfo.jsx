@@ -13,7 +13,11 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
 
   const handleCopyUrlClick = () => {
     const currUrl = window.location.href;
-    navigator.clipboard.writeText(`${currUrl}/${survey.id}`);
+    navigator.clipboard.writeText(
+      survey.is_multistage
+        ? `${currUrl}/multistage/${survey.id}`
+        : `${currUrl}/${survey.id}`
+    );
     showNotification(t("Kyselyn osoite kopioitu leikepöydälle"), "success");
   };
 
