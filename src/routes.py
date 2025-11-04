@@ -528,11 +528,9 @@ def api_multistage_survey_choices(survey_id):
     stages = survey_choices_service.get_survey_choices_by_stage(survey_id)
     survey = survey_service.get_survey(survey_id)
     additional_info = len(survey_choices_service.survey_all_additional_infos(survey_id)) > 0
-
     closed = survey_service.check_if_survey_closed(survey_id)
     user_survey_ranking = user_rankings_service.get_user_multistage_rankings(survey_id, user_id)
     if user_survey_ranking:
-        print(user_survey_ranking)
         ranked_stages = {
         stage_id: {
             "goodChoices": convert_to_list(data["ranking"]),
@@ -542,6 +540,7 @@ def api_multistage_survey_choices(survey_id):
         }
         for stage_id, data in user_survey_ranking.items()
         }
+        print(ranked_stages)
         return jsonify(
             {
                 "survey": {
@@ -553,8 +552,8 @@ def api_multistage_survey_choices(survey_id):
                     "search_visibility": survey.allow_search_visibility,
                     "denied_allowed_choices": survey.allowed_denied_choices,
                     "closed": closed,
+                    "additionalInfo": additional_info,
                 },
-                "additional_info": additional_info,
                 "stages": stages,
                 "rankedStages": ranked_stages,
                 "existing": "1",

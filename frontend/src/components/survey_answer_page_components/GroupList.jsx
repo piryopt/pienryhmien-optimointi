@@ -32,7 +32,7 @@ const GroupList = ({
 
     return (
       <div className="group-container" style={{ marginBottom: 7 }}>
-        {filteredItems.map((item) => (
+        {filteredItems.map((item, index) => (
           <GroupItem
             key={String(item.id)}
             item={item}
@@ -41,6 +41,8 @@ const GroupList = ({
             }
             expanded={expandedIds.has(String(item.id))}
             onToggle={toggleExpand}
+            index={index + 1}
+            id={id}
           />
         ))}
       </div>

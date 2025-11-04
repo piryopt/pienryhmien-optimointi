@@ -45,19 +45,23 @@ const MultiStageAnswerPage = () => {
           let goodChoices = [];
           let badChoices = [];
           if (data.existing === "1") {
-            const goodIds = new Set(
-              (data.rankedStages[stageId].goodChoices || []).map(String)
+            const goodIds = (data.rankedStages[stageId].goodChoices || []).map(
+              String
             );
-            const badIds = new Set(
-              (data.rankedStages[stageId].badChoices || []).map(String)
+            const badIds = (data.rankedStages[stageId].badChoices || []).map(
+              String
             );
-            goodChoices = choices.filter((c) => goodIds.has(String(c.id)));
-            badChoices = choices.filter((c) => badIds.has(String(c.id)));
 
-            const used = new Set(
-              [...goodChoices, ...badChoices].map((c) => String(c.id))
-            );
-            neutralChoices = choices.filter((c) => !used.has(String(c.id)));
+            goodChoices = goodIds
+              .map((id) => choices.find((c) => String(c.id) === id))
+              .filter(Boolean);
+
+            badChoices = badIds
+              .map((id) => choices.find((c) => String(c.id) === id))
+              .filter(Boolean);
+
+            const usedIds = new Set([...goodIds, ...badIds]);
+            neutralChoices = choices.filter((c) => !usedIds.has(String(c.id)));
           }
 
           stagesData[stageId] = {
@@ -65,10 +69,9 @@ const MultiStageAnswerPage = () => {
             neutral: neutralChoices,
             good: goodChoices,
             bad: badChoices,
-            notAvailable: !!data.rankedStages?.[stageId]["notAvailable"],
+            notAvailable: !!data.rankedStages?.[stageId]?.notAvailable,
             hasMandatory: stage.hasMandatory
           };
-          initialReasons[stageId] = data.rankedStages?.[stageId]["reason"];
         }
 
         setStages(stagesData);
@@ -185,10 +188,10 @@ const MultiStageAnswerPage = () => {
   return (
     <div className="answer-page">
       <div>
-        <h1 className="answer-title">
+        <h2 className="answer-title">
           <img src={assignmentIcon} alt="" className="assignment-icon" />
           {survey.name}
-        </h1>
+        </h2>
         <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
       </div>
 
@@ -210,7 +213,7 @@ const MultiStageAnswerPage = () => {
               <Tab.Pane key={stageId} eventKey={stageId}>
                 <div className="stage-section">
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <h2 className="stage-title">{stage.name}</h2>
+                    <h3 className="stage-title">{stage.name}</h3>
                     <Form.Check
                       type="switch"
                       id={`not-available-${stageId}`}
