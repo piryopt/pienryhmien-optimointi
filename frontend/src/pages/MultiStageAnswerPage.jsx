@@ -37,6 +37,7 @@ const MultiStageAnswerPage = () => {
         if (!mountedRef.current) return;
 
         const stagesData = {};
+        const initialReasons = {};
 
         for (const [stageId, stage] of Object.entries(data.stages || {})) {
           const choices = stage.choices || [];
@@ -67,9 +68,11 @@ const MultiStageAnswerPage = () => {
             notAvailable: !!data.rankedStages?.[stageId]["notAvailable"],
             hasMandatory: stage.hasMandatory
           };
+          initialReasons[stageId] = data.rankedStages?.[stageId]["reason"];
         }
 
         setStages(stagesData);
+        setReasons(initialReasons);
         setAdditionalInfo(data.survey.additionalInfo || false);
         setSurvey(data.survey || {});
         setActiveStage(Object.keys(stagesData)[0] || null);
