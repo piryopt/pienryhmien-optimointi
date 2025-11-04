@@ -191,7 +191,7 @@ class SurveyChoicesRepository:
                 LEFT JOIN choice_infos ci 
                     ON ci.choice_id = sc.id
                 WHERE sc.survey_id = :survey_id
-                ORDER BY ss.stage, ss.order_number NULLS LAST, sc.id;
+                ORDER BY ss.order_number, ss.stage NULLS LAST, sc.id;
             """
             result = db.session.execute(text(sql), {"survey_id": survey_id}).mappings().all()
             return result
