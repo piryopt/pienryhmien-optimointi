@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import TrashMoreInfo from "./TrashMoreInfo";
-import menu_white from "/images/menu_white_36dp.svg";
-import insertDriveFileWhite from "/images/insert_drive_file_white_36dp.svg";
-import insertPageBreakWhite from "/images/insert_page_break_white_36dp.svg";
 import { Link } from "react-router-dom";
+import TrashMoreInfo from "./TrashMoreInfo";
+import menuIcon from "/images/menu_white_36dp.svg";
+import insertDriveFileIcon from "/images/insert_drive_file_white_36dp.svg";
+import insertPageBreakIcon from "/images/insert_page_break_white_36dp.svg";
 
-const TrashTableRow = ({ survey, handleDeleteClick }) => {
+const TrashTableRow = ({ survey, handleDeleteClick, handleRestoreClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
   const { t } = useTranslation();
 
@@ -25,7 +25,7 @@ const TrashTableRow = ({ survey, handleDeleteClick }) => {
     <tr>
       <td>
         <img
-          src={survey.closed ? insertPageBreakWhite : insertDriveFileWhite}
+          src={survey.closed ? insertPageBreakIcon : insertDriveFileIcon}
           alt=""
           className="d-inline-block align-text-top"
           width="20"
@@ -57,7 +57,7 @@ const TrashTableRow = ({ survey, handleDeleteClick }) => {
         <div onClick={() => setMoreInfoVisible(!moreInfoVisible)}>
           <label style={{ cursor: "pointer" }} className="surveys_link">
             <img
-              src={menu_white}
+              src={menuIcon}
               alt=""
               className="d-inline-block align-text-top"
               width="20"
@@ -71,10 +71,11 @@ const TrashTableRow = ({ survey, handleDeleteClick }) => {
           <TrashMoreInfo
             survey={survey}
             handleDeleteClick={handleDeleteClick}
+            handleRestoreClick={handleRestoreClick}
           />
         )}
       </td>
-      <td>{survey.time_end}</td>
+      <td>00.00.0000 00:00</td>
     </tr>
   );
 };

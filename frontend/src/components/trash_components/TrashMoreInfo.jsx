@@ -1,31 +1,33 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import manageSearchWhite from "/images/manage_search_white_36dp.svg";
-import contentCopyWhite from "/images/content_copy_white_36dp.svg";
-import editWhite from "/images/edit_white_36dp.svg";
-import folderCopyWhite from "/images/folder_copy_white_36dp.svg";
-import deleteWhite from "/images/delete_white_36dp.svg";
-import { useNotification } from "../../context/NotificationContext";
+import manageSearchIcon from "/images/manage_search_white_36dp.svg";
+import folderCopyIcon from "/images/folder_copy_white_36dp.svg";
+import deleteIcon from "/images/delete_white_36dp.svg";
+import restoreIcon from "/images/restore_from_trash_36d.svg";
 
-const TrashMoreInfo = ({ survey, handleDeleteClick }) => {
+const TrashMoreInfo = ({ survey, handleDeleteClick, handleRestoreClick }) => {
   const { t } = useTranslation();
-  const { showNotification } = useNotification();
-
-  const handleCopyUrlClick = () => {
-    const currUrl = window.location.href;
-    navigator.clipboard.writeText(
-      survey.is_multistage
-        ? `${currUrl}/multistage/${survey.id}`
-        : `${currUrl}/${survey.id}`
-    );
-    showNotification(t("Kyselyn osoite kopioitu leikepöydälle"), "success");
-  };
 
   return (
     <div>
+      <span
+        style={{ cursor: "pointer" }}
+        className="surveys_link"
+        onClick={() => handleRestoreClick(survey.id)}
+      >
+        <img
+          src={restoreIcon}
+          alt=""
+          className="d-inline-block align-text-top"
+          width="20"
+          height="20"
+        />
+        &nbsp;{t("Palauta kysely")}
+      </span>
+      <br></br>
       <Link className="surveys_link" to={`/surveys/${survey.id}/answers`}>
         <img
-          src={manageSearchWhite}
+          src={manageSearchIcon}
           alt=""
           className="d-inline-block align-text-top"
           width="20"
@@ -33,32 +35,13 @@ const TrashMoreInfo = ({ survey, handleDeleteClick }) => {
         />
         &nbsp;{t("Tarkastele tuloksia")}
       </Link>
-      {!survey.closed && (
-        <>
-          <br />
-          <span
-            className="surveys_link"
-            onClick={handleCopyUrlClick}
-            style={{ cursor: "pointer" }}
-          >
-            <img
-              src={contentCopyWhite}
-              alt=""
-              className="d-inline-block align-text-top"
-              width="20"
-              height="20"
-            />
-            &nbsp;{t("Kopioi kyselyn osoite leikepöydälle")}
-          </span>
-        </>
-      )}
       <br></br>
       <Link
         className="surveys_link"
         to={`/surveys/create?fromtemplate=${survey.id}`}
       >
         <img
-          src={folderCopyWhite}
+          src={folderCopyIcon}
           alt=""
           className="d-inline-block align-text-top"
           width="20"
@@ -73,13 +56,13 @@ const TrashMoreInfo = ({ survey, handleDeleteClick }) => {
         onClick={() => handleDeleteClick(survey.id, survey.closed)}
       >
         <img
-          src={deleteWhite}
+          src={deleteIcon}
           alt=""
           className="d-inline-block align-text-top"
           width="20"
           height="20"
         />
-        &nbsp;{t("Poista kysely pysyvästi")}
+        &nbsp;{t("Poista kysely")}
       </span>
     </div>
   );

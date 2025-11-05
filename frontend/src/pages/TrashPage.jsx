@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import TrashTable from "../components/trash_components/TrashTable.jsx";
-import trashIcon from "/images/auto_delete_36dp.svg";
+import trashIcon from "/images/delete_36dp.svg";
 
 const TrashPage = () => {
   const [surveys, setSurveys] = useState([]);
