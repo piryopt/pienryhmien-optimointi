@@ -29,6 +29,7 @@ const GroupItem = ({ item, choice, expanded, onToggle, index, id }) => {
             choice.infos.map((infoObj, idx) => {
               const entries = Object.entries(infoObj);
               const [key, value] = entries.length ? entries[0] : ["", ""];
+
               return (
                 <div key={idx} className="info-entry">
                   <strong className="info-key">{key}:</strong>
