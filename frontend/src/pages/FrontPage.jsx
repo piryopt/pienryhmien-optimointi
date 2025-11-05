@@ -101,7 +101,11 @@ const FrontPage = () => {
             <div key={survey.id} className="mb-4">
               <FrontPageButton
                 key={survey.id}
-                path={`surveys/${survey.id}`}
+                path={
+                  survey.is_multistage
+                    ? `surveys/multistage/${survey.id}`
+                    : `surveys/${survey.id}`
+                }
                 imgSrc={surveyIcon}
                 mainText={survey.surveyname}
                 additionalText="Vastaukset"

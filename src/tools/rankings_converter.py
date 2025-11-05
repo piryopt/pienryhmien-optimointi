@@ -27,11 +27,16 @@ def convert_to_int_list(ranking_string):
 
 def convert_to_string(ranking_list):
     """
-    Converts a list consisting of the rankings of a survey into a string. E:G ["2", "3", "5", "6", "4", "7"] -> "2,3,5,6,4,7"
+    Converts a list consisting of the rankings of a survey into a string. Also works with int list.
+    E:G ["2", "3", "5", "6", "4", "7"] -> "2,3,5,6,4,7".
 
     args:
         ranking_list: The list of rankings that the user chooses. It is converted into a string which is need when adding rankings
         to the database
     """
+    if len(ranking_list) == 0:
+        return ""
+    if type(ranking_list[0]) is int:
+        ranking_list = list(map(lambda r: str(r), ranking_list))
     ranking_string = ",".join(ranking_list)
     return ranking_string

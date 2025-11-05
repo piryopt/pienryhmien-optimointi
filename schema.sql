@@ -59,7 +59,9 @@ CREATE TABLE user_survey_rankings (
 	ranking TEXT, -- e.g 1,2,5,3,4, the id's of survey_choices
 	rejections TEXT, -- same format as ranking
 	reason TEXT,
-	deleted BOOLEAN
+	deleted BOOLEAN,
+	stage TEXT DEFAULT NULL,
+	not_available BOOLEAN DEFAULT NULL
 );
 
 CREATE TABLE final_group ( -- lopullinen sijoitus
@@ -79,4 +81,5 @@ CREATE TABLE feedback (
 );
 
 
-CREATE UNIQUE INDEX idx_user_survey_rankings_user_id_survey_id on user_survey_rankings (user_id,survey_id);
+CREATE UNIQUE INDEX idx_user_survey_rankings_user_id_survey_id_stage
+ON user_survey_rankings (user_id, survey_id, stage);

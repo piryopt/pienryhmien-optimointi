@@ -4,7 +4,7 @@ import csrfService from "./csrf";
 
 const getActiveSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/surveys/active`, {
+    const response = await axios.get(`${baseUrl}/api/surveys/active`, {
       withCredentials: true
     });
     return response.data;
@@ -15,7 +15,7 @@ const getActiveSurveys = async () => {
 
 const getClosedSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/surveys/closed`, {
+    const response = await axios.get(`${baseUrl}/api/surveys/closed`, {
       withCredentials: true
     });
     return response.data;
@@ -225,7 +225,8 @@ const submitMultiStageAnswers = async (payload) => {
       `${baseUrl}/api/surveys/multistage/${payload.surveyId}`,
       {
         stages: payload.stages,
-        reason: payload.reason
+        minChoices: payload.minChoices,
+        deniedAllowedChoices: payload.deniedAllowedChoices
       },
       {
         headers: {
@@ -235,7 +236,7 @@ const submitMultiStageAnswers = async (payload) => {
       }
     );
 
-    if (response.data.success) {
+    if (response.data.status === "1") {
       return { status: "1", msg: response.data.message || "success" };
     } else {
       return {

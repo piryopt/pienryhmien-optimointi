@@ -98,7 +98,12 @@ class SurveyRepository:
             user_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.time_end FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False)"
+            sql = """
+                SELECT s.id, s.surveyname, s.time_end,
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
+                    AS is_multistage FROM surveys s, survey_owners so 
+                WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False)
+                """
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
             return surveys
@@ -114,7 +119,11 @@ class SurveyRepository:
             user_id: The id of the user
         """
         try:
-            sql = """SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count FROM surveys s 
+            sql = """
+            SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count,
+            EXISTS (
+                SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id
+            ) AS is_multistage FROM surveys s 
             JOIN survey_owners so ON s.id = so.survey_id 
             LEFT JOIN user_survey_rankings us ON s.id = us.survey_id 
             WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
@@ -136,7 +145,13 @@ class SurveyRepository:
             user_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND s.closed=True AND so.survey_id = s.id AND s.deleted=False) ORDER BY s.time_end DESC"
+            sql = """
+                SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end,
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
+                    AS is_multistage FROM surveys s, survey_owners so 
+                WHERE (so.user_id=:user_id AND s.closed=True AND so.survey_id = s.id AND s.deleted=False) 
+                ORDER BY s.time_end DESC
+                """
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
             return surveys

@@ -169,7 +169,14 @@ const AnswerSurveyPage = () => {
       <div>
         <Header surveyName={survey.name} />
         {!readOnly && (
-          <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
+          <>
+            <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
+            <p className="note">
+              HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt
+              ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina
+              vähintään minimikokoon asti vastauksista riippumatta.
+            </p>
+          </>
         )}
       </div>
       {readOnly ? (
