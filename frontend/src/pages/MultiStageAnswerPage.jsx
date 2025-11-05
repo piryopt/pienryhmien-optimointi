@@ -94,17 +94,18 @@ const MultiStageAnswerPage = () => {
   const handleDragEnd = (result) => {
     const { source, destination } = result;
     if (!destination) return;
-
-    const sourceParts = source.droppableId.split("-");
+    const sourceParts = source.droppableId.split(/-(?=[^ -]+$)/);
     const sourceStage = sourceParts.length === 2 ? sourceParts[0] : "single";
     const sourceListId =
       sourceParts.length === 2 ? sourceParts[1] : sourceParts[0];
 
-    const destParts = destination.droppableId.split("-");
+    const destParts = destination.droppableId.split(/-(?=[^ -]+$)/);
     const destStage = destParts.length === 2 ? destParts[0] : "single";
     const destListId = destParts.length === 2 ? destParts[1] : destParts[0];
 
-    if (!stages[sourceStage] || !stages[destStage]) return;
+    if (!stages[sourceStage] || !stages[destStage]) {
+      return;
+    }
 
     const sourceList = [...(stages[sourceStage][sourceListId] || [])];
     const destList =
