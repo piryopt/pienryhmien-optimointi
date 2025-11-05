@@ -4,7 +4,7 @@ import csrfService from "./csrf";
 
 const getActiveSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/surveys/active`, {
+    const response = await axios.get(`${baseUrl}/surveys/active`, {
       withCredentials: true
     });
     return response.data;
@@ -15,7 +15,7 @@ const getActiveSurveys = async () => {
 
 const getClosedSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/surveys/closed`, {
+    const response = await axios.get(`${baseUrl}/surveys/closed`, {
       withCredentials: true
     });
     return response.data;
@@ -26,7 +26,7 @@ const getClosedSurveys = async () => {
 
 const getSurvey = async (surveyId) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/surveys/${surveyId}`, {
+    const response = await axios.get(`${baseUrl}/surveys/${surveyId}`, {
       withCredentials: true
     });
     return response.data;
@@ -37,7 +37,7 @@ const getSurvey = async (surveyId) => {
 
 const getFrontPageData = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/frontpage`, {
+    const response = await axios.get(`${baseUrl}/frontpage`, {
       withCredentials: true
     });
     return response.data;
@@ -90,7 +90,7 @@ const submitSurveyAnswer = async ({
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.post(
-      `${baseUrl}/api/surveys/${surveyId}`,
+      `${baseUrl}/surveys/${surveyId}`,
       payload,
       {
         withCredentials: true,
@@ -109,7 +109,7 @@ const submitSurveyAnswer = async ({
 const deleteSurveyAnswer = async (surveyId) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
-    const response = await axios.delete(`${baseUrl}/api/surveys/${surveyId}`, {
+    const response = await axios.delete(`${baseUrl}/surveys/${surveyId}`, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "X-CSRFToken": csrfToken
@@ -222,7 +222,7 @@ const submitMultiStageAnswers = async (payload) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.post(
-      `${baseUrl}/api/surveys/multistage/${payload.surveyId}`,
+      `${baseUrl}/surveys/multistage/${payload.surveyId}`,
       {
         stages: payload.stages,
         minChoices: payload.minChoices,
@@ -252,7 +252,7 @@ const submitMultiStageAnswers = async (payload) => {
 const getMultiStageSurvey = async (surveyId) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/surveys/multistage/${surveyId}`,
+      `${baseUrl}/surveys/multistage/${surveyId}`,
       {
         withCredentials: true
       }
