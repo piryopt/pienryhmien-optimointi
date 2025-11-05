@@ -19,6 +19,7 @@ import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 import CreateSurveyPage from "./pages/CreateSurveyPage";
 import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";
 import MultiStageAnswerPage from "./pages/MultiStageAnswerPage";
+import TrashPage from "./pages/TrashPage";
 
 const App = () => {
   return (
@@ -101,6 +102,14 @@ const App = () => {
             element={
               <RequireAuth>
                 <SurveyResultsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/trash"
+            element={
+              <RequireAuth>
+                <TrashPage />
               </RequireAuth>
             }
           />
