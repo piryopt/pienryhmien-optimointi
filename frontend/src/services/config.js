@@ -1,7 +1,7 @@
 import { baseUrl } from "../utils/constants";
 
 const fetchDebugFlag = async () => {
-  const response = await fetch(`${baseUrl}/api/config`, {
+  const response = await fetch(`${baseUrl}/config`, {
     credentials: "include"
   });
   const data = await response.json();
