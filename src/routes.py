@@ -181,7 +181,7 @@ def get_info():
     return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
 
 
-@bp.route("/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"])
+@bp.route("/api/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"])
 def expand_ranking(survey_id, email):
     """
     Return json data of user's choices and rejections
@@ -275,7 +275,6 @@ def new_survey_post():
     """
     try:
         data = request.get_json()
-        print("Choices: ", data.get("choices", []))
         if not data:
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 
@@ -344,7 +343,7 @@ def import_survey_choices():
 """
 
 
-@bp.route("/csrf_token", methods=["GET"])
+@bp.route("/api/csrf_token", methods=["GET"])
 @ad_login
 def get_csrf():
     csrf_token = generate_csrf()
@@ -540,7 +539,6 @@ def api_multistage_survey_choices(survey_id):
         }
         for stage_id, data in user_survey_ranking.items()
         }
-        print(ranked_stages)
         return jsonify(
             {
                 "survey": {
@@ -845,7 +843,7 @@ def edit_survey_post(survey_id):
     return jsonify(response)
 
 
-@bp.route("/surveys/<string:survey_id>/delete")
+@bp.route("/api/surveys/<string:survey_id>/delete")
 def delete_survey(survey_id):
     if not check_if_owner(survey_id):
         return redirect("/")
@@ -933,7 +931,7 @@ def post_group_sizes(survey_id):
     return jsonify(response)
 
 
-@bp.route("/surveys/<string:survey_id>/answers", methods=["GET"])
+@bp.route("/api/surveys/<string:survey_id>/answers", methods=["GET"])
 @ad_login
 def survey_answers(survey_id):
     """
@@ -967,7 +965,7 @@ def survey_answers(survey_id):
     )
 
 
-@bp.route("/surveys/<string:survey_id>/results", methods=["GET", "POST"])
+@bp.route("/api/surveys/<string:survey_id>/results", methods=["GET", "POST"])
 @ad_login
 def survey_results(survey_id):
     """
@@ -1045,7 +1043,7 @@ def save_survey_results(survey_id, output_data):
         return jsonify({"msg": "Survey saved"})
 
 
-@bp.route("/surveys/<string:survey_id>/close", methods=["POST"])
+@bp.route("/api/surveys/<string:survey_id>/close", methods=["POST"])
 def close_survey(survey_id):
     """
     Close survey, so that no more answers can be submitted
@@ -1058,7 +1056,7 @@ def close_survey(survey_id):
     return jsonify({"status": "1", "msg": "Survey closed"})
 
 
-@bp.route("/surveys/<string:survey_id>/open", methods=["POST"])
+@bp.route("/api/surveys/<string:survey_id>/open", methods=["POST"])
 def open_survey(survey_id):
     """
     Open survey back up so that students can submit answers
@@ -1146,6 +1144,46 @@ def login():
 
         return redirect("/")
 
+@bp.route("/api/auth/login", methods=["GET", "POST"])
+def api_login():
+    if not current_app.debug:
+        return redirect("/")
+
+    users = [
+        User("outi1", "testi.opettaja@helsinki.fi", True),
+        User("olli1", "testi.opiskelija@helsinki.fi", False),
+        User("robottiStudent", "robotti.student@helsinki.fi", False),
+        User("robottiTeacher", "robotti.teacher@helsinki.fi", True),
+        User("robottiTeacher2", "robotti.2.teacher@helsinki.fi", True),
+        User("Ääpö Wokki", "hm@helsinki.fi", True),
+        User("opettaja", "opettaja@mail.com", True),
+    ]
+
+    if request.method == "GET":
+        return render_template("mock_ad.html")
+    if request.method == "POST":
+        username = request.form.get("username")
+
+        email = name = role_bool = ""
+
+        for user in users:
+            if user.name == username:
+                email = user.email
+                name = user.name
+                role_bool = user.isteacher
+                break
+
+        if not email:
+            return jsonify({"message": "Invalid username"}), 401
+
+        if not user_service.find_by_email(email):  # account doesn't exist, register
+            user_service.create_user(name, email, role_bool)  # actual registration
+
+        if user_service.check_credentials(email):  # log in, update session etc.
+            if role_bool:
+                user_service.make_user_teacher(email)
+
+        return redirect("/")
 
 @bp.route("/auth/logout")
 def logout():
@@ -1500,7 +1538,7 @@ def get_choices(survey_id):
     return jsonify(response)
 
 
-@bp.route("/feedback", methods=["GET", "POST"])
+@bp.route("/api/feedback", methods=["GET", "POST"])
 def feedback():
     if request.method == "GET":
         return jsonify({"success": False, "status": "0", "key": "use_react", "msg": gettext("Please use the React frontend for feedback")}), 200
