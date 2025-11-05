@@ -177,7 +177,7 @@ const SurveyMultistageCreate = () => {
         return {
           ...t,
           columns: update.columns,
-          rows: [...t.rows, ...update.rows],
+          rows: update.rows,
           nextRowId: update.nextRowId
         };
       })
