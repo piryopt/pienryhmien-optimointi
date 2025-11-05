@@ -109,18 +109,46 @@ const GroupList = ({
                         {choice &&
                         Array.isArray(choice.infos) &&
                         choice.infos.length > 0 ? (
-                          choice.infos.map((infoObj, idx) => {
-                            const entries = Object.entries(infoObj);
-                            const [key, value] = entries.length
-                              ? entries[0]
-                              : ["", ""];
-                            return (
+                          (() => {
+                            const visible = choice.infos
+                              .map((infoObj) => {
+                                const entries = Object.entries(infoObj);
+                                const [key, value] = entries.length
+                                  ? entries[0]
+                                  : ["", ""];
+                                return {
+                                  key: key ? key.toString().trim() : "",
+                                  value
+                                };
+                              })
+                              .filter(
+                                ({ key }) =>
+                                  key !== "" &&
+                                  !key.endsWith("*") &&
+                                  !["hidden", "piilotettu"].includes(
+                                    key.toLowerCase()
+                                  )
+                              );
+
+                            if (visible.length === 0) {
+                              return (
+                                <p className="no-info">
+                                  Lisätietoa ei saatavilla.
+                                </p>
+                              );
+                            }
+
+                            return visible.map((entry, idx) => (
                               <div key={idx} className="info-entry">
-                                <strong className="info-key">{key}:</strong>
-                                <span className="info-value">{value}</span>
+                                <strong className="info-key">
+                                  {entry.key}:
+                                </strong>
+                                <span className="info-value">
+                                  {entry.value}
+                                </span>
                               </div>
-                            );
-                          })
+                            ));
+                          })()
                         ) : (
                           <p className="no-info">Lisätietoa ei saatavilla.</p>
                         )}
