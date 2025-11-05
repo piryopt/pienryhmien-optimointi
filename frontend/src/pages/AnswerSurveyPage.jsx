@@ -44,10 +44,13 @@ const AnswerSurveyPage = () => {
           setExisting(true);
           const goodIds = data.goodChoices || [];
           const badIds = data.badChoices || [];
-          const goodIdSet = new Set((goodIds || []).map(String));
-          const badIdSet = new Set((badIds || []).map(String));
-          goodChoices = choices.filter((c) => goodIdSet.has(String(c.id)));
-          badChoices = choices.filter((c) => badIdSet.has(String(c.id)));
+          goodChoices = goodIds
+            .map((id) => choices.find((c) => String(c.id) === id))
+            .filter(Boolean);
+
+          badChoices = badIds
+            .map((id) => choices.find((c) => String(c.id) === id))
+            .filter(Boolean);
 
           const used = new Set(
             [...goodChoices, ...badChoices].map((c) => String(c.id))
