@@ -242,6 +242,7 @@ def multistage_survey_create():
             enddate=f"{date_to_sql_valid(data["enddate"])} {data["endtime"]}",
             allowed_denied_choices=len(data["allowedDeniedChoices"]),
             allow_search_visibility=data["allowSearchVisibility"],
+            allow_absences=data["allowAbsences"],
             user_id=user_id
         )
         # Add choices
@@ -549,6 +550,7 @@ def api_multistage_survey_choices(survey_id):
                     "min_choices": survey.min_choices,
                     "search_visibility": survey.allow_search_visibility,
                     "denied_allowed_choices": survey.allowed_denied_choices,
+                    "allow_absences": survey.allow_absences,
                     "closed": closed,
                     "additionalInfo": additional_info,
                 },
@@ -567,6 +569,7 @@ def api_multistage_survey_choices(survey_id):
                 "min_choices": survey.min_choices,
                 "search_visibility": survey.allow_search_visibility,
                 "denied_allowed_choices": survey.allowed_denied_choices,
+                "allow_absences": survey.allow_absences,
                 "closed": survey.closed,
                 "additionalInfo": additional_info
             },
