@@ -152,5 +152,26 @@ class UserRankingsRepository:
             print(e)
             return 0
 
+    def get_all_rankings_by_stage(self, survey_id, stage):
+        """
+        SQL code for getting all rankings from a multistage survey by stage.
+        """
+        try:
+            sql = """
+            SELECT 
+                usr.user_id,
+                usr.ranking,
+                usr.rejections,
+                usr.reason,
+                usr.not_available
+                FROM user_survey_rankings usr
+                WHERE survey_id=:survey_id AND stage=:stage
+            """
+            result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage})
+            rankings = result.fetchall()
+            return rankings
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
 
 user_rankings_repository = UserRankingsRepository()

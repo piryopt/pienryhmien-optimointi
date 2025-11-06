@@ -398,5 +398,22 @@ class SurveyRepository:
             print(e)
             return False
 
+    def get_all_survey_stages(self, survey_id):
+        """
+        SQL code for getting all survey stages.
+        """
+        try:
+            sql = """
+                    SELECT DISTINCT stage, order_number 
+                    FROM survey_stages 
+                    WHERE survey_id=:survey_id 
+                    ORDER BY order_number;
+                """
+            result = db.session.execute(text(sql), {"survey_id": survey_id})
+            stages = result.fetchall()
+            return stages
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
 
 survey_repository = SurveyRepository()

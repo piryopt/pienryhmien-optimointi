@@ -23,7 +23,14 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
 
   return (
     <div>
-      <Link className="surveys_link" to={`/surveys/${survey.id}/answers`}>
+      <Link
+        className="surveys_link"
+        to={
+          survey.is_multistage
+            ? `/surveys/multistage/${survey.id}/answers`
+            : `/surveys/${survey.id}/answers`
+        }
+      >
         <img
           src={manageSearchWhite}
           alt=""
