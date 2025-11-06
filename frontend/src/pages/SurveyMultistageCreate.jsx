@@ -10,6 +10,7 @@ import SurveyDateOfClosing from "../components/create_survey_page_components/Sur
 import SurveyDescription from "../components/create_survey_page_components/SurveyDescription";
 import MinChoicesSection from "../components/create_survey_page_components/MinChoicesSection";
 import DenyChoicesSection from "../components/create_survey_page_components/DenyChoicesSection";
+import AllowAbsencesSection from "../components/create_multistage_survey_components/AllowAbsences";
 import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
 import MultistageSurveyPrioritizedGroupsDescription from "../components/create_multistage_survey_components/MultistageSurveyPrioritizedGroupsDescription";
 import StageTables from "../components/create_multistage_survey_components/StageTables";
@@ -287,6 +288,7 @@ const SurveyMultistageCreate = () => {
           <SurveyDescription />
           <MinChoicesSection />
           <DenyChoicesSection />
+          <AllowAbsencesSection />
           <SearchVisibilitySection />
           <MultistageSurveyPrioritizedGroupsDescription />
           <StageTables
