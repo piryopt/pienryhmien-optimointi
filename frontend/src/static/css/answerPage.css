@@ -68,6 +68,11 @@ li {
   flex: 1;
 }
 
+.search-container {
+  display: flex;
+  margin-bottom: 10px;
+}
+
 .submit-row {
   width: 100%;
   display: flex;
