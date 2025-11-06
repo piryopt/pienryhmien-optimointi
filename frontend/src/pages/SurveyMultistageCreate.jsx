@@ -11,6 +11,7 @@ import SurveyDescription from "../components/create_survey_page_components/Surve
 import MinChoicesSection from "../components/create_survey_page_components/MinChoicesSection";
 import DenyChoicesSection from "../components/create_survey_page_components/DenyChoicesSection";
 import AllowAbsencesSection from "../components/create_multistage_survey_components/AllowAbsences";
+import LimitParticipationSection from "../components/create_multistage_survey_components/LimitParticipation";
 import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
 import MultistageSurveyPrioritizedGroupsDescription from "../components/create_multistage_survey_components/MultistageSurveyPrioritizedGroupsDescription";
 import StageTables from "../components/create_multistage_survey_components/StageTables";
@@ -23,6 +24,7 @@ import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 const SurveyMultistageCreate = () => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
+  const [limitParticipationVisible, setLimitParticipationVisible] = useState(false);
 
   const schema = buildCreateSurveySchema(t);
 
@@ -46,6 +48,7 @@ const SurveyMultistageCreate = () => {
       }
     ]);
     setNewStageName("");
+
   };
 
   const updateStageName = (tableId, name) =>
@@ -190,6 +193,8 @@ const SurveyMultistageCreate = () => {
   const onSubmit = async (data) => {
     const csrfToken = await csrfService.fetchCsrfToken();
 
+    console.log("DEBUG: tables before payload:", JSON.stringify(tables, null, 2));
+
     const stages = tables.map((t) => ({
       id: t.id,
       name: t.name || "",
@@ -199,7 +204,8 @@ const SurveyMultistageCreate = () => {
           mandatory: !!r.mandatory,
           name: r.name || "",
           max_spaces: Number(r.max_spaces) || 0,
-          min_size: Number(r.min_size) || 0
+          min_size: Number(r.min_size) || 0,
+          participation_limit: Number(r.max_participation) || null
         };
         t.columns.forEach((c) => {
           choice[c.name] = r[c.name] ?? "";
@@ -207,6 +213,7 @@ const SurveyMultistageCreate = () => {
         return choice;
       })
     }));
+    console.log("DEBUG: built stages payload:", JSON.stringify(stages, null, 2));
 
     const allowedDenied = Array.isArray(data.allowedDeniedChoices)
       ? data.allowedDeniedChoices
@@ -290,6 +297,10 @@ const SurveyMultistageCreate = () => {
           <MinChoicesSection />
           <DenyChoicesSection />
           <AllowAbsencesSection />
+          <LimitParticipationSection
+            limitParticipationVisible={limitParticipationVisible}
+            setLimitParticipationVisible={setLimitParticipationVisible}
+          />
           <SearchVisibilitySection />
           <MultistageSurveyPrioritizedGroupsDescription />
           <StageTables
@@ -303,6 +314,7 @@ const SurveyMultistageCreate = () => {
             updateCell={updateCell}
             setTableSelectAllMandatory={setTableSelectAllMandatory}
             importCsv={importCsvToTable}
+            limitParticipationVisible={limitParticipationVisible}
           />
           <div className="mb-4">
             <Button variant="primary" onClick={addStage}>

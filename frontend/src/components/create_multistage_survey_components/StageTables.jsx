@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import ChoiceTable from "../create_survey_page_components/ChoiceTable";
 import StageNameInput from "../create_survey_page_components/StageNameInput";
 
-const StageTables = ({ tables, updateStageName, setTables, addRow, deleteRow, addColumn, removeColumn, updateCell, setTableSelectAllMandatory, importCsv }) => {
+const StageTables = ({ tables, updateStageName, setTables, addRow, deleteRow, addColumn, removeColumn, updateCell, setTableSelectAllMandatory, importCsv, limitParticipationVisible }) => {
   const { t } = useTranslation();
   
   return (
@@ -56,6 +56,7 @@ const StageTables = ({ tables, updateStageName, setTables, addRow, deleteRow, ad
           updateCell={(rowId, key, value) => updateCell(table.id, rowId, key, value)}
           setSelectAllMandatory={(val) => setTableSelectAllMandatory(table.id, val)}
           selectAllMandatory={table.selectAllMandatory}
+          limitParticipationVisible={limitParticipationVisible}
         />
         </div>
       </div>
