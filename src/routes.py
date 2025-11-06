@@ -661,7 +661,7 @@ def api_survey_submit(survey_id):
     return jsonify(response)
 
 
-@bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
+@bp.route("/api/surveys/<string:survey_id>/submission", methods=["DELETE"])
 def api_delete_submission(survey_id):
     """
     Delete the current ranking of the student.
@@ -854,7 +854,7 @@ def delete_survey(survey_id):
     return redirect("/surveys")
 
 
-@bp.route("/surveys/<string:survey_id>", methods=["DELETE"])
+@bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
 def delete_surveys_endpoint(survey_id):
     if not check_if_owner(survey_id):
         response = {"message": "No permission to delete survey"}
@@ -967,6 +967,46 @@ def survey_answers(survey_id):
         }
     )
 
+@bp.route("/api/surveys/multistage/<string:survey_id>/answers", methods=["GET"])
+@ad_login
+def multistage_survey_answers(survey_id):
+    """
+    Returns json data for displaying answers of a multistage survey
+    """
+    if not check_if_owner(survey_id):
+        response = {"message": "Only owners can view survey answers"}
+        return jsonify(response), 403
+
+    survey_name = survey_service.get_survey_name(survey_id)
+    survey_stages = survey_service.get_all_survey_stages(survey_id)
+    answers = {}
+    for stage in survey_stages:
+        rankings = user_rankings_service.get_multistage_rankings_by_stage(survey_id, stage.stage)
+        choices_data = []
+        for r in rankings:
+            choices_data.append(
+                {
+                    "email": user_service.get_email(r.user_id),
+                    "ranking": r.ranking, 
+                    "rejections": r.rejections, 
+                    "reason": r.reason,
+                    "notAvailable": r.not_available
+                }
+            )    
+        answers[stage.stage] = choices_data
+    closed = survey_service.check_if_survey_closed(survey_id)
+    answers_saved = survey_service.check_if_survey_results_saved(survey_id)
+
+    return jsonify(
+        {
+            "surveyName": survey_name,
+            "surveyAnswers": choices_data,
+            "surveyId": survey_id,
+            "closed": closed,
+            "answersSaved": answers_saved,
+            "answers": answers
+        }
+    )
 
 @bp.route("/api/surveys/<string:survey_id>/results", methods=["GET", "POST"])
 @ad_login

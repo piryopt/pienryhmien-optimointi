@@ -22,7 +22,7 @@ const SurveyAnswersTable = (props) => {
   const handleAnswerDelete = (email) => {
     if (window.confirm(t("Haluatko varmasti poistaa vastauksen?"))) {
       try {
-        surveyService.deleteSurveyAnswer(props.surveyId, email);
+        surveyService.deleteSurveyAnswerByEmail(props.surveyId, email);
         const updatedAnswers = props.answers.filter((a) => a.email !== email);
         const updatedFilteredAnswers = props.filteredAnswers.filter(
           (a) => a.email !== email

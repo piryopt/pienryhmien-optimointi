@@ -298,3 +298,7 @@ span.surveys_link:hover {
   background: rgba(54, 54, 54, 0.4);
   color: #fff;
 }
+
+#stage-dropdown .dropdown-menu {
+  width: 100%;
+}
