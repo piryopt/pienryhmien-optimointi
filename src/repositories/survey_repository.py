@@ -175,7 +175,7 @@ class SurveyRepository:
             print(e)
             return False
 
-    def create_new_survey(self, surveyname, min_choices, description, enddate, allowed_denied_choices=0, allow_search_visibility=True, user_id=None):
+    def create_new_survey(self, surveyname, min_choices, description, enddate, allowed_denied_choices=0, allow_search_visibility=True, allow_absences=False, user_id=None):
         """
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
@@ -186,8 +186,8 @@ class SurveyRepository:
                 id = generate_unique_id(10)
 
             sql = (
-                "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility, deleted)"
-                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, False) RETURNING id"
+                "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility, allow_absences, deleted)"
+                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, :a_a, False) RETURNING id"
             )
 
             result = db.session.execute(
@@ -202,6 +202,7 @@ class SurveyRepository:
                     "t_e": enddate,
                     "a_d_c": allowed_denied_choices,
                     "a_s_v": allow_search_visibility,
+                    "a_a": allow_absences,
                 },
             )
             db.session.commit()

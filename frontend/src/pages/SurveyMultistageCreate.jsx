@@ -222,7 +222,8 @@ const SurveyMultistageCreate = () => {
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
       allowedDeniedChoices: allowedDenied,
-      allowSearchVisibility: data.allowSearchVisibility || false
+      allowSearchVisibility: data.allowSearchVisibility || false,
+      allowAbsences: data.allowAbsences || false
     };
 
     const extractMessage = (json, res) => {

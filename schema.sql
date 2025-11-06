@@ -17,6 +17,7 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	time_end timestamp,
 	allowed_denied_choices INTEGER,
 	allow_search_visibility BOOLEAN,
+	allow_absences BOOLEAN DEFAULT FALSE,
 	deleted BOOLEAN
 );
 

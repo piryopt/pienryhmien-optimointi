@@ -215,13 +215,15 @@ const MultiStageAnswerPage = () => {
                 <div className="stage-section">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <h3 className="stage-title">{stage.name}</h3>
-                    <Form.Check
-                      type="switch"
-                      id={`not-available-${stageId}`}
-                      label="En ole paikalla tässä vaiheessa"
-                      checked={stage.notAvailable}
-                      onChange={() => toggleNotAvailable(stageId)}
-                    />
+                    {survey.allow_absences && (
+                      <Form.Check
+                        type="switch"
+                        id={`not-available-${stageId}`}
+                        label="En ole paikalla tässä vaiheessa"
+                        checked={stage.notAvailable}
+                        onChange={() => toggleNotAvailable(stageId)}
+                      />
+                    )}
                   </div>
                   <p
                     style={{
