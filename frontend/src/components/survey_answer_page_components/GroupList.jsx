@@ -9,7 +9,8 @@ const GroupList = ({
   toggleExpand,
   choices = [],
   readOnly = false,
-  multiphase = false
+  multiphase = false,
+  searchTerm = ""
 }) => {
   const borderColor = multiphase
     ? id.endsWith("good")
@@ -23,6 +24,7 @@ const GroupList = ({
         ? "darkred"
         : "gray";
   const choiceMap = new Map(choices.map((c) => [String(c.id), c]));
+  const normalizedSearch = (searchTerm || "").toString().trim().toLowerCase();
 
   if (readOnly) {
     const filteredItems = (items || []).filter((it) => {
@@ -49,6 +51,12 @@ const GroupList = ({
     );
   }
 
+  const renderedItems = normalizedSearch
+    ? (items || []).filter((it) => {
+        const name = it && it.name ? String(it.name).toLowerCase() : "";
+        return name.includes(normalizedSearch);
+      })
+    : items || [];
   return (
     <Droppable droppableId={id}>
       {(provided) => (
@@ -58,7 +66,7 @@ const GroupList = ({
           className="group-container"
           style={{ border: `2px solid ${borderColor}` }}
         >
-          {items.map((item, index) => {
+          {renderedItems.map((item, index) => {
             const choice =
               choiceMap.get(String(item.id)) || (item.infos ? item : null);
 
