@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import surveyService from "../services/surveys.js";
 import listIcon from "/images/list_white_36dp.svg";
 import addIcon from "/images/note_add_white_36dp.svg";
 import multiAddIcon from "/images/note_stack_add_36dp.svg";
 import surveyIcon from "/images/assignment_white_36dp.svg";
+import trashIcon from "/images/delete_36dp.svg";
 
 const FrontPageButton = ({
   path,
@@ -91,6 +92,15 @@ const FrontPage = () => {
             mainText="Näytä vanhat kyselyt"
             additionalText="Luotuja kyselyitä"
             additionalVars={{ count: createdSurveys }}
+          />
+          <br></br>
+          <FrontPageButton
+            path="/trash"
+            imgSrc={trashIcon}
+            mainText="Roskakori"
+            additionalText="Näe poistettavaksi asetetut kyselyt"
+            topRightText="Poistettavat kyselyt"
+            additionalVars={{ count: 1 }}
           />
         </div>
       </div>
