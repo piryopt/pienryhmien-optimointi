@@ -73,6 +73,9 @@ class UserRankingsService:
 
         return stages
 
+    def get_multistage_rankings_by_stage(self, survey_id, stage):
+        return self._user_rankings_repository.get_all_rankings_by_stage(survey_id, stage)
+
     def delete_ranking(self, survey_id, current_user_id):
         """
         Deletes the ranking for a survey

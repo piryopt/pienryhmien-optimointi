@@ -19,6 +19,7 @@ import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 import CreateSurveyPage from "./pages/CreateSurveyPage";
 import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";
 import MultiStageAnswerPage from "./pages/MultiStageAnswerPage";
+import SurveyMultistageAnswersPage from "./pages/SurveyMultistageAnswersPage";
 import TrashPage from "./pages/TrashPage";
 
 const App = () => {
@@ -94,6 +95,14 @@ const App = () => {
             element={
               <RequireAuth>
                 <SurveyAnswersPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/surveys/multistage/:surveyId/answers"
+            element={
+              <RequireAuth>
+                <SurveyMultistageAnswersPage />
               </RequireAuth>
             }
           />

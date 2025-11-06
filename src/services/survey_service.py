@@ -492,6 +492,7 @@ class SurveyService:
         survey_id = self._survey_repository.create_new_survey(**kwargs)
         return survey_id
 
-
+    def get_all_survey_stages(self, survey_id):
+        return self._survey_repository.get_all_survey_stages(survey_id)
 
 survey_service = SurveyService()

@@ -109,13 +109,38 @@ const submitSurveyAnswer = async ({
 const deleteSurveyAnswer = async (surveyId) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
-    const response = await axios.delete(`${baseUrl}/surveys/${surveyId}`, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "X-CSRFToken": csrfToken
+    const response = await axios.delete(
+      `${baseUrl}/surveys/${surveyId}/submission`,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteSurveyAnswerByEmail = async (surveyId, studentEmail) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.post(
+      `${baseUrl}/surveys/${surveyId}/answers/delete`,
+      {
+        student_email: studentEmail
       },
-      withCredentials: true
-    });
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -127,6 +152,20 @@ const getSurveyAnswersData = async (surveyId) => {
     const response = await axios.get(`${baseUrl}/surveys/${surveyId}/answers`, {
       withCredentials: true
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getMultiStageSurveyAnswersData = async (surveyId) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/surveys/multistage/${surveyId}/answers`,
+      {
+        withCredentials: true
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -268,9 +307,9 @@ export default {
   getClosedSurveys: getClosedSurveys,
   getSurvey: getSurvey,
   getFrontPageData: getFrontPageData,
-  deleteSurvey: deleteSurvey,
   submitSurveyAnswer: submitSurveyAnswer,
   deleteSurveyAnswer: deleteSurveyAnswer,
+  deleteSurveyAnswerByEmail: deleteSurveyAnswerByEmail,
   deleteSurvey: deleteSurvey,
   getSurveyAnswersData: getSurveyAnswersData,
   getStudentRankings: getStudentRankings,
@@ -279,5 +318,6 @@ export default {
   getSurveyResultsData: getSurveyResultsData,
   saveResults: saveResults,
   submitMultiStageAnswers: submitMultiStageAnswers,
-  getMultiStageSurvey: getMultiStageSurvey
+  getMultiStageSurvey: getMultiStageSurvey,
+  getMultiStageSurveyAnswersData: getMultiStageSurveyAnswersData
 };
