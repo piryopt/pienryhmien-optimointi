@@ -26,6 +26,7 @@ const MultiStageAnswerPage = () => {
   const [reasons, setReasons] = useState({});
   const [additionalInfo, setAdditionalInfo] = useState(false);
   const [activeStage, setActiveStage] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -272,6 +273,17 @@ const MultiStageAnswerPage = () => {
                       </div>
 
                       <div className="right-column">
+                        {survey?.search_visibility && (
+                          <div className="search-container">
+                            <input
+                              id="searchChoices"
+                              type="text"
+                              placeholder="Hae ryhmiä..."
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                          </div>
+                        )}
                         <GroupList
                           id={`${stageId}-neutral`}
                           items={stage.neutral}
@@ -280,6 +292,7 @@ const MultiStageAnswerPage = () => {
                           choices={stage.neutral}
                           stageId={stageId}
                           multiphase={true}
+                          searchTerm={searchTerm}
                         />
                       </div>
                     </div>

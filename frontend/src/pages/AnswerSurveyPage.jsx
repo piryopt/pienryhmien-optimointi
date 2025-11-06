@@ -26,6 +26,7 @@ const AnswerSurveyPage = () => {
   const [expandedIds, setExpandedIds] = useState(new Set());
   const [reason, setReason] = useState("");
   const [existing, setExisting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -225,12 +226,24 @@ const AnswerSurveyPage = () => {
               />
             </div>
             <div className="right-column">
+              {survey?.search_visibility && (
+                <div className="search-container">
+                  <input
+                    id="searchChoices"
+                    type="text"
+                    placeholder="Hae ryhmiä..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              )}
               <GroupList
                 id="neutral"
                 items={neutral}
                 expandedIds={expandedIds}
                 toggleExpand={toggleExpand}
                 choices={neutral}
+                searchTerm={searchTerm}
               />
             </div>
           </DragDropContext>
