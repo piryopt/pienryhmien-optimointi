@@ -24,7 +24,8 @@ import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 const SurveyMultistageCreate = () => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
-  const [limitParticipationVisible, setLimitParticipationVisible] = useState(false);
+  const [limitParticipationVisible, setLimitParticipationVisible] =
+    useState(false);
 
   const schema = buildCreateSurveySchema(t);
 
@@ -48,7 +49,6 @@ const SurveyMultistageCreate = () => {
       }
     ]);
     setNewStageName("");
-
   };
 
   const updateStageName = (tableId, name) =>
@@ -193,7 +193,10 @@ const SurveyMultistageCreate = () => {
   const onSubmit = async (data) => {
     const csrfToken = await csrfService.fetchCsrfToken();
 
-    console.log("DEBUG: tables before payload:", JSON.stringify(tables, null, 2));
+    console.log(
+      "DEBUG: tables before payload:",
+      JSON.stringify(tables, null, 2)
+    );
 
     const stages = tables.map((t) => ({
       id: t.id,
@@ -213,7 +216,10 @@ const SurveyMultistageCreate = () => {
         return choice;
       })
     }));
-    console.log("DEBUG: built stages payload:", JSON.stringify(stages, null, 2));
+    console.log(
+      "DEBUG: built stages payload:",
+      JSON.stringify(stages, null, 2)
+    );
 
     const allowedDenied = Array.isArray(data.allowedDeniedChoices)
       ? data.allowedDeniedChoices

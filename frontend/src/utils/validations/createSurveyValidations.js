@@ -37,6 +37,27 @@ export const buildCreateSurveySchema = (t) => {
         then: (schema) =>
           schema.required(t("Priorisoitujen ryhmien vähimmäismäärä vaaditaan")),
         otherwise: (schema) => schema.notRequired().default(1)
+      }),
+    choices: yup.array().of(
+      yup.object({
+        name: yup
+          .string()
+          .required(t("Nimi vaaditaan"))
+          .min(5, t("Nimi on liian lyhyt, oltava vähintään 5 merkkiä")),
+        max_spaces: yup
+          .number()
+          .typeError(t("Kentän tulee olla kokonaisluku"))
+          .integer(t("Kentän tulee olla kokonaisluku"))
+          .min(1, t("Enimmäispaikkojen määrä on oltava vähintään 1"))
+          .required(t("Enimmäispaikat vaaditaan")),
+        min_size: yup
+          .number()
+          .typeError(t("Kentän tulee olla kokonaisluku"))
+          .integer(t("Kentän tulee olla kokonaisluku"))
+          .min(0, t("Minimikoon on oltava vähintään 0"))
+          .required(t("Ryhmän minimikoko vaaditaan"))
+          .min(1, t("Lisää vähintään yksi vaihtoehto"))
       })
+    )
   });
 };

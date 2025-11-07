@@ -1,6 +1,13 @@
 import { useTranslation } from "react-i18next";
 
-const ChoiceRow = ({ row, columns, updateCell, onDelete, limitParticipationVisible=false }) => {
+const ChoiceRow = ({
+  row,
+  columns,
+  updateCell,
+  onDelete,
+  limitParticipationVisible = false,
+  errors = {}
+}) => {
   const { t } = useTranslation();
 
   const handleChange = (field) => (e) => {
@@ -28,6 +35,14 @@ const ChoiceRow = ({ row, columns, updateCell, onDelete, limitParticipationVisib
           value={row.name || ""}
           onChange={handleChange("name")}
         />
+        {errors.name && (
+          <div
+            className="text-danger"
+            style={{ fontSize: "0.85em", marginTop: 4 }}
+          >
+            {errors.name}
+          </div>
+        )}
       </td>
 
       <td>
@@ -38,6 +53,14 @@ const ChoiceRow = ({ row, columns, updateCell, onDelete, limitParticipationVisib
           value={row.max_spaces || ""}
           onChange={handleChange("max_spaces")}
         />
+        {errors.max_spaces && (
+          <div
+            className="text-danger"
+            style={{ fontSize: "0.85em", marginTop: 4 }}
+          >
+            {errors.max_spaces}
+          </div>
+        )}
       </td>
 
       <td>
@@ -48,6 +71,14 @@ const ChoiceRow = ({ row, columns, updateCell, onDelete, limitParticipationVisib
           value={row.min_size || ""}
           onChange={handleChange("min_size")}
         />
+        {errors.min_size && (
+          <div
+            className="text-danger"
+            style={{ fontSize: "0.85em", marginTop: 4 }}
+          >
+            {errors.min_size}
+          </div>
+        )}
       </td>
 
       {limitParticipationVisible && (
@@ -74,7 +105,11 @@ const ChoiceRow = ({ row, columns, updateCell, onDelete, limitParticipationVisib
       ))}
 
       <td className="action-cell" tabIndex="0" style={{ textAlign: "center" }}>
-        <div className="delete-row-btn" onClick={onDelete} title={t("Poista")}></div>
+        <div
+          className="delete-row-btn"
+          onClick={onDelete}
+          title={t("Poista")}
+        ></div>
       </td>
     </tr>
   );
