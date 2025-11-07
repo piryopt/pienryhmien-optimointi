@@ -173,5 +173,26 @@ class UserRankingsRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return []
+        
+    def get_user_multistage_rankings_by_stage(self, survey_id, user_id, stage):
+        """
+        SQL code for getting user rankings from a multistage survey stage
+        """
+        try:
+            sql = """
+            SELECT 
+                ranking,
+                rejections,
+                reason,
+                not_available
+                FROM user_survey_rankings
+                WHERE survey_id=:survey_id AND stage=:stage AND user_id=:user_id
+            """
+            result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage, "user_id": user_id})
+            rankings = result.fetchone()
+            return rankings
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return None
 
 user_rankings_repository = UserRankingsRepository()

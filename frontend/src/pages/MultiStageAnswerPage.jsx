@@ -19,7 +19,7 @@ const MultiStageAnswerPage = () => {
   const { showNotification } = useNotification();
   const { t } = useTranslation();
 
-  const [stages, setStages] = useState({});
+  const [stages, setStages] = useState([]);
   const [survey, setSurvey] = useState({});
   const [loading, setLoading] = useState(true);
   const [expandedIds, setExpandedIds] = useState(new Set());
@@ -37,19 +37,21 @@ const MultiStageAnswerPage = () => {
         const data = await surveyService.getMultiStageSurvey(surveyId);
         if (!mountedRef.current) return;
 
-        const stagesData = {};
+        const stagesData = [];
         const initialReasons = {};
 
-        for (const [stageId, stage] of Object.entries(data.stages || {})) {
+        for (const stage of data.stages || []) {
+          const stageId = stage.name;
           const choices = stage.choices || [];
           let neutralChoices = [...choices];
           let goodChoices = [];
           let badChoices = [];
+
           if (data.existing === "1") {
-            const goodIds = (data.rankedStages[stageId].goodChoices || []).map(
+            const goodIds = (data.rankedStages[stageId]?.goodChoices || []).map(
               String
             );
-            const badIds = (data.rankedStages[stageId].badChoices || []).map(
+            const badIds = (data.rankedStages[stageId]?.badChoices || []).map(
               String
             );
 
@@ -65,21 +67,22 @@ const MultiStageAnswerPage = () => {
             neutralChoices = choices.filter((c) => !usedIds.has(String(c.id)));
           }
 
-          stagesData[stageId] = {
-            name: stageId,
+          stagesData.push({
+            id: stageId,
+            name: stage.name,
             neutral: neutralChoices,
             good: goodChoices,
             bad: badChoices,
             notAvailable: !!data.rankedStages?.[stageId]?.notAvailable,
             hasMandatory: stage.hasMandatory
-          };
+          });
+          initialReasons[stageId] = data.rankedStages?.[stageId]["reason"];
         }
-
         setStages(stagesData);
         setReasons(initialReasons);
         setAdditionalInfo(data.survey.additionalInfo || false);
         setSurvey(data.survey || {});
-        setActiveStage(Object.keys(stagesData)[0] || null);
+        setActiveStage(stagesData[0]?.id || null);
       } catch (err) {
         console.error(err);
       } finally {
@@ -103,39 +106,32 @@ const MultiStageAnswerPage = () => {
     const destParts = destination.droppableId.split(/-(?=[^ -]+$)/);
     const destStage = destParts.length === 2 ? destParts[0] : "single";
     const destListId = destParts.length === 2 ? destParts[1] : destParts[0];
-
-    if (!stages[sourceStage] || !stages[destStage]) {
-      return;
-    }
-
-    const sourceList = [...(stages[sourceStage][sourceListId] || [])];
+    const stageIndex = stages.findIndex((s) => s.id === sourceStage);
+    if (stageIndex === -1) return;
+    const stage = stages[stageIndex];
+    const sourceList = [...(stage[sourceListId] || [])];
     const destList =
       sourceStage === destStage && sourceListId === destListId
         ? sourceList
-        : [...(stages[destStage][destListId] || [])];
-
+        : [...(stages.find((s) => s.id === destStage)?.[destListId] || [])];
     const [moved] = sourceList.splice(source.index, 1);
-
     if (!(sourceStage === destStage && sourceListId === destListId)) {
       ["good", "bad", "neutral"].forEach((listId) => {
         if (listId !== destListId) {
-          stages[sourceStage][listId] = (
-            stages[sourceStage][listId] || []
-          ).filter((x) => x.id !== moved.id);
+          stage[listId] = (stage[listId] || []).filter(
+            (x) => x.id !== moved.id
+          );
         }
       });
     }
-
     destList.splice(destination.index, 0, moved);
-
-    setStages((prev) => ({
-      ...prev,
-      [sourceStage]: {
-        ...prev[sourceStage],
-        [sourceListId]: sourceList,
-        [destListId]: destList
-      }
-    }));
+    setStages((prev) =>
+      prev.map((s) =>
+        s.id === stage.id
+          ? { ...s, [sourceListId]: sourceList, [destListId]: destList }
+          : s
+      )
+    );
   };
 
   const toggleExpand = (itemId) => {
@@ -149,23 +145,23 @@ const MultiStageAnswerPage = () => {
   };
 
   const toggleNotAvailable = (stageId) => {
-    setStages((prev) => ({
-      ...prev,
-      [stageId]: { ...prev[stageId], notAvailable: !prev[stageId].notAvailable }
-    }));
+    setStages((prev) =>
+      prev.map((s) =>
+        s.id === stageId ? { ...s, notAvailable: !s.notAvailable } : s
+      )
+    );
   };
 
   const handleSubmit = async () => {
     try {
-      const payload = Object.entries(stages).map(([stageId, lists]) => ({
-        stageId,
-        notAvailable: lists.notAvailable,
-        good: lists.good.map((c) => c.id),
-        bad: lists.bad.map((c) => c.id),
-        neutral: lists.neutral.map((c) => c.id),
-        reason: reasons[stageId]
+      const payload = stages.map((s) => ({
+        stageId: s.id,
+        notAvailable: s.notAvailable,
+        good: s.good.map((c) => c.id),
+        bad: s.bad.map((c) => c.id),
+        neutral: s.neutral.map((c) => c.id),
+        reason: reasons[s.id]
       }));
-
       const result = await surveyService.submitMultiStageAnswers({
         surveyId,
         minChoices: survey.min_choices,
@@ -200,9 +196,9 @@ const MultiStageAnswerPage = () => {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Tab.Container activeKey={activeStage} onSelect={setActiveStage}>
           <Nav variant="tabs" className="mb-3 justify-content-center">
-            {Object.entries(stages).map(([stageId, { name, notAvailable }]) => (
-              <Nav.Item key={stageId}>
-                <Nav.Link eventKey={stageId}>
+            {stages.map(({ id, name, notAvailable }) => (
+              <Nav.Item key={id}>
+                <Nav.Link eventKey={id}>
                   {name}
                   {notAvailable ? " (poissa)" : ""}
                 </Nav.Link>
@@ -211,18 +207,18 @@ const MultiStageAnswerPage = () => {
           </Nav>
 
           <Tab.Content>
-            {Object.entries(stages).map(([stageId, stage]) => (
-              <Tab.Pane key={stageId} eventKey={stageId}>
+            {stages.map((stage) => (
+              <Tab.Pane key={stage.id} eventKey={stage.id}>
                 <div className="stage-section">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <h3 className="stage-title">{stage.name}</h3>
                     {survey.allow_absences && (
                       <Form.Check
                         type="switch"
-                        id={`not-available-${stageId}`}
+                        id={`not-available-${stage.id}`}
                         label="En ole paikalla tässä vaiheessa"
                         checked={stage.notAvailable}
-                        onChange={() => toggleNotAvailable(stageId)}
+                        onChange={() => toggleNotAvailable(stage.id)}
                       />
                     )}
                   </div>
@@ -251,22 +247,22 @@ const MultiStageAnswerPage = () => {
                     <div className="answer-layout">
                       <div className="left-column">
                         <GroupList
-                          id={`${stageId}-good`}
+                          id={`${stage.id}-good`}
                           items={stage.good}
                           expandedIds={expandedIds}
                           toggleExpand={toggleExpand}
                           choices={stage.neutral}
-                          stageId={stageId}
+                          stageId={stage.id}
                           multiphase={true}
                         />
                         {(survey.denied_allowed_choices ?? 0) !== 0 && (
                           <GroupList
-                            id={`${stageId}-bad`}
+                            id={`${stage.id}-bad`}
                             items={stage.bad}
                             expandedIds={expandedIds}
                             toggleExpand={toggleExpand}
                             choices={stage.neutral}
-                            stageId={stageId}
+                            stageId={stage.id}
                             multiphase={true}
                           />
                         )}
@@ -285,12 +281,12 @@ const MultiStageAnswerPage = () => {
                           </div>
                         )}
                         <GroupList
-                          id={`${stageId}-neutral`}
+                          id={`${stage.id}-neutral`}
                           items={stage.neutral}
                           expandedIds={expandedIds}
                           toggleExpand={toggleExpand}
                           choices={stage.neutral}
-                          stageId={stageId}
+                          stageId={stage.id}
                           multiphase={true}
                           searchTerm={searchTerm}
                         />
@@ -310,10 +306,10 @@ const MultiStageAnswerPage = () => {
                 </div>
                 {(survey.denied_allowed_choices ?? 0) !== 0 && (
                   <ReasonsBox
-                    key={stageId}
-                    reason={reasons[stageId] || ""}
+                    key={stage.id}
+                    reason={reasons[stage.id] || ""}
                     setReason={(value) =>
-                      setReasons({ ...reasons, [stageId]: value })
+                      setReasons({ ...reasons, [stage.id]: value })
                     }
                   />
                 )}

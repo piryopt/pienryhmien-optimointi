@@ -73,6 +73,12 @@ class UserRankingsService:
 
         return stages
 
+    def get_user_multistage_rankings_by_stage(self, survey_id, user_id, stage):
+        """
+        Returns user's rankings for a stage of a multistage survey
+        """
+        return self._user_rankings_repository.get_user_multistage_rankings_by_stage(survey_id, user_id, stage)
+
     def get_multistage_rankings_by_stage(self, survey_id, stage):
         return self._user_rankings_repository.get_all_rankings_by_stage(survey_id, stage)
 

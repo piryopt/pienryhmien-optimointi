@@ -48,6 +48,7 @@ const SurveyAnswersTable = (props) => {
           answer={answer}
           surveyId={props.surveyId}
           handleAnswerDelete={handleAnswerDelete}
+          stage={props.stage}
         />
       )}
     />

@@ -175,20 +175,26 @@ class SurveyChoicesService:
         Returns survey choices grouped by stage in structured form
         """
         rows = self._survey_choices_repository.get_choices_grouped_by_stage(survey_id)
-        stages = {}
+        stages = []
+        stageIndices = {}
+        index = 0
         for row in rows:
             stage_id = row["stage"] or "no_stage"
     
-            if stage_id not in stages:
-                stages[stage_id] = {
+            if stage_id not in stageIndices:
+                stageIndices[stage_id] = index
+                stages.append({
+                    "name": stage_id,
                     "orderNumber": row["order_number"],
                     "hasMandatory": any(map(lambda r: r["mandatory"] if r["stage"] == stage_id else False, rows)),
                     "choices": []
-                }
+                })
+                index += 1
+            choices = stages[stageIndices[stage_id]]["choices"]
     
-            choices = stages[stage_id]["choices"]
-    
-            choice = next((c for c in choices if c["id"] == row["choice_id"]), None)
+            matching_choices = [c for c in choices if c["id"] == row["choice_id"]]
+            choice = matching_choices[0] if matching_choices else None
+
             if not choice:
                 choice = {
                     "id": row["choice_id"],
@@ -206,7 +212,6 @@ class SurveyChoicesService:
                     row["info_key"]: row["info_value"],
                     "hidden": row["hidden"]
                 })
-    
-        return stages
+        return sorted(stages, key=lambda s: s["orderNumber"])
 
 survey_choices_service = SurveyChoicesService()

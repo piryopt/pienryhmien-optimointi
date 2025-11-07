@@ -183,8 +183,17 @@ const getMultiStageSurveyAnswersData = async (surveyId) => {
   }
 };
 
-const getStudentRankings = async (surveyId, studentEmail) => {
+const getStudentRankings = async (surveyId, studentEmail, stage) => {
   try {
+    if (stage) {
+      const response = await axios.get(
+        `${baseUrl}/surveys/${surveyId}/${stage}/studentranking/${studentEmail}`,
+        {
+          withCredentials: true
+        }
+      );
+      return response.data;
+    }
     const response = await axios.get(
       `${baseUrl}/surveys/${surveyId}/studentranking/${studentEmail}`,
       {

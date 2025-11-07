@@ -5,18 +5,29 @@ import menuWhite from "/images/menu_white_36dp.svg";
 import deleteWhite from "/images/delete_white_36dp.svg";
 import UserRankings from "../UserRankings";
 
-const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
+const SurveyAnswersTableRow = ({
+  answer,
+  handleAnswerDelete,
+  surveyId,
+  stage = null
+}) => {
   const [rankingsVisible, setRankingsVisible] = useState(false);
   const [rankings, setRankings] = useState([]);
   const [rejections, setRejections] = useState([]);
   const { t } = useTranslation();
 
+  useEffect(() => {
+    setRankingsVisible(false);
+  }, [stage]);
+
   const handleRankingClick = async () => {
     try {
       const response = await surveyService.getStudentRankings(
         surveyId,
-        answer.email
+        answer.email,
+        stage
       );
+      console.log(response);
       setRankings(response.choices);
       setRejections(response.rejections);
       setRankingsVisible(!rankingsVisible);
