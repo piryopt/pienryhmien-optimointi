@@ -10,7 +10,7 @@ const SurveyMultistageAnswersPage = () => {
   const { surveyId } = useParams();
   const { t } = useTranslation();
   const [surveyData, setSurveyData] = useState({});
-  const [surveyAnswers, setSurveyAnswers] = useState({});
+  const [surveyAnswers, setSurveyAnswers] = useState([]);
   const [stages, setStages] = useState([]);
   const [currStage, setCurrStage] = useState(null);
 
@@ -20,12 +20,17 @@ const SurveyMultistageAnswersPage = () => {
         await surveyService.getMultiStageSurveyAnswersData(surveyId);
       setSurveyData(response);
       setSurveyAnswers(response.answers);
-      const surveyStages = Object.keys(response.answers);
+      const surveyStages = response.answers.map((s) => Object.keys(s)[0]);
       setStages(surveyStages);
       setCurrStage(surveyStages[0]);
     };
     getSurveyAnswers();
   }, []);
+
+  const indexOfCurrStage = () => {
+    return surveyAnswers.findIndex((a) => Object.keys(a)[0] === currStage);
+  };
+
   return (
     <div>
       <h5>
@@ -39,12 +44,13 @@ const SurveyMultistageAnswersPage = () => {
       />
       {currStage && (
         <SurveyAnswersTable
-          answers={surveyAnswers[currStage]}
+          answers={surveyAnswers[indexOfCurrStage()][currStage]}
           setAnswers={null}
-          filteredAnswers={surveyAnswers[currStage]}
+          filteredAnswers={surveyAnswers[indexOfCurrStage()][currStage]}
           setFilteredAnswers={null}
-          surveyId={null}
+          surveyId={surveyId}
           setSurveyAnswersAmount={null}
+          stage={currStage}
         />
       )}
     </div>

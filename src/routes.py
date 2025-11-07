@@ -181,13 +181,18 @@ def get_info():
     return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
 
 
-@bp.route("/api/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"])
-def expand_ranking(survey_id, email):
+@bp.route("/api/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"], defaults={'stage': None})
+@bp.route("/api/surveys/<string:survey_id>/<string:stage>/studentranking/<string:email>", methods=["GET"])
+def expand_ranking(survey_id, email, stage):
     """
     Return json data of user's choices and rejections
     """
     user_id = user_service.get_user_id_by_email(email)
-    user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
+    if stage:
+        user_ranking = user_rankings_service.get_user_multistage_rankings_by_stage(survey_id, user_id, stage)
+    else:
+        user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
+    print(user_ranking)
     ranking_list = convert_to_list(user_ranking.ranking)
     rejection_list = convert_to_list(user_ranking.rejections)
     choices = []
@@ -239,7 +244,7 @@ def multistage_survey_create():
             surveyname=data["surveyGroupname"],
             min_choices=data["minchoices"],
             description=data["surveyInformation"],
-            enddate=f"{date_to_sql_valid(data["enddate"])} {data["endtime"]}",
+            enddate=f"{date_to_sql_valid(data['enddate'])} {data['endtime']}",
             allowed_denied_choices=len(data["allowedDeniedChoices"]),
             allow_search_visibility=data["allowSearchVisibility"],
             allow_absences=data["allowAbsences"],
@@ -979,10 +984,11 @@ def multistage_survey_answers(survey_id):
 
     survey_name = survey_service.get_survey_name(survey_id)
     survey_stages = survey_service.get_all_survey_stages(survey_id)
-    answers = {}
+    all_answers = []
     for stage in survey_stages:
         rankings = user_rankings_service.get_multistage_rankings_by_stage(survey_id, stage.stage)
         choices_data = []
+        answers = {}
         for r in rankings:
             choices_data.append(
                 {
@@ -992,8 +998,10 @@ def multistage_survey_answers(survey_id):
                     "reason": r.reason,
                     "notAvailable": r.not_available
                 }
-            )    
+            )
+
         answers[stage.stage] = choices_data
+        all_answers.append(answers)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
 
@@ -1004,7 +1012,7 @@ def multistage_survey_answers(survey_id):
             "surveyId": survey_id,
             "closed": closed,
             "answersSaved": answers_saved,
-            "answers": answers
+            "answers": all_answers
         }
     )
 

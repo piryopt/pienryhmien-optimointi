@@ -10,7 +10,7 @@ const StageDropdown = ({ stages, currStage, setCurrStage }) => {
     <div style={{ display: "inline-block" }}>
       <DropdownButton
         id="stage-dropdown"
-        title={t("Valitse vaihe")}
+        title={currStage}
         variant="dark"
         style={{ paddingTop: "1em", paddingBottom: "1em" }}
       >
