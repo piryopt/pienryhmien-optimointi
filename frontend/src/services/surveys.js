@@ -24,6 +24,17 @@ const getClosedSurveys = async () => {
   }
 };
 
+const getDeletedSurveys = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/surveys/deleted`, {
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 const getSurvey = async (surveyId) => {
   try {
     const response = await axios.get(`${baseUrl}/surveys/${surveyId}`, {
@@ -305,6 +316,7 @@ const getMultiStageSurvey = async (surveyId) => {
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
+  getDeletedSurveys: getDeletedSurveys,
   getSurvey: getSurvey,
   getFrontPageData: getFrontPageData,
   submitSurveyAnswer: submitSurveyAnswer,

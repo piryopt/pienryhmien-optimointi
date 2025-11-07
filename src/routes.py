@@ -151,6 +151,12 @@ def surveys_closed():
     closed_surveys = survey_service.get_list_closed_surveys(user_id)
     return jsonify(closed_surveys)
 
+@bp.route("/api/surveys/deleted")
+@ad_login
+def surveys_deleted():
+    user_id = session.get("user_id", 0)
+    deleted_surveys = survey_service.get_list_deleted_surveys(user_id)
+    return jsonify(deleted_surveys)
 
 @bp.route("/surveys")
 @ad_login

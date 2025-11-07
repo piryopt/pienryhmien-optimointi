@@ -434,4 +434,25 @@ class SurveyRepository:
             print(e)
             return False
 
+    def get_deleted_surveys(self, user_id):
+        """
+        SQL code getting the list of all set to be deleted surveys for which the user has access to.
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = """
+                SELECT s.id, s.surveyname, s.time_end,
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
+                    AS is_multistage FROM surveys s, survey_owners so 
+                WHERE (so.user_id=:user_id AND s.id=so.survey_id AND s.deleted=True)
+                """
+            result = db.session.execute(text(sql), {"user_id": user_id})
+            surveys = result.fetchall()
+            return surveys
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
+
 survey_repository = SurveyRepository()
