@@ -22,7 +22,7 @@ const LimitParticipationSection = ({ setLimitParticipationVisible }) => {
           )}
         </p>
 
-         <input
+        <input
           type="radio"
           id="limit-participation-yes"
           {...register("limitParticipation")}

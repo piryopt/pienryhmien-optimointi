@@ -132,13 +132,14 @@ class SurveyChoicesRepository:
             max_spaces (int): The maximum number of participants allowed in this choice.
             min_size (int): The minimum required size for the group.
             mandatory (bool, optional): Whether the group is mandatory to fill. Defaults to False.
+            participation_limit (int, optional): Maximum number of times a participant can be assigned to this choice. Defaults to 0.
             stage (str): Stage identifier.
         """
         try:
             sql = """
             WITH new_choice AS (
-                INSERT INTO survey_choices (survey_id, name, max_spaces, min_size, mandatory, deleted)
-                VALUES (:survey_id, :name, :max_spaces, :min_size, :mandatory, FALSE)
+                INSERT INTO survey_choices (survey_id, name, max_spaces, min_size, mandatory, deleted, participation_limit)
+                VALUES (:survey_id, :name, :max_spaces, :min_size, :mandatory, FALSE, :participation_limit)
                 RETURNING id
             )
             INSERT INTO survey_stages (survey_id, choice_id, stage, order_number)
@@ -154,6 +155,7 @@ class SurveyChoicesRepository:
                     "max_spaces": kwargs.get("max_spaces"),
                     "min_size": kwargs.get("min_size"),
                     "mandatory": kwargs.get("mandatory", False),
+                    "participation_limit": kwargs.get("participation_limit", 0),
                     "stage": kwargs.get("stage"),
                     "order_number": kwargs.get("order_number")
                 }
@@ -179,6 +181,7 @@ class SurveyChoicesRepository:
                     sc.max_spaces,
                     sc.min_size,
                     sc.mandatory,
+                    sc.participation_limit,
                     sc.deleted,
                     ss.stage,
                     ss.order_number,

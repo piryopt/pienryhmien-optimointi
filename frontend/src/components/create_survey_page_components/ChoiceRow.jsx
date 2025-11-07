@@ -56,8 +56,8 @@ const ChoiceRow = ({ row, columns, updateCell, onDelete, limitParticipationVisib
             type="number"
             min="0"
             className="form-control form-control-sm"
-            value={row.max_participation || ""}
-            onChange={handleChange("max_participation")}
+            value={row.participation_limit || ""}
+            onChange={handleChange("participation_limit")}
           />
         </td>
       )}

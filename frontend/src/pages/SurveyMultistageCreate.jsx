@@ -205,7 +205,7 @@ const SurveyMultistageCreate = () => {
           name: r.name || "",
           max_spaces: Number(r.max_spaces) || 0,
           min_size: Number(r.min_size) || 0,
-          participation_limit: Number(r.max_participation) || null
+          participation_limit: Number(r.participation_limit) || 0
         };
         t.columns.forEach((c) => {
           choice[c.name] = r[c.name] ?? "";

@@ -158,7 +158,7 @@ class SurveyChoicesService:
                 - message (str): Informational message.
         """
         try:
-            required_fields = ["survey_id", "name", "max_spaces", "min_size", "mandatory", "stage", "order_number"]
+            required_fields = ["survey_id", "name", "max_spaces", "min_size", "mandatory", "stage", "order_number", "participation_limit"]
             choice_id = self._survey_choices_repository.create_new_multistage_choice(**kwargs)
             for key, val in kwargs.items():
                 if key not in required_fields:
@@ -196,6 +196,7 @@ class SurveyChoicesService:
                     "slots": row["max_spaces"],
                     "min_size": row["min_size"],
                     "mandatory": row["mandatory"],
+                    "participation_limit": row["participation_limit"],
                     "infos": []
                 }
                 choices.append(choice)
