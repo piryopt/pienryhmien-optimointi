@@ -12,8 +12,10 @@ const AllowAbsencesSection = () => {
       <div>
         <h3>{t("Sallitaanko poissaolot?")}</h3>
         <p>
-          {t("Salliessasi poissaolot, vastaajat voivat merkitä itsensä \
-            poissaoleviksi valitsemistaan vaiheista.")}
+          {t(
+            "Salliessasi poissaolot, vastaajat voivat merkitä itsensä \
+            poissaoleviksi valitsemistaan vaiheista."
+          )}
         </p>
 
         <input
