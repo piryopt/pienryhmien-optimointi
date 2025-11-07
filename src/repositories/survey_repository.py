@@ -416,4 +416,43 @@ class SurveyRepository:
             print(e)
             return []
 
+    def get_trash_count(self, user_id):
+        """
+        SQL code for getting the number of surveys in trash bin the owner has access to
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = "SELECT COUNT(s.id) FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id AND s.deleted=True)"
+            result = db.session.execute(text(sql), {"user_id": user_id})
+            count = result.fetchone()
+            if not count:
+                return False
+            return count.count
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
+    def get_deleted_surveys(self, user_id):
+        """
+        SQL code getting the list of all set to be deleted surveys for which the user has access to.
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = """
+                SELECT s.id, s.surveyname, s.time_end,
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
+                    AS is_multistage FROM surveys s, survey_owners so 
+                WHERE (so.user_id=:user_id AND s.id=so.survey_id AND s.deleted=True)
+                """
+            result = db.session.execute(text(sql), {"user_id": user_id})
+            surveys = result.fetchall()
+            return surveys
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
+
 survey_repository = SurveyRepository()

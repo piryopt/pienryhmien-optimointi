@@ -11,13 +11,8 @@ const TrashPage = () => {
   useEffect(() => {
     const getSurveys = async () => {
       try {
-        const [activeRes, closedRes] = await Promise.all([
-          surveyService.getActiveSurveys(),
-          surveyService.getClosedSurveys()
-        ]);
-        const separatingRow = { id: "separatingRow" };
-        const updatedSurveys = [...activeRes, separatingRow, ...closedRes];
-        setSurveys(updatedSurveys);
+        const responseData = await surveyService.getDeletedSurveys();
+        setSurveys(responseData);
       } catch (err) {
         console.error("Error loading surveys", err);
       }

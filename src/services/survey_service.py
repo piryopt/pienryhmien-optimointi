@@ -495,4 +495,25 @@ class SurveyService:
     def get_all_survey_stages(self, survey_id):
         return self._survey_repository.get_all_survey_stages(survey_id)
 
+    def get_trash_count(self, user_id):
+        return self._survey_repository.get_trash_count(user_id)
+
+    def get_list_deleted_surveys(self, user_id):
+        """
+        Get the list of set to be deleted surveys for a user
+
+        args:
+            user_id: The id of the user whose set to be deleted surveys we want
+        """
+        surveys = self._survey_repository.get_deleted_surveys(user_id)
+        return [
+            {
+                key: format_datestring(val) if key == "time_end" else val
+                for key, val in survey._mapping.items()
+            }
+            for survey in surveys
+        ]
+
+
+
 survey_service = SurveyService()
