@@ -16,11 +16,14 @@ import SearchVisibilitySection from "../components/create_survey_page_components
 import PrioritizedGroupsDescription from "../components/create_survey_page_components/PrioritizedGroupsDescription";
 import ChoiceTable from "../components/create_survey_page_components/ChoiceTable";
 import { parseCsvFile, updateTableFromCSV } from "../services/csv";
+import { useSearchParams } from "react-router-dom";
+import surveyService from "../services/surveys";
 import "../static/css/createSurveyPage.css";
 
 const CreateSurveyPage = () => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
+  const [searchParams] = useSearchParams();
 
   const schema = buildCreateSurveySchema(t);
 
@@ -30,6 +33,77 @@ const CreateSurveyPage = () => {
     { id: 1, mandatory: false, name: "", max_spaces: "", min_size: "" }
   ]);
   const [selectAllMandatory, setSelectAllMandatory] = useState(false);
+
+  const templateId = searchParams.get("fromtemplate");
+
+  const methods = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      groupname: "",
+      enddate: null,
+      endtime: "00:00",
+      choices: [],
+      minchoices: 1,
+      surveyInformation: "",
+      // radio setting defaults
+      minChoicesSetting: "all",
+      denyChoicesSetting: "hide",
+      allowedDeniedChoices: 0,
+      allowSearchVisibility: false,
+    },
+    mode: "onBlur",
+  });
+
+  const { handleSubmit } = methods;
+
+  useEffect(() => {
+    if (!templateId) return;
+
+    const loadTemplate = async () => {
+      try {
+        const data = await surveyService.getSurvey(templateId);
+
+        if (!data.survey || !Array.isArray(data.choices)) return;
+
+        methods.setValue("groupname", data.survey.name || "");
+        methods.setValue("surveyInformation", data.survey.description || "");
+
+        const dynamicCols = new Set();
+        data.choices.forEach(choice => {
+          choice.infos?.forEach(infoObj => {
+            Object.keys(infoObj).forEach(key => dynamicCols.add(key));
+          });
+        });
+        dynamicCols.forEach(colName => addColumn(colName));
+
+        const choices = data.choices.map((c, i) => {
+          const row = {
+            id: i + 1,
+            mandatory: !!c.mandatory,
+            name: c.name || "",
+            max_spaces: c.slots || 0,
+            min_size: c.min_size || 0
+          };
+
+          c.infos?.forEach(infoObj => {
+            Object.entries(infoObj).forEach(([key, value]) => {
+              row[key] = value;
+            });
+          });
+          return row;
+        });
+
+        nextRowId.current = choices.length;
+        setRows(choices);
+
+      } catch (error) {
+        console.error("Failed to load survey template:", error);
+      }
+    };
+
+    loadTemplate();
+  }, [templateId]);
+
 
   useEffect(() => {
     setRows((r) => r.map((x) => ({ ...x, mandatory: selectAllMandatory })));
@@ -103,26 +177,6 @@ const CreateSurveyPage = () => {
     },
     [columns, rows]
   );
-
-  const methods = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      groupname: "",
-      enddate: null,
-      endtime: "00:00",
-      choices: [],
-      minchoices: 1,
-      surveyInformation: "",
-      // radio setting defaults
-      minChoicesSetting: "all",
-      denyChoicesSetting: "hide",
-      allowedDeniedChoices: 0,
-      allowSearchVisibility: false
-    },
-    mode: "onBlur"
-  });
-
-  const { handleSubmit } = methods;
 
   const onSubmit = async (data) => {
     const csrfToken = await csrfService.fetchCsrfToken();
