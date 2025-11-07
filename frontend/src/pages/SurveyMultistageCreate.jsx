@@ -45,7 +45,8 @@ const SurveyMultistageCreate = () => {
         rows: [
           { id: 1, mandatory: false, name: "", max_spaces: "", min_size: "" }
         ],
-        selectAllMandatory: false
+        selectAllMandatory: false,
+        choiceErrors: []
       }
     ]);
     setNewStageName("");
@@ -88,16 +89,30 @@ const SurveyMultistageCreate = () => {
 
   const updateCell = (tableId, id, key, value) =>
     setTables((ts) =>
-      ts.map((t) =>
-        t.id !== tableId
-          ? t
-          : {
-              ...t,
-              rows: t.rows.map((row) =>
-                row.id === id ? { ...row, [key]: value } : row
-              )
-            }
-      )
+      ts.map((t) => {
+        if (t.id !== tableId) return t;
+
+        const newRows = t.rows.map((row) =>
+          row.id === id ? { ...row, [key]: value } : row
+        );
+
+        const rowIndex = t.rows.findIndex((r) => r.id === id);
+        const newChoiceErrors = Array.isArray(t.choiceErrors)
+          ? t.choiceErrors.map((err) => ({ ...err }))
+          : [];
+
+        if (rowIndex >= 0 && newChoiceErrors[rowIndex]) {
+          if (
+            Object.prototype.hasOwnProperty.call(newChoiceErrors[rowIndex], key)
+          ) {
+            const copyRowErr = { ...newChoiceErrors[rowIndex] };
+            delete copyRowErr[key];
+            newChoiceErrors[rowIndex] = copyRowErr;
+          }
+        }
+
+        return { ...t, rows: newRows, choiceErrors: newChoiceErrors };
+      })
     );
 
   const addColumn = (tableId, name) => {
@@ -193,6 +208,11 @@ const SurveyMultistageCreate = () => {
   const onSubmit = async (data) => {
     const csrfToken = await csrfService.fetchCsrfToken();
 
+    const parseNumberOrUndefined = (val) =>
+      val === "" || val === null || typeof val === "undefined"
+        ? undefined
+        : Number(val);
+
     console.log(
       "DEBUG: tables before payload:",
       JSON.stringify(tables, null, 2)
@@ -206,9 +226,9 @@ const SurveyMultistageCreate = () => {
         const choice = {
           mandatory: !!r.mandatory,
           name: r.name || "",
-          max_spaces: Number(r.max_spaces) || 0,
-          min_size: Number(r.min_size) || 0,
-          participation_limit: Number(r.participation_limit) || 0
+          max_spaces: parseNumberOrUndefined(r.max_spaces),
+          min_size: parseNumberOrUndefined(r.min_size),
+          participation_limit: parseNumberOrUndefined(r.participation_limit)
         };
         t.columns.forEach((c) => {
           choice[c.name] = r[c.name] ?? "";
@@ -216,6 +236,58 @@ const SurveyMultistageCreate = () => {
         return choice;
       })
     }));
+    let anyValidationFailed = false;
+    await Promise.all(
+      stages.map(async (stage) => {
+        try {
+          await schema.validate(
+            {
+              groupname: data.groupname,
+              enddate: data.enddate,
+              endtime: data.endtime,
+              minchoices: data.minchoices,
+              minChoicesSetting: data.minChoicesSetting,
+              choices: stage.choices
+            },
+            { abortEarly: false }
+          );
+          // clear previous errors for this stage
+          setTables((ts) =>
+            ts.map((t) => (t.id !== stage.id ? t : { ...t, choiceErrors: [] }))
+          );
+        } catch (validationError) {
+          anyValidationFailed = true;
+          const perRowErrors = (stage.choices || []).map(() => ({}));
+          if (
+            validationError &&
+            validationError.inner &&
+            validationError.inner.length
+          ) {
+            validationError.inner.forEach((err) => {
+              if (!err.path) return;
+              const m = err.path.match(/^choices\[(\d+)\]\.(.+)$/);
+              if (m) {
+                const idx = Number(m[1]);
+                const field = m[2];
+                perRowErrors[idx] = perRowErrors[idx] || {};
+                perRowErrors[idx][field] =
+                  perRowErrors[idx][field] || err.message;
+              }
+            });
+          }
+          setTables((ts) =>
+            ts.map((t) =>
+              t.id !== stage.id ? t : { ...t, choiceErrors: perRowErrors }
+            )
+          );
+        }
+      })
+    );
+
+    if (anyValidationFailed) {
+      return;
+    }
+
     console.log(
       "DEBUG: built stages payload:",
       JSON.stringify(stages, null, 2)

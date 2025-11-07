@@ -162,11 +162,16 @@ const CreateSurveyPage = () => {
 
   const setChoices = () => {
     const choicesEntry = rows.map((r) => {
+      const parseNumberOrUndefined = (val) =>
+        val === "" || val === null || typeof val === "undefined"
+          ? undefined
+          : Number(val);
+
       const base = {
         mandatory: !!r.mandatory,
         name: r.name,
-        max_spaces: Number(r.max_spaces) || 0,
-        min_size: Number(r.min_size) || 0
+        max_spaces: parseNumberOrUndefined(r.max_spaces),
+        min_size: parseNumberOrUndefined(r.min_size)
       };
       columns.forEach((c) => (base[c.name] = r[c.name] ?? ""));
       return base;

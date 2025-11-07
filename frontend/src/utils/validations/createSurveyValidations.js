@@ -38,6 +38,7 @@ export const buildCreateSurveySchema = (t) => {
           schema.required(t("Priorisoitujen ryhmien vähimmäismäärä vaaditaan")),
         otherwise: (schema) => schema.notRequired().default(1)
       }),
+
     choices: yup.array().of(
       yup.object({
         name: yup
@@ -54,9 +55,14 @@ export const buildCreateSurveySchema = (t) => {
           .number()
           .typeError(t("Kentän tulee olla kokonaisluku"))
           .integer(t("Kentän tulee olla kokonaisluku"))
-          .min(0, t("Minimikoon on oltava vähintään 0"))
+          .when("mandatory", {
+            is: true,
+            then: (schema) =>
+              schema.min(1, t("Ryhmän minimikoon on oltava vähintään 1")),
+            otherwise: (schema) =>
+              schema.min(0, t("Minimikoon on oltava vähintään 0"))
+          })
           .required(t("Ryhmän minimikoko vaaditaan"))
-          .min(1, t("Lisää vähintään yksi vaihtoehto"))
       })
     )
   });
