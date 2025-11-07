@@ -50,6 +50,7 @@ const FrontPageButton = ({
 
 const FrontPage = () => {
   const [createdSurveys, setCreatedSurveys] = useState(0);
+  const [trashCount, setTrashCount] = useState(0);
   const [activeSurveys, setActiveSurveys] = useState([]);
   const { t } = useTranslation();
 
@@ -59,6 +60,7 @@ const FrontPage = () => {
         const responseData = await surveyService.getFrontPageData();
         setCreatedSurveys(responseData.createdSurveys);
         setActiveSurveys(responseData.activeSurveys);
+        setTrashCount(responseData.trashCount);
       } catch (err) {
         console.error("Error fetching data", err);
       }
@@ -100,7 +102,7 @@ const FrontPage = () => {
             mainText="Roskakori"
             additionalText="Näe poistettavaksi asetetut kyselyt"
             topRightText="Poistettavat kyselyt"
-            additionalVars={{ count: 1 }}
+            additionalVars={{ count: trashCount }}
           />
         </div>
       </div>

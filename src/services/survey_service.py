@@ -495,4 +495,7 @@ class SurveyService:
     def get_all_survey_stages(self, survey_id):
         return self._survey_repository.get_all_survey_stages(survey_id)
 
+    def get_trash_count(self, user_id):
+        return self._survey_repository.get_trash_count(user_id)
+
 survey_service = SurveyService()

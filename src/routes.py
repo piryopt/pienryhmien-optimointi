@@ -126,8 +126,9 @@ def frontpage_data():
     user_id = session.get("user_id", 0)
     created_surveys = survey_service.count_surveys_created(user_id)
     active_surveys = survey_service.get_active_surveys_and_response_count(user_id)
+    trash_count = survey_service.get_trash_count(user_id)
 
-    return jsonify({"createdSurveys": created_surveys, "activeSurveys": active_surveys})
+    return jsonify({"createdSurveys": created_surveys, "activeSurveys": active_surveys, "trashCount": trash_count})
 
 
 """
