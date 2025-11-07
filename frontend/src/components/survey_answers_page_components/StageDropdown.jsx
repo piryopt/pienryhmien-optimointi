@@ -2,9 +2,20 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { useTranslation } from "react-i18next";
 import "../../static/css/dark.css";
+import { useEffect } from "react";
 
-const StageDropdown = ({ stages, currStage, setCurrStage }) => {
+const StageDropdown = ({
+  stages,
+  currStage,
+  setCurrStage,
+  setCurrStageAvailableSpaces,
+  spacesData
+}) => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    setCurrStageAvailableSpaces(spacesData[currStage]);
+  });
 
   return (
     <div style={{ display: "inline-block" }}>

@@ -100,6 +100,16 @@ class SurveyChoicesService:
         tally = sum(choice.max_spaces for choice in choices)
 
         return tally
+    
+    def get_stages_available_spaces(self, survey_id):
+        """
+        Returns the total number of available space for each stage in the groups of a survey
+        """
+        spaces = {}
+        stages = self._survey_repository.get_all_survey_stages(survey_id)
+        for stage in stages:
+            spaces[stage.stage] = self._survey_choices_repository.count_spaces_in_stage(survey_id, stage.stage)
+        return spaces
 
     def add_empty_survey_choice(self, survey_id: str, spaces: int):
         """

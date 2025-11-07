@@ -14,10 +14,12 @@ const SurveyAnswersTableRow = ({
   const [rankingsVisible, setRankingsVisible] = useState(false);
   const [rankings, setRankings] = useState([]);
   const [rejections, setRejections] = useState([]);
+  const [notAvailable, setNotAvailable] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
     setRankingsVisible(false);
+    setNotAvailable(false);
   }, [stage]);
 
   const handleRankingClick = async () => {
@@ -27,10 +29,10 @@ const SurveyAnswersTableRow = ({
         answer.email,
         stage
       );
-      console.log(response);
       setRankings(response.choices);
       setRejections(response.rejections);
       setRankingsVisible(!rankingsVisible);
+      setNotAvailable(response.notAvailable || false);
     } catch (err) {
       console.error("Error showing rankings", err);
     }
@@ -51,7 +53,11 @@ const SurveyAnswersTableRow = ({
           &nbsp;{rankingsVisible ? t("Piilota") : t("Näytä")}
         </span>
         {rankingsVisible && (
-          <UserRankings rankings={rankings} rejections={rejections} />
+          <UserRankings
+            rankings={rankings}
+            rejections={rejections}
+            notAvailable={notAvailable}
+          />
         )}
       </td>
       <td>
