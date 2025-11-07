@@ -53,10 +53,28 @@ const GroupList = ({
 
   const renderedItems = normalizedSearch
     ? (items || []).filter((it) => {
-        const name = it && it.name ? String(it.name).toLowerCase() : "";
-        return name.includes(normalizedSearch);
+        if (!it) return false;
+        const name = it.name ? String(it.name).toLowerCase() : "";
+        if (name.includes(normalizedSearch)) return true;
+
+        const choice = choiceMap.get(String(it.id)) || (it.infos ? it : null);
+        if (choice && Array.isArray(choice.infos)) {
+          for (const infoObj of choice.infos) {
+            for (const val of Object.values(infoObj || {})) {
+              if (
+                val !== null &&
+                val !== undefined &&
+                String(val).toLowerCase().includes(normalizedSearch)
+              ) {
+                return true;
+              }
+            }
+          }
+        }
+        return false;
       })
     : items || [];
+
   return (
     <Droppable droppableId={id}>
       {(provided) => (
