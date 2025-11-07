@@ -12,6 +12,7 @@ const ChoiceTable = ({
   updateCell,
   setSelectAllMandatory,
   selectAllMandatory,
+  limitParticipationVisible=false
 }) => {
   const { t } = useTranslation();
 
@@ -85,6 +86,16 @@ const ChoiceTable = ({
               {t("Ryhmän minimikoko")}
             </th>
 
+            {limitParticipationVisible && (
+              <th
+                className="constant-header"
+                col-validation-regex="\d+"
+                validation-text={t("kokonaislukuja")}
+              >
+                {t("Osallistumiskerrat*")}
+              </th>
+            )}
+
             {columns.map(({ name }) => (
               <th key={name} className="variable-header">
                 {name}
@@ -128,6 +139,7 @@ const ChoiceTable = ({
               columns={columns}
               updateCell={updateCell}
               onDelete={() => deleteRow(row.id)}
+              limitParticipationVisible={limitParticipationVisible}
             />
           ))}
         </tbody>

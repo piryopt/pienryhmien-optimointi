@@ -34,6 +34,7 @@ CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
 	max_spaces INTEGER,
 	deleted BOOLEAN,
 	min_size INTEGER,
+	participation_limit INTEGER DEFAULT 0,
 	mandatory BOOLEAN DEFAULT FALSE -- group must be filled
 );
 

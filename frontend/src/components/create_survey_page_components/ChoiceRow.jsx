@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-const ChoiceRow = ({ row, columns, updateCell, onDelete }) => {
+const ChoiceRow = ({ row, columns, updateCell, onDelete, limitParticipationVisible=false }) => {
   const { t } = useTranslation();
 
   const handleChange = (field) => (e) => {
@@ -49,6 +49,18 @@ const ChoiceRow = ({ row, columns, updateCell, onDelete }) => {
           onChange={handleChange("min_size")}
         />
       </td>
+
+      {limitParticipationVisible && (
+        <td>
+          <input
+            type="number"
+            min="0"
+            className="form-control form-control-sm"
+            value={row.participation_limit || ""}
+            onChange={handleChange("participation_limit")}
+          />
+        </td>
+      )}
 
       {columns.map((col) => (
         <td key={col.name}>
