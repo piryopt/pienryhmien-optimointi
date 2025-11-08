@@ -22,7 +22,7 @@ const SurveysTable = ({ surveys, setSurveys }) => {
       surveyId,
       async () => {
         try {
-          await surveyService.deleteSurvey(surveyId);
+          await surveyService.trashSurvey(surveyId);
           setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
           showNotification(t("Kysely poistettu"), "success");
         } catch (err) {

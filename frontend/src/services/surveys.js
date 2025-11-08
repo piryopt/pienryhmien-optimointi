@@ -57,15 +57,20 @@ const getFrontPageData = async () => {
   }
 };
 
-const deleteSurvey = async (surveyId) => {
+const trashSurvey = async (surveyId) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
-    const response = await axios.delete(`${baseUrl}/surveys/${surveyId}`, {
-      headers: {
-        "X-CSRFToken": csrfToken
-      },
-      withCredentials: true
-    });
+    const response = await axios.patch(
+      `${baseUrl}/surveys/${surveyId}/trash`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -86,6 +91,21 @@ const returnSurvey = async (surveyId) => {
         withCredentials: true
       }
     );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteSurvey = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.delete(`${baseUrl}/surveys/${surveyId}`, {
+      headers: {
+        "X-CSRFToken": csrfToken
+      },
+      withCredentials: true
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -351,8 +371,9 @@ export default {
   submitSurveyAnswer: submitSurveyAnswer,
   deleteSurveyAnswer: deleteSurveyAnswer,
   deleteSurveyAnswerByEmail: deleteSurveyAnswerByEmail,
-  deleteSurvey: deleteSurvey,
+  trashSurvey: trashSurvey,
   returnSurvey: returnSurvey,
+  deleteSurvey: deleteSurvey,
   getSurveyAnswersData: getSurveyAnswersData,
   getStudentRankings: getStudentRankings,
   openSurvey: openSurvey,
