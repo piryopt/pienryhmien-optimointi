@@ -32,6 +32,15 @@ const AdminClosedFeedbackList = () => {
       <br />
       <h2>{t("Suljetut palautteet")}</h2>
       <div style={{ marginBottom: 8 }}>
+        <Link to="/admintools/analytics">
+          <small>{t("Tarkastele tilastoja")}</small>
+        </Link>
+        <br />
+        <Link to="/admintools/surveys">
+          <small>{t("Tarkastele kyselyitä")}</small>
+        </Link>
+      </div>
+      <div style={{ marginBottom: 8 }} align="right">
         <Link to="/admintools/feedback">
           <small>{t("Avoimet palautteet")}</small>
         </Link>

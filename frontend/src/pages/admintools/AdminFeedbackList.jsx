@@ -32,10 +32,20 @@ const AdminFeedbackList = () => {
       <br />
       <h2>{t("Avoimet palautteet")}</h2>
       <div style={{ marginBottom: 8 }}>
+        <Link to="/admintools/analytics">
+          <small>{t("Tarkastele tilastoja")}</small>
+        </Link>
+        <br />
+        <Link to="/admintools/surveys">
+          <small>{t("Tarkastele kyselyitä")}</small>
+        </Link>
+      </div>
+      <div style={{ marginBottom: 8 }} align="right">
         <Link to="/admintools/feedback/closed">
           <small>{t("Suljetut palautteet")}</small>
         </Link>
       </div>
+
 
       {loading ? <p>{t("Ladataan…")}</p> : (
         <>

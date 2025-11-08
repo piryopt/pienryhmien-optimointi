@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import adminService from "../../services/admin"
 import { useNotification } from "../../context/NotificationContext"
+import { Link } from "react-router-dom"
 
 const AdminAnalytics = () => {
   const { t } = useTranslation()
@@ -68,6 +69,15 @@ const AdminAnalytics = () => {
     <div>
       <br />
       <h2>{t("Tilastot")}</h2>
+      <div style={{ marginBottom: 8 }}>
+        <Link to="/admintools/feedback">
+          <small>{t("Tarkastele palautteita")}</small>
+        </Link>
+        <br />
+        <Link to="/admintools/surveys">
+          <small>{t("Tarkastele kyselyitä")}</small>
+        </Link>
+      </div>
 
       {loading ? <p>{t("Ladataan...")}</p> : (
         <>

@@ -75,6 +75,15 @@ const AdminSurveyList = () => {
     <div>
       <br />
       <h2>{t("Kyselyt")}</h2>
+      <div style={{ marginBottom: 8 }}>
+        <Link to="/admintools/feedback">
+          <small>{t("Tarkastele palautteita")}</small>
+        </Link>
+        <br />
+        <Link to="/admintools/analytics">
+          <small>{t("Tarkastele tilastoja")}</small>
+        </Link>
+      </div>
 
       {loading ? <p>{t("Ladataan...")}</p> : (
         <>
