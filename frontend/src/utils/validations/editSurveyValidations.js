@@ -24,10 +24,9 @@ export const buildEditSurveySchema = (t) => {
           combined.setHours(hh || 0, mm || 0, 0, 0);
           return combined.getTime() > Date.now();
         }
-      ),
+      )
   });
 };
-
 
 export const buildEditSurveyAdminSchema = (t) => {
   return yup.object({
@@ -35,5 +34,5 @@ export const buildEditSurveyAdminSchema = (t) => {
       .string()
       .required(t("Anna sähköpostiosoite"))
       .email(t("Antamasi sähköpostiosoite ei ole kelvollinen"))
-  })
-}
+  });
+};

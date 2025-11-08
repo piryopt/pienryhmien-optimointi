@@ -17,7 +17,7 @@ const EditSurveyInfo = ({ placeholder }) => {
         id="survey-information"
         className="form-control"
         {...register("surveyInformation")}
-        placeholder={placeholder}
+        defaultValue={placeholder}
       />
     </section>
   );

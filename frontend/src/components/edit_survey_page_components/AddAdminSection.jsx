@@ -4,7 +4,8 @@ import { useNotification } from "../../context/NotificationContext";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
-import { buildEditSurveyAdminSchema } from "../../utils/validations/editSurveyValidations.js"
+import { buildEditSurveyAdminSchema } from "../../utils/validations/editSurveyValidations.js";
+import { safeParseJson, extractMessage } from "../../utils/parsers";
 
 const AddAdminSection = ({ value = "", onChange = () => {}, surveyId }) => {
   const { t } = useTranslation();
@@ -15,12 +16,18 @@ const AddAdminSection = ({ value = "", onChange = () => {}, surveyId }) => {
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      adminEmail: "",
+      adminEmail: ""
     },
     mode: "onBlur"
   });
 
-  const { register, handleSubmit, formState: { errors }, watch, setValue } = methods;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue
+  } = methods;
 
   useEffect(() => {
     setValue("adminEmail", value || "");
@@ -31,57 +38,62 @@ const AddAdminSection = ({ value = "", onChange = () => {}, surveyId }) => {
     onChange(watchedEmail);
   }, [watchedEmail, onChange]);
 
-  const extractMessage = (json, res) => {
-      if (!json) return res?.statusText || t(`Hallinnointioikeuksien myöntäminen käyttäjälle ${watchedEmail} epäonnistui`);
-      if (typeof json === "string") return json;
-      return (
-        json.msg ||
-        json.message ||
-        res?.statusText ||
-        t(`Hallinnointioikeuksien myöntäminen käyttäjälle ${watchedEmail} epäonnistui`)
-      );
-    };
-
-  const onSubmit = useCallback(async (data) => {
-    try {
-      const csrfToken = await csrfService.fetchCsrfToken();
-      const res = await fetch(`http://localhost:5001/api/surveys/${surveyId}/add_owner`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken
-        },
-        body: JSON.stringify({ email: data.adminEmail })
-      });
-
-      let json = null;
-        try {
-          json = await res.json();
-        } catch {
-          json = null;
-        }
-
+  const onSubmit = useCallback(
+    async (data) => {
+      try {
+        const csrfToken = await csrfService.fetchCsrfToken();
+        const res = await fetch(
+          `http://localhost:5001/api/surveys/${surveyId}/add_owner`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfToken
+            },
+            body: JSON.stringify({ email: data.adminEmail })
+          }
+        );
+        const json = await safeParseJson(res);
         if (!res.ok) {
-          const msg = extractMessage(json, res);
-          showNotification(msg, "error");
+          showNotification(
+            extractMessage(
+              json,
+              res,
+              t(
+                `Hallinnointioikeuksien myöntäminen käyttäjälle ${watchedEmail} epäonnistui`
+              )
+            ),
+            "error"
+          );
           return;
         }
-
         if (!json || String(json.status) !== "1") {
-          const msg = extractMessage(json, res);
-          showNotification(msg, "error");
+          showNotification(
+            extractMessage(
+              json,
+              res,
+              t(
+                `Hallinnointioikeuksien myöntäminen käyttäjälle ${watchedEmail} epäonnistui`
+              )
+            ),
+            "error"
+          );
           return;
         }
-
-        showNotification(json.msg || t("Kysely muokattu onnistuneesti"), "success");
-    } catch (err) {
-      showNotification(
-        err?.message || t("Kyselyn muokkaus epäonnistui"),
-        "error"
-      );
-    }
-  }, [surveyId, showNotification, t, watchedEmail]);
+        showNotification(
+          json.msg || t("Kysely muokattu onnistuneesti"),
+          "success"
+        );
+      } catch (err) {
+        showNotification(
+          err?.message || t("Kyselyn muokkaus epäonnistui"),
+          "error"
+        );
+      }
+    },
+    [surveyId, showNotification, t, watchedEmail]
+  );
 
   return (
     <div>
