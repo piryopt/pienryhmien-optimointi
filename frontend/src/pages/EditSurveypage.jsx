@@ -125,7 +125,7 @@ const EditSurveyPage = () => {
 
   return (
     <div>
-      <h1>Kyselyn muokkaus</h1>
+      <h1>{t("Kyselyn muokkaus")}</h1>
       <AddAdminSection surveyId={surveyId} />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>

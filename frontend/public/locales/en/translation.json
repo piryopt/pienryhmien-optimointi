@@ -1,56 +1,231 @@
 {
   "Aiemmat kyselyt": "",
   "Aktiiviset kyselyt": "Active surveys",
+  "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
+    "": "Give user administrative rights to the survey"
+  },
+  "Anna palaute": "",
   "Anna palautetta": "Give feedback",
+  "Anna sähköpostiosoite": "Email is missing",
+  "Antamasi sähköpostiosoite ei ole kelvollinen": "The provided email address is not valid",
   "Avaa kysely uudelleen": "",
+  "Avoimet palautteet": "",
   "Avoin": "",
-  "Ei": "",
+  "Bugi": "",
+  "CSV-ohje": "",
+  "Ei": "No",
+  "Ei palautetta": "",
+  "Ei palautteita": "",
+  "Enimmäispaikat": "",
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "",
+  "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
+    " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
+      "": ""
+    }
+  },
+  "Haluatko palauttaa kyselyn roskakorista?": "",
   "Haluatko varmasti avata kyselyn uudestaan?": "",
+  "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "",
   "Haluatko varmasti poistaa kyselyn?": "",
   "Haluatko varmasti poistaa vastauksen?": "",
   "Haluatko varmasti sulkea kyselyn?": "",
+  "Haluatko varmasti sulkea palautteen?": "",
+  "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
+    " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
+      "": ""
+    }
+  },
+  "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
+    "": ""
+  },
   "Jaa ryhmiin": "",
   "Jaettavia paikkoja": "",
   "Jakaja": "Jakaja",
+  "Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa             opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *": {
+    "": ""
+  },
+  "Jos ryhmän minimikoolla ei ole väliä, syötä 0": {
+    " Pakollisen ryhmän             mimimikoko ei voi olla 0": {
+      "": ""
+    }
+  },
+  "Käynnissä olevat kyselyt": "Ongoing surveys",
   "Käyttäjätunnus": "Username",
+  "Kello": "Time",
+  "Kentän tulee olla kokonaisluku": "",
+  "Kentän tulee olla vähintään 0": "",
   "Kielletyt": "",
   "Kirjaudu sisään": "Sign in",
   "Kirjaudu ulos": "Log out",
+  "Kirjautuminen epäonnistui": "",
+  "Kirjautuminen onnistui": "",
+  "Kirjautuminen ulos onnistui": "",
+  "kokonaislukuja": "",
   "Kopioi kysely": "",
   "Kopioi kyselyn osoite leikepöydälle": "",
-  "Kyllä": "",
+  "Kyllä": "Yes",
   "Kysely": "",
+  "Kysely avattu": "",
+  "Kysely luotu onnistuneesti": "",
+  "Kysely muokattu onnistuneesti": "Survey updated successfully",
+  "Kysely palautettu": "",
+  "Kysely poistetaan": "",
+  "Kysely poistettu": "",
+  "Kysely suljettu": "",
+  "Kyselyn kuvaus": "Survey description",
+  "Kyselyn luonti epäonnistui": "",
+  "Kyselyn muokkaus": "Survey editing",
+  "Kyselyn muokkaus epäonnistui": "Error occurred when updating survey!",
+  "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä": "The name of the survey must be at least 5 characters long.",
+  "Kyselyn nimi": "The name of the survey",
+  "Kyselyn osoite kopioitu leikepöydälle": "",
+  "Kyselyn palauttaminen epäonnistui": "",
+  "Kyselyn poistaminen epäonnistui": "",
   "Kyselyn tila": "",
-  "Käynnissä olevat kyselyt": "Ongoing surveys",
-  "Luotuja kyselyitä": "Created surveys: {{count}}",
-  "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Create a new survey or import existing response options from a CSV file",
+  "Kyselyn vastaukset tallennettu": {
+    "": ""
+  },
+  "Kyselyn vastauksien tallennus epäonnistui": {
+    "": ""
+  },
+  "Ladataan": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
+  "Ladataan…": "",
+  "Lähetetään": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
+  "Lajittelun tulokset": "",
+  "Lataus epäonnistui": "",
+  "Lisää käyttäjä": "Add user",
+  "Lisää tietokenttä": "",
+  "Lisää vaihe": "",
+  "Lisää vaihtoehto": "",
+  "Luo kysely": "",
   "Luo uusi kysely": "Create a new survey",
   "Luo uusi monivaiheinen kysely": "Create a new multiphase survey",
-  "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Create a multiphase survey and specify answer options for each phase",
+  "Monesko valinta": "",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "",
+  "Muu": "",
   "Näytä": "",
-  "Näytä vanhat kyselyt": "Show old surveys",
+  "Näytetäänkö vastaajalle hakupalkki?": "",
+  "Nimi": "",
+  "Opiskelijat on lajiteltu ryhmiin seuraavasti": "",
+  "Otsikko": "",
+  "Päivämäärä on virheellinen": "",
+  "Pakota minimikoko": "",
   "Palaa kyselylistaan": "",
+  "Palaa listaan": "",
+  "Palaa takaisin": "Return",
+  "Palauta kysely": "",
   "Palaute": "Feedback",
+  "Palaute lähetetty": "",
+  "Palaute suljettu": "",
+  "Palautteen lähettäjä": "",
+  "Palautteen lähetys epäonnistui": "",
+  "Palautteen tyyppi": "",
+  "Palautteiden lataus epäonnistui": "",
   "Perustelut": "",
   "Piilota": "",
+  "Poista": "",
   "Poista kysely": "",
+  "Poista sarake": "",
+  "Poista vaihe": "",
+  "pp": {
+    "kk": {
+      "vvvv": ""
+    }
+  },
+  "Priorisoitavat ryhmät": "",
+  "Priorisoitujen ryhmien vähimmäismäärä": "",
+  "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
+  "Roskakori": "",
+  "Ryhmä": "",
+  "Ryhmäjako tallennettu": "",
+  "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "",
+  "Ryhmäjaon tallennus epäonnistui": "",
+  "Ryhmän minimikoko": "",
   "Ryhmät luotu": "",
-  "Sähköposti": "",
+  "Ryhmät, jotka pudotettiin jaosta": "",
+  "Ryhmävalintojen keskiarvo": "",
+  "Sähköposti": "Email",
+  "sähköpostiosoite": "Email address",
   "Salasana": "Password",
+  "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista": {
+    "": ""
+  },
+  "Sallitaanko poissaolot?": "",
+  "Sallitaanko valintojen kieltäminen?": "",
+  "Sallittu kiellettyjen ryhmien määrä": "",
+  "Sisältö": "",
   "Sulje kysely": "",
+  "Sulje palaute": "",
+  "Suljetaan": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
   "Suljettu": "",
-  "Tämä on kyselyn luontisivu!!": "This is the survey create page!!",
+  "Suljetut palautteet": "",
+  "Sulkeminen epäonnistui": "",
+  "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "",
+  "Syötä käyttäjän sähköpostiosoite": {
+    "": "Give user email"
+  },
+  "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa         mielekkyysjärjestykseen": {
+    " Anna kullekkin ryhmälle myös sen enimmäiskoko": {
+      "         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa": {
+        " Sarakkeen         voit luoda painamalla '+ Lisää tietokenttä'": {
+          "": ""
+        }
+      }
+    }
+  },
+  "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen": {
+    " Kuvausteksti näytetään vastaajalle kyselyn yhteydessä": {
+      "": ""
+    }
+  },
+  "Tallenna muutokset": "Save changes",
+  "Tallenna tulokset": "",
+  "Tarkastele": "",
   "Tarkastele tuloksia": "",
   "Tietosuojaseloste": "Privacy Policy",
   "Tilastot": "Statistics",
   "Toiminnot": "Actions",
+  "tulokset": "",
+  "Tulokset": "",
+  "Tuo valinnat CSV-tiedostosta": "",
   "UKK": "FAQ",
+  "Vaaditaanko kaikkien ryhmien järjestämistä?": "",
+  "Vaiheen nimi": "",
+  "Vaiheen tunniste": "",
   "Valinnat": "",
+  "Valitse päättymisaika": "",
+  "Valitse päättymispäivä": "",
+  "Valitse vaihe": "",
   "Vastauksen poistaminen": "",
-  "Vastaukset": "Answers: {{count}}",
+  "Vastauksen poistaminen epäonnistui": "",
   "Vastauksia": "",
+  "Vastaus poistettu": "",
+  "Vastausaika": "Response time",
+  "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
+    "": "Response time defines the period during which it is possible to   respond to the survey."
+  },
   "Vastausaika päättyy": "Response time expires",
-  "Vastausaika päättyy:": "Response time expires: {{timeEnd}}"
+  "Vastausajan päättyminen ei voi olla menneisyydessä": "",
+  "Vie tulokset Excel-taulukkoon": "",
+  "Voit muokata kyselyn kuvausta": "You can edit the survey description.",
+  "Yhteys palvelimeen epäonnistui": "",
+  "yli 5 merkkiä pitkiä": ""
 }
