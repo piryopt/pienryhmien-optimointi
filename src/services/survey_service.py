@@ -5,6 +5,7 @@ from src.repositories.survey_repository import survey_repository as default_surv
 from src.repositories.survey_owners_repository import survey_owners_repository as default_survey_owners_repository
 from src.repositories.survey_choices_repository import survey_choices_repository as default_survey_choices_repository
 from src.services.user_service import user_service as default_user_service
+from src.services.user_rankings_service import user_rankings_service as default_user_rankings_service
 from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
 from src.tools.date_converter import time_to_close, format_datestring
 from src.tools.parsers import date_to_sql_valid
@@ -482,6 +483,40 @@ class SurveyService:
             ]
             admin_data.append(survey_data)
         return admin_data
+    
+    def get_admin_analytics(self):
+        """
+        Collect analytics numbers used in admin UI.
+        Returns a dict with named metrics or None on error
+        Keys:
+        {
+            "total_surveys": int,      # total number of surveys in system
+            "active_surveys": int,     # number of active (open) surveys
+            "total_students": int,     # number of registered students
+            "total_responses": int,    # total rankings/responses created
+            "total_teachers": int      # number of registered teachers
+        }
+        """
+        try:
+            total_surveys = self.len_all_surveys()
+            active_surveys = self.len_active_surveys()
+            total_students = self._user_service.len_all_students()
+            total_teachers = self._user_service.len_all_teachers()
+
+            from src.services.user_rankings_service import user_rankings_service
+
+            total_responses = user_rankings_service.len_all_rankings()
+
+            return {
+                "total_surveys": int(total_surveys or 0),
+                "active_surveys": int(active_surveys or 0),
+                "total_students": int(total_students or 0),
+                "total_responses": int(total_responses or 0),
+                "total_teachers": int(total_teachers or 0)
+            }
+        except Exception as e:
+            print("Error collecting admin analytics:", e)
+            return None
 
     def set_survey_deleted_true(self, survey_id):
         """
