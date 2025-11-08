@@ -23,6 +23,7 @@ const SurveyMultistageAnswersPage = () => {
   const [spacesData, setSpacesData] = useState({});
   const [searchEmail, setSearchEmail] = useState("");
   const [answersAmount, setAnswersAmount] = useState(0);
+  const [currAnswers, setCurrAnswers] = useState([]);
 
   useEffect(() => {
     const getSurveyAnswers = async () => {
@@ -34,6 +35,7 @@ const SurveyMultistageAnswersPage = () => {
       const surveyStages = response.answers.map((s) => Object.keys(s)[0]);
       setStages(surveyStages);
       setFilteredAnswers(response.answers[0][surveyStages[0]]);
+      setCurrAnswers(response.answers[0][surveyStages[0]]);
       setCurrStage(surveyStages[0]);
       setCurrStageAvailableSpaces(response.availableSpaces[surveyStages[0]]);
       setAnswersAmount(response.answers[0][surveyStages[0]].length);
@@ -103,8 +105,8 @@ const SurveyMultistageAnswersPage = () => {
       </p>
       {currStage && (
         <SurveyAnswersTable
-          answers={surveyAnswers[indexOfCurrStage()][currStage]}
-          setAnswers={setSurveyAnswers}
+          answers={currAnswers}
+          setAnswers={setCurrAnswers}
           filteredAnswers={filteredAnswers}
           setFilteredAnswers={setFilteredAnswers}
           surveyId={surveyId}

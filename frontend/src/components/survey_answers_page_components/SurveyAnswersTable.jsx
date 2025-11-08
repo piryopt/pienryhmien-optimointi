@@ -35,13 +35,8 @@ const SurveyAnswersTable = (props) => {
       const updatedFilteredAnswers = props.filteredAnswers.filter(
         (a) => a.email !== email
       );
-      if (props.stage) {
-        // make it work with current stage answers
-        console.log(props);
-      } else {
-        props.setAnswers(updatedAnswers);
-        props.setFilteredAnswers(updatedFilteredAnswers);
-      }
+      props.setAnswers(updatedAnswers);
+      props.setFilteredAnswers(updatedFilteredAnswers);
       props.setSurveyAnswersAmount((prev) => prev - 1);
       showNotification(t("Vastaus poistettu"), "success");
     } catch (err) {
