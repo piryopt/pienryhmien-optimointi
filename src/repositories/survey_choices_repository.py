@@ -202,4 +202,23 @@ class SurveyChoicesRepository:
             print(e)
             return []
 
+    def count_spaces_in_stage(self, survey_id, stage):
+        """
+        Returns the number of spaces in a survey stages groups
+        """
+        try:
+            sql = """
+                SELECT 
+                SUM(sc.max_spaces)
+                FROM survey_choices sc
+                LEFT JOIN survey_stages ss 
+                    ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
+                WHERE sc.survey_id = :survey_id AND ss.stage = :stage
+            """
+            result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage})
+            return result.fetchone()[0]
+        except Exception as e:
+            print(e)
+            return None
+
 survey_choices_repository = SurveyChoicesRepository()

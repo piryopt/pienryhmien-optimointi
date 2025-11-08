@@ -159,13 +159,13 @@ class UserRankingsRepository:
         try:
             sql = """
             SELECT 
-                usr.user_id,
-                usr.ranking,
-                usr.rejections,
-                usr.reason,
-                usr.not_available
-                FROM user_survey_rankings usr
-                WHERE survey_id=:survey_id AND stage=:stage
+                user_id,
+                ranking,
+                rejections,
+                reason,
+                not_available
+                FROM user_survey_rankings
+                WHERE survey_id=:survey_id AND stage=:stage AND deleted = FALSE
             """
             result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage})
             rankings = result.fetchall()
@@ -186,7 +186,7 @@ class UserRankingsRepository:
                 reason,
                 not_available
                 FROM user_survey_rankings
-                WHERE survey_id=:survey_id AND stage=:stage AND user_id=:user_id
+                WHERE survey_id=:survey_id AND stage=:stage AND user_id=:user_id AND deleted = FALSE
             """
             result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage, "user_id": user_id})
             rankings = result.fetchone()

@@ -199,7 +199,8 @@ def expand_ranking(survey_id, email, stage):
         user_ranking = user_rankings_service.get_user_multistage_rankings_by_stage(survey_id, user_id, stage)
     else:
         user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
-    print(user_ranking)
+    
+    not_available = user_ranking.not_available or False
     ranking_list = convert_to_list(user_ranking.ranking)
     rejection_list = convert_to_list(user_ranking.rejections)
     choices = []
@@ -211,7 +212,7 @@ def expand_ranking(survey_id, email, stage):
         for r in rejection_list:
             choice = survey_choices_service.get_survey_choice(r)
             rejections.append(choice)
-    return jsonify({"choices": choices, "rejections": rejections})
+    return jsonify({"choices": choices, "rejections": rejections, "notAvailable": not_available})
 
 
 @bp.route("/surveys/create", methods=["GET"])
@@ -786,7 +787,7 @@ def delete_submission(survey_id):
     return jsonify(response)
 
 
-@bp.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
+@bp.route("/api/surveys/<string:survey_id>/answers/delete", methods=["POST"])
 def owner_deletes_submission(survey_id):
     """
     Survey owner can delete a single rankinging from the survey for
@@ -1009,6 +1010,8 @@ def multistage_survey_answers(survey_id):
 
         answers[stage.stage] = choices_data
         all_answers.append(answers)
+
+    available_spaces = survey_choices_service.get_stages_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
 
@@ -1019,7 +1022,8 @@ def multistage_survey_answers(survey_id):
             "surveyId": survey_id,
             "closed": closed,
             "answersSaved": answers_saved,
-            "answers": all_answers
+            "answers": all_answers,
+            "availableSpaces": available_spaces
         }
     )
 

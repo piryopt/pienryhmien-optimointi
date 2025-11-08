@@ -4,6 +4,7 @@ import SurveyMoreInfo from "./SurveyMoreInfo";
 import menu_white from "/images/menu_white_36dp.svg";
 import insertDriveFileWhite from "/images/insert_drive_file_white_36dp.svg";
 import insertPageBreakWhite from "/images/insert_page_break_white_36dp.svg";
+import noteStack from "/images/note_stack_36dp.svg";
 import { Link } from "react-router-dom";
 
 const SurveyTableRow = ({ survey, handleDeleteClick }) => {
@@ -25,7 +26,13 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
     <tr>
       <td>
         <img
-          src={survey.closed ? insertPageBreakWhite : insertDriveFileWhite}
+          src={
+            survey.is_multistage
+              ? noteStack
+              : survey.closed
+                ? insertPageBreakWhite
+                : insertDriveFileWhite
+          }
           alt=""
           className="d-inline-block align-text-top"
           width="20"

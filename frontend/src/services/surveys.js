@@ -33,7 +33,7 @@ const getDeletedSurveys = async () => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 const getSurvey = async (surveyId) => {
   try {
