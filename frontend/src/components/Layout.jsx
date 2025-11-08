@@ -1,9 +1,10 @@
 import {
   NotificationProvider,
-  NotificationDisplay,
+  NotificationDisplay
 } from "../context/NotificationContext";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { SurveyDialogProvider } from "../context/SurveyDialogContext";
 import configService from "../services/config";
 import Notification from "./Notification";
 
@@ -14,9 +15,11 @@ const Layout = ({ children }) => {
         <Navbar />
         <NotificationDisplay />
         <main className="flex-shrink-0">
-          <div className="container">
-            <section className="content">{children}</section>
-          </div>
+          <SurveyDialogProvider>
+            <div className="container">
+              <section className="content">{children}</section>
+            </div>
+          </SurveyDialogProvider>
         </main>
         <Footer />
       </NotificationProvider>

@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useNotification } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import surveyService from "../../services/surveys";
+import { useSurveyDialog } from "../../context/SurveyDialogContext";
 
 const AnswersButtons = ({
   surveyClosed,
@@ -12,30 +13,41 @@ const AnswersButtons = ({
 }) => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
+  const { openDialog } = useSurveyDialog();
   const navigate = useNavigate();
 
   const handleOpenSurveyClick = async () => {
-    if (window.confirm(t("Haluatko varmasti avata kyselyn uudestaan?"))) {
-      try {
-        await surveyService.openSurvey(surveyId);
-        setSurveyClosed(false);
-        showNotification(t("Kysely avattu"), "success");
-      } catch (err) {
-        console.error("error opening survey", err);
+    openDialog(
+      t("Avaa uudestaan?"),
+      t("Haluatko varmasti avata kyselyn uudestaan?"),
+      null,
+      async () => {
+        try {
+          await surveyService.openSurvey(surveyId);
+          setSurveyClosed(false);
+          showNotification(t("Kysely avattu"), "success");
+        } catch (err) {
+          console.error("error opening survey", err);
+        }
       }
-    }
+    );
   };
 
   const handleCloseSurveyClick = async () => {
-    if (window.confirm(t("Haluatko varmasti sulkea kyselyn?"))) {
-      try {
-        await surveyService.closeSurvey(surveyId);
-        setSurveyClosed(true);
-        showNotification(t("Kysely suljettu"), "success");
-      } catch (err) {
-        console.error("error opening survey", err);
+    openDialog(
+      t("Sulje kysely?"),
+      t("Haluatko varmasti sulkea kyselyn?"),
+      null,
+      async () => {
+        try {
+          await surveyService.closeSurvey(surveyId);
+          setSurveyClosed(true);
+          showNotification(t("Kysely suljettu"), "success");
+        } catch (err) {
+          console.error("error opening survey", err);
+        }
       }
-    }
+    );
   };
 
   const handleAssignGroups = () => {

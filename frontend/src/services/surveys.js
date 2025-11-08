@@ -136,11 +136,7 @@ const deleteSurveyAnswer = async (surveyId) => {
   }
 };
 
-const deleteSurveyAnswerByEmail = async (
-  surveyId,
-  studentEmail,
-  stage = null
-) => {
+const deleteSurveyAnswerByEmail = async (surveyId, studentEmail) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.post(
