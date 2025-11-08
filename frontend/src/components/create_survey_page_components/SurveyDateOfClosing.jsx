@@ -8,7 +8,7 @@ const hours = Array.from({ length: 24 }).map(
   (_, i) => String(i).padStart(2, "0") + ":00"
 );
 
-const SurveyDateOfClosing = () => {
+const SurveyDateOfClosing = ({ placeholderDate, placeholderTime }) => {
   const { t } = useTranslation();
   const { control, register, formState } = useFormContext();
   const { errors } = formState;
@@ -38,7 +38,7 @@ const SurveyDateOfClosing = () => {
                 onChange={(date) => field.onChange(date)}
                 dateFormat="dd.MM.yyyy"
                 minDate={new Date()}
-                placeholderText={t("pp.kk.vvvv")}
+                placeholderText={placeholderDate ? placeholderDate : t("pp.kk.vvvv")}
                 autoComplete="off"
               />
             )}
@@ -49,18 +49,25 @@ const SurveyDateOfClosing = () => {
           <label htmlFor="endtime" className="time-label">
             {t("Kello")}:
           </label>
-          <select
-            id="endtime"
-            {...register("endtime")}
-            className={`datetime-input-field time-select ${errors.endtime ? "is-invalid" : ""}`}
-            defaultValue={hours[0]}
-          >
-            {hours.map((h) => (
-              <option key={h} value={h}>
-                {h}
-              </option>
-            ))}
-          </select>
+          <Controller
+            name="endtime"
+            control={control}
+            defaultValue={placeholderTime ?? hours[0]}
+            render={({ field }) => (
+              <select
+                id="endtime"
+                value={field.value ?? placeholderTime ?? hours[0]}
+                onChange={(e) => field.onChange(e.target.value)}
+                className={`datetime-input-field time-select ${errors.endtime ? "is-invalid" : ""}`}
+              >
+                {hours.map((h) => (
+                  <option key={h} value={h}>
+                    {h}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
         </div>
       </div>
 
