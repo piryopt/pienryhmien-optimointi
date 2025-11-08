@@ -36,15 +36,15 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_results_list = []
     for k, v in happiness_results.items():
         if v > 0:
-            if k == gettext("Hylätty"):
-                k = gettext("Hylättyyn")
-                msg = gettext(" valintaan sijoitetut käyttäjät: ")
-            elif k == gettext("Ei järjestetty"):
-                k = gettext("Ei järjestettyyn")
-                msg = gettext(" valintaan sijoitetut käyttäjät: ")
+            if k == "Hylätty":
+                k = "Hylättyyn"
+                msg = " valintaan sijoitetut käyttäjät: "
+            elif k == "Ei järjestetty":
+                k = "Ei järjestettyyn"
+                msg = " valintaan sijoitetut käyttäjät: "
             else:
-                msg = gettext(". valintaansa sijoitetut käyttäjät: ")
-            happiness_results_list.append((k, msg + f"{v}"))
+                msg = ". valintaansa sijoitetut käyttäjät: "
+            happiness_results_list.append((k, msg, v))
 
     happiness_results_list.sort(key=happiness_sort_key)
     dropped_groups = dropped_group_names(dropped_groups_id)
@@ -288,16 +288,16 @@ def get_additional_infos(survey_choices):
     """
     additional_infos = {}
     for row in survey_choices:
-        additional_infos[str(row[0])] = []
+        additional_infos[str(row.id)] = []
 
-        cinfos = survey_choices_service.get_choice_additional_infos(row[0])
+        cinfos = survey_choices_service.get_choice_additional_infos(row.id)
         for i in cinfos:
-            additional_infos[str(row[0])].append(i[1])
+            additional_infos[str(row.id)].append(i["info_value"])
 
-        mandatory = survey_choices_service.get_survey_choice_mandatory(row[0])
-        min_size = survey_choices_service.get_survey_choice_min_size(row[0])
+        mandatory = survey_choices_service.get_survey_choice_mandatory(row.id)
+        min_size = survey_choices_service.get_survey_choice_min_size(row.id)
         if mandatory:
-            additional_infos[str(row[0])].append(f"Minimikoko: {min_size}")
+            additional_infos[str(row.id)].append(f"Minimikoko: {min_size}")
 
     return additional_infos, cinfos
 
@@ -318,7 +318,7 @@ def get_happiness_data(output_data, survey_id):
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
         rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking, rejections)
-        if happiness != gettext("Hylätty") and happiness != gettext("Ei järjestetty"):
+        if happiness != "Hylätty" and happiness != "Ei järjestetty":
             happiness_sum += happiness
         results.append(happiness)
         if happiness not in happiness_results:
@@ -341,7 +341,7 @@ def get_happiness(survey_choice_id, user_ranking, user_rejections):
     rejections_list = convert_to_int_list(user_rejections)
 
     if survey_choice_id in rejections_list:
-        return gettext("Hylätty")
+        return "Hylätty"
 
     ranking_list = convert_to_list(user_ranking)
     happiness = 0
@@ -350,7 +350,7 @@ def get_happiness(survey_choice_id, user_ranking, user_rejections):
         if survey_choice_id == int(choice_id):
             return happiness
 
-    return gettext("Ei järjestetty")
+    return "Ei järjestetty"
 
 
 def happiness_sort_key(x):
@@ -361,9 +361,9 @@ def happiness_sort_key(x):
     value = x[0]
     if isinstance(value, int):
         return (0, value)
-    elif value == gettext("Ei järjestettyyn"):
+    elif value == "Ei järjestettyyn":
         return (1, 0)
-    elif value == gettext("Hylättyyn"):
+    elif value == "Hylättyyn":
         return (2, 0)
     else:
         # Any other string (shouldn't happen)
@@ -383,7 +383,7 @@ def dropped_group_names(dropped_groups_id):
     dropped_groups = []
     for group_id in dropped_groups_id:
         group = survey_choices_service.get_survey_choice(group_id)
-        dropped_groups.append(group.name)
+        dropped_groups.append(group["name"])
 
     return dropped_groups
 

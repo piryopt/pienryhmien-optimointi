@@ -32,9 +32,12 @@ TEST_POSTGRES_DB=test_db_name
 TEST_DATABASE_URL=postgresql://testuser:testpass@test-db:5432/test_db_name
 TEST_SECRET_KEY=test_secret
 
+# admin user for local development
+DEV_ADMIN_NAME=outi1
 
 # Debug on "1" else "0"
 FLASK_DEBUG=1
+
 ```
 
 ---

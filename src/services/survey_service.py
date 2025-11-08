@@ -6,7 +6,7 @@ from src.repositories.survey_owners_repository import survey_owners_repository a
 from src.repositories.survey_choices_repository import survey_choices_repository as default_survey_choices_repository
 from src.services.user_service import user_service as default_user_service
 from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
-from src.tools.date_converter import time_to_close
+from src.tools.date_converter import time_to_close, format_datestring
 from src.tools.parsers import date_to_sql_valid
 from src.tools.constants import SURVEY_FIELDS
 
@@ -117,7 +117,14 @@ class SurveyService:
         args:
             user_id: The id of the user whose active surveys we want
         """
-        return self._survey_repository.get_active_surveys(user_id)
+        surveys = self._survey_repository.get_active_surveys(user_id)
+        return [
+        {
+            key: format_datestring(val) if key == "time_end" else val
+            for key, val in survey._mapping.items()
+        }
+        for survey in surveys
+        ]
 
     def get_active_surveys_and_response_count(self, user_id):
         """
@@ -126,7 +133,15 @@ class SurveyService:
         args:
             user_id: The id of the user whose active surveys we want
         """
-        return self._survey_repository.get_active_surveys_and_response_count(user_id)
+
+        surveys = self._survey_repository.get_active_surveys_and_response_count(user_id)
+        return [
+        {
+            key: format_datestring(val) if key == "time_end" else val
+            for key, val in survey._mapping.items()
+        }
+        for survey in surveys
+        ]
 
     def check_if_survey_closed(self, survey_id):
         """
@@ -148,7 +163,14 @@ class SurveyService:
         args:
             user_id: The id of the user whose closed surveys we want
         """
-        return self._survey_repository.get_closed_surveys(user_id)
+        surveys = self._survey_repository.get_closed_surveys(user_id)
+        return [
+            {
+                key: format_datestring(val) if key == "time_end" else val
+                for key, val in survey._mapping.items()
+            }
+            for survey in surveys
+        ]
 
     def update_survey_answered(self, survey_id):
         """
@@ -351,16 +373,11 @@ class SurveyService:
                 msg = gettext("Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!")
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
-            language = session.get("language", "fi")
+            print("Survey choices react: ", survey_dict["choices"])
             for choice in survey_dict["choices"]:
-                if (
-                    choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä"
-                    or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä"
-                    or choice[SurveyService.SURVEY_FIELDS["min_size"][language]] == "tyhjä"
-                ):
+                if choice["name"] == "":
                     msg = gettext(
-                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi "
-                        "ilmestyy, kun asetat hiiren poistettavan rivin päälle."
+                        "Ryhmä vaatii nimen joka on vähintään 5 merkkiä pitkä"
                     )
                     return {"success": False, "message": {"status": "0", "msg": msg}}
         return {"success": True}
@@ -479,6 +496,35 @@ class SurveyService:
 
         self._choices_repository.set_choices_deleted_true(survey_id)
         return self._survey_repository.set_survey_deleted_true(survey_id)
+
+    def create_new_multiphase_survey(self, **kwargs):
+        if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):
+            return None
+        survey_id = self._survey_repository.create_new_survey(**kwargs)
+        return survey_id
+
+    def get_all_survey_stages(self, survey_id):
+        return self._survey_repository.get_all_survey_stages(survey_id)
+
+    def get_trash_count(self, user_id):
+        return self._survey_repository.get_trash_count(user_id)
+
+    def get_list_deleted_surveys(self, user_id):
+        """
+        Get the list of set to be deleted surveys for a user
+
+        args:
+            user_id: The id of the user whose set to be deleted surveys we want
+        """
+        surveys = self._survey_repository.get_deleted_surveys(user_id)
+        return [
+            {
+                key: format_datestring(val) if key == "time_end" else val
+                for key, val in survey._mapping.items()
+            }
+            for survey in surveys
+        ]
+
 
 
 survey_service = SurveyService()

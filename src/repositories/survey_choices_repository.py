@@ -139,5 +139,102 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
+    def create_new_multistage_choice(self, **kwargs):
+        """
+        Creates a new multistage survey choice
+        Expected keyword arguments (**kwargs):
+            survey_id (str): The ID of the survey this choice belongs to.
+            name (str): The display name of the choice (e.g., group or class name).
+            max_spaces (int): The maximum number of participants allowed in this choice.
+            min_size (int): The minimum required size for the group.
+            mandatory (bool, optional): Whether the group is mandatory to fill. Defaults to False.
+            participation_limit (int, optional): Maximum number of times a participant can be assigned to this choice. Defaults to 0.
+            stage (str): Stage identifier.
+        """
+        try:
+            sql = """
+            WITH new_choice AS (
+                INSERT INTO survey_choices (survey_id, name, max_spaces, min_size, mandatory, deleted, participation_limit)
+                VALUES (:survey_id, :name, :max_spaces, :min_size, :mandatory, FALSE, :participation_limit)
+                RETURNING id
+            )
+            INSERT INTO survey_stages (survey_id, choice_id, stage, order_number)
+            SELECT :survey_id, id, :stage, :order_number FROM new_choice
+            RETURNING choice_id;
+            """
+
+            res = db.session.execute(
+                text(sql),
+                {
+                    "survey_id": kwargs.get("survey_id"),
+                    "name": kwargs.get("name"),
+                    "max_spaces": kwargs.get("max_spaces"),
+                    "min_size": kwargs.get("min_size"),
+                    "mandatory": kwargs.get("mandatory", False),
+                    "participation_limit": kwargs.get("participation_limit", 0),
+                    "stage": kwargs.get("stage"),
+                    "order_number": kwargs.get("order_number")
+                }
+            )
+            new_choice_id = res.fetchone()[0]
+            db.session.commit()
+            return new_choice_id
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            return None
+
+    def get_choices_grouped_by_stage(self, survey_id):
+        """
+        Fetches all survey choices grouped by stage for a given survey.
+        Returns a list of rows including stage, choice info, and order number.
+        """
+        try:
+            sql = """
+                SELECT
+                    sc.id AS choice_id,
+                    sc.name AS choice_name,
+                    sc.max_spaces,
+                    sc.min_size,
+                    sc.mandatory,
+                    sc.participation_limit,
+                    sc.deleted,
+                    ss.stage,
+                    ss.order_number,
+                    ci.info_key,
+                    ci.info_value,
+                    ci.hidden
+                FROM survey_choices sc
+                LEFT JOIN survey_stages ss
+                    ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
+                LEFT JOIN choice_infos ci
+                    ON ci.choice_id = sc.id
+                WHERE sc.survey_id = :survey_id
+                ORDER BY ss.order_number, ss.stage NULLS LAST, sc.id;
+            """
+            result = db.session.execute(text(sql), {"survey_id": survey_id}).mappings().all()
+            return result
+        except Exception as e:
+            print(e)
+            return []
+
+    def count_spaces_in_stage(self, survey_id, stage):
+        """
+        Returns the number of spaces in a survey stages groups
+        """
+        try:
+            sql = """
+                SELECT
+                SUM(sc.max_spaces)
+                FROM survey_choices sc
+                LEFT JOIN survey_stages ss
+                    ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
+                WHERE sc.survey_id = :survey_id AND ss.stage = :stage
+            """
+            result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage})
+            return result.fetchone()[0]
+        except Exception as e:
+            print(e)
+            return None
 
 survey_choices_repository = SurveyChoicesRepository()

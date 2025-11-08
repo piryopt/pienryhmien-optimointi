@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
 from dotenv import load_dotenv
 from src.tools.date_converter import format_datestring
+from flask_cors import CORS
 
 
 csfr = CSRFProtect()
@@ -31,7 +32,17 @@ def create_app(test_config=None):
     load_dotenv()
 
     app = Flask(__name__)
-    app.config.from_object(Config())
+    CORS(app, origins=["http://localhost:5173", "http://localhost:5001"], supports_credentials=True)
+
+    #app.config.from_object(Config())
+    app.config.setdefault("SESSION_COOKIE_HTTPONLY", True)
+
+    if os.getenv("FLASK_USE_SECURECOOKIES", "0") == "1":
+        app.config["SESSION_COOKIE_SECURE"] = True
+        app.config["SESSION_COOKIE_SAMESITE"] = "None"
+    else:
+        app.config["SESSION_COOKIE_SECURE"] = False
+        app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
     env = os.getenv("FLASK_ENV", "development")
 
