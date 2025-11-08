@@ -398,6 +398,22 @@ class SurveyRepository:
             print(e)
             return False
 
+    def set_survey_deleted_false(self, survey_id):
+        """
+        SQL code for setting survey's deleted field false
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "UPDATE surveys SET deleted = False WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
     def get_all_survey_stages(self, survey_id):
         """
         SQL code for getting all survey stages.

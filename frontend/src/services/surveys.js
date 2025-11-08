@@ -72,6 +72,26 @@ const deleteSurvey = async (surveyId) => {
   }
 };
 
+const returnSurvey = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.patch(
+      `${baseUrl}/surveys/${surveyId}/return`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const submitSurveyAnswer = async ({
   surveyId,
   good,
@@ -332,6 +352,7 @@ export default {
   deleteSurveyAnswer: deleteSurveyAnswer,
   deleteSurveyAnswerByEmail: deleteSurveyAnswerByEmail,
   deleteSurvey: deleteSurvey,
+  returnSurvey: returnSurvey,
   getSurveyAnswersData: getSurveyAnswersData,
   getStudentRankings: getStudentRankings,
   openSurvey: openSurvey,
