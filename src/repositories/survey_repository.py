@@ -100,8 +100,8 @@ class SurveyRepository:
         try:
             sql = """
                 SELECT s.id, s.surveyname, s.time_end,
-                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
-                    AS is_multistage FROM surveys s, survey_owners so 
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id)
+                    AS is_multistage FROM surveys s, survey_owners so
                 WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False)
                 """
             result = db.session.execute(text(sql), {"user_id": user_id})
@@ -123,10 +123,10 @@ class SurveyRepository:
             SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count,
             EXISTS (
                 SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id
-            ) AS is_multistage FROM surveys s 
-            JOIN survey_owners so ON s.id = so.survey_id 
-            LEFT JOIN user_survey_rankings us ON s.id = us.survey_id 
-            WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
+            ) AS is_multistage FROM surveys s
+            JOIN survey_owners so ON s.id = so.survey_id
+            LEFT JOIN user_survey_rankings us ON s.id = us.survey_id
+            WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False)
             GROUP BY s.id, s.surveyname"""
 
             result = db.session.execute(text(sql), {"user_id": user_id})
@@ -147,9 +147,9 @@ class SurveyRepository:
         try:
             sql = """
                 SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end,
-                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
-                    AS is_multistage FROM surveys s, survey_owners so 
-                WHERE (so.user_id=:user_id AND s.closed=True AND so.survey_id = s.id AND s.deleted=False) 
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id)
+                    AS is_multistage FROM surveys s, survey_owners so
+                WHERE (so.user_id=:user_id AND s.closed=True AND so.survey_id = s.id AND s.deleted=False)
                 ORDER BY s.time_end DESC
                 """
             result = db.session.execute(text(sql), {"user_id": user_id})
@@ -398,6 +398,22 @@ class SurveyRepository:
             print(e)
             return False
 
+    def delete_survey_permanently(self, survey_id):
+        """
+        SQL code for setting survey and all related data permanently.
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "DELETE FROM surveys WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
+
     def set_survey_deleted_false(self, survey_id):
         """
         SQL code for setting survey's deleted field false
@@ -420,9 +436,9 @@ class SurveyRepository:
         """
         try:
             sql = """
-                    SELECT DISTINCT stage, order_number 
-                    FROM survey_stages 
-                    WHERE survey_id=:survey_id 
+                    SELECT DISTINCT stage, order_number
+                    FROM survey_stages
+                    WHERE survey_id=:survey_id
                     ORDER BY order_number;
                 """
             result = db.session.execute(text(sql), {"survey_id": survey_id})
@@ -460,8 +476,8 @@ class SurveyRepository:
         try:
             sql = """
                 SELECT s.id, s.surveyname, s.time_end,
-                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
-                    AS is_multistage FROM surveys s, survey_owners so 
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id)
+                    AS is_multistage FROM surveys s, survey_owners so
                 WHERE (so.user_id=:user_id AND s.id=so.survey_id AND s.deleted=True)
                 """
             result = db.session.execute(text(sql), {"user_id": user_id})
