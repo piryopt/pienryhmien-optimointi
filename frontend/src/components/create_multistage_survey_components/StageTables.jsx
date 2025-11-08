@@ -77,6 +77,7 @@ const StageTables = ({
                 setTableSelectAllMandatory(table.id, val)
               }
               selectAllMandatory={table.selectAllMandatory}
+              choiceErrors={table.choiceErrors || []}
               limitParticipationVisible={limitParticipationVisible}
             />
           </div>

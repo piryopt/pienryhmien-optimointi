@@ -12,7 +12,8 @@ const ChoiceTable = ({
   updateCell,
   setSelectAllMandatory,
   selectAllMandatory,
-  limitParticipationVisible=false
+  choiceErrors = [],
+  limitParticipationVisible = false
 }) => {
   const { t } = useTranslation();
 
@@ -132,7 +133,7 @@ const ChoiceTable = ({
         </thead>
 
         <tbody id="choiceTable">
-          {rows.map((row) => (
+          {rows.map((row, idx) => (
             <ChoiceRow
               key={row.id}
               row={row}
@@ -140,6 +141,7 @@ const ChoiceTable = ({
               updateCell={updateCell}
               onDelete={() => deleteRow(row.id)}
               limitParticipationVisible={limitParticipationVisible}
+              errors={choiceErrors?.[idx] ?? {}}
             />
           ))}
         </tbody>
