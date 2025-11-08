@@ -888,7 +888,6 @@ def delete_survey(survey_id):
     survey_service.set_survey_deleted_true(survey_id)
     return redirect("/surveys")
 
-
 @bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
 def delete_surveys_endpoint(survey_id):
     if not check_if_owner(survey_id):
@@ -897,6 +896,13 @@ def delete_surveys_endpoint(survey_id):
     survey_service.set_survey_deleted_true(survey_id)
     return "", 204
 
+@bp.route("/api/surveys/<string:survey_id>/return", methods=["PATCH"])
+def return_survey(survey_id):
+    if not check_if_owner(survey_id):
+        response = {"message": "No permission to return survey"}
+        return jsonify(response), 403
+    survey_service.set_survey_deleted_false(survey_id)
+    return "", 204
 
 @bp.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
 def add_owner(survey_id, email):

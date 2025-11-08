@@ -486,6 +486,13 @@ class SurveyService:
         """
         return self._survey_repository.set_survey_deleted_true(survey_id)
 
+    def set_survey_deleted_false(self, survey_id):
+        """
+        Sets survey tables column deleted to false
+        RETURNS whether updating was successful
+        """
+        return self._survey_repository.set_survey_deleted_false(survey_id)
+
     def create_new_multiphase_survey(self, **kwargs):
         if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):
             return None
