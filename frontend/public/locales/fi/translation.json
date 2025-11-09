@@ -22,7 +22,7 @@
   "Enimmäispaikat vaaditaan": "Enimmäispaikat vaaditaan",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "Enimmäispaikkojen määrä on oltava vähintään 1",
   "etusivu": {
-    "Vastausaika päättyy": "etusivu.Vastausaika päättyy"
+    "Vastausaika päättyy": "Vastausaika päättyy: {{timeEnd}}"
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
@@ -124,6 +124,7 @@
   "Lisää vaihtoehto": "Lisää vaihtoehto",
   "Luo kysely": "Luo kysely",
   "Luo uusi kysely": "Luo uusi kysely",
+  "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
   "Luo uusi monivaiheinen kysely": "Luo uusi monivaiheinen kysely",
   "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot",
   "Luotuja kyselyitä": "Luotuja kyselyitä: {{count}}",
@@ -131,6 +132,7 @@
   "Monesko valinta": "Monesko valinta",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Muokkaa kyselyä tai lisää siihen ylläpitäjä",
   "Muu": "Muu",
+  "Näe poistettavaksi asetetut kyselyt": "Näe poistettavaksi asetetut kyselyt",
   "Näytä": "Näytä",
   "Näytä vanhat kyselyt": "Näytä vanhat kyselyt",
   "Näytetäänkö vastaajalle hakupalkki?": "Näytetäänkö vastaajalle hakupalkki?",
@@ -162,6 +164,7 @@
   "Poista sarake": "Poista sarake",
   "Poista vaihe": "Poista vaihe",
   "Poista vastaus?": "Poista vastaus?",
+  "Poistettavat kyselyt": "Poistettavat kyselyt: {{count}}",
   "pp": {
     "kk": {
       "vvvv": "pp.kk.vvvv"
@@ -243,9 +246,6 @@
   "Vastauksen poistaminen": "Vastauksen poistaminen",
   "Vastauksen poistaminen epäonnistui": "Vastauksen poistaminen epäonnistui",
   "Vastaukset": "Vastaukset: {{count}}",
-  "Valitse vaihe": "Valitse vaihe",
-  "Vastauksen poistaminen": "Vastauksen poistaminen",
-  "Vastauksen poistaminen epäonnistui": "Vastauksen poistaminen epäonnistui",
   "Vastauksia": "Vastauksia",
   "Vastaus poistettu": "Vastaus poistettu",
   "Vastausaika": "Vastausaika",

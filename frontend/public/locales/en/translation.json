@@ -22,7 +22,7 @@
   "Enimmäispaikat vaaditaan": "",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "",
   "etusivu": {
-    "Vastausaika päättyy": ""
+    "Vastausaika päättyy": "Response time expires: {{timeEnd}}"
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
@@ -132,6 +132,7 @@
   "Monesko valinta": "",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "",
   "Muu": "",
+  "Näe poistettavaksi asetetut kyselyt": "See surveys to be deleted",
   "Näytä": "",
   "Näytä vanhat kyselyt": "Show old surveys",
   "Näytetäänkö vastaajalle hakupalkki?": "",
@@ -163,6 +164,7 @@
   "Poista sarake": "",
   "Poista vaihe": "",
   "Poista vastaus?": "",
+  "Poistettavat kyselyt": "Surveys to be deleted: {{count}}",
   "pp": {
     "kk": {
       "vvvv": ""
@@ -172,7 +174,7 @@
   "Priorisoitujen ryhmien vähimmäismäärä": "",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
   "Rajoita osallistumiskertoja": "",
-  "Roskakori": "",
+  "Roskakori": "Trash bin",
   "Ryhmä": "",
   "Ryhmäjako tallennettu": "",
   "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "",
@@ -180,10 +182,6 @@
   "Ryhmän minimikoko": "",
   "Ryhmän minimikoko vaaditaan": "",
   "Ryhmän minimikoon on oltava vähintään 1": "",
-  "Ryhmät luotu": "",
-  "Ryhmät, jotka pudotettiin jaosta": "",
-  "Ryhmävalintojen keskiarvo": "",
-  "Sähköposti": "",
   "Ryhmät luotu": "",
   "Ryhmät, jotka pudotettiin jaosta": "",
   "Ryhmävalintojen keskiarvo": "",
@@ -248,14 +246,6 @@
   "Vastauksen poistaminen": "",
   "Vastauksen poistaminen epäonnistui": "",
   "Vastaukset": "Answers: {{count}}",
-  "Vastauksia": "",
-  "Vastaus poistettu": "",
-  "Vastausaika": "",
-  "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
-    "": ""
-  "Valitse vaihe": "",
-  "Vastauksen poistaminen": "",
-  "Vastauksen poistaminen epäonnistui": "",
   "Vastauksia": "",
   "Vastaus poistettu": "",
   "Vastausaika": "Response time",
