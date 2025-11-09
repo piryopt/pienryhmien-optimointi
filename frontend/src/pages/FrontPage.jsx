@@ -121,7 +121,7 @@ const FrontPage = () => {
                 imgSrc={surveyIcon}
                 mainText={survey.surveyname}
                 additionalText="Vastaukset"
-                topRightText="Vastausaika päättyy:"
+                topRightText="etusivu.Vastausaika päättyy"
                 additionalVars={{
                   timeEnd: survey.time_end,
                   count: survey.response_count
