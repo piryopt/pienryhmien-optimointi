@@ -398,6 +398,22 @@ class SurveyRepository:
             print(e)
             return False
 
+    def delete_survey_permanently(self, survey_id):
+        """
+        SQL code for setting survey and all related data permanently.
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "DELETE FROM surveys WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
+
     def set_survey_deleted_false(self, survey_id):
         """
         SQL code for setting survey's deleted field false
@@ -470,22 +486,6 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return []
-
-    def delete_survey_permanently(self, survey_id):
-        """
-        SQL code for setting survey and all related data permanently.
-
-        args:
-            survey_id: The id of the survey
-        """
-        try:
-            sql = "DELETE FROM surveys WHERE id=:survey_id"
-            db.session.execute(text(sql), {"survey_id": survey_id})
-            db.session.commit()
-            return True
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return False
 
 
 survey_repository = SurveyRepository()
