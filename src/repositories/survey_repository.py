@@ -400,7 +400,7 @@ class SurveyRepository:
 
     def delete_survey_permanently(self, survey_id):
         """
-        SQL code for setting survey and all related data permanently.
+        SQL code for deleting survey and all related data permanently.
 
         args:
             survey_id: The id of the survey

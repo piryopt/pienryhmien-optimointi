@@ -22,9 +22,8 @@ const TrashTable = ({ surveys, setSurveys }) => {
       )
     ) {
       try {
-        //await surveyService.deleteSurvey(surveyId);
-        //setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
-        console.log("Deleting survey...");
+        await surveyService.deleteSurvey(surveyId);
+        setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
         showNotification(t("Kysely poistettu"), "success");
       } catch (err) {
         showNotification(t("Kyselyn poistaminen epäonnistui"), "error");

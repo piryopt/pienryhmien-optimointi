@@ -327,6 +327,15 @@ class SurveyService:
             if survey.time_end <= datetime.now() - timedelta(days=365 * 2):
                 self._survey_repository.delete_survey_permanently(survey.id)
 
+    def delete_survey_permanently(self, survey_id):
+        """
+        Deletes survey and all related data permanently.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.delete_survey_permanently(survey_id)
+
     def fetch_survey_responses(self, survey_id):
         """
         Gets a list of user_survey_rankings for the survey
@@ -494,7 +503,6 @@ class SurveyService:
         RETURNS whether updating was successful
         """
 
-        self._choices_repository.set_choices_deleted_true(survey_id)
         return self._survey_repository.set_survey_deleted_true(survey_id)
 
     def set_survey_deleted_false(self, survey_id):
