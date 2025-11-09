@@ -89,7 +89,7 @@ class SurveyService:
             return False
         return self._survey_repository.close_survey(survey_id)
 
-    def open_survey(self, survey_id, user_id):
+    def open_survey(self, survey_id, user_id, new_end_time):
         """
         Re-open the survey, so that rankings can be added
 
@@ -107,7 +107,7 @@ class SurveyService:
             return False
         if self._survey_repository.survey_name_exists(survey.surveyname, user_id):
             return False
-        return self._survey_repository.open_survey(survey_id)
+        return self._survey_repository.open_survey(survey_id, new_end_time)
 
     def get_active_surveys(self, user_id):
         """

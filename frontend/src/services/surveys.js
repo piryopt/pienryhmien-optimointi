@@ -206,15 +206,15 @@ const getStudentRankings = async (surveyId, studentEmail, stage) => {
   }
 };
 
-const openSurvey = async (surveyId) => {
+const openSurvey = async (surveyId, newEndDate, newEndTime) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.post(
       `${baseUrl}/surveys/${surveyId}/open`,
-      null,
+      { newEndDate, newEndTime },
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
           "X-CSRFToken": csrfToken
         },
         withCredentials: true

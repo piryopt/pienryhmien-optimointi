@@ -13,16 +13,24 @@ export const SurveyDialogProvider = ({ children }) => {
     title: "",
     description: "",
     confirmData: null,
-    onConfirmCallback: null
+    onConfirmCallback: null,
+    content: null
   });
 
-  const openDialog = (title, description, confirmData, onConfirm) => {
+  const openDialog = (
+    title,
+    description,
+    confirmData,
+    onConfirm,
+    content = null
+  ) => {
     setDialogState({
       open: true,
       title,
       description,
       confirmData,
-      onConfirmCallback: () => onConfirm
+      onConfirmCallback: () => onConfirm,
+      content
     });
   };
 
@@ -61,7 +69,14 @@ export const SurveyDialogProvider = ({ children }) => {
         </Modal.Header>
 
         <Modal.Body>
-          <p className="mb-3">{dialogState.description}</p>
+          {dialogState.content ? (
+            <>
+              {dialogState.content}
+              <p className="mb-3">{dialogState.description}</p>
+            </>
+          ) : (
+            <p className="mb-3">{dialogState.description}</p>
+          )}
         </Modal.Body>
 
         <Modal.Footer>

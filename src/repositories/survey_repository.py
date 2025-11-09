@@ -74,7 +74,7 @@ class SurveyRepository:
             print(e)
             return False
 
-    def open_survey(self, survey_id):
+    def open_survey(self, survey_id, new_end_time):
         """
         SQL code for opening a survey
 
@@ -82,8 +82,8 @@ class SurveyRepository:
             survey_id: The id of the survey
         """
         try:
-            sql = "UPDATE surveys SET closed = False WHERE id=:survey_id"
-            db.session.execute(text(sql), {"survey_id": survey_id})
+            sql = "UPDATE surveys SET closed = False, time_end = :new_end_time WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id, "new_end_time": new_end_time})
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718

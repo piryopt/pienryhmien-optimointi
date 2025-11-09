@@ -3,6 +3,10 @@ import { useNotification } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import surveyService from "../../services/surveys";
 import { useSurveyDialog } from "../../context/SurveyDialogContext";
+import SurveyDateOfClosing from "../create_survey_page_components/SurveyDateOfClosing";
+import { FormProvider, useForm } from "react-hook-form";
+import { format } from "date-fns";
+import { buildCreateSurveySchema } from "../../utils/validations/createSurveyValidations";
 
 const AnswersButtons = ({
   surveyClosed,
@@ -16,6 +20,12 @@ const AnswersButtons = ({
   const { openDialog } = useSurveyDialog();
   const navigate = useNavigate();
 
+  const schema = buildCreateSurveySchema(t);
+
+  const form = useForm({
+    defaultValues: { enddate: null, endtime: "00:00" }
+  });
+
   const handleOpenSurveyClick = async () => {
     openDialog(
       t("Avaa uudestaan?"),
@@ -23,13 +33,28 @@ const AnswersButtons = ({
       null,
       async () => {
         try {
-          await surveyService.openSurvey(surveyId);
+          const data = form.getValues();
+          await schema.validateAt("enddate", { enddate: data.enddate });
+          await schema.validateAt("endtime", {
+            enddate: data.enddate,
+            endtime: data.endtime
+          });
+          const newEndDate = format(data.enddate, "dd.MM.yyyy");
+          const newEndTime = data.endtime || "";
+          await surveyService.openSurvey(surveyId, newEndDate, newEndTime);
           setSurveyClosed(false);
           showNotification(t("Kysely avattu"), "success");
         } catch (err) {
+          showNotification(
+            t(`Kyselyn avaaminen epäonnistui: ${err.message}`),
+            "error"
+          );
           console.error("error opening survey", err);
         }
-      }
+      },
+      <FormProvider {...form}>
+        <SurveyDateOfClosing />
+      </FormProvider>
     );
   };
 
