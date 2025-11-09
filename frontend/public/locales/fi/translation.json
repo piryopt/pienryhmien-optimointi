@@ -1,8 +1,13 @@
 {
   "Aiemmat kyselyt": "Aiemmat kyselyt",
   "Aktiiviset kyselyt": "Aktiiviset kyselyt",
+  "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
+    "": "Anna käyttäjälle hallinnointioikeudet kyselyyn."
+  },
   "Anna palaute": "Anna palaute",
   "Anna palautetta": "Anna palautetta",
+  "Anna sähköpostiosoite": "Anna sähköpostiosoite",
+  "Antamasi sähköpostiosoite ei ole kelvollinen": "Antamasi sähköpostiosoite ei ole kelvollinen",
   "Avaa kysely uudelleen": "Avaa kysely uudelleen",
   "Avaa uudestaan?": "Avaa uudestaan?",
   "Avoimet palautteet": "Avoimet palautteet",
@@ -75,12 +80,15 @@
   "Kysely": "Kysely",
   "Kysely avattu": "Kysely avattu",
   "Kysely luotu onnistuneesti": "Kysely luotu onnistuneesti",
+  "Kysely muokattu onnistuneesti": "Kysely muokattu onnistuneesti",
   "Kysely palautettu": "Kysely palautettu",
   "Kysely poistetaan": "Kysely poistetaan",
   "Kysely poistettu": "Kysely poistettu",
   "Kysely suljettu": "Kysely suljettu",
   "Kyselyn kuvaus": "Kyselyn kuvaus",
   "Kyselyn luonti epäonnistui": "Kyselyn luonti epäonnistui",
+  "Kyselyn muokkaus": "Kyselyn muokkaus",
+  "Kyselyn muokkaus epäonnistui": "Kyselyn muokkaus epäonnistui",
   "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä": "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä",
   "Kyselyn nimi": "Kyselyn nimi",
   "Kyselyn osoite kopioitu leikepöydälle": "Kyselyn osoite kopioitu leikepöydälle",
@@ -110,12 +118,12 @@
   },
   "Lajittelun tulokset": "Lajittelun tulokset",
   "Lataus epäonnistui": "Lataus epäonnistui",
+  "Lisää käyttäjä": "Lisää käyttäjä",
   "Lisää tietokenttä": "Lisää tietokenttä",
   "Lisää vaihe": "Lisää vaihe",
   "Lisää vaihtoehto": "Lisää vaihtoehto",
   "Luo kysely": "Luo kysely",
   "Luo uusi kysely": "Luo uusi kysely",
-  "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
   "Luo uusi monivaiheinen kysely": "Luo uusi monivaiheinen kysely",
   "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot",
   "Luotuja kyselyitä": "Luotuja kyselyitä: {{count}}",
@@ -136,6 +144,7 @@
   "Pakota minimikoko": "Pakota minimikoko",
   "Palaa kyselylistaan": "Palaa kyselylistaan",
   "Palaa listaan": "Palaa listaan",
+  "Palaa takaisin": "Palaa takaisin",
   "Palauta kysely": "Palauta kysely",
   "Palaute": "Palaute",
   "Palaute lähetetty": "Palaute lähetetty",
@@ -174,6 +183,7 @@
   "Ryhmät, jotka pudotettiin jaosta": "Ryhmät, jotka pudotettiin jaosta",
   "Ryhmävalintojen keskiarvo": "Ryhmävalintojen keskiarvo",
   "Sähköposti": "Sähköposti",
+  "sähköpostiosoite": "sähköpostiosoite",
   "Salasana": "Salasana",
   "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista": {
     "": "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista."
@@ -196,6 +206,9 @@
   "Suljetut palautteet": "Suljetut palautteet",
   "Sulkeminen epäonnistui": "Sulkeminen epäonnistui",
   "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)",
+  "Syötä käyttäjän sähköpostiosoite": {
+    "": "Syötä käyttäjän sähköpostiosoite."
+  },
   "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa         mielekkyysjärjestykseen": {
     " Anna kullekkin ryhmälle myös sen enimmäiskoko": {
       "         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa": {
@@ -210,6 +223,7 @@
       "": "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen. Kuvausteksti näytetään vastaajalle kyselyn yhteydessä."
     }
   },
+  "Tallenna muutokset": "Tallenna muutokset",
   "Tallenna tulokset": "Tallenna tulokset",
   "Tarkastele": "Tarkastele",
   "Tarkastele tuloksia": "Tarkastele tuloksia",
@@ -229,6 +243,9 @@
   "Vastauksen poistaminen": "Vastauksen poistaminen",
   "Vastauksen poistaminen epäonnistui": "Vastauksen poistaminen epäonnistui",
   "Vastaukset": "Vastaukset: {{count}}",
+  "Valitse vaihe": "Valitse vaihe",
+  "Vastauksen poistaminen": "Vastauksen poistaminen",
+  "Vastauksen poistaminen epäonnistui": "Vastauksen poistaminen epäonnistui",
   "Vastauksia": "Vastauksia",
   "Vastaus poistettu": "Vastaus poistettu",
   "Vastausaika": "Vastausaika",
@@ -238,6 +255,7 @@
   "Vastausaika päättyy": "Vastausaika päättyy",
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Vastausajan päättyminen ei voi olla menneisyydessä",
   "Vie tulokset Excel-taulukkoon": "Vie tulokset Excel-taulukkoon",
+  "Voit muokata kyselyn kuvausta": "Voit muokata kyselyn kuvausta",
   "Yhteys palvelimeen epäonnistui": "Yhteys palvelimeen epäonnistui",
   "yli 5 merkkiä pitkiä": "yli 5 merkkiä pitkiä"
 }

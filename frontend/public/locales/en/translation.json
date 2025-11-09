@@ -1,8 +1,13 @@
 {
   "Aiemmat kyselyt": "",
   "Aktiiviset kyselyt": "Active surveys",
+  "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
+    "": "Give user administrative rights to the survey"
+  },
   "Anna palaute": "",
   "Anna palautetta": "Give feedback",
+  "Anna sähköpostiosoite": "Email is missing",
+  "Antamasi sähköpostiosoite ei ole kelvollinen": "The provided email address is not valid",
   "Avaa kysely uudelleen": "",
   "Avaa uudestaan?": "",
   "Avoimet palautteet": "",
@@ -59,7 +64,7 @@
   },
   "Käynnissä olevat kyselyt": "Ongoing surveys",
   "Käyttäjätunnus": "Username",
-  "Kello": "",
+  "Kello": "Time",
   "Kentän tulee olla kokonaisluku": "",
   "Kentän tulee olla vähintään 0": "",
   "Kielletyt": "",
@@ -71,18 +76,21 @@
   "kokonaislukuja": "",
   "Kopioi kysely": "",
   "Kopioi kyselyn osoite leikepöydälle": "",
-  "Kyllä": "",
+  "Kyllä": "Yes",
   "Kysely": "",
   "Kysely avattu": "",
   "Kysely luotu onnistuneesti": "",
+  "Kysely muokattu onnistuneesti": "Survey updated successfully",
   "Kysely palautettu": "",
   "Kysely poistetaan": "",
   "Kysely poistettu": "",
   "Kysely suljettu": "",
-  "Kyselyn kuvaus": "",
+  "Kyselyn kuvaus": "Survey description",
   "Kyselyn luonti epäonnistui": "",
-  "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä": "",
-  "Kyselyn nimi": "",
+  "Kyselyn muokkaus": "Survey editing",
+  "Kyselyn muokkaus epäonnistui": "Error occurred when updating survey!",
+  "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä": "The name of the survey must be at least 5 characters long.",
+  "Kyselyn nimi": "The name of the survey",
   "Kyselyn osoite kopioitu leikepöydälle": "",
   "Kyselyn palauttaminen epäonnistui": "",
   "Kyselyn poistaminen epäonnistui": "",
@@ -110,6 +118,7 @@
   },
   "Lajittelun tulokset": "",
   "Lataus epäonnistui": "",
+  "Lisää käyttäjä": "Add user",
   "Lisää tietokenttä": "",
   "Lisää vaihe": "",
   "Lisää vaihtoehto": "",
@@ -136,6 +145,7 @@
   "Pakota minimikoko": "",
   "Palaa kyselylistaan": "",
   "Palaa listaan": "",
+  "Palaa takaisin": "Return",
   "Palauta kysely": "",
   "Palaute": "Feedback",
   "Palaute lähetetty": "",
@@ -174,6 +184,11 @@
   "Ryhmät, jotka pudotettiin jaosta": "",
   "Ryhmävalintojen keskiarvo": "",
   "Sähköposti": "",
+  "Ryhmät luotu": "",
+  "Ryhmät, jotka pudotettiin jaosta": "",
+  "Ryhmävalintojen keskiarvo": "",
+  "Sähköposti": "Email",
+  "sähköpostiosoite": "Email address",
   "Salasana": "Password",
   "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista": {
     "": ""
@@ -196,6 +211,9 @@
   "Suljetut palautteet": "",
   "Sulkeminen epäonnistui": "",
   "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "",
+  "Syötä käyttäjän sähköpostiosoite": {
+    "": "Give user email"
+  },
   "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa         mielekkyysjärjestykseen": {
     " Anna kullekkin ryhmälle myös sen enimmäiskoko": {
       "         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa": {
@@ -210,6 +228,7 @@
       "": ""
     }
   },
+  "Tallenna muutokset": "Save changes",
   "Tallenna tulokset": "",
   "Tarkastele": "",
   "Tarkastele tuloksia": "",
@@ -234,10 +253,19 @@
   "Vastausaika": "",
   "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
     "": ""
+  "Valitse vaihe": "",
+  "Vastauksen poistaminen": "",
+  "Vastauksen poistaminen epäonnistui": "",
+  "Vastauksia": "",
+  "Vastaus poistettu": "",
+  "Vastausaika": "Response time",
+  "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
+    "": "Response time defines the period during which it is possible to   respond to the survey."
   },
   "Vastausaika päättyy": "Response time expires",
   "Vastausajan päättyminen ei voi olla menneisyydessä": "",
   "Vie tulokset Excel-taulukkoon": "",
+  "Voit muokata kyselyn kuvausta": "You can edit the survey description.",
   "Yhteys palvelimeen epäonnistui": "",
   "yli 5 merkkiä pitkiä": ""
 }
