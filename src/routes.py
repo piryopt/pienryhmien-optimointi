@@ -992,7 +992,7 @@ def survey_answers(survey_id):
         response = {"message": "Only owners can view survey answers"}
         return jsonify(response), 403
 
-    survey_name = survey_service.get_survey_name(survey_id)
+    survey = survey_service.get_survey(survey_id)
     survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
@@ -1000,18 +1000,17 @@ def survey_answers(survey_id):
 
     survey_answers_amount = len(survey_answers)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
-    closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
 
     return jsonify(
         {
-            "surveyName": survey_name,
+            "surveyName": survey.surveyname,
             "surveyAnswers": choices_data,
             "surveyAnswersAmount": survey_answers_amount,
             "availableSpaces": available_spaces,
             "surveyId": survey_id,
-            "closed": closed,
-            "answersSaved": answers_saved,
+            "closed": survey.closed,
+            "answersSaved": answers_saved
         }
     )
 
@@ -1159,7 +1158,9 @@ def open_survey(survey_id):
     Open survey back up so that students can submit answers
     """
     user_id = session.get("user_id", 0)
-    opened = survey_service.open_survey(survey_id, user_id)
+    data = request.get_json()
+    new_end_date = f"{date_to_sql_valid(data["newEndDate"])} {data["newEndTime"]}"
+    opened = survey_service.open_survey(survey_id, user_id, new_end_date)
     if not opened:
         response = {"status": "0", "msg": "Opening survey failed"}
         return jsonify(response)
