@@ -21,6 +21,7 @@ import CSVInstructionsPage from "./components/create_survey_page_components/CSVI
 import MultiStageAnswerPage from "./pages/MultiStageAnswerPage";
 import SurveyMultistageAnswersPage from "./pages/SurveyMultistageAnswersPage";
 import TrashPage from "./pages/TrashPage";
+import EditSurveyPage from "./pages/EditSurveypage";
 
 const App = () => {
   return (
@@ -157,6 +158,14 @@ const App = () => {
                 <RequireAdmin>
                   <AdminFeedbackDetail />
                 </RequireAdmin>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="surveys/:id/edit" 
+            element={
+              <RequireAuth>
+                <EditSurveyPage />
               </RequireAuth>
             }
           />

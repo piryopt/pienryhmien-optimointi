@@ -859,6 +859,28 @@ def edit_survey_post(survey_id):
     return jsonify(response)
 
 
+@bp.route("/api/surveys/<string:survey_id>", methods=["PATCH"])
+def api_edit_survey_post(survey_id):
+    """
+    PATCH method for editing survey.
+    """
+    if not check_if_owner(survey_id):
+        return redirect("/")
+
+    edit_dict = request.get_json()
+    validation = survey_service.validate_created_survey(edit_dict, edited=True)
+    if not validation["success"]:
+        return jsonify(validation["message"]), 400
+
+    user_id = session.get("user_id", 0)
+    (success, message) = survey_service.save_survey_edit(survey_id, edit_dict, user_id)
+    if not success:
+        response = {"status": "0", "msg": message}
+        return jsonify(response)
+    response = {"status": "1", "msg": message}
+    return jsonify(response)
+
+
 @bp.route("/api/surveys/<string:survey_id>/delete")
 def delete_survey(survey_id):
     if not check_if_owner(survey_id):
@@ -890,6 +912,19 @@ def add_owner(survey_id, email):
         return jsonify(response)
     response = {"status": "1", "msg": message}
     return jsonify(response)
+
+@bp.route("/api/surveys/<string:survey_id>/add_owner", methods=["POST"])
+def api_add_owner(survey_id):
+    email = request.json.get("email")
+    if not check_if_owner(survey_id):
+        return redirect("/")
+    (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
+    if not success:
+        response = {"status": "0", "msg": message}
+        return jsonify(response)
+    response = {"status": "1", "msg": message}
+    return jsonify(response)
+
 
 
 @bp.route("/surveys/<string:survey_id>/group_sizes", methods=["GET"])
