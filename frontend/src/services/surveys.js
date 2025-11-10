@@ -57,6 +57,46 @@ const getFrontPageData = async () => {
   }
 };
 
+const trashSurvey = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.patch(
+      `${baseUrl}/surveys/${surveyId}/trash`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const returnSurvey = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.patch(
+      `${baseUrl}/surveys/${surveyId}/return`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const deleteSurvey = async (surveyId) => {
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
@@ -331,6 +371,8 @@ export default {
   submitSurveyAnswer: submitSurveyAnswer,
   deleteSurveyAnswer: deleteSurveyAnswer,
   deleteSurveyAnswerByEmail: deleteSurveyAnswerByEmail,
+  trashSurvey: trashSurvey,
+  returnSurvey: returnSurvey,
   deleteSurvey: deleteSurvey,
   getSurveyAnswersData: getSurveyAnswersData,
   getStudentRankings: getStudentRankings,

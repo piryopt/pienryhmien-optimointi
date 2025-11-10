@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_babel import gettext
 from flask import session
 from src.repositories.survey_repository import survey_repository as default_survey_repository
@@ -14,6 +14,7 @@ from src.tools.constants import SURVEY_FIELDS
 
 class SurveyService:
     SURVEY_FIELDS = SURVEY_FIELDS
+
     def __init__(
         self,
         survey_repositroy=default_survey_repository,
@@ -316,6 +317,26 @@ class SurveyService:
             if closing_time:
                 self._survey_repository.close_survey(survey_id)
 
+    def check_for_surveys_to_delete(self):
+        """
+        Gets a list of all surveys and deletes them and their related data if end time was over two years ago.
+        """
+
+        surveys = self._survey_repository.get_all_active_surveys()
+
+        for survey in surveys:
+            if survey.time_end <= datetime.now() - timedelta(days=365 * 2):
+                self._survey_repository.delete_survey_permanently(survey.id)
+
+    def delete_survey_permanently(self, survey_id):
+        """
+        Deletes survey and all related data permanently.
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.delete_survey_permanently(survey_id)
+
     def fetch_survey_responses(self, survey_id):
         """
         Gets a list of user_survey_rankings for the survey
@@ -324,7 +345,6 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
-        
 
     def get_choice_popularities(self, survey_id: str):
         """
@@ -427,9 +447,7 @@ class SurveyService:
         language = session.get("language", "fi")
         for choice in choices:
             success = self._choices_repository.edit_choice_group_size(
-                survey_id,
-                choice[SurveyService.SURVEY_FIELDS["name"][language]],
-                choice[SurveyService.SURVEY_FIELDS["spaces"][language]]
+                survey_id, choice[SurveyService.SURVEY_FIELDS["name"][language]], choice[SurveyService.SURVEY_FIELDS["spaces"][language]]
             )
             if not success:
                 if count > 0:
@@ -516,10 +534,18 @@ class SurveyService:
 
     def set_survey_deleted_true(self, survey_id):
         """
-        Sets survey tables column deleted to true, doesn't actually delete the survey
+        Sets survey and choices tables column deleted to true, doesn't actually delete the survey or choices
         RETURNS whether updating was successful
         """
+
         return self._survey_repository.set_survey_deleted_true(survey_id)
+
+    def set_survey_deleted_false(self, survey_id):
+        """
+        Sets survey tables column deleted to false
+        RETURNS whether updating was successful
+        """
+        return self._survey_repository.set_survey_deleted_false(survey_id)
 
     def create_new_multiphase_survey(self, **kwargs):
         if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):

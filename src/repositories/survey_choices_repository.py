@@ -123,6 +123,22 @@ class SurveyChoicesRepository:
             print(e)
             return []
 
+    def set_choices_deleted_true(self, survey_id):
+        """
+        SQL code for setting survey choices deleted field true
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "UPDATE survey_choices SET deleted = True WHERE survey_id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
     def create_new_multistage_choice(self, **kwargs):
         """
         Creates a new multistage survey choice
@@ -175,7 +191,7 @@ class SurveyChoicesRepository:
         """
         try:
             sql = """
-                SELECT 
+                SELECT
                     sc.id AS choice_id,
                     sc.name AS choice_name,
                     sc.max_spaces,
@@ -189,9 +205,9 @@ class SurveyChoicesRepository:
                     ci.info_value,
                     ci.hidden
                 FROM survey_choices sc
-                LEFT JOIN survey_stages ss 
+                LEFT JOIN survey_stages ss
                     ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
-                LEFT JOIN choice_infos ci 
+                LEFT JOIN choice_infos ci
                     ON ci.choice_id = sc.id
                 WHERE sc.survey_id = :survey_id
                 ORDER BY ss.order_number, ss.stage NULLS LAST, sc.id;
@@ -208,10 +224,10 @@ class SurveyChoicesRepository:
         """
         try:
             sql = """
-                SELECT 
+                SELECT
                 SUM(sc.max_spaces)
                 FROM survey_choices sc
-                LEFT JOIN survey_stages ss 
+                LEFT JOIN survey_stages ss
                     ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
                 WHERE sc.survey_id = :survey_id AND ss.stage = :stage
             """
@@ -220,5 +236,21 @@ class SurveyChoicesRepository:
         except Exception as e:
             print(e)
             return None
+    def set_choices_deleted_true(self, survey_id):
+        """
+        SQL code for setting survey choices deleted field true
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "UPDATE survey_choices SET deleted = True WHERE survey_id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
 
 survey_choices_repository = SurveyChoicesRepository()

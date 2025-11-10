@@ -22,9 +22,8 @@ const TrashTable = ({ surveys, setSurveys }) => {
       )
     ) {
       try {
-        //await surveyService.deleteSurvey(surveyId);
-        //setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
-        console.log("Deleting survey...");
+        await surveyService.deleteSurvey(surveyId);
+        setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
         showNotification(t("Kysely poistettu"), "success");
       } catch (err) {
         showNotification(t("Kyselyn poistaminen epäonnistui"), "error");
@@ -36,7 +35,8 @@ const TrashTable = ({ surveys, setSurveys }) => {
   const handleRestoreClick = async (surveyId) => {
     if (window.confirm(t("Haluatko palauttaa kyselyn roskakorista?"))) {
       try {
-        console.log("Returning survey...");
+        await surveyService.returnSurvey(surveyId)
+        setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
         showNotification(t("Kysely palautettu"), "success");
       } catch (err) {
         showNotification(t("Kyselyn palauttaminen epäonnistui"), "error");

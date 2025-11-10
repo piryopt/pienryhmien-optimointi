@@ -23,13 +23,13 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 
 CREATE TABLE survey_owners (
 	id SERIAL PRIMARY KEY,
-	survey_id VARCHAR(10) REFERENCES surveys,
+	survey_id VARCHAR(10) REFERENCES surveys ON DELETE CASCADE,
 	user_id INTEGER REFERENCES users
 );
 
 CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
 	id SERIAL PRIMARY KEY,
-	survey_id VARCHAR(10) REFERENCES surveys,
+	survey_id VARCHAR(10) REFERENCES surveys ON DELETE CASCADE,
 	name TEXT,
 	max_spaces INTEGER,
 	deleted BOOLEAN,
@@ -48,7 +48,7 @@ CREATE TABLE survey_stages (
 
 CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices
 	id SERIAL PRIMARY KEY,
-	choice_id INTEGER REFERENCES survey_choices,
+	choice_id INTEGER REFERENCES survey_choices ON DELETE CASCADE,
 	info_key TEXT,
 	info_value TEXT,
 	hidden BOOLEAN
@@ -57,7 +57,7 @@ CREATE TABLE choice_infos ( -- dynamic amount of additional infos to choices
 CREATE TABLE user_survey_rankings (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users,
-	survey_id VARCHAR(10) REFERENCES surveys,
+	survey_id VARCHAR(10) REFERENCES surveys ON DELETE CASCADE,
 	ranking TEXT, -- e.g 1,2,5,3,4, the id's of survey_choices
 	rejections TEXT, -- same format as ranking
 	reason TEXT,
@@ -69,8 +69,8 @@ CREATE TABLE user_survey_rankings (
 CREATE TABLE final_group ( -- lopullinen sijoitus
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users,
-	survey_id VARCHAR(10) REFERENCES surveys,
-	choice_id INTEGER REFERENCES survey_choices
+	survey_id VARCHAR(10) REFERENCES surveys ON DELETE CASCADE,
+	choice_id INTEGER REFERENCES survey_choices ON DELETE CASCADE
 );
 
 CREATE TABLE feedback (
