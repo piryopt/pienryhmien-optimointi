@@ -3,7 +3,7 @@ import { baseUrl } from "../utils/constants"
 
 const fetchAnalytics = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/admintools/analytics`, {
+    const response = await axios.get(`${baseUrl}/admintools/analytics`, {
       withCredentials: true
     })
     const data = response?.data || {}
@@ -22,7 +22,7 @@ const fetchAnalytics = async () => {
 
 const fetchAdminSurveys = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/admintools/surveys`, {
+    const response = await axios.get(`${baseUrl}/admintools/surveys`, {
       withCredentials: true
     })
     const data = response?.data || {}
