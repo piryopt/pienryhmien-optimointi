@@ -2,6 +2,7 @@ import hyLogo from "/images/hy_logo.svg";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
 
 const Navbar = () => {
@@ -40,15 +41,15 @@ const Navbar = () => {
         </a>
         {isAdmin && (
           <div className="collapse navbar-collapse" id="navbarNav">
-            <a className="nav-link" href="#">
+            <Link to="/admintools/analytics" style={{ marginRight: 10 }}>
               <small>{t("Tilastot")}</small>
-            </a>
-            <a className="nav-link" href="#">
+            </Link>
+            <Link to="/admintools/feedback" style={{ marginRight: 10 }}>
               <small>{t("Palaute")}</small>
-            </a>
-            <a className="nav-link" href="#">
+            </Link>
+            <Link to="/admintools/surveys" style={{ marginRight: 10 }}>
               <small>{t("Aktiiviset kyselyt")}</small>
-            </a>
+            </Link>
           </div>
         )}
 
