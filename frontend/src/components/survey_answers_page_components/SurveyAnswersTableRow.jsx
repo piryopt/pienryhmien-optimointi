@@ -5,21 +5,34 @@ import menuWhite from "/images/menu_white_36dp.svg";
 import deleteWhite from "/images/delete_white_36dp.svg";
 import UserRankings from "../UserRankings";
 
-const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
+const SurveyAnswersTableRow = ({
+  answer,
+  handleAnswerDelete,
+  surveyId,
+  stage = null
+}) => {
   const [rankingsVisible, setRankingsVisible] = useState(false);
   const [rankings, setRankings] = useState([]);
   const [rejections, setRejections] = useState([]);
+  const [notAvailable, setNotAvailable] = useState(false);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    setRankingsVisible(false);
+    setNotAvailable(false);
+  }, [stage]);
 
   const handleRankingClick = async () => {
     try {
       const response = await surveyService.getStudentRankings(
         surveyId,
-        answer.email
+        answer.email,
+        stage
       );
       setRankings(response.choices);
       setRejections(response.rejections);
       setRankingsVisible(!rankingsVisible);
+      setNotAvailable(response.notAvailable || false);
     } catch (err) {
       console.error("Error showing rankings", err);
     }
@@ -40,7 +53,11 @@ const SurveyAnswersTableRow = ({ answer, handleAnswerDelete, surveyId }) => {
           &nbsp;{rankingsVisible ? t("Piilota") : t("Näytä")}
         </span>
         {rankingsVisible && (
-          <UserRankings rankings={rankings} rejections={rejections} />
+          <UserRankings
+            rankings={rankings}
+            rejections={rejections}
+            notAvailable={notAvailable}
+          />
         )}
       </td>
       <td>

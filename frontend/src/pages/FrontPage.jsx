@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import surveyService from "../services/surveys.js";
 import listIcon from "/images/list_white_36dp.svg";
 import addIcon from "/images/note_add_white_36dp.svg";
 import multiAddIcon from "/images/note_stack_add_36dp.svg";
 import surveyIcon from "/images/assignment_white_36dp.svg";
+import trashIcon from "/images/delete_36dp.svg";
 import { useAuth } from "../context/AuthProvider"
 
 const FrontPageButton = ({
@@ -50,6 +51,7 @@ const FrontPageButton = ({
 
 const FrontPage = () => {
   const [createdSurveys, setCreatedSurveys] = useState(0);
+  const [trashCount, setTrashCount] = useState(0);
   const [activeSurveys, setActiveSurveys] = useState([]);
   const { t } = useTranslation();
   const { user, loading } = useAuth()
@@ -61,6 +63,7 @@ const FrontPage = () => {
         const responseData = await surveyService.getFrontPageData();
         setCreatedSurveys(responseData.createdSurveys);
         setActiveSurveys(responseData.activeSurveys);
+        setTrashCount(responseData.trashCount);
       } catch (err) {
         console.error("Error fetching data", err);
       }
@@ -95,6 +98,15 @@ const FrontPage = () => {
             additionalText="Luotuja kyselyitä"
             additionalVars={{ count: createdSurveys }}
           />
+          <br></br>
+          <FrontPageButton
+            path="/trash"
+            imgSrc={trashIcon}
+            mainText="Roskakori"
+            additionalText="Näe poistettavaksi asetetut kyselyt"
+            topRightText="Poistettavat kyselyt"
+            additionalVars={{ count: trashCount }}
+          />
           {/* Admin-only link */}
           {isAdmin && (
             <>
@@ -116,11 +128,15 @@ const FrontPage = () => {
             <div key={survey.id} className="mb-4">
               <FrontPageButton
                 key={survey.id}
-                path={`surveys/${survey.id}`}
+                path={
+                  survey.is_multistage
+                    ? `surveys/multistage/${survey.id}`
+                    : `surveys/${survey.id}`
+                }
                 imgSrc={surveyIcon}
                 mainText={survey.surveyname}
                 additionalText="Vastaukset"
-                topRightText="Vastausaika päättyy:"
+                topRightText="etusivu.Vastausaika päättyy"
                 additionalVars={{
                   timeEnd: survey.time_end,
                   count: survey.response_count

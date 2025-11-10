@@ -1,0 +1,83 @@
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import TrashMoreInfo from "./TrashMoreInfo";
+import menuIcon from "/images/menu_white_36dp.svg";
+import insertDriveFileIcon from "/images/insert_drive_file_white_36dp.svg";
+import insertPageBreakIcon from "/images/insert_page_break_white_36dp.svg";
+
+const TrashTableRow = ({ survey, handleDeleteClick, handleRestoreClick }) => {
+  const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
+  const { t } = useTranslation();
+
+  if (survey.id === "separatingRow") {
+    return (
+      <tr>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+      </tr>
+    );
+  }
+  return (
+    <tr>
+      <td>
+        <img
+          src={survey.closed ? insertPageBreakIcon : insertDriveFileIcon}
+          alt=""
+          className="d-inline-block align-text-top"
+          width="20"
+          height="20"
+        />
+        <Link
+          className="surveys_link"
+          to={
+            survey.is_multistage
+              ? `/surveys/multistage/${survey.id}`
+              : `/surveys/${survey.id}`
+          }
+        >
+          &nbsp;
+          {survey.surveyname}
+        </Link>
+      </td>
+      <td>
+        <p style={{ color: survey.closed ? "orangered" : "green" }}>
+          {survey.closed ? t("Suljettu") : t("Avoin")}
+        </p>
+      </td>
+      <td>
+        <p style={{ color: survey.results_saved && "green" }}>
+          {survey.results_saved ? t("Kyllä") : t("Ei")}
+        </p>
+      </td>
+      <td>
+        <div onClick={() => setMoreInfoVisible(!moreInfoVisible)}>
+          <label style={{ cursor: "pointer" }} className="surveys_link">
+            <img
+              src={menuIcon}
+              alt=""
+              className="d-inline-block align-text-top"
+              width="20"
+              height="20"
+            />
+            &nbsp;
+            {moreInfoVisible ? t("Piilota") : t("Näytä")}
+          </label>
+        </div>
+        {moreInfoVisible && (
+          <TrashMoreInfo
+            survey={survey}
+            handleDeleteClick={handleDeleteClick}
+            handleRestoreClick={handleRestoreClick}
+          />
+        )}
+      </td>
+      <td>00.00.0000 00:00</td>
+    </tr>
+  );
+};
+
+export default TrashTableRow;

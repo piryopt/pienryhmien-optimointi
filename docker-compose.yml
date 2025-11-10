@@ -79,11 +79,9 @@ services:
       - ./frontend:/usr/src/app
       - ./src/static/react:/usr/src/app/../src/static/react
       - /usr/src/app/node_modules
-    ports:
-      - "5173:5173"
     environment:
       - CHOKIDAR_USEPOLLING=true
-    command: npm run build && npm run dev -- --host
+    command: npm run build
     depends_on:
       - web
       - db

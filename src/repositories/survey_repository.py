@@ -74,7 +74,7 @@ class SurveyRepository:
             print(e)
             return False
 
-    def open_survey(self, survey_id):
+    def open_survey(self, survey_id, new_end_time):
         """
         SQL code for opening a survey
 
@@ -82,8 +82,8 @@ class SurveyRepository:
             survey_id: The id of the survey
         """
         try:
-            sql = "UPDATE surveys SET closed = False WHERE id=:survey_id"
-            db.session.execute(text(sql), {"survey_id": survey_id})
+            sql = "UPDATE surveys SET closed = False, time_end = :new_end_time WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id, "new_end_time": new_end_time})
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
@@ -98,7 +98,12 @@ class SurveyRepository:
             user_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.time_end FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False)"
+            sql = """
+                SELECT s.id, s.surveyname, s.time_end,
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
+                    AS is_multistage FROM surveys s, survey_owners so 
+                WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False)
+                """
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
             return surveys
@@ -114,7 +119,11 @@ class SurveyRepository:
             user_id: The id of the user
         """
         try:
-            sql = """SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count FROM surveys s 
+            sql = """
+            SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count,
+            EXISTS (
+                SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id
+            ) AS is_multistage FROM surveys s 
             JOIN survey_owners so ON s.id = so.survey_id 
             LEFT JOIN user_survey_rankings us ON s.id = us.survey_id 
             WHERE (so.user_id=:user_id AND closed=False AND s.id=so.survey_id AND s.deleted=False) 
@@ -136,7 +145,13 @@ class SurveyRepository:
             user_id: The id of the user
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND s.closed=True AND so.survey_id = s.id AND s.deleted=False) ORDER BY s.time_end DESC"
+            sql = """
+                SELECT s.id, s.surveyname, s.closed, s.results_saved, s.time_end,
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
+                    AS is_multistage FROM surveys s, survey_owners so 
+                WHERE (so.user_id=:user_id AND s.closed=True AND so.survey_id = s.id AND s.deleted=False) 
+                ORDER BY s.time_end DESC
+                """
             result = db.session.execute(text(sql), {"user_id": user_id})
             surveys = result.fetchall()
             return surveys
@@ -160,7 +175,7 @@ class SurveyRepository:
             print(e)
             return False
 
-    def create_new_survey(self, surveyname, min_choices, description, enddate, allowed_denied_choices=0, allow_search_visibility=True):
+    def create_new_survey(self, surveyname, min_choices, description, enddate, allowed_denied_choices=0, allow_search_visibility=True, allow_absences=False, user_id=None):
         """
         Creates a new survey, updates just surveys table
         RETURNS created survey's id
@@ -171,8 +186,8 @@ class SurveyRepository:
                 id = generate_unique_id(10)
 
             sql = (
-                "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility, deleted)"
-                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, False) RETURNING id"
+                "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility, allow_absences, deleted)"
+                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, :a_a, False) RETURNING id"
             )
 
             result = db.session.execute(
@@ -187,6 +202,7 @@ class SurveyRepository:
                     "t_e": enddate,
                     "a_d_c": allowed_denied_choices,
                     "a_s_v": allow_search_visibility,
+                    "a_a": allow_absences,
                 },
             )
             db.session.commit()
@@ -382,5 +398,61 @@ class SurveyRepository:
             print(e)
             return False
 
+    def get_all_survey_stages(self, survey_id):
+        """
+        SQL code for getting all survey stages.
+        """
+        try:
+            sql = """
+                    SELECT DISTINCT stage, order_number 
+                    FROM survey_stages 
+                    WHERE survey_id=:survey_id 
+                    ORDER BY order_number;
+                """
+            result = db.session.execute(text(sql), {"survey_id": survey_id})
+            stages = result.fetchall()
+            return stages
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
+
+    def get_trash_count(self, user_id):
+        """
+        SQL code for getting the number of surveys in trash bin the owner has access to
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = "SELECT COUNT(s.id) FROM surveys s, survey_owners so WHERE (so.user_id=:user_id AND so.survey_id=s.id AND s.deleted=True)"
+            result = db.session.execute(text(sql), {"user_id": user_id})
+            count = result.fetchone()
+            if not count:
+                return False
+            return count.count
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
+    def get_deleted_surveys(self, user_id):
+        """
+        SQL code getting the list of all set to be deleted surveys for which the user has access to.
+
+        args:
+            user_id: The id of the user
+        """
+        try:
+            sql = """
+                SELECT s.id, s.surveyname, s.time_end,
+                EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id) 
+                    AS is_multistage FROM surveys s, survey_owners so 
+                WHERE (so.user_id=:user_id AND s.id=so.survey_id AND s.deleted=True)
+                """
+            result = db.session.execute(text(sql), {"user_id": user_id})
+            surveys = result.fetchall()
+            return surveys
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
 
 survey_repository = SurveyRepository()

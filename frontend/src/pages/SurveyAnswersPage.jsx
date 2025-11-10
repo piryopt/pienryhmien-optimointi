@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import assignmentWhite from "/images/assignment_white_36dp.svg";
 import SurveyAnswersTable from "../components/survey_answers_page_components/SurveyAnswersTable";
-import { useNotification } from "../context/NotificationContext";
+import SurveyAnswersInfo from "../components/survey_answers_page_components/SurveyAnswersInfo";
+import AnswersButtons from "../components/survey_answers_page_components/AnswersButtons";
 
 const SurveyAnswersPage = () => {
   const [answers, setAnswers] = useState([]);
@@ -17,7 +18,6 @@ const SurveyAnswersPage = () => {
 
   const { id } = useParams();
   const { t } = useTranslation();
-  const { showNotification } = useNotification();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,43 +52,6 @@ const SurveyAnswersPage = () => {
     setFilteredAnswers(updatedAnswers);
   };
 
-  const handleOpenSurveyClick = async () => {
-    if (window.confirm(t("Haluatko varmasti avata kyselyn uudestaan?"))) {
-      try {
-        await surveyService.openSurvey(id);
-        setSurveyClosed(false);
-        showNotification(t("Kysely avattu"), "success");
-      } catch (err) {
-        console.error("error opening survey", err);
-      }
-    }
-  };
-
-  const handleCloseSurveyClick = async () => {
-    if (window.confirm(t("Haluatko varmasti sulkea kyselyn?"))) {
-      try {
-        await surveyService.closeSurvey(id);
-        setSurveyClosed(true);
-        showNotification(t("Kysely suljettu"), "success");
-      } catch (err) {
-        console.error("error opening survey", err);
-      }
-    }
-  };
-
-  const handleAssignGroups = () => {
-    if (answers.length === 0) {
-      showNotification(
-        t("Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia"),
-        "error"
-      );
-      return;
-    } else if (answers.length > surveyData.availableSpaces) {
-      navigate(`/surveys/${id}/group_sizes`);
-    }
-    navigate(`/surveys/${id}/results`);
-  };
-
   if (loading) return null;
 
   return (
@@ -98,48 +61,17 @@ const SurveyAnswersPage = () => {
         <img src={assignmentWhite} alt="" width={34} height={30} />
         &nbsp;{surveyData.surveyName}
       </h5>
-      <br />
-      <i>
-        {t("Vastauksia")}: {surveyAnswersAmount}
-      </i>
-      <br />
-      <i>
-        {t("Jaettavia paikkoja")}: {surveyData.availableSpaces}
-      </i>
-      <br />
-      <br />
-      <Link to="/surveys" className="surveys_link" style={{ float: "right" }}>
-        {t("Palaa kyselylistaan")}
-      </Link>
-      <br />
-      <br />
-      {surveyClosed ? (
-        <>
-          <button
-            className="btn btn-outline-warning"
-            style={{ float: "right" }}
-            onClick={handleOpenSurveyClick}
-          >
-            {t("Avaa kysely uudelleen")}
-          </button>
-          <button
-            className="btn btn-outline-primary"
-            onClick={handleAssignGroups}
-          >
-            {t("Jaa ryhmiin")}
-          </button>
-        </>
-      ) : (
-        <button
-          className="btn btn-outline-warning"
-          style={{ float: "right" }}
-          onClick={handleCloseSurveyClick}
-        >
-          {t("Sulje kysely")}
-        </button>
-      )}
-      <br />
-      <br />
+      <SurveyAnswersInfo
+        answersAmount={surveyAnswersAmount}
+        availableSpaces={surveyData.availableSpaces}
+      />
+      <AnswersButtons
+        surveyClosed={surveyClosed}
+        setSurveyClosed={setSurveyClosed}
+        surveyData={surveyData}
+        answers={answers}
+        surveyId={id}
+      />
       <p>
         <i style={{ whiteSpace: "pre-line" }}>
           {t(`Hae yksittäistä vastausta kirjoittamalla tähän kenttään

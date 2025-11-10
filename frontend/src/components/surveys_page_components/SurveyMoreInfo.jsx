@@ -13,13 +13,24 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
 
   const handleCopyUrlClick = () => {
     const currUrl = window.location.href;
-    navigator.clipboard.writeText(`${currUrl}/${survey.id}`);
+    navigator.clipboard.writeText(
+      survey.is_multistage
+        ? `${currUrl}/multistage/${survey.id}`
+        : `${currUrl}/${survey.id}`
+    );
     showNotification(t("Kyselyn osoite kopioitu leikepöydälle"), "success");
   };
 
   return (
     <div>
-      <Link className="surveys_link" to={`/surveys/${survey.id}/answers`}>
+      <Link
+        className="surveys_link"
+        to={
+          survey.is_multistage
+            ? `/surveys/multistage/${survey.id}/answers`
+            : `/surveys/${survey.id}/answers`
+        }
+      >
         <img
           src={manageSearchWhite}
           alt=""

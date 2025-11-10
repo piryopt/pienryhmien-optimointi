@@ -17,7 +17,7 @@ from src.services.survey_owners_service import survey_owners_service
 from src.services.feedback_service import feedback_service
 from src.tools.survey_result_helper import convert_choices_groups, convert_users_students, convert_date, convert_time, hungarian_results
 from src.tools.rankings_converter import convert_to_list, convert_to_string
-from src.tools.parsers import parser_csv_to_dict
+from src.tools.parsers import parser_csv_to_dict, date_to_sql_valid
 from src.tools.date_converter import format_datestring
 from src.entities.user import User
 # from src.tools.db_data_gen import gen_data
@@ -126,8 +126,9 @@ def frontpage_data():
     user_id = session.get("user_id", 0)
     created_surveys = survey_service.count_surveys_created(user_id)
     active_surveys = survey_service.get_active_surveys_and_response_count(user_id)
+    trash_count = survey_service.get_trash_count(user_id)
 
-    return jsonify({"createdSurveys": created_surveys, "activeSurveys": active_surveys})
+    return jsonify({"createdSurveys": created_surveys, "activeSurveys": active_surveys, "trashCount": trash_count})
 
 
 """
@@ -135,7 +136,7 @@ def frontpage_data():
 """
 
 
-@bp.route("/surveys/active")
+@bp.route("/api/surveys/active")
 @ad_login
 def surveys_active():
     user_id = session.get("user_id", 0)
@@ -143,13 +144,19 @@ def surveys_active():
     return jsonify(active_surveys)
 
 
-@bp.route("/surveys/closed")
+@bp.route("/api/surveys/closed")
 @ad_login
 def surveys_closed():
     user_id = session.get("user_id", 0)
     closed_surveys = survey_service.get_list_closed_surveys(user_id)
     return jsonify(closed_surveys)
 
+@bp.route("/api/surveys/deleted")
+@ad_login
+def surveys_deleted():
+    user_id = session.get("user_id", 0)
+    deleted_surveys = survey_service.get_list_deleted_surveys(user_id)
+    return jsonify(deleted_surveys)
 
 @bp.route("/surveys")
 @ad_login
@@ -181,13 +188,19 @@ def get_info():
     return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
 
 
-@bp.route("/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"])
-def expand_ranking(survey_id, email):
+@bp.route("/api/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"], defaults={'stage': None})
+@bp.route("/api/surveys/<string:survey_id>/<string:stage>/studentranking/<string:email>", methods=["GET"])
+def expand_ranking(survey_id, email, stage):
     """
     Return json data of user's choices and rejections
     """
     user_id = user_service.get_user_id_by_email(email)
-    user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
+    if stage:
+        user_ranking = user_rankings_service.get_user_multistage_rankings_by_stage(survey_id, user_id, stage)
+    else:
+        user_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
+    
+    not_available = user_ranking.not_available or False
     ranking_list = convert_to_list(user_ranking.ranking)
     rejection_list = convert_to_list(user_ranking.rejections)
     choices = []
@@ -199,7 +212,7 @@ def expand_ranking(survey_id, email):
         for r in rejection_list:
             choice = survey_choices_service.get_survey_choice(r)
             rejections.append(choice)
-    return jsonify({"choices": choices, "rejections": rejections})
+    return jsonify({"choices": choices, "rejections": rejections, "notAvailable": not_available})
 
 
 @bp.route("/surveys/create", methods=["GET"])
@@ -228,19 +241,41 @@ def new_survey_form(survey=None):
 def multistage_survey_create():
     try:
         data = request.get_json()
+        user_id = session.get("user_id", 0)
         if not data:
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 
         # Add validation
 
-        # Add creation logic
+        # Add to surveys table
+        survey_id = survey_service.create_new_multiphase_survey(
+            surveyname=data["surveyGroupname"],
+            min_choices=data["minchoices"],
+            description=data["surveyInformation"],
+            enddate=f"{date_to_sql_valid(data['enddate'])} {data['endtime']}",
+            allowed_denied_choices=len(data["allowedDeniedChoices"]),
+            allow_search_visibility=data["allowSearchVisibility"],
+            allow_absences=data["allowAbsences"],
+            user_id=user_id
+        )
+        # Add choices
+        for stage in data["stages"]:
+            for choice in stage["choices"]:
+                survey_choices_service.add_multistage_choice(
+                    **{**choice, 
+                       "survey_id": survey_id, 
+                       "stage": stage["name"],
+                        "order_number": stage["id"]
+                    }
+                )
 
-        survey_stages = data.get("stages", [])
-        print(survey_stages)
+        # Add survey owner :
+        email = user_service.get_email(user_id)
+        (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
+        if not success:
+            return jsonify({"status": "0", "msg": message}), 400
 
-        # test sending back response
-        survey_name = data.get("surveyGroupname", "")
-        return jsonify({"status": "1", "msg": f"Survey {survey_name} received"}), 200
+        return jsonify({"status": "1", "msg": f"Survey created"}), 200
 
     except Exception as e:
         current_app.logger.exception("Error creating survey")
@@ -254,7 +289,6 @@ def new_survey_post():
     """
     try:
         data = request.get_json()
-        print("Choices: ", data.get("choices", []))
         if not data:
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 
@@ -270,7 +304,7 @@ def new_survey_post():
         minchoices = data.get("minchoices", 0)
         date_end = data.get("enddate", "")
         time_end = data.get("endtime", "")
-        allowed_denied_choices = data.get("allowedDeniedChoices", [])
+        allowed_denied_choices = data.get("allowedDeniedChoices", 0)
         allow_search_visibility = data.get("allowSearchVisibility", False)
 
         date_string = f"{date_end} {time_end}"
@@ -323,7 +357,7 @@ def import_survey_choices():
 """
 
 
-@bp.route("/csrf_token", methods=["GET"])
+@bp.route("/api/csrf_token", methods=["GET"])
 @ad_login
 def get_csrf():
     csrf_token = generate_csrf()
@@ -501,6 +535,88 @@ def api_survey(survey_id):
         }
     )
 
+@bp.route("/api/surveys/multistage/<string:survey_id>", methods=["GET"])
+def api_multistage_survey_choices(survey_id):
+    user_id = session.get("user_id", 0)
+    stages = survey_choices_service.get_survey_choices_by_stage(survey_id)
+    survey = survey_service.get_survey(survey_id)
+    additional_info = len(survey_choices_service.survey_all_additional_infos(survey_id)) > 0
+    closed = survey_service.check_if_survey_closed(survey_id)
+    user_survey_ranking = user_rankings_service.get_user_multistage_rankings(survey_id, user_id)
+    if user_survey_ranking:
+        ranked_stages = {
+        stage_id: {
+            "goodChoices": convert_to_list(data["ranking"]),
+            "badChoices": convert_to_list(data["rejections"]),
+            "reason": data["reason"],
+            "notAvailable": data["not_available"]
+        }
+        for stage_id, data in user_survey_ranking.items()
+        }
+        return jsonify(
+            {
+                "survey": {
+                    "id": str(survey.id),
+                    "name": survey.surveyname,
+                    "deadline": format_datestring(survey.time_end),
+                    "description": survey.survey_description,
+                    "min_choices": survey.min_choices,
+                    "search_visibility": survey.allow_search_visibility,
+                    "denied_allowed_choices": survey.allowed_denied_choices,
+                    "allow_absences": survey.allow_absences,
+                    "closed": closed,
+                    "additionalInfo": additional_info,
+                },
+                "stages": stages,
+                "rankedStages": ranked_stages,
+                "existing": "1",
+            }
+        )
+    return jsonify(
+        {
+            "survey": {
+                "id": str(survey.id),
+                "name": survey.surveyname,
+                "deadline": format_datestring(survey.time_end),
+                "description": survey.survey_description,
+                "min_choices": survey.min_choices,
+                "search_visibility": survey.allow_search_visibility,
+                "denied_allowed_choices": survey.allowed_denied_choices,
+                "allow_absences": survey.allow_absences,
+                "closed": survey.closed,
+                "additionalInfo": additional_info
+            },
+            "stages": stages,
+            "existing": "0"
+        })
+
+@bp.route("/api/surveys/multistage/<string:survey_id>", methods=["POST"])
+def api_multistage_survey_submit(survey_id):
+    """
+    API endpoint for submitting multiphase survey answers
+    """
+    data = request.get_json()
+    user_id = session.get("user_id", 0)
+    
+    # no validations, refactoring needs to be done anyway
+    for stage in data["stages"]:
+        good_ids = stage["good"]
+        bad_ids = stage["bad"]
+        reason = stage.get("reason", "")
+    
+        ranking = convert_to_string(good_ids)
+        rejections = convert_to_string(bad_ids)
+        
+        succesful_add = user_rankings_service.add_user_ranking(
+            user_id, survey_id, ranking, rejections, reason, 
+            stage=stage["stageId"], not_available=stage["notAvailable"],
+            multistage_ranking=True
+        )
+        if not succesful_add:
+            return jsonify({"status": "0", "message": "adding user ranking failed"})
+    
+    return jsonify({"status": "1", "message": "success"})
+
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["POST"])
 def api_survey_submit(survey_id):
@@ -558,7 +674,7 @@ def api_survey_submit(survey_id):
     return jsonify(response)
 
 
-@bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
+@bp.route("/api/surveys/<string:survey_id>/submission", methods=["DELETE"])
 def api_delete_submission(survey_id):
     """
     Delete the current ranking of the student.
@@ -671,7 +787,7 @@ def delete_submission(survey_id):
     return jsonify(response)
 
 
-@bp.route("/surveys/<string:survey_id>/answers/delete", methods=["POST"])
+@bp.route("/api/surveys/<string:survey_id>/answers/delete", methods=["POST"])
 def owner_deletes_submission(survey_id):
     """
     Survey owner can delete a single rankinging from the survey for
@@ -743,7 +859,29 @@ def edit_survey_post(survey_id):
     return jsonify(response)
 
 
-@bp.route("/surveys/<string:survey_id>/delete")
+@bp.route("/api/surveys/<string:survey_id>", methods=["PATCH"])
+def api_edit_survey_post(survey_id):
+    """
+    PATCH method for editing survey.
+    """
+    if not check_if_owner(survey_id):
+        return redirect("/")
+
+    edit_dict = request.get_json()
+    validation = survey_service.validate_created_survey(edit_dict, edited=True)
+    if not validation["success"]:
+        return jsonify(validation["message"]), 400
+
+    user_id = session.get("user_id", 0)
+    (success, message) = survey_service.save_survey_edit(survey_id, edit_dict, user_id)
+    if not success:
+        response = {"status": "0", "msg": message}
+        return jsonify(response)
+    response = {"status": "1", "msg": message}
+    return jsonify(response)
+
+
+@bp.route("/api/surveys/<string:survey_id>/delete")
 def delete_survey(survey_id):
     if not check_if_owner(survey_id):
         return redirect("/")
@@ -751,7 +889,7 @@ def delete_survey(survey_id):
     return redirect("/surveys")
 
 
-@bp.route("/surveys/<string:survey_id>", methods=["DELETE"])
+@bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
 def delete_surveys_endpoint(survey_id):
     if not check_if_owner(survey_id):
         response = {"message": "No permission to delete survey"}
@@ -774,6 +912,19 @@ def add_owner(survey_id, email):
         return jsonify(response)
     response = {"status": "1", "msg": message}
     return jsonify(response)
+
+@bp.route("/api/surveys/<string:survey_id>/add_owner", methods=["POST"])
+def api_add_owner(survey_id):
+    email = request.json.get("email")
+    if not check_if_owner(survey_id):
+        return redirect("/")
+    (success, message) = survey_owners_service.add_owner_to_survey(survey_id, email)
+    if not success:
+        response = {"status": "0", "msg": message}
+        return jsonify(response)
+    response = {"status": "1", "msg": message}
+    return jsonify(response)
+
 
 
 @bp.route("/surveys/<string:survey_id>/group_sizes", methods=["GET"])
@@ -831,7 +982,7 @@ def post_group_sizes(survey_id):
     return jsonify(response)
 
 
-@bp.route("/surveys/<string:survey_id>/answers", methods=["GET"])
+@bp.route("/api/surveys/<string:survey_id>/answers", methods=["GET"])
 @ad_login
 def survey_answers(survey_id):
     """
@@ -841,7 +992,7 @@ def survey_answers(survey_id):
         response = {"message": "Only owners can view survey answers"}
         return jsonify(response), 403
 
-    survey_name = survey_service.get_survey_name(survey_id)
+    survey = survey_service.get_survey(survey_id)
     survey_answers = survey_service.fetch_survey_responses(survey_id)
     choices_data = []
     for s in survey_answers:
@@ -849,6 +1000,52 @@ def survey_answers(survey_id):
 
     survey_answers_amount = len(survey_answers)
     available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
+    answers_saved = survey_service.check_if_survey_results_saved(survey_id)
+
+    return jsonify(
+        {
+            "surveyName": survey.surveyname,
+            "surveyAnswers": choices_data,
+            "surveyAnswersAmount": survey_answers_amount,
+            "availableSpaces": available_spaces,
+            "surveyId": survey_id,
+            "closed": survey.closed,
+            "answersSaved": answers_saved
+        }
+    )
+
+@bp.route("/api/surveys/multistage/<string:survey_id>/answers", methods=["GET"])
+@ad_login
+def multistage_survey_answers(survey_id):
+    """
+    Returns json data for displaying answers of a multistage survey
+    """
+    if not check_if_owner(survey_id):
+        response = {"message": "Only owners can view survey answers"}
+        return jsonify(response), 403
+
+    survey_name = survey_service.get_survey_name(survey_id)
+    survey_stages = survey_service.get_all_survey_stages(survey_id)
+    all_answers = []
+    for stage in survey_stages:
+        rankings = user_rankings_service.get_multistage_rankings_by_stage(survey_id, stage.stage)
+        choices_data = []
+        answers = {}
+        for r in rankings:
+            choices_data.append(
+                {
+                    "email": user_service.get_email(r.user_id),
+                    "ranking": r.ranking, 
+                    "rejections": r.rejections, 
+                    "reason": r.reason,
+                    "notAvailable": r.not_available
+                }
+            )
+
+        answers[stage.stage] = choices_data
+        all_answers.append(answers)
+
+    available_spaces = survey_choices_service.get_stages_available_spaces(survey_id)
     closed = survey_service.check_if_survey_closed(survey_id)
     answers_saved = survey_service.check_if_survey_results_saved(survey_id)
 
@@ -856,16 +1053,15 @@ def survey_answers(survey_id):
         {
             "surveyName": survey_name,
             "surveyAnswers": choices_data,
-            "surveyAnswersAmount": survey_answers_amount,
-            "availableSpaces": available_spaces,
             "surveyId": survey_id,
             "closed": closed,
             "answersSaved": answers_saved,
+            "answers": all_answers,
+            "availableSpaces": available_spaces
         }
     )
 
-
-@bp.route("/surveys/<string:survey_id>/results", methods=["GET", "POST"])
+@bp.route("/api/surveys/<string:survey_id>/results", methods=["GET", "POST"])
 @ad_login
 def survey_results(survey_id):
     """
@@ -943,7 +1139,7 @@ def save_survey_results(survey_id, output_data):
         return jsonify({"msg": "Survey saved"})
 
 
-@bp.route("/surveys/<string:survey_id>/close", methods=["POST"])
+@bp.route("/api/surveys/<string:survey_id>/close", methods=["POST"])
 def close_survey(survey_id):
     """
     Close survey, so that no more answers can be submitted
@@ -956,13 +1152,15 @@ def close_survey(survey_id):
     return jsonify({"status": "1", "msg": "Survey closed"})
 
 
-@bp.route("/surveys/<string:survey_id>/open", methods=["POST"])
+@bp.route("/api/surveys/<string:survey_id>/open", methods=["POST"])
 def open_survey(survey_id):
     """
     Open survey back up so that students can submit answers
     """
     user_id = session.get("user_id", 0)
-    opened = survey_service.open_survey(survey_id, user_id)
+    data = request.get_json()
+    new_end_date = f"{date_to_sql_valid(data["newEndDate"])} {data["newEndTime"]}"
+    opened = survey_service.open_survey(survey_id, user_id, new_end_date)
     if not opened:
         response = {"status": "0", "msg": "Opening survey failed"}
         return jsonify(response)
@@ -1044,6 +1242,46 @@ def login():
 
         return redirect("/")
 
+@bp.route("/api/auth/login", methods=["GET", "POST"])
+def api_login():
+    if not current_app.debug:
+        return redirect("/")
+
+    users = [
+        User("outi1", "testi.opettaja@helsinki.fi", True),
+        User("olli1", "testi.opiskelija@helsinki.fi", False),
+        User("robottiStudent", "robotti.student@helsinki.fi", False),
+        User("robottiTeacher", "robotti.teacher@helsinki.fi", True),
+        User("robottiTeacher2", "robotti.2.teacher@helsinki.fi", True),
+        User("Ääpö Wokki", "hm@helsinki.fi", True),
+        User("opettaja", "opettaja@mail.com", True),
+    ]
+
+    if request.method == "GET":
+        return render_template("mock_ad.html")
+    if request.method == "POST":
+        username = request.form.get("username")
+
+        email = name = role_bool = ""
+
+        for user in users:
+            if user.name == username:
+                email = user.email
+                name = user.name
+                role_bool = user.isteacher
+                break
+
+        if not email:
+            return jsonify({"message": "Invalid username"}), 401
+
+        if not user_service.find_by_email(email):  # account doesn't exist, register
+            user_service.create_user(name, email, role_bool)  # actual registration
+
+        if user_service.check_credentials(email):  # log in, update session etc.
+            if role_bool:
+                user_service.make_user_teacher(email)
+
+        return redirect("/")
 
 @bp.route("/auth/logout")
 def logout():
@@ -1432,7 +1670,7 @@ def get_choices(survey_id):
     return jsonify(response)
 
 
-@bp.route("/feedback", methods=["GET", "POST"])
+@bp.route("/api/feedback", methods=["GET", "POST"])
 def feedback():
     if request.method == "GET":
         return jsonify({"success": False, "status": "0", "key": "use_react", "msg": gettext("Please use the React frontend for feedback")}), 200

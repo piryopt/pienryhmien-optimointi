@@ -100,6 +100,16 @@ class SurveyChoicesService:
         tally = sum(choice.max_spaces for choice in choices)
 
         return tally
+    
+    def get_stages_available_spaces(self, survey_id):
+        """
+        Returns the total number of available space for each stage in the groups of a survey
+        """
+        spaces = {}
+        stages = self._survey_repository.get_all_survey_stages(survey_id)
+        for stage in stages:
+            spaces[stage.stage] = self._survey_choices_repository.count_spaces_in_stage(survey_id, stage.stage)
+        return spaces
 
     def add_empty_survey_choice(self, survey_id: str, spaces: int):
         """
@@ -140,5 +150,78 @@ class SurveyChoicesService:
             return None
         return survey_choice.mandatory
 
+    def add_multistage_choice(self, **kwargs):
+        """
+        Adds a new multistage choice (e.g., a recurring group) to a survey.
+
+        Expected keyword arguments (**kwargs):
+            survey_id (str): The ID of the survey the choice belongs to.
+            name (str): The display name of the choice.
+            max_spaces (int): Maximum number of participants allowed.
+            min_size (int): Minimum number of participants required.
+            stages (list[str]): A list of stage identifiers (e.g., ["week1", "week2"]).
+            mandatory (bool): Whether the group is mandatory. Defaults to False.
+
+        Returns:
+            dict: A result dictionary with keys:
+                - success (bool): True if creation succeeded.
+                - message (str): Informational message.
+        """
+        try:
+            required_fields = ["survey_id", "name", "max_spaces", "min_size", "mandatory", "stage", "order_number", "participation_limit"]
+            choice_id = self._survey_choices_repository.create_new_multistage_choice(**kwargs)
+            for key, val in kwargs.items():
+                if key not in required_fields:
+                    # no hidden field feature implemented yet
+                    self._survey_choices_repository.create_new_choice_info(choice_id, key, val, False)
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Unexpected service error: {e}"
+            }
+
+    def get_survey_choices_by_stage(self, survey_id):
+        """
+        Returns survey choices grouped by stage in structured form
+        """
+        rows = self._survey_choices_repository.get_choices_grouped_by_stage(survey_id)
+        stages = []
+        stageIndices = {}
+        index = 0
+        for row in rows:
+            stage_id = row["stage"] or "no_stage"
+    
+            if stage_id not in stageIndices:
+                stageIndices[stage_id] = index
+                stages.append({
+                    "name": stage_id,
+                    "orderNumber": row["order_number"],
+                    "hasMandatory": any(map(lambda r: r["mandatory"] if r["stage"] == stage_id else False, rows)),
+                    "choices": []
+                })
+                index += 1
+            choices = stages[stageIndices[stage_id]]["choices"]
+    
+            matching_choices = [c for c in choices if c["id"] == row["choice_id"]]
+            choice = matching_choices[0] if matching_choices else None
+
+            if not choice:
+                choice = {
+                    "id": row["choice_id"],
+                    "name": row["choice_name"],
+                    "slots": row["max_spaces"],
+                    "min_size": row["min_size"],
+                    "mandatory": row["mandatory"],
+                    "participation_limit": row["participation_limit"],
+                    "infos": []
+                }
+                choices.append(choice)
+    
+            if row.get("info_key"):
+                choice["infos"].append({
+                    row["info_key"]: row["info_value"],
+                    "hidden": row["hidden"]
+                })
+        return sorted(stages, key=lambda s: s["orderNumber"])
 
 survey_choices_service = SurveyChoicesService()

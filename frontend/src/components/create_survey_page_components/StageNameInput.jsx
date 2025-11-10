@@ -1,7 +1,12 @@
 import { useTranslation } from "react-i18next";
 import "../../static/css/createSurveyPage.css";
 
-const StageNameInput = ({ value = "", onChange = () => {}, id, placeholder }) => {
+const StageNameInput = ({
+  value = "",
+  onChange = () => {},
+  id,
+  placeholder
+}) => {
   const { t } = useTranslation();
 
   return (

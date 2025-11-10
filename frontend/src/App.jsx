@@ -20,6 +20,10 @@ import RequireAdmin from "./components/RequireAdmin";
 import AnswerSurveyPage from "./pages/AnswerSurveyPage";
 import CreateSurveyPage from "./pages/CreateSurveyPage";
 import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";
+import MultiStageAnswerPage from "./pages/MultiStageAnswerPage";
+import SurveyMultistageAnswersPage from "./pages/SurveyMultistageAnswersPage";
+import TrashPage from "./pages/TrashPage";
+import EditSurveyPage from "./pages/EditSurveypage";
 
 const App = () => {
   return (
@@ -66,9 +70,20 @@ const App = () => {
               </RequireAuth>
             }
           />
+          <Route
+            path="/surveys/multistage/:surveyId"
+            element={
+              <RequireAuth>
+                <MultiStageAnswerPage />
+              </RequireAuth>
+            }
+          />
           <Route path="/auth/login" element={<LoginPage />} />
+
           <Route path="/faq" element={<FAQ />} />
+
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
           <Route
             path="/csv-instructions"
             element={
@@ -77,6 +92,7 @@ const App = () => {
               </RequireAuth>
             }
           />
+
           <Route
             path="/surveys/:id/answers"
             element={
@@ -86,10 +102,26 @@ const App = () => {
             }
           />
           <Route
+            path="/surveys/multistage/:surveyId/answers"
+            element={
+              <RequireAuth>
+                <SurveyMultistageAnswersPage />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/surveys/:id/results"
             element={
               <RequireAuth>
                 <SurveyResultsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/trash"
+            element={
+              <RequireAuth>
+                <TrashPage />
               </RequireAuth>
             }
           />
@@ -132,6 +164,14 @@ const App = () => {
             }
           />
           <Route
+            path="surveys/:id/edit" 
+            element={
+              <RequireAuth>
+                <EditSurveyPage />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/admintools/analytics"
             element={
               <RequireAuth>
@@ -158,4 +198,3 @@ const App = () => {
 };
 
 export default App;
-

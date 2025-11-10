@@ -26,6 +26,7 @@ const AnswerSurveyPage = () => {
   const [expandedIds, setExpandedIds] = useState(new Set());
   const [reason, setReason] = useState("");
   const [existing, setExisting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -44,10 +45,13 @@ const AnswerSurveyPage = () => {
           setExisting(true);
           const goodIds = data.goodChoices || [];
           const badIds = data.badChoices || [];
-          const goodIdSet = new Set((goodIds || []).map(String));
-          const badIdSet = new Set((badIds || []).map(String));
-          goodChoices = choices.filter((c) => goodIdSet.has(String(c.id)));
-          badChoices = choices.filter((c) => badIdSet.has(String(c.id)));
+          goodChoices = goodIds
+            .map((id) => choices.find((c) => String(c.id) === id))
+            .filter(Boolean);
+
+          badChoices = badIds
+            .map((id) => choices.find((c) => String(c.id) === id))
+            .filter(Boolean);
 
           const used = new Set(
             [...goodChoices, ...badChoices].map((c) => String(c.id))
@@ -169,7 +173,14 @@ const AnswerSurveyPage = () => {
       <div>
         <Header surveyName={survey.name} />
         {!readOnly && (
-          <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
+          <>
+            <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
+            <p className="note">
+              HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt
+              ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina
+              vähintään minimikokoon asti vastauksista riippumatta.
+            </p>
+          </>
         )}
       </div>
       {readOnly ? (
@@ -215,12 +226,24 @@ const AnswerSurveyPage = () => {
               />
             </div>
             <div className="right-column">
+              {survey?.search_visibility && (
+                <div className="search-container">
+                  <input
+                    id="searchChoices"
+                    type="text"
+                    placeholder="Hae ryhmiä..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              )}
               <GroupList
                 id="neutral"
                 items={neutral}
                 expandedIds={expandedIds}
                 toggleExpand={toggleExpand}
                 choices={neutral}
+                searchTerm={searchTerm}
               />
             </div>
           </DragDropContext>

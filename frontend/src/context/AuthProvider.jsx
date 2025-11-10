@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
   const refreshSession = async () => {
     try {
-      const res = await fetch(`${baseUrl}/api/session`, {
+      const res = await fetch(`${baseUrl}/session`, {
         credentials: "include"
       });
       const data = await res.json();
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     if (debug) {
       const csrf = await csrfService.fetchCsrfToken();
-      await fetch(`${baseUrl}/api/logout`, {
+      await fetch(`${baseUrl}/logout`, {
         method: "POST",
         credentials: "include",
         headers: { "X-CSRFToken": csrf, "Content-Type": "application/json" }

@@ -90,7 +90,7 @@ class SurveyService:
             return False
         return self._survey_repository.close_survey(survey_id)
 
-    def open_survey(self, survey_id, user_id):
+    def open_survey(self, survey_id, user_id, new_end_time):
         """
         Re-open the survey, so that rankings can be added
 
@@ -108,7 +108,7 @@ class SurveyService:
             return False
         if self._survey_repository.survey_name_exists(survey.surveyname, user_id):
             return False
-        return self._survey_repository.open_survey(survey_id)
+        return self._survey_repository.open_survey(survey_id, new_end_time)
 
     def get_active_surveys(self, user_id):
         """
@@ -363,15 +363,11 @@ class SurveyService:
                 msg = gettext("Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!")
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
-            language = session.get("language", "fi")
             print("Survey choices react: ", survey_dict["choices"])
             for choice in survey_dict["choices"]:
-                if choice[SurveyService.SURVEY_FIELDS["name"][language]] == "tyhjä" \
-                or choice[SurveyService.SURVEY_FIELDS["spaces"][language]] == "tyhjä" \
-                or choice[SurveyService.SURVEY_FIELDS["min_size"][language]] == "tyhjä":
+                if choice["name"] == "":
                     msg = gettext(
-                        "Jos rivi on täynnä tyhjiä soluja, poista rivi kokonaan. Rivin poistanappi " \
-                        "ilmestyy, kun asetat hiiren poistettavan rivin päälle."
+                        "Ryhmä vaatii nimen joka on vähintään 5 merkkiä pitkä"
                     )
                     return {"success": False, "message": {"status": "0", "msg": msg}}
         return {"success": True}
@@ -524,6 +520,35 @@ class SurveyService:
         RETURNS whether updating was successful
         """
         return self._survey_repository.set_survey_deleted_true(survey_id)
+
+    def create_new_multiphase_survey(self, **kwargs):
+        if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):
+            return None
+        survey_id = self._survey_repository.create_new_survey(**kwargs)
+        return survey_id
+
+    def get_all_survey_stages(self, survey_id):
+        return self._survey_repository.get_all_survey_stages(survey_id)
+
+    def get_trash_count(self, user_id):
+        return self._survey_repository.get_trash_count(user_id)
+
+    def get_list_deleted_surveys(self, user_id):
+        """
+        Get the list of set to be deleted surveys for a user
+
+        args:
+            user_id: The id of the user whose set to be deleted surveys we want
+        """
+        surveys = self._survey_repository.get_deleted_surveys(user_id)
+        return [
+            {
+                key: format_datestring(val) if key == "time_end" else val
+                for key, val in survey._mapping.items()
+            }
+            for survey in surveys
+        ]
+
 
 
 survey_service = SurveyService()
