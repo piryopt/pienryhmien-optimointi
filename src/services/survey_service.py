@@ -375,15 +375,51 @@ class SurveyService:
         return (answers, popularities)
 
     def validate_created_survey(self, survey_dict, edited=False):
-        # Name length
-        if len(survey_dict["surveyGroupname"]) < 5:
-            msg = gettext("Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä")
+        survey_name = survey_dict.get("surveyGroupname", "")
+        description = survey_dict.get("surveyInformation", "")
+        survey_choices = survey_dict.get("choices", [])
+        minchoices = survey_dict.get("minchoices", 0)
+        date_end = survey_dict.get("enddate", "")
+        time_end = survey_dict.get("endtime", "")
+        allowed_denied_choices = survey_dict.get("allowedDeniedChoices", 0)
+        allow_search_visibility = survey_dict.get("allowSearchVisibility", False)
+
+        date_string = f"{date_end} {time_end}"
+        format_code = "%d.%m.%Y %H:%M"
+        try:
+            parsed_time = datetime.strptime(date_string, format_code)
+        except Exception:
+            return {"success": False, "message": "Invalid date/time format"}
+
+        if parsed_time <= datetime.now():
+            msg = "Response period's end can't be in the past"
+            return {"success": False, "message": {"status": "0", "msg": msg}}
+
+        if minchoices > len(survey_choices):
+            msg = "There are less choices than the minimum amount of prioritized groups! The creation of the survey failed!"
+            return {"status": False, "message": {"status": "0", "msg": msg}}
+
+        if not isinstance(allowed_denied_choices, int):
+            msg = "Survey denied choices must be an integer"
+            return {"success": False, "message": {"status": "0", "msg": msg}}
+
+        if not isinstance(allow_search_visibility, bool):
+            print(type(allow_search_visibility), allow_search_visibility)
+            msg = "Survey search visibility must be a boolean"
+            return {"success": False, "message": {"status": "0", "msg": msg}}
+        
+        if len(survey_name) < 5:
+            msg = "Survey name must be atleast 5 characters long"
+            return {"success": False, "message": {"status": "0", "msg": msg}}
+
+        if not isinstance(description, str):
+            msg = "Survey description must be a string"
             return {"success": False, "message": {"status": "0", "msg": msg}}
 
         # Min choices is a number
         if not edited:
-            if not isinstance(survey_dict["minchoices"], int):
-                msg = gettext("Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!")
+            if not isinstance(minchoices, int):
+                msg = "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"
                 return {"success": False, "message": {"status": "0", "msg": msg}}
         if "choices" in survey_dict:
             print("Survey choices react: ", survey_dict["choices"])
