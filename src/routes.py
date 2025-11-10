@@ -1464,6 +1464,40 @@ def api_admin_feedback_close(feedback_id):
     return jsonify({"success": True, "msg": "feedback_closed"}), 200
 
 
+@bp.route("/api/admintools/analytics", methods=["GET"])
+def api_admin_analytics():
+    user_id = session.get("user_id", 0)
+    if not user_service.check_if_admin(user_id):
+        return jsonify({"success": False, "error": "unauthorized"}), 403
+    
+    analytics = survey_service.get_admin_analytics()
+    if not analytics:
+        return jsonify({"success": False, "error": "server_error"}), 500
+
+    items_array = [
+        analytics.get("total_surveys", 0),
+        analytics.get("active_surveys", 0),
+        analytics.get("total_students", 0),
+        analytics.get("total_responses", 0),
+        analytics.get("total_teachers", 0)
+    ]
+    
+    return jsonify({"success": True, "data": items_array, "meta": analytics}), 200
+
+
+@bp.route("/api/admintools/surveys", methods=["GET"])
+def api_admin_all_active_surveys():
+    user_id = session.get("user_id", 0)
+    if not user_service.check_if_admin(user_id):
+        return jsonify({"success": False, "error": "unauthorized"}), 403
+    
+    data = survey_service.get_all_active_surveys()
+    if data is None:
+        return jsonify({"success": False, "error": "server_error"}), 500
+    
+    return jsonify({"success": True, "data": data}), 200
+
+
 @bp.route("/admintools/surveys", methods=["GET"])
 def admin_all_active_surveys():
     # Only admins permitted!

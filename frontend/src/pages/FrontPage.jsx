@@ -7,6 +7,7 @@ import addIcon from "/images/note_add_white_36dp.svg";
 import multiAddIcon from "/images/note_stack_add_36dp.svg";
 import surveyIcon from "/images/assignment_white_36dp.svg";
 import trashIcon from "/images/delete_36dp.svg";
+import { useAuth } from "../context/AuthProvider"
 
 const FrontPageButton = ({
   path,
@@ -53,6 +54,8 @@ const FrontPage = () => {
   const [trashCount, setTrashCount] = useState(0);
   const [activeSurveys, setActiveSurveys] = useState([]);
   const { t } = useTranslation();
+  const { user, loading } = useAuth()
+  const isAdmin = !loading && user && user.admin
 
   useEffect(() => {
     const getFrontPageData = async () => {
@@ -104,6 +107,18 @@ const FrontPage = () => {
             topRightText="Poistettavat kyselyt"
             additionalVars={{ count: trashCount }}
           />
+          {/* Admin-only link */}
+          {isAdmin && (
+            <>
+              <br />
+              <FrontPageButton
+                path="/admintools/analytics"
+                imgSrc={listIcon}
+                mainText="Hallintatyökalut"
+                additionalText="Avaa järjestelmänhallintanäkymä"
+              />
+            </>
+          )}
         </div>
       </div>
       <p>{t("Käynnissä olevat kyselyt")}</p>
