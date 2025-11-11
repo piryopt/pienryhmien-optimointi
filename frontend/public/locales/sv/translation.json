@@ -8,6 +8,7 @@
   "Anna palautetta": "Ge feedback",
   "Anna sähköpostiosoite": "E-postadress saknas!",
   "Antamasi sähköpostiosoite ei ole kelvollinen": "Den angivna e-postadressen är inte giltig.",
+  "Avaa": "",
   "Avaa kysely uudelleen": "",
   "Avaa uudestaan?": "",
   "Avoimet palautteet": "",
@@ -15,9 +16,11 @@
   "Bugi": "",
   "CSV-ohje": "",
   "Ei": "",
+  "Ei kyselyitä": "",
   "Ei paikalla": "",
   "Ei palautetta": "",
   "Ei palautteita": "",
+  "Ei tietoja": "",
   "Enimmäispaikat": "",
   "Enimmäispaikat vaaditaan": "",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "",
@@ -25,6 +28,7 @@
     "Vastausaika päättyy": "Svarstid utgår: {{timeEnd}}"
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "",
+  "Hakunäkyvyys": "",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
       "": ""
@@ -44,9 +48,12 @@
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
     "": ""
   },
+  "Hylkäysmäärä": "",
+  "ID": "",
   "Jaa ryhmiin": "",
   "Jaettavia paikkoja": "",
   "Jakaja": "Jakaja",
+  "Jakajassa luodut kyselyt": "",
   "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
     " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
       " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
@@ -62,6 +69,7 @@
       "": ""
     }
   },
+  "Kaikki käynnissä olevat kyselyt": "",
   "Käynnissä olevat kyselyt": "Pågående enkäter",
   "Käyttäjätunnus": "Användarnamn",
   "Kello": "Klockan",
@@ -85,6 +93,7 @@
   "Kysely poistetaan": "",
   "Kysely poistettu": "",
   "Kysely suljettu": "",
+  "Kyselyjen lataus epäonnistui": "",
   "Kyselyn kuvaus": "Enkätens beskrivning",
   "Kyselyn luonti epäonnistui": "",
   "Kyselyn muokkaus": "Redigering av enkät",
@@ -101,6 +110,7 @@
   "Kyselyn vastauksien tallennus epäonnistui": {
     "": ""
   },
+  "Kyselyt": "",
   "Ladataan": {
     "": {
       "": {
@@ -128,6 +138,7 @@
   "Luo uusi monivaiheinen kysely": "Skapa ny flerfasundersökning",
   "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Skapa en ny enkät i flera steg och ange svarsalternativ för varje steg",
   "Luotuja kyselyitä": "Skapade enkäter: {{count}}",
+  "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera enkäten eller lägg till en administratör",
@@ -142,6 +153,7 @@
   "Opiskelijat on lajiteltu ryhmiin seuraavasti": "",
   "Osallistumiskerrat*": "",
   "Otsikko": "",
+  "Päättyy": "",
   "Päivämäärä on virheellinen": "",
   "Pakota minimikoko": "",
   "Palaa kyselylistaan": "",
@@ -174,6 +186,8 @@
   "Priorisoitujen ryhmien vähimmäismäärä": "",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
   "Rajoita osallistumiskertoja": "",
+  "Rekisteröityneet opettajat": "",
+  "Rekisteröityneet opiskelijat": "",
   "Roskakori": "Papperskorg",
   "Ryhmä": "",
   "Ryhmäjako tallennettu": "",
@@ -185,6 +199,7 @@
   "Ryhmät luotu": "",
   "Ryhmät, jotka pudotettiin jaosta": "",
   "Ryhmävalintojen keskiarvo": "",
+  "Ryhmien määrä": "",
   "Sähköposti": "E-postadress",
   "sähköpostiosoite": "E-postadress",
   "Salasana": "Lösenord",
@@ -229,8 +244,12 @@
   "Tallenna muutokset": "Spara ändringar",
   "Tallenna tulokset": "",
   "Tarkastele": "",
+  "Tarkastele kyselyitä": "",
+  "Tarkastele palautteita": "",
+  "Tarkastele tilastoja": "",
   "Tarkastele tuloksia": "",
   "Tietosuojaseloste": "Integritetspolicy",
+  "Tilastojen lataus epäonnistui": "",
   "Tilastot": "Statistik",
   "Toiminnot": "Åtgärder",
   "tulokset": "",
@@ -247,6 +266,7 @@
   "Vastauksen poistaminen epäonnistui": "",
   "Vastaukset": "Svar: {{count}}",
   "Vastauksia": "",
+  "Vastauksia luotu": "",
   "Vastaus poistettu": "",
   "Vastausaika": "Svarstid",
   "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
