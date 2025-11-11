@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import SurveysTable from "../components/surveys_page_components/SurveysTable";
-import listWhite from "/images/list_white_36dp.svg";
+import { imagesBaseUrl } from "../utils/constants";
 
 const SurveysPage = () => {
   const [surveys, setSurveys] = useState([]);
@@ -30,7 +30,7 @@ const SurveysPage = () => {
       <br />
       <h2>
         <img
-          src={listWhite}
+          src={`${imagesBaseUrl}/list_white_36dp.svg`}
           alt=""
           className="d-inline-block align-text-top"
           width="42"

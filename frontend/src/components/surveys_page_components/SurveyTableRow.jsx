@@ -1,11 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import SurveyMoreInfo from "./SurveyMoreInfo";
-import menu_white from "/images/menu_white_36dp.svg";
-import insertDriveFileWhite from "/images/insert_drive_file_white_36dp.svg";
-import insertPageBreakWhite from "/images/insert_page_break_white_36dp.svg";
-import noteStack from "/images/note_stack_36dp.svg";
 import { Link } from "react-router-dom";
+import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyTableRow = ({ survey, handleDeleteClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
@@ -28,10 +25,10 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
         <img
           src={
             survey.is_multistage
-              ? noteStack
+              ? `${imagesBaseUrl}/note_stack_36dp.svg`
               : survey.closed
-                ? insertPageBreakWhite
-                : insertDriveFileWhite
+                ? `${imagesBaseUrl}/insert_page_break_white_36dp.svg`
+                : `${imagesBaseUrl}/insert_drive_file_white_36dp.svg`
           }
           alt=""
           className="d-inline-block align-text-top"
@@ -64,7 +61,7 @@ const SurveyTableRow = ({ survey, handleDeleteClick }) => {
         <div onClick={() => setMoreInfoVisible(!moreInfoVisible)}>
           <label style={{ cursor: "pointer" }} className="surveys_link">
             <img
-              src={menu_white}
+              src={`${imagesBaseUrl}/menu_white_36dp.svg`}
               alt=""
               className="d-inline-block align-text-top"
               width="20"
