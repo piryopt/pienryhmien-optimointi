@@ -49,7 +49,7 @@ const CreateSurveyPage = () => {
       minChoicesSetting: "all",
       denyChoicesSetting: "hide",
       allowedDeniedChoices: 0,
-      allowSearchVisibility: false
+      allowSearchVisibility: "false",
     },
     mode: "onBlur"
   });
@@ -67,6 +67,16 @@ const CreateSurveyPage = () => {
 
         methods.setValue("groupname", data.survey.name || "");
         methods.setValue("surveyInformation", data.survey.description || "");
+
+        const minCount = data.survey.min_choices ?? 1;
+        methods.setValue("minChoicesSetting", minCount > 0 ? "custom" : "all");
+        methods.setValue("minchoices", minCount);
+
+        const deniedCount = data.survey.denied_allowed_choices ?? 0;
+        methods.setValue("denyChoicesSetting", deniedCount > 0 ? "show" : "hide");
+        methods.setValue("allowedDeniedChoices", deniedCount);
+
+        methods.setValue("allowSearchVisibility", data.survey.search_visibility ? "true" : "false");
 
         const dynamicCols = new Set();
         data.choices.forEach((choice) => {
@@ -236,7 +246,7 @@ const CreateSurveyPage = () => {
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
       allowedDeniedChoices: data.allowedDeniedChoices || 0,
-      allowSearchVisibility: data.allowSearchVisibility || false
+      allowSearchVisibility: data.allowSearchVisibility === "true"
     };
 
     const extractMessage = (json, res) => {
