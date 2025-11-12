@@ -5,7 +5,7 @@ const SearchVisibilitySection = () => {
   const { register, watch } = useFormContext();
   const { t } = useTranslation();
 
-  const value = watch("allowSearchVisibility", false);
+  const value = watch("allowSearchVisibility");
 
   return (
     <section>
@@ -25,9 +25,7 @@ const SearchVisibilitySection = () => {
           type="radio"
           id="search-visibility-yes"
           value="true"
-          {...register("allowSearchVisibility", {
-            setValueAs: (v) => v === "true"
-          })}
+          {...register("allowSearchVisibility")}
         />
         <label htmlFor="search-visibility-yes">{t("Kyllä")}</label>
 
@@ -35,10 +33,7 @@ const SearchVisibilitySection = () => {
           type="radio"
           id="search-visibility-no"
           value="false"
-          {...register("allowSearchVisibility", {
-            setValueAs: (v) => v === "true"
-          })}
-          defaultChecked
+          {...register("allowSearchVisibility")}
         />
         <label htmlFor="search-visibility-no">{t("Ei")}</label>
       </div>
