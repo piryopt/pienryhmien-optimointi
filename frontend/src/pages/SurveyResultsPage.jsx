@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import * as XLSX from "xlsx";
 import { useNotification } from "../context/NotificationContext";
 import surveyService from "../services/surveys";
 import SurveyResultsTable from "../components/survey_results_page_components/SurveyResultsTable";
@@ -47,24 +46,28 @@ const SurveyResultsPage = () => {
     getSurveyResults();
   }, []);
 
-  const handleToExcelFile = () => {
-    const groupData = results.map((res) => ({
-      [t("Nimi")]: res[0][1],
-      [t("Sähköposti")]: res[1],
-      [t("Ryhmä")]: res[2][1],
-      [t("Monesko valinta")]: res[3],
-      ...Object.fromEntries(
-        infoKeys.map((pair, index) => [
-          pair.info_key,
-          additionalInfos[res[2][0]][index]
-        ])
-      )
-    }));
-    const ws = XLSX.utils.json_to_sheet(groupData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, t("Tulokset"));
-    XLSX.writeFile(wb, `${t("tulokset")}.xlsx`);
-  };
+  {
+    const handleToExcelFile = async () => {
+      const groupData = results.map((res) => ({
+        [t("Nimi")]: res[0][1],
+        [t("Sähköposti")]: res[1],
+        [t("Ryhmä")]: res[2][1],
+        [t("Monesko valinta")]: res[3],
+        ...Object.fromEntries(
+          infoKeys.map((pair, index) => [
+            pair.info_key,
+            additionalInfos[res[2][0]][index]
+          ])
+        )
+      }));
+      const { utils, writeFile } = await import("xlsx");
+      const { json_to_sheet, book_new, book_append_sheet } = utils;
+      const ws = json_to_sheet(groupData);
+      const wb = book_new();
+      book_append_sheet(wb, ws, t("Tulokset"));
+      writeFile(wb, `${t("tulokset")}.xlsx`);
+    };
+  }
 
   const handleSaveResults = () => {
     try {
