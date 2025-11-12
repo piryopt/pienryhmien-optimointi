@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import surveyService from "../../services/surveys";
 import UserRankings from "../UserRankings";
-import menuWhite from "/images/menu_white_36dp.svg";
+import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyResultsTableRow = ({ result, surveyId }) => {
   const [rankingsVisible, setRankingsVisible] = useState(false);
@@ -54,7 +54,12 @@ const SurveyResultsTableRow = ({ result, surveyId }) => {
           style={{ cursor: "pointer" }}
           onClick={handleRankingClick}
         >
-          <img src={menuWhite} alt="" width={20} height={20} />
+          <img
+            src={`${imagesBaseUrl}/menu_white_36dp.svg`}
+            alt=""
+            width={20}
+            height={20}
+          />
           &nbsp;{rankingsVisible ? t("Piilota") : t("Näytä")}
         </span>
         {rankingsVisible && (

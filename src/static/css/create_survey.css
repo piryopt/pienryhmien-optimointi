@@ -195,7 +195,7 @@ tr:hover .action-cell {
 
 .delete-row-btn {
   visibility: visible;
-  background-image: url("../images/delete_white_36dp.svg");
+  background-image: url("http://localhost:5001/static/images/delete_white_36dp.svg");
   background-size: contain;
   width: 100%;
   height: 24px;
@@ -206,7 +206,7 @@ tr:hover .action-cell {
 
 /* tr:hover .delete-row-btn {
   visibility: visible;
-  background-image: url("../images/delete_white_36dp.svg");
+  background-image: url("http://localhost:5001/static/images/delete_white_36dp.svg");
   background-size: contain;
   width: 100%;
   height: 24px;
@@ -226,7 +226,7 @@ tr:hover .action-cell {
 
 div.delete-col-btn-visible {
   visibility: visible;
-  background-image: url("../images/delete_white_36dp.svg");
+  background-image: url("http://localhost:5001/static/images/delete_white_36dp.svg");
   background-size: contain;
   width: 100%;
   height: 30px;
@@ -237,7 +237,7 @@ div.delete-col-btn-visible {
 
 .delete-col-btn:hover {
   visibility: visible;
-  background-image: url("../images/delete_white_36dp.svg");
+  background-image: url("http://localhost:5001/static/images/delete_white_36dp.svg");
   background-size: contain;
   width: 100%;
   height: 30px;

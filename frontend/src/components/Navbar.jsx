@@ -1,9 +1,9 @@
-import hyLogo from "/images/hy_logo.svg";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
+import { imagesBaseUrl } from "../utils/constants";
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ const Navbar = () => {
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
           <img
-            src={hyLogo}
+            src={`${imagesBaseUrl}/hy_logo.svg`}
             alt=""
             width="34"
             height="30"

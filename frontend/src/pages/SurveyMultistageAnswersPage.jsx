@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
-import assignmentWhite from "/images/assignment_white_36dp.svg";
 import SurveyAnswersTable from "../components/survey_answers_page_components/SurveyAnswersTable";
 import StageDropdown from "../components/survey_answers_page_components/StageDropdown";
 import SurveyAnswersInfo from "../components/survey_answers_page_components/SurveyAnswersInfo";
 import AnswersButtons from "../components/survey_answers_page_components/AnswersButtons";
+import { imagesBaseUrl } from "../utils/constants";
 
 const SurveyMultistageAnswersPage = () => {
   const { surveyId } = useParams();
@@ -67,7 +67,12 @@ const SurveyMultistageAnswersPage = () => {
   return (
     <div>
       <h5>
-        <img src={assignmentWhite} alt="" width={34} height={30} />
+        <img
+          src={`${imagesBaseUrl}/assignment_white_36dp.svg`}
+          alt=""
+          width={34}
+          height={30}
+        />
         &nbsp;{surveyData.surveyName}
       </h5>
       <StageDropdown
