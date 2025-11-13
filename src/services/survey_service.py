@@ -61,6 +61,18 @@ class SurveyService:
             return False
         return survey.surveyname
 
+    def is_multistage(self, survey_id):
+        """
+        Returns True if the survey has stages (is multistage), False otherwise.
+
+        args:
+            survey_id: The id of the survey
+        """
+        result = self._survey_repository.is_multistage(survey_id)
+        if not result:
+            return False
+        return result
+
     def count_surveys_created(self, user_id):
         """
         Get the size of the list of surveys created. If no surveys have been created, return 0
@@ -119,13 +131,7 @@ class SurveyService:
             user_id: The id of the user whose active surveys we want
         """
         surveys = self._survey_repository.get_active_surveys(user_id)
-        return [
-        {
-            key: format_datestring(val) if key == "time_end" else val
-            for key, val in survey._mapping.items()
-        }
-        for survey in surveys
-        ]
+        return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
     def get_active_surveys_and_response_count(self, user_id):
         """
@@ -136,13 +142,7 @@ class SurveyService:
         """
 
         surveys = self._survey_repository.get_active_surveys_and_response_count(user_id)
-        return [
-        {
-            key: format_datestring(val) if key == "time_end" else val
-            for key, val in survey._mapping.items()
-        }
-        for survey in surveys
-        ]
+        return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
     def check_if_survey_closed(self, survey_id):
         """
@@ -165,13 +165,7 @@ class SurveyService:
             user_id: The id of the user whose closed surveys we want
         """
         surveys = self._survey_repository.get_closed_surveys(user_id)
-        return [
-            {
-                key: format_datestring(val) if key == "time_end" else val
-                for key, val in survey._mapping.items()
-            }
-            for survey in surveys
-        ]
+        return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
     def update_survey_answered(self, survey_id):
         """
@@ -346,6 +340,15 @@ class SurveyService:
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
 
+    def fetch_survey_responses_grouped_by_stage(self, survey_id):
+        """
+        Gets a list of user_survey_rankings for the survey grouped by stage
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.fetch_survey_response_grouped_by_stages(survey_id)
+
     def get_choice_popularities(self, survey_id: str):
         """
         Calls repository function fetch_survey_responses() to get user rankings
@@ -386,9 +389,7 @@ class SurveyService:
             print("Survey choices react: ", survey_dict["choices"])
             for choice in survey_dict["choices"]:
                 if choice["name"] == "":
-                    msg = gettext(
-                        "Ryhmä vaatii nimen joka on vähintään 5 merkkiä pitkä"
-                    )
+                    msg = gettext("Ryhmä vaatii nimen joka on vähintään 5 merkkiä pitkä")
                     return {"success": False, "message": {"status": "0", "msg": msg}}
         return {"success": True}
 
@@ -497,7 +498,7 @@ class SurveyService:
             ]
             admin_data.append(survey_data)
         return admin_data
-    
+
     def get_admin_analytics(self):
         """
         Collect analytics numbers used in admin UI.
@@ -526,7 +527,7 @@ class SurveyService:
                 "active_surveys": int(active_surveys or 0),
                 "total_students": int(total_students or 0),
                 "total_responses": int(total_responses or 0),
-                "total_teachers": int(total_teachers or 0)
+                "total_teachers": int(total_teachers or 0),
             }
         except Exception as e:
             print("Error collecting admin analytics:", e)
@@ -567,14 +568,7 @@ class SurveyService:
             user_id: The id of the user whose set to be deleted surveys we want
         """
         surveys = self._survey_repository.get_deleted_surveys(user_id)
-        return [
-            {
-                key: format_datestring(val) if key == "time_end" else val
-                for key, val in survey._mapping.items()
-            }
-            for survey in surveys
-        ]
-
+        return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
 
 survey_service = SurveyService()
