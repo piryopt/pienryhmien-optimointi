@@ -109,7 +109,7 @@ const FrontPage = () => {
               <br />
               <FrontPageButton
                 path="/admintools/analytics"
-                imgSrc={listIcon}
+                imgSrc={`${imagesBaseUrl}/list_white_36dp.svg`}
                 mainText="Hallintatyökalut"
                 additionalText="Avaa järjestelmänhallintanäkymä"
               />

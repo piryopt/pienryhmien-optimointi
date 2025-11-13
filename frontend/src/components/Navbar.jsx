@@ -19,7 +19,7 @@ const Navbar = () => {
       showNotification(t("Kirjautuminen ulos onnistui"), "success");
       navigate("/");
     } else {
-      window.location.href = "/auth/logout";
+      window.location.replace("/api/logout");
     }
   };
 
