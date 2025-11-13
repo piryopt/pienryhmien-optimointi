@@ -69,7 +69,7 @@ const CreateSurveyPage = () => {
         methods.setValue("surveyInformation", data.survey.description || "");
 
         const minCount = data.survey.min_choices ?? 1;
-        methods.setValue("minChoicesSetting", minCount > 0 ? "custom" : "all");
+        methods.setValue("minChoicesSetting", minCount > 1 ? "custom" : "all");
         methods.setValue("minchoices", minCount);
 
         const deniedCount = data.survey.denied_allowed_choices ?? 0;
