@@ -186,6 +186,20 @@ const MultiStageAnswerPage = () => {
     return <div className="text-center mt-5">Ladataan kyselyä...</div>;
   if (!activeStage) return <div>Ei vaiheita ladattuna</div>;
 
+  if (survey.closed) return (
+    <div className="answer-page">
+      <h2 className="answer-title">
+          <img
+            src={`${imagesBaseUrl}/assignment_white_36dp.svg`}
+            alt=""
+            className="assignment-icon"
+          />
+          {survey.name}
+      </h2>
+      <ClosedMultistageSurveyView existing={existing} stages={stages} reasons={reasons} expandedIds={expandedIds} toggleExpand={toggleExpand} />
+    </div>
+  )
+
   return (
     <div className="answer-page">
       <div>
@@ -197,148 +211,140 @@ const MultiStageAnswerPage = () => {
           />
           {survey.name}
         </h2>
-        {!survey.closed && (
-          <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
-        )}
+        <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
       </div>
 
-      {survey.closed? (
-        <ClosedMultistageSurveyView existing={existing} stages={stages} reasons={reasons} expandedIds={expandedIds} toggleExpand={toggleExpand} />
-        ) : (
-      <>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Tab.Container activeKey={activeStage} onSelect={setActiveStage}>
-            <Nav variant="tabs" className="mb-3 justify-content-center">
-              {stages.map(({ id, name, notAvailable }) => (
-                <Nav.Item key={id}>
-                  <Nav.Link eventKey={id}>
-                    {name}
-                    {notAvailable ? " (poissa)" : ""}
-                  </Nav.Link>
-                </Nav.Item>
-              ))}
-            </Nav>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Tab.Container activeKey={activeStage} onSelect={setActiveStage}>
+          <Nav variant="tabs" className="mb-3 justify-content-center">
+            {stages.map(({ id, name, notAvailable }) => (
+              <Nav.Item key={id}>
+                <Nav.Link eventKey={id}>
+                  {name}
+                  {notAvailable ? " (poissa)" : ""}
+                </Nav.Link>
+              </Nav.Item>
+            ))}
+          </Nav>
 
-            <Tab.Content>
-              {stages.map((stage) => (
-                <Tab.Pane key={stage.id} eventKey={stage.id}>
-                  <div className="stage-section">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <h3 className="stage-title">{stage.name}</h3>
-                      {survey.allow_absences && (
-                        <Form.Check
-                          type="switch"
-                          id={`not-available-${stage.id}`}
-                          label="En ole paikalla tässä vaiheessa"
-                          checked={stage.notAvailable}
-                          onChange={() => toggleNotAvailable(stage.id)}
-                        />
-                      )}
-                    </div>
-                    <p
-                      style={{
-                        fontStyle: "italic",
-                        opacity: 0.8,
-                        fontSize: "0.95rem",
-                        marginTop: "-4px",
-                        marginBottom: "1.2rem"
-                      }}
-                    >
-                      Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse
-                      itsesi poissaolevaksi.
-                    </p>
-                    {stage.hasMandatory && !stage.notAvailable && (
-                      <p className="note">
-                        HUOM! <span className="mandatory">{"Pakolliseksi"}</span>{" "}
-                        merkityt ryhmät priorisoidaan jakamisprosessissa. Ne
-                        täytetään aina vähintään minimikokoon asti vastauksista
-                        riippumatta.
-                      </p>
-                    )}
-
-                    {!stage.notAvailable ? (
-                      <div className="answer-layout">
-                        <div className="left-column">
-                          <GroupList
-                            id={`${stage.id}-good`}
-                            items={stage.good}
-                            expandedIds={expandedIds}
-                            toggleExpand={toggleExpand}
-                            choices={stage.neutral}
-                            stageId={stage.id}
-                            multiphase={true}
-                          />
-                          {(survey.denied_allowed_choices ?? 0) !== 0 && (
-                            <GroupList
-                              id={`${stage.id}-bad`}
-                              items={stage.bad}
-                              expandedIds={expandedIds}
-                              toggleExpand={toggleExpand}
-                              choices={stage.neutral}
-                              stageId={stage.id}
-                              multiphase={true}
-                            />
-                          )}
-                        </div>
-
-                        <div className="right-column">
-                          {survey?.search_visibility && (
-                            <div className="search-container">
-                              <input
-                                id="searchChoices"
-                                type="text"
-                                placeholder="Hae ryhmiä..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                              />
-                            </div>
-                          )}
-                          <GroupList
-                            id={`${stage.id}-neutral`}
-                            items={stage.neutral}
-                            expandedIds={expandedIds}
-                            toggleExpand={toggleExpand}
-                            choices={stage.neutral}
-                            stageId={stage.id}
-                            multiphase={true}
-                            searchTerm={searchTerm}
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      <div
-                        style={{
-                          color: "#aaa",
-                          fontStyle: "italic",
-                          margin: "3em 0"
-                        }}
-                      >
-                        Olet ilmoittanut olevasi poissa tässä vaiheessa.
-                      </div>
+          <Tab.Content>
+            {stages.map((stage) => (
+              <Tab.Pane key={stage.id} eventKey={stage.id}>
+                <div className="stage-section">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <h3 className="stage-title">{stage.name}</h3>
+                    {survey.allow_absences && (
+                      <Form.Check
+                        type="switch"
+                        id={`not-available-${stage.id}`}
+                        label="En ole paikalla tässä vaiheessa"
+                        checked={stage.notAvailable}
+                        onChange={() => toggleNotAvailable(stage.id)}
+                      />
                     )}
                   </div>
-                  {(survey.denied_allowed_choices ?? 0) !== 0 && (
-                    <ReasonsBox
-                      key={stage.id}
-                      reason={reasons[stage.id] || ""}
-                      setReason={(value) =>
-                        setReasons({ ...reasons, [stage.id]: value })
-                      }
-                    />
+                  <p
+                    style={{
+                      fontStyle: "italic",
+                      opacity: 0.8,
+                      fontSize: "0.95rem",
+                      marginTop: "-4px",
+                      marginBottom: "1.2rem"
+                    }}
+                  >
+                    Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse
+                    itsesi poissaolevaksi.
+                  </p>
+                  {stage.hasMandatory && !stage.notAvailable && (
+                    <p className="note">
+                      HUOM! <span className="mandatory">{"Pakolliseksi"}</span>{" "}
+                      merkityt ryhmät priorisoidaan jakamisprosessissa. Ne
+                      täytetään aina vähintään minimikokoon asti vastauksista
+                      riippumatta.
+                    </p>
                   )}
-                </Tab.Pane>
-              ))}
-            </Tab.Content>
-          </Tab.Container>
-        </DragDropContext>
 
-        <div className="submit-row mt-4">
-          <Button variant="success" className="submit-btn" onClick={handleSubmit}>
-            Lähetä kaikki valinnat
-          </Button>
-        </div>
-      </>
-      )}
+                  {!stage.notAvailable ? (
+                    <div className="answer-layout">
+                      <div className="left-column">
+                        <GroupList
+                          id={`${stage.id}-good`}
+                          items={stage.good}
+                          expandedIds={expandedIds}
+                          toggleExpand={toggleExpand}
+                          choices={stage.neutral}
+                          stageId={stage.id}
+                          multiphase={true}
+                        />
+                        {(survey.denied_allowed_choices ?? 0) !== 0 && (
+                          <GroupList
+                            id={`${stage.id}-bad`}
+                            items={stage.bad}
+                            expandedIds={expandedIds}
+                            toggleExpand={toggleExpand}
+                            choices={stage.neutral}
+                            stageId={stage.id}
+                            multiphase={true}
+                          />
+                        )}
+                      </div>
+
+                      <div className="right-column">
+                        {survey?.search_visibility && (
+                          <div className="search-container">
+                            <input
+                              id="searchChoices"
+                              type="text"
+                              placeholder="Hae ryhmiä..."
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                          </div>
+                        )}
+                        <GroupList
+                          id={`${stage.id}-neutral`}
+                          items={stage.neutral}
+                          expandedIds={expandedIds}
+                          toggleExpand={toggleExpand}
+                          choices={stage.neutral}
+                          stageId={stage.id}
+                          multiphase={true}
+                          searchTerm={searchTerm}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        color: "#aaa",
+                        fontStyle: "italic",
+                        margin: "3em 0"
+                      }}
+                    >
+                      Olet ilmoittanut olevasi poissa tässä vaiheessa.
+                    </div>
+                  )}
+                </div>
+                {(survey.denied_allowed_choices ?? 0) !== 0 && (
+                  <ReasonsBox
+                    key={stage.id}
+                    reason={reasons[stage.id] || ""}
+                    setReason={(value) =>
+                      setReasons({ ...reasons, [stage.id]: value })
+                    }
+                  />
+                )}
+              </Tab.Pane>
+            ))}
+          </Tab.Content>
+        </Tab.Container>
+      </DragDropContext>
+
+      <div className="submit-row mt-4">
+        <Button variant="success" className="submit-btn" onClick={handleSubmit}>
+          Lähetä kaikki valinnat
+        </Button>
+      </div>
     </div>
   );
 };

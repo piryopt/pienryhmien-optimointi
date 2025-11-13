@@ -42,49 +42,60 @@ const ClosedMultistageSurveyView = ({
         <>
           {stages
             .filter((stage) => (stage.stage ?? stage.id) === currStage)
-            .map((stage) => (
-              <div className="answer-layout" key={stage.id}>
-                <div className="left-column">
-                  {stage.good.length > 0 && (
-                    <>
-                      <h2 className="closed-survey-title">Valinnat:</h2>
-                      <GroupList
-                        id="good"
-                        items={stage.good}
-                        expandedIds={expandedIds}
-                        toggleExpand={toggleExpand}
-                        choices={stage.neutral}
-                        readOnly={true}
-                      />
-                    </>
-                  )}
-                </div>
+            .map((stage) => {
+              // If the user marked not available for this stage, show message instead of grouplists
+              if (stage.notAvailable) {
+                return (
+                  <div className="answer-layout" key={stage.id}>
+                    <p>Olet ilmoittautunut poissaolevaksi</p>
+                  </div>
+                );
+              }
 
-                <div className="right-column" style={{ marginLeft: 15 }}>
-                  {stage.bad.length > 0 && (
-                    <>
-                      <h2 className="closed-survey-title">Hylkäykset:</h2>
-                      <GroupList
-                        id="bad"
-                        items={stage.bad}
-                        expandedIds={expandedIds}
-                        toggleExpand={toggleExpand}
-                        choices={stage.neutral}
-                        readOnly={true}
-                      />
-                      {reasons[stage.id] && reasons[stage.id].length > 0 ? (
-                        <div style={{ paddingLeft: 11 }}>
-                          <p>
-                            Perustelut hylkäyksille:
-                            <br /> {reasons[stage.id]}
-                          </p>
-                        </div>
-                      ) : null}
-                    </>
-                  )}
+              return (
+                <div className="answer-layout" key={stage.id}>
+                  <div className="left-column">
+                    {stage.good.length > 0 && (
+                      <>
+                        <h2 className="closed-survey-title">Valinnat:</h2>
+                        <GroupList
+                          id="good"
+                          items={stage.good}
+                          expandedIds={expandedIds}
+                          toggleExpand={toggleExpand}
+                          choices={stage.neutral}
+                          readOnly={true}
+                        />
+                      </>
+                    )}
+                  </div>
+
+                  <div className="right-column" style={{ marginLeft: 15 }}>
+                    {stage.bad.length > 0 && (
+                      <>
+                        <h2 className="closed-survey-title">Hylkäykset:</h2>
+                        <GroupList
+                          id="bad"
+                          items={stage.bad}
+                          expandedIds={expandedIds}
+                          toggleExpand={toggleExpand}
+                          choices={stage.neutral}
+                          readOnly={true}
+                        />
+                        {reasons[stage.id] && reasons[stage.id].length > 0 ? (
+                          <div style={{ paddingLeft: 11 }}>
+                            <p>
+                              Perustelut hylkäyksille:
+                              <br /> {reasons[stage.id]}
+                            </p>
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
         </>
       )}
     </>
