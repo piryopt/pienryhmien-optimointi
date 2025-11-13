@@ -87,6 +87,7 @@ const SurveyMultistageAnswersPage = () => {
         surveyData={surveyData}
         answers={surveyAnswers}
         surveyId={surveyId}
+        multistage={true}
       />
       <p>
         <i style={{ whiteSpace: "pre-line" }}>

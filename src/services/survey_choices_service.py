@@ -25,6 +25,16 @@ class SurveyChoicesService:
         """
         return self._survey_choices_repository.find_survey_choices(survey_id)
 
+    def get_list_of_stage_survey_choices(self, survey_id: str, stage: str):
+        """
+        Returns a list of survey choices from a survey for a given stage
+
+        args:
+            survey_id: The id of the survey from which we want the survey choices
+            stage: The stage of the survey choices
+        """
+        return self._survey_choices_repository.get_stage_choices(survey_id, stage)  
+
     def get_survey_choice(self, survey_choice_id: int):
         """
         Returns the data of a survey choice
