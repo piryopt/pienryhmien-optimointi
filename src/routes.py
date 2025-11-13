@@ -264,7 +264,8 @@ def multistage_survey_create():
             user_id=user_id,
         )
         if not survey_id:
-            jsonify({"status": "0", "msg": "Creating survey failed"})
+            msg = "There already exists a survey with the same name! Close it or change the name!"
+            return jsonify({"status": "0", "msg": msg})
         # Add choices
         for stage in data["stages"]:
             for choice in stage["choices"]:
@@ -314,7 +315,7 @@ def new_survey_post():
             survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility
         )
         if not survey_id:
-            msg = gettext("Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!")
+            msg = "There already exists a survey with the same name! Close it or change the name!"
             return jsonify({"status": "0", "msg": msg}), 409
 
         email = user_service.get_email(user_id)

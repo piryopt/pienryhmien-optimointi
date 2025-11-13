@@ -428,6 +428,9 @@ class SurveyService:
                 if not result["success"]:
                     return result
         elif multistage:
+            stage_names = list(map(lambda s: s["name"], survey_dict["stages"]))
+            if len(stage_names) != len(set(stage_names)):
+                return {"success": False, "message": "Name of every stage must be unique within a survey"}
             for stage in survey_dict["stages"]:
                 if len(stage["choices"]) < minchoices:
                     msg = "There are less choices than the minimum amount of prioritized groups!"

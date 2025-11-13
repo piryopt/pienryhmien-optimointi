@@ -173,7 +173,7 @@ const SurveyMultistageCreate = () => {
       surveyInformation: "",
       minChoicesSetting: "all",
       denyChoicesSetting: "hide",
-      allowedDeniedChoices: "",
+      allowedDeniedChoices: 0,
       allowSearchVisibility: false
     },
     mode: "onBlur"
@@ -213,10 +213,10 @@ const SurveyMultistageCreate = () => {
         ? undefined
         : Number(val);
 
-    console.log(
-      "DEBUG: tables before payload:",
-      JSON.stringify(tables, null, 2)
-    );
+    //console.log(
+    //  "DEBUG: tables before payload:",
+    //  JSON.stringify(tables, null, 2)
+    //);
 
     const stages = tables.map((t) => ({
       id: t.id,
@@ -288,13 +288,12 @@ const SurveyMultistageCreate = () => {
       return;
     }
 
-    console.log(
-      "DEBUG: built stages payload:",
-      JSON.stringify(stages, null, 2)
-    );
+    //console.log(
+    //  "DEBUG: built stages payload:",
+    //  JSON.stringify(stages, null, 2)
+    //);
 
     const allowedDenied = data.allowedDeniedChoices;
-    console.log(data);
 
     const payload = {
       surveyGroupname: data.groupname,
