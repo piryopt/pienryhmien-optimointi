@@ -1,14 +1,10 @@
 import { useTranslation } from "react-i18next";
 import Table from "../Table";
 import SurveyTableRow from "./SurveyTableRow";
-import assignmentWhite from "/images/assignment_white_36dp.svg";
-import toggleOnWhite from "/images/toggle_on_white_36dp.svg";
-import toggleOffWhite from "/images/toggle_off_white_36dp.svg";
-import scheduleWhite from "/images/schedule_white_36dp.svg";
-import menuWhite from "/images/menu_white_36dp.svg";
 import surveyService from "../../services/surveys";
 import { useNotification } from "../../context/NotificationContext";
 import { useSurveyDialog } from "../../context/SurveyDialogContext";
+import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveysTable = ({ surveys, setSurveys }) => {
   const { t } = useTranslation();
@@ -34,11 +30,24 @@ const SurveysTable = ({ surveys, setSurveys }) => {
   };
 
   const columns = [
-    { title: t("Kysely"), icon: assignmentWhite },
-    { title: t("Kyselyn tila"), icon: toggleOnWhite },
-    { title: t("Ryhmät luotu"), icon: toggleOffWhite },
-    { title: t("Toiminnot"), icon: menuWhite, style: { minWidth: "22em" } },
-    { title: t("Vastausaika päättyy"), icon: scheduleWhite }
+    { title: t("Kysely"), icon: `${imagesBaseUrl}/assignment_white_36dp.svg` },
+    {
+      title: t("Kyselyn tila"),
+      icon: `${imagesBaseUrl}/toggle_on_white_36dp.svg`
+    },
+    {
+      title: t("Ryhmät luotu"),
+      icon: `${imagesBaseUrl}/toggle_off_white_36dp.svg`
+    },
+    {
+      title: t("Toiminnot"),
+      icon: `${imagesBaseUrl}/menu_white_36dp.svg`,
+      style: { minWidth: "22em" }
+    },
+    {
+      title: t("Vastausaika päättyy"),
+      icon: `${imagesBaseUrl}/schedule_white_36dp.svg`
+    }
   ];
 
   return (

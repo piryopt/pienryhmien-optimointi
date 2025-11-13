@@ -1,11 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import manageSearchWhite from "/images/manage_search_white_36dp.svg";
-import contentCopyWhite from "/images/content_copy_white_36dp.svg";
-import editWhite from "/images/edit_white_36dp.svg";
-import folderCopyWhite from "/images/folder_copy_white_36dp.svg";
-import deleteWhite from "/images/delete_white_36dp.svg";
 import { useNotification } from "../../context/NotificationContext";
+import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
   const { t } = useTranslation();
@@ -32,7 +28,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
         }
       >
         <img
-          src={manageSearchWhite}
+          src={`${imagesBaseUrl}/manage_search_white_36dp.svg`}
           alt=""
           className="d-inline-block align-text-top"
           width="20"
@@ -49,7 +45,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
             style={{ cursor: "pointer" }}
           >
             <img
-              src={contentCopyWhite}
+              src={`${imagesBaseUrl}/content_copy_white_36dp.svg`}
               alt=""
               className="d-inline-block align-text-top"
               width="20"
@@ -62,7 +58,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
       <br></br>
       <Link to={`/surveys/${survey.id}/edit`} className="surveys_link">
         <img
-          src={editWhite}
+          src={`${imagesBaseUrl}/edit_white_36dp.svg`}
           alt=""
           className="d-inline-block align-text-top"
           width="20"
@@ -76,7 +72,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
         to={`/surveys/create?fromtemplate=${survey.id}`}
       >
         <img
-          src={folderCopyWhite}
+          src={`${imagesBaseUrl}/folder_copy_white_36dp.svg`}
           alt=""
           className="d-inline-block align-text-top"
           width="20"
@@ -91,7 +87,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
         onClick={() => handleDeleteClick(survey.id, survey.closed)}
       >
         <img
-          src={deleteWhite}
+          src={`${imagesBaseUrl}/delete_white_36dp.svg`}
           alt=""
           className="d-inline-block align-text-top"
           width="20"

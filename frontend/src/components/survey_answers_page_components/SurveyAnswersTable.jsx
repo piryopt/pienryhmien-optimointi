@@ -4,11 +4,8 @@ import { useState } from "react";
 import surveyService from "../../services/surveys";
 import Table from "../Table";
 import SurveyAnswersTableRow from "./SurveyAnswersTableRow";
-import emailWhite from "/images/email_white_36dp.svg";
-import doneWhite from "/images/done_white_36dp.svg";
-import questionAnswerWhite from "/images/question_answer_white_36dp.svg";
-import personOffWhite from "/images/person_off_white_36dp.svg";
 import { useSurveyDialog } from "../../context/SurveyDialogContext";
+import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyAnswersTable = (props) => {
   const { t } = useTranslation();
@@ -18,10 +15,20 @@ const SurveyAnswersTable = (props) => {
   const [emailToDelete, setEmailToDelete] = useState("");
 
   const columns = [
-    { title: t("Sähköposti"), icon: emailWhite },
-    { title: t("Valinnat"), icon: doneWhite, style: { minWidth: "12em" } },
-    { title: t("Perustelut"), icon: questionAnswerWhite },
-    { title: t("Vastauksen poistaminen"), icon: personOffWhite }
+    { title: t("Sähköposti"), icon: `${imagesBaseUrl}/email_white_36dp.svg` },
+    {
+      title: t("Valinnat"),
+      icon: `${imagesBaseUrl}/done_white_36dp.svg`,
+      style: { minWidth: "12em" }
+    },
+    {
+      title: t("Perustelut"),
+      icon: `${imagesBaseUrl}/question_answer_white_36dp.svg`
+    },
+    {
+      title: t("Vastauksen poistaminen"),
+      icon: `${imagesBaseUrl}/person_off_white_36dp.svg`
+    }
   ];
 
   const handleAnswerDelete = (email) => {

@@ -25,7 +25,10 @@ def get_locale():
 
     if not has_request_context():
         return "fi"
-    return session.get("language", 0)
+    lang = session.get("language")
+    if isinstance(lang, str) and lang:
+        return lang
+    return "fi"
 
 
 def create_app(test_config=None):

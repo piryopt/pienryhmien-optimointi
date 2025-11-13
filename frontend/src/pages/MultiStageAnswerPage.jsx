@@ -10,9 +10,9 @@ import Tab from "react-bootstrap/Tab";
 import Form from "react-bootstrap/Form";
 import GroupList from "../components/survey_answer_page_components/GroupList.jsx";
 import ReasonsBox from "../components/survey_answer_page_components/ReasonsBox.jsx";
-import assignmentIcon from "/images/assignment_white_36dp.svg";
 import SurveyInfo from "../components/survey_answer_page_components/SurveyInfo.jsx";
 import "../static/css/answerPage.css";
+import { imagesBaseUrl } from "../utils/constants.js";
 
 const MultiStageAnswerPage = () => {
   const { surveyId } = useParams();
@@ -187,7 +187,11 @@ const MultiStageAnswerPage = () => {
     <div className="answer-page">
       <div>
         <h2 className="answer-title">
-          <img src={assignmentIcon} alt="" className="assignment-icon" />
+          <img
+            src={`${imagesBaseUrl}/assignment_white_36dp.svg`}
+            alt=""
+            className="assignment-icon"
+          />
           {survey.name}
         </h2>
         <SurveyInfo survey={survey} additionalInfo={additionalInfo} />

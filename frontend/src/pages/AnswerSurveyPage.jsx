@@ -11,7 +11,6 @@ import { ReactReduxContext } from "react-redux";
 import GroupList from "../components/survey_answer_page_components/GroupList.jsx";
 import ReasonsBox from "../components/survey_answer_page_components/ReasonsBox.jsx";
 import ButtonRow from "../components/survey_answer_page_components/ButtonRow.jsx";
-import assignmentIcon from "/images/assignment_white_36dp.svg";
 import "../static/css/answerPage.css";
 
 const AnswerSurveyPage = () => {

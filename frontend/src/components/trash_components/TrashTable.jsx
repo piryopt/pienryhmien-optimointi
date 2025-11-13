@@ -3,11 +3,7 @@ import Table from "../Table";
 import TrashTableRow from "./TrashTableRow";
 import surveyService from "../../services/surveys";
 import { useNotification } from "../../context/NotificationContext";
-import assignmentIcon from "/images/assignment_white_36dp.svg";
-import toggleOnIcon from "/images/toggle_on_white_36dp.svg";
-import toggleOffIcon from "/images/toggle_off_white_36dp.svg";
-import deleteDateIcon from "/images/auto_delete_36dp.svg";
-import menuIcon from "/images/menu_white_36dp.svg";
+import { imagesBaseUrl } from "../../utils/constants";
 
 const TrashTable = ({ surveys, setSurveys }) => {
   const { t } = useTranslation();
@@ -35,7 +31,7 @@ const TrashTable = ({ surveys, setSurveys }) => {
   const handleRestoreClick = async (surveyId) => {
     if (window.confirm(t("Haluatko palauttaa kyselyn roskakorista?"))) {
       try {
-        await surveyService.returnSurvey(surveyId)
+        await surveyService.returnSurvey(surveyId);
         setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
         showNotification(t("Kysely palautettu"), "success");
       } catch (err) {
@@ -46,11 +42,24 @@ const TrashTable = ({ surveys, setSurveys }) => {
   };
 
   const columns = [
-    { title: t("Kysely"), icon: assignmentIcon },
-    { title: t("Kyselyn tila"), icon: toggleOnIcon },
-    { title: t("Ryhmät luotu"), icon: toggleOffIcon },
-    { title: t("Toiminnot"), icon: menuIcon, style: { minWidth: "22em" } },
-    { title: t("Kysely poistetaan"), icon: deleteDateIcon }
+    { title: t("Kysely"), icon: `${imagesBaseUrl}/assignment_white_36dp.svg` },
+    {
+      title: t("Kyselyn tila"),
+      icon: `${imagesBaseUrl}/toggle_on_white_36dp.svg`
+    },
+    {
+      title: t("Ryhmät luotu"),
+      icon: `${imagesBaseUrl}/toggle_off_white_36dp.svg`
+    },
+    {
+      title: t("Toiminnot"),
+      icon: `${imagesBaseUrl}/menu_white_36dp.svg`,
+      style: { minWidth: "22em" }
+    },
+    {
+      title: t("Kysely poistetaan"),
+      icon: `${imagesBaseUrl}/auto_delete_36dp.svg`
+    }
   ];
 
   return (
