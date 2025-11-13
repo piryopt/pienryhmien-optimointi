@@ -293,11 +293,8 @@ const SurveyMultistageCreate = () => {
       JSON.stringify(stages, null, 2)
     );
 
-    const allowedDenied = Array.isArray(data.allowedDeniedChoices)
-      ? data.allowedDeniedChoices
-      : data.allowedDeniedChoices
-        ? [data.allowedDeniedChoices]
-        : [];
+    const allowedDenied = data.allowedDeniedChoices;
+    console.log(data);
 
     const payload = {
       surveyGroupname: data.groupname,

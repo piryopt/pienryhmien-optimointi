@@ -248,6 +248,9 @@ def multistage_survey_create():
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 
         # Add validation
+        validation = survey_service.validate_created_survey(data, multistage=True)
+        if not validation["success"]:
+            return jsonify({"status": "0", "msg": validation["message"]}), 400
 
         # Add to surveys table
         survey_id = survey_service.create_new_multiphase_survey(
@@ -255,11 +258,13 @@ def multistage_survey_create():
             min_choices=data["minchoices"],
             description=data["surveyInformation"],
             enddate=f"{date_to_sql_valid(data['enddate'])} {data['endtime']}",
-            allowed_denied_choices=len(data["allowedDeniedChoices"]),
+            allowed_denied_choices=data["allowedDeniedChoices"],
             allow_search_visibility=data["allowSearchVisibility"],
             allow_absences=data["allowAbsences"],
             user_id=user_id,
         )
+        if not survey_id:
+            jsonify({"status": "0", "msg": "Creating survey failed"})
         # Add choices
         for stage in data["stages"]:
             for choice in stage["choices"]:

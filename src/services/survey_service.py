@@ -374,7 +374,7 @@ class SurveyService:
                     popularities[int(ranking[i])] = 1
         return (answers, popularities)
 
-    def validate_created_survey(self, survey_dict, edited=False):
+    def validate_created_survey(self, survey_dict, edited=False, multistage=False):
         survey_name = survey_dict.get("surveyGroupname", "")
         description = survey_dict.get("surveyInformation", "")
         survey_choices = survey_dict.get("choices", [])
@@ -393,40 +393,65 @@ class SurveyService:
 
         if parsed_time <= datetime.now():
             msg = "Response period's end can't be in the past"
-            return {"success": False, "message": {"status": "0", "msg": msg}}
+            return {"success": False, "message": msg}
 
-        if minchoices > len(survey_choices):
-            msg = "There are less choices than the minimum amount of prioritized groups! The creation of the survey failed!"
-            return {"status": False, "message": {"status": "0", "msg": msg}}
+        if not multistage and (minchoices > len(survey_choices)):
+            msg = "There are less choices than the minimum amount of prioritized groups!"
+            return {"success": False, "message": msg}
 
         if not isinstance(allowed_denied_choices, int):
+            print(allowed_denied_choices)
             msg = "Survey denied choices must be an integer"
-            return {"success": False, "message": {"status": "0", "msg": msg}}
+            return {"success": False, "message": msg}
 
         if not isinstance(allow_search_visibility, bool):
             print(type(allow_search_visibility), allow_search_visibility)
             msg = "Survey search visibility must be a boolean"
-            return {"success": False, "message": {"status": "0", "msg": msg}}
+            return {"success": False, "message": msg}
         
         if len(survey_name) < 5:
             msg = "Survey name must be atleast 5 characters long"
-            return {"success": False, "message": {"status": "0", "msg": msg}}
+            return {"success": False, "message": msg}
 
         if not isinstance(description, str):
             msg = "Survey description must be a string"
-            return {"success": False, "message": {"status": "0", "msg": msg}}
+            return {"success": False, "message": msg}
 
         # Min choices is a number
         if not edited:
             if not isinstance(minchoices, int):
-                msg = "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"
-                return {"success": False, "message": {"status": "0", "msg": msg}}
+                msg = "The minimum number of prioritized groups should be a number!"
+                return {"success": False, "message": msg}
         if "choices" in survey_dict:
-            print("Survey choices react: ", survey_dict["choices"])
             for choice in survey_dict["choices"]:
-                if choice["name"] == "":
-                    msg = gettext("Ryhmä vaatii nimen joka on vähintään 5 merkkiä pitkä")
-                    return {"success": False, "message": {"status": "0", "msg": msg}}
+                result = self.validate_survey_choice(choice)
+                if not result["success"]:
+                    return result
+        elif multistage:
+            for stage in survey_dict["stages"]:
+                if len(stage["choices"]) < minchoices:
+                    msg = "There are less choices than the minimum amount of prioritized groups!"
+                    return {"success": False, "message": msg}
+                for choice in stage["choices"]:
+                    result = self.validate_survey_choice(choice)
+                    if not result["success"]:
+                        return result
+        return {"success": True}
+
+    def validate_survey_choice(self, choice):
+        """
+        method for validating a survey choice
+        """
+        if len(choice["name"]) < 5:
+            msg = "Group requires a name that is at least 5 characters long"
+            return {"success": False, "message": msg}
+        if not isinstance(choice["mandatory"], bool):
+            msg = "Group mandatory must be a boolean"
+            return {"success": False, "message": msg}
+        if choice["min_size"] > choice["max_spaces"]:
+            msg = "Group minimum size must be smaller than maximum size"
+            return {"success": False, "message": msg}
+
         return {"success": True}
 
     def save_survey_edit(self, survey_id, edit_dict, user_id):
