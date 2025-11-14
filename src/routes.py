@@ -248,6 +248,9 @@ def multistage_survey_create():
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 
         # Add validation
+        validation = survey_service.validate_created_survey(data, multistage=True)
+        if not validation["success"]:
+            return jsonify({"status": "0", "msg": validation["message"]}), 400
 
         # Add to surveys table
         survey_id = survey_service.create_new_multiphase_survey(
@@ -255,11 +258,14 @@ def multistage_survey_create():
             min_choices=data["minchoices"],
             description=data["surveyInformation"],
             enddate=f"{date_to_sql_valid(data['enddate'])} {data['endtime']}",
-            allowed_denied_choices=len(data["allowedDeniedChoices"]),
+            allowed_denied_choices=data["allowedDeniedChoices"],
             allow_search_visibility=data["allowSearchVisibility"],
             allow_absences=data["allowAbsences"],
             user_id=user_id,
         )
+        if not survey_id:
+            msg = "There already exists a survey with the same name! Close it or change the name!"
+            return jsonify({"status": "0", "msg": msg})
         # Add choices
         for stage in data["stages"]:
             for choice in stage["choices"]:
@@ -280,7 +286,7 @@ def multistage_survey_create():
         return jsonify({"status": "0", "msg": gettext("Server error")}), 500
 
 
-@bp.route("/surveys/create", methods=["POST"])
+@bp.route("/api/surveys/create", methods=["POST"])
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -305,26 +311,11 @@ def new_survey_post():
         allowed_denied_choices = data.get("allowedDeniedChoices", 0)
         allow_search_visibility = data.get("allowSearchVisibility", False)
 
-        date_string = f"{date_end} {time_end}"
-        format_code = "%d.%m.%Y %H:%M"
-        try:
-            parsed_time = datetime.strptime(date_string, format_code)
-        except Exception:
-            return jsonify({"status": "0", "msg": gettext("Invalid date/time format")}), 400
-
-        if parsed_time <= datetime.now():
-            msg = gettext("Vastausajan päättyminen ei voi olla menneisyydessä")
-            return jsonify({"status": "0", "msg": msg}), 400
-
-        if minchoices > len(survey_choices):
-            msg = gettext("Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmäismäärä! Kyselyn luominen epäonnistui!")
-            return jsonify({"status": "0", "msg": msg}), 400
-
         survey_id = survey_service.create_new_survey_manual(
             survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility
         )
         if not survey_id:
-            msg = gettext("Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!")
+            msg = "There already exists a survey with the same name! Close it or change the name!"
             return jsonify({"status": "0", "msg": msg}), 409
 
         email = user_service.get_email(user_id)
