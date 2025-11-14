@@ -14,8 +14,6 @@ const RequireAuth = ({ children }) => {
       return <LoginPage />;
     }
     // server handles Haka login
-    window.location.href = "/auth/login";
-    return null;
   }
 
   // logged in

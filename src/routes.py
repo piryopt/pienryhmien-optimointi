@@ -1,7 +1,7 @@
 from random import shuffle
 from datetime import datetime
 from functools import wraps
-from flask import app, render_template, request, session, jsonify, redirect, Blueprint, current_app
+from flask import app, render_template, request, session, jsonify, redirect, Blueprint, current_app, send_from_directory
 from flask_wtf.csrf import generate_csrf
 import markdown
 from pathlib import Path
@@ -99,9 +99,16 @@ def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
+    # in production serve the built react app (copied to static/react folder by dockerfile)
+    if not current_app.debug:
+        # user_id = session.get("user_id", 0)
+        # if user_id == 0:
+        #     return redirect("/api/auth/login") this needs to be implemented (dont know how sso works here)
+        return send_from_directory(current_app.static_folder, "index.html")
+
     # used in local use
     if current_app.debug and session.get("user_id", 0) == 0:
-        return redirect("/auth/login")
+        return redirect("/api/auth/login")
     reloaded = session.get("reloaded", 0)
     if not reloaded:
         session["reloaded"] = True
@@ -116,6 +123,12 @@ def frontpage() -> str:
 
     return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
+@bp.route("/static/images/<path:filename>")
+def serve_images(filename):
+    images_dir = Path(__file__).parents[0] / "static" / "images"
+    file_path = images_dir / filename
+    if file_path.exists() and file_path.is_file():
+        return send_from_directory(str(images_dir), filename)
 
 @bp.route("/api/frontpage", methods=["GET"])
 @ad_login
@@ -1314,7 +1327,10 @@ def api_logout():
     SPA logout: clear server session and return JSON.
     """
     user_service.logout()
-    return jsonify({"logged_out": True})
+    if current_app.debug:
+        return jsonify({"logged_out": True})
+    else:
+        return redirect("/Shibboleth.sso/Logout")
 
 
 """
