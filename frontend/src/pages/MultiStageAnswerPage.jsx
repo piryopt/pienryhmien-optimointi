@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext.jsx";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys.js";
-import Button from "react-bootstrap/Button";
 import Nav from "react-bootstrap/Nav";
 import Tab from "react-bootstrap/Tab";
 import Form from "react-bootstrap/Form";
@@ -14,6 +13,7 @@ import SurveyInfo from "../components/survey_answer_page_components/SurveyInfo.j
 import "../static/css/answerPage.css";
 import { imagesBaseUrl } from "../utils/constants.js";
 import ClosedMultistageSurveyView from "../components/survey_answer_page_components/ClosedMultistageSurveyView.jsx";
+import ButtonRow from "../components/survey_answer_page_components/ButtonRow.jsx";
 
 const MultiStageAnswerPage = () => {
   const { surveyId } = useParams();
@@ -171,6 +171,7 @@ const MultiStageAnswerPage = () => {
         deniedAllowedChoices: survey.denied_allowed_choices,
         stages: payload
       });
+      setExisting(true);
       if (result.status === "0") throw new Error(result.msg);
       showNotification(t("Kyselyn vastaukset tallennettu."), "success");
     } catch (error) {
@@ -179,6 +180,28 @@ const MultiStageAnswerPage = () => {
         t("Kyselyn vastauksien tallennus epäonnistui."),
         "error"
       );
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const result = await surveyService.deleteSurveyAnswer(surveyId);
+      if (result.status === "0") throw new Error(result.msg);
+      showNotification(result.msg, "success");
+      setExisting(false);
+      setStages((prev) =>
+        prev.map((s) => ({
+          ...s,
+          good: [],
+          bad: [],
+          neutral: [...s.good, ...s.bad, ...s.neutral],
+          notAvailable: false
+        }))
+      );
+      setReasons({});
+    } catch (error) {
+      showNotification(error.message, "error");
+      console.error("Error deleting survey", error);
     }
   };
 
@@ -277,18 +300,33 @@ const MultiStageAnswerPage = () => {
                           multiphase={true}
                         />
                         {(survey.denied_allowed_choices ?? 0) !== 0 && (
-                          <GroupList
-                            id={`${stage.id}-bad`}
-                            items={stage.bad}
-                            expandedIds={expandedIds}
-                            toggleExpand={toggleExpand}
-                            choices={stage.neutral}
-                            stageId={stage.id}
-                            multiphase={true}
-                          />
+                          <>
+                            <GroupList
+                              id={`${stage.id}-bad`}
+                              items={stage.bad}
+                              expandedIds={expandedIds}
+                              toggleExpand={toggleExpand}
+                              choices={stage.neutral}
+                              stageId={stage.id}
+                              multiphase={true}
+                            />
+                            <ReasonsBox
+                              key={stage.id}
+                              reason={reasons[stage.id] || ""}
+                              setReason={(value) =>
+                                setReasons({ ...reasons, [stage.id]: value })
+                              }
+                            />
+                          </>
                         )}
+                        <div className="submit-row mt-4">
+                          <ButtonRow
+                            handleSubmit={handleSubmit}
+                            handleDelete={handleDelete}
+                            existing={existing}
+                          />
+                        </div>
                       </div>
-
                       <div className="right-column">
                         {survey?.search_visibility && (
                           <div className="search-container">
@@ -325,26 +363,11 @@ const MultiStageAnswerPage = () => {
                     </div>
                   )}
                 </div>
-                {(survey.denied_allowed_choices ?? 0) !== 0 && (
-                  <ReasonsBox
-                    key={stage.id}
-                    reason={reasons[stage.id] || ""}
-                    setReason={(value) =>
-                      setReasons({ ...reasons, [stage.id]: value })
-                    }
-                  />
-                )}
               </Tab.Pane>
             ))}
           </Tab.Content>
         </Tab.Container>
       </DragDropContext>
-
-      <div className="submit-row mt-4">
-        <Button variant="success" className="submit-btn" onClick={handleSubmit}>
-          Lähetä kaikki valinnat
-        </Button>
-      </div>
     </div>
   );
 };
