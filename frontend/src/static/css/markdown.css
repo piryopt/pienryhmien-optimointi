@@ -1,0 +1,13 @@
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.markdown-content .md-image-small {
+  max-width: 60%;
+  height: auto;
+  display: block;
+  margin: 0.5rem 0;
+}

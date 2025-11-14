@@ -31,12 +31,29 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
       FLASK_ENV: development
+      FLASK_DEBUG: 1
     depends_on:
       - db
     ports:
       - "5001:5000"
     volumes:
       - .:/usr/src/app
+
+  web-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: always
+    env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      FLASK_ENV: production
+      FLASK_DEBUG: 0
+    depends_on:
+      - db
+    ports:
+      - "5001:5000"
 
   web-test:
     build: .

@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
 from dotenv import load_dotenv
 from src.tools.date_converter import format_datestring
+from flask_cors import CORS
 
 
 csfr = CSRFProtect()
@@ -24,14 +25,27 @@ def get_locale():
 
     if not has_request_context():
         return "fi"
-    return session.get("language", 0)
+    lang = session.get("language")
+    if isinstance(lang, str) and lang:
+        return lang
+    return "fi"
 
 
 def create_app(test_config=None):
     load_dotenv()
 
-    app = Flask(__name__)
-    app.config.from_object(Config())
+    app = Flask(__name__, static_folder="./static/react", static_url_path="/")
+    CORS(app, origins=["http://localhost:5173", "http://localhost:5001"], supports_credentials=True)
+
+    #app.config.from_object(Config())
+    app.config.setdefault("SESSION_COOKIE_HTTPONLY", True)
+
+    if os.getenv("FLASK_USE_SECURECOOKIES", "0") == "1":
+        app.config["SESSION_COOKIE_SECURE"] = True
+        app.config["SESSION_COOKIE_SAMESITE"] = "None"
+    else:
+        app.config["SESSION_COOKIE_SECURE"] = False
+        app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
     env = os.getenv("FLASK_ENV", "development")
 
@@ -55,7 +69,7 @@ def create_app(test_config=None):
     if test_config is None or env != "testing":
         # initialize scheduler if not running tests
 
-        from src.routes import close_surveys
+        from src.routes import close_surveys, delete_old_surveys
 
         scheduler.init_app(app)
         scheduler.start()
@@ -64,6 +78,11 @@ def create_app(test_config=None):
         def scheduled_close_surveys():
             with app.app_context():
                 close_surveys()
+
+        @scheduler.task("cron", id="delete_old_surveys", week="*")
+        def scheduled_delete_old_surveys():
+            with app.app_context():
+                delete_old_surveys()
 
     # make format_datestring accessible from jinja templates
     app.jinja_env.globals.update(format_datestring=format_datestring)
