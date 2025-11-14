@@ -21,6 +21,8 @@
   "Ei palautetta": "",
   "Ei palautteita": "",
   "Ei tietoja": "",
+  "Ei vaiheita ladattuna": "",
+  "En ole paikalla tässä vaiheessa": "Jag är frånvarande",
   "Enimmäispaikat": "Max antal platser",
   "Enimmäispaikat vaaditaan": "",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "",
@@ -29,6 +31,13 @@
   },
   "etusivu": {
     "Vastausaika päättyy": "Svarstid utgår: {{timeEnd}}"
+  },
+  "Hae ryhmiä": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "",
   "Hakunäkyvyys": "",
@@ -43,6 +52,7 @@
   "Haluatko varmasti poistaa kyselyn?": "",
   "Haluatko varmasti sulkea kyselyn?": "",
   "Haluatko varmasti sulkea palautteen?": "",
+  "HUOM! ": "OBS! ",
   "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
     " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
       "": ""
@@ -58,6 +68,9 @@
   "Jaettavia paikkoja": "Platser att tilldela",
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
+    "": "Ordna alternativen i preferensordning eller markera dig själv som frånvarande"
+  },
   "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
     " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
       " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
@@ -123,7 +136,15 @@
       }
     }
   },
+  "Ladataan kyselyä": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
   "Ladataan…": "",
+  "Lähetä valinnat": "Skicka val",
   "Lähetetään": {
     "": {
       "": {
@@ -146,6 +167,9 @@
   "Luo uusi monivaiheinen kysely": "Skapa ny flerfasundersökning",
   "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Skapa en ny enkät i flera steg och ange svarsalternativ för varje steg",
   "Luotuja kyselyitä": "Skapade enkäter: {{count}}",
+  "merkityt ryhmät priorisoidaan jakamisprosessissa": {
+    " ": "grupper prioriteras i delningsprocessen."
+  },
   "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordning på val",
@@ -155,6 +179,9 @@
   "Näytä": "Visa",
   "Näytä vanhat kyselyt": "Visa gamla enkäter",
   "Näytetäänkö vastaajalle hakupalkki?": "Visas sökfältet för respondenten?",
+  "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
+    "": "De är alltid fyllda till åtminstone minimistorleken oavsett svaren."
+  },
   "Nimi": "Namn",
   "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "",
   "Nimi vaaditaan": "",
@@ -165,6 +192,7 @@
   "Päättyy": "",
   "Päivämäärä on virheellinen": "",
   "Pakollinen": "Obligatorisk",
+  "Pakolliseksi ": "Obligatoriska ",
   "Pakota minimikoko": "Kraft minsta gruppstorlek",
   "Palaa kyselylistaan": "Återgå till frågelistan",
   "Palaa listaan": "",
@@ -181,11 +209,13 @@
   "Perustelut hylkäyksille": "Motiveringar för avvisningar",
   "Peruuta": "Avbryt",
   "Piilota": "",
+  "poissa": "frånvarande",
   "Poista": "Ta bort",
   "Poista kysely": "Ta bort enkät",
   "Poista kysely?": "",
   "Poista sarake": "",
   "Poista vaihe": "",
+  "Poista valinnat": "Ta bort val",
   "Poista vastaus?": "",
   "Poistettavat kyselyt": "Undersökningar som ska raderas: {{count}}",
   "pp": {

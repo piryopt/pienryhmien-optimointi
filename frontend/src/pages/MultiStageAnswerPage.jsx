@@ -188,7 +188,6 @@ const MultiStageAnswerPage = () => {
       const result = await surveyService.deleteSurveyAnswer(surveyId);
       if (result.status === "0") throw new Error(result.msg);
       showNotification(result.msg, "success");
-      setExisting(false);
       setStages((prev) =>
         prev.map((s) => ({
           ...s,
@@ -199,6 +198,7 @@ const MultiStageAnswerPage = () => {
         }))
       );
       setReasons({});
+      setExisting(false);
     } catch (error) {
       showNotification(error.message, "error");
       console.error("Error deleting survey", error);
@@ -206,8 +206,8 @@ const MultiStageAnswerPage = () => {
   };
 
   if (loading)
-    return <div className="text-center mt-5">Ladataan kyselyä...</div>;
-  if (!activeStage) return <div>Ei vaiheita ladattuna</div>;
+    return <div className="text-center mt-5">{t("Ladataan kyselyä...")}</div>;
+  if (!activeStage) return <div>{t("Ei vaiheita ladattuna")}</div>;
 
   if (survey.closed) return (
     <div className="answer-page">
@@ -244,7 +244,7 @@ const MultiStageAnswerPage = () => {
               <Nav.Item key={id}>
                 <Nav.Link eventKey={id}>
                   {name}
-                  {notAvailable ? " (poissa)" : ""}
+                  {notAvailable ? ` (${t("poissa")})` : ""}
                 </Nav.Link>
               </Nav.Item>
             ))}
@@ -260,7 +260,7 @@ const MultiStageAnswerPage = () => {
                       <Form.Check
                         type="switch"
                         id={`not-available-${stage.id}`}
-                        label="En ole paikalla tässä vaiheessa"
+                        label={t("En ole paikalla tässä vaiheessa")}
                         checked={stage.notAvailable}
                         onChange={() => toggleNotAvailable(stage.id)}
                       />
@@ -275,15 +275,12 @@ const MultiStageAnswerPage = () => {
                       marginBottom: "1.2rem"
                     }}
                   >
-                    Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse
-                    itsesi poissaolevaksi.
+                    {t("Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi.")}
                   </p>
                   {stage.hasMandatory && !stage.notAvailable && (
                     <p className="note">
-                      HUOM! <span className="mandatory">{"Pakolliseksi"}</span>{" "}
-                      merkityt ryhmät priorisoidaan jakamisprosessissa. Ne
-                      täytetään aina vähintään minimikokoon asti vastauksista
-                      riippumatta.
+                      {t("HUOM! ")}<span className="mandatory">{t("Pakolliseksi ")}</span>
+                      {t("merkityt ryhmät priorisoidaan jakamisprosessissa. ")} {t("Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.")}
                     </p>
                   )}
 
@@ -319,13 +316,6 @@ const MultiStageAnswerPage = () => {
                             />
                           </>
                         )}
-                        <div className="submit-row mt-4">
-                          <ButtonRow
-                            handleSubmit={handleSubmit}
-                            handleDelete={handleDelete}
-                            existing={existing}
-                          />
-                        </div>
                       </div>
                       <div className="right-column">
                         {survey?.search_visibility && (
@@ -333,7 +323,7 @@ const MultiStageAnswerPage = () => {
                             <input
                               id="searchChoices"
                               type="text"
-                              placeholder="Hae ryhmiä..."
+                              placeholder={t("Hae ryhmiä...")}
                               value={searchTerm}
                               onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -359,15 +349,24 @@ const MultiStageAnswerPage = () => {
                         margin: "3em 0"
                       }}
                     >
-                      Olet ilmoittanut olevasi poissa tässä vaiheessa.
+                      {t("Olet ilmoittautunut poissaolevaksi.")}
                     </div>
                   )}
                 </div>
+
               </Tab.Pane>
             ))}
           </Tab.Content>
         </Tab.Container>
       </DragDropContext>
+
+      <div className="submit-row mt-4">
+        <ButtonRow
+          handleSubmit={handleSubmit}
+          handleDelete={handleDelete}
+          existing={existing}
+        />
+      </div>
     </div>
   );
 };
