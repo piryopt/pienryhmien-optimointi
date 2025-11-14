@@ -46,28 +46,26 @@ const SurveyResultsPage = () => {
     getSurveyResults();
   }, []);
 
-  {
-    const handleToExcelFile = async () => {
-      const groupData = results.map((res) => ({
-        [t("Nimi")]: res[0][1],
-        [t("Sähköposti")]: res[1],
-        [t("Ryhmä")]: res[2][1],
-        [t("Monesko valinta")]: res[3],
-        ...Object.fromEntries(
-          infoKeys.map((pair, index) => [
-            pair.info_key,
-            additionalInfos[res[2][0]][index]
-          ])
-        )
-      }));
-      const { utils, writeFile } = await import("xlsx");
-      const { json_to_sheet, book_new, book_append_sheet } = utils;
-      const ws = json_to_sheet(groupData);
-      const wb = book_new();
-      book_append_sheet(wb, ws, t("Tulokset"));
-      writeFile(wb, `${t("tulokset")}.xlsx`);
-    };
-  }
+  const handleToExcelFile = async () => {
+    const groupData = results.map((res) => ({
+      [t("Nimi")]: res[0][1],
+      [t("Sähköposti")]: res[1],
+      [t("Ryhmä")]: res[2][1],
+      [t("Monesko valinta")]: res[3],
+      ...Object.fromEntries(
+        infoKeys.map((pair, index) => [
+          pair.info_key,
+          additionalInfos[res[2][0]][index]
+        ])
+      )
+    }));
+    const { utils, writeFile } = await import("xlsx");
+    const { json_to_sheet, book_new, book_append_sheet } = utils;
+    const ws = json_to_sheet(groupData);
+    const wb = book_new();
+    book_append_sheet(wb, ws, t("Tulokset"));
+    writeFile(wb, `${t("tulokset")}.xlsx`);
+  };
 
   const handleSaveResults = () => {
     try {

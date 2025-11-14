@@ -17,14 +17,17 @@ export const AuthProvider = ({ children }) => {
       });
       const data = await res.json();
       setUser(data.logged_in ? data : false);
+      return data;
     } catch (err) {
       console.error("refreshSession failed", err);
       setUser(false);
+      return { logged_in: false };
     }
   };
 
   useEffect(() => {
     (async () => {
+      let debugFlag = false;
       try {
         const debugFlag = await configService.fetchDebugFlag();
         setDebug(debugFlag);
@@ -32,7 +35,19 @@ export const AuthProvider = ({ children }) => {
         console.error("fetchDebugFlag failed", e);
         setDebug(false);
       }
-      await refreshSession();
+      const sessionData = await refreshSession();
+      // if not debug and user not logged in, trigger redirect to backend so SSO can authenticate
+      // sessionStorage used to prevent infinite loops if SSO fails
+      if (debugFlag === false && !sessionData.logged_in) {
+        const attempted = sessionStorage.getItem("ssoAttempted");
+        if (!attempted) {
+          sessionStorage.setItem("ssoAttempted", 1);
+          window.location.href = "/";
+          return;
+        } else {
+          setUser(false);
+        }
+      }
       setLoading(false);
     })();
   }, []);
@@ -58,6 +73,7 @@ export const AuthProvider = ({ children }) => {
       throw new Error(err?.message || "Login failed");
     }
 
+    sessionStorage.removeItem("ssoAttempted");
     await refreshSession();
     return user;
   };
@@ -73,7 +89,7 @@ export const AuthProvider = ({ children }) => {
       await refreshSession();
       return;
     }
-    // If debug is false we expect caller to do a full redirect to /auth/logout
+    // If debug is false we expect caller to do a full redirect to api/auth/logout
   };
 
   return (

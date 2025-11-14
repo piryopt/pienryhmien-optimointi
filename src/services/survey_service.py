@@ -61,6 +61,18 @@ class SurveyService:
             return False
         return survey.surveyname
 
+    def is_multistage(self, survey_id):
+        """
+        Returns True if the survey has stages (is multistage), False otherwise.
+
+        args:
+            survey_id: The id of the survey
+        """
+        result = self._survey_repository.is_multistage(survey_id)
+        if not result:
+            return False
+        return result
+
     def count_surveys_created(self, user_id):
         """
         Get the size of the list of surveys created. If no surveys have been created, return 0
@@ -119,13 +131,7 @@ class SurveyService:
             user_id: The id of the user whose active surveys we want
         """
         surveys = self._survey_repository.get_active_surveys(user_id)
-        return [
-        {
-            key: format_datestring(val) if key == "time_end" else val
-            for key, val in survey._mapping.items()
-        }
-        for survey in surveys
-        ]
+        return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
     def get_active_surveys_and_response_count(self, user_id):
         """
@@ -136,13 +142,7 @@ class SurveyService:
         """
 
         surveys = self._survey_repository.get_active_surveys_and_response_count(user_id)
-        return [
-        {
-            key: format_datestring(val) if key == "time_end" else val
-            for key, val in survey._mapping.items()
-        }
-        for survey in surveys
-        ]
+        return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
     def check_if_survey_closed(self, survey_id):
         """
@@ -165,13 +165,7 @@ class SurveyService:
             user_id: The id of the user whose closed surveys we want
         """
         surveys = self._survey_repository.get_closed_surveys(user_id)
-        return [
-            {
-                key: format_datestring(val) if key == "time_end" else val
-                for key, val in survey._mapping.items()
-            }
-            for survey in surveys
-        ]
+        return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
     def update_survey_answered(self, survey_id):
         """
@@ -346,6 +340,15 @@ class SurveyService:
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
 
+    def fetch_survey_responses_grouped_by_stage(self, survey_id):
+        """
+        Gets a list of user_survey_rankings for the survey grouped by stage
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.fetch_survey_response_grouped_by_stages(survey_id)
+
     def get_choice_popularities(self, survey_id: str):
         """
         Calls repository function fetch_survey_responses() to get user rankings
@@ -371,25 +374,87 @@ class SurveyService:
                     popularities[int(ranking[i])] = 1
         return (answers, popularities)
 
-    def validate_created_survey(self, survey_dict, edited=False):
-        # Name length
-        if len(survey_dict["surveyGroupname"]) < 5:
-            msg = gettext("Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä")
-            return {"success": False, "message": {"status": "0", "msg": msg}}
+    def validate_created_survey(self, survey_dict, edited=False, multistage=False):
+        survey_name = survey_dict.get("surveyGroupname", "")
+        description = survey_dict.get("surveyInformation", "")
+        survey_choices = survey_dict.get("choices", [])
+        minchoices = survey_dict.get("minchoices", 0)
+        date_end = survey_dict.get("enddate", "")
+        time_end = survey_dict.get("endtime", "")
+        allowed_denied_choices = survey_dict.get("allowedDeniedChoices", 0)
+        allow_search_visibility = survey_dict.get("allowSearchVisibility", False)
+
+        date_string = f"{date_end} {time_end}"
+        format_code = "%d.%m.%Y %H:%M"
+        try:
+            parsed_time = datetime.strptime(date_string, format_code)
+        except Exception:
+            return {"success": False, "message": "Invalid date/time format"}
+
+        if parsed_time <= datetime.now():
+            msg = "Response period's end can't be in the past"
+            return {"success": False, "message": msg}
+
+        if not multistage and (minchoices > len(survey_choices)):
+            msg = "There are less choices than the minimum amount of prioritized groups!"
+            return {"success": False, "message": msg}
+
+        if not isinstance(allowed_denied_choices, int):
+            print(allowed_denied_choices)
+            msg = "Survey denied choices must be an integer"
+            return {"success": False, "message": msg}
+
+        if not isinstance(allow_search_visibility, bool):
+            print(type(allow_search_visibility), allow_search_visibility)
+            msg = "Survey search visibility must be a boolean"
+            return {"success": False, "message": msg}
+        
+        if len(survey_name) < 5:
+            msg = "Survey name must be atleast 5 characters long"
+            return {"success": False, "message": msg}
+
+        if not isinstance(description, str):
+            msg = "Survey description must be a string"
+            return {"success": False, "message": msg}
 
         # Min choices is a number
         if not edited:
-            if not isinstance(survey_dict["minchoices"], int):
-                msg = gettext("Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!")
-                return {"success": False, "message": {"status": "0", "msg": msg}}
+            if not isinstance(minchoices, int):
+                msg = "The minimum number of prioritized groups should be a number!"
+                return {"success": False, "message": msg}
         if "choices" in survey_dict:
-            print("Survey choices react: ", survey_dict["choices"])
             for choice in survey_dict["choices"]:
-                if choice["name"] == "":
-                    msg = gettext(
-                        "Ryhmä vaatii nimen joka on vähintään 5 merkkiä pitkä"
-                    )
-                    return {"success": False, "message": {"status": "0", "msg": msg}}
+                result = self.validate_survey_choice(choice)
+                if not result["success"]:
+                    return result
+        elif multistage:
+            stage_names = list(map(lambda s: s["name"], survey_dict["stages"]))
+            if len(stage_names) != len(set(stage_names)):
+                return {"success": False, "message": "Name of every stage must be unique within a survey"}
+            for stage in survey_dict["stages"]:
+                if len(stage["choices"]) < minchoices:
+                    msg = "There are less choices than the minimum amount of prioritized groups!"
+                    return {"success": False, "message": msg}
+                for choice in stage["choices"]:
+                    result = self.validate_survey_choice(choice)
+                    if not result["success"]:
+                        return result
+        return {"success": True}
+
+    def validate_survey_choice(self, choice):
+        """
+        method for validating a survey choice
+        """
+        if len(choice["name"]) < 5:
+            msg = "Group requires a name that is at least 5 characters long"
+            return {"success": False, "message": msg}
+        if not isinstance(choice["mandatory"], bool):
+            msg = "Group mandatory must be a boolean"
+            return {"success": False, "message": msg}
+        if choice["min_size"] > choice["max_spaces"]:
+            msg = "Group minimum size must be smaller than maximum size"
+            return {"success": False, "message": msg}
+
         return {"success": True}
 
     def save_survey_edit(self, survey_id, edit_dict, user_id):
@@ -497,7 +562,7 @@ class SurveyService:
             ]
             admin_data.append(survey_data)
         return admin_data
-    
+
     def get_admin_analytics(self):
         """
         Collect analytics numbers used in admin UI.
@@ -526,7 +591,7 @@ class SurveyService:
                 "active_surveys": int(active_surveys or 0),
                 "total_students": int(total_students or 0),
                 "total_responses": int(total_responses or 0),
-                "total_teachers": int(total_teachers or 0)
+                "total_teachers": int(total_teachers or 0),
             }
         except Exception as e:
             print("Error collecting admin analytics:", e)
@@ -567,14 +632,7 @@ class SurveyService:
             user_id: The id of the user whose set to be deleted surveys we want
         """
         surveys = self._survey_repository.get_deleted_surveys(user_id)
-        return [
-            {
-                key: format_datestring(val) if key == "time_end" else val
-                for key, val in survey._mapping.items()
-            }
-            for survey in surveys
-        ]
-
+        return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
 
 survey_service = SurveyService()

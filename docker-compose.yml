@@ -38,6 +38,21 @@ services:
     volumes:
       - .:/usr/src/app
 
+  web-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: always
+    env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      FLASK_ENV: production
+    depends_on:
+      - db
+    ports:
+      - "5001:5000"
+
   web-test:
     build: .
     restart: always
@@ -71,20 +86,6 @@ services:
     volumes:
       - .:/usr/src/app
     entrypoint: ["pytest", "tests/"]
-
-  react:
-    build:
-      context: ./frontend
-    volumes:
-      - ./frontend:/usr/src/app
-      - ./src/static/react:/usr/src/app/../src/static/react
-      - /usr/src/app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    command: npm run build
-    depends_on:
-      - web
-      - db
 
 volumes:
   dev_db_data:

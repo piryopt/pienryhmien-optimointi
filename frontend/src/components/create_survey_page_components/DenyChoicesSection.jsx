@@ -38,7 +38,7 @@ const DenyChoicesSection = () => {
             type="number"
             id="allowedDeniedChoices"
             className="form-control"
-            {...register("allowedDeniedChoices")}
+            {...register("allowedDeniedChoices", { valueAsNumber: true })}
             min={0}
           />
         </div>

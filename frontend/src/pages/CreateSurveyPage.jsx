@@ -19,6 +19,7 @@ import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 import { useSearchParams } from "react-router-dom";
 import surveyService from "../services/surveys";
 import "../static/css/createSurveyPage.css";
+import { baseUrl } from "../utils/constants";
 
 const CreateSurveyPage = () => {
   const { t } = useTranslation();
@@ -261,7 +262,7 @@ const CreateSurveyPage = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5001/surveys/create", {
+      const res = await fetch(`${baseUrl}/surveys/create`, {
         method: "POST",
         credentials: "include",
         headers: {
