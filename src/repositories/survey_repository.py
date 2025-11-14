@@ -442,7 +442,23 @@ class SurveyRepository:
             survey_id: The id of the survey
         """
         try:
-            sql = "UPDATE surveys SET deleted = True WHERE id=:survey_id"
+            sql = "UPDATE surveys SET deleted = True, deleted_at = NOW() WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
+    def set_survey_deleted_false(self, survey_id):
+        """
+        SQL code for setting survey's deleted field false
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "UPDATE surveys SET deleted = False, deleted_at = NULL WHERE id=:survey_id"
             db.session.execute(text(sql), {"survey_id": survey_id})
             db.session.commit()
             return True
@@ -465,22 +481,6 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return []
-
-    def set_survey_deleted_false(self, survey_id):
-        """
-        SQL code for setting survey's deleted field false
-
-        args:
-            survey_id: The id of the survey
-        """
-        try:
-            sql = "UPDATE surveys SET deleted = False WHERE id=:survey_id"
-            db.session.execute(text(sql), {"survey_id": survey_id})
-            db.session.commit()
-            return True
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return False
 
     def get_all_survey_stages(self, survey_id):
         """
@@ -527,7 +527,7 @@ class SurveyRepository:
         """
         try:
             sql = """
-                SELECT s.id, s.surveyname, s.time_end,
+                SELECT s.id, s.surveyname, s.closed, s.deleted_at,
                 EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id)
                     AS is_multistage FROM surveys s, survey_owners so
                 WHERE (so.user_id=:user_id AND s.id=so.survey_id AND s.deleted=True)
