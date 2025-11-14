@@ -19,6 +19,7 @@ jobs:
           tags: staging ${{ github.sha }}
           containerfiles: |
             ./Dockerfile.prod
+          build-args: VITE_STAGE=staging
 
       - name: Push to quay.io
         uses: redhat-actions/push-to-registry@v2

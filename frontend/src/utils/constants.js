@@ -1,5 +1,16 @@
-export const baseUrl = "http://localhost:5001/api";
-export const imagesBaseUrl = "http://localhost:5001/static/images";
+const STAGE = import.meta.env.VITE_STAGE || "dev";
+
+const HOSTS = {
+  dev: "http://localhost:5001",
+  staging: "https://jakaja-test.it.helsinki.fi",
+  production: "https://jakaja.it.helsinki.fi"
+};
+
+const apiHost = HOSTS[STAGE] || HOSTS.dev;
+
+export const baseUrl = `${apiHost}/api`;
+export const imagesBaseUrl = `${apiHost}/static/images`;
+
 export const languages = {
   fi: {
     logo: `${imagesBaseUrl}/fin.svg`,
