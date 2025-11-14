@@ -1,6 +1,7 @@
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import "../../static/css/answerPage.css";
 import GroupItem from "./GroupItem";
+import { useTranslation } from "react-i18next";
 
 const GroupList = ({
   id,
@@ -12,6 +13,8 @@ const GroupList = ({
   multiphase = false,
   searchTerm = ""
 }) => {
+  const { t } = useTranslation();
+  
   const borderColor = multiphase
     ? id.endsWith("good")
       ? "green"
@@ -118,15 +121,15 @@ const GroupList = ({
                         {item.name}
                       </span>
                       {item.mandatory && (
-                        <span className="group-mandatory">Pakollinen</span>
+                        <span className="group-mandatory">{t("Pakollinen")}</span>
                       )}
                     </h2>
                     <p className="group-slots">
-                      Ryhmän maksimikoko: {item.slots}
+                      {t("Ryhmän maksimikoko")}: {item.slots}
                     </p>
                     {item.mandatory && (
                       <p className="group-minsize">
-                        Ryhmän minimikoko: {item.min_size}
+                        {t("Ryhmän minimikoko")}: {item.min_size}
                       </p>
                     )}
 
@@ -176,7 +179,7 @@ const GroupList = ({
                             ));
                           })()
                         ) : (
-                          <p className="no-info">Lisätietoa ei saatavilla.</p>
+                          <p className="no-info">{t("Lisätietoa ei saatavilla.")}</p>
                         )}
                       </div>
                     )}

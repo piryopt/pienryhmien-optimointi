@@ -24,6 +24,9 @@
   "Enimmäispaikat": "Max antal platser",
   "Enimmäispaikat vaaditaan": "",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "",
+  "Et ole vastannut tähän kyselyyn": {
+    "": ""
+  },
   "etusivu": {
     "Vastausaika päättyy": "Svarstid utgår: {{timeEnd}}"
   },
@@ -48,6 +51,7 @@
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
     "": ""
   },
+  "Hylkäykset": "Avvisningar",
   "Hylkäysmäärä": "",
   "ID": "",
   "Jaa ryhmiin": "Dela in i grupper",
@@ -89,6 +93,7 @@
   "Kysely avattu": "",
   "Kysely luotu onnistuneesti": "",
   "Kysely muokattu onnistuneesti": "",
+  "Kysely on suljettu": "Enkäten är stängd",
   "Kysely palautettu": "",
   "Kysely poistetaan": "",
   "Kysely poistettu": "",
@@ -132,6 +137,9 @@
   "Lisää tietokenttä": "Lägg till fält",
   "Lisää vaihe": "",
   "Lisää vaihtoehto": "Lägg till alternativ",
+  "Lisätietoa ei saatavilla": {
+    "": ""
+  },
   "Luo kysely": "Skapa enkät",
   "Luo uusi kysely": "Skapa en ny enkät",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Skapa en ny enkät eller importera färdiga svarsalternativ från en CSV-fil",
@@ -150,11 +158,13 @@
   "Nimi": "Namn",
   "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "",
   "Nimi vaaditaan": "",
+  "Olet ilmoittautunut poissaolevaksi": "",
   "Opiskelijat on lajiteltu ryhmiin seuraavasti": "Studenter har sorterats i grupper enligt följande",
   "Osallistumiskerrat*": "",
   "Otsikko": "Rubrik",
   "Päättyy": "",
   "Päivämäärä on virheellinen": "",
+  "Pakollinen": "Obligatorisk",
   "Pakota minimikoko": "Kraft minsta gruppstorlek",
   "Palaa kyselylistaan": "Återgå till frågelistan",
   "Palaa listaan": "",
@@ -168,6 +178,7 @@
   "Palautteen tyyppi": "",
   "Palautteiden lataus epäonnistui": "",
   "Perustelut": "Motiveringar",
+  "Perustelut hylkäyksille": "Motiveringar för avvisningar",
   "Peruuta": "Avbryt",
   "Piilota": "",
   "Poista": "Ta bort",
@@ -193,6 +204,7 @@
   "Ryhmäjako tallennettu": "",
   "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "",
   "Ryhmäjaon tallennus epäonnistui": "",
+  "Ryhmän maksimikoko": "Maximal gruppstorlek",
   "Ryhmän minimikoko": "Minsta gruppstorlek",
   "Ryhmän minimikoko vaaditaan": "",
   "Ryhmän minimikoon on oltava vähintään 1": "",
@@ -243,6 +255,9 @@
   },
   "Tallenna muutokset": "Spara ändringar",
   "Tallenna tulokset": "Spara resultat",
+  "Tämä kysely on suljettu eikä siihen voi enää vastata": {
+    "": "Den här enkäten är stängd och kan inte längre besvaras."
+  },
   "Tarkastele": "",
   "Tarkastele kyselyitä": "",
   "Tarkastele palautteita": "",
@@ -264,6 +279,9 @@
   "Valitse päättymispäivä": "",
   "Vastauksen poistaminen": "Ta bort svar",
   "Vastauksen poistaminen epäonnistui": "",
+  "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta": {
+    "": "Ditt svar har sparats och du kan se dina val nedan."
+  },
   "Vastaukset": "Svar: {{count}}",
   "Vastauksia": "Svar",
   "Vastauksia luotu": "",
