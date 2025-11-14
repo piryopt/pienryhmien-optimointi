@@ -1322,16 +1322,19 @@ def logout():
         return redirect("/Shibboleth.sso/Logout")
 
 
-@bp.route("/api/logout", methods=["POST"])
+@bp.route("/api/logout", methods=["GET", "POST"])
 def api_logout():
     """
     SPA logout: clear server session and return JSON.
     """
     user_service.logout()
+
     if current_app.debug:
-        return jsonify({"logged_out": True})
-    else:
-        return redirect("/Shibboleth.sso/Logout")
+        if request.method == "POST":
+            return jsonify({"logged_out": True})
+        return redirect("/")
+    
+    return redirect("/Shibboleth.sso/Logout")
 
 
 """
