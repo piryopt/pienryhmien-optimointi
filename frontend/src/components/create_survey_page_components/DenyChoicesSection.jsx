@@ -5,7 +5,7 @@ const DenyChoicesSection = () => {
   const { register, watch } = useFormContext();
   const { t } = useTranslation();
 
-  const setting = watch("denyChoicesSetting", "hide");
+  const setting = watch("denyChoicesSetting");
 
   return (
     <section>
@@ -25,7 +25,6 @@ const DenyChoicesSection = () => {
           id="deny-choices-no"
           {...register("denyChoicesSetting")}
           value="hide"
-          defaultChecked
         />
         <label htmlFor="deny-choices-no">{t("Ei")}</label>
       </div>

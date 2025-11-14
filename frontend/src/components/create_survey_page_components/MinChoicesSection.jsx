@@ -5,7 +5,7 @@ const MinChoicesSection = () => {
   const { register, watch } = useFormContext();
   const { t } = useTranslation();
 
-  const setting = watch("minChoicesSetting", "all");
+  const setting = watch("minChoicesSetting");
 
   return (
     <section>
@@ -22,7 +22,6 @@ const MinChoicesSection = () => {
           id="min-choices-all"
           {...register("minChoicesSetting")}
           value="all"
-          defaultChecked
         />
         <label htmlFor="min-choices-all">{t("Kyllä")}</label>
 
