@@ -13,6 +13,7 @@ import EditSurveyInfo from "../components/edit_survey_page_components/EditSurvey
 import csrfService from "../services/csrf";
 import { useNotification } from "../context/NotificationContext";
 import { safeParseJson, extractMessage } from "../utils/parsers";
+import { baseUrl } from "../utils/constants";
 
 const EditSurveyPage = () => {
   const { t } = useTranslation();
@@ -76,13 +77,13 @@ const EditSurveyPage = () => {
     const csrfToken = await csrfService.fetchCsrfToken();
     const updatedSurvey = {
       surveyGroupname: data.groupname,
-      surveyInformation: data.surveyInformation, 
+      surveyInformation: data.surveyInformation,
       enddate: format(data.enddate, "dd.MM.yyyy"),
-      endtime: data.endtime,
+      endtime: data.endtime
     };
 
     try {
-      const res = await fetch(`http://localhost:5001/api/surveys/${surveyId}`, {
+      const res = await fetch(`${baseUrl}/surveys/${surveyId}`, {
         method: "PATCH",
         credentials: "include",
         headers: {

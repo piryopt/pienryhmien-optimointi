@@ -319,18 +319,15 @@ const SurveyMultistageCreate = () => {
     };
 
     try {
-      const res = await fetch(
-        "http://localhost:5001/api/multistage/survey/create",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken
-          },
-          body: JSON.stringify(payload)
-        }
-      );
+      const res = await fetch(`${baseUrl}/multistage/survey/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        body: JSON.stringify(payload)
+      });
 
       let json = null;
       try {
