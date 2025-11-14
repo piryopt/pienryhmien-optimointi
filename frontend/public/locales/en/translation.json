@@ -24,6 +24,9 @@
   "Enimmäispaikat": "Maximum capacity",
   "Enimmäispaikat vaaditaan": "",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "Maximum capacity must be at least 1",
+  "Et ole vastannut tähän kyselyyn": {
+    "": ""
+  },
   "etusivu": {
     "Vastausaika päättyy": "Response time expires: {{timeEnd}}"
   },
@@ -48,6 +51,7 @@
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
     "": ""
   },
+  "Hylkäykset": "Rejections",
   "Hylkäysmäärä": "",
   "ID": "",
   "Jaa ryhmiin": "Allocate groups",
@@ -89,6 +93,7 @@
   "Kysely avattu": "",
   "Kysely luotu onnistuneesti": "",
   "Kysely muokattu onnistuneesti": "Survey updated successfully",
+  "Kysely on suljettu": "The survey is closed.",
   "Kysely palautettu": "",
   "Kysely poistetaan": "",
   "Kysely poistettu": "",
@@ -132,6 +137,9 @@
   "Lisää tietokenttä": "Add additional field",
   "Lisää vaihe": "Add stage",
   "Lisää vaihtoehto": "Add option",
+  "Lisätietoa ei saatavilla": {
+    "": ""
+  },
   "Luo kysely": "Create survey",
   "Luo uusi kysely": "Create a new survey",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Create a new survey or import existing response options from a CSV file",
@@ -150,11 +158,13 @@
   "Nimi": "Name",
   "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "",
   "Nimi vaaditaan": "Name required",
+  "Olet ilmoittautunut poissaolevaksi": "",
   "Opiskelijat on lajiteltu ryhmiin seuraavasti": "Students have been sorted into groups as follows",
   "Osallistumiskerrat*": "",
   "Otsikko": "Title",
   "Päättyy": "",
   "Päivämäärä on virheellinen": "",
+  "Pakollinen": "Mandatory",
   "Pakota minimikoko": "Force minimum group size",
   "Palaa kyselylistaan": "Return to the survey list",
   "Palaa listaan": "",
@@ -168,6 +178,7 @@
   "Palautteen tyyppi": "",
   "Palautteiden lataus epäonnistui": "",
   "Perustelut": "Reasons",
+  "Perustelut hylkäyksille": "Reasons for rejections",
   "Peruuta": "Cancel",
   "Piilota": "Hide",
   "Poista": "Delete",
@@ -193,6 +204,7 @@
   "Ryhmäjako tallennettu": "",
   "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "",
   "Ryhmäjaon tallennus epäonnistui": "",
+  "Ryhmän maksimikoko": "Maximum group size",
   "Ryhmän minimikoko": "Minimum group size",
   "Ryhmän minimikoko vaaditaan": "",
   "Ryhmän minimikoon on oltava vähintään 1": "",
@@ -243,6 +255,9 @@
   },
   "Tallenna muutokset": "Save changes",
   "Tallenna tulokset": "Save results",
+  "Tämä kysely on suljettu eikä siihen voi enää vastata": {
+    "": "This survey is closed and no longer accepting responses."
+  },
   "Tarkastele": "Review",
   "Tarkastele kyselyitä": "Review surveys",
   "Tarkastele palautteita": "Review feedback",
@@ -264,6 +279,9 @@
   "Valitse päättymispäivä": "Choose an end date",
   "Vastauksen poistaminen": "Delete response",
   "Vastauksen poistaminen epäonnistui": "",
+  "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta": {
+    "": "Your survey response has been saved, and you can view your selections below."
+  },
   "Vastaukset": "Answers: {{count}}",
   "Vastauksia": "Answers",
   "Vastauksia luotu": "Answers created",

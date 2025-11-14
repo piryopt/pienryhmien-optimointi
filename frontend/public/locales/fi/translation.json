@@ -24,6 +24,9 @@
   "Enimmäispaikat": "Enimmäispaikat",
   "Enimmäispaikat vaaditaan": "Enimmäispaikat vaaditaan",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "Enimmäispaikkojen määrä on oltava vähintään 1",
+  "Et ole vastannut tähän kyselyyn": {
+    "": "Et ole vastannut tähän kyselyyn."
+  },
   "etusivu": {
     "Vastausaika päättyy": "Vastausaika päättyy: {{timeEnd}}"
   },
@@ -48,6 +51,7 @@
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
     "": "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
   },
+  "Hylkäykset": "Hylkäykset",
   "Hylkäysmäärä": "Hylkäysmäärä",
   "ID": "ID",
   "Jaa ryhmiin": "Jaa ryhmiin",
@@ -89,6 +93,7 @@
   "Kysely avattu": "Kysely avattu",
   "Kysely luotu onnistuneesti": "Kysely luotu onnistuneesti",
   "Kysely muokattu onnistuneesti": "Kysely muokattu onnistuneesti",
+  "Kysely on suljettu": "Kysely on suljettu",
   "Kysely palautettu": "Kysely palautettu",
   "Kysely poistetaan": "Kysely poistetaan",
   "Kysely poistettu": "Kysely poistettu",
@@ -132,6 +137,9 @@
   "Lisää tietokenttä": "Lisää tietokenttä",
   "Lisää vaihe": "Lisää vaihe",
   "Lisää vaihtoehto": "Lisää vaihtoehto",
+  "Lisätietoa ei saatavilla": {
+    "": "Lisätietoa ei saatavilla."
+  },
   "Luo kysely": "Luo kysely",
   "Luo uusi kysely": "Luo uusi kysely",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
@@ -150,11 +158,13 @@
   "Nimi": "Nimi",
   "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "Nimi on liian lyhyt, oltava vähintään 5 merkkiä",
   "Nimi vaaditaan": "Nimi vaaditaan",
+  "Olet ilmoittautunut poissaolevaksi": "Olet ilmoittautunut poissaolevaksi",
   "Opiskelijat on lajiteltu ryhmiin seuraavasti": "Opiskelijat on lajiteltu ryhmiin seuraavasti",
   "Osallistumiskerrat*": "Osallistumiskerrat*",
   "Otsikko": "Otsikko",
   "Päättyy": "Päättyy",
   "Päivämäärä on virheellinen": "Päivämäärä on virheellinen",
+  "Pakollinen": "Pakollinen",
   "Pakota minimikoko": "Pakota minimikoko",
   "Palaa kyselylistaan": "Palaa kyselylistaan",
   "Palaa listaan": "Palaa listaan",
@@ -168,6 +178,7 @@
   "Palautteen tyyppi": "Palautteen tyyppi",
   "Palautteiden lataus epäonnistui": "Palautteiden lataus epäonnistui",
   "Perustelut": "Perustelut",
+  "Perustelut hylkäyksille": "Perustelut hylkäyksille",
   "Peruuta": "Peruuta",
   "Piilota": "Piilota",
   "Poista": "Poista",
@@ -193,6 +204,7 @@
   "Ryhmäjako tallennettu": "Ryhmäjako tallennettu",
   "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia",
   "Ryhmäjaon tallennus epäonnistui": "Ryhmäjaon tallennus epäonnistui",
+  "Ryhmän maksimikoko": "Ryhmän maksimikoko",
   "Ryhmän minimikoko": "Ryhmän minimikoko",
   "Ryhmän minimikoko vaaditaan": "Ryhmän minimikoko vaaditaan",
   "Ryhmän minimikoon on oltava vähintään 1": "Ryhmän minimikoon on oltava vähintään 1",
@@ -243,6 +255,9 @@
   },
   "Tallenna muutokset": "Tallenna muutokset",
   "Tallenna tulokset": "Tallenna tulokset",
+  "Tämä kysely on suljettu eikä siihen voi enää vastata": {
+    "": "Tämä kysely on suljettu eikä siihen voi enää vastata."
+  },
   "Tarkastele": "Tarkastele",
   "Tarkastele kyselyitä": "Tarkastele kyselyitä",
   "Tarkastele palautteita": "Tarkastele palautteita",
@@ -264,6 +279,9 @@
   "Valitse päättymispäivä": "Valitse päättymispäivä",
   "Vastauksen poistaminen": "Vastauksen poistaminen",
   "Vastauksen poistaminen epäonnistui": "Vastauksen poistaminen epäonnistui",
+  "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta": {
+    "": "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta."
+  },
   "Vastaukset": "Vastaukset: {{count}}",
   "Vastauksia": "Vastauksia",
   "Vastauksia luotu": "Vastauksia luotu",

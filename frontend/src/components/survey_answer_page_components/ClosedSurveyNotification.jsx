@@ -1,7 +1,9 @@
 import "../../static/css/answerPage.css";
 import { imagesBaseUrl } from "../../utils/constants";
+import { useTranslation } from "react-i18next";
 
 const ClosedSurveyNotification = ({ existing }) => {
+  const { t } = useTranslation();
   console.log("ClosedSurveyNotification existing:", existing);
   return (
     <div className="closed-survey-notifier">
@@ -15,17 +17,17 @@ const ClosedSurveyNotification = ({ existing }) => {
         />
       </div>
       <div className="closed-survey-content">
-        <h2>Kysely on suljettu</h2>
+        <h2>{t("Kysely on suljettu")}</h2>
         <p>
           {" "}
-          Tämä kysely on suljettu eikä siihen voi enää vastata.
+          {t("Tämä kysely on suljettu eikä siihen voi enää vastata.")}
           {existing ? (
             <>
               {" "}
-              Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta.
+              {t("Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta.")}
             </>
           ) : (
-            <> Et ole vastannut tähän kyselyyn.</>
+            <> {t("Et ole vastannut tähän kyselyyn.")}</>
           )}
         </p>
       </div>

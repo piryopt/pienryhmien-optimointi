@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import GroupList from "./GroupList.jsx";
 import ClosedSurveyNotification from "./ClosedSurveyNotification.jsx";
 import StageDropdown from "./../survey_answers_page_components/StageDropdown.jsx";
-import { useEffect, useState } from "react";
+
 
 const ClosedMultistageSurveyView = ({
   stages,
@@ -10,11 +12,10 @@ const ClosedMultistageSurveyView = ({
   expandedIds,
   toggleExpand
 }) => {
-  // derive labels for dropdown from stage objects (prefer human label 'stage' if present)
+  const { t } = useTranslation();
   const stageLabels = (stages || []).map((s) => s.stage ?? s.id);
   const [currStage, setCurrStage] = useState(stageLabels.length > 0 ? stageLabels[0] : "");
 
-  // keep current stage in sync when stages prop changes
   useEffect(() => {
     const labels = (stages || []).map((s) => s.stage ?? s.id);
     if (!labels.includes(currStage)) {
@@ -43,11 +44,11 @@ const ClosedMultistageSurveyView = ({
           {stages
             .filter((stage) => (stage.stage ?? stage.id) === currStage)
             .map((stage) => {
-              // If the user marked not available for this stage, show message instead of grouplists
+        
               if (stage.notAvailable) {
                 return (
                   <div className="answer-layout" key={stage.id}>
-                    <p>Olet ilmoittautunut poissaolevaksi</p>
+                    <p>{t("Olet ilmoittautunut poissaolevaksi")}</p>
                   </div>
                 );
               }
@@ -57,7 +58,7 @@ const ClosedMultistageSurveyView = ({
                   <div className="left-column">
                     {stage.good.length > 0 && (
                       <>
-                        <h2 className="closed-survey-title">Valinnat:</h2>
+                        <h2 className="closed-survey-title">{t("Valinnat")}:</h2>
                         <GroupList
                           id="good"
                           items={stage.good}
@@ -73,7 +74,7 @@ const ClosedMultistageSurveyView = ({
                   <div className="right-column" style={{ marginLeft: 15 }}>
                     {stage.bad.length > 0 && (
                       <>
-                        <h2 className="closed-survey-title">Hylkäykset:</h2>
+                        <h2 className="closed-survey-title">{t("Hylkäykset")}:</h2>
                         <GroupList
                           id="bad"
                           items={stage.bad}
@@ -85,7 +86,7 @@ const ClosedMultistageSurveyView = ({
                         {reasons[stage.id] && reasons[stage.id].length > 0 ? (
                           <div style={{ paddingLeft: 11 }}>
                             <p>
-                              Perustelut hylkäyksille:
+                              {t("Perustelut hylkäyksille")}:
                               <br /> {reasons[stage.id]}
                             </p>
                           </div>
