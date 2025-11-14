@@ -6,7 +6,7 @@
 {% endfor %}
 {% if rejections %}
 </br>
-<b>{{ _('Hylkäykset') }}</b>
+<b>{{ _('Kielletyt') }}</b>
 {% for survey_choice in rejections %}
 <li><small>{{survey_choice.name}}</small></li>
 {% endfor %}
