@@ -7,7 +7,7 @@ CREATE TABLE users (
 	language TEXT
 );
 
-CREATE TABLE surveys ( -- yksittäinen kysely
+CREATE TABLE surveys ( -- singular survey
 	id VARCHAR(10) UNIQUE PRIMARY KEY,
 	surveyname TEXT,
 	min_choices INTEGER,
@@ -18,7 +18,8 @@ CREATE TABLE surveys ( -- yksittäinen kysely
 	allowed_denied_choices INTEGER,
 	allow_search_visibility BOOLEAN,
 	allow_absences BOOLEAN DEFAULT FALSE,
-	deleted BOOLEAN
+	deleted BOOLEAN,
+  deleted_at TIMESTAMP DEFAULT NULL
 );
 
 CREATE TABLE survey_owners (
@@ -27,7 +28,7 @@ CREATE TABLE survey_owners (
 	user_id INTEGER REFERENCES users
 );
 
-CREATE TABLE survey_choices ( -- yksittäinen päiväkoti, pienryhmä
+CREATE TABLE survey_choices ( -- singular group, daycare etc.
 	id SERIAL PRIMARY KEY,
 	survey_id VARCHAR(10) REFERENCES surveys ON DELETE CASCADE,
 	name TEXT,
@@ -66,7 +67,7 @@ CREATE TABLE user_survey_rankings (
 	not_available BOOLEAN DEFAULT NULL
 );
 
-CREATE TABLE final_group ( -- lopullinen sijoitus
+CREATE TABLE final_group (
 	id SERIAL PRIMARY KEY,
 	user_id INTEGER REFERENCES users,
 	survey_id VARCHAR(10) REFERENCES surveys ON DELETE CASCADE,

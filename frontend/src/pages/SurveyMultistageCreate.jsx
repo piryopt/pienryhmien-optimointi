@@ -19,6 +19,7 @@ import StageTables from "../components/create_multistage_survey_components/Stage
 import Button from "react-bootstrap/Button";
 import { format } from "date-fns";
 import csrfService from "../services/csrf";
+import { baseUrl } from "../utils/constants";
 import "../static/css/createSurveyPage.css";
 import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 
@@ -174,7 +175,7 @@ const SurveyMultistageCreate = () => {
       surveyInformation: "",
       minChoicesSetting: "all",
       denyChoicesSetting: "hide",
-      allowedDeniedChoices: "",
+      allowedDeniedChoices: 0,
       allowSearchVisibility: false
     },
     mode: "onBlur"
@@ -214,10 +215,10 @@ const SurveyMultistageCreate = () => {
         ? undefined
         : Number(val);
 
-    console.log(
-      "DEBUG: tables before payload:",
-      JSON.stringify(tables, null, 2)
-    );
+    //console.log(
+    //  "DEBUG: tables before payload:",
+    //  JSON.stringify(tables, null, 2)
+    //);
 
     const stages = tables.map((t) => ({
       id: t.id,
@@ -289,16 +290,12 @@ const SurveyMultistageCreate = () => {
       return;
     }
 
-    console.log(
-      "DEBUG: built stages payload:",
-      JSON.stringify(stages, null, 2)
-    );
+    //console.log(
+    //  "DEBUG: built stages payload:",
+    //  JSON.stringify(stages, null, 2)
+    //);
 
-    const allowedDenied = Array.isArray(data.allowedDeniedChoices)
-      ? data.allowedDeniedChoices
-      : data.allowedDeniedChoices
-        ? [data.allowedDeniedChoices]
-        : [];
+    const allowedDenied = data.allowedDeniedChoices;
 
     const payload = {
       surveyGroupname: data.groupname,
@@ -324,18 +321,15 @@ const SurveyMultistageCreate = () => {
     };
 
     try {
-      const res = await fetch(
-        `${baseUrl}/multistage/survey/create`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken
-          },
-          body: JSON.stringify(payload)
-        }
-      );
+      const res = await fetch(`${baseUrl}/multistage/survey/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        body: JSON.stringify(payload)
+      });
 
       let json = null;
       try {

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-22 13:21+0300\n"
-"PO-Revision-Date: 2025-10-22 13:30+0300\n"
+"POT-Creation-Date: 2025-10-28 12:32+0200\n"
+"PO-Revision-Date: 2025-10-28 12:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: en <LL@li.org>\n"
 "Language: en\n"
@@ -129,7 +129,7 @@ msgstr "Average of group selections"
 
 #: src/templates/results.html:32
 msgid ""
-"Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-"
+"Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-"
 "järjestettyihin valintoihin ei vaikuta keskiarvoon."
 msgstr ""
 "Note! The fact that some students have been placed in rejected or unranked "
@@ -217,7 +217,7 @@ msgid "Vastaukset"
 msgstr "Answers"
 
 #: src/templates/showrankings.html:9
-msgid "Hylkäykset"
+msgid "Kielletyt"
 msgstr "Rejections"
 
 #: src/templates/survey_answers.html:3
@@ -350,7 +350,7 @@ msgid "Otsikko"
 msgstr "Title"
 
 #: src/templates/feedback.html:16 src/templates/feedback.html:18
-msgid "Palutteen tyyppi"
+msgid "Palautteen tyyppi"
 msgstr "Type of feedback"
 
 #: src/templates/feedback.html:20
@@ -842,11 +842,11 @@ msgstr "Giving feedback was successful"
 
 #: src/tools/survey_result_helper.py:39 src/tools/survey_result_helper.py:321
 #: src/tools/survey_result_helper.py:344
-msgid "Hylätty"
+msgid "Kielletty"
 msgstr "Rejected"
 
 #: src/tools/survey_result_helper.py:40 src/tools/survey_result_helper.py:366
-msgid "Hylättyyn"
+msgid "Kiellettyyn"
 msgstr "Rejected"
 
 #: src/tools/survey_result_helper.py:41 src/tools/survey_result_helper.py:44

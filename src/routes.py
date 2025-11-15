@@ -1,7 +1,7 @@
 from random import shuffle
 from datetime import datetime
 from functools import wraps
-from flask import app, render_template, request, session, jsonify, redirect, Blueprint, current_app
+from flask import app, render_template, request, session, jsonify, redirect, Blueprint, current_app, send_from_directory, abort
 from flask_wtf.csrf import generate_csrf
 import markdown
 from pathlib import Path
@@ -99,9 +99,16 @@ def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
+    # in production serve the built react app (copied to static/react folder by dockerfile)
+    if not current_app.debug:
+        # user_id = session.get("user_id", 0)
+        # if user_id == 0:
+        #     return redirect("/api/auth/login") this needs to be implemented (dont know how sso works here)
+        return send_from_directory(current_app.static_folder, "index.html")
+
     # used in local use
     if current_app.debug and session.get("user_id", 0) == 0:
-        return redirect("/auth/login")
+        return redirect("/api/auth/login")
     reloaded = session.get("reloaded", 0)
     if not reloaded:
         session["reloaded"] = True
@@ -116,6 +123,13 @@ def frontpage() -> str:
 
     return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
+@bp.route("/static/images/<path:filename>")
+def serve_images(filename):
+    images_dir = Path(__file__).parents[0] / "static" / "images"
+    file_path = images_dir / filename
+    if file_path.exists() and file_path.is_file():
+        return send_from_directory(str(images_dir), filename)
+        
 
 @bp.route("/api/frontpage", methods=["GET"])
 @ad_login
@@ -248,6 +262,9 @@ def multistage_survey_create():
             return jsonify({"status": "0", "msg": gettext("Invalid request payload")}), 400
 
         # Add validation
+        validation = survey_service.validate_created_survey(data, multistage=True)
+        if not validation["success"]:
+            return jsonify({"status": "0", "msg": validation["message"]}), 400
 
         # Add to surveys table
         survey_id = survey_service.create_new_multiphase_survey(
@@ -255,11 +272,14 @@ def multistage_survey_create():
             min_choices=data["minchoices"],
             description=data["surveyInformation"],
             enddate=f"{date_to_sql_valid(data['enddate'])} {data['endtime']}",
-            allowed_denied_choices=len(data["allowedDeniedChoices"]),
+            allowed_denied_choices=data["allowedDeniedChoices"],
             allow_search_visibility=data["allowSearchVisibility"],
             allow_absences=data["allowAbsences"],
             user_id=user_id,
         )
+        if not survey_id:
+            msg = "There already exists a survey with the same name! Close it or change the name!"
+            return jsonify({"status": "0", "msg": msg})
         # Add choices
         for stage in data["stages"]:
             for choice in stage["choices"]:
@@ -280,7 +300,7 @@ def multistage_survey_create():
         return jsonify({"status": "0", "msg": gettext("Server error")}), 500
 
 
-@bp.route("/surveys/create", methods=["POST"])
+@bp.route("/api/surveys/create", methods=["POST"])
 def new_survey_post():
     """
     Post method for creating a new survey.
@@ -305,26 +325,11 @@ def new_survey_post():
         allowed_denied_choices = data.get("allowedDeniedChoices", 0)
         allow_search_visibility = data.get("allowSearchVisibility", False)
 
-        date_string = f"{date_end} {time_end}"
-        format_code = "%d.%m.%Y %H:%M"
-        try:
-            parsed_time = datetime.strptime(date_string, format_code)
-        except Exception:
-            return jsonify({"status": "0", "msg": gettext("Invalid date/time format")}), 400
-
-        if parsed_time <= datetime.now():
-            msg = gettext("Vastausajan päättyminen ei voi olla menneisyydessä")
-            return jsonify({"status": "0", "msg": msg}), 400
-
-        if minchoices > len(survey_choices):
-            msg = gettext("Vaihtoehtoja on vähemmän kuin priorisoitujen ryhmien vähimmäismäärä! Kyselyn luominen epäonnistui!")
-            return jsonify({"status": "0", "msg": msg}), 400
-
         survey_id = survey_service.create_new_survey_manual(
             survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility
         )
         if not survey_id:
-            msg = gettext("Tämän niminen kysely on jo käynnissä! Sulje se tai muuta nimeä!")
+            msg = "There already exists a survey with the same name! Close it or change the name!"
             return jsonify({"status": "0", "msg": msg}), 409
 
         email = user_service.get_email(user_id)
@@ -544,13 +549,13 @@ def api_multistage_survey_choices(survey_id):
     user_survey_ranking = user_rankings_service.get_user_multistage_rankings(survey_id, user_id)
     if user_survey_ranking:
         ranked_stages = {
-        stage_id: {
-            "goodChoices": convert_to_list(data["ranking"]),
-            "badChoices": convert_to_list(data["rejections"]),
-            "reason": data["reason"],
-            "notAvailable": data["not_available"]
-        }
-        for stage_id, data in user_survey_ranking.items()
+            stage_id: {
+                "goodChoices": convert_to_list(data["ranking"]),
+                "badChoices": convert_to_list(data["rejections"]),
+                "reason": data["reason"],
+                "notAvailable": data["not_available"],
+            }
+            for stage_id, data in user_survey_ranking.items()
         }
         return jsonify(
             {
@@ -1105,7 +1110,6 @@ def survey_results(survey_id):
     if survey_service.is_multistage(survey_id):
         output_data = build_multistage_output(survey_id)
         if output_data is None:
-            current_app.logger.error(f"No results available for multistage survey {survey_id}")
             return jsonify({"error": "Survey answers not found"}), 404
         
         if request.method == "GET":
@@ -1119,7 +1123,6 @@ def survey_results(survey_id):
     
     output_data = build_output(survey_id)
     if output_data is None:
-        current_app.logger.error(f"No results available for single-stage survey {survey_id}")
         return jsonify({"error": "Survey answers not found"}), 404
 
     if request.method == "GET":
@@ -1322,13 +1325,19 @@ def logout():
         return redirect("/Shibboleth.sso/Logout")
 
 
-@bp.route("/api/logout", methods=["POST"])
+@bp.route("/api/logout", methods=["GET", "POST"])
 def api_logout():
     """
     SPA logout: clear server session and return JSON.
     """
     user_service.logout()
-    return jsonify({"logged_out": True})
+
+    if current_app.debug:
+        if request.method == "POST":
+            return jsonify({"logged_out": True})
+        return redirect("/")
+    
+    return redirect("/Shibboleth.sso/Logout")
 
 
 """
@@ -1479,7 +1488,7 @@ def api_admin_analytics():
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
-    
+
     analytics = survey_service.get_admin_analytics()
     if not analytics:
         return jsonify({"success": False, "error": "server_error"}), 500
@@ -1491,7 +1500,7 @@ def api_admin_analytics():
         analytics.get("total_responses", 0),
         analytics.get("total_teachers", 0),
     ]
-    
+
     return jsonify({"success": True, "data": items_array, "meta": analytics}), 200
 
 
@@ -1500,11 +1509,11 @@ def api_admin_all_active_surveys():
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
-    
+
     data = survey_service.get_all_active_surveys()
     if data is None:
         return jsonify({"success": False, "error": "server_error"}), 500
-    
+
     return jsonify({"success": True, "data": data}), 200
 
 
@@ -1729,6 +1738,14 @@ def language_sv():
         response = {"status": "1", "msg": "Uppdatera språket till svenska!"}
         return jsonify(response)
 
+
+@bp.app_errorhandler(404)
+def spa_fallback_404(e):
+    path = request.path or ""
+    # let API and static requests return normal 404/serve assets
+    if path.startswith("/api") or path.startswith("/static") or "." in path.rsplit("/", 1)[-1]:
+        return abort(404)
+    return send_from_directory(current_app.static_folder, "index.html")
 
 """
 TASKS:

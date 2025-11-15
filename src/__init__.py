@@ -25,13 +25,16 @@ def get_locale():
 
     if not has_request_context():
         return "fi"
-    return session.get("language", 0)
+    lang = session.get("language")
+    if isinstance(lang, str) and lang:
+        return lang
+    return "fi"
 
 
 def create_app(test_config=None):
     load_dotenv()
 
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder="./static/react", static_url_path="/")
     CORS(app, origins=["http://localhost:5173", "http://localhost:5001"], supports_credentials=True)
 
     #app.config.from_object(Config())

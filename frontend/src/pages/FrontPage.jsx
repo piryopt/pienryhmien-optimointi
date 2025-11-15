@@ -2,12 +2,8 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import surveyService from "../services/surveys.js";
-import listIcon from "/images/list_white_36dp.svg";
-import addIcon from "/images/note_add_white_36dp.svg";
-import multiAddIcon from "/images/note_stack_add_36dp.svg";
-import surveyIcon from "/images/assignment_white_36dp.svg";
-import trashIcon from "/images/delete_36dp.svg";
-import { useAuth } from "../context/AuthProvider"
+import { useAuth } from "../context/AuthProvider";
+import { imagesBaseUrl } from "../utils/constants.js";
 
 const FrontPageButton = ({
   path,
@@ -54,8 +50,8 @@ const FrontPage = () => {
   const [trashCount, setTrashCount] = useState(0);
   const [activeSurveys, setActiveSurveys] = useState([]);
   const { t } = useTranslation();
-  const { user, loading } = useAuth()
-  const isAdmin = !loading && user && user.admin
+  const { user, loading } = useAuth();
+  const isAdmin = !loading && user && user.admin;
 
   useEffect(() => {
     const getFrontPageData = async () => {
@@ -78,14 +74,14 @@ const FrontPage = () => {
         <div className="col-sm">
           <FrontPageButton
             path="/surveys/create"
-            imgSrc={addIcon}
+            imgSrc={`${imagesBaseUrl}/note_add_white_36dp.svg`}
             mainText="Luo uusi kysely"
             additionalText="Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta"
           />
           <br></br>
           <FrontPageButton
             path="multistage/survey/create"
-            imgSrc={multiAddIcon}
+            imgSrc={`${imagesBaseUrl}/note_stack_add_36dp.svg`}
             mainText="Luo uusi monivaiheinen kysely"
             additionalText="Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot"
           />
@@ -93,7 +89,7 @@ const FrontPage = () => {
         <div className="col-sm">
           <FrontPageButton
             path="/surveys"
-            imgSrc={listIcon}
+            imgSrc={`${imagesBaseUrl}/list_white_36dp.svg`}
             mainText="Näytä vanhat kyselyt"
             additionalText="Luotuja kyselyitä"
             additionalVars={{ count: createdSurveys }}
@@ -101,7 +97,7 @@ const FrontPage = () => {
           <br></br>
           <FrontPageButton
             path="/trash"
-            imgSrc={trashIcon}
+            imgSrc={`${imagesBaseUrl}/delete_36dp.svg`}
             mainText="Roskakori"
             additionalText="Näe poistettavaksi asetetut kyselyt"
             topRightText="Poistettavat kyselyt"
@@ -113,7 +109,7 @@ const FrontPage = () => {
               <br />
               <FrontPageButton
                 path="/admintools/analytics"
-                imgSrc={listIcon}
+                imgSrc={`${imagesBaseUrl}/list_white_36dp.svg`}
                 mainText="Hallintatyökalut"
                 additionalText="Avaa järjestelmänhallintanäkymä"
               />
@@ -133,7 +129,7 @@ const FrontPage = () => {
                     ? `surveys/multistage/${survey.id}`
                     : `surveys/${survey.id}`
                 }
-                imgSrc={surveyIcon}
+                imgSrc={`${imagesBaseUrl}/assignment_white_36dp.svg`}
                 mainText={survey.surveyname}
                 additionalText="Vastaukset"
                 topRightText="etusivu.Vastausaika päättyy"

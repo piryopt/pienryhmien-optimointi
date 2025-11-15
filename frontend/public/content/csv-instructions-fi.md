@@ -6,28 +6,28 @@ Jakajassa CSV-tiedoston erottajalla ei ole väliä (voi olla esimerkiksi , tai ;
 "Päiväkodin nimi", "Paikkamäärä", "Minimikoko"</br></br>
 
 Alla oleva kuva näyttää esimerkkitiedoston muodon ja siitä syntyvän kyselyn:</br>
-<img src="/images/csv.png" alt="Esimerkki CSV-tiedosto" class="md-image-small">
+<img src="/static/images/csv.png" alt="Esimerkki CSV-tiedosto" class="md-image-small">
 </br></br>
-<img src="/images/csv-create.png" alt="CSV-tiedostosta luonti" class="md-image-small">
+<img src="/static/images/csv-create.png" alt="CSV-tiedostosta luonti" class="md-image-small">
 </br></br>
 
 Jakaja pudottaa oletuksena epäsuositun ryhmän, jos sen minimikoko ei täyty jaossa. Jos haluat, että jotkut ryhmät toteutuvat varmasti, voit lisätä CSV-tiedostoon sarakkeen "Mandatory" ja täyttää sen arvoilla TRUE tai FALSE sen mukaan onko ryhmä pakollinen vai ei. Sarakkeen "Mandatory" arvot voivat olla esimerkiksi TRUE, true tai True eli kirjainkoolla ei ole välilä. FALSE arvoa ei periaatteessa ole pakko antaa, muttaa sarake tarvitsee jokaisella rivillä jonkin arvon (esimerkiksi tyhjät lainausmerkit " " käyvät hyvin).
 
 Alla oleva kuva näyttää pakollisia ryhmiä sisältävän esimerkkitiedoston muodon ja siitä syntyvän kyselyn:
-<img src="/images/csv2.png" alt="Esimerkki CSV-tiedosto" class="md-image-small">
+<img src="/static/images/csv2.png" alt="Esimerkki CSV-tiedosto" class="md-image-small">
 </br></br>
-<img src="/images/csv2-create.png" alt="CSV-tiedostosta luonti" class="md-image-small">
+<img src="/static/images/csv2-create.png" alt="CSV-tiedostosta luonti" class="md-image-small">
 
 ## E-lomake
 
 Luodessasi kyselyä E-lomakkeessa, sinun täytyy kysyä ensimmäisessä kentässä kohteen nimeä, toisena kohteen paikkamäärää (positiivinen kokonaisluku) ja kolmantena ryhmien minimikoko (positiivinen kokonaisluku), muuten kohteiden tuonti CSV-tiedostosta ei toimi. Vastausnäkymän pitäisi näyttää jotakuinkin tältä:
 
 Kyselyn vastausnäkymä, johon päiväkoti yms. täyttää oman tietonsa
-<img src="/images/csv-reply-view.png" alt="Vastausnäkymä käyttäjälle">
+<img src="/static/images/csv-reply-view.png" alt="Vastausnäkymä käyttäjälle">
 
 Kolmessa ensimmäisessä kohdassa nimellä ei ole väliä (Päiväkodin nimi, nimi, tunnus yms. tai paikkamäärä, enimmäispaikat yms. kaikki käyvät ja min_size, minimikoko jne.), kunhan järjestys on oikea.
 
 Ylläolevaan kyselyn vastaaminen tuottaa tälläisen CSV-tiedoston, joka löytyy Elomakkeen kohdasta lomakeraportti:
-<img src="/images/csv-report-view.png" alt="Lomakeraportti">
+<img src="/static/images/csv-report-view.png" alt="Lomakeraportti">
 
 <strong>Kaksi ensimmäistä saraketta ovat turhia (Tall.id, Tallennusaika), joten poista ne luodusta .csv tiedostosta.</strong>

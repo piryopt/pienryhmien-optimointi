@@ -9,6 +9,7 @@ import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
 import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
 import SurveyResultsPage from "./pages/SurveyResultsPage";
+import MultistageResultsPage from "./pages/MultistageResultsPage";
 import AdminAnalytics from "./pages/admintools/AdminAnalytics";
 import AdminSurveyList from "./pages/admintools/AdminSurveyList";
 import FeedbackPage from "./pages/FeedbackPage";

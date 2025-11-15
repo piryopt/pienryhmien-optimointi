@@ -5,7 +5,10 @@ export async function parseCsvFile(file) {
 }
 
 export function parseCSV(text) {
-  const lines = text.replace(/\r\n/g, "\n").split("\n").filter((l) => l.trim() !== "");
+  const lines = text
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .filter((l) => l.trim() !== "");
   return lines.map((line) => {
     const row = [];
     let cur = "";
@@ -60,12 +63,14 @@ export function updateTableFromCSV(headers, dataRows, existingTable) {
   const hasMandatory = hasMandatoryColumn(headers);
   const dynamicHeaders = computeDynamicHeaders(headers, 3, hasMandatory);
 
-  // Create dynamic columns using header labels
-  const missingCols = dynamicHeaders
-    .filter((col) => !existingTable.columns.find((c) => c.name === col))
-    .map((name) => ({ name, validationRegex: "", validationText: "" }));
+  const existingColumns = existingTable.columns || [];
 
-  const mergedColumns = [...existingTable.columns, ...missingCols];
+  const mergedColumns = dynamicHeaders.map((name) => {
+    const existing = existingColumns.find((c) => c.name === name);
+    return existing
+      ? { ...existing }
+      : { name, validationRegex: "", validationText: "" };
+  });
 
   let nextId = getStartingNextId(existingTable);
 
@@ -98,7 +103,6 @@ export function updateTableFromCSV(headers, dataRows, existingTable) {
     if (!row.name) row.name = `r${nextId}`;
     return row;
   });
-
   return {
     columns: mergedColumns,
     rows: newRows,

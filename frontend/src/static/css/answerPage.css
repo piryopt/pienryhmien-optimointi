@@ -36,7 +36,7 @@ li {
 }
 
 .instructions {
-  margin: 6px 0;
+  margin-bottom: 1.5em 0;
   font-style: italic;
 }
 
@@ -206,6 +206,7 @@ li {
 .closed-survey-title {
   font-size: 25px;
   margin-left: 7px;
+  margin-top: 0px;
 }
 .rank-number {
   position: absolute;

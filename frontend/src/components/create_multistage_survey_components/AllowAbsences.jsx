@@ -2,7 +2,7 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const AllowAbsencesSection = () => {
-  const { register, watch } = useFormContext();
+  const { setValue, watch } = useFormContext();
   const { t } = useTranslation();
 
   const value = watch("allowAbsences", false);
@@ -22,9 +22,8 @@ const AllowAbsencesSection = () => {
           type="radio"
           id="allow-absences-yes"
           value="true"
-          {...register("allowAbsences", {
-            setValueAs: (v) => v === "true"
-          })}
+          checked={value === true}
+          onChange={() => setValue("allowAbsences", true)}
         />
         <label htmlFor="allow-absences-yes">{t("Kyllä")}</label>
 
@@ -32,10 +31,8 @@ const AllowAbsencesSection = () => {
           type="radio"
           id="allow-absences-no"
           value="false"
-          {...register("allowAbsences", {
-            setValueAs: (v) => v === "true"
-          })}
-          defaultChecked
+          checked={value === false}
+          onChange={() => setValue("allowAbsences", false)}
         />
         <label htmlFor="allow-absences-no">{t("Ei")}</label>
       </div>

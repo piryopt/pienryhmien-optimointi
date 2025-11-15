@@ -41,6 +41,27 @@ class SurveyRepository:
             print(e)
             return None
 
+    def is_multistage(self, survey_id):
+        """
+        SQL code for checking whether or not a survey is multistage
+
+        args:
+            survey_id: The id of the survey
+
+        returns
+            True if the survey is multistage, False otherwise
+        """
+        try:
+            sql = "SELECT EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = :survey_id) AS is_multistage"
+            result = db.session.execute(text(sql), {"survey_id": survey_id})
+            row = result.fetchone()
+            if not row:
+                return False
+            return bool(row[0])
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return None
+
     def survey_name_exists(self, surveyname, user_id):
         """
         SQL code for getting the id from a survey that has a certain name, is open has access to by a certain user.
@@ -197,6 +218,7 @@ class SurveyRepository:
             return False
 
     def create_new_survey(
+<<<<<<< HEAD
         self, 
         surveyname, 
         min_choices, 
@@ -205,6 +227,16 @@ class SurveyRepository:
         allowed_denied_choices=0, 
         allow_search_visibility=True, 
         allow_absences=False, 
+=======
+        self,
+        surveyname,
+        min_choices,
+        description,
+        enddate,
+        allowed_denied_choices=0,
+        allow_search_visibility=True,
+        allow_absences=False,
+>>>>>>> origin/main
         user_id=None,
     ):
         """
@@ -355,6 +387,27 @@ class SurveyRepository:
             print(e)
             return {}
 
+    def fetch_survey_response_grouped_by_stages(self, survey_id):
+        """Returns survey answers grouped by stage (grouping done in SQL)."""
+        try:
+            sql = text(
+                "SELECT stage, user_id, ranking, rejections, reason "
+                "FROM user_survey_rankings "
+                "WHERE survey_id = :survey_id AND deleted IS FALSE "
+                "ORDER BY stage, user_id"
+            )
+            result = db.session.execute(sql, {"survey_id": survey_id})
+            rows = result.fetchall()
+
+            grouped = {}
+            for stage, user_id, ranking, rejections, reason in rows:
+                grouped.setdefault(stage, []).append((user_id, ranking, rejections, reason))
+
+            return grouped
+        except Exception as e:
+            print(e)
+            return {}
+
     def get_list_active_answered(self, user_id):
         """
         SQL code for getting a list of surveys that are active, that have been answered by the user
@@ -442,7 +495,23 @@ class SurveyRepository:
             survey_id: The id of the survey
         """
         try:
-            sql = "UPDATE surveys SET deleted = True WHERE id=:survey_id"
+            sql = "UPDATE surveys SET deleted = True, deleted_at = NOW() WHERE id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
+    def set_survey_deleted_false(self, survey_id):
+        """
+        SQL code for setting survey's deleted field false
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "UPDATE surveys SET deleted = False, deleted_at = NULL WHERE id=:survey_id"
             db.session.execute(text(sql), {"survey_id": survey_id})
             db.session.commit()
             return True
@@ -465,22 +534,6 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return []
-
-    def set_survey_deleted_false(self, survey_id):
-        """
-        SQL code for setting survey's deleted field false
-
-        args:
-            survey_id: The id of the survey
-        """
-        try:
-            sql = "UPDATE surveys SET deleted = False WHERE id=:survey_id"
-            db.session.execute(text(sql), {"survey_id": survey_id})
-            db.session.commit()
-            return True
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return False
 
     def get_all_survey_stages(self, survey_id):
         """
@@ -527,7 +580,7 @@ class SurveyRepository:
         """
         try:
             sql = """
-                SELECT s.id, s.surveyname, s.time_end,
+                SELECT s.id, s.surveyname, s.closed, s.deleted_at,
                 EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id)
                     AS is_multistage FROM surveys s, survey_owners so
                 WHERE (so.user_id=:user_id AND s.id=so.survey_id AND s.deleted=True)

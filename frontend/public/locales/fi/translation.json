@@ -8,6 +8,7 @@
   "Anna palautetta": "Anna palautetta",
   "Anna sähköpostiosoite": "Anna sähköpostiosoite",
   "Antamasi sähköpostiosoite ei ole kelvollinen": "Antamasi sähköpostiosoite ei ole kelvollinen",
+  "Avaa": "Avaa",
   "Avaa kysely uudelleen": "Avaa kysely uudelleen",
   "Avaa uudestaan?": "Avaa uudestaan?",
   "Avoimet palautteet": "Avoimet palautteet",
@@ -15,16 +16,22 @@
   "Bugi": "Bugi",
   "CSV-ohje": "CSV-ohje",
   "Ei": "Ei",
+  "Ei kyselyitä": "Ei kyselyitä",
   "Ei paikalla": "Ei paikalla",
   "Ei palautetta": "Ei palautetta",
   "Ei palautteita": "Ei palautteita",
+  "Ei tietoja": "Ei tietoja",
   "Enimmäispaikat": "Enimmäispaikat",
   "Enimmäispaikat vaaditaan": "Enimmäispaikat vaaditaan",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "Enimmäispaikkojen määrä on oltava vähintään 1",
+  "Et ole vastannut tähän kyselyyn": {
+    "": "Et ole vastannut tähän kyselyyn."
+  },
   "etusivu": {
     "Vastausaika päättyy": "Vastausaika päättyy: {{timeEnd}}"
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä",
+  "Hakunäkyvyys": "Hakunäkyvyys",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
       "": "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle."
@@ -44,9 +51,13 @@
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
     "": "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
   },
+  "Hylkäykset": "Hylkäykset",
+  "Hylkäysmäärä": "Hylkäysmäärä",
+  "ID": "ID",
   "Jaa ryhmiin": "Jaa ryhmiin",
   "Jaettavia paikkoja": "Jaettavia paikkoja",
   "Jakaja": "Jakaja",
+  "Jakajassa luodut kyselyt": "Jakajassa luodut kyselyt",
   "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
     " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
       " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
@@ -62,6 +73,7 @@
       "": "Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän             mimimikoko ei voi olla 0."
     }
   },
+  "Kaikki käynnissä olevat kyselyt": "Kaikki käynnissä olevat kyselyt",
   "Käynnissä olevat kyselyt": "Käynnissä olevat kyselyt",
   "Käyttäjätunnus": "Käyttäjätunnus",
   "Kello": "Kello",
@@ -81,10 +93,12 @@
   "Kysely avattu": "Kysely avattu",
   "Kysely luotu onnistuneesti": "Kysely luotu onnistuneesti",
   "Kysely muokattu onnistuneesti": "Kysely muokattu onnistuneesti",
+  "Kysely on suljettu": "Kysely on suljettu",
   "Kysely palautettu": "Kysely palautettu",
   "Kysely poistetaan": "Kysely poistetaan",
   "Kysely poistettu": "Kysely poistettu",
   "Kysely suljettu": "Kysely suljettu",
+  "Kyselyjen lataus epäonnistui": "Kyselyjen lataus epäonnistui",
   "Kyselyn kuvaus": "Kyselyn kuvaus",
   "Kyselyn luonti epäonnistui": "Kyselyn luonti epäonnistui",
   "Kyselyn muokkaus": "Kyselyn muokkaus",
@@ -101,6 +115,7 @@
   "Kyselyn vastauksien tallennus epäonnistui": {
     "": "Kyselyn vastauksien tallennus epäonnistui."
   },
+  "Kyselyt": "Kyselyt",
   "Ladataan": {
     "": {
       "": {
@@ -122,12 +137,16 @@
   "Lisää tietokenttä": "Lisää tietokenttä",
   "Lisää vaihe": "Lisää vaihe",
   "Lisää vaihtoehto": "Lisää vaihtoehto",
+  "Lisätietoa ei saatavilla": {
+    "": "Lisätietoa ei saatavilla."
+  },
   "Luo kysely": "Luo kysely",
   "Luo uusi kysely": "Luo uusi kysely",
   "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
   "Luo uusi monivaiheinen kysely": "Luo uusi monivaiheinen kysely",
   "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot",
   "Luotuja kyselyitä": "Luotuja kyselyitä: {{count}}",
+  "Min valinnat": "Min valinnat",
   "Minimikoon on oltava vähintään 0": "Minimikoon on oltava vähintään 0",
   "Monesko valinta": "Monesko valinta",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Muokkaa kyselyä tai lisää siihen ylläpitäjä",
@@ -139,10 +158,13 @@
   "Nimi": "Nimi",
   "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "Nimi on liian lyhyt, oltava vähintään 5 merkkiä",
   "Nimi vaaditaan": "Nimi vaaditaan",
+  "Olet ilmoittautunut poissaolevaksi": "Olet ilmoittautunut poissaolevaksi",
   "Opiskelijat on lajiteltu ryhmiin seuraavasti": "Opiskelijat on lajiteltu ryhmiin seuraavasti",
   "Osallistumiskerrat*": "Osallistumiskerrat*",
   "Otsikko": "Otsikko",
+  "Päättyy": "Päättyy",
   "Päivämäärä on virheellinen": "Päivämäärä on virheellinen",
+  "Pakollinen": "Pakollinen",
   "Pakota minimikoko": "Pakota minimikoko",
   "Palaa kyselylistaan": "Palaa kyselylistaan",
   "Palaa listaan": "Palaa listaan",
@@ -156,6 +178,7 @@
   "Palautteen tyyppi": "Palautteen tyyppi",
   "Palautteiden lataus epäonnistui": "Palautteiden lataus epäonnistui",
   "Perustelut": "Perustelut",
+  "Perustelut hylkäyksille": "Perustelut hylkäyksille",
   "Peruuta": "Peruuta",
   "Piilota": "Piilota",
   "Poista": "Poista",
@@ -174,17 +197,21 @@
   "Priorisoitujen ryhmien vähimmäismäärä": "Priorisoitujen ryhmien vähimmäismäärä",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "Priorisoitujen ryhmien vähimmäismäärä vaaditaan",
   "Rajoita osallistumiskertoja": "Rajoita osallistumiskertoja",
+  "Rekisteröityneet opettajat": "Rekisteröityneet opettajat",
+  "Rekisteröityneet opiskelijat": "Rekisteröityneet opiskelijat",
   "Roskakori": "Roskakori",
   "Ryhmä": "Ryhmä",
   "Ryhmäjako tallennettu": "Ryhmäjako tallennettu",
   "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia",
   "Ryhmäjaon tallennus epäonnistui": "Ryhmäjaon tallennus epäonnistui",
+  "Ryhmän maksimikoko": "Ryhmän maksimikoko",
   "Ryhmän minimikoko": "Ryhmän minimikoko",
   "Ryhmän minimikoko vaaditaan": "Ryhmän minimikoko vaaditaan",
   "Ryhmän minimikoon on oltava vähintään 1": "Ryhmän minimikoon on oltava vähintään 1",
   "Ryhmät luotu": "Ryhmät luotu",
   "Ryhmät, jotka pudotettiin jaosta": "Ryhmät, jotka pudotettiin jaosta",
   "Ryhmävalintojen keskiarvo": "Ryhmävalintojen keskiarvo",
+  "Ryhmien määrä": "Ryhmien määrä",
   "Sähköposti": "Sähköposti",
   "sähköpostiosoite": "sähköpostiosoite",
   "Salasana": "Salasana",
@@ -228,9 +255,16 @@
   },
   "Tallenna muutokset": "Tallenna muutokset",
   "Tallenna tulokset": "Tallenna tulokset",
+  "Tämä kysely on suljettu eikä siihen voi enää vastata": {
+    "": "Tämä kysely on suljettu eikä siihen voi enää vastata."
+  },
   "Tarkastele": "Tarkastele",
+  "Tarkastele kyselyitä": "Tarkastele kyselyitä",
+  "Tarkastele palautteita": "Tarkastele palautteita",
+  "Tarkastele tilastoja": "Tarkastele tilastoja",
   "Tarkastele tuloksia": "Tarkastele tuloksia",
   "Tietosuojaseloste": "Tietosuojaseloste",
+  "Tilastojen lataus epäonnistui": "Tilastojen lataus epäonnistui",
   "Tilastot": "Tilastot",
   "Toiminnot": "Toiminnot",
   "tulokset": "tulokset",
@@ -245,8 +279,12 @@
   "Valitse päättymispäivä": "Valitse päättymispäivä",
   "Vastauksen poistaminen": "Vastauksen poistaminen",
   "Vastauksen poistaminen epäonnistui": "Vastauksen poistaminen epäonnistui",
+  "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta": {
+    "": "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta."
+  },
   "Vastaukset": "Vastaukset: {{count}}",
   "Vastauksia": "Vastauksia",
+  "Vastauksia luotu": "Vastauksia luotu",
   "Vastaus poistettu": "Vastaus poistettu",
   "Vastausaika": "Vastausaika",
   "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {

@@ -1,0 +1,31 @@
+FROM node:20 AS builder
+WORKDIR /app/frontend
+
+ARG VITE_STAGE=production
+ENV VITE_STAGE=${VITE_STAGE}
+
+COPY frontend/package*.json ./
+
+RUN npm install
+
+COPY frontend ./
+
+RUN npm run build
+
+
+FROM registry.access.redhat.com/ubi8/python-312
+WORKDIR /usr/src/app
+
+COPY requirements.txt .
+
+COPY ./schema.sql .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+COPY --from=builder /app/frontend/dist /usr/src/app/src/static/react
+
+CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+
+EXPOSE 5000/tcp

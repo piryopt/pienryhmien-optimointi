@@ -1,6 +1,9 @@
 import "../../static/css/answerPage.css";
+import { useTranslation } from "react-i18next";
 
 const GroupItem = ({ item, choice, expanded, onToggle, index, id }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       key={String(item.id)}
@@ -17,11 +20,11 @@ const GroupItem = ({ item, choice, expanded, onToggle, index, id }) => {
         >
           {item.name}
         </span>
-        {item.mandatory && <span className="group-mandatory">Pakollinen</span>}
+        {item.mandatory && <span className="group-mandatory">{t("Pakollinen")}</span>}
       </h2>
-      <p className="group-slots">Ryhmän maksimikoko: {item.slots}</p>
+      <p className="group-slots">{t("Ryhmän maksimikoko")}: {item.slots}</p>
       {item.mandatory && (
-        <p className="group-minsize">Ryhmän minimikoko: {item.min_size}</p>
+        <p className="group-minsize">{t("Ryhmän minimikoko")}: {item.min_size}</p>
       )}
       {expanded && (
         <div className="group-expanded">
@@ -38,7 +41,7 @@ const GroupItem = ({ item, choice, expanded, onToggle, index, id }) => {
               );
             })
           ) : (
-            <p className="no-info">Lisätietoa ei saatavilla.</p>
+            <p className="no-info">{t("Lisätietoa ei saatavilla.")}</p>
           )}
         </div>
       )}

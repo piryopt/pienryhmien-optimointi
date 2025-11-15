@@ -1,8 +1,9 @@
-import hyLogo from "/images/hy_logo.svg";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
+import { imagesBaseUrl } from "../utils/constants";
 
 const Navbar = () => {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ const Navbar = () => {
       showNotification(t("Kirjautuminen ulos onnistui"), "success");
       navigate("/");
     } else {
-      window.location.href = "/auth/logout";
+      window.location.replace("/api/logout");
     }
   };
 
@@ -30,7 +31,7 @@ const Navbar = () => {
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
           <img
-            src={hyLogo}
+            src={`${imagesBaseUrl}/hy_logo.svg`}
             alt=""
             width="34"
             height="30"
@@ -40,15 +41,15 @@ const Navbar = () => {
         </a>
         {isAdmin && (
           <div className="collapse navbar-collapse" id="navbarNav">
-            <a className="nav-link" href="#">
+            <Link to="/admintools/analytics" style={{ marginRight: 10 }}>
               <small>{t("Tilastot")}</small>
-            </a>
-            <a className="nav-link" href="#">
+            </Link>
+            <Link to="/admintools/feedback" style={{ marginRight: 10 }}>
               <small>{t("Palaute")}</small>
-            </a>
-            <a className="nav-link" href="#">
+            </Link>
+            <Link to="/admintools/surveys" style={{ marginRight: 10 }}>
               <small>{t("Aktiiviset kyselyt")}</small>
-            </a>
+            </Link>
           </div>
         )}
 

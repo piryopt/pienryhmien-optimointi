@@ -1,7 +1,7 @@
-import githubLogo from "/images/github-mark-white.png";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./footer_components/LanguageSwitcher";
 import { Link } from "react-router-dom";
+import { imagesBaseUrl } from "../utils/constants";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ const Footer = () => {
         <LanguageSwitcher />
         <a href="https://github.com/piryopt/pienryhmien-optimointi">
           <img
-            src={githubLogo}
+            src={`${imagesBaseUrl}/github-mark-white.png`}
             alt="Jakaja GitHubissa"
             width="30"
             height="30"

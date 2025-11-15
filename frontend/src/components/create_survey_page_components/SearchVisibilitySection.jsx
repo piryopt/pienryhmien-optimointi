@@ -2,10 +2,10 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const SearchVisibilitySection = () => {
-  const { register, watch } = useFormContext();
+  const { register, watch, setValue } = useFormContext();
   const { t } = useTranslation();
 
-  const value = watch("allowSearchVisibility", false);
+  const value = watch("allowSearchVisibility");
 
   return (
     <section>
@@ -24,21 +24,16 @@ const SearchVisibilitySection = () => {
         <input
           type="radio"
           id="search-visibility-yes"
-          value="true"
-          {...register("allowSearchVisibility", {
-            setValueAs: (v) => v === "true"
-          })}
+          checked={value === true}
+          onChange={() => setValue("allowSearchVisibility", true, { shouldValidate: true, shouldDirty: true })}
         />
         <label htmlFor="search-visibility-yes">{t("Kyllä")}</label>
 
         <input
           type="radio"
           id="search-visibility-no"
-          value="false"
-          {...register("allowSearchVisibility", {
-            setValueAs: (v) => v === "true"
-          })}
-          defaultChecked
+          checked={value === false}
+          onChange={() => setValue("allowSearchVisibility", false, { shouldValidate: true, shouldDirty: true })}
         />
         <label htmlFor="search-visibility-no">{t("Ei")}</label>
       </div>

@@ -18,7 +18,6 @@ def build_output(survey_id):
     user_rankings = survey_service.fetch_survey_responses(survey_id)
     if not user_rankings:
         return None
-    
     survey_answers_amount = len(user_rankings)
 
     # Ensure groups meet min_size constraints by adding empty choice(s) if needed
@@ -39,10 +38,10 @@ def build_multistage_output(survey_id):
     Build results structure for a multistage survey.
     Returns a list of stage_result dicts (same shape as before).
     """
-    multistage_user_rankings = survey_service.fetch_survey_responses_grouped_by_stages(survey_id)
+    multistage_user_rankings = survey_service.fetch_survey_responses_grouped_by_stage(survey_id)
     if not multistage_user_rankings:
         return None
-    
+
     output_data = []
     for stage in survey_service.get_all_survey_stages(survey_id):
         # Add check that groups meet min_size constraints and add empty choice(s) if needed!!
@@ -62,7 +61,6 @@ def build_multistage_output(survey_id):
             "droppedGroups": stage_output_data[3],
         }
         output_data.append(stage_result)
-    
     return output_data
 
 
@@ -89,15 +87,20 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_sum, happiness_results = get_happiness_data(output_data, survey_id)
     happiness_avg = happiness_sum / (len(students_dict) - unranked_or_rejected) if (len(students_dict) - unranked_or_rejected) > 0 else 1
 
+    infos = survey_choices_service.get_choice_additional_infos(survey_choices[0].id)
+    
+    additional_info_keys = list(map(lambda i: i.info_key, infos))
+    infos = list(map(lambda i: i.info_value, infos))
+
     happiness_results_list = []
     for k, v in happiness_results.items():
         if v > 0:
-            if k == "Hylätty":
-                k = "Hylättyyn"
-                msg = " valintaan sijoitetut käyttäjät: "
-            elif k == "Ei järjestetty":
-                k = "Ei järjestettyyn"
-                msg = " valintaan sijoitetut käyttäjät: "
+            if k == gettext("Kielletty"):
+                k = gettext("Kiellettyyn")
+                msg = gettext(" valintaan sijoitetut käyttäjät: ")
+            elif k == gettext("Ei järjestetty"):
+                k = gettext("Ei järjestettyyn")
+                msg = gettext(" valintaan sijoitetut käyttäjät: ")
             else:
                 msg = ". valintaansa sijoitetut käyttäjät: "
             happiness_results_list.append((k, msg, v))
@@ -105,7 +108,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_results_list.sort(key=happiness_sort_key)
     dropped_groups = dropped_group_names(dropped_groups_id)
 
-    output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, cinfos, additional_infos)
+    output_data = (output_data, happiness_avg, happiness_results_list, dropped_groups, infos, additional_info_keys)
     return output_data
 
 
@@ -374,7 +377,7 @@ def get_happiness_data(output_data, survey_id):
         ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
         rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
         happiness = get_happiness(choice_id, ranking, rejections)
-        if happiness != "Hylätty" and happiness != "Ei järjestetty":
+        if happiness != gettext("Kielletty") and happiness != gettext("Ei järjestetty"):
             happiness_sum += happiness
         results.append(happiness)
         if happiness not in happiness_results:
@@ -397,7 +400,7 @@ def get_happiness(survey_choice_id, user_ranking, user_rejections):
     rejections_list = convert_to_int_list(user_rejections)
 
     if survey_choice_id in rejections_list:
-        return "Hylätty"
+        return gettext("Kielletty")
 
     ranking_list = convert_to_list(user_ranking)
     happiness = 0
@@ -412,14 +415,14 @@ def get_happiness(survey_choice_id, user_ranking, user_rejections):
 def happiness_sort_key(x):
     """
     A sort key function for sorting happiness results so that integers come first
-    in ascending order, then "Ei järjestettyyn", then "Hylättyyn".
+    in ascending order, then "Ei järjestettyyn", then "Kiellettyyn".
     """
     value = x[0]
     if isinstance(value, int):
         return (0, value)
     elif value == "Ei järjestettyyn":
         return (1, 0)
-    elif value == "Hylättyyn":
+    elif value == gettext("Kiellettyyn"):
         return (2, 0)
     else:
         # Any other string (shouldn't happen)

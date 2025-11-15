@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import TrashTable from "../components/trash_components/TrashTable.jsx";
-import trashIcon from "/images/delete_36dp.svg";
+import { imagesBaseUrl } from "../utils/constants";
 
 const TrashPage = () => {
   const [surveys, setSurveys] = useState([]);
@@ -25,7 +25,7 @@ const TrashPage = () => {
       <br />
       <h2>
         <img
-          src={trashIcon}
+          src={`${imagesBaseUrl}/delete_36dp.svg`}
           alt=""
           className="d-inline-block align-text-top"
           width="42"

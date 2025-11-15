@@ -6,7 +6,7 @@ import SurveyAnswersTable from "../components/survey_answers_page_components/Sur
 import StageDropdown from "../components/survey_answers_page_components/StageDropdown";
 import SurveyAnswersInfo from "../components/survey_answers_page_components/SurveyAnswersInfo";
 import AnswersButtons from "../components/survey_answers_page_components/AnswersButtons";
-import { imagesBaseUrl } from "../utils/constants"
+import { imagesBaseUrl } from "../utils/constants";
 
 const SurveyMultistageAnswersPage = () => {
   const { surveyId } = useParams();

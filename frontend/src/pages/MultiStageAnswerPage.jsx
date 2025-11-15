@@ -10,9 +10,10 @@ import Tab from "react-bootstrap/Tab";
 import Form from "react-bootstrap/Form";
 import GroupList from "../components/survey_answer_page_components/GroupList.jsx";
 import ReasonsBox from "../components/survey_answer_page_components/ReasonsBox.jsx";
-import assignmentIcon from "/images/assignment_white_36dp.svg";
 import SurveyInfo from "../components/survey_answer_page_components/SurveyInfo.jsx";
 import "../static/css/answerPage.css";
+import { imagesBaseUrl } from "../utils/constants.js";
+import ClosedMultistageSurveyView from "../components/survey_answer_page_components/ClosedMultistageSurveyView.jsx";
 
 const MultiStageAnswerPage = () => {
   const { surveyId } = useParams();
@@ -27,6 +28,7 @@ const MultiStageAnswerPage = () => {
   const [additionalInfo, setAdditionalInfo] = useState(false);
   const [activeStage, setActiveStage] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [existing, setExisting] = useState(false);
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -48,6 +50,7 @@ const MultiStageAnswerPage = () => {
           let badChoices = [];
 
           if (data.existing === "1") {
+            setExisting(true);
             const goodIds = (data.rankedStages[stageId]?.goodChoices || []).map(
               String
             );
@@ -183,11 +186,29 @@ const MultiStageAnswerPage = () => {
     return <div className="text-center mt-5">Ladataan kyselyä...</div>;
   if (!activeStage) return <div>Ei vaiheita ladattuna</div>;
 
+  if (survey.closed) return (
+    <div className="answer-page">
+      <h2 className="answer-title">
+          <img
+            src={`${imagesBaseUrl}/assignment_white_36dp.svg`}
+            alt=""
+            className="assignment-icon"
+          />
+          {survey.name}
+      </h2>
+      <ClosedMultistageSurveyView existing={existing} stages={stages} reasons={reasons} expandedIds={expandedIds} toggleExpand={toggleExpand} />
+    </div>
+  )
+
   return (
     <div className="answer-page">
       <div>
         <h2 className="answer-title">
-          <img src={assignmentIcon} alt="" className="assignment-icon" />
+          <img
+            src={`${imagesBaseUrl}/assignment_white_36dp.svg`}
+            alt=""
+            className="assignment-icon"
+          />
           {survey.name}
         </h2>
         <SurveyInfo survey={survey} additionalInfo={additionalInfo} />

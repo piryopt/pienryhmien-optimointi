@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import surveyService from "../../services/surveys";
-import menuWhite from "/images/menu_white_36dp.svg";
-import deleteWhite from "/images/delete_white_36dp.svg";
 import UserRankings from "../UserRankings";
+import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyAnswersTableRow = ({
   answer,
@@ -49,7 +48,12 @@ const SurveyAnswersTableRow = ({
           style={{ cursor: "pointer" }}
           onClick={handleRankingClick}
         >
-          <img src={menuWhite} alt="" width={20} height={20} />
+          <img
+            src={`${imagesBaseUrl}/menu_white_36dp.svg`}
+            alt=""
+            width={20}
+            height={20}
+          />
           &nbsp;{rankingsVisible ? t("Piilota") : t("Näytä")}
         </span>
         {rankingsVisible && (
@@ -69,7 +73,12 @@ const SurveyAnswersTableRow = ({
           className="surveys_link"
           onClick={() => handleAnswerDelete(answer.email)}
         >
-          <img src={deleteWhite} alt="" width={30} height={24} />
+          <img
+            src={`${imagesBaseUrl}/delete_white_36dp.svg`}
+            alt=""
+            width={30}
+            height={24}
+          />
         </span>
       </td>
     </tr>

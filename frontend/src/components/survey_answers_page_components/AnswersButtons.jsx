@@ -87,8 +87,8 @@ const AnswersButtons = ({
       navigate(`/surveys/${surveyId}/group_sizes`);
     }
     if (multistage) {
-      navigate(`/surveys/multistage/${surveyId}/results`)
-      return
+      navigate(`/surveys/multistage/${surveyId}/results`);
+      return;
     }
     navigate(`/surveys/${surveyId}/results`);
   };
