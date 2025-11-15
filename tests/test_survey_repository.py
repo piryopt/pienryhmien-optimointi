@@ -93,7 +93,7 @@ def test_open_survey(setup_db):
     sr.close_survey(survey_id)
     closed = sr.get_survey(survey_id).closed
     assert closed is True
-    sr.open_survey(survey_id)
+    sr.open_survey(survey_id, "2026-01-01 02:02")
     opened = sr.get_survey(survey_id).closed
     assert opened is False
 
@@ -298,7 +298,7 @@ def test_exceptions():
     assert not success
     success = sr.close_survey(-1)
     assert not success
-    success = sr.open_survey(-1)
+    success = sr.open_survey(-1, "2026-01-01 00:00")
     assert not success
     success = sr.get_active_surveys(-1)
     assert not success

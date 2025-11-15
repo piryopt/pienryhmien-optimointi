@@ -75,15 +75,15 @@ def test_survey_creation_case_normal(setup_env):
 
     choice1_infos = scs.get_choice_additional_infos(choices[0][0])
     choice2_infos = scs.get_choice_additional_infos(choices[1][0])
-    assert choice1_infos[0][0] == "Osoite"
-    assert choice1_infos[0][1] == "Keijukaistenpolku 14"
-    assert choice1_infos[1][0] == "Postinumero"
-    assert choice1_infos[1][1] == "00820"
+    assert choice1_infos[0]["info_key"] == "Osoite"
+    assert choice1_infos[0]["info_value"] == "Keijukaistenpolku 14"
+    assert choice1_infos[1]["info_key"] == "Postinumero"
+    assert choice1_infos[1]["info_value"] == "00820"
 
-    assert choice2_infos[0][0] == "Osoite"
-    assert choice2_infos[0][1] == "Hattulantie 2"
-    assert choice2_infos[1][0] == "Postinumero"
-    assert choice2_infos[1][1] == "00550"
+    assert choice2_infos[0]["info_key"] == "Osoite"
+    assert choice2_infos[0]["info_value"] == "Hattulantie 2"
+    assert choice2_infos[1]["info_key"] == "Postinumero"
+    assert choice2_infos[1]["info_value"] == "00550"
 
 
 def test_count_surveys_created(setup_env):
@@ -166,7 +166,7 @@ def test_get_list_closed_surveys(setup_env):
 
     surveys = ss.get_list_closed_surveys(d["user_id"])
 
-    assert surveys[0][0] == closed_id
+    assert surveys[0]["id"] == closed_id
     assert len(surveys) == 1
 
 
@@ -190,7 +190,7 @@ def test_get_list_open_surveys(setup_env):
 
     surveys = ss.get_active_surveys(d["user_id"])
 
-    assert surveys[0][0] == open_id
+    assert surveys[0]["id"] == open_id
     assert len(surveys) == 1
 
 
@@ -208,7 +208,7 @@ def test_open_survey_normal(setup_env):
     closed = ss.check_if_survey_closed(survey_id)
     assert closed is True
 
-    ss.open_survey(survey_id, d["user_id"])
+    ss.open_survey(survey_id, d["user_id"], "01.01.2026")
     closed = ss.check_if_survey_closed(survey_id)
     assert closed is False
 
@@ -218,7 +218,7 @@ def test_open_survey_non_existant(setup_env):
     Test opening a non-existent survey
     """
     d = setup_env
-    ret = ss.open_survey("ITSNOTREAL", d["user_id"])
+    ret = ss.open_survey("ITSNOTREAL", d["user_id"], "01.01.2026")
     assert ret is False
 
 
@@ -233,7 +233,7 @@ def test_open_survey_wrong_owner(setup_env):
     sos.add_owner_to_survey(survey_id, d["user_email"])
 
     ss.close_survey(survey_id, d["user_id"])
-    ret = ss.open_survey(survey_id, d["user_id2"])
+    ret = ss.open_survey(survey_id, d["user_id2"], "01.01.2026")
     assert ret is False
 
     ret = ss.check_if_survey_closed(survey_id)
