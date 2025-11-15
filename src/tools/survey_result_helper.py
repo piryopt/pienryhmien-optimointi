@@ -1,13 +1,69 @@
 from src.entities.group import Group
 from src.entities.student import Student
+from src.services.survey_service import survey_service
 from src.services.user_service import user_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.tools.rankings_converter import convert_to_list, convert_to_int_list
-from flask_babel import gettext
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 import copy
+
+
+def build_output(survey_id):
+    """
+    Build results structure for a regular (single-stage) survey.
+    Returns the same tuple that hungarian_results returns or None if no answers.
+    """
+    user_rankings = survey_service.fetch_survey_responses(survey_id)
+    if not user_rankings:
+        return None
+    
+    survey_answers_amount = len(user_rankings)
+
+    # Ensure groups meet min_size constraints by adding empty choice(s) if needed
+    answers_less_than_min_size = survey_choices_service.check_answers_less_than_min_size(survey_id, survey_answers_amount)
+    if answers_less_than_min_size:
+        survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount)
+
+    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
+    groups_dict = convert_choices_groups(survey_choices)
+    students_dict = convert_users_students(user_rankings)
+
+    output_data = hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices)
+    return output_data
+
+
+def build_multistage_output(survey_id):
+    """
+    Build results structure for a multistage survey.
+    Returns a list of stage_result dicts (same shape as before).
+    """
+    multistage_user_rankings = survey_service.fetch_survey_responses_grouped_by_stages(survey_id)
+    if not multistage_user_rankings:
+        return None
+    
+    output_data = []
+    for stage in survey_service.get_all_survey_stages(survey_id):
+        # Add check that groups meet min_size constraints and add empty choice(s) if needed!!
+
+        survey_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
+        groups_dict = convert_choices_groups(survey_choices)
+        students_dict = convert_users_students(multistage_user_rankings[stage.stage])
+
+        stage_output_data = hungarian_results(survey_id, multistage_user_rankings[stage.stage], groups_dict, students_dict, survey_choices)
+        stage_result = {
+            "stage": stage.stage,
+            "results": stage_output_data[0],
+            "happinessData": stage_output_data[2],
+            "happiness": stage_output_data[1],
+            "infos": stage_output_data[4],
+            "additionalInfoKeys": stage_output_data[5],
+            "droppedGroups": stage_output_data[3],
+        }
+        output_data.append(stage_result)
+    
+    return output_data
 
 
 def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):

@@ -4,6 +4,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNotification } from "../context/NotificationContext";
 import { buildCreateSurveySchema } from "../utils/validations/createSurveyValidations";
+import { baseUrl } from "../utils/constants"
 import MultistageSurveyHeader from "../components/create_multistage_survey_components/MultistageSurveyHeader";
 import SurveyNameInput from "../components/create_survey_page_components/SurveyNameInput";
 import SurveyDateOfClosing from "../components/create_survey_page_components/SurveyDateOfClosing";
@@ -324,7 +325,7 @@ const SurveyMultistageCreate = () => {
 
     try {
       const res = await fetch(
-        "http://localhost:5001/api/multistage/survey/create",
+        `${baseUrl}/multistage/survey/create`,
         {
           method: "POST",
           credentials: "include",

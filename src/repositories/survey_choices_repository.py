@@ -173,8 +173,8 @@ class SurveyChoicesRepository:
                     "mandatory": kwargs.get("mandatory", False),
                     "participation_limit": kwargs.get("participation_limit", 0),
                     "stage": kwargs.get("stage"),
-                    "order_number": kwargs.get("order_number")
-                }
+                    "order_number": kwargs.get("order_number"),
+                },
             )
             new_choice_id = res.fetchone()[0]
             db.session.commit()
@@ -217,6 +217,26 @@ class SurveyChoicesRepository:
         except Exception as e:
             print(e)
             return []
+    
+    def get_stage_choices(self, survey_id, stage):
+        """
+        Returns a list of survey choices from a survey for a given stage
+        """
+        try:
+            sql = """
+                SELECT sc.*
+                FROM survey_choices sc
+                JOIN survey_stages ss
+                  ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
+                WHERE sc.survey_id = :survey_id AND sc.deleted = False AND ss.stage = :stage
+                ORDER BY ss.order_number, sc.id
+            """
+            result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage})
+            survey_choices = result.fetchall()
+            return survey_choices
+        except Exception as e:
+            print(e)
+            return []
 
     def count_spaces_in_stage(self, survey_id, stage):
         """
@@ -236,21 +256,6 @@ class SurveyChoicesRepository:
         except Exception as e:
             print(e)
             return None
-    def set_choices_deleted_true(self, survey_id):
-        """
-        SQL code for setting survey choices deleted field true
-
-        args:
-            survey_id: The id of the survey
-        """
-        try:
-            sql = "UPDATE survey_choices SET deleted = True WHERE survey_id=:survey_id"
-            db.session.execute(text(sql), {"survey_id": survey_id})
-            db.session.commit()
-            return True
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return False
 
 
 survey_choices_repository = SurveyChoicesRepository()

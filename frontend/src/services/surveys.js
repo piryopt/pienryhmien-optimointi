@@ -291,7 +291,13 @@ const getSurveyResultsData = async (surveyId) => {
     const response = await axios.get(`${baseUrl}/surveys/${surveyId}/results`, {
       withCredentials: true
     });
-    return response.data;
+    const data = response.data || {}
+
+    if (!Array.isArray(data.stageResults)) {
+      data.stageResults = []
+    }
+
+    return data;
   } catch (error) {
     throw error;
   }
@@ -362,6 +368,20 @@ const getMultiStageSurvey = async (surveyId) => {
   }
 };
 
+const getMultistageSurveyResultsData = async (surveyId) => {
+  return axios.get(`/api/surveys/${surveyId}/results`).then(res => res.data)
+}
+
+const getMultistageStages = async (surveyId) => {
+  return axios.get(`/api/surveys/multistage/${surveyId}`).then(res => {
+    return res.data?.stages ?? res.data
+  })
+}
+
+const saveMultistageResults = async (surveyId) => {
+  return axios.post(`/api/surveys/${surveyId}/results`).then(res => res.data)
+}
+
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
@@ -382,5 +402,8 @@ export default {
   saveResults: saveResults,
   submitMultiStageAnswers: submitMultiStageAnswers,
   getMultiStageSurvey: getMultiStageSurvey,
-  getMultiStageSurveyAnswersData: getMultiStageSurveyAnswersData
+  getMultiStageSurveyAnswersData: getMultiStageSurveyAnswersData,
+  getMultistageSurveyResultsData: getMultistageSurveyResultsData,
+  getMultistageStages: getMultistageStages,
+  saveMultistageResults: saveMultistageResults
 };

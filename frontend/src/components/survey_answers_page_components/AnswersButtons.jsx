@@ -13,7 +13,8 @@ const AnswersButtons = ({
   setSurveyClosed,
   surveyId,
   surveyData,
-  answers
+  answers,
+  multistage=false,
 }) => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
@@ -84,6 +85,10 @@ const AnswersButtons = ({
       return;
     } else if (answers.length > surveyData.availableSpaces) {
       navigate(`/surveys/${surveyId}/group_sizes`);
+    }
+    if (multistage) {
+      navigate(`/surveys/multistage/${surveyId}/results`)
+      return
     }
     navigate(`/surveys/${surveyId}/results`);
   };
