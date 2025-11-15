@@ -445,11 +445,6 @@ class SurveyService:
                 return {"success": False, "message": msg}
         if "choices" in survey_dict:
             for choice in survey_dict["choices"]:
-<<<<<<< HEAD
-                if choice["name"] == "":
-                    msg = gettext("Ryhmä vaatii nimen joka on vähintään 5 merkkiä pitkä")
-                    return {"success": False, "message": {"status": "0", "msg": msg}}
-=======
                 result = self.validate_survey_choice(choice)
                 if not result["success"]:
                     return result
@@ -481,7 +476,6 @@ class SurveyService:
             msg = "Group minimum size must be smaller than maximum size"
             return {"success": False, "message": msg}
 
->>>>>>> origin/main
         return {"success": True}
 
     def save_survey_edit(self, survey_id, edit_dict, user_id):
@@ -660,10 +654,6 @@ class SurveyService:
         """
         surveys = self._survey_repository.get_deleted_surveys(user_id)
         return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/main
 
 
 survey_service = SurveyService()

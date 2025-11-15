@@ -5,6 +5,7 @@ from src.services.user_service import user_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.tools.rankings_converter import convert_to_list, convert_to_int_list
+from flask_babel import gettext
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 import copy
@@ -89,8 +90,8 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
 
     infos = survey_choices_service.get_choice_additional_infos(survey_choices[0].id)
     
-    additional_info_keys = list(map(lambda i: i.info_key, infos))
-    infos = list(map(lambda i: i.info_value, infos))
+    additional_info_keys = [list(i.keys()) for i in infos]
+    infos = [list(i.values()) for i in infos]
 
     happiness_results_list = []
     for k, v in happiness_results.items():

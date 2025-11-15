@@ -23,7 +23,6 @@ import CreateSurveyPage from "./pages/CreateSurveyPage";
 import CSVInstructionsPage from "./components/create_survey_page_components/CSVInstructionsPage";
 import MultiStageAnswerPage from "./pages/MultiStageAnswerPage";
 import SurveyMultistageAnswersPage from "./pages/SurveyMultistageAnswersPage";
-import MultistageResultsPage from "./pages/MultistageResultsPage";
 import TrashPage from "./pages/TrashPage";
 import EditSurveyPage from "./pages/EditSurveypage";
 
