@@ -218,16 +218,6 @@ class SurveyRepository:
             return False
 
     def create_new_survey(
-<<<<<<< HEAD
-        self, 
-        surveyname, 
-        min_choices, 
-        description, 
-        enddate, 
-        allowed_denied_choices=0, 
-        allow_search_visibility=True, 
-        allow_absences=False, 
-=======
         self,
         surveyname,
         min_choices,
@@ -236,7 +226,6 @@ class SurveyRepository:
         allowed_denied_choices=0,
         allow_search_visibility=True,
         allow_absences=False,
->>>>>>> origin/main
         user_id=None,
     ):
         """
