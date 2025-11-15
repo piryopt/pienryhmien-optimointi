@@ -1,6 +1,8 @@
 # Jakaja 2.0
 
-Jakaja is a group assignment optimization application originally developed in the Software Engineering Lab course at the University of Helsinki.
+**NOTE! This is version 2.0! Old documentation can be found in [here](https://github.com/piryopt/pienryhmien-optimointi/tree/main/documentation)**
+
+Jakaja is a group assignment optimization application originally developed in the Software Engineering Lab course at the University of Helsinki.  
 The system helps assign students into groups based on their preferences, using the **Hungarian Algorithm**. For simplicity's sake, survey creators will be referred to as teachers and responders as students. Teachers can create surveys, to which students submit their preferences for the selection. After the teacher closes the survey, the system divides students into groups based on their responses. The results can be exported to Excel.
 
 The goal of **Jakaja 2.0** is to extend and refine the original system to better handle real-world requirements and improve maintainability.
