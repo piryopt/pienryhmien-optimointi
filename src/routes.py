@@ -340,70 +340,6 @@ def get_csrf():
 """
 
 
-@bp.route("/surveys/<string:survey_id>")
-@ad_login
-def surveys(survey_id):
-    """
-    The answer page for surveys.
-    """
-    # Needed for the session bug.
-    reloaded = session.get("reloaded", 0)
-    if not reloaded:
-        session["reloaded"] = True
-        return redirect(f"/surveys/{survey_id}")
-
-    user_id = session.get("user_id", 0)
-    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
-    survey = survey_service.get_survey(survey_id)
-
-    additional_info = False
-    if len(survey_choices_info) > 0:
-        additional_info = True
-
-    # If the survey has no choices, either it is an invalid survey or it doesn't exist
-    if not survey_choices:
-        return redirect("/")
-
-    survey_all_info = {}
-    for row in survey_choices_info:
-        if row.choice_id not in survey_all_info:
-            survey_all_info[row.choice_id] = {"infos": [{row.info_key: row.info_value}]}
-            survey_all_info[row.choice_id]["search"] = row.info_value
-        else:
-            survey_all_info[row.choice_id]["infos"].append({row.info_key: row.info_value})
-            survey_all_info[row.choice_id]["search"] += " " + row.info_value
-
-    for row in survey_choices:
-        if row.id not in survey_all_info:
-            survey_all_info[row.id] = {"name": row.name}
-            survey_all_info[row.id]["slots"] = row.max_spaces
-            survey_all_info[row.id]["id"] = row.id
-            survey_all_info[row.id]["mandatory"] = row.mandatory
-            survey_all_info[row.id]["search"] = row.name
-            survey_all_info[row.id]["infos"] = []
-            survey_all_info[row.id]["min_size"] = row.min_size
-        else:
-            survey_all_info[row.id]["name"] = row.name
-            survey_all_info[row.id]["mandatory"] = row.mandatory
-            survey_all_info[row.id]["slots"] = row.max_spaces
-            survey_all_info[row.id]["id"] = row.id
-            survey_all_info[row.id]["min_size"] = row.min_size
-
-    user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
-    if user_survey_ranking:
-        return surveys_answer_exists(survey_id, survey_all_info, additional_info)
-
-    # If the survey is closed, return a different page, where the student can view their answers.
-    closed = survey_service.check_if_survey_closed(survey_id)
-    if closed:
-        return render_template("closedsurvey.html", survey_name=survey.surveyname)
-
-    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
-    shuffled_choices = list(survey_all_info.values())
-    shuffle(shuffled_choices)
-    return render_template("survey.html", choices=shuffled_choices, survey=survey, additional_info=additional_info)
-
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["GET"])
 def api_survey(survey_id):
@@ -1710,6 +1646,15 @@ def spa_fallback_404(e):
     if path.startswith("/api") or path.startswith("/static") or "." in path.rsplit("/", 1)[-1]:
         return abort(404)
     return send_from_directory(current_app.static_folder, "index.html")
+
+@bp.route("/<path:path>")
+def spa_fallback(path):
+    if path.startswith("api") or path.startswith("static") or path.startswith("auth"):
+        return abort(404)
+    # In production serve the built SPA index so React Router can handle client routes
+    if not current_app.debug:
+        return send_from_directory(current_app.static_folder, "index.html")
+    return abort(404)
 
 """
 TASKS:
