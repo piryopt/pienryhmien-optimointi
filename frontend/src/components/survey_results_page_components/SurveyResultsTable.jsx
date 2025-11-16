@@ -3,7 +3,7 @@ import Table from "../Table";
 import SurveyResultsTableRow from "./SurveyResultsTableRow";
 import { imagesBaseUrl } from "../../utils/constants";
 
-const SurveyResultsTable = ({ results, surveyId }) => {
+const SurveyResultsTable = ({ results, surveyId, currStage }) => {
   const { t } = useTranslation();
 
   const columns = [
@@ -26,7 +26,12 @@ const SurveyResultsTable = ({ results, surveyId }) => {
       columns={columns}
       data={results}
       renderRow={(result, i) => (
-        <SurveyResultsTableRow key={i} result={result} surveyId={surveyId} />
+        <SurveyResultsTableRow 
+          key={i} 
+          result={result} 
+          surveyId={surveyId} 
+          currStage={currStage}
+        />
       )}
     />
   );

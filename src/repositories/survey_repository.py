@@ -19,6 +19,27 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return None
+    
+    def is_multistage(self, survey_id):
+        """
+        SQL code for checking whether or not a survey is multistage
+        
+        args:
+            survey_id: The id of the survey
+        
+        returns
+            True if the survey is multistage, False otherwise
+        """
+        try:
+            sql = "SELECT EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = :survey_id) AS is_multistage"
+            result = db.session.execute(text(sql), {"survey_id": survey_id})
+            row = result.fetchone()
+            if not row:
+                return False
+            return bool(row[0])
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return None
 
     def is_multistage(self, survey_id):
         """
@@ -333,6 +354,27 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return []
+    
+    def fetch_survey_responses_grouped_by_stages(self, survey_id):
+        """Returns survey answers grouped by stage (grouping done in SQL)."""
+        try:
+            sql = text(
+                "SELECT stage, user_id, ranking, rejections, reason "
+                "FROM user_survey_rankings "
+                "WHERE survey_id = :survey_id AND deleted IS FALSE "
+                "ORDER BY stage, user_id"
+            )
+            result = db.session.execute(sql, {"survey_id": survey_id})
+            rows = result.fetchall()
+
+            grouped = {}
+            for stage, user_id, ranking, rejections, reason in rows:
+                grouped.setdefault(stage, []).append((user_id, ranking, rejections, reason))
+            
+            return grouped
+        except Exception as e:
+            print(e)
+            return {}
 
     def fetch_survey_response_grouped_by_stages(self, survey_id):
         """Returns survey answers grouped by stage (grouping done in SQL)."""

@@ -14,9 +14,9 @@ const StageDropdown = ({
   const { t } = useTranslation();
 
   if (setCurrStageAvailableSpaces) {
-  useEffect(() => {
-    setCurrStageAvailableSpaces(spacesData[currStage]);
-  });
+    useEffect(() => {
+      setCurrStageAvailableSpaces(spacesData[currStage]);
+    })
   }
 
   return (

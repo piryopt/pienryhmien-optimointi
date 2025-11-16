@@ -997,21 +997,24 @@ def survey_results(survey_id):
     """
 
     if not check_if_owner(survey_id):
-        return jsonify({"msg": "Only survey owners can get survey results"})
+        current_app.logger.error(f"Unauthorized access to survey {survey_id}")
+        return jsonify({"error": "Only survey owners can get survey results"}), 403
 
     # Check that the survey is closed. If it is open, redirect to home page.
     if not survey_service.check_if_survey_closed(survey_id):
-        return jsonify({"msg": "Survey must be closed for group assignment"})
+        current_app.logger.error(f"Survey {survey_id} is not closed")
+        return jsonify({"error": "Survey must be closed for group assignment"}), 400
 
     # Check if the answers are already saved to the database. This determines which operations are available to the owner.
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
+    current_app.logger.info(f"Survey {survey_id} saved results exist: {saved_result_exists}")
 
     # Check if the survey is a multistage survey
     if survey_service.is_multistage(survey_id):
         output_data = build_multistage_output(survey_id)
         if output_data is None:
-            return jsonify({"msg": "Error: Survey answers not found"})
-
+            return jsonify({"error": "Survey answers not found"}), 404
+        
         if request.method == "GET":
             return jsonify(
                 {
@@ -1020,10 +1023,10 @@ def survey_results(survey_id):
                     "resultsSaved": saved_result_exists,
                 }
             )
-
+    
     output_data = build_output(survey_id)
     if output_data is None:
-        return jsonify({"msg": "Error: Survey answers not found"})
+        return jsonify({"error": "Survey answers not found"}), 404
 
     if request.method == "GET":
         return jsonify(
@@ -1093,6 +1096,41 @@ def open_survey(survey_id):
         response = {"status": "0", "msg": "Opening survey failed"}
         return jsonify(response)
     return jsonify({"status": "1", "msg": "Survey opened"})
+
+
+@bp.route("/api/surveys/multistage/<string:survey_id>/results", methods=["POST"])
+def api_save_multistage_results(survey_id):
+    """
+    Save multistage survey results
+    """
+    if not check_if_owner(survey_id):
+        return jsonify({"msg": "Only survey owners can save results"}), 403
+
+    saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
+    if saved_result_exists:
+        return jsonify({"msg": "Survey has already been saved"}), 400
+    
+    output_data = build_multistage_output(survey_id)
+    if output_data is None:
+        return jsonify({"msg": "Survey answers not found"}), 404
+    
+    survey_answered = survey_service.update_survey_answered(survey_id)
+    if not survey_answered:
+        return jsonify({"msg": "Saving survey failed"}), 500
+    
+    for stage in output_data:
+        results_list = stage.get("results", []) if isinstance(stage, dict) else []
+        for res in results_list:
+            try:
+                user_id = res[0][0]
+                choice_id = res[2][0]
+            except Exception:
+                continue
+            saved = final_group_service.save_result(user_id, survey_id, choice_id)
+            if not saved:
+                return jsonify({"msg": f"Error in saving {res[0][1]} results"}), 500
+    
+    return jsonify({"msg": "Survey saved"}), 200
 
 
 """

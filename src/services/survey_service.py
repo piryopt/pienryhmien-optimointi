@@ -60,6 +60,18 @@ class SurveyService:
         if not survey:
             return False
         return survey.surveyname
+    
+    def is_multistage(self, survey_id):
+        """
+        Returns True if the survey has stages (is multistage), False otherwise.
+
+        args:
+            survey_id: The id of the survey
+        """
+        result = self._survey_repository.is_multistage(survey_id)
+        if not result:
+            return False
+        return result
 
     def is_multistage(self, survey_id):
         """
@@ -350,6 +362,15 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
+    
+    def fetch_survey_responses_grouped_by_stages(self, survey_id):
+        """
+        Gets a list of user_survey_rankings for the survey grouped by stage
+
+        args:
+            survey_id: The id of the survey
+        """
+        return self._survey_repository.fetch_survey_responses_grouped_by_stages(survey_id)
 
     def fetch_survey_responses_grouped_by_stage(self, survey_id):
         """

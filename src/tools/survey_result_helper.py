@@ -6,7 +6,7 @@ from src.services.user_service import user_service
 from src.services.survey_choices_service import survey_choices_service
 from src.services.user_rankings_service import user_rankings_service
 from src.tools.rankings_converter import convert_to_list, convert_to_int_list
-
+from flask_babel import gettext
 import src.algorithms.hungarian as h
 import src.algorithms.weights as w
 import copy
@@ -20,7 +20,6 @@ def build_output(survey_id):
     user_rankings = survey_service.fetch_survey_responses(survey_id)
     if not user_rankings:
         return None
-
     survey_answers_amount = len(user_rankings)
 
     # Ensure groups meet min_size constraints by adding empty choice(s) if needed
@@ -51,9 +50,9 @@ def build_multistage_output(survey_id):
 
         survey_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
         groups_dict = convert_choices_groups(survey_choices)
-        students_dict = convert_users_students(multistage_user_rankings[stage[0]])
+        students_dict = convert_users_students(multistage_user_rankings[stage.stage])
 
-        stage_output_data = hungarian_results(survey_id, multistage_user_rankings[stage[0]], groups_dict, students_dict, survey_choices)
+        stage_output_data = hungarian_results(survey_id, multistage_user_rankings[stage.stage], groups_dict, students_dict, survey_choices)
         stage_result = {
             "stage": stage.stage,
             "results": stage_output_data[0],
@@ -64,13 +63,12 @@ def build_multistage_output(survey_id):
             "droppedGroups": stage_output_data[3],
         }
         output_data.append(stage_result)
-
     return output_data
 
 
 def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
     """
-    Run the hungarian algorthim until their is no violation for the min_size portion
+    Run the hungarian algorithm until there is no violation for the min_size portion
 
     args:
         survey_id: The id of the survey
@@ -88,13 +86,13 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     output_data, unranked_or_rejected = run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id)
     additional_infos, cinfos = get_additional_infos(survey_choices)
 
-    happiness_sum, happiness_results = get_happiness_data(output_data, survey_id)
-    happiness_avg = happiness_sum / (len(students_dict) - unranked_or_rejected) if (len(students_dict) - unranked_or_rejected) > 0 else 1
+    happiness_sum, happiness_results, valid_count = get_happiness_data(output_data, students_dict)
+    happiness_avg = (happiness_sum / valid_count) if valid_count > 0 else 1
 
     infos = survey_choices_service.get_choice_additional_infos(survey_choices[0].id)
-
-    additional_info_keys = list(map(lambda i: i["info_key"], infos))
-    infos = list(map(lambda i: i["info_value"], infos))
+    
+    additional_info_keys = [list(i.keys()) for i in infos]
+    infos = [list(i.values()) for i in infos]
 
     happiness_results_list = []
     for k, v in happiness_results.items():
@@ -376,23 +374,32 @@ def get_happiness_data(output_data, survey_id):
         output_data: The output data from the hungarian algorithm along with happiness average, happiness results, dropped groups and additional infos
         survey_id: The id of the survey
     """
+    students_dict = survey_id if isinstance(survey_id, dict) else None
+
     happiness_results = {}
     happiness_sum = 0
+    valid_count = 0
+
     for results in output_data:
         user_id = results[0][0]
         choice_id = results[2][0]
-        ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
-        rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
-        happiness = get_happiness(choice_id, ranking, rejections)
-        if happiness != gettext("Kielletty") and happiness != gettext("Ei järjestetty"):
-            happiness_sum += happiness
-        results.append(happiness)
-        if happiness not in happiness_results:
-            happiness_results[happiness] = 1
-        else:
-            happiness_results[happiness] += 1
 
-    return happiness_sum, happiness_results
+        if students_dict and user_id in students_dict:
+            ranking = students_dict[user_id].selections
+            rejections = students_dict[user_id].rejections
+        else:
+            ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
+            rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
+        
+        happiness = get_happiness(choice_id, ranking, rejections)
+        if isinstance(happiness, (int, float)):
+            happiness_sum += happiness
+            valid_count += 1
+            happiness_results[happiness] = happiness_results.get(happiness, 0) + 1
+        else:
+            happiness_results[happiness] = happiness_results.get(happiness, 0) + 1
+        
+        return happiness_sum, happiness_results, valid_count
 
 
 def get_happiness(survey_choice_id, user_ranking, user_rejections):

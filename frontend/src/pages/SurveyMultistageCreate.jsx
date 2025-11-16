@@ -4,6 +4,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNotification } from "../context/NotificationContext";
 import { buildCreateSurveySchema } from "../utils/validations/createSurveyValidations";
+import { baseUrl } from "../utils/constants"
 import MultistageSurveyHeader from "../components/create_multistage_survey_components/MultistageSurveyHeader";
 import SurveyNameInput from "../components/create_survey_page_components/SurveyNameInput";
 import SurveyDateOfClosing from "../components/create_survey_page_components/SurveyDateOfClosing";
@@ -18,7 +19,6 @@ import StageTables from "../components/create_multistage_survey_components/Stage
 import Button from "react-bootstrap/Button";
 import { format } from "date-fns";
 import csrfService from "../services/csrf";
-import { baseUrl } from "../utils/constants";
 import "../static/css/createSurveyPage.css";
 import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 
