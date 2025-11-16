@@ -14,7 +14,7 @@ const SurveysTable = ({ surveys, setSurveys }) => {
   const handleDeleteClick = async (surveyId) => {
     openDialog(
       t("Poista kysely?"),
-      t("Haluatko varmasti poistaa kyselyn?"),
+      t("Haluatko siirtää kyselyn roskakoriin?"),
       surveyId,
       async () => {
         try {

@@ -322,6 +322,17 @@ class SurveyService:
             if survey.time_end <= datetime.now() - timedelta(days=365 * 2):
                 self._survey_repository.delete_survey_permanently(survey.id)
 
+    def check_for_trashed_surveys_to_delete(self):
+        """
+        Gets a list of all surveys and deletes them and their related data if survey has been in trash bin for a week.
+        """
+
+        surveys = self._survey_repository.get_all_deleted_surveys()
+
+        for survey in surveys:
+            if survey.deleted_at <= datetime.now() - timedelta(days=7):
+                self._survey_repository.delete_survey_permanently(survey.id)
+
     def delete_survey_permanently(self, survey_id):
         """
         Deletes survey and all related data permanently.
