@@ -34,6 +34,11 @@ const TrashPage = () => {
         &nbsp;{t("Roskakori")}
       </h2>
       <br />
+      <p>
+        {t(
+          "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti."
+        )}
+      </p>
       <TrashTable surveys={surveys} setSurveys={setSurveys} />
     </div>
   );

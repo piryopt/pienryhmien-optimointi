@@ -17,7 +17,7 @@ const TrashTableRow = ({ survey, handleDeleteClick, handleRestoreClick }) => {
   const month = nextWeek.getMonth() + 1;
   const year = nextWeek.getFullYear();
 
-  const deleteDate = `${day}.${month}.${year}`;
+  const deleteDate = `${day}.${month}.${year} 00:00`;
 
   if (survey.id === "separatingRow") {
     return (
