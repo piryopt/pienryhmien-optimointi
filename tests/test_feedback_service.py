@@ -16,7 +16,7 @@ def test_new_feedback(setup_env):
     Test that adding a new feedback works
     """
     d = setup_env
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message, id = fs.new_feedback(d["user_id"], d["data"])
     assert success
 
 
@@ -26,9 +26,9 @@ def test_new_feedback_title_exists(setup_env):
     """
     d = setup_env
     d["data"]["title"] = "otsikko"
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message, id = fs.new_feedback(d["user_id"], d["data"])
     assert success
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message = fs.new_feedback(d["user_id"], d["data"])
     assert message == "Olet jo luonut palautteen tällä otsikolla!"
 
 
@@ -39,9 +39,9 @@ def test_new_feedback_content_too_short(setup_env):
     d = setup_env
     d["data"]["title"] = "Valitus testeistä"
     d["data"]["content"] = "moti"
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message = fs.new_feedback(d["user_id"], d["data"])
     assert not success
-    assert message == "Sisältö on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 5."
+    assert message == "Sisältö on liian lyhyt! Merkkimäärän täytyy olla vähintään 5."
 
 
 def test_new_feedback_title_too_short(setup_env):
@@ -50,9 +50,9 @@ def test_new_feedback_title_too_short(setup_env):
     """
     d = setup_env
     d["data"]["title"] = "aa"
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message = fs.new_feedback(d["user_id"], d["data"])
     assert not success
-    assert message == "Otsikko on liian lyhyt! Merkkimäärän täytyy olla suurempi kuin 3."
+    assert message == "Otsikko on liian lyhyt! Merkkimäärän täytyy olla vähintään 3."
 
 
 def test_unsolved_list(setup_env):
@@ -61,10 +61,10 @@ def test_unsolved_list(setup_env):
     """
     d = setup_env
     d["data"]["title"] = "aaaaaaaaaa"
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message, id = fs.new_feedback(d["user_id"], d["data"])
     assert success
     d["data"]["title"] = "bbbbbbbbbb"
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message, id = fs.new_feedback(d["user_id"], d["data"])
     assert success
     feedback_list = fs.get_unsolved_feedback()
     assert len(feedback_list) == 2
@@ -76,7 +76,7 @@ def test_title_too_long(setup_env):
     """
     d = setup_env
     d["data"]["title"] = "a" * 51
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message = fs.new_feedback(d["user_id"], d["data"])
     assert not success
 
 
@@ -87,7 +87,7 @@ def test_content_too_long(setup_env):
     d = setup_env
     d["data"]["title"] = "Valitus testeistä"
     d["data"]["content"] = "testit ovat heikkoja! " * 100
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message = fs.new_feedback(d["user_id"], d["data"])
     assert not success
 
 
@@ -106,7 +106,7 @@ def test_get_feedback(setup_env):
     d = setup_env
     d["data"]["title"] = "Testit ovat mahtavia!"
     d["data"]["content"] = "Huijasin, ne ovat heikkoja >:D"
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message, id = fs.new_feedback(d["user_id"], d["data"])
     assert success
     all_unsolved_feedback = fr.get_feedback_by_solved(False)
     feedback = all_unsolved_feedback[-1]
@@ -130,7 +130,7 @@ def test_get_solved_feedback(setup_env):
     d = setup_env
     d["data"]["title"] = "Testit ovat todella mahtavia!"
     d["data"]["content"] = "Huijasin, ne ovat heikkoja >:D"
-    success, message = fs.new_feedback(d["user_id"], d["data"])
+    success, key, message, id = fs.new_feedback(d["user_id"], d["data"])
     assert success
     all_unsolved_feedback = fr.get_feedback_by_solved(False)
     feedback = all_unsolved_feedback[-1]

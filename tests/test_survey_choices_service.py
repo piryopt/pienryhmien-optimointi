@@ -5,6 +5,7 @@ from src.services.survey_choices_service import survey_choices_service as scs
 from src.services.survey_owners_service import survey_owners_service as sos
 import json
 
+
 @pytest.fixture()
 def setup_env(setup_db):
     """
@@ -25,6 +26,7 @@ def setup_env(setup_db):
     setup_db["survey_id"] = survey_id
 
     return setup_db
+
 
 def test_get_list_of_survey_choices_returns_false_if_no_data_found():
     """
@@ -81,7 +83,7 @@ def test_get_survey_choice_gets_correct_choice(setup_env):
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
     one_choice = scs.get_survey_choice(choices[0][0])
-    assert choices[0][2] == one_choice[2]
+    assert choices[0].name == one_choice["name"]
 
 
 def test_get_survey_choice_min_size(setup_env):
@@ -126,9 +128,9 @@ def test_get_choice_additional_infos_returns_correct_data(setup_env):
     choices = scs.get_list_of_survey_choices(d["survey_id"])
     choice_infos = scs.get_choice_additional_infos(choices[0][0])
     # headers
-    assert choice_infos[0][0] + " " + choice_infos[1][0] == "Osoite Postinumero"
+    assert choice_infos[0]["info_key"] + " " + choice_infos[1]["info_key"] == "Osoite Postinumero"
     # info
-    assert choice_infos[0][1] + " " + choice_infos[1][1] == "Keijukaistenpolku 14 00820"
+    assert choice_infos[0]["info_value"] + " " + choice_infos[1]["info_value"] == "Keijukaistenpolku 14 00820"
 
 
 def test_count_number_of_available_spaces(setup_env):

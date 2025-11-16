@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
 import { buildEditSurveyAdminSchema } from "../../utils/validations/editSurveyValidations.js";
 import { safeParseJson, extractMessage } from "../../utils/parsers";
+import { baseUrl } from "../../utils/constants.js";
 
 const AddAdminSection = ({ value = "", onChange = () => {}, surveyId }) => {
   const { t } = useTranslation();
@@ -42,18 +43,15 @@ const AddAdminSection = ({ value = "", onChange = () => {}, surveyId }) => {
     async (data) => {
       try {
         const csrfToken = await csrfService.fetchCsrfToken();
-        const res = await fetch(
-          `http://localhost:5001/api/surveys/${surveyId}/add_owner`,
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": csrfToken
-            },
-            body: JSON.stringify({ email: data.adminEmail })
-          }
-        );
+        const res = await fetch(`${baseUrl}/surveys/${surveyId}/add_owner`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
+          },
+          body: JSON.stringify({ email: data.adminEmail })
+        });
         const json = await safeParseJson(res);
         if (!res.ok) {
           showNotification(

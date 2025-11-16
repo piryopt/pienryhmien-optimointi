@@ -1,7 +1,7 @@
 from random import shuffle
 from datetime import datetime
 from functools import wraps
-from flask import app, render_template, request, session, jsonify, redirect, Blueprint, current_app, send_from_directory
+from flask import app, render_template, request, session, jsonify, redirect, Blueprint, current_app, send_from_directory, abort
 from flask_wtf.csrf import generate_csrf
 import markdown
 from pathlib import Path
@@ -130,6 +130,7 @@ def serve_images(filename):
     file_path = images_dir / filename
     if file_path.exists() and file_path.is_file():
         return send_from_directory(str(images_dir), filename)
+        
 
 
 @bp.route("/api/frontpage", methods=["GET"])
@@ -1323,16 +1324,19 @@ def logout():
         return redirect("/Shibboleth.sso/Logout")
 
 
-@bp.route("/api/logout", methods=["POST"])
+@bp.route("/api/logout", methods=["GET", "POST"])
 def api_logout():
     """
     SPA logout: clear server session and return JSON.
     """
     user_service.logout()
+
     if current_app.debug:
-        return jsonify({"logged_out": True})
-    else:
-        return redirect("/Shibboleth.sso/Logout")
+        if request.method == "POST":
+            return jsonify({"logged_out": True})
+        return redirect("/")
+    
+    return redirect("/Shibboleth.sso/Logout")
 
 
 """
@@ -1733,6 +1737,14 @@ def language_sv():
         response = {"status": "1", "msg": "Uppdatera språket till svenska!"}
         return jsonify(response)
 
+
+@bp.app_errorhandler(404)
+def spa_fallback_404(e):
+    path = request.path or ""
+    # let API and static requests return normal 404/serve assets
+    if path.startswith("/api") or path.startswith("/static") or "." in path.rsplit("/", 1)[-1]:
+        return abort(404)
+    return send_from_directory(current_app.static_folder, "index.html")
 
 """
 TASKS:

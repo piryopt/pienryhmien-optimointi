@@ -30,7 +30,8 @@ class FeedbackRepository:
             return None
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return None
 
     def get_feedback(self, feedback_id):

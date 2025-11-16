@@ -18,6 +18,7 @@ import StageTables from "../components/create_multistage_survey_components/Stage
 import Button from "react-bootstrap/Button";
 import { format } from "date-fns";
 import csrfService from "../services/csrf";
+import { baseUrl } from "../utils/constants";
 import "../static/css/createSurveyPage.css";
 import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 
@@ -319,18 +320,15 @@ const SurveyMultistageCreate = () => {
     };
 
     try {
-      const res = await fetch(
-        "http://localhost:5001/api/multistage/survey/create",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken
-          },
-          body: JSON.stringify(payload)
-        }
-      );
+      const res = await fetch(`${baseUrl}/multistage/survey/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        body: JSON.stringify(payload)
+      });
 
       let json = null;
       try {
