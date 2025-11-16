@@ -8,6 +8,17 @@ const TrashTableRow = ({ survey, handleDeleteClick, handleRestoreClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
   const { t } = useTranslation();
 
+  const timestamp = Date.parse(survey.deleted_at);
+  const timeDate = new Date(timestamp);
+  const nextWeek = new Date();
+  nextWeek.setDate(timeDate.getDate() + 7);
+
+  const day = nextWeek.getDate();
+  const month = nextWeek.getMonth() + 1;
+  const year = nextWeek.getFullYear();
+
+  const deleteDate = `${day}.${month}.${year}`;
+
   if (survey.id === "separatingRow") {
     return (
       <tr>
@@ -77,7 +88,7 @@ const TrashTableRow = ({ survey, handleDeleteClick, handleRestoreClick }) => {
           />
         )}
       </td>
-      <td>00.00.0000 00:00</td>
+      <td>{deleteDate}</td>
     </tr>
   );
 };

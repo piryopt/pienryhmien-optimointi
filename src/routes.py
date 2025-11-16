@@ -123,6 +123,7 @@ def frontpage() -> str:
 
     return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
+
 @bp.route("/static/images/<path:filename>")
 def serve_images(filename):
     images_dir = Path(__file__).parents[0] / "static" / "images"
@@ -130,6 +131,7 @@ def serve_images(filename):
     if file_path.exists() and file_path.is_file():
         return send_from_directory(str(images_dir), filename)
         
+
 
 @bp.route("/api/frontpage", methods=["GET"])
 @ad_login
@@ -1664,6 +1666,13 @@ def close_surveys():
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """
     survey_service.check_for_surveys_to_close()
+
+
+def delete_trashed_surveys():
+    """
+    Daily check if surveys in trash bin are over a week old. If so, delete said surveys and all related data.
+    """
+    survey_service.check_for_trashed_surveys_to_delete()
 
 
 def delete_old_surveys():
