@@ -395,10 +395,6 @@ class SurveyService:
             msg = "Response period's end can't be in the past"
             return {"success": False, "message": msg}
 
-        if not multistage and (minchoices > len(survey_choices)):
-            msg = "There are less choices than the minimum amount of prioritized groups!"
-            return {"success": False, "message": msg}
-
         if not isinstance(allowed_denied_choices, int):
             print(allowed_denied_choices)
             msg = "Survey denied choices must be an integer"
@@ -408,7 +404,7 @@ class SurveyService:
             print(type(allow_search_visibility), allow_search_visibility)
             msg = "Survey search visibility must be a boolean"
             return {"success": False, "message": msg}
-        
+
         if len(survey_name) < 5:
             msg = "Survey name must be atleast 5 characters long"
             return {"success": False, "message": msg}
@@ -422,6 +418,11 @@ class SurveyService:
             if not isinstance(minchoices, int):
                 msg = "The minimum number of prioritized groups should be a number!"
                 return {"success": False, "message": msg}
+
+        if not multistage and (minchoices > len(survey_choices)):
+            msg = "There are less choices than the minimum amount of prioritized groups!"
+            return {"success": False, "message": msg}
+
         if "choices" in survey_dict:
             for choice in survey_dict["choices"]:
                 result = self.validate_survey_choice(choice)

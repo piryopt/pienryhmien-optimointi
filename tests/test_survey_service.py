@@ -370,7 +370,7 @@ def test_check_surveys_to_close(setup_env):
 
 def test_validate_created_survey_invalid_name(setup_env):
     """
-    Test that creating a survey with a  name that is too short returns False
+    Test that creating a survey with a name that is too short returns False
     """
     survey_dict = {
         "surveyGroupname": "Test",
@@ -379,10 +379,7 @@ def test_validate_created_survey_invalid_name(setup_env):
         "endtime": "00:00",
     }
 
-    assert ss.validate_created_survey(survey_dict) == {
-        "success": False,
-        "message": {"status": "0", "msg": "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä"},
-    }
+    assert ss.validate_created_survey(survey_dict) == {"success": False, "message": "Survey name must be atleast 5 characters long"}
 
 
 def test_validate_created_survey(setup_env):
@@ -390,12 +387,28 @@ def test_validate_created_survey(setup_env):
     Test that creating a survey with valid inputs returns True
     """
 
+    choices = (
+        {
+            "mandatory": False,
+            "name": "Esimerkkipäiväkoti 1",
+            "max_spaces": "8",
+            "min_size": "1",
+        },
+        {
+            "mandatory": True,
+            "name": "Esimerkkipäiväkoti 2",
+            "max_spaces": "6",
+            "min_size": "1",
+        },
+    )
+
     survey_dict = {
-        "surveyGroupname": "Test survey invalid min choices",
-        "surveyInformation": "Test survey validation with min_choices less than 1",
+        "surveyGroupname": "Test valid survey",
+        "surveyInformation": "Test survey validation with a very good survey",
         "enddate": "31.12.2077",
         "endtime": "00:00",
         "minchoices": 1,
+        "choices": choices,
     }
 
     assert ss.validate_created_survey(survey_dict) == {"success": True}
@@ -421,15 +434,8 @@ def test_validate_created_survey_invalid_min_choices(setup_env):
         "minchoices": "not a number",
     }
 
-    assert ss.validate_created_survey(survey_dict) == {
-        "success": False,
-        "message": {"status": "0", "msg": "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"},
-    }
-
-    assert ss.validate_created_survey(survey_dict2) == {
-        "success": False,
-        "message": {"status": "0", "msg": "Priorisoitavien ryhmien vähimmäismäärän tulee olla numero!"},
-    }
+    assert ss.validate_created_survey(survey_dict) == {"success": False, "message": "The minimum number of prioritized groups should be a number!"}
+    assert ss.validate_created_survey(survey_dict2) == {"success": False, "message": "The minimum number of prioritized groups should be a number!"}
 
 
 def test_save_survey_edit(setup_env):
