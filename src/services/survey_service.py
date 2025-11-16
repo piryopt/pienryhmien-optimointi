@@ -604,6 +604,7 @@ class SurveyService:
         RETURNS whether updating was successful
         """
 
+        self._choices_repository.set_choices_deleted_true(survey_id)
         return self._survey_repository.set_survey_deleted_true(survey_id)
 
     def set_survey_deleted_false(self, survey_id):

@@ -566,7 +566,7 @@ def test_new_enough_survey_not_deleted(setup_env):
     urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
-    assert surveys[0].response_count == 2
+    assert surveys[0]["response_count"] == 2
 
     count_before = ss.count_surveys_created(d["user_id"])
     assert count_before == 1
@@ -593,7 +593,7 @@ def test_deleting_old_survey_permanently_delete_all_related_data(setup_env):
     urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
-    assert surveys[0].response_count == 2
+    assert surveys[0]["response_count"] == 2
 
     count_before_deletion = ss.count_surveys_created(d["user_id"])
     assert count_before_deletion == 1
@@ -605,7 +605,7 @@ def test_deleting_old_survey_permanently_delete_all_related_data(setup_env):
     assert len(choices) == 2
 
     additional_info = scs.get_choice_additional_infos(choices[0].id)
-    assert "Keijukaistenpolku 14" in additional_info[0]
+    assert "Keijukaistenpolku 14" in additional_info[0]["info_value"]
 
     ss.check_for_surveys_to_delete()
 
@@ -654,8 +654,8 @@ def test_get_correct_active_surveys_and_response_count(setup_env):
     sos.add_owner_to_survey(survey_id, d["user_email"])
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
-    assert surveys[0].surveyname == "Test survey 16"
-    assert surveys[0].response_count == 0
+    assert surveys[0]["surveyname"] == "Test survey 16"
+    assert surveys[0]["response_count"] == 0
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
@@ -663,8 +663,8 @@ def test_get_correct_active_surveys_and_response_count(setup_env):
     urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
-    assert surveys[0].surveyname == "Test survey 16"
-    assert surveys[0].response_count == 2
+    assert surveys[0]["surveyname"] == "Test survey 16"
+    assert surveys[0]["response_count"] == 2
 
 
 def test_len_active_surveys_admin(setup_env):
