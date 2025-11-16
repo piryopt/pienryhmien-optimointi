@@ -4,41 +4,49 @@ import TrashTableRow from "./TrashTableRow";
 import surveyService from "../../services/surveys";
 import { useNotification } from "../../context/NotificationContext";
 import { imagesBaseUrl } from "../../utils/constants";
+import { useSurveyDialog } from "../../context/SurveyDialogContext";
 
 const TrashTable = ({ surveys, setSurveys }) => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
+  const { openDialog } = useSurveyDialog();
 
   const handleDeleteClick = async (surveyId) => {
-    if (
-      window.confirm(
-        t(
-          "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? "
-        )
-      )
-    ) {
-      try {
-        await surveyService.deleteSurvey(surveyId);
-        setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
-        showNotification(t("Kysely poistettu"), "success");
-      } catch (err) {
-        showNotification(t("Kyselyn poistaminen epäonnistui"), "error");
-        console.error("Error deleting survey:", err);
+    openDialog(
+      t("Poista kaikki kyselyn data?"),
+      t(
+        "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? "
+      ),
+      null,
+      async () => {
+        try {
+          await surveyService.deleteSurvey(surveyId);
+          setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
+          showNotification(t("Kysely poistettu"), "success");
+        } catch (err) {
+          showNotification(t("Kyselyn poistaminen epäonnistui"), "error");
+          console.error("Error deleting survey:", err);
+        }
       }
-    }
+    );
   };
 
   const handleRestoreClick = async (surveyId) => {
-    if (window.confirm(t("Haluatko palauttaa kyselyn roskakorista?"))) {
-      try {
-        await surveyService.returnSurvey(surveyId);
-        setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
-        showNotification(t("Kysely palautettu"), "success");
-      } catch (err) {
-        showNotification(t("Kyselyn palauttaminen epäonnistui"), "error");
-        console.error("Error restoring survey:", err);
+    openDialog(
+      t("Palauta kysely?"),
+      t("Haluatko palauttaa kyselyn roskakorista?"),
+      null,
+      async () => {
+        try {
+          await surveyService.returnSurvey(surveyId);
+          setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
+          showNotification(t("Kysely palautettu"), "success");
+        } catch (err) {
+          showNotification(t("Kyselyn palauttaminen epäonnistui"), "error");
+          console.error("Error restoring survey:", err);
+        }
       }
-    }
+    );
   };
 
   const columns = [
