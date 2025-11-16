@@ -174,23 +174,7 @@ def surveys_deleted():
     return jsonify(deleted_surveys)
 
 
-@bp.route("/surveys")
-@ad_login
-def previous_surveys():
-    """
-    For fetching previous survey list from the database
-    """
-    reloaded = session.get("reloaded", 0)
-    if not reloaded:
-        session["reloaded"] = True
-        return redirect("/surveys")
-    user_id = session.get("user_id", 0)
-    if user_id == 0:
-        return redirect("/")
-    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
-    closed_surveys = survey_service.get_list_closed_surveys(user_id)
 
-    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys=closed_surveys)
 
 
 @bp.route("/surveys/getinfo", methods=["POST"])
@@ -231,25 +215,6 @@ def expand_ranking(survey_id, email, stage):
     return jsonify({"choices": choices, "rejections": rejections, "notAvailable": not_available})
 
 
-@bp.route("/surveys/create", methods=["GET"])
-@ad_login
-def new_survey_form(survey=None):
-    """
-    Page for survey creation. Adds fields automatically if user chose to copy from template
-
-    args:
-        survey: By default, none. If user copied from template, the survey is the survey from the template
-    """
-    query_params = request.args.to_dict()
-    if "fromTemplate" in query_params:
-        survey_id = query_params["fromTemplate"]
-        if not check_if_owner(survey_id):
-            return redirect("/")
-        survey = survey_service.get_survey_as_dict(survey_id)
-        survey["variable_columns"] = [
-            column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
-        ]
-    return render_template("create_survey.html", survey=survey)
 
 
 @bp.route("/api/multistage/survey/create", methods=["POST"])
