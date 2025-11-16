@@ -324,7 +324,7 @@ def test_happiness_results(setup_survey3):
     happiness_results_list = output[2]
 
     assert happiness_avg == 1.3333333333333333
-    assert happiness_results_list == [(1, ". valintaansa sijoitetut käyttäjät: 2"), (2, ". valintaansa sijoitetut käyttäjät: 1")]
+    assert happiness_results_list == [(1, ". valintaansa sijoitetut käyttäjät: ", 2), (2, ". valintaansa sijoitetut käyttäjät: ", 1)]
 
 
 def test_happiness_results_students_in_unranked_or_rejected(setup_survey3):
@@ -364,7 +364,7 @@ def test_happiness_results_students_in_unranked_or_rejected(setup_survey3):
 
     assert happiness_avg == 1
     assert happiness_results_list == [
-        (1, ". valintaansa sijoitetut käyttäjät: 1"),
-        ("Ei järjestettyyn", " valintaan sijoitetut käyttäjät: 1"),
-        ("Kiellettyyn", " valintaan sijoitetut käyttäjät: 1"),
+        (1, ". valintaansa sijoitetut käyttäjät: ", 1),
+        ("Ei järjestettyyn", " valintaan sijoitetut käyttäjät: ", 1),
+        ("Kiellettyyn", " valintaan sijoitetut käyttäjät: ", 1),
     ]

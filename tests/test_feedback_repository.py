@@ -10,7 +10,7 @@ def test_new_feedback(setup_db):
     assert success
 
 
-def test_get_feedbacK(setup_db):
+def test_get_feedback(setup_db):
     """
     Test that getting a valid feedback works
     """
@@ -25,7 +25,7 @@ def test_get_feedbacK(setup_db):
     assert feedback.title == "Testi palaute 2"
 
 
-def test_get_invalid_feedbacK():
+def test_get_invalid_feedback():
     """
     Test that getting a invalid feedback works
     """
