@@ -334,6 +334,17 @@ class SurveyService:
             if survey.time_end <= datetime.now() - timedelta(days=365 * 2):
                 self._survey_repository.delete_survey_permanently(survey.id)
 
+    def check_for_trashed_surveys_to_delete(self):
+        """
+        Gets a list of all surveys and deletes them and their related data if survey has been in trash bin for a week.
+        """
+
+        surveys = self._survey_repository.get_all_deleted_surveys()
+
+        for survey in surveys:
+            if survey.deleted_at <= datetime.now() - timedelta(days=7):
+                self._survey_repository.delete_survey_permanently(survey.id)
+
     def delete_survey_permanently(self, survey_id):
         """
         Deletes survey and all related data permanently.
@@ -416,10 +427,6 @@ class SurveyService:
             msg = "Response period's end can't be in the past"
             return {"success": False, "message": msg}
 
-        if not multistage and (minchoices > len(survey_choices)):
-            msg = "There are less choices than the minimum amount of prioritized groups!"
-            return {"success": False, "message": msg}
-
         if not isinstance(allowed_denied_choices, int):
             print(allowed_denied_choices)
             msg = "Survey denied choices must be an integer"
@@ -429,7 +436,7 @@ class SurveyService:
             print(type(allow_search_visibility), allow_search_visibility)
             msg = "Survey search visibility must be a boolean"
             return {"success": False, "message": msg}
-        
+
         if len(survey_name) < 5:
             msg = "Survey name must be atleast 5 characters long"
             return {"success": False, "message": msg}
@@ -443,6 +450,11 @@ class SurveyService:
             if not isinstance(minchoices, int):
                 msg = "The minimum number of prioritized groups should be a number!"
                 return {"success": False, "message": msg}
+
+        if not multistage and (minchoices > len(survey_choices)):
+            msg = "There are less choices than the minimum amount of prioritized groups!"
+            return {"success": False, "message": msg}
+
         if "choices" in survey_dict:
             for choice in survey_dict["choices"]:
                 result = self.validate_survey_choice(choice)
@@ -624,6 +636,7 @@ class SurveyService:
         RETURNS whether updating was successful
         """
 
+        self._choices_repository.set_choices_deleted_true(survey_id)
         return self._survey_repository.set_survey_deleted_true(survey_id)
 
     def set_survey_deleted_false(self, survey_id):

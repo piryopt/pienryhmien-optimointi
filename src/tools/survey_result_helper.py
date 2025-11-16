@@ -1,3 +1,4 @@
+from flask_babel import gettext
 from src.entities.group import Group
 from src.entities.student import Student
 from src.services.survey_service import survey_service
@@ -137,7 +138,10 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
         if seats < survey_answers_amount:
             empty_group_id = survey_choices_service.add_empty_survey_choice(survey_id, survey_answers_amount - seats)
             empty_group = survey_choices_service.get_survey_choice(empty_group_id)
-            groups_dict[empty_group[0]] = Group(empty_group[0], empty_group[2], empty_group[3], empty_group[5], empty_group[6])
+
+            groups_dict[empty_group["id"]] = Group(
+                empty_group["id"], empty_group["name"], empty_group["max_spaces"], empty_group["min_size"], empty_group["participation_limit"]
+            )
 
         # Run the algotrithm with the groups that haven't been dropped
         weights = w.Weights(len(groups_dict), len(students_dict)).get_weights()

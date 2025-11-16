@@ -581,5 +581,18 @@ class SurveyRepository:
             print(e)
             return []
 
+    def get_all_deleted_surveys(self):
+        """
+        SQL code getting the list of all set to be deleted surveys.
+        """
+        try:
+            sql = "SELECT s.id, s.surveyname, s.closed, s.deleted_at FROM surveys WHERE (deleted=True)"
+            result = db.session.execute(text(sql), {"user_id": user_id})
+            surveys = result.fetchall()
+            return surveys
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return []
+
 
 survey_repository = SurveyRepository()

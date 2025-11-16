@@ -53,7 +53,7 @@ class SurveyChoicesService:
             survey_choice_id: The id of the survey choice
         """
         survey_choice = self._survey_choices_repository.get_survey_choice(survey_choice_id)
-        return dict(survey_choice._mapping)
+        return dict(survey_choice._mapping) if survey_choice else None
 
     def get_survey_choice_min_size(self, survey_choice_id: int):
         """

@@ -123,6 +123,7 @@ def frontpage() -> str:
 
     return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
 
+
 @bp.route("/static/images/<path:filename>")
 def serve_images(filename):
     images_dir = Path(__file__).parents[0] / "static" / "images"
@@ -130,6 +131,7 @@ def serve_images(filename):
     if file_path.exists() and file_path.is_file():
         return send_from_directory(str(images_dir), filename)
         
+
 
 @bp.route("/api/frontpage", methods=["GET"])
 @ad_login
@@ -174,23 +176,7 @@ def surveys_deleted():
     return jsonify(deleted_surveys)
 
 
-@bp.route("/surveys")
-@ad_login
-def previous_surveys():
-    """
-    For fetching previous survey list from the database
-    """
-    reloaded = session.get("reloaded", 0)
-    if not reloaded:
-        session["reloaded"] = True
-        return redirect("/surveys")
-    user_id = session.get("user_id", 0)
-    if user_id == 0:
-        return redirect("/")
-    active_surveys = survey_repository.fetch_all_active_surveys(user_id)
-    closed_surveys = survey_service.get_list_closed_surveys(user_id)
 
-    return render_template("surveys.html", active_surveys=active_surveys, closed_surveys=closed_surveys)
 
 
 @bp.route("/surveys/getinfo", methods=["POST"])
@@ -231,25 +217,6 @@ def expand_ranking(survey_id, email, stage):
     return jsonify({"choices": choices, "rejections": rejections, "notAvailable": not_available})
 
 
-@bp.route("/surveys/create", methods=["GET"])
-@ad_login
-def new_survey_form(survey=None):
-    """
-    Page for survey creation. Adds fields automatically if user chose to copy from template
-
-    args:
-        survey: By default, none. If user copied from template, the survey is the survey from the template
-    """
-    query_params = request.args.to_dict()
-    if "fromTemplate" in query_params:
-        survey_id = query_params["fromTemplate"]
-        if not check_if_owner(survey_id):
-            return redirect("/")
-        survey = survey_service.get_survey_as_dict(survey_id)
-        survey["variable_columns"] = [
-            column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
-        ]
-    return render_template("create_survey.html", survey=survey)
 
 
 @bp.route("/api/multistage/survey/create", methods=["POST"])
@@ -372,70 +339,6 @@ def get_csrf():
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
 
-
-@bp.route("/surveys/<string:survey_id>")
-@ad_login
-def surveys(survey_id):
-    """
-    The answer page for surveys.
-    """
-    # Needed for the session bug.
-    reloaded = session.get("reloaded", 0)
-    if not reloaded:
-        session["reloaded"] = True
-        return redirect(f"/surveys/{survey_id}")
-
-    user_id = session.get("user_id", 0)
-    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    survey_choices_info = survey_choices_service.survey_all_additional_infos(survey_id)
-    survey = survey_service.get_survey(survey_id)
-
-    additional_info = False
-    if len(survey_choices_info) > 0:
-        additional_info = True
-
-    # If the survey has no choices, either it is an invalid survey or it doesn't exist
-    if not survey_choices:
-        return redirect("/")
-
-    survey_all_info = {}
-    for row in survey_choices_info:
-        if row.choice_id not in survey_all_info:
-            survey_all_info[row.choice_id] = {"infos": [{row.info_key: row.info_value}]}
-            survey_all_info[row.choice_id]["search"] = row.info_value
-        else:
-            survey_all_info[row.choice_id]["infos"].append({row.info_key: row.info_value})
-            survey_all_info[row.choice_id]["search"] += " " + row.info_value
-
-    for row in survey_choices:
-        if row.id not in survey_all_info:
-            survey_all_info[row.id] = {"name": row.name}
-            survey_all_info[row.id]["slots"] = row.max_spaces
-            survey_all_info[row.id]["id"] = row.id
-            survey_all_info[row.id]["mandatory"] = row.mandatory
-            survey_all_info[row.id]["search"] = row.name
-            survey_all_info[row.id]["infos"] = []
-            survey_all_info[row.id]["min_size"] = row.min_size
-        else:
-            survey_all_info[row.id]["name"] = row.name
-            survey_all_info[row.id]["mandatory"] = row.mandatory
-            survey_all_info[row.id]["slots"] = row.max_spaces
-            survey_all_info[row.id]["id"] = row.id
-            survey_all_info[row.id]["min_size"] = row.min_size
-
-    user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
-    if user_survey_ranking:
-        return surveys_answer_exists(survey_id, survey_all_info, additional_info)
-
-    # If the survey is closed, return a different page, where the student can view their answers.
-    closed = survey_service.check_if_survey_closed(survey_id)
-    if closed:
-        return render_template("closedsurvey.html", survey_name=survey.surveyname)
-
-    # Shuffle the choices, so that the choices aren't displayed in a fixed order.
-    shuffled_choices = list(survey_all_info.values())
-    shuffle(shuffled_choices)
-    return render_template("survey.html", choices=shuffled_choices, survey=survey, additional_info=additional_info)
 
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["GET"])
@@ -1782,6 +1685,15 @@ def spa_fallback_404(e):
         return abort(404)
     return send_from_directory(current_app.static_folder, "index.html")
 
+@bp.route("/<path:path>")
+def spa_fallback(path):
+    if path.startswith("api") or path.startswith("static") or path.startswith("auth"):
+        return abort(404)
+    # In production serve the built SPA index so React Router can handle client routes
+    if not current_app.debug:
+        return send_from_directory(current_app.static_folder, "index.html")
+    return abort(404)
+
 """
 TASKS:
 """
@@ -1792,6 +1704,13 @@ def close_surveys():
     Every hour go through a list of a all open surveys. Close all surveys which have an end_date equal or less to now
     """
     survey_service.check_for_surveys_to_close()
+
+
+def delete_trashed_surveys():
+    """
+    Daily check if surveys in trash bin are over a week old. If so, delete said surveys and all related data.
+    """
+    survey_service.check_for_trashed_surveys_to_delete()
 
 
 def delete_old_surveys():
