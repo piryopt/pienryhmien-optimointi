@@ -5,8 +5,10 @@ def convert_to_list(ranking_string):
     args:
         ranking_string: The string that is converted into a list. The string is retrieved from the database table user_survey_rankings
     """
-    if ranking_string == "":
+    if ranking_string is None or ranking_string == "":
         return []
+    if isinstance(ranking_string, list):
+        return [str(i) for i in ranking_string]
     ranking_list = ranking_string.split(",")
     return ranking_list
 
@@ -17,8 +19,10 @@ def convert_to_int_list(ranking_string):
     args:
         ranking_list: The list that is converted into a list of integers. The list is retrieved from the database table user_survey_rankings
     """
-    if ranking_string == '':
+    if ranking_string is None or ranking_string == '':
         return []
+    if isinstance(ranking_string, list):
+        return [int(i) for i in ranking_string]
     ranking_list = ranking_string.split(",")
 
     int_ranking = [int(i) for i in ranking_list]

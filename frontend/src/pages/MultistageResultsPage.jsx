@@ -155,7 +155,7 @@ const MultistageSurveyResultsPage = () => {
             <b>{t("Opiskelijat on lajiteltu ryhmiin seuraavasti")}:</b>
           </p>
 
-          <SurveyResultsTable results={results} surveyId={id} />
+          <SurveyResultsTable results={results} surveyId={id} currStage={currStage} />
         </>
       )}
 

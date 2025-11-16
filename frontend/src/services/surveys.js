@@ -223,7 +223,7 @@ const getMultiStageSurveyAnswersData = async (surveyId) => {
   }
 };
 
-const getStudentRankings = async (surveyId, studentEmail, stage) => {
+const getStudentRankings = async (surveyId, studentEmail, stage = null) => {
   try {
     if (stage) {
       const response = await axios.get(
@@ -369,17 +369,33 @@ const getMultiStageSurvey = async (surveyId) => {
 };
 
 const getMultistageSurveyResultsData = async (surveyId) => {
-  return axios.get(`/api/surveys/${surveyId}/results`).then(res => res.data)
+  return axios.get(`${baseUrl}/surveys/multistage/${surveyId}/results`).then(res => res.data)
 }
 
 const getMultistageStages = async (surveyId) => {
-  return axios.get(`/api/surveys/multistage/${surveyId}`).then(res => {
+  return axios.get(`${baseUrl}/surveys/multistage/${surveyId}`).then(res => {
     return res.data?.stages ?? res.data
   })
 }
 
 const saveMultistageResults = async (surveyId) => {
-  return axios.post(`/api/surveys/${surveyId}/results`).then(res => res.data)
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken()
+    const response = await axios.post(
+      `${baseUrl}/surveys/multistage/${surveyId}/results`,
+      null,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    )
+    return response.data
+  } catch (error) {
+    throw error
+  }
 }
 
 export default {
