@@ -69,7 +69,7 @@ def create_app(test_config=None):
     if test_config is None or env != "testing":
         # initialize scheduler if not running tests
 
-        from src.routes import close_surveys, delete_old_surveys
+        from src.routes import close_surveys, delete_old_surveys, delete_trashed_surveys
 
         scheduler.init_app(app)
         scheduler.start()
