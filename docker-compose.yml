@@ -63,6 +63,7 @@ services:
       DATABASE_URL: ${TEST_DATABASE_URL}
       SECRET_KEY: ${TEST_SECRET_KEY}
       FLASK_ENV: testing
+      FLASK_DEBUG: 1
     depends_on:
       - test-db
     ports:
@@ -84,6 +85,7 @@ services:
       DATABASE_URL: ${TEST_DATABASE_URL}
       SECRET_KEY: ${TEST_SECRET_KEY}
       FLASK_ENV: testing
+      FLASK_DEBUG: 1
       BASE_URL: http://web-test:5000
     volumes:
       - .:/usr/src/app
