@@ -544,9 +544,26 @@ class SurveyService:
         count = 0
         language = session.get("language", "fi")
         for choice in choices:
-            success = self._choices_repository.edit_choice_group_size(
-                survey_id, choice[SurveyService.SURVEY_FIELDS["name"][language]], choice[SurveyService.SURVEY_FIELDS["spaces"][language]]
-            )
+            # new behavior with choice IDs and max_spaces key also supports old behavior
+            if "id" in choice and ("max_spaces" in choice or "maxSpaces" in choice):
+                seats = choice.get("max_spaces") if "max_spaces" in choice else choice.get("maxSpaces")
+                try:
+                    seats_int = int(seats)
+                except Exception:
+                    seats_int = 0
+                success = self._choices_repository.edit_choice_group_size_by_id(choice["id"], seats_int)
+            else:
+                # legacy behavior expects localized keys for name and spaces
+                try:
+                    name_key = SurveyService.SURVEY_FIELDS["name"][language]
+                    spaces_key = SurveyService.SURVEY_FIELDS["spaces"][language]
+                    seats_val = choice[spaces_key]
+                    seats_int = int(seats_val)
+                except Exception:
+                    seats_int = 0
+                success = self._choices_repository.edit_choice_group_size(
+                    survey_id, choice.get(name_key, ""), seats_int
+                )
             if not success:
                 if count > 0:
                     message = gettext("Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut")
