@@ -69,6 +69,20 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
+    def edit_choice_group_size_by_id(self, choice_id: int, seats: int):
+        """
+        Update the max_spaces for a choice identified by its id.
+        RETURNS True if managed, False if there's an error
+        """
+        try:
+            sql = "UPDATE survey_choices SET max_spaces = :max_spaces WHERE id = :id"
+            db.session.execute(text(sql), {"id": choice_id, "max_spaces": seats})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
     def create_new_choice_info(self, choice_id, info_key, info_value, hidden):
         """
         Adds an additional to existing survey choice, updates choice_infos table
