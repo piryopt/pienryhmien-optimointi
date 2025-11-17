@@ -79,14 +79,17 @@ export const SurveyDialogProvider = ({ children }) => {
           )}
         </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeDialog}>
-            {t("Peruuta")}
-          </Button>
-          <Button variant="danger" onClick={onConfirm}>
-            {t("Kyllä")}
-          </Button>
-        </Modal.Footer>
+        {/* Hide default footer when content element passes hideModalFooter prop*/}
+        {!(dialogState.content && dialogState.content.props && dialogState.content.props.hideModalFooter) && (
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeDialog}>
+              {t("Peruuta")}
+            </Button>
+            <Button variant="danger" onClick={onConfirm}>
+              {t("Kyllä")}
+            </Button>
+          </Modal.Footer>
+        )}
       </Modal>
     </SurveyDialogContext.Provider>
   );
