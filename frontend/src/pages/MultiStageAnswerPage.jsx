@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext.jsx";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys.js";
-import Button from "react-bootstrap/Button";
 import Nav from "react-bootstrap/Nav";
 import Tab from "react-bootstrap/Tab";
 import Form from "react-bootstrap/Form";
@@ -14,6 +13,7 @@ import SurveyInfo from "../components/survey_answer_page_components/SurveyInfo.j
 import "../static/css/answerPage.css";
 import { imagesBaseUrl } from "../utils/constants.js";
 import ClosedMultistageSurveyView from "../components/survey_answer_page_components/ClosedMultistageSurveyView.jsx";
+import ButtonRow from "../components/survey_answer_page_components/ButtonRow.jsx";
 
 const MultiStageAnswerPage = () => {
   const { surveyId } = useParams();
@@ -171,6 +171,7 @@ const MultiStageAnswerPage = () => {
         deniedAllowedChoices: survey.denied_allowed_choices,
         stages: payload
       });
+      setExisting(true);
       if (result.status === "0") throw new Error(result.msg);
       showNotification(t("Kyselyn vastaukset tallennettu."), "success");
     } catch (error) {
@@ -182,9 +183,31 @@ const MultiStageAnswerPage = () => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const result = await surveyService.deleteSurveyAnswer(surveyId);
+      if (result.status === "0") throw new Error(result.msg);
+      showNotification(result.msg, "success");
+      setStages((prev) =>
+        prev.map((s) => ({
+          ...s,
+          good: [],
+          bad: [],
+          neutral: [...s.good, ...s.bad, ...s.neutral],
+          notAvailable: false
+        }))
+      );
+      setReasons({});
+      setExisting(false);
+    } catch (error) {
+      showNotification(error.message, "error");
+      console.error("Error deleting survey", error);
+    }
+  };
+
   if (loading)
-    return <div className="text-center mt-5">Ladataan kyselyä...</div>;
-  if (!activeStage) return <div>Ei vaiheita ladattuna</div>;
+    return <div className="text-center mt-5">{t("Ladataan kyselyä...")}</div>;
+  if (!activeStage) return <div>{t("Ei vaiheita ladattuna")}</div>;
 
   if (survey.closed) return (
     <div className="answer-page">
@@ -221,7 +244,7 @@ const MultiStageAnswerPage = () => {
               <Nav.Item key={id}>
                 <Nav.Link eventKey={id}>
                   {name}
-                  {notAvailable ? " (poissa)" : ""}
+                  {notAvailable ? ` (${t("poissa")})` : ""}
                 </Nav.Link>
               </Nav.Item>
             ))}
@@ -237,7 +260,7 @@ const MultiStageAnswerPage = () => {
                       <Form.Check
                         type="switch"
                         id={`not-available-${stage.id}`}
-                        label="En ole paikalla tässä vaiheessa"
+                        label={t("En ole paikalla tässä vaiheessa")}
                         checked={stage.notAvailable}
                         onChange={() => toggleNotAvailable(stage.id)}
                       />
@@ -252,15 +275,12 @@ const MultiStageAnswerPage = () => {
                       marginBottom: "1.2rem"
                     }}
                   >
-                    Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse
-                    itsesi poissaolevaksi.
+                    {t("Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi.")}
                   </p>
                   {stage.hasMandatory && !stage.notAvailable && (
                     <p className="note">
-                      HUOM! <span className="mandatory">{"Pakolliseksi"}</span>{" "}
-                      merkityt ryhmät priorisoidaan jakamisprosessissa. Ne
-                      täytetään aina vähintään minimikokoon asti vastauksista
-                      riippumatta.
+                      {t("HUOM! ")}<span className="mandatory">{t("Pakolliseksi ")}</span>
+                      {t("merkityt ryhmät priorisoidaan jakamisprosessissa. ")} {t("Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.")}
                     </p>
                   )}
 
@@ -277,25 +297,33 @@ const MultiStageAnswerPage = () => {
                           multiphase={true}
                         />
                         {(survey.denied_allowed_choices ?? 0) !== 0 && (
-                          <GroupList
-                            id={`${stage.id}-bad`}
-                            items={stage.bad}
-                            expandedIds={expandedIds}
-                            toggleExpand={toggleExpand}
-                            choices={stage.neutral}
-                            stageId={stage.id}
-                            multiphase={true}
-                          />
+                          <>
+                            <GroupList
+                              id={`${stage.id}-bad`}
+                              items={stage.bad}
+                              expandedIds={expandedIds}
+                              toggleExpand={toggleExpand}
+                              choices={stage.neutral}
+                              stageId={stage.id}
+                              multiphase={true}
+                            />
+                            <ReasonsBox
+                              key={stage.id}
+                              reason={reasons[stage.id] || ""}
+                              setReason={(value) =>
+                                setReasons({ ...reasons, [stage.id]: value })
+                              }
+                            />
+                          </>
                         )}
                       </div>
-
                       <div className="right-column">
                         {survey?.search_visibility && (
                           <div className="search-container">
                             <input
                               id="searchChoices"
                               type="text"
-                              placeholder="Hae ryhmiä..."
+                              placeholder={t("Hae ryhmiä...")}
                               value={searchTerm}
                               onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -321,19 +349,11 @@ const MultiStageAnswerPage = () => {
                         margin: "3em 0"
                       }}
                     >
-                      Olet ilmoittanut olevasi poissa tässä vaiheessa.
+                      {t("Olet ilmoittautunut poissaolevaksi.")}
                     </div>
                   )}
                 </div>
-                {(survey.denied_allowed_choices ?? 0) !== 0 && (
-                  <ReasonsBox
-                    key={stage.id}
-                    reason={reasons[stage.id] || ""}
-                    setReason={(value) =>
-                      setReasons({ ...reasons, [stage.id]: value })
-                    }
-                  />
-                )}
+
               </Tab.Pane>
             ))}
           </Tab.Content>
@@ -341,9 +361,11 @@ const MultiStageAnswerPage = () => {
       </DragDropContext>
 
       <div className="submit-row mt-4">
-        <Button variant="success" className="submit-btn" onClick={handleSubmit}>
-          Lähetä kaikki valinnat
-        </Button>
+        <ButtonRow
+          handleSubmit={handleSubmit}
+          handleDelete={handleDelete}
+          existing={existing}
+        />
       </div>
     </div>
   );

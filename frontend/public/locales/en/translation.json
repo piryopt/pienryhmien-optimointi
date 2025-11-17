@@ -21,6 +21,8 @@
   "Ei palautetta": "No feedback",
   "Ei palautteita": "No feedback",
   "Ei tietoja": "No info",
+  "Ei vaiheita ladattuna": "No survey loaded",
+  "En ole paikalla tässä vaiheessa": "I am absent",
   "Enimmäispaikat": "Maximum capacity",
   "Enimmäispaikat vaaditaan": "",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "Maximum capacity must be at least 1",
@@ -30,11 +32,18 @@
   "etusivu": {
     "Vastausaika päättyy": "Response time expires: {{timeEnd}}"
   },
+  "Hae ryhmiä": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "",
   "Hakunäkyvyys": "",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
-      "": ""
+      "": "With the search bar, the respondent can filter options based on their name and choices. It is advisable to allow for surveys with a lot of response options, not all of which need to be organized, and conversely, to disallow surveys with few response options where all must be organized."
     }
   },
   "Haluatko palauttaa kyselyn roskakorista?": "",
@@ -43,9 +52,10 @@
   "Haluatko varmasti poistaa kyselyn?": "",
   "Haluatko varmasti sulkea kyselyn?": "",
   "Haluatko varmasti sulkea palautteen?": "",
+  "HUOM! ": "NOTE! ",
   "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
     " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
-      "": ""
+      "": "NOTE! Groups below the minimum size will be dropped. If you wish for a group to be mandatory, click the checkbox on the left."
     }
   },
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
@@ -58,19 +68,22 @@
   "Jaettavia paikkoja": "Allocated spots",
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
+    "": "Arrange options in order of preference or mark yourself as absent"
+  },
   "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
     " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
       " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
-        "": ""
+        "": "If you want to limit how many times a respondent can participate in the same group, answer yes here. You can later set the maximum number of participation times for each group in the stage table. For this to work, the group must have the same name in all stages."
       }
     }
   },
   "Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa             opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *": {
-    "": ""
+    "": "If you want to ensure that information from a specific column is not shown to students during the response phase, append an asterisk (*) at the end of the column name."
   },
   "Jos ryhmän minimikoolla ei ole väliä, syötä 0": {
     " Pakollisen ryhmän             mimimikoko ei voi olla 0": {
-      "": ""
+      "": "If the minimum size of the group doesn't matter, enter 0. A mandatory group can not be set to 0."
     }
   },
   "Kaikki käynnissä olevat kyselyt": "",
@@ -123,7 +136,15 @@
       }
     }
   },
+  "Ladataan kyselyä": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
   "Ladataan…": "",
+  "Lähetä valinnat": "Submit selections",
   "Lähetetään": {
     "": {
       "": {
@@ -146,6 +167,9 @@
   "Luo uusi monivaiheinen kysely": "Create a new multiphase survey",
   "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Create a multiphase survey and specify answer options for each phase",
   "Luotuja kyselyitä": "Created surveys: {{count}}",
+  "merkityt ryhmät priorisoidaan jakamisprosessissa": {
+    " ": " groups are prioritized in the allocation process."
+  },
   "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordinal choice",
@@ -155,6 +179,9 @@
   "Näytä": "Open",
   "Näytä vanhat kyselyt": "Show old surveys",
   "Näytetäänkö vastaajalle hakupalkki?": "Show the search bar?",
+  "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
+    "": "They are filled to at least the minimum size regardless of the answers."
+  },
   "Nimi": "Name",
   "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "",
   "Nimi vaaditaan": "Name required",
@@ -165,6 +192,7 @@
   "Päättyy": "",
   "Päivämäärä on virheellinen": "",
   "Pakollinen": "Mandatory",
+  "Pakolliseksi ": "Mandatory ",
   "Pakota minimikoko": "Force minimum group size",
   "Palaa kyselylistaan": "Return to the survey list",
   "Palaa listaan": "",
@@ -181,11 +209,13 @@
   "Perustelut hylkäyksille": "Reasons for rejections",
   "Peruuta": "Cancel",
   "Piilota": "Hide",
+  "poissa": "absent",
   "Poista": "Delete",
   "Poista kysely": "Delete survey",
   "Poista kysely?": "Delete survey?",
   "Poista sarake": "Delete coulumn",
   "Poista vaihe": "Delete stage",
+  "Poista valinnat": "Delete selections",
   "Poista vastaus?": "Delete answer?",
   "Poistettavat kyselyt": "Surveys to be deleted: {{count}}",
   "pp": {
@@ -196,7 +226,7 @@
   "Priorisoitavat ryhmät": "Prioritized groups",
   "Priorisoitujen ryhmien vähimmäismäärä": "Minimum number of prioritized groups",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
-  "Rajoita osallistumiskertoja": "",
+  "Rajoita osallistumiskertoja": "Limit participation times",
   "Rekisteröityneet opettajat": "",
   "Rekisteröityneet opiskelijat": "",
   "Roskakori": "Trash bin",
@@ -216,9 +246,9 @@
   "sähköpostiosoite": "Email address",
   "Salasana": "Password",
   "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista": {
-    "": ""
+    "": "If you allow absences, respondents can mark themselves as absent from the stages they select."
   },
-  "Sallitaanko poissaolot?": "",
+  "Sallitaanko poissaolot?": "Allow absences?",
   "Sallitaanko valintojen kieltäminen?": "Can participants deny selections?",
   "Sallittu kiellettyjen ryhmien määrä": "Allowed number of denied groups",
   "Sisältö": "Content",
@@ -243,14 +273,14 @@
     " Anna kullekkin ryhmälle myös sen enimmäiskoko": {
       "         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa": {
         " Sarakkeen         voit luoda painamalla '+ Lisää tietokenttä'": {
-          "": ""
+          "": "Enter the groups that the survey respondent can prioritize   in order of preference. Also, provide the maximum size for each group. If desired, you can add additional information about each item in separate columns. Create a new column by clicking on '+ Add Field'."
         }
       }
     }
   },
   "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen": {
     " Kuvausteksti näytetään vastaajalle kyselyn yhteydessä": {
-      "": ""
+      "": "Here you can provide a description of the survey and instructions for responding. The description text will be shown to the respondents alongside the survey."
     }
   },
   "Tallenna muutokset": "Save changes",

@@ -21,6 +21,8 @@
   "Ei palautetta": "",
   "Ei palautteita": "",
   "Ei tietoja": "",
+  "Ei vaiheita ladattuna": "",
+  "En ole paikalla tässä vaiheessa": "Jag är frånvarande",
   "Enimmäispaikat": "Max antal platser",
   "Enimmäispaikat vaaditaan": "",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "",
@@ -30,11 +32,18 @@
   "etusivu": {
     "Vastausaika päättyy": "Svarstid utgår: {{timeEnd}}"
   },
+  "Hae ryhmiä": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "",
   "Hakunäkyvyys": "",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
-      "": ""
+      "": "Med hjälp av sökfältet kan respondenterna filtrera alternativen de ser baserat på deras namn och alternativ.   Det rekommenderas att tillåta undersökningar med ett stort antal svarsalternativ, som alla inte behöver ordnas,   och på samma sätt förbjuda undersökningar med få svarsalternativ, som alla måste ordnas."
     }
   },
   "Haluatko palauttaa kyselyn roskakorista?": "",
@@ -43,9 +52,10 @@
   "Haluatko varmasti poistaa kyselyn?": "",
   "Haluatko varmasti sulkea kyselyn?": "",
   "Haluatko varmasti sulkea palautteen?": "",
+  "HUOM! ": "OBS! ",
   "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
     " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
-      "": ""
+      "": "OBS! Grupper som understiger minsta storlek kommer att uteslutas från tilldelningen. Om du vill säkerställa att en viss grupp bildas, kryssa i rutan till vänster om gruppen."
     }
   },
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
@@ -58,19 +68,22 @@
   "Jaettavia paikkoja": "Platser att tilldela",
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
+    "": "Ordna alternativen i preferensordning eller markera dig själv som frånvarande"
+  },
   "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
     " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
       " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
-        "": ""
+        "": "Om du vill begränsa hur många gånger en respondent kan delta i samma grupp, svara ja här. Du kan senare ställa in det maximala antalet deltagandetider för varje grupp i stegtabellen. För att detta ska fungera måste gruppen ha samma namn i alla steg."
       }
     }
   },
   "Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa             opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *": {
-    "": ""
+    "": "Om du vill att informationen för en viss kolumn inte ska visas för respondentena under svarsfasen, sätt * som sista tecknet i kolumnnamnet."
   },
   "Jos ryhmän minimikoolla ei ole väliä, syötä 0": {
     " Pakollisen ryhmän             mimimikoko ei voi olla 0": {
-      "": ""
+      "": "Om det inte spelar roll med minimistorleken, ange 0. Minsta storlek för en obligatorisk grupp kan inte vara 0."
     }
   },
   "Kaikki käynnissä olevat kyselyt": "",
@@ -123,7 +136,15 @@
       }
     }
   },
+  "Ladataan kyselyä": {
+    "": {
+      "": {
+        "": ""
+      }
+    }
+  },
   "Ladataan…": "",
+  "Lähetä valinnat": "Skicka val",
   "Lähetetään": {
     "": {
       "": {
@@ -135,7 +156,7 @@
   "Lataus epäonnistui": "",
   "Lisää käyttäjä": "Lägg till användare",
   "Lisää tietokenttä": "Lägg till fält",
-  "Lisää vaihe": "",
+  "Lisää vaihe": "Lägg till fas",
   "Lisää vaihtoehto": "Lägg till alternativ",
   "Lisätietoa ei saatavilla": {
     "": ""
@@ -146,6 +167,9 @@
   "Luo uusi monivaiheinen kysely": "Skapa ny flerfasundersökning",
   "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Skapa en ny enkät i flera steg och ange svarsalternativ för varje steg",
   "Luotuja kyselyitä": "Skapade enkäter: {{count}}",
+  "merkityt ryhmät priorisoidaan jakamisprosessissa": {
+    " ": "grupper prioriteras i delningsprocessen."
+  },
   "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordning på val",
@@ -155,6 +179,9 @@
   "Näytä": "Visa",
   "Näytä vanhat kyselyt": "Visa gamla enkäter",
   "Näytetäänkö vastaajalle hakupalkki?": "Visas sökfältet för respondenten?",
+  "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
+    "": "De är alltid fyllda till åtminstone minimistorleken oavsett svaren."
+  },
   "Nimi": "Namn",
   "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "",
   "Nimi vaaditaan": "",
@@ -165,6 +192,7 @@
   "Päättyy": "",
   "Päivämäärä on virheellinen": "",
   "Pakollinen": "Obligatorisk",
+  "Pakolliseksi ": "Obligatoriska ",
   "Pakota minimikoko": "Kraft minsta gruppstorlek",
   "Palaa kyselylistaan": "Återgå till frågelistan",
   "Palaa listaan": "",
@@ -181,11 +209,13 @@
   "Perustelut hylkäyksille": "Motiveringar för avvisningar",
   "Peruuta": "Avbryt",
   "Piilota": "",
+  "poissa": "frånvarande",
   "Poista": "Ta bort",
   "Poista kysely": "Ta bort enkät",
   "Poista kysely?": "",
   "Poista sarake": "",
-  "Poista vaihe": "",
+  "Poista vaihe": "Ta bort fas",
+  "Poista valinnat": "Ta bort val",
   "Poista vastaus?": "",
   "Poistettavat kyselyt": "Undersökningar som ska raderas: {{count}}",
   "pp": {
@@ -196,7 +226,7 @@
   "Priorisoitavat ryhmät": "Prioriterade grupper",
   "Priorisoitujen ryhmien vähimmäismäärä": "Minsta antal prioriterade grupper",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
-  "Rajoita osallistumiskertoja": "",
+  "Rajoita osallistumiskertoja": "Begränsa deltagandetider",
   "Rekisteröityneet opettajat": "",
   "Rekisteröityneet opiskelijat": "",
   "Roskakori": "Papperskorg",
@@ -216,9 +246,9 @@
   "sähköpostiosoite": "E-postadress",
   "Salasana": "Lösenord",
   "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista": {
-    "": ""
+    "": "När du tillåter frånvaro kan respondenter markera sig själva som frånvarande från de steg de väljer."
   },
-  "Sallitaanko poissaolot?": "",
+  "Sallitaanko poissaolot?": "Är frånvaro tillåten?",
   "Sallitaanko valintojen kieltäminen?": "Tillåts det att förbjuda val?",
   "Sallittu kiellettyjen ryhmien määrä": "Antal tillåtna förbjudna grupper",
   "Sisältö": "Innehåll",
@@ -235,7 +265,7 @@
   "Suljettu": "Stängd",
   "Suljetut palautteet": "",
   "Sulkeminen epäonnistui": "",
-  "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "",
+  "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "Det rekommenderas att alla grupper organiseras om det inte finns ett stort antal (>10).",
   "Syötä käyttäjän sähköpostiosoite": {
     "": "Ange användarens e-postadress."
   },
@@ -243,14 +273,14 @@
     " Anna kullekkin ryhmälle myös sen enimmäiskoko": {
       "         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa": {
         " Sarakkeen         voit luoda painamalla '+ Lisää tietokenttä'": {
-          "": ""
+          "": "Ange grupperna som respondenten kan placera i meningsordning. Ge också varje grupp dess maximala storlek. Om du vill kan du lägga till ytterligare information om objektet i dess egna kolumner. Du kan skapa kolumnen genom att trycka på '+ Lägg till datafält.'"
         }
       }
     }
   },
   "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen": {
     " Kuvausteksti näytetään vastaajalle kyselyn yhteydessä": {
-      "": ""
+      "": "Här kan du ange en beskrivning av enkäten och instruktioner för att svara på den. Beskrivningstexten visas för svaranden i samband med enkäten."
     }
   },
   "Tallenna muutokset": "Spara ändringar",
@@ -273,7 +303,7 @@
   "UKK": "FAQ",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Krävs det att alla grupper ordnas?",
   "Vaiheen nimi": "",
-  "Vaiheen tunniste": "",
+  "Vaiheen tunniste": "Fasens identifierare",
   "Valinnat": "Val",
   "Valitse päättymisaika": "",
   "Valitse päättymispäivä": "",
