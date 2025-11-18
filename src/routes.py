@@ -1028,6 +1028,31 @@ def survey_results(survey_id):
     if output_data is None:
         return jsonify({"error": "Survey answers not found"}), 404
 
+    try:
+        results_list = output_data[0]
+        for res in results_list:
+            try:
+                user_id = res[0][0]
+                choice_id = res[2][0]
+                ur = user_rankings_service.user_ranking_exists(survey_id, user_id)
+                ordinal = ""
+                if ur and ur.ranking:
+                    ranking_list = convert_to_list(ur.ranking)
+                    if str(choice_id) in ranking_list:
+                        ordinal = ranking_list.index(str(choice_id)) + 1
+                if len(res) < 4:
+                    while len(res) < 4:
+                        res.append(None)
+                res[3] = ordinal
+                if len(res[2]) < 3:
+                    while len(res[2]) < 3:
+                        res[2].append(None)
+                res[2][2] = ordinal
+            except Exception:
+                continue
+    except Exception:
+        current_app.logger.exception("Error computing ordinals for results")
+        
     if request.method == "GET":
         return jsonify(
             {

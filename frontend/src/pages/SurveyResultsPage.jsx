@@ -47,18 +47,30 @@ const SurveyResultsPage = () => {
   }, []);
 
   const handleToExcelFile = async () => {
-    const groupData = results.map((res) => ({
-      [t("Nimi")]: res[0][1],
-      [t("Sähköposti")]: res[1],
-      [t("Ryhmä")]: res[2][1],
-      [t("Monesko valinta")]: res[3],
-      ...Object.fromEntries(
-        infoKeys.map((pair, index) => [
-          pair.info_key,
-          (additionalInfos[res[2][0]] || [])[index]
-        ])
+    // info key sanitization
+    const safeInfoKeys = Array.isArray(infoKeys) ? infoKeys.filter(k => k && k.info_key) : []
+
+    const groupData = results.map((res) => {
+      const name = res?.[0]?.[1] ?? ""
+      const email = res?.[1] ?? ""
+      const groupName = res?.[2]?.[1] ?? ""
+      // fallback for choice ordinal
+      const choiceIndex = (res?.[3] ?? res?.[2]?.[2] ?? "") || ""
+
+      const additional = Object.fromEntries(
+        safeInfoKeys
+          .map((pair, index) => [pair.info_key, (additionalInfos?.[res?.[2]?.[0]] || [])[index]])
+          .filter(([key, value]) => key && value !== undefined && value !== null && value !== "")
       )
-    }));
+
+      return {
+        [t("Nimi")]: name,
+        [t("Sähköposti")]: email,
+        [t("Ryhmä")]: groupName,
+        [t("Monesko valinta")]: choiceIndex,
+        ...additional
+      }
+    })
     const { utils, writeFile } = await import("xlsx");
     const { json_to_sheet, book_new, book_append_sheet } = utils;
     const ws = json_to_sheet(groupData);
