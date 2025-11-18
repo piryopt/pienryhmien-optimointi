@@ -69,7 +69,11 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
       <br></br>
       <Link
         className="surveys_link"
-        to={`/surveys/create?fromtemplate=${survey.id}`}
+        to={
+          survey.is_multistage
+            ? `/surveys/multistage/create?fromtemplate=${survey.id}`
+            : `/surveys/create?fromtemplate=${survey.id}`
+        }
       >
         <img
           src={`${imagesBaseUrl}/folder_copy_white_36dp.svg`}
