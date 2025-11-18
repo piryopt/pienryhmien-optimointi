@@ -37,14 +37,12 @@ const SurveyMultistageCreate = () => {
   const stageNextId = useRef(1);
   const [newStageName, setNewStageName] = useState("");
   const [tables, setTables] = useState([]);
-  console.log(tables);
   useEffect(() => {
     if (!templateId) return;
 
     const loadTemplate = async () => {
       try {
         const data = await surveyService.getMultiStageSurvey(templateId);
-        console.log(data);
         if (!data.survey) return;
 
         methods.setValue("groupname", data.survey.name || "");
@@ -76,6 +74,7 @@ const SurveyMultistageCreate = () => {
 
         setLimitParticipationVisible(participationLimited);
 
+        const loadedTables = [];
         for (const stage of data.stages) {
           const id = stageNextId.current++;
           const parsedChoices = stage.choices.map((choice) => {
@@ -93,7 +92,7 @@ const SurveyMultistageCreate = () => {
               ...rowFields
             };
           });
-          tables.push({
+          loadedTables.push({
             id,
             name: stage.name,
             nextRowId: stage.choices.length,
@@ -112,7 +111,7 @@ const SurveyMultistageCreate = () => {
             choiceErrors: []
           });
         }
-        console.log(tables);
+        setTables(loadedTables);
       } catch (error) {
         console.error("Failed to load survey template:", error);
       }
