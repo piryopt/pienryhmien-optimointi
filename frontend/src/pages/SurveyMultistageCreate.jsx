@@ -121,6 +121,20 @@ const SurveyMultistageCreate = () => {
     loadTemplate();
   }, [templateId]);
 
+  useEffect(() => {
+    if (limitParticipationVisible) return;
+    setTables((ts) =>
+      ts.map((t) => ({
+        ...t,
+        rows: t.rows.map((r) => {
+          const copy = { ...r };
+          delete copy.participation_limit;
+          return copy;
+        })
+      }))
+    );
+  }, [limitParticipationVisible]);
+
   const addStage = () => {
     const id = stageNextId.current++;
     setTables((ts) => [
@@ -187,9 +201,9 @@ const SurveyMultistageCreate = () => {
       )
     );
 
-  const updateCell = (tableId, id, key, value) =>
-    setTables((ts) =>
-      ts.map((t) => {
+  const updateCell = (tableId, id, key, value) => {
+    setTables((ts) => {
+      const updated = ts.map((t) => {
         if (t.id !== tableId) return t;
 
         const newRows = t.rows.map((row) =>
@@ -212,8 +226,31 @@ const SurveyMultistageCreate = () => {
         }
 
         return { ...t, rows: newRows, choiceErrors: newChoiceErrors };
-      })
-    );
+      });
+
+      // only sync across stages when the edited column is the one we want to mirror (participation_limit)
+      if (key !== "participation_limit") {
+        return updated;
+      }
+
+      const sourceTable = updated.find((t) => t.id === tableId);
+      if (!sourceTable) return updated;
+      const updatedRow = sourceTable.rows.find((r) => r.id === id);
+      if (!updatedRow || !updatedRow.name) return updated;
+      const nameKey = (updatedRow.name || "").toString().trim().toLowerCase();
+      if (!nameKey) return updated;
+
+      // apply the same participation_limit value to all rows in all tables that have the same group name
+      return updated.map((t) => ({
+        ...t,
+        rows: t.rows.map((r) =>
+          (r.name || "").toString().trim().toLowerCase() === nameKey
+            ? { ...r, [key]: value }
+            : r
+        )
+      }));
+    });
+  };
 
   const addColumn = (tableId, name) => {
     if (!name) return;
@@ -291,18 +328,56 @@ const SurveyMultistageCreate = () => {
       .slice(1)
       .filter((r) => r.some((c) => String(c || "").trim() !== ""));
 
-    setTables((ts) =>
-      ts.map((t) => {
+    setTables((ts) => {
+      const targetIndex = ts.findIndex((t) => t.id === tableId);
+      // gather participation_limit values from earlier stages only
+      const nameToParticipation = {};
+      if (targetIndex > 0) {
+        ts.slice(0, targetIndex).forEach((stage) => {
+          stage.rows.forEach((r) => {
+            const nk = (r.name || "").toString().trim().toLowerCase();
+            if (!nk) return;
+            const val = r.participation_limit;
+            if (typeof val !== "undefined" && val !== "") {
+              if (
+                !Object.prototype.hasOwnProperty.call(nameToParticipation, nk)
+              ) {
+                nameToParticipation[nk] = val;
+              }
+            }
+          });
+        });
+      }
+
+      // apply CSV to the target table
+      return ts.map((t) => {
         if (t.id !== tableId) return t;
         const update = updateTableFromCSV(headers, rowsToParse, t);
+        const filledRows = update.rows.map((r) => {
+          // ensure CSV-provided participation-like props are removed
+          const copy = { ...r };
+          // fill participation limit from earlier stages when possible
+          const nameKey = (copy.name || "").toString().trim().toLowerCase();
+          if (
+            nameKey &&
+            Object.prototype.hasOwnProperty.call(nameToParticipation, nameKey)
+          ) {
+            return {
+              ...copy,
+              participation_limit: nameToParticipation[nameKey]
+            };
+          }
+          return copy;
+        });
+
         return {
           ...t,
           columns: update.columns,
-          rows: update.rows,
+          rows: filledRows,
           nextRowId: update.nextRowId
         };
-      })
-    );
+      });
+    });
   };
 
   const { handleSubmit } = methods;
@@ -314,11 +389,6 @@ const SurveyMultistageCreate = () => {
       val === "" || val === null || typeof val === "undefined"
         ? undefined
         : Number(val);
-
-    //console.log(
-    //  "DEBUG: tables before payload:",
-    //  JSON.stringify(tables, null, 2)
-    //);
 
     const stages = tables.map((t) => ({
       id: t.id,
@@ -389,11 +459,6 @@ const SurveyMultistageCreate = () => {
     if (anyValidationFailed) {
       return;
     }
-
-    //console.log(
-    //  "DEBUG: built stages payload:",
-    //  JSON.stringify(stages, null, 2)
-    //);
 
     const allowedDenied = data.allowedDeniedChoices;
 
