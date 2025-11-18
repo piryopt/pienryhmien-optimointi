@@ -55,7 +55,7 @@ const SurveyResultsPage = () => {
       ...Object.fromEntries(
         infoKeys.map((pair, index) => [
           pair.info_key,
-          additionalInfos[res[2][0]][index]
+          (additionalInfos[res[2][0]] || [])[index]
         ])
       )
     }));
