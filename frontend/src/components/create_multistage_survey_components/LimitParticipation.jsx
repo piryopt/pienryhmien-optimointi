@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const LimitParticipationSection = ({ setLimitParticipationVisible }) => {
-  const { register, watch } = useFormContext();
+  const { setValue, watch } = useFormContext();
   const { t } = useTranslation();
 
   const value = watch("limitParticipation", false);
@@ -25,19 +25,24 @@ const LimitParticipationSection = ({ setLimitParticipationVisible }) => {
         <input
           type="radio"
           id="limit-participation-yes"
-          {...register("limitParticipation")}
           value="true"
-          onChange={() => setLimitParticipationVisible(true)}
+          checked={value === true}
+          onChange={() => {
+            setValue("limitParticipation", true);
+            setLimitParticipationVisible(true);
+          }}
         />
         <label htmlFor="limit-participation-yes">{t("Kyllä")}</label>
 
         <input
           type="radio"
           id="limit-participation-no"
-          {...register("limitParticipation")}
           value="false"
-          defaultChecked
-          onChange={() => setLimitParticipationVisible(false)}
+          checked={value === false}
+          onChange={() => {
+            setValue("limitParticipation", false);
+            setLimitParticipationVisible(false);
+          }}
         />
         <label htmlFor="limit-participation-no">{t("Ei")}</label>
       </div>
