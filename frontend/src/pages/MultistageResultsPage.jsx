@@ -82,25 +82,50 @@ const MultistageSurveyResultsPage = () => {
   }, [currStage, surveyResultsData])
 
   const exportToExcel = () => {
-    if (!results || results.length === 0) {
+    if (!surveyResultsData || !Array.isArray(surveyResultsData.stageResults) || surveyResultsData.stageResults.length === 0) {
       showNotification(t("Ei tuloksia vietäväksi"), "warning")
       return
     }
 
-    const groupData = results.map((res) => ({
-      [t("Nimi")]: res[0][1],
-      [t("Sähköposti")]: res[1],
-      [t("Ryhmä")]: res[2][1],
-      [t("Monesko valinta")]: res[3],
-      ...Object.fromEntries(
-        infoKeys.map((pair, index) => [pair.info_key, (additionalInfos[res[2][0]] || [])[index]])
-      )
-    }))
-
-    const ws = XLSX.utils.json_to_sheet(groupData)
     const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, t("Tulokset"))
-    XLSX.writeFile(wb, `${t("tulokset")}_${currStage || "vaihe"}.xlsx`)
+
+    surveyResultsData.stageResults.forEach((stageObj, idx) => {
+      const resultsArr = stageObj.results || []
+      if (!resultsArr || resultsArr.length === 0) return
+
+      // info key sanitization per stage
+      const safeInfoKeys = Array.isArray(stageObj.infos) ? stageObj.infos.filter(k => k && k.info_key) : []
+      const additionalInfosPerStage = stageObj.additionalInfoKeys || {}
+
+      const groupData = resultsArr.map((res) => {
+        const name = res?.[0]?.[1] ?? ""
+        const email = res?.[1] ?? ""
+        const groupName = res?.[2]?.[1] ?? ""
+        const choiceIndex = (res?.[3] ?? res?.[2]?.[2] ?? "") || ""
+
+        const additional = Object.fromEntries(
+          safeInfoKeys
+            .map((pair, index) => [pair.info_key, (additionalInfosPerStage?.[res?.[2]?.[0]] || [])[index]])
+            .filter(([key, value]) => key && value !== undefined && value !== null && value !== "")
+        )
+
+        return {
+          [t("Nimi")]: name,
+          [t("Sähköposti")]: email,
+          [t("Ryhmä")]: groupName,
+          [t("Monesko valinta")]: choiceIndex,
+          ...additional
+        }
+      })
+
+      const ws = XLSX.utils.json_to_sheet(groupData)
+      const rawName = stageObj.stage || `${t("vaihe")}_${idx + 1}`
+      const sheetName = String(rawName).substring(0, 31)
+      XLSX.utils.book_append_sheet(wb, ws, sheetName)
+    })
+
+    const filename = `${t("tulokset")}_${id || "multivaiheinen"}.xlsx`
+    XLSX.writeFile(wb, filename)
   }
 
   const saveAllResults = () => {

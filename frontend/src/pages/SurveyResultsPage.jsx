@@ -47,6 +47,11 @@ const SurveyResultsPage = () => {
   }, []);
 
   const handleToExcelFile = async () => {
+    if (!results || results.length === 0) {
+      showNotification(t("Ei tuloksia vietäväksi"), "warning")
+      return
+    }
+    
     // info key sanitization
     const safeInfoKeys = Array.isArray(infoKeys) ? infoKeys.filter(k => k && k.info_key) : []
 
