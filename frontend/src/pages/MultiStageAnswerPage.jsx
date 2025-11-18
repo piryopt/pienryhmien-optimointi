@@ -171,6 +171,42 @@ const MultiStageAnswerPage = () => {
         deniedAllowedChoices: survey.denied_allowed_choices,
         stages: payload
       });
+      for (const stage of stages) {
+        if (stage.notAvailable) continue;
+
+        if (stage.good.length < survey.min_choices) {
+          showNotification(
+            t(
+              `Sijoita vähintään ${survey.min_choices} ryhmää jokaisesta vaiheesta vihreään laatikkoon${
+                survey.allow_absences
+                  ? " tai merkitse itsesi poissaolevaksi vaiheesta"
+                  : ""
+              }`
+            ),
+            "error"
+          );
+          return;
+        }
+
+        if (stage.bad.length > survey.denied_allowed_choices) {
+          showNotification(
+            t(
+              `Voit kieltää enintään ${survey.denied_allowed_choices} jokaisesta vaiheesta`
+            ),
+            "error"
+          );
+          return;
+        }
+
+        if (stage.bad.length > 0 && reasons[stage.name].length < 10) {
+          showNotification(
+            t("Perustelun tulee olla vähintään 10 merkkiä pitkä"),
+            "error"
+          );
+          return;
+        }
+      }
+
       setExisting(true);
       if (result.status === "0") throw new Error(result.msg);
       showNotification(t("Kyselyn vastaukset tallennettu."), "success");
@@ -209,19 +245,26 @@ const MultiStageAnswerPage = () => {
     return <div className="text-center mt-5">{t("Ladataan kyselyä...")}</div>;
   if (!activeStage) return <div>{t("Ei vaiheita ladattuna")}</div>;
 
-  if (survey.closed) return (
-    <div className="answer-page">
-      <h2 className="answer-title">
+  if (survey.closed)
+    return (
+      <div className="answer-page">
+        <h2 className="answer-title">
           <img
             src={`${imagesBaseUrl}/assignment_white_36dp.svg`}
             alt=""
             className="assignment-icon"
           />
           {survey.name}
-      </h2>
-      <ClosedMultistageSurveyView existing={existing} stages={stages} reasons={reasons} expandedIds={expandedIds} toggleExpand={toggleExpand} />
-    </div>
-  )
+        </h2>
+        <ClosedMultistageSurveyView
+          existing={existing}
+          stages={stages}
+          reasons={reasons}
+          expandedIds={expandedIds}
+          toggleExpand={toggleExpand}
+        />
+      </div>
+    );
 
   return (
     <div className="answer-page">
@@ -275,12 +318,20 @@ const MultiStageAnswerPage = () => {
                       marginBottom: "1.2rem"
                     }}
                   >
-                    {t("Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi.")}
+                    {t(
+                      "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi."
+                    )}
                   </p>
                   {stage.hasMandatory && !stage.notAvailable && (
                     <p className="note">
-                      {t("HUOM! ")}<span className="mandatory">{t("Pakolliseksi ")}</span>
-                      {t("merkityt ryhmät priorisoidaan jakamisprosessissa. ")} {t("Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.")}
+                      {t("HUOM! ")}
+                      <span className="mandatory">{t("Pakolliseksi ")}</span>
+                      {t(
+                        "merkityt ryhmät priorisoidaan jakamisprosessissa. "
+                      )}{" "}
+                      {t(
+                        "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
+                      )}
                     </p>
                   )}
 
@@ -353,7 +404,6 @@ const MultiStageAnswerPage = () => {
                     </div>
                   )}
                 </div>
-
               </Tab.Pane>
             ))}
           </Tab.Content>
