@@ -2,10 +2,14 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const DenyChoicesSection = () => {
-  const { register, watch } = useFormContext();
+  const {
+    register,
+    watch,
+    formState: { errors }
+  } = useFormContext();
   const { t } = useTranslation();
 
-  const setting = watch("denyChoicesSetting");
+  const setting = watch("denyChoicesSetting", "hide");
 
   return (
     <section>
@@ -37,10 +41,15 @@ const DenyChoicesSection = () => {
           <input
             type="number"
             id="allowedDeniedChoices"
-            className="form-control"
+            className={`form-control ${errors.allowedDeniedChoices ? "is-invalid" : ""}`}
             {...register("allowedDeniedChoices", { valueAsNumber: true })}
-            min={0}
+            min={1}
           />
+          {errors.allowedDeniedChoices && (
+            <p className="invalid-feedback">
+              {errors.allowedDeniedChoices.message}
+            </p>
+          )}
         </div>
       )}
     </section>
