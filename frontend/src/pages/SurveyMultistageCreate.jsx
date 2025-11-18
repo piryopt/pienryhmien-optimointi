@@ -4,8 +4,8 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNotification } from "../context/NotificationContext";
 import { buildCreateSurveySchema } from "../utils/validations/createSurveyValidations";
-import { baseUrl } from "../utils/constants";
 import surveyService from "../services/surveys";
+import { baseUrl, imagesBaseUrl } from "../utils/constants";
 import MultistageSurveyHeader from "../components/create_multistage_survey_components/MultistageSurveyHeader";
 import SurveyNameInput from "../components/create_survey_page_components/SurveyNameInput";
 import SurveyDateOfClosing from "../components/create_survey_page_components/SurveyDateOfClosing";
@@ -138,6 +138,18 @@ const SurveyMultistageCreate = () => {
       }
     ]);
     setNewStageName("");
+  };
+
+  const copyStage = (tableId) => {
+    const tableToCopy = tables.find((t) => t.id === tableId);
+    if (tableToCopy) {
+      const newTable = {
+        ...tableToCopy,
+        id: stageNextId.current++,
+        name: `${tableToCopy.name} ${t("(kopio)")}`
+      };
+      setTables((ts) => [...ts, newTable]);
+    }
   };
 
   const updateStageName = (tableId, name) =>
@@ -476,6 +488,7 @@ const SurveyMultistageCreate = () => {
             setTableSelectAllMandatory={setTableSelectAllMandatory}
             importCsv={importCsvToTable}
             limitParticipationVisible={limitParticipationVisible}
+            copyStage={copyStage}
           />
           <div className="mb-4">
             <Button variant="primary" onClick={addStage}>
@@ -483,6 +496,10 @@ const SurveyMultistageCreate = () => {
             </Button>
           </div>
           <button type="submit" className="btn btn-success">
+            <img
+              className="create-survey-icon"
+              src={`${imagesBaseUrl}/note_add_white_36dp.svg`}
+            />
             {t("Luo kysely")}
           </button>
         </form>

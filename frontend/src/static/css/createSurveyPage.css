@@ -207,7 +207,7 @@ div.delete-col-btn-visible {
   );
   background-size: contain;
   width: 100%;
-  height: 30px;
+  height: 25px;
   cursor: pointer;
   background-position: center;
   background-repeat: no-repeat;
@@ -261,4 +261,26 @@ label {
 .input-label {
   margin-top: 17px;
   margin-bottom: 5px;
+}
+
+.copy-icon {
+  width: 34px;
+  height: 25px;
+  margin-left: -8px;
+  margin-right: 3px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.create-survey-icon {
+  width: 34px;
+  height: 25px;
+  margin-left: -8px;
+  margin-right: 3px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.create-survey-button {
+  margin-top: 25px;
 }
