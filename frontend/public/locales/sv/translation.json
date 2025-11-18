@@ -128,6 +128,11 @@
   "Kyselyn vastauksien tallennus epäonnistui": {
     "": ""
   },
+  "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
+  " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+    "": "Det finns fler svarande än tillgängliga platser att tilldela. Redigera gruppstorlekarna innan gruppindelningen."
+  }
+  },
   "Kyselyt": "",
   "Ladataan": {
     "": {
@@ -174,6 +179,7 @@
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordning på val",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera enkäten eller lägg till en administratör",
+  "Muokkaa ryhmäkokoja": "Redigera gruppstorlekar",
   "Muu": "Annat",
   "Näe poistettavaksi asetetut kyselyt": "Se undersökningar som ska raderas",
   "Näytä": "Visa",

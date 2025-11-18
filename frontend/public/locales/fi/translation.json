@@ -128,6 +128,11 @@
   "Kyselyn vastauksien tallennus epäonnistui": {
     "": "Kyselyn vastauksien tallennus epäonnistui."
   },
+  "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
+  " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+    "": "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa ryhmäkokoja ennen ryhmäjakoa."
+  }
+  },
   "Kyselyt": "Kyselyt",
   "Ladataan": {
     "": {
@@ -174,6 +179,7 @@
   "Minimikoon on oltava vähintään 0": "Minimikoon on oltava vähintään 0",
   "Monesko valinta": "Monesko valinta",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Muokkaa kyselyä tai lisää siihen ylläpitäjä",
+  "Muokkaa ryhmäkokoja": "Muokkaa ryhmäkokoja",
   "Muu": "Muu",
   "Näe poistettavaksi asetetut kyselyt": "Näe poistettavaksi asetetut kyselyt",
   "Näytä": "Näytä",

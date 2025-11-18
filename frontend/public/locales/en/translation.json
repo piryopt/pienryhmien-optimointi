@@ -128,6 +128,11 @@
   "Kyselyn vastauksien tallennus epäonnistui": {
     "": ""
   },
+  "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
+  " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+    "": "There are more respondents than available spots. Edit group sizes before allocating groups."
+  }
+  },
   "Kyselyt": "",
   "Ladataan": {
     "": {
@@ -174,6 +179,7 @@
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordinal choice",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Edit the survey or add an administrator",
+  "Muokkaa ryhmäkokoja": "Edit group sizes",
   "Muu": "Other",
   "Näe poistettavaksi asetetut kyselyt": "See surveys to be deleted",
   "Näytä": "Open",
