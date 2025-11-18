@@ -26,10 +26,6 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
         });
         setEditedChoices(initialEdited);
       } catch (err) {
-        showNotification(
-          t("Ryhmäkokojen lataaminen epäonnistui"),
-          "error"
-        );
         console.error("Error loading group sizes data", err);
         onClose();
       }
@@ -90,7 +86,7 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
 
       if (seats <= 0) {
         errors.push(
-          t(`Ryhmä "${choice.name}" täytyy sisältää vähintään 1 paikan`)
+          t('Ryhmä "{{name}}" täytyy sisältää vähintään 1 paikan', { name: choice.name })
         );
       }
     });
@@ -98,9 +94,10 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
     const total = getTotalEditedSpaces();
     if (total < surveyAnswersAmount) {
       errors.push(
-        t(
-          `Jaettavia paikkoja on ${total}, mutta vastauksia on ${surveyAnswersAmount}. Lisää paikkoja.`
-        )
+        t('Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.', {
+          total: total,
+          answers: surveyAnswersAmount
+        })
       );
     }
 
