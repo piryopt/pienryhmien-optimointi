@@ -1,4 +1,5 @@
 {
+  "(kopio)": "(kopia)",
   "Aiemmat kyselyt": "Tidigare enkäter",
   "Aktiiviset kyselyt": "Aktiva enkäter",
   "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
@@ -16,11 +17,14 @@
   "Bugi": "Bugg",
   "CSV-ohje": "CSV guide",
   "Ei": "Nej",
+  "Ei järjestetty": "",
   "Ei kyselyitä": "",
   "Ei paikalla": "",
   "Ei palautetta": "",
   "Ei palautteita": "",
   "Ei tietoja": "",
+  "Ei tuloksia tälle vaiheelle": "",
+  "Ei tuloksia vietäväksi": "",
   "Ei vaiheita ladattuna": "",
   "En ole paikalla tässä vaiheessa": "Jag är frånvarande",
   "Enimmäispaikat": "Max antal platser",
@@ -47,9 +51,9 @@
     }
   },
   "Haluatko palauttaa kyselyn roskakorista?": "",
+  "Haluatko siirtää kyselyn roskakoriin?": "",
   "Haluatko varmasti avata kyselyn uudestaan?": "",
   "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "",
-  "Haluatko varmasti poistaa kyselyn?": "",
   "Haluatko varmasti sulkea kyselyn?": "",
   "Haluatko varmasti sulkea palautteen?": "",
   "HUOM! ": "OBS! ",
@@ -61,6 +65,10 @@
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
     "": ""
   },
+  "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
+    "": ""
+  },
+  "Hylätty": "",
   "Hylkäykset": "Avvisningar",
   "Hylkäysmäärä": "",
   "ID": "",
@@ -88,6 +96,7 @@
     }
   },
   "Kaikki käynnissä olevat kyselyt": "",
+  "Kaikkien vaiheiden tulokset tallennettu": "",
   "Käynnissä olevat kyselyt": "Pågående enkäter",
   "Käyttäjätunnus": "Användarnamn",
   "Kello": "Klockan",
@@ -102,6 +111,7 @@
   "kokonaislukuja": "heltal",
   "Kopioi kysely": "Kopiera enkät",
   "Kopioi kyselyn osoite leikepöydälle": "Kopiera enkätens webbadress till urklipp",
+  "Kopioi vaihe": "Kopiera fas",
   "Kyllä": "Ja",
   "Kysely": "Enkät",
   "Kysely avattu": "",
@@ -179,6 +189,7 @@
   "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordning på val",
+  "Monivaiheisen kyselyn tulokset": "",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera enkäten eller lägg till en administratör",
   "Muokkaa ryhmäkokoja": "Redigera gruppstorlekar",
   "Muu": "Annat",
@@ -205,6 +216,7 @@
   "Palaa listaan": "",
   "Palaa takaisin": "Gå tillbaka",
   "Palauta kysely": "",
+  "Palauta kysely?": "",
   "Palaute": "Feedback",
   "Palaute lähetetty": "",
   "Palaute suljettu": "",
@@ -218,6 +230,7 @@
   "Piilota": "",
   "poissa": "frånvarande",
   "Poista": "Ta bort",
+  "Poista kaikki kyselyn data?": "",
   "Poista kysely": "Ta bort enkät",
   "Poista kysely?": "",
   "Poista sarake": "",
@@ -293,6 +306,7 @@
       "": "Här kan du ange en beskrivning av enkäten och instruktioner för att svara på den. Beskrivningstexten visas för svaranden i samband med enkäten."
     }
   },
+  "Tallenna kaikkien vaiheiden tulokset": "",
   "Tallenna muutokset": "Spara ändringar",
   "Tallenna tulokset": "Spara resultat",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
@@ -309,6 +323,7 @@
   "Toiminnot": "Åtgärder",
   "tulokset": "",
   "Tulokset": "Resultat",
+  "Tulosten tallennus epäonnistui": "",
   "Tuo valinnat CSV-tiedostosta": "Importera val från en CSV-fil",
   "UKK": "FAQ",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Krävs det att alla grupper ordnas?",

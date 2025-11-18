@@ -1,4 +1,5 @@
 {
+  "(kopio)": "(copy)",
   "Aiemmat kyselyt": "Previous surveys",
   "Aktiiviset kyselyt": "Active surveys",
   "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
@@ -16,11 +17,14 @@
   "Bugi": "Bug",
   "CSV-ohje": "CSV guide",
   "Ei": "No",
+  "Ei järjestetty": "",
   "Ei kyselyitä": "No surveys",
   "Ei paikalla": "Not present",
   "Ei palautetta": "No feedback",
   "Ei palautteita": "No feedback",
   "Ei tietoja": "No info",
+  "Ei tuloksia tälle vaiheelle": "",
+  "Ei tuloksia vietäväksi": "",
   "Ei vaiheita ladattuna": "No survey loaded",
   "En ole paikalla tässä vaiheessa": "I am absent",
   "Enimmäispaikat": "Maximum capacity",
@@ -47,9 +51,9 @@
     }
   },
   "Haluatko palauttaa kyselyn roskakorista?": "",
+  "Haluatko siirtää kyselyn roskakoriin?": "",
   "Haluatko varmasti avata kyselyn uudestaan?": "",
   "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "",
-  "Haluatko varmasti poistaa kyselyn?": "",
   "Haluatko varmasti sulkea kyselyn?": "",
   "Haluatko varmasti sulkea palautteen?": "",
   "HUOM! ": "NOTE! ",
@@ -61,6 +65,10 @@
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
     "": ""
   },
+  "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
+    "": ""
+  },
+  "Hylätty": "",
   "Hylkäykset": "Rejections",
   "Hylkäysmäärä": "",
   "ID": "",
@@ -88,6 +96,7 @@
     }
   },
   "Kaikki käynnissä olevat kyselyt": "",
+  "Kaikkien vaiheiden tulokset tallennettu": "",
   "Käynnissä olevat kyselyt": "Ongoing surveys",
   "Käyttäjätunnus": "Username",
   "Kello": "Time",
@@ -102,6 +111,7 @@
   "kokonaislukuja": "integers",
   "Kopioi kysely": "Copy survey",
   "Kopioi kyselyn osoite leikepöydälle": "Copy the survey link to the clipboard",
+  "Kopioi vaihe": "Copy stage",
   "Kyllä": "Yes",
   "Kysely": "Survey",
   "Kysely avattu": "",
@@ -179,6 +189,7 @@
   "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordinal choice",
+  "Monivaiheisen kyselyn tulokset": "",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Edit the survey or add an administrator",
   "Muokkaa ryhmäkokoja": "Edit group sizes",
   "Muu": "Other",
@@ -205,6 +216,7 @@
   "Palaa listaan": "",
   "Palaa takaisin": "Return",
   "Palauta kysely": "",
+  "Palauta kysely?": "",
   "Palaute": "Feedback",
   "Palaute lähetetty": "",
   "Palaute suljettu": "",
@@ -218,6 +230,7 @@
   "Piilota": "Hide",
   "poissa": "absent",
   "Poista": "Delete",
+  "Poista kaikki kyselyn data?": "",
   "Poista kysely": "Delete survey",
   "Poista kysely?": "Delete survey?",
   "Poista sarake": "Delete coulumn",
@@ -293,6 +306,7 @@
       "": "Here you can provide a description of the survey and instructions for responding. The description text will be shown to the respondents alongside the survey."
     }
   },
+  "Tallenna kaikkien vaiheiden tulokset": "",
   "Tallenna muutokset": "Save changes",
   "Tallenna tulokset": "Save results",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
@@ -309,6 +323,7 @@
   "Toiminnot": "Actions",
   "tulokset": "results",
   "Tulokset": "Results",
+  "Tulosten tallennus epäonnistui": "",
   "Tuo valinnat CSV-tiedostosta": "Import selections from a CSV file.",
   "UKK": "FAQ",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Is organizing all groups required?",
