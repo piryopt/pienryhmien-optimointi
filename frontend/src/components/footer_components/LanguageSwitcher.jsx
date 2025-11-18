@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { languages } from "../../utils/constants";
 
@@ -6,6 +6,11 @@ const LanguageSwitcher = () => {
   const [currLanguage, setCurrLanguage] = useState(
     localStorage.getItem("i18nextLng")?.split("-")[0] || "fi"
   );
+
+  useEffect(() => {
+    changeLanguage(currLanguage);
+  }, []);
+
   const { i18n } = useTranslation();
 
   const changeLanguage = (lng) => {
