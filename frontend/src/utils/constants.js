@@ -1,12 +1,13 @@
-const STAGE = import.meta.env.VITE_STAGE || "dev";
+const STAGE = import.meta.env.VITE_STAGE || "development";
 
 const HOSTS = {
-  dev: "http://localhost:5001",
+  development: "http://localhost:5001",
   staging: "https://jakaja-test.it.helsinki.fi",
-  production: "https://jakaja.it.helsinki.fi"
+  production: "https://jakaja.it.helsinki.fi",
+  testing: "http://web-test:5000"
 };
 
-const apiHost = HOSTS[STAGE] || HOSTS.dev;
+const apiHost = HOSTS[STAGE] || HOSTS.development;
 
 export const baseUrl = `${apiHost}/api`;
 export const imagesBaseUrl = `${apiHost}/static/images`;

@@ -56,7 +56,9 @@ services:
       - "5001:5000"
 
   web-test:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.webtest
     restart: always
     env_file: .env
     environment:
@@ -68,8 +70,6 @@ services:
       - test-db
     ports:
       - "5002:5000"
-    volumes:
-      - .:/usr/src/app
     profiles: ["test"]
 
   test:
