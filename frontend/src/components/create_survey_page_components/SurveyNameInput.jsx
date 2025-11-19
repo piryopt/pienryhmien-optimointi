@@ -13,6 +13,7 @@ const SurveyNameInput = () => {
       <input
         type="text"
         className="form-control"
+        data-testid="groupname"
         {...register("groupname")}
         aria-invalid={!!errors.groupname}
         aria-describedby="groupname-validation-warning"

@@ -15,6 +15,7 @@ const SurveyDescription = () => {
       </p>
       <textarea
         id="survey-information"
+        data-testid="survey-information"
         className="form-control"
         {...register("surveyInformation")}
       />

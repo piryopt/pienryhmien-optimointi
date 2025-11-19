@@ -24,19 +24,24 @@ def create_survey_with_csv_file(page: Page):
         "link",
         name="Luo uusi kysely Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
     ).click()
-    page.locator("#groupname").fill("Päiväkoti valinta")
+    page.get_by_test_id("groupname").fill("Päiväkoti valinta")
     page.locator("#end-date").fill("31.08.2029")
     page.locator("#endtime").select_option("12:00")
-    page.locator("#survey-information").fill("Valitse mihin päiväkotiin haluat sijoittaa itsesi")
+    page.get_by_test_id("survey-information").fill("Valitse mihin päiväkotiin haluat sijoittaa itsesi")
 
     with page.expect_file_chooser() as fc_info:
         page.get_by_text("Tuo valinnat CSV-tiedostosta").click()
     file_chooser = fc_info.value
     file_chooser.set_files(str(TEST_FILES_PATH) + "/test_survey2.csv")
-    expect(page.get_by_text("Päiväkoti Toivo")).to_be_visible()
-    expect(page.get_by_text("Nallitie 3")).to_be_visible()
-    page.locator("#create_survey").click()
+
+    input_locator = page.locator("#choiceTable tr").nth(0).locator("td").nth(1).locator("input")
+    expect(input_locator).to_have_value("Päiväkoti Toivo")
+
+    input_locator = page.locator("#choiceTable tr").nth(3).locator("td").nth(4).locator("input")
+    expect(input_locator).to_have_value("Nallitie 3")
+
+    page.get_by_test_id("create-button").click()
     expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
+
     page.locator("#dropdownMenuButton1").click()
     page.get_by_text("Kirjaudu ulos").click()
-

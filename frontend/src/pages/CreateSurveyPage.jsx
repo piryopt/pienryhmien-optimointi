@@ -50,7 +50,7 @@ const CreateSurveyPage = () => {
       minChoicesSetting: "all",
       denyChoicesSetting: "hide",
       allowedDeniedChoices: 0,
-      allowSearchVisibility: false,
+      allowSearchVisibility: false
     },
     mode: "onBlur"
   });
@@ -74,10 +74,16 @@ const CreateSurveyPage = () => {
         methods.setValue("minchoices", minCount);
 
         const deniedCount = data.survey.denied_allowed_choices ?? 0;
-        methods.setValue("denyChoicesSetting", deniedCount > 0 ? "show" : "hide");
+        methods.setValue(
+          "denyChoicesSetting",
+          deniedCount > 0 ? "show" : "hide"
+        );
         methods.setValue("allowedDeniedChoices", deniedCount);
 
-        methods.setValue("allowSearchVisibility", !!data.survey.search_visibility);
+        methods.setValue(
+          "allowSearchVisibility",
+          !!data.survey.search_visibility
+        );
 
         const dynamicCols = new Set();
         data.choices.forEach((choice) => {
@@ -247,7 +253,7 @@ const CreateSurveyPage = () => {
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
       allowedDeniedChoices: data.allowedDeniedChoices || 0,
-      allowSearchVisibility: !!data.allowSearchVisibility,
+      allowSearchVisibility: !!data.allowSearchVisibility
     };
 
     const extractMessage = (json, res) => {
@@ -325,8 +331,15 @@ const CreateSurveyPage = () => {
             choiceErrors={choiceErrors}
           />
           <br />
-          <button type="submit" className="btn btn-success create-survey-button">
-             <img className="create-survey-icon" src={`${imagesBaseUrl}/note_add_white_36dp.svg`} />
+          <button
+            type="submit"
+            className="btn btn-success create-survey-button"
+            data-testid="create-button"
+          >
+            <img
+              className="create-survey-icon"
+              src={`${imagesBaseUrl}/note_add_white_36dp.svg`}
+            />
             {t("Luo kysely")}
           </button>
         </form>
