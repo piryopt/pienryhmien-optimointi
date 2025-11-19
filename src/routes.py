@@ -392,6 +392,7 @@ def api_survey(survey_id):
             )
 
     choices = list(survey_all_info.values())
+    choices_not_shuffled = list(survey_all_info.values())
 
     closed = survey_service.check_if_survey_closed(survey_id)
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
@@ -399,7 +400,6 @@ def api_survey(survey_id):
         user_rankings = user_survey_ranking.ranking
         rejections = user_survey_ranking.rejections
         reason = user_survey_ranking.reason
-
         return jsonify(
             {
                 "survey": {
@@ -422,7 +422,6 @@ def api_survey(survey_id):
         )
 
     shuffle(choices)
-
     return jsonify(
         {
             "survey": {
@@ -437,6 +436,7 @@ def api_survey(survey_id):
             },
             "additional_info": additional_info,
             "choices": choices,
+            "choices_not_shuffled": choices_not_shuffled,
             "existing": "0",
         }
     )

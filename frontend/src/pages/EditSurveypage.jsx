@@ -4,6 +4,10 @@ import { useTranslation } from "react-i18next";
 import { buildEditSurveySchema } from "../utils/validations/editSurveyValidations";
 import AddAdminSection from "../components/edit_survey_page_components/AddAdminSection";
 import EditSurveyName from "../components/edit_survey_page_components/EditSurveyName";
+import MinChoicesSection from "../components/edit_survey_page_components/MinChoicesSection";
+import DenyChoicesSection from "../components/edit_survey_page_components/DenyChoicesSection";
+import SearchVisibilitySection from "../components/edit_survey_page_components/SearchVisibilitySection";
+import PrioritizedGroupsSection from "../components/edit_survey_page_components/PrioritizedGroupsSection";
 import surveyService from "../services/surveys";
 import { useEffect, useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -23,6 +27,8 @@ const EditSurveyPage = () => {
   const { id: surveyId } = useParams();
   const [survey, setSurvey] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [choices, setChoices] = useState("");
+  const [choices_not_shuffled, setChoicesNotShuffled] = useState("");
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -49,6 +55,8 @@ const EditSurveyPage = () => {
         const response = await surveyService.getSurvey(surveyId);
         if (!mounted) return;
         setSurvey(response.survey);
+        setChoices(response.choices);
+        setChoicesNotShuffled(response.choices_not_shuffled);
         const parsed = response?.survey?.deadline
           ? parse(response.survey.deadline, "dd.MM.yyyy HH:mm", new Date())
           : null;
@@ -127,6 +135,10 @@ const EditSurveyPage = () => {
   return (
     <div>
       <h1>{t("Kyselyn muokkaus")}</h1>
+      <h5>
+        <b style={{ color: "red" }}>{t("Huom!")}</b>{" "}
+        {t("Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta")}
+      </h5>
       <AddAdminSection surveyId={surveyId} />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -140,6 +152,10 @@ const EditSurveyPage = () => {
             }
           />
           <EditSurveyInfo placeholder={survey.description} />
+          <MinChoicesSection choices={choices} survey={survey} />
+          <DenyChoicesSection survey={survey} />
+          <SearchVisibilitySection survey={survey} />
+          <PrioritizedGroupsSection choices={choices_not_shuffled} />
           <button
             type="submit"
             className="btn btn-primary"
