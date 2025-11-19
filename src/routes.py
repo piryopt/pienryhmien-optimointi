@@ -100,7 +100,8 @@ def frontpage() -> str:
     Returns the rendered skeleton template
     """
     # in production serve the built react app (copied to static/react folder by dockerfile)
-    if not current_app.debug:
+    flask_env = current_app.config.get("ENV", "develpment")
+    if flask_env in ["production", "testing"]:
         # user_id = session.get("user_id", 0)
         # if user_id == 0:
         #     return redirect("/api/auth/login") this needs to be implemented (dont know how sso works here)
@@ -130,7 +131,6 @@ def serve_images(filename):
     file_path = images_dir / filename
     if file_path.exists() and file_path.is_file():
         return send_from_directory(str(images_dir), filename)
-        
 
 
 @bp.route("/api/frontpage", methods=["GET"])
@@ -176,9 +176,6 @@ def surveys_deleted():
     return jsonify(deleted_surveys)
 
 
-
-
-
 @bp.route("/surveys/getinfo", methods=["POST"])
 def get_info():
     """
@@ -215,8 +212,6 @@ def expand_ranking(survey_id, email, stage):
             choice = survey_choices_service.get_survey_choice(r)
             rejections.append(choice)
     return jsonify({"choices": choices, "rejections": rejections, "notAvailable": not_available})
-
-
 
 
 @bp.route("/api/multistage/survey/create", methods=["POST"])
@@ -338,7 +333,6 @@ def get_csrf():
 """
 /SURVEYS/<SURVEY_ID>/* ROUTES:
 """
-
 
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["GET"])
@@ -1014,7 +1008,7 @@ def survey_results(survey_id):
         output_data = build_multistage_output(survey_id)
         if output_data is None:
             return jsonify({"error": "Survey answers not found"}), 404
-        
+
         if request.method == "GET":
             return jsonify(
                 {
@@ -1023,7 +1017,7 @@ def survey_results(survey_id):
                     "resultsSaved": saved_result_exists,
                 }
             )
-    
+
     output_data = build_output(survey_id)
     if output_data is None:
         return jsonify({"error": "Survey answers not found"}), 404
@@ -1109,15 +1103,15 @@ def api_save_multistage_results(survey_id):
     saved_result_exists = survey_service.check_if_survey_results_saved(survey_id)
     if saved_result_exists:
         return jsonify({"msg": "Survey has already been saved"}), 400
-    
+
     output_data = build_multistage_output(survey_id)
     if output_data is None:
         return jsonify({"msg": "Survey answers not found"}), 404
-    
+
     survey_answered = survey_service.update_survey_answered(survey_id)
     if not survey_answered:
         return jsonify({"msg": "Saving survey failed"}), 500
-    
+
     for stage in output_data:
         results_list = stage.get("results", []) if isinstance(stage, dict) else []
         for res in results_list:
@@ -1129,7 +1123,7 @@ def api_save_multistage_results(survey_id):
             saved = final_group_service.save_result(user_id, survey_id, choice_id)
             if not saved:
                 return jsonify({"msg": f"Error in saving {res[0][1]} results"}), 500
-    
+
     return jsonify({"msg": "Survey saved"}), 200
 
 
@@ -1182,31 +1176,28 @@ def login():
         User("opettaja", "opettaja@mail.com", True),
     ]
 
-    if request.method == "GET":
-        return render_template("mock_ad.html")
-    if request.method == "POST":
-        username = request.form.get("username")
+    username = request.form.get("username")
 
-        email = name = role_bool = ""
+    email = name = role_bool = ""
 
-        for user in users:
-            if user.name == username:
-                email = user.email
-                name = user.name
-                role_bool = user.isteacher
-                break
+    for user in users:
+        if user.name == username:
+            email = user.email
+            name = user.name
+            role_bool = user.isteacher
+            break
 
-        if not email:
-            return jsonify({"message": "Invalid username"}), 401
+    if not email:
+        return jsonify({"message": "Invalid username"}), 401
 
-        if not user_service.find_by_email(email):  # account doesn't exist, register
-            user_service.create_user(name, email, role_bool)  # actual registration
+    if not user_service.find_by_email(email):  # account doesn't exist, register
+        user_service.create_user(name, email, role_bool)  # actual registration
 
-        if user_service.check_credentials(email):  # log in, update session etc.
-            if role_bool:
-                user_service.make_user_teacher(email)
+    if user_service.check_credentials(email):  # log in, update session etc.
+        if role_bool:
+            user_service.make_user_teacher(email)
 
-        return redirect("/")
+    return redirect("/")
 
 
 @bp.route("/api/auth/login", methods=["GET", "POST"])
@@ -1224,31 +1215,28 @@ def api_login():
         User("opettaja", "opettaja@mail.com", True),
     ]
 
-    if request.method == "GET":
-        return render_template("mock_ad.html")
-    if request.method == "POST":
-        username = request.form.get("username")
+    username = request.form.get("username")
 
-        email = name = role_bool = ""
+    email = name = role_bool = ""
 
-        for user in users:
-            if user.name == username:
-                email = user.email
-                name = user.name
-                role_bool = user.isteacher
-                break
+    for user in users:
+        if user.name == username:
+            email = user.email
+            name = user.name
+            role_bool = user.isteacher
+            break
 
-        if not email:
-            return jsonify({"message": "Invalid username"}), 401
+    if not email:
+        return jsonify({"message": "Invalid username"}), 401
 
-        if not user_service.find_by_email(email):  # account doesn't exist, register
-            user_service.create_user(name, email, role_bool)  # actual registration
+    if not user_service.find_by_email(email):  # account doesn't exist, register
+        user_service.create_user(name, email, role_bool)  # actual registration
 
-        if user_service.check_credentials(email):  # log in, update session etc.
-            if role_bool:
-                user_service.make_user_teacher(email)
+    if user_service.check_credentials(email):  # log in, update session etc.
+        if role_bool:
+            user_service.make_user_teacher(email)
 
-        return redirect("/")
+    return redirect("/")
 
 
 @bp.route("/auth/logout")
@@ -1274,7 +1262,7 @@ def api_logout():
         if request.method == "POST":
             return jsonify({"logged_out": True})
         return redirect("/")
-    
+
     return redirect("/Shibboleth.sso/Logout")
 
 
@@ -1685,6 +1673,7 @@ def spa_fallback_404(e):
         return abort(404)
     return send_from_directory(current_app.static_folder, "index.html")
 
+
 @bp.route("/<path:path>")
 def spa_fallback(path):
     if path.startswith("api") or path.startswith("static") or path.startswith("auth"):
@@ -1693,6 +1682,7 @@ def spa_fallback(path):
     if not current_app.debug:
         return send_from_directory(current_app.static_folder, "index.html")
     return abort(404)
+
 
 """
 TASKS:

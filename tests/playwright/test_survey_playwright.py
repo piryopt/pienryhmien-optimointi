@@ -11,7 +11,7 @@ def test_login(setup_db, page: Page):
     Test that mock ad login works. After login the user is redirected to the home page
     """
     login(page, "robottiTeacher", "eat")
-    expect(page).to_have_title(re.compile("Etusivu - Jakaja"))
+    expect(page).to_have_title(re.compile("Jakaja"))
 
 
 def test_go_to_create_survey_page(setup_db, page: Page):

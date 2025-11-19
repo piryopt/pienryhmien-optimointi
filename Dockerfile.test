@@ -1,18 +1,3 @@
-FROM node:20-alpine AS builder
-WORKDIR /app/frontend
-
-ARG VITE_STAGE=development
-ENV VITE_STAGE=${VITE_STAGE}
-
-COPY frontend/package*.json ./
-
-RUN npm install
-
-COPY frontend ./
-
-RUN npm run build
-
-
 FROM mcr.microsoft.com/playwright/python:v1.54.0-noble
 WORKDIR /usr/src/app
 
@@ -21,8 +6,6 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-
-COPY --from=builder /app/frontend/dist /usr/src/app/src/static/react
 
 RUN playwright install --with-deps
 

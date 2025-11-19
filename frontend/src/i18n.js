@@ -5,7 +5,6 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 i18n
   .use(HttpBackend)
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: "fi",

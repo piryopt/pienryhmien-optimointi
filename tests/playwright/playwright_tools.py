@@ -7,6 +7,6 @@ def login(page, username, password):
     """
     base_url = os.getenv("BASE_URL", "http://127.0.0.1:5000/")
     page.goto(base_url)
-    page.locator("#nameid").fill(username)
-    page.get_by_label("Salasana (laita mitä vaan):").fill(password)
-    page.get_by_role("button").click()
+    page.get_by_test_id("username").fill(username)
+    page.get_by_test_id("password").fill(password)
+    page.get_by_test_id("login-button").click()
