@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 import Button from "react-bootstrap/Button";
 import ChoiceTable from "../create_survey_page_components/ChoiceTable";
 import StageNameInput from "../create_survey_page_components/StageNameInput";
+import { imagesBaseUrl } from "../../utils/constants";
+import "../../static/css/createSurveyPage.css";
 
 const StageTables = ({
   tables,
@@ -14,7 +16,8 @@ const StageTables = ({
   updateCell,
   setTableSelectAllMandatory,
   importCsv,
-  limitParticipationVisible
+  limitParticipationVisible,
+  copyStage
 }) => {
   const { t } = useTranslation();
 
@@ -38,6 +41,15 @@ const StageTables = ({
                 }
               >
                 {t("Poista vaihe")}
+              </Button>
+            </div>
+            <div className="column stage-copy-button">
+              <Button variant="primary" onClick={() => copyStage(table.id)}>
+                <img
+                  className="copy-icon"
+                  src={`${imagesBaseUrl}/content_copy_white_36dp.svg`}
+                />
+                {t("Kopioi vaihe")}
               </Button>
             </div>
             <div className="column">

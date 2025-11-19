@@ -19,7 +19,7 @@ import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 import { useSearchParams } from "react-router-dom";
 import surveyService from "../services/surveys";
 import "../static/css/createSurveyPage.css";
-import { baseUrl } from "../utils/constants";
+import { baseUrl, imagesBaseUrl } from "../utils/constants";
 
 const CreateSurveyPage = () => {
   const { t } = useTranslation();
@@ -389,7 +389,8 @@ const CreateSurveyPage = () => {
             choiceErrors={choiceErrors}
           />
           <br />
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-success create-survey-button">
+             <img className="create-survey-icon" src={`${imagesBaseUrl}/note_add_white_36dp.svg`} />
             {t("Luo kysely")}
           </button>
         </form>

@@ -80,7 +80,7 @@ const FrontPage = () => {
           />
           <br></br>
           <FrontPageButton
-            path="multistage/survey/create"
+            path="/surveys/multistage/create"
             imgSrc={`${imagesBaseUrl}/note_stack_add_36dp.svg`}
             mainText="Luo uusi monivaiheinen kysely"
             additionalText="Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot"

@@ -400,6 +400,40 @@ const saveMultistageResults = async (surveyId) => {
   }
 };
 
+const getGroupSizesData = async (surveyId) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/surveys/${surveyId}/group_sizes`,
+      {
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateGroupSizes = async (surveyId, choices) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.post(
+      `${baseUrl}/surveys/${surveyId}/group_sizes`,
+      { choices },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken
+        },
+        withCredentials: true
+      }
+    )
+    return response.data
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getActiveSurveys: getActiveSurveys,
   getClosedSurveys: getClosedSurveys,
@@ -423,5 +457,7 @@ export default {
   getMultiStageSurveyAnswersData: getMultiStageSurveyAnswersData,
   getMultistageSurveyResultsData: getMultistageSurveyResultsData,
   getMultistageStages: getMultistageStages,
-  saveMultistageResults: saveMultistageResults
+  saveMultistageResults: saveMultistageResults,
+  getGroupSizesData: getGroupSizesData,
+  updateGroupSizes: updateGroupSizes
 };

@@ -1,4 +1,5 @@
 {
+  "(kopio)": "(kopio)",
   "Aiemmat kyselyt": "Aiemmat kyselyt",
   "Aktiiviset kyselyt": "Aktiiviset kyselyt",
   "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
@@ -16,11 +17,14 @@
   "Bugi": "Bugi",
   "CSV-ohje": "CSV-ohje",
   "Ei": "Ei",
+  "Ei järjestetty": "Ei järjestetty",
   "Ei kyselyitä": "Ei kyselyitä",
   "Ei paikalla": "Ei paikalla",
   "Ei palautetta": "Ei palautetta",
   "Ei palautteita": "Ei palautteita",
   "Ei tietoja": "Ei tietoja",
+  "Ei tuloksia tälle vaiheelle": "Ei tuloksia tälle vaiheelle",
+  "Ei tuloksia vietäväksi": "Ei tuloksia vietäväksi",
   "Ei vaiheita ladattuna": "Ei vaiheita ladattuna",
   "En ole paikalla tässä vaiheessa": "En ole paikalla tässä vaiheessa",
   "Enimmäispaikat": "Enimmäispaikat",
@@ -47,9 +51,9 @@
     }
   },
   "Haluatko palauttaa kyselyn roskakorista?": "Haluatko palauttaa kyselyn roskakorista?",
+  "Haluatko siirtää kyselyn roskakoriin?": "Haluatko siirtää kyselyn roskakoriin?",
   "Haluatko varmasti avata kyselyn uudestaan?": "Haluatko varmasti avata kyselyn uudestaan?",
   "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ",
-  "Haluatko varmasti poistaa kyselyn?": "Haluatko varmasti poistaa kyselyn?",
   "Haluatko varmasti sulkea kyselyn?": "Haluatko varmasti sulkea kyselyn?",
   "Haluatko varmasti sulkea palautteen?": "Haluatko varmasti sulkea palautteen?",
   "HUOM! ": "HUOM! ",
@@ -61,11 +65,16 @@
   "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
     "": "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
   },
+  "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
+    "": "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti."
+  },
+  "Hylätty": "Hylätty",
   "Hylkäykset": "Hylkäykset",
   "Hylkäysmäärä": "Hylkäysmäärä",
   "ID": "ID",
   "Jaa ryhmiin": "Jaa ryhmiin",
   "Jaettavia paikkoja": "Jaettavia paikkoja",
+  "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.": "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.",
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "Jakajassa luodut kyselyt",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
@@ -87,6 +96,7 @@
     }
   },
   "Kaikki käynnissä olevat kyselyt": "Kaikki käynnissä olevat kyselyt",
+  "Kaikkien vaiheiden tulokset tallennettu": "Kaikkien vaiheiden tulokset tallennettu",
   "Käynnissä olevat kyselyt": "Käynnissä olevat kyselyt",
   "Käyttäjätunnus": "Käyttäjätunnus",
   "Kello": "Kello",
@@ -101,6 +111,7 @@
   "kokonaislukuja": "kokonaislukuja",
   "Kopioi kysely": "Kopioi kysely",
   "Kopioi kyselyn osoite leikepöydälle": "Kopioi kyselyn osoite leikepöydälle",
+  "Kopioi vaihe": "Kopioi vaihe",
   "Kyllä": "Kyllä",
   "Kysely": "Kysely",
   "Kysely avattu": "Kysely avattu",
@@ -127,6 +138,11 @@
   },
   "Kyselyn vastauksien tallennus epäonnistui": {
     "": "Kyselyn vastauksien tallennus epäonnistui."
+  },
+  "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
+  " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+    "": "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa ryhmäkokoja ennen ryhmäjakoa."
+  }
   },
   "Kyselyt": "Kyselyt",
   "Ladataan": {
@@ -173,7 +189,9 @@
   "Min valinnat": "Min valinnat",
   "Minimikoon on oltava vähintään 0": "Minimikoon on oltava vähintään 0",
   "Monesko valinta": "Monesko valinta",
+  "Monivaiheisen kyselyn tulokset": "Monivaiheisen kyselyn tulokset",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Muokkaa kyselyä tai lisää siihen ylläpitäjä",
+  "Muokkaa ryhmäkokoja": "Muokkaa ryhmäkokoja",
   "Muu": "Muu",
   "Näe poistettavaksi asetetut kyselyt": "Näe poistettavaksi asetetut kyselyt",
   "Näytä": "Näytä",
@@ -198,6 +216,7 @@
   "Palaa listaan": "Palaa listaan",
   "Palaa takaisin": "Palaa takaisin",
   "Palauta kysely": "Palauta kysely",
+  "Palauta kysely?": "Palauta kysely?",
   "Palaute": "Palaute",
   "Palaute lähetetty": "Palaute lähetetty",
   "Palaute suljettu": "Palaute suljettu",
@@ -211,6 +230,7 @@
   "Piilota": "Piilota",
   "poissa": "poissa",
   "Poista": "Poista",
+  "Poista kaikki kyselyn data?": "Poista kaikki kyselyn data?",
   "Poista kysely": "Poista kysely",
   "Poista kysely?": "Poista kysely?",
   "Poista sarake": "Poista sarake",
@@ -231,9 +251,12 @@
   "Rekisteröityneet opiskelijat": "Rekisteröityneet opiskelijat",
   "Roskakori": "Roskakori",
   "Ryhmä": "Ryhmä",
+  "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan": "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan",
   "Ryhmäjako tallennettu": "Ryhmäjako tallennettu",
   "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia",
   "Ryhmäjaon tallennus epäonnistui": "Ryhmäjaon tallennus epäonnistui",
+  "Ryhmäkoot päivitettiin onnistuneesti": "Ryhmäkoot päivitettiin onnistuneesti",
+  "Ryhmäkokojen päivittäminen epäonnistui": "Ryhmäkokojen päivittäminen epäonnistui",
   "Ryhmän maksimikoko": "Ryhmän maksimikoko",
   "Ryhmän minimikoko": "Ryhmän minimikoko",
   "Ryhmän minimikoko vaaditaan": "Ryhmän minimikoko vaaditaan",
@@ -283,6 +306,7 @@
       "": "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen. Kuvausteksti näytetään vastaajalle kyselyn yhteydessä."
     }
   },
+  "Tallenna kaikkien vaiheiden tulokset": "Tallenna kaikkien vaiheiden tulokset",
   "Tallenna muutokset": "Tallenna muutokset",
   "Tallenna tulokset": "Tallenna tulokset",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
@@ -299,6 +323,7 @@
   "Toiminnot": "Toiminnot",
   "tulokset": "tulokset",
   "Tulokset": "Tulokset",
+  "Tulosten tallennus epäonnistui": "Tulosten tallennus epäonnistui",
   "Tuo valinnat CSV-tiedostosta": "Tuo valinnat CSV-tiedostosta",
   "UKK": "UKK",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Vaaditaanko kaikkien ryhmien järjestämistä?",

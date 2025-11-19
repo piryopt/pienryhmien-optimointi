@@ -48,7 +48,7 @@ const App = () => {
             }
           />
           <Route
-            path="/multistage/survey/create"
+            path="/surveys/multistage/create"
             element={
               <RequireAuth>
                 <SurveyMultistageCreate />
@@ -173,7 +173,7 @@ const App = () => {
             }
           />
           <Route
-            path="surveys/:id/edit" 
+            path="surveys/:id/edit"
             element={
               <RequireAuth>
                 <EditSurveyPage />
