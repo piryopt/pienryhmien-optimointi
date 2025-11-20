@@ -22,7 +22,10 @@ const TrashMoreInfo = ({ survey, handleDeleteClick, handleRestoreClick }) => {
         &nbsp;{t("Palauta kysely")}
       </span>
       <br></br>
-      <Link className="surveys_link" to={`/surveys/${survey.id}/answers`}>
+      <Link
+        className="surveys_link"
+        to={`/surveys/${survey.is_multistage ? "multistage/" : ""}${survey.id}/answers`}
+      >
         <img
           src={`${imagesBaseUrl}/manage_search_white_36dp.svg`}
           alt=""
@@ -35,7 +38,7 @@ const TrashMoreInfo = ({ survey, handleDeleteClick, handleRestoreClick }) => {
       <br></br>
       <Link
         className="surveys_link"
-        to={`/surveys/create?fromtemplate=${survey.id}`}
+        to={`/surveys/${survey.is_multistage ? "multistage/" : ""}create?fromtemplate=${survey.id}`}
       >
         <img
           src={`${imagesBaseUrl}/folder_copy_white_36dp.svg`}
