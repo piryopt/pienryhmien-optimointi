@@ -26,6 +26,7 @@ const AnswerSurveyPage = () => {
   const [reason, setReason] = useState("");
   const [existing, setExisting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [choices, setChoices] = useState("");
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ const AnswerSurveyPage = () => {
         let neutralChoices = [...choices];
         let goodChoices = [];
         let badChoices = [];
+        setChoices(choices);
 
         if (data.existing === "1") {
           setExisting(true);
@@ -74,7 +76,7 @@ const AnswerSurveyPage = () => {
       mountedRef.current = false;
     };
   }, [surveyId]);
-
+  console.log("surveydata:", survey);
   const handleDragEnd = (result) => {
     const { source, destination } = result;
     if (!destination) return;
@@ -173,7 +175,11 @@ const AnswerSurveyPage = () => {
         <Header surveyName={survey.name} />
         {!readOnly && (
           <>
-            <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
+            <SurveyInfo
+              survey={survey}
+              additionalInfo={additionalInfo}
+              choices={choices}
+            />
             <p className="note">
               HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt
               ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina
