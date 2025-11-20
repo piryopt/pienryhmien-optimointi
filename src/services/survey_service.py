@@ -661,6 +661,7 @@ class SurveyService:
         Sets survey tables column deleted to false
         RETURNS whether updating was successful
         """
+        self._choices_repository.set_choices_deleted_false(survey_id)
         return self._survey_repository.set_survey_deleted_false(survey_id)
 
     def create_new_multiphase_survey(self, **kwargs):
