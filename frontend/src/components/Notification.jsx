@@ -16,6 +16,7 @@ const Notification = ({ notification, onClose }) => {
 
   const style = {
     bottom: 0,
+    zIndex: 10,
     background: notification.type === "success" ? "green" : "red",
     height: "50px",
     width: "100%",
