@@ -1033,6 +1033,18 @@ def survey_results(survey_id):
                             ranking_list = convert_to_list(ur.ranking)
                             if str(choice_id) in ranking_list:
                                 ordinal = ranking_list.index(str(choice_id)) + 1
+                        rejections = None
+                        if ur and getattr(ur, "rejections", None) is not None:
+                            rejections = ur.rejections
+                        else:
+                            try:
+                                rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
+                            except Exception:
+                                rejections = None
+                        if rejections:
+                            rej_list = convert_to_list(rejections)
+                            if str(choice_id) in rej_list:
+                                ordinal = "Kielletty"
                         if len(res) < 4:
                             while len(res) < 4:
                                 res.append(None)
@@ -1067,10 +1079,24 @@ def survey_results(survey_id):
                 choice_id = res[2][0]
                 ur = user_rankings_service.user_ranking_exists(survey_id, user_id)
                 ordinal = ""
-                if ur and ur.ranking:
+                if ur and getattr(ur, "ranking", None):
                     ranking_list = convert_to_list(ur.ranking)
                     if str(choice_id) in ranking_list:
                         ordinal = ranking_list.index(str(choice_id)) + 1
+                rejections = None
+                if ur and getattr(ur, "rejections", None) is not None:
+                    rejections = ur.rejections
+                else:
+                    try:
+                        rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
+                    except Exception:
+                        rejections = None
+                
+                if rejections:
+                    rej_list = convert_to_list(rejections)
+                    if str(choice_id) in rej_list:
+                        ordinal = "Kielletty"
+
                 if len(res) < 4:
                     while len(res) < 4:
                         res.append(None)

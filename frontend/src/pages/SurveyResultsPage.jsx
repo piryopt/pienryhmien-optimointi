@@ -47,42 +47,58 @@ const SurveyResultsPage = () => {
   }, []);
 
   const handleToExcelFile = async () => {
-    if (!results || results.length === 0) {
-      showNotification(t("Ei tuloksia vietäväksi"), "warning")
-      return
-    }
-    
-    // info key sanitization
-    const safeInfoKeys = Array.isArray(infoKeys) ? infoKeys.filter(k => k && k.info_key) : []
-
-    const groupData = results.map((res) => {
-      const name = res?.[0]?.[1] ?? ""
-      const email = res?.[1] ?? ""
-      const groupName = res?.[2]?.[1] ?? ""
-      // fallback for choice ordinal
-      const choiceIndex = (res?.[3] ?? res?.[2]?.[2] ?? "") || ""
-
-      const additional = Object.fromEntries(
-        safeInfoKeys
-          .map((pair, index) => [pair.info_key, (additionalInfos?.[res?.[2]?.[0]] || [])[index]])
-          .filter(([key, value]) => key && value !== undefined && value !== null && value !== "")
-      )
-
-      return {
-        [t("Nimi")]: name,
-        [t("Sähköposti")]: email,
-        [t("Ryhmä")]: groupName,
-        [t("Monesko valinta")]: choiceIndex,
-        ...additional
+    try {
+      if (!results || results.length === 0) {
+        showNotification(t("Ei tuloksia vietäväksi"), "warning")
+        return
       }
-    })
-    const { utils, writeFile } = await import("xlsx");
-    const { json_to_sheet, book_new, book_append_sheet } = utils;
-    const ws = json_to_sheet(groupData);
-    const wb = book_new();
-    book_append_sheet(wb, ws, t("Tulokset"));
-    writeFile(wb, `${t("tulokset")}.xlsx`);
-  };
+
+      // info key sanitization
+      const safeInfoKeys = Array.isArray(infoKeys) ? infoKeys.filter(k => k && k.info_key) : []
+      const additionalInfosPerSurvey = additionalInfos || {}
+
+      const groupData = []
+      results.forEach((res) => {
+        try {
+          const name = res?.[0]?.[1] ?? ""
+          const email = res?.[1] ?? ""
+          const groupName = res?.[2]?.[1] ?? ""
+          let choiceIndex = res?.[3] ?? res?.[2]?.[2] ?? ""
+          if (choiceIndex === null || choiceIndex === undefined) choiceIndex = ""
+
+          const additional = Object.fromEntries(
+            safeInfoKeys
+              .map((pair, index) => [pair.info_key, (additionalInfosPerSurvey?.[res?.[2]?.[0]] || [])[index]])
+              .filter(([key, value]) => key && value !== undefined && value !== null && value !== "")
+          )
+
+          groupData.push({
+            [t("Nimi")]: name,
+            [t("Sähköposti")]: email,
+            [t("Ryhmä")]: groupName,
+            [t("Monesko valinta")]: choiceIndex,
+            ...additional
+          })
+        } catch (rowErr) {
+          groupData.push({ [t("Virheellinen rivi")]: t("Tieto puuttuu tai on rikkoutunut") })
+        }
+      })
+
+      if (groupData.length === 0) {
+        groupData.push({ [t("Info")]: t("Kaikki rivit olivat virheellisiä") })
+      }
+
+      const { utils, writeFile } = await import("xlsx")
+      const { json_to_sheet, book_new, book_append_sheet } = utils
+      const ws = json_to_sheet(groupData)
+      const wb = book_new()
+      book_append_sheet(wb, ws, t("Tulokset"))
+      writeFile(wb, `${t("tulokset")}.xlsx`)
+    } catch (err) {
+      showNotification(t("Tulosten vienti epäonnistui"), "error")
+      console.error("Excel write error", err)
+    }
+  }
 
   const handleSaveResults = () => {
     try {

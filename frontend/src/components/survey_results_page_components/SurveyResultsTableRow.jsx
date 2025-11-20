@@ -38,7 +38,7 @@ const SurveyResultsTableRow = ({ result, surveyId, currStage }) => {
         if (idx !== -1) {
           ord = idx + 1
         } else if (RejectionIds.indexOf(allocatedChoiceId) !== -1) {
-          ord = t("Hylätty")
+          ord = t("Kielletty")
         } else {
           ord = t("Ei järjestetty")
         }
@@ -78,7 +78,7 @@ const SurveyResultsTableRow = ({ result, surveyId, currStage }) => {
 
   const rankingStyle = {
     color:
-      result[3] === "Hylätty"
+      result[3] === "Kielletty"
         ? "red"
         : result[3] === "Ei järjestetty"
           ? "yellow"
