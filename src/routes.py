@@ -392,6 +392,7 @@ def api_survey(survey_id):
             )
 
     choices = list(survey_all_info.values())
+    choices_not_shuffled = list(survey_all_info.values())
 
     closed = survey_service.check_if_survey_closed(survey_id)
     user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
@@ -399,7 +400,6 @@ def api_survey(survey_id):
         user_rankings = user_survey_ranking.ranking
         rejections = user_survey_ranking.rejections
         reason = user_survey_ranking.reason
-
         return jsonify(
             {
                 "survey": {
@@ -422,7 +422,6 @@ def api_survey(survey_id):
         )
 
     shuffle(choices)
-
     return jsonify(
         {
             "survey": {
@@ -437,6 +436,7 @@ def api_survey(survey_id):
             },
             "additional_info": additional_info,
             "choices": choices,
+            "choices_not_shuffled": choices_not_shuffled,
             "existing": "0",
         }
     )
@@ -905,6 +905,74 @@ def post_group_sizes(survey_id):
         response["msg"] = gettext("Tallennus epäonnistui.")
 
     return jsonify(response)
+
+
+@bp.route("/api/surveys/<string:survey_id>/group_sizes", methods=["GET"])
+def api_group_sizes(survey_id):
+    """
+    Get group sizes data in a survey
+    Args:
+        survey_id (int): id of the survey
+    """
+    if not check_if_owner(survey_id):
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    try:
+        survey = survey_service.get_survey_as_dict(survey_id)
+        (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
+        available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
+
+        choices = []
+        for choice in survey.get("choices", []):
+            choices.append({
+                "id": choice.get("id"),
+                "name": choice.get("name"),
+                "max_spaces": choice.get("max_spaces"),
+                "popularity": choice_popularities.get(choice.get("id"), 0)
+            })
+        
+        return jsonify({
+            "survey": {
+                "surveyname": survey.get("surveyname"),
+                "id": survey_id
+            },
+            "choices": choices,
+            "survey_answers_amount": survey_answers_amount,
+            "available_spaces": available_spaces,
+            "popularities": choice_popularities
+        })
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Failed to fetch group sizes data"}), 500
+
+
+@bp.route("/api/surveys/<string:survey_id>/group_sizes", methods=["POST"])
+def api_post_group_sizes(survey_id):
+    """
+    Post method for editing group sizes in the survey
+    Args:
+        survey_id (int): id of the survey
+    """
+    if not check_if_owner(survey_id):
+        return jsonify({"status": "0", "msg": "Unauthorized"}), 403
+
+    data = request.get_json()
+    if not data or "choices" not in data:
+        return jsonify({"status": "0", "msg": "Invalid payload"}), 400
+
+    try:
+        db_response = survey_service.update_survey_group_sizes(survey_id, data["choices"])
+        response = {}
+        if db_response[0] is True:
+            response["status"] = "1"
+            response["msg"] = gettext("Tallennus onnistui. Päivitä sivu nähdäksesi tilanne.")
+        else:
+            response["status"] = "0"
+            response["msg"] = gettext("Tallennus epäonnistui.")
+        return jsonify(response)
+    except Exception as e:
+        print(e)
+        return jsonify({"status": "0", "msg": "Internal server error"}), 500
 
 
 @bp.route("/api/surveys/<string:survey_id>/answers", methods=["GET"])

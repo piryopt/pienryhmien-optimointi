@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import surveyService from "../../services/surveys";
 import { useSurveyDialog } from "../../context/SurveyDialogContext";
 import SurveyDateOfClosing from "../create_survey_page_components/SurveyDateOfClosing";
+import GroupSizesEditDialog from "./GroupSizesEditDialog";
 import { FormProvider, useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { buildCreateSurveySchema } from "../../utils/validations/createSurveyValidations";
@@ -18,7 +19,7 @@ const AnswersButtons = ({
 }) => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
-  const { openDialog } = useSurveyDialog();
+  const { openDialog, closeDialog } = useSurveyDialog();
   const navigate = useNavigate();
 
   const schema = buildCreateSurveySchema(t);
@@ -84,7 +85,25 @@ const AnswersButtons = ({
       );
       return;
     } else if (answers.length > surveyData.availableSpaces) {
-      navigate(`/surveys/${surveyId}/group_sizes`);
+      openDialog(
+        t("Muokkaa ryhmäkokoja"),
+        null,
+        null,
+        null,
+        <GroupSizesEditDialog
+          surveyId={surveyId}
+          onClose={() => closeDialog()}
+          onSuccess={() => {
+            if (multistage) {
+              navigate(`/surveys/multistage/${surveyId}/results`);
+            } else {
+              navigate(`/surveys/${surveyId}/results`);
+            }
+          }}
+          hideModalFooter={true}
+        />
+      );
+      return;
     }
     if (multistage) {
       navigate(`/surveys/multistage/${surveyId}/results`);

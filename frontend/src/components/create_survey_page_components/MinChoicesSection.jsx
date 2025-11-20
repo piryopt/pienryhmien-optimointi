@@ -2,10 +2,14 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const MinChoicesSection = () => {
-  const { register, watch } = useFormContext();
+  const {
+    register,
+    watch,
+    formState: { errors }
+  } = useFormContext();
   const { t } = useTranslation();
 
-  const setting = watch("minChoicesSetting");
+  const setting = watch("minChoicesSetting", "all");
 
   return (
     <section>
@@ -24,7 +28,6 @@ const MinChoicesSection = () => {
           value="all"
         />
         <label htmlFor="min-choices-all">{t("Kyllä")}</label>
-
         <input
           type="radio"
           id="min-choices-custom"
@@ -42,10 +45,13 @@ const MinChoicesSection = () => {
           <input
             type="number"
             id="minchoices"
-            className="form-control"
-            {...register("minchoices")}
-            min={0}
+            className={`form-control ${errors.minchoices ? "is-invalid" : ""}`}
+            {...register("minchoices", { valueAsNumber: true })}
+            min={1}
           />
+          {errors.minchoices && (
+            <p className="invalid-feedback">{errors.minchoices.message}</p>
+          )}
         </div>
       )}
     </section>

@@ -2,6 +2,7 @@ FROM node:20 AS builder
 WORKDIR /app/frontend
 
 ARG VITE_STAGE=production
+
 ENV VITE_STAGE=${VITE_STAGE}
 
 COPY frontend/package*.json ./
@@ -26,6 +27,8 @@ COPY . .
 
 COPY --from=builder /app/frontend/dist /usr/src/app/src/static/react
 
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+ENV FLASK_APP=src
+
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "src:app"]
 
 EXPOSE 5000/tcp
