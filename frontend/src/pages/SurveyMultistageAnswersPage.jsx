@@ -117,6 +117,9 @@ const SurveyMultistageAnswersPage = () => {
           surveyId={surveyId}
           setSurveyAnswersAmount={setAnswersAmount}
           stage={currStage}
+          stages={stages}
+          allAnswers={surveyAnswers}
+          setAllAnswers={setSurveyAnswers}
         />
       )}
     </div>

@@ -51,6 +51,12 @@ const SurveyAnswersTable = (props) => {
           props.setAnswers(updatedAnswers);
           props.setFilteredAnswers(updatedFilteredAnswers);
           props.setSurveyAnswersAmount((prev) => prev - 1);
+          if (props.allAnswers) {
+            const updatedAllAnswers = props.allAnswers.filter(
+              (answer, i) => answer[props.stages[i]].email === email
+            );
+            props.setAllAnswers(updatedAllAnswers);
+          }
           showNotification(t("Vastaus poistettu"), "success");
         } catch (err) {
           showNotification(t("Vastauksen poistaminen epäonnistui"), "error");

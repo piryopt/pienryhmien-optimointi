@@ -49,13 +49,13 @@ const CreateSurveyPage = () => {
       // radio setting defaults
       minChoicesSetting: "all",
       denyChoicesSetting: "hide",
-      allowedDeniedChoices: 0,
+      allowedDeniedChoices: 1,
       allowSearchVisibility: false
     },
     mode: "onBlur"
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, setError, setFocus } = methods;
 
   useEffect(() => {
     if (!templateId) return;
@@ -73,7 +73,7 @@ const CreateSurveyPage = () => {
         methods.setValue("minChoicesSetting", minCount > 1 ? "custom" : "all");
         methods.setValue("minchoices", minCount);
 
-        const deniedCount = data.survey.denied_allowed_choices ?? 0;
+        const deniedCount = data.survey.denied_allowed_choices ?? 1;
         methods.setValue(
           "denyChoicesSetting",
           deniedCount > 0 ? "show" : "hide"
@@ -112,6 +112,7 @@ const CreateSurveyPage = () => {
 
         nextRowId.current = choices.length;
         setRows(choices);
+        setChoiceErrors(choices.map(() => ({})));
       } catch (error) {
         console.error("Failed to load survey template:", error);
       }
@@ -207,6 +208,7 @@ const CreateSurveyPage = () => {
         const merged = updateTableFromCSV(headers, dataRows, existingTable);
         setColumns(merged.columns);
         setRows(merged.rows);
+        setChoiceErrors(merged.rows.map(() => ({})));
         nextRowId.current = merged.nextRowId;
       } catch (err) {
         console.error("CSV import failed", err);
@@ -216,14 +218,24 @@ const CreateSurveyPage = () => {
   );
 
   const onSubmit = async (data) => {
+    const choicesEntry = setChoices();
+    const dataForValidation = {
+      ...data,
+      choices: choicesEntry,
+      minchoices:
+        data.minChoicesSetting === "all"
+          ? choicesEntry.length
+          : data.minchoices,
+      allowedDeniedChoices:
+        data.denyChoicesSetting === "hide" ? 0 : data.allowedDeniedChoices
+    };
     try {
-      await schema.validate(
-        { ...data, choices: setChoices() },
-        { abortEarly: false }
-      );
+      await schema.validate(dataForValidation, { abortEarly: false });
       setChoiceErrors([]);
     } catch (validationError) {
       const perRowErrors = rows.map(() => ({}));
+      const errorPaths = [];
+
       if (
         validationError &&
         validationError.inner &&
@@ -237,22 +249,70 @@ const CreateSurveyPage = () => {
             const field = m[2];
             perRowErrors[idx] = perRowErrors[idx] || {};
             perRowErrors[idx][field] = perRowErrors[idx][field] || err.message;
+            errorPaths.push(`choices[${idx}].${field}`);
+          } else {
+            setError(err.path, {
+              type: err.type || "manual",
+              message: err.message
+            });
+            errorPaths.push(err.path);
           }
         });
       }
+
       setChoiceErrors(perRowErrors);
+
+      // focus + scroll to first error field (setFocus preferred)
+      if (errorPaths.length > 0) {
+        const firstPath = errorPaths[0];
+        try {
+          if (typeof setFocus === "function") {
+            // RHF setFocus accepts field name in dot notation
+            setFocus(firstPath);
+          } else {
+            throw new Error("no setFocus");
+          }
+        } catch (e) {
+          // fallback: try to find element by name or id and scroll+focus it
+          const nameSelector = `[name="${firstPath}"]`;
+          let element = document.querySelector(nameSelector);
+          if (!element && firstPath.startsWith("choices[")) {
+            const fallbackId = firstPath
+              .replace(/\[/g, "-")
+              .replace(/\]/g, "")
+              .replace(/\./g, "-");
+            element = document.getElementById(fallbackId);
+          }
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+            if (typeof element.focus === "function") {
+              element.focus();
+            }
+          } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        }
+      }
+
       return;
     }
 
     const csrfToken = await csrfService.fetchCsrfToken();
+
+    const finalMinchoices =
+      data.minChoicesSetting === "all" ? choicesEntry.length : data.minchoices;
+
+    const finalAllowedDenied =
+      data.denyChoicesSetting === "hide" ? 0 : data.allowedDeniedChoices;
+
     const payload = {
       surveyGroupname: data.groupname,
       surveyInformation: data.surveyInformation || "",
       choices: setChoices() || [],
-      minchoices: data.minchoices ?? 1,
+      minchoices: finalMinchoices,
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
-      allowedDeniedChoices: data.allowedDeniedChoices || 0,
+      allowedDeniedChoices: finalAllowedDenied,
       allowSearchVisibility: !!data.allowSearchVisibility
     };
 
@@ -296,7 +356,6 @@ const CreateSurveyPage = () => {
         showNotification(msg, "error");
         return;
       }
-
       showNotification(json.msg || t("Kysely luotu onnistuneesti"), "success");
     } catch (err) {
       showNotification(
@@ -305,7 +364,6 @@ const CreateSurveyPage = () => {
       );
     }
   };
-
   return (
     <div>
       <Header />

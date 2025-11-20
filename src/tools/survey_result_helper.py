@@ -83,10 +83,12 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     survey_answers_amount = len(user_rankings)
     dropped_groups_id = []
 
-    output_data, unranked_or_rejected = run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id)
+    output_data, unranked_or_rejected, original_students_dict = run_hungarian(
+        survey_id, survey_answers_amount, groups_dict, students_dict, dropped_groups_id
+    )
     additional_infos, cinfos = get_additional_infos(survey_choices)
 
-    happiness_sum, happiness_results, valid_count = get_happiness_data(output_data, students_dict)
+    happiness_sum, happiness_results, valid_count = get_happiness_data(output_data, original_students_dict)
     happiness_avg = (happiness_sum / valid_count) if valid_count > 0 else 1
 
     infos = survey_choices_service.get_choice_additional_infos(survey_choices[0].id)
@@ -184,7 +186,7 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
         unranked_or_rejected = students_in_unranked_or_rejected_groups(output_data, students_dict_original)
 
         if not violation:
-            return output_data, unranked_or_rejected
+            return output_data, unranked_or_rejected, students_dict_original
 
 
 def get_seats(groups_dict):
@@ -399,7 +401,7 @@ def get_happiness_data(output_data, survey_id):
         else:
             happiness_results[happiness] = happiness_results.get(happiness, 0) + 1
         
-        return happiness_sum, happiness_results, valid_count
+    return happiness_sum, happiness_results, valid_count
 
 
 def get_happiness(survey_choice_id, user_ranking, user_rejections):

@@ -18,8 +18,6 @@ const MultistageSurveyResultsPage = () => {
   const [loading, setLoading] = useState(true)
 
   const [droppedGroups, setDroppedGroups] = useState([])
-  const [infoKeys, setInfoKeys] = useState([])
-  const [additionalInfos, setAdditionalInfos] = useState([])
   const [happinessData, setHappinessData] = useState([])
   const [resultsSaved, setResultsSaved] = useState(false)
   const [results, setResults] = useState([])
@@ -67,40 +65,89 @@ const MultistageSurveyResultsPage = () => {
     if (active) {
       setResults(active.results || [])
       setDroppedGroups(active.droppedGroups || [])
-      setInfoKeys(active.infos || [])
-      setAdditionalInfos(active.additionalInfoKeys || {})
       setHappinessData(active.happinessData || [])
       setResultsSaved(Boolean(active.resultsSaved))
     } else {
       setResults([])
       setDroppedGroups([])
-      setInfoKeys([])
-      setAdditionalInfos([])
       setHappinessData([])
       setResultsSaved(false)
     }
   }, [currStage, surveyResultsData])
 
   const exportToExcel = () => {
-    if (!results || results.length === 0) {
+    if (!surveyResultsData || !Array.isArray(surveyResultsData.stageResults) || surveyResultsData.stageResults.length === 0) {
       showNotification(t("Ei tuloksia vietäväksi"), "warning")
       return
     }
 
-    const groupData = results.map((res) => ({
-      [t("Nimi")]: res[0][1],
-      [t("Sähköposti")]: res[1],
-      [t("Ryhmä")]: res[2][1],
-      [t("Monesko valinta")]: res[3],
-      ...Object.fromEntries(
-        infoKeys.map((pair, index) => [pair.info_key, (additionalInfos[res[2][0]] || [])[index]])
-      )
-    }))
-
-    const ws = XLSX.utils.json_to_sheet(groupData)
     const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, t("Tulokset"))
-    XLSX.writeFile(wb, `${t("tulokset")}_${currStage || "vaihe"}.xlsx`)
+
+    surveyResultsData.stageResults.forEach((stageObj, idx) => {
+      try {
+        const resultsArr = Array.isArray(stageObj.results) ? stageObj.results : []
+        const rawName = stageObj.stage || `${t("vaihe")}_${idx + 1}`
+        const sheetName = String(rawName).substring(0, 31)
+
+        // Fallback: if no results, create an info sheet
+        if (!resultsArr || resultsArr.length === 0) {
+          const infoRow = { [t("Info")]: t("Ei tuloksia tälle vaiheelle") }
+          const ws = XLSX.utils.json_to_sheet([infoRow])
+          XLSX.utils.book_append_sheet(wb, ws, sheetName)
+          return
+        }
+
+        const safeInfoKeys = Array.isArray(stageObj.infos) ? stageObj.infos.filter(k => k && k.info_key) : []
+        const additionalInfosPerStage = stageObj.additionalInfoKeys || {}
+
+        const groupData = []
+        resultsArr.forEach((res, rowIndex) => {
+          try {
+            const name = res?.[0]?.[1] ?? ""
+            const email = res?.[1] ?? ""
+            const groupName = res?.[2]?.[1] ?? ""
+            let choiceIndex = res?.[3] ?? res?.[2]?.[2] ?? ""
+            if (choiceIndex === null || choiceIndex === undefined) choiceIndex = ""
+            const additional = Object.fromEntries(
+              safeInfoKeys
+                .map((pair, index) => [pair.info_key, (additionalInfosPerStage?.[res?.[2]?.[0]] || [])[index]])
+                .filter(([key, value]) => key && value !== undefined && value !== null && value !== "")
+            )
+
+            groupData.push({
+              [t("Nimi")]: name,
+              [t("Sähköposti")]: email,
+              [t("Ryhmä")]: groupName,
+              [t("Monesko valinta")]: choiceIndex,
+              ...additional
+            })
+          } catch (rowErr) {
+            groupData.push({ [t("Virheellinen rivi")]: t("Tieto puuttuu tai on rikkoutunut") })
+          }
+        })
+
+        if (groupData.length === 0) {
+          groupData.push({ [t("Info")]: t("Kaikki rivit olivat virheellisiä") })
+        }
+
+        const ws = XLSX.utils.json_to_sheet(groupData)
+        XLSX.utils.book_append_sheet(wb, ws, sheetName)
+      } catch (stageErr) {
+        const errRow = { [t("Virhe")]: t("Tämän vaiheen vienti epäonnistui") }
+        const rawName = stageObj?.stage || `${t("vaihe")}_${idx + 1}`
+        const sheetName = String(rawName).substring(0, 31)
+        const ws = XLSX.utils.json_to_sheet([errRow])
+        XLSX.utils.book_append_sheet(wb, ws, sheetName)
+      }
+    })
+
+    try {
+      const filename = `${t("tulokset")}_${id || "multivaiheinen"}.xlsx`
+      XLSX.writeFile(wb, filename)
+    } catch (writeErr) {
+      showNotification(t("Tulosten vienti epäonnistui"), "error")
+      console.error("Excel write error", writeErr)
+    }
   }
 
   const saveAllResults = () => {

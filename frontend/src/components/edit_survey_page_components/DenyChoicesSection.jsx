@@ -1,16 +1,8 @@
-import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-
-const DenyChoicesSection = () => {
-  const {
-    register,
-    watch,
-    formState: { errors }
-  } = useFormContext();
+const DenyChoicesSection = ({ survey }) => {
   const { t } = useTranslation();
-
-  const setting = watch("denyChoicesSetting", "hide");
-
+  const a_d_c = survey.denied_allowed_choices;
+  const denyAllowed = a_d_c !== 0;
   return (
     <section>
       <div>
@@ -19,21 +11,23 @@ const DenyChoicesSection = () => {
         <input
           type="radio"
           id="deny-choices-yes"
-          {...register("denyChoicesSetting")}
-          value="show"
+          checked={denyAllowed}
+          readOnly
+          disabled={!denyAllowed}
         />
         <label htmlFor="deny-choices-yes">{t("Kyllä")}</label>
 
         <input
           type="radio"
           id="deny-choices-no"
-          {...register("denyChoicesSetting")}
-          value="hide"
+          checked={!denyAllowed}
+          readOnly
+          disabled={denyAllowed}
         />
         <label htmlFor="deny-choices-no">{t("Ei")}</label>
       </div>
 
-      {setting === "show" && (
+      {a_d_c !== 0 && (
         <div className="deny-choices-section">
           <label htmlFor="allowedDeniedChoices" className="input-label">
             {t("Sallittu kiellettyjen ryhmien määrä")}
@@ -41,15 +35,10 @@ const DenyChoicesSection = () => {
           <input
             type="number"
             id="allowedDeniedChoices"
-            className={`form-control ${errors.allowedDeniedChoices ? "is-invalid" : ""}`}
-            {...register("allowedDeniedChoices", { valueAsNumber: true })}
-            min={1}
+            className="form-control"
+            value={a_d_c}
+            readOnly
           />
-          {errors.allowedDeniedChoices && (
-            <p className="invalid-feedback">
-              {errors.allowedDeniedChoices.message}
-            </p>
-          )}
         </div>
       )}
     </section>

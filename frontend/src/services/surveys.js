@@ -291,10 +291,10 @@ const getSurveyResultsData = async (surveyId) => {
     const response = await axios.get(`${baseUrl}/surveys/${surveyId}/results`, {
       withCredentials: true
     });
-    const data = response.data || {}
+    const data = response.data || {};
 
     if (!Array.isArray(data.stageResults)) {
-      data.stageResults = []
+      data.stageResults = [];
     }
 
     return data;
@@ -369,18 +369,20 @@ const getMultiStageSurvey = async (surveyId) => {
 };
 
 const getMultistageSurveyResultsData = async (surveyId) => {
-  return axios.get(`${baseUrl}/surveys/multistage/${surveyId}/results`).then(res => res.data)
-}
+  return axios
+    .get(`${baseUrl}/surveys/multistage/${surveyId}/results`)
+    .then((res) => res.data);
+};
 
 const getMultistageStages = async (surveyId) => {
-  return axios.get(`${baseUrl}/surveys/multistage/${surveyId}`).then(res => {
-    return res.data?.stages ?? res.data
-  })
-}
+  return axios.get(`${baseUrl}/surveys/multistage/${surveyId}`).then((res) => {
+    return res.data?.stages ?? res.data;
+  });
+};
 
 const saveMultistageResults = async (surveyId) => {
   try {
-    const csrfToken = await csrfService.fetchCsrfToken()
+    const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.post(
       `${baseUrl}/surveys/multistage/${surveyId}/results`,
       null,
@@ -428,9 +430,9 @@ const updateGroupSizes = async (surveyId, choices) => {
     )
     return response.data
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 export default {
   getActiveSurveys: getActiveSurveys,

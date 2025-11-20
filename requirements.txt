@@ -19,4 +19,4 @@ pytest-playwright
 Flask-Babel
 pandas
 flask-cors
-
+gunicorn
