@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 from playwright.sync_api import Page, expect
-from .playwright_tools import login
+from .playwright_tools import login, mouse_dnd
 
 TEST_FILES_PATH = Path(__file__).parent / ".." / "test_files"
 
@@ -127,7 +127,6 @@ def test_survey_more_info_works(setup_db, page: Page, create_survey_with_csv_fil
     """
     Test that if a survey choice has additional info, it is displayed when clicked and hidden when clicked again
     """
-    login(page, "robottiTeacher", "repeat")
     page.get_by_role("link", name="Näytä vanhat kyselyt").click()
     page.get_by_role("link", name="Päiväkoti valinta").click()
     page.get_by_text("Päiväkoti Floora").click()
@@ -142,31 +141,21 @@ def test_answer_survey(setup_db, page: Page, create_survey_with_csv_file):
     """
     Test that a user can answer a created survey
     """
-    login(page, "robottiTeacher", "eat")
     page.get_by_role("link", name="Näytä vanhat kyselyt").click()
     page.get_by_role("link", name="Päiväkoti valinta").click()
     expect(page.get_by_text("Päiväkoti valinta").first).to_be_visible()
-    expect(page.get_by_text("Päiväkoti Toivo").first).to_be_visible()
     expect(page.get_by_text("Päiväkoti Floora").first).to_be_visible()
+    expect(page.get_by_text("Päiväkoti Toivo").first).to_be_visible()
     expect(page.get_by_text("Päiväkoti Kotikallio").first).to_be_visible()
     expect(page.get_by_text("Päiväkoti Nalli").first).to_be_visible()
     page.get_by_test_id("submit-button").click()
-    #expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_visible()
-    page.get_by_text("Päiväkoti Toivo").drag_to(page.locator("[data-rfd-droppable-id='good']"))
+    expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_visible()
 
-    
-    
-    
-    
+    mouse_dnd(page, "Päiväkoti Toivo", '[data-rfd-droppable-id="good"]')
+    mouse_dnd(page, "Päiväkoti Floora", '[data-rfd-droppable-id="good"]')
+    mouse_dnd(page, "Päiväkoti Kotikallio", '[data-rfd-droppable-id="good"]')
+    mouse_dnd(page, "Päiväkoti Nalli", '[data-rfd-droppable-id="good"]')
 
-
-    #page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Floora").drag_to(page.locator("[data-rfd-droppable-id='good']"))
-    #page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Kotikallio").drag_to(page.locator("[data-rfd-droppable-id='good']"))
-    #page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Nalli").drag_to(page.locator("[data-rfd-droppable-id='good']"))
-    #page.wait_for_timeout(500)
     page.get_by_test_id("submit-button").click()
     expect(page.get_by_text("Tallennus onnistui.")).to_be_visible()
 
@@ -177,7 +166,6 @@ def test_delete_survey_answer(setup_db, page: Page, create_survey_with_csv_file)
     """
 
     # First we answer survey
-    login(page, "robottiTeacher", "eat")
     page.get_by_role("link", name="Näytä vanhat kyselyt").click()
     page.get_by_role("link", name="Päiväkoti valinta").click()
     expect(page.get_by_text("Päiväkoti valinta").first).to_be_visible()
@@ -185,30 +173,22 @@ def test_delete_survey_answer(setup_db, page: Page, create_survey_with_csv_file)
     expect(page.get_by_text("Päiväkoti Floora").first).to_be_visible()
     expect(page.get_by_text("Päiväkoti Kotikallio").first).to_be_visible()
     expect(page.get_by_text("Päiväkoti Nalli").first).to_be_visible()
-    page.locator("#submitDoesntExistButton").click()
+    page.get_by_test_id("submit-button").click()
     expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_visible()
-    expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_hidden()
-    page.get_by_text("Päiväkoti Toivo").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
-    page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Floora").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
-    page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Kotikallio").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
-    page.wait_for_timeout(500)
-    page.get_by_text("Päiväkoti Nalli").drag_to(page.locator("xpath=//*[@id='sortable-good']"))
-    page.wait_for_timeout(500)
-    page.locator("#submitDoesntExistButton").click()
+
+    mouse_dnd(page, "Päiväkoti Floora", '[data-rfd-droppable-id="good"]')
+    mouse_dnd(page, "Päiväkoti Toivo", '[data-rfd-droppable-id="good"]')
+    mouse_dnd(page, "Päiväkoti Kotikallio", '[data-rfd-droppable-id="good"]')
+    mouse_dnd(page, "Päiväkoti Nalli", '[data-rfd-droppable-id="good"]')
+
+    page.get_by_test_id("submit-button").click()
     expect(page.get_by_text("Tallennus onnistui.")).to_be_visible()
 
-    page.locator("#dropdownMenuButton1").click()
-    page.get_by_text("Kirjaudu ulos").click()
+    page.go_back()
 
     # Delete answers
-    login(page, "robottiTeacher", "sleep")
-    page.get_by_role("link", name="Näytä vanhat kyselyt").click()
     page.get_by_role("link", name="Päiväkoti valinta").click()
-    page.locator("#deleteSubmission").click()
-    expect(page.get_by_text("Oletko varma?")).to_be_visible()
-    page.locator("#confirmDelete").click()
+    page.get_by_test_id("delete-button").click()
     expect(page.get_by_text("Valinnat poistettu")).to_be_visible()
 
 

@@ -43,5 +43,4 @@ def create_survey_with_csv_file(page: Page):
     page.get_by_test_id("create-button").click()
     expect(page.get_by_text("Uusi kysely luotu!")).to_be_visible()
 
-    page.locator("#dropdownMenuButton1").click()
-    page.get_by_text("Kirjaudu ulos").click()
+    page.go_back()
