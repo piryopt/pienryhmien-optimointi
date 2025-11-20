@@ -55,7 +55,11 @@ def _run_hungarian_for(d, survey_choices):
     groups_dict = srh.convert_choices_groups(survey_choices)
     students_dict = srh.convert_users_students(user_rankings)
     dropped_groups_id = []
-    output, unranked_and_rejected = srh.run_hungarian(d["survey_id"], len(user_rankings), groups_dict, students_dict, dropped_groups_id)
+
+    # students_dict_original not used
+    output, unranked_and_rejected, students_dict_original = srh.run_hungarian(
+        d["survey_id"], len(user_rankings), groups_dict, students_dict, dropped_groups_id
+    )
     return output, unranked_and_rejected, dropped_groups_id
 
 
