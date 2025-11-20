@@ -10,7 +10,8 @@ CREATE TABLE users (
 CREATE TABLE surveys ( -- singular survey
 	id VARCHAR(10) UNIQUE PRIMARY KEY,
 	surveyname TEXT,
-	min_choices INTEGER,
+	min_choices INTEGER DEFAULT NULL,
+	min_choices_per_stage JSONB DEFAULT NULL,
 	closed BOOLEAN,
 	results_saved BOOLEAN,
 	survey_description TEXT,

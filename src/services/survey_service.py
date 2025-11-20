@@ -410,7 +410,7 @@ class SurveyService:
         survey_name = survey_dict.get("surveyGroupname", "")
         description = survey_dict.get("surveyInformation", "")
         survey_choices = survey_dict.get("choices", [])
-        minchoices = survey_dict.get("minchoices", 0)
+        min_choices_map = survey_dict.get("minChoicesPerStage", {}) if multistage else survey_dict.get("minchoices", 0)
         date_end = survey_dict.get("enddate", "")
         time_end = survey_dict.get("endtime", "")
         allowed_denied_choices = survey_dict.get("allowedDeniedChoices", 0)
@@ -447,11 +447,22 @@ class SurveyService:
 
         # Min choices is a number
         if not edited:
-            if not isinstance(minchoices, int):
-                msg = "The minimum number of prioritized groups should be a number!"
-                return {"success": False, "message": msg}
+            if multistage == False:
+                if not isinstance(min_choices_map, int):
+                    msg = "The minimum number of prioritized groups should be a number!"
+                    return {"success": False, "message": msg}
 
-        if not multistage and (minchoices > len(survey_choices)):
+            else:
+                if not isinstance(min_choices_map, dict):
+                    msg = "Per-stage minimum choices must be provided as an object/dictionary!"
+                    return {"success": False, "message": msg}
+
+                for v in min_choices_map.values():
+                    if not isinstance(v, int):
+                        msg = "Each per-stage minimum number of prioritized groups should be a number!"
+                        return {"success": False, "message": msg}
+
+        if not multistage and (min_choices_map > len(survey_choices)):
             msg = "There are less choices than the minimum amount of prioritized groups!"
             return {"success": False, "message": msg}
 
@@ -461,14 +472,23 @@ class SurveyService:
                 if not result["success"]:
                     return result
         elif multistage:
-            stage_names = list(map(lambda s: s["name"], survey_dict["stages"]))
+            stage_names = [s.get("name", "") for s in survey_dict["stages"]]
             if len(stage_names) != len(set(stage_names)):
                 return {"success": False, "message": "Name of every stage must be unique within a survey"}
             for stage in survey_dict["stages"]:
-                if len(stage["choices"]) < minchoices:
+                stage_name = (stage.get("name") or "").strip()
+                if stage_name == "":
+                    return {"success": False, "message": "Every stage must have a non-empty name"}
+                if stage_name not in min_choices_map:
+                    print("stage name:",stage_name)
+                    print("min choices per stages:",min_choices_map)
+                    return {"success": False, "message": f"Missing minchoices entry for stage '{stage_name}'"}
+                required_min = min_choices_map.get(stage_name, 0)
+                if len(stage.get("choices", [])) < required_min:
                     msg = "There are less choices than the minimum amount of prioritized groups!"
                     return {"success": False, "message": msg}
-                for choice in stage["choices"]:
+                
+                for choice in stage.get("choices", []):
                     result = self.validate_survey_choice(choice)
                     if not result["success"]:
                         return result
@@ -666,6 +686,7 @@ class SurveyService:
     def create_new_multiphase_survey(self, **kwargs):
         if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):
             return None
+    
         survey_id = self._survey_repository.create_new_survey(**kwargs)
         return survey_id
 
