@@ -204,9 +204,11 @@ const MultiStageAnswerPage = () => {
           return;
         }
 
-        if (stage.bad.length > 0 && reasons[stage.name].length < 10) {
+        if (stage.bad.length > 0 && (reasons[stage.name]?.length ?? 0) < 10) {
           showNotification(
-            t("Perustelun tulee olla vähintään 10 merkkiä pitkä"),
+            t(
+              `Vaiheen ${stage.name} hylkäyksien perustelun tulee olla vähintään 10 merkkiä pitkä`
+            ),
             "error"
           );
           return;
