@@ -238,6 +238,7 @@ def multistage_survey_create():
             allow_search_visibility=data["allowSearchVisibility"],
             allow_absences=data["allowAbsences"],
             user_id=user_id,
+            min_choices_per_stage=data.get("minChoicesPerStage"),
         )
         if not survey_id:
             msg = "There already exists a survey with the same name! Close it or change the name!"
@@ -412,6 +413,7 @@ def api_survey(survey_id):
                 "goodChoices": convert_to_list(user_rankings),
                 "badChoices": convert_to_list(rejections),
                 "reason": reason,
+                "choices_not_shuffled": choices_not_shuffled,
             }
         )
 
@@ -461,7 +463,7 @@ def api_multistage_survey_choices(survey_id):
                     "name": survey.surveyname,
                     "deadline": format_datestring(survey.time_end),
                     "description": survey.survey_description,
-                    "min_choices": survey.min_choices,
+                    "min_choices_per_stage": survey.min_choices_per_stage,
                     "search_visibility": survey.allow_search_visibility,
                     "denied_allowed_choices": survey.allowed_denied_choices,
                     "allow_absences": survey.allow_absences,
@@ -480,7 +482,7 @@ def api_multistage_survey_choices(survey_id):
                 "name": survey.surveyname,
                 "deadline": format_datestring(survey.time_end),
                 "description": survey.survey_description,
-                "min_choices": survey.min_choices,
+                "min_choices_per_stage": survey.min_choices_per_stage,
                 "search_visibility": survey.allow_search_visibility,
                 "denied_allowed_choices": survey.allowed_denied_choices,
                 "allow_absences": survey.allow_absences,
