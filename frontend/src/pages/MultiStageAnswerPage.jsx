@@ -241,6 +241,10 @@ const MultiStageAnswerPage = () => {
     }
   };
 
+  const indexOfCurrStage = () => {
+    return stages.findIndex((stage) => stage.name === activeStage);
+  };
+
   if (loading)
     return <div className="text-center mt-5">{t("Ladataan kyselyä...")}</div>;
   if (!activeStage) return <div>{t("Ei vaiheita ladattuna")}</div>;
@@ -277,7 +281,15 @@ const MultiStageAnswerPage = () => {
           />
           {survey.name}
         </h2>
-        <SurveyInfo survey={survey} additionalInfo={additionalInfo} />
+        <SurveyInfo
+          survey={survey}
+          additionalInfo={additionalInfo}
+          choices={[
+            ...stages[indexOfCurrStage()].neutral,
+            ...stages[indexOfCurrStage()].bad,
+            ...stages[indexOfCurrStage()].good
+          ]}
+        />
       </div>
 
       <DragDropContext onDragEnd={handleDragEnd}>
