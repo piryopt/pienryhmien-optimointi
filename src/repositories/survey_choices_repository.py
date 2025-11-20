@@ -240,7 +240,7 @@ class SurveyChoicesRepository:
                     ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
                 LEFT JOIN choice_infos ci
                     ON ci.choice_id = sc.id
-                WHERE sc.survey_id = :survey_id
+                WHERE sc.survey_id = :survey_id AND sc.deleted = FALSE
                 ORDER BY ss.order_number, ss.stage NULLS LAST, sc.id;
             """
             result = db.session.execute(text(sql), {"survey_id": survey_id}).mappings().all()
