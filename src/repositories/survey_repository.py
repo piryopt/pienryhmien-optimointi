@@ -162,7 +162,8 @@ class SurveyRepository:
         """
         try:
             sql = """
-            SELECT s.id, s.surveyname, s.time_end, COUNT(us.user_id) AS response_count,
+            SELECT s.id, s.surveyname, s.time_end, 
+            COUNT(DISTINCT CASE WHEN us.deleted = FALSE THEN us.user_id END) AS response_count,
             EXISTS (
                 SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id
             ) AS is_multistage FROM surveys s
