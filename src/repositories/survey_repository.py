@@ -1,3 +1,4 @@
+import json
 from sqlalchemy import text
 from src import db
 from src.tools.db_tools import generate_unique_id
@@ -228,6 +229,7 @@ class SurveyRepository:
         allow_search_visibility=True,
         allow_absences=False,
         user_id=None,
+        min_choices_per_stage=None
     ):
         """
         Creates a new survey, updates just surveys table
@@ -239,8 +241,8 @@ class SurveyRepository:
                 id = generate_unique_id(10)
 
             sql = (
-                "INSERT INTO surveys (id, surveyname, min_choices, closed, results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility, allow_absences, deleted)"
-                " VALUES (:id, :surveyname, :min_choices, :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, :a_a, False) RETURNING id"
+                "INSERT INTO surveys (id, surveyname, min_choices, min_choices_per_stage, closed, results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility, allow_absences, deleted)"
+                " VALUES (:id, :surveyname, :min_choices, :min_choices_per_stage, :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, :a_a, False) RETURNING id"
             )
 
             result = db.session.execute(
@@ -249,6 +251,7 @@ class SurveyRepository:
                     "id": id,
                     "surveyname": surveyname,
                     "min_choices": min_choices,
+                    "min_choices_per_stage": json.dumps(min_choices_per_stage) if min_choices_per_stage is not None else None,
                     "closed": False,
                     "saved": False,
                     "desc": description,

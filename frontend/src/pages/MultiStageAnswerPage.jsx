@@ -37,6 +37,7 @@ const MultiStageAnswerPage = () => {
     (async () => {
       try {
         const data = await surveyService.getMultiStageSurvey(surveyId);
+        console.log("multistage survey data:", data);
         if (!mountedRef.current) return;
 
         const stagesData = [];
@@ -174,10 +175,15 @@ const MultiStageAnswerPage = () => {
       for (const stage of stages) {
         if (stage.notAvailable) continue;
 
-        if (stage.good.length < survey.min_choices) {
+        if (
+          survey.denied_allowed_choices === 0
+            ? stage.good.length < survey.min_choices_per_stage[stage.name]
+            : stage.good.length + stage.bad.length <
+              survey.min_choices_per_stage[stage.name]
+        ) {
           showNotification(
             t(
-              `Sijoita vähintään ${survey.min_choices} ryhmää jokaisesta vaiheesta vihreään laatikkoon${
+              `Sijoita vähintään ${survey.min_choices_per_stage[stage.name]} ryhmää jokaisesta vaiheesta vihreään tai punaiseen laatikkoon${
                 survey.allow_absences
                   ? " tai merkitse itsesi poissaolevaksi vaiheesta"
                   : ""
@@ -198,9 +204,11 @@ const MultiStageAnswerPage = () => {
           return;
         }
 
-        if (stage.bad.length > 0 && reasons[stage.name].length < 10) {
+        if (stage.bad.length > 0 && (reasons[stage.name]?.length ?? 0) < 10) {
           showNotification(
-            t("Perustelun tulee olla vähintään 10 merkkiä pitkä"),
+            t(
+              `Vaiheen ${stage.name} hylkäyksien perustelun tulee olla vähintään 10 merkkiä pitkä`
+            ),
             "error"
           );
           return;
@@ -244,7 +252,7 @@ const MultiStageAnswerPage = () => {
   const indexOfCurrStage = () => {
     return stages.findIndex((stage) => stage.name === activeStage);
   };
-
+  const currentStage = stages[indexOfCurrStage()] || null;
   if (loading)
     return <div className="text-center mt-5">{t("Ladataan kyselyä...")}</div>;
   if (!activeStage) return <div>{t("Ei vaiheita ladattuna")}</div>;
@@ -289,6 +297,7 @@ const MultiStageAnswerPage = () => {
             ...stages[indexOfCurrStage()].bad,
             ...stages[indexOfCurrStage()].good
           ]}
+          stageName={currentStage?.name || null}
         />
       </div>
 

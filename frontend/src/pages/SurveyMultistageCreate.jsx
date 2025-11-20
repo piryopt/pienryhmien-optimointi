@@ -37,6 +37,28 @@ const SurveyMultistageCreate = () => {
   const stageNextId = useRef(1);
   const [newStageName, setNewStageName] = useState("");
   const [tables, setTables] = useState([]);
+
+  const methods = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      groupname: "",
+      enddate: null,
+      endtime: "00:00",
+      choices: [],
+      minchoices: 1,
+      surveyInformation: "",
+      minChoicesSetting: "all",
+      denyChoicesSetting: "hide",
+      allowedDeniedChoices: 1,
+      allowSearchVisibility: false,
+      allowAbsences: false,
+      limitParticipation: false
+    },
+    mode: "onBlur"
+  });
+
+  const { handleSubmit, setError, setFocus } = methods;
+
   useEffect(() => {
     if (!templateId) return;
 
@@ -298,25 +320,6 @@ const SurveyMultistageCreate = () => {
       )
     );
 
-  const methods = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      groupname: "",
-      enddate: null,
-      endtime: "00:00",
-      choices: [],
-      minchoices: 1,
-      surveyInformation: "",
-      minChoicesSetting: "all",
-      denyChoicesSetting: "hide",
-      allowedDeniedChoices: 0,
-      allowSearchVisibility: false,
-      allowAbsences: false,
-      limitParticipation: false
-    },
-    mode: "onBlur"
-  });
-
   const importCsvToTable = async (tableId, file) => {
     if (!file) return;
     const parsed = await parseCsvFile(file);
@@ -379,8 +382,6 @@ const SurveyMultistageCreate = () => {
     });
   };
 
-  const { handleSubmit } = methods;
-
   const onSubmit = async (data) => {
     const csrfToken = await csrfService.fetchCsrfToken();
 
@@ -407,17 +408,27 @@ const SurveyMultistageCreate = () => {
         return choice;
       })
     }));
+
     let anyValidationFailed = false;
+    let firstTopErrorPath = null;
     await Promise.all(
       stages.map(async (stage) => {
+        const stage_min_choices =
+          data.minChoicesSetting === "all"
+            ? stage.choices.length
+            : data.minchoices;
+        const a_d_c =
+          data.denyChoicesSetting === "hide" ? 0 : data.allowedDeniedChoices;
         try {
           await schema.validate(
             {
               groupname: data.groupname,
               enddate: data.enddate,
               endtime: data.endtime,
-              minchoices: data.minchoices,
+              minchoices: stage_min_choices,
+              allowedDeniedChoices: a_d_c,
               minChoicesSetting: data.minChoicesSetting,
+              denyChoicesSetting: data.denyChoicesSetting,
               choices: stage.choices
             },
             { abortEarly: false }
@@ -429,6 +440,7 @@ const SurveyMultistageCreate = () => {
         } catch (validationError) {
           anyValidationFailed = true;
           const perRowErrors = (stage.choices || []).map(() => ({}));
+          const stagePrefix = stage.name ? `${stage.name}: ` : "";
           if (
             validationError &&
             validationError.inner &&
@@ -443,6 +455,17 @@ const SurveyMultistageCreate = () => {
                 perRowErrors[idx] = perRowErrors[idx] || {};
                 perRowErrors[idx][field] =
                   perRowErrors[idx][field] || err.message;
+              } else {
+                // top-level field (e.g. "minchoices" or "allowedDeniedChoices")
+                try {
+                  setError(err.path, {
+                    type: err.type || "manual",
+                    message: stagePrefix + err.message
+                  });
+                  if (!firstTopErrorPath) firstTopErrorPath = err.path;
+                } catch (e) {
+                  // ignore setError failures
+                }
               }
             });
           }
@@ -454,24 +477,39 @@ const SurveyMultistageCreate = () => {
         }
       })
     );
-
+    if (firstTopErrorPath) {
+      try {
+        setFocus(firstTopErrorPath);
+      } catch {}
+    }
     if (anyValidationFailed) {
       return;
     }
 
-    const allowedDenied = data.allowedDeniedChoices;
+    const allowedDenied =
+      data.denyChoicesSetting === "hide" ? 1 : data.allowedDeniedChoices;
 
+    const minChoicesPerStage = {};
+    stages.forEach((s) => {
+      const key = s.name;
+      minChoicesPerStage[key] =
+        data.minChoicesSetting === "all"
+          ? s.choices?.length
+          : (data.minchoices ?? 1);
+    });
     const payload = {
       surveyGroupname: data.groupname,
       surveyInformation: data.surveyInformation || "",
       stages,
-      minchoices: data.minchoices ?? 1,
+      minchoices: null,
+      minChoicesPerStage: minChoicesPerStage,
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
       allowedDeniedChoices: allowedDenied,
       allowSearchVisibility: data.allowSearchVisibility || false,
       allowAbsences: data.allowAbsences || false
     };
+    console.log("Payload:", payload);
 
     const extractMessage = (json, res) => {
       if (!json) return res?.statusText || t("Kyselyn luonti epäonnistui");

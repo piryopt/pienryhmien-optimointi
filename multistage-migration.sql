@@ -63,3 +63,7 @@ ALTER TABLE final_group
 ALTER TABLE surveys
     ADD COLUMN deleted_at TIMESTAMP DEFAULT NULL;
 
+ALTER TABLE surveys ADD COLUMN min_choices_per_stage JSONB DEFAULT NULL;
+
+ALTER TABLE surveys
+ALTER COLUMN min_choices SET DEFAULT NULL;

@@ -1,7 +1,10 @@
-const SurveyInfo = ({ survey, additionalInfo, choices }) => {
-  const min_choices = Number(survey.min_choices);
+const SurveyInfo = ({ survey, additionalInfo, choices, stageName = null }) => {
+  const min_choices = !stageName
+    ? Number(survey.min_choices)
+    : Number(survey.min_choices_per_stage[stageName]);
   const a_d_c = Number(survey.denied_allowed_choices);
   const total = choices.length;
+  console.log("current stage choices:", choices);
 
   const isAll = total > 0 && min_choices === total;
   const denySome = a_d_c > 0;

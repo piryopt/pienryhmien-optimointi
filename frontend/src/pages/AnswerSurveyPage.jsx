@@ -76,7 +76,7 @@ const AnswerSurveyPage = () => {
       mountedRef.current = false;
     };
   }, [surveyId]);
-  console.log("surveydata:", survey);
+
   const handleDragEnd = (result) => {
     const { source, destination } = result;
     if (!destination) return;
