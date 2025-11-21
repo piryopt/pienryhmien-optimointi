@@ -19,10 +19,16 @@ def mouse_dnd(page, source: str, target: str):
         source: text on the draggable item
         target: dnd id of the drop area
     """
-
     # Items located by text, answer boxes located by dnd id
-    s = page.get_by_text(source).bounding_box()
-    t = page.locator(target).bounding_box()
+
+    s = page.get_by_text(source)
+    t = page.locator(target)
+
+    s.scroll_into_view_if_needed()
+    t.scroll_into_view_if_needed()
+
+    s = s.bounding_box()
+    t = t.bounding_box()
 
     # Hold mouse on location
     page.mouse.move(s["x"] + s["width"] / 2, s["y"] + s["height"] / 2)
