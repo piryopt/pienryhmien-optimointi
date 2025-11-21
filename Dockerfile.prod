@@ -29,6 +29,8 @@ COPY --from=builder /app/frontend/dist /usr/src/app/src/static/react
 
 ENV FLASK_APP=src
 
+ENV FLASK_ENV=production
+
 CMD ["gunicorn", "-b", "0.0.0.0:5000", "src:app"]
 
 EXPOSE 5000/tcp

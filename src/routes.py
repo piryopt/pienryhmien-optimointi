@@ -99,9 +99,9 @@ def frontpage() -> str:
     """
     Returns the rendered skeleton template
     """
-    # in production serve the built react app (copied to static/react folder by dockerfile)
+    # in production or testing serve the built react app (copied to static/react folder by dockerfile)
     flask_env = current_app.config.get("ENV", "development")
-    if flask_env in ["production", "testing"]:
+    if flask_env in ["production", "testing"] or not current_app.debug:
         # user_id = session.get("user_id", 0)
         # if user_id == 0:
         #     return redirect("/api/auth/login") this needs to be implemented (dont know how sso works here)
