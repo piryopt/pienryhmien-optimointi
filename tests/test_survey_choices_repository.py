@@ -127,6 +127,17 @@ def test_get_all_additional_infos_not_hidden(setup_env):
     assert info[0][0] == "Osoite"
     assert info[0][1] == "Kakkakuja 4"
 
+def test_remove_empty_choices(setup_env):
+    """
+    Tests if empty choices are removed
+    """
+    d = setup_env
+    scr.create_new_survey_choice(d["survey_id"], "Tyhjä", 2, 0, False)
+    choice_list = scr.find_survey_choices(d["survey_id"])
+    assert len(choice_list) == 3
+    scr.remove_empty_choices(d["survey_id"])
+    updated_choice_list = scr.find_survey_choices(d["survey_id"])
+    assert len(updated_choice_list) == 2
 
 def test_exceptions():
     """

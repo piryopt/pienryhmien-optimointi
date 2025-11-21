@@ -133,6 +133,8 @@ class SurveyService:
             return False
         if self._survey_repository.survey_name_exists(survey.surveyname, user_id):
             return False
+        if not self._choices_repository.remove_empty_choices(survey_id):
+            return False
         return self._survey_repository.open_survey(survey_id, new_end_time)
 
     def get_active_surveys(self, user_id):
@@ -428,12 +430,10 @@ class SurveyService:
             return {"success": False, "message": msg}
 
         if not isinstance(allowed_denied_choices, int):
-            print(allowed_denied_choices)
             msg = "Survey denied choices must be an integer"
             return {"success": False, "message": msg}
 
         if not isinstance(allow_search_visibility, bool):
-            print(type(allow_search_visibility), allow_search_visibility)
             msg = "Survey search visibility must be a boolean"
             return {"success": False, "message": msg}
 
@@ -447,7 +447,7 @@ class SurveyService:
 
         # Min choices is a number
         if not edited:
-            if multistage == False:
+            if not multistage:
                 if not isinstance(min_choices_map, int):
                     msg = "The minimum number of prioritized groups should be a number!"
                     return {"success": False, "message": msg}
