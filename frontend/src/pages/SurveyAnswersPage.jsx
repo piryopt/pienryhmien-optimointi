@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
@@ -15,17 +15,23 @@ const SurveyAnswersPage = () => {
   const [surveyClosed, setSurveyClosed] = useState(false);
   const [searchEmail, setSearchEmail] = useState("");
   const [loading, setLoading] = useState(true);
+  const [answersSaved, setAnswersSaved] = useState(false);
 
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const mountedRef = useRef(false);
 
   useEffect(() => {
+    mountedRef.current = true;
     const getSurveyAnswersData = async () => {
       try {
         const responseData = await surveyService.getSurveyAnswersData(id);
-        if (responseData.answersSaved)
+        if (responseData.answersSaved) {
+          setAnswersSaved(true);
           navigate(`/surveys/${id}/results`, { replace: true });
+          return;
+        }
         setAnswers(responseData.surveyAnswers);
         setFilteredAnswers(responseData.surveyAnswers);
         setSurveyData(responseData);
@@ -34,13 +40,13 @@ const SurveyAnswersPage = () => {
       } catch (err) {
         console.error("Error loading survey data", err);
       } finally {
-        // fixes bug where the default content flashes before navigation
-        setTimeout(() => {
-          setLoading(false);
-        }, 1);
+        if (mountedRef.current) setLoading(false);
       }
     };
     getSurveyAnswersData();
+    return () => {
+      mountedRef.current = false;
+    };
   }, [surveyClosed]);
 
   const handleFilterChange = (event) => {
@@ -52,7 +58,10 @@ const SurveyAnswersPage = () => {
     setFilteredAnswers(updatedAnswers);
   };
 
-  if (loading) return null;
+  if (answersSaved) return null;
+
+  if (loading)
+    return <div className="text-center mt-5">{t("Ladataan...")}</div>;
 
   return (
     <div>

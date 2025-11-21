@@ -49,28 +49,37 @@ const SurveyResultsPage = () => {
   const handleToExcelFile = async () => {
     try {
       if (!results || results.length === 0) {
-        showNotification(t("Ei tuloksia vietäväksi"), "warning")
-        return
+        showNotification(t("Ei tuloksia vietäväksi"), "warning");
+        return;
       }
 
       // info key sanitization
-      const safeInfoKeys = Array.isArray(infoKeys) ? infoKeys.filter(k => k && k.info_key) : []
-      const additionalInfosPerSurvey = additionalInfos || {}
+      const safeInfoKeys = Array.isArray(infoKeys)
+        ? infoKeys.filter((k) => k && k.info_key)
+        : [];
+      const additionalInfosPerSurvey = additionalInfos || {};
 
-      const groupData = []
+      const groupData = [];
       results.forEach((res) => {
         try {
-          const name = res?.[0]?.[1] ?? ""
-          const email = res?.[1] ?? ""
-          const groupName = res?.[2]?.[1] ?? ""
-          let choiceIndex = res?.[3] ?? res?.[2]?.[2] ?? ""
-          if (choiceIndex === null || choiceIndex === undefined) choiceIndex = ""
+          const name = res?.[0]?.[1] ?? "";
+          const email = res?.[1] ?? "";
+          const groupName = res?.[2]?.[1] ?? "";
+          let choiceIndex = res?.[3] ?? res?.[2]?.[2] ?? "";
+          if (choiceIndex === null || choiceIndex === undefined)
+            choiceIndex = "";
 
           const additional = Object.fromEntries(
             safeInfoKeys
-              .map((pair, index) => [pair.info_key, (additionalInfosPerSurvey?.[res?.[2]?.[0]] || [])[index]])
-              .filter(([key, value]) => key && value !== undefined && value !== null && value !== "")
-          )
+              .map((pair, index) => [
+                pair.info_key,
+                (additionalInfosPerSurvey?.[res?.[2]?.[0]] || [])[index]
+              ])
+              .filter(
+                ([key, value]) =>
+                  key && value !== undefined && value !== null && value !== ""
+              )
+          );
 
           groupData.push({
             [t("Nimi")]: name,
@@ -78,27 +87,29 @@ const SurveyResultsPage = () => {
             [t("Ryhmä")]: groupName,
             [t("Monesko valinta")]: choiceIndex,
             ...additional
-          })
+          });
         } catch (rowErr) {
-          groupData.push({ [t("Virheellinen rivi")]: t("Tieto puuttuu tai on rikkoutunut") })
+          groupData.push({
+            [t("Virheellinen rivi")]: t("Tieto puuttuu tai on rikkoutunut")
+          });
         }
-      })
+      });
 
       if (groupData.length === 0) {
-        groupData.push({ [t("Info")]: t("Kaikki rivit olivat virheellisiä") })
+        groupData.push({ [t("Info")]: t("Kaikki rivit olivat virheellisiä") });
       }
 
-      const { utils, writeFile } = await import("xlsx")
-      const { json_to_sheet, book_new, book_append_sheet } = utils
-      const ws = json_to_sheet(groupData)
-      const wb = book_new()
-      book_append_sheet(wb, ws, t("Tulokset"))
-      writeFile(wb, `${t("tulokset")}.xlsx`)
+      const { utils, writeFile } = await import("xlsx");
+      const { json_to_sheet, book_new, book_append_sheet } = utils;
+      const ws = json_to_sheet(groupData);
+      const wb = book_new();
+      book_append_sheet(wb, ws, t("Tulokset"));
+      writeFile(wb, `${t("tulokset")}.xlsx`);
     } catch (err) {
-      showNotification(t("Tulosten vienti epäonnistui"), "error")
-      console.error("Excel write error", err)
+      showNotification(t("Tulosten vienti epäonnistui"), "error");
+      console.error("Excel write error", err);
     }
-  }
+  };
 
   const handleSaveResults = () => {
     try {
@@ -111,7 +122,8 @@ const SurveyResultsPage = () => {
     }
   };
 
-  if (loading) return null;
+  if (loading)
+    return <div className="text-center mt-5">{t("Ladataan...")}</div>;
 
   return (
     <div>
