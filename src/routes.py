@@ -542,14 +542,14 @@ def api_survey_submit(survey_id):
     min_choices = int(raw_data["minChoices"])
     allowed_denied_choices = int(raw_data["maxBadChoices"])
 
-    if len(good_ids) < min_choices:
+    if (len(good_ids) + len(bad_ids)) < min_choices:
         msg = gettext("Tallennus epäonnistui. Valitse vähintään ")
         response = {"status": "0", "msg": msg + str(min_choices)}
         return jsonify(response)
 
     if len(bad_ids) > allowed_denied_choices:
         msg = gettext("Tallennus epäonnistui. Voit hylätä enintään ")
-        response = {"status": "0", "msg": msg}
+        response = {"status": "0", "msg": msg + str(allowed_denied_choices)}
         return jsonify(response)
 
     ranking = convert_to_string(good_ids)

@@ -428,12 +428,10 @@ class SurveyService:
             return {"success": False, "message": msg}
 
         if not isinstance(allowed_denied_choices, int):
-            print(allowed_denied_choices)
             msg = "Survey denied choices must be an integer"
             return {"success": False, "message": msg}
 
         if not isinstance(allow_search_visibility, bool):
-            print(type(allow_search_visibility), allow_search_visibility)
             msg = "Survey search visibility must be a boolean"
             return {"success": False, "message": msg}
 
@@ -447,7 +445,7 @@ class SurveyService:
 
         # Min choices is a number
         if not edited:
-            if multistage == False:
+            if not multistage:
                 if not isinstance(min_choices_map, int):
                     msg = "The minimum number of prioritized groups should be a number!"
                     return {"success": False, "message": msg}
