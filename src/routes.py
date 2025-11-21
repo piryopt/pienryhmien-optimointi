@@ -100,7 +100,7 @@ def frontpage() -> str:
     Returns the rendered skeleton template
     """
     # in production serve the built react app (copied to static/react folder by dockerfile)
-    flask_env = current_app.config.get("ENV", "develpment")
+    flask_env = current_app.config.get("ENV", "development")
     if flask_env in ["production", "testing"]:
         # user_id = session.get("user_id", 0)
         # if user_id == 0:
