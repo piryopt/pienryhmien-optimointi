@@ -150,6 +150,7 @@ def test_answer_survey(setup_db, page: Page, create_survey_with_csv_file):
     expect(page.get_by_text("Päiväkoti Nalli").first).to_be_visible()
     page.get_by_test_id("submit-button").click()
     expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_visible()
+    expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_hidden(timeout=55000)
 
     mouse_dnd(page, "Päiväkoti Toivo", '[data-rfd-droppable-id="good"]')
     mouse_dnd(page, "Päiväkoti Floora", '[data-rfd-droppable-id="good"]')
@@ -175,6 +176,7 @@ def test_delete_survey_answer(setup_db, page: Page, create_survey_with_csv_file)
     expect(page.get_by_text("Päiväkoti Nalli").first).to_be_visible()
     page.get_by_test_id("submit-button").click()
     expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_visible()
+    expect(page.get_by_text("Tallennus epäonnistui. Valitse vähintään 4")).to_be_hidden(timeout=55000)
 
     mouse_dnd(page, "Päiväkoti Floora", '[data-rfd-droppable-id="good"]')
     mouse_dnd(page, "Päiväkoti Toivo", '[data-rfd-droppable-id="good"]')
