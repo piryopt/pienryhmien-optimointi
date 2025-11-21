@@ -133,6 +133,8 @@ class SurveyService:
             return False
         if self._survey_repository.survey_name_exists(survey.surveyname, user_id):
             return False
+        if not self._choices_repository.remove_empty_choices(survey_id):
+            return False
         return self._survey_repository.open_survey(survey_id, new_end_time)
 
     def get_active_surveys(self, user_id):

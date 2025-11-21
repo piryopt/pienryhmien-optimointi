@@ -307,6 +307,20 @@ class SurveyChoicesRepository:
         except Exception as e:
             print(e)
             return None
-
+        
+    def remove_empty_choices(self, survey_id):
+        """
+        Removes empty groups with the name "Tyhjä" created during assignment
+        """
+        try:
+            sql = """
+                DELETE FROM survey_choices WHERE survey_id = :survey_id AND name = 'Tyhjä'
+            """
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
 survey_choices_repository = SurveyChoicesRepository()
