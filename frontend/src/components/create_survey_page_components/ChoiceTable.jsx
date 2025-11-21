@@ -38,7 +38,11 @@ const ChoiceTable = ({
       <table className="table table-dark table-striped table-hover choice-table-main">
         <thead>
           <tr id="column-delete-btns">
-            {limitParticipationVisible ? <td colSpan="5"></td> : <td colSpan="4"></td>}
+            {limitParticipationVisible ? (
+              <td colSpan="5"></td>
+            ) : (
+              <td colSpan="4"></td>
+            )}
             {columns.map(({ name }) => (
               <th key={name} className="variable-header">
                 <div
@@ -151,6 +155,7 @@ const ChoiceTable = ({
         <button
           className="new-row-input btn btn-secondary"
           type="button"
+          data-testid="add-choice-button"
           onClick={addRow}
         >
           + {t("Lisää vaihtoehto")}
