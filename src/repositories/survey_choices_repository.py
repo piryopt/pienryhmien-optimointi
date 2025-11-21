@@ -153,6 +153,23 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
+    def set_choices_deleted_false(self, survey_id):
+        """
+        SQL code for setting survey choices deleted field false
+
+        args:
+            survey_id: The id of the survey
+        """
+        try:
+            sql = "UPDATE survey_choices SET deleted = FALSE WHERE survey_id=:survey_id"
+            db.session.execute(text(sql), {"survey_id": survey_id})
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
+
     def create_new_multistage_choice(self, **kwargs):
         """
         Creates a new multistage survey choice
@@ -223,7 +240,7 @@ class SurveyChoicesRepository:
                     ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
                 LEFT JOIN choice_infos ci
                     ON ci.choice_id = sc.id
-                WHERE sc.survey_id = :survey_id
+                WHERE sc.survey_id = :survey_id AND sc.deleted = FALSE
                 ORDER BY ss.order_number, ss.stage NULLS LAST, sc.id;
             """
             result = db.session.execute(text(sql), {"survey_id": survey_id}).mappings().all()
