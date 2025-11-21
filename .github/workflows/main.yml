@@ -81,6 +81,17 @@ jobs:
           mkdir -p src/static/react
           cp -R frontend/dist/* src/static/react/
 
+      - name: Run Flask server and log output
+        run: |
+          flask run --debug > flask_output.log 2>&1 &
+          for i in {1..30}; do
+            curl -sSf http://localhost:5000/ && break
+            echo "Waiting for server..."
+            sleep 1
+          done
+        env:
+          FLASK_ENV: testing
+
       - name: Run Playwright tests
         run: |
           python -m playwright install --with-deps chromium
