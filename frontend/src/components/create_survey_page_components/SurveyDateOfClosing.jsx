@@ -38,7 +38,9 @@ const SurveyDateOfClosing = ({ placeholderDate, placeholderTime }) => {
                 onChange={(date) => field.onChange(date)}
                 dateFormat="dd.MM.yyyy"
                 minDate={new Date()}
-                placeholderText={placeholderDate ? placeholderDate : t("pp.kk.vvvv")}
+                placeholderText={
+                  placeholderDate ? placeholderDate : t("pp.kk.vvvv")
+                }
                 autoComplete="off"
               />
             )}

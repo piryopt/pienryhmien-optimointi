@@ -6,11 +6,11 @@ const ButtonRow = ({ handleSubmit, handleDelete, existing }) => {
   
   return (
     <div className="submit-row">
-      <Button variant="success" className="submit-btn" onClick={handleSubmit}>
+      <Button variant="success" className="submit-btn"   data-testid="submit-button" onClick={handleSubmit}>
         {t('Lähetä valinnat')}
       </Button>
       { existing &&
-        <Button variant="danger" className="submit-btn" onClick={handleDelete} style={{marginLeft: '15px'}}>
+        <Button variant="danger" className="submit-btn" data-testid="delete-button"onClick={handleDelete} style={{marginLeft: '15px'}}>
           {t('Poista valinnat')}
         </Button>
       }

@@ -48,6 +48,7 @@ def create_app(test_config=None):
         app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
     env = os.getenv("FLASK_ENV", "development")
+    app.config["ENV"] = env
 
     if test_config is None:
         if env == "testing":

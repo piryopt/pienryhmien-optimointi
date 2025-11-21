@@ -38,6 +38,8 @@ const Login = () => {
           <label>{t("Käyttäjätunnus")}:</label>
           <input
             type="text"
+            name="username"
+            data-testid="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -47,11 +49,15 @@ const Login = () => {
           <label>{t("Salasana")}:</label>
           <input
             type="password"
+            name="password"
+            data-testid="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">{t("Kirjaudu sisään")}</button>
+        <button type="submit" data-testid="login-button">
+          {t("Kirjaudu sisään")}
+        </button>
       </form>
     </div>
   );

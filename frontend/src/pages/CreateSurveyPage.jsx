@@ -389,8 +389,15 @@ const CreateSurveyPage = () => {
             choiceErrors={choiceErrors}
           />
           <br />
-          <button type="submit" className="btn btn-success create-survey-button">
-             <img className="create-survey-icon" src={`${imagesBaseUrl}/note_add_white_36dp.svg`} />
+          <button
+            type="submit"
+            className="btn btn-success create-survey-button"
+            data-testid="create-button"
+          >
+            <img
+              className="create-survey-icon"
+              src={`${imagesBaseUrl}/note_add_white_36dp.svg`}
+            />
             {t("Luo kysely")}
           </button>
         </form>
