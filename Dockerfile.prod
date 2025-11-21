@@ -27,6 +27,8 @@ COPY . .
 
 COPY --from=builder /app/frontend/dist /usr/src/app/src/static/react
 
+ENV FLASK_ENV=production
+
 ENV FLASK_APP=src
 
 CMD ["gunicorn", "-b", "0.0.0.0:5000", "src:app"]
