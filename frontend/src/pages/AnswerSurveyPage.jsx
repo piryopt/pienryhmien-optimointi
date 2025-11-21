@@ -12,6 +12,7 @@ import GroupList from "../components/survey_answer_page_components/GroupList.jsx
 import ReasonsBox from "../components/survey_answer_page_components/ReasonsBox.jsx";
 import ButtonRow from "../components/survey_answer_page_components/ButtonRow.jsx";
 import "../static/css/answerPage.css";
+import GroupSearch from "../components/GroupSearch.jsx";
 
 const AnswerSurveyPage = () => {
   const { surveyId } = useParams();
@@ -232,15 +233,10 @@ const AnswerSurveyPage = () => {
             </div>
             <div className="right-column">
               {survey?.search_visibility && (
-                <div className="search-container">
-                  <input
-                    id="searchChoices"
-                    type="text"
-                    placeholder="Hae ryhmiä..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
+                <GroupSearch
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                />
               )}
               <GroupList
                 id="neutral"

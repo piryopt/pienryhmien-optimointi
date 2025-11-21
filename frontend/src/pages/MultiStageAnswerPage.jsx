@@ -14,6 +14,7 @@ import "../static/css/answerPage.css";
 import { imagesBaseUrl } from "../utils/constants.js";
 import ClosedMultistageSurveyView from "../components/survey_answer_page_components/ClosedMultistageSurveyView.jsx";
 import ButtonRow from "../components/survey_answer_page_components/ButtonRow.jsx";
+import GroupSearch from "../components/GroupSearch.jsx";
 
 const MultiStageAnswerPage = () => {
   const { surveyId } = useParams();
@@ -391,15 +392,10 @@ const MultiStageAnswerPage = () => {
                       </div>
                       <div className="right-column">
                         {survey?.search_visibility && (
-                          <div className="search-container">
-                            <input
-                              id="searchChoices"
-                              type="text"
-                              placeholder={t("Hae ryhmiä...")}
-                              value={searchTerm}
-                              onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                          </div>
+                          <GroupSearch
+                            searchTerm={searchTerm}
+                            setSearchTerm={setSearchTerm}
+                          />
                         )}
                         <GroupList
                           id={`${stage.id}-neutral`}
