@@ -158,6 +158,12 @@ def test_answer_survey(setup_db, page: Page, create_survey_with_csv_file):
     mouse_dnd(page, "Päiväkoti Kotikallio", '[data-rfd-droppable-id="good"]')
     mouse_dnd(page, "Päiväkoti Nalli", '[data-rfd-droppable-id="good"]')
 
+    # Makes sure that last item has been let go
+    page.wait_for_timeout(1000)
+
+    items = page.locator('[data-rfd-droppable-id="good"] >> [data-rfd-draggable-id]')
+    assert items.count() == 4
+
     page.get_by_test_id("submit-button").click()
     expect(page.get_by_text("Tallennus onnistui.")).to_be_visible()
 
@@ -184,6 +190,12 @@ def test_delete_survey_answer(setup_db, page: Page, create_survey_with_csv_file)
     mouse_dnd(page, "Päiväkoti Toivo", '[data-rfd-droppable-id="good"]')
     mouse_dnd(page, "Päiväkoti Kotikallio", '[data-rfd-droppable-id="good"]')
     mouse_dnd(page, "Päiväkoti Nalli", '[data-rfd-droppable-id="good"]')
+
+    # Makes sure that last item has been let go
+    page.wait_for_timeout(1000)
+
+    items = page.locator('[data-rfd-droppable-id="good"] >> [data-rfd-draggable-id]')
+    assert items.count() == 4
 
     page.get_by_test_id("submit-button").click()
     expect(page.get_by_text("Tallennus onnistui.")).to_be_visible()
