@@ -4,7 +4,8 @@ const HOSTS = {
   development: "http://localhost:5001",
   staging: "https://jakaja-test.it.helsinki.fi",
   production: "https://jakaja.it.helsinki.fi",
-  testing: "http://web-test:5000"
+  testing: "http://web-test:5000",
+  ci: "http://localhost:5000"
 };
 
 const apiHost = HOSTS[STAGE] || HOSTS.development;
