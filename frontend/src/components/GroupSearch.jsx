@@ -6,7 +6,7 @@ const GroupSearch = ({ searchTerm, setSearchTerm }) => {
   const { t } = useTranslation();
 
   return (
-    <InputGroup className="mb-2 group-search-input" style={{ width: "550px" }}>
+    <InputGroup className="mb-2 group-search-input" style={{ width: "250px" }}>
       <Form.Control
         type="text"
         placeholder={t("Hae ryhmiä...")}
