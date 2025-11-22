@@ -920,23 +920,24 @@ def api_group_sizes(survey_id):
 
         choices = []
         for choice in survey.get("choices", []):
-            choices.append({
-                "id": choice.get("id"),
-                "name": choice.get("name"),
-                "max_spaces": choice.get("max_spaces"),
-                "popularity": choice_popularities.get(choice.get("id"), 0)
-            })
+            choices.append(
+                {
+                    "id": choice.get("id"),
+                    "name": choice.get("name"),
+                    "max_spaces": choice.get("max_spaces"),
+                    "popularity": choice_popularities.get(choice.get("id"), 0),
+                }
+            )
 
-        return jsonify({
-            "survey": {
-                "surveyname": survey.get("surveyname"),
-                "id": survey_id
-            },
-            "choices": choices,
-            "survey_answers_amount": survey_answers_amount,
-            "available_spaces": available_spaces,
-            "popularities": choice_popularities
-        })
+        return jsonify(
+            {
+                "survey": {"surveyname": survey.get("surveyname"), "id": survey_id},
+                "choices": choices,
+                "survey_answers_amount": survey_answers_amount,
+                "available_spaces": available_spaces,
+                "popularities": choice_popularities,
+            }
+        )
     except Exception as e:
         print(e)
         return jsonify({"error": "Failed to fetch group sizes data"}), 500
@@ -1081,6 +1082,7 @@ def survey_results(survey_id):
 
         try:
             for stage in output_data:
+                print(stage)
                 results_list = stage.get("results", []) if isinstance(stage, dict) else []
                 stage_id = stage.get("stage") if isinstance(stage, dict) else None
                 for res in results_list:
