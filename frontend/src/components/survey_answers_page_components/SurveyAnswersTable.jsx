@@ -52,9 +52,11 @@ const SurveyAnswersTable = (props) => {
           props.setFilteredAnswers(updatedFilteredAnswers);
           props.setSurveyAnswersAmount((prev) => prev - 1);
           if (props.allAnswers) {
-            const updatedAllAnswers = props.allAnswers.filter(
-              (answer, i) => answer[props.stages[i]].email === email
-            );
+            const updatedAllAnswers = props.allAnswers.map((stage, i) => ({
+              [props.stages[i]]: stage[props.stages[i]].filter(
+                (answer) => answer.email !== email
+              )
+            }));
             props.setAllAnswers(updatedAllAnswers);
           }
           showNotification(t("Vastaus poistettu"), "success");

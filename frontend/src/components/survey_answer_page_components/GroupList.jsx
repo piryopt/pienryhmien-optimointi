@@ -14,7 +14,7 @@ const GroupList = ({
   searchTerm = ""
 }) => {
   const { t } = useTranslation();
-  
+
   const borderColor = multiphase
     ? id.endsWith("good")
       ? "green"
@@ -87,9 +87,38 @@ const GroupList = ({
           className="group-container"
           style={{ border: `2px solid ${borderColor}` }}
         >
-          {renderedItems.map((item, index) => {
+          {(items || []).map((item, index) => {
+            if (!item) return null;
+
             const choice =
               choiceMap.get(String(item.id)) || (item.infos ? item : null);
+
+            const isVisible = (() => {
+              if (!normalizedSearch) return true;
+
+              const name = item.name ? String(item.name).toLowerCase() : "";
+              if (name.includes(normalizedSearch)) return true;
+
+              const c = choice;
+              if (c && Array.isArray(c.infos)) {
+                for (const infoObj of c.infos) {
+                  for (const val of Object.values(infoObj || {})) {
+                    if (
+                      val !== null &&
+                      val !== undefined &&
+                      String(val).toLowerCase().includes(normalizedSearch)
+                    ) {
+                      return true;
+                    }
+                  }
+                }
+              }
+              return false;
+            })();
+
+            if (!isVisible) {
+              return <div key={String(item.id)} style={{ display: "none" }} />;
+            }
 
             return (
               <Draggable
@@ -121,7 +150,9 @@ const GroupList = ({
                         {item.name}
                       </span>
                       {item.mandatory && (
-                        <span className="group-mandatory">{t("Pakollinen")}</span>
+                        <span className="group-mandatory">
+                          {t("Pakollinen")}
+                        </span>
                       )}
                     </h2>
                     <p className="group-slots">
@@ -179,7 +210,9 @@ const GroupList = ({
                             ));
                           })()
                         ) : (
-                          <p className="no-info">{t("Lisätietoa ei saatavilla.")}</p>
+                          <p className="no-info">
+                            {t("Lisätietoa ei saatavilla.")}
+                          </p>
                         )}
                       </div>
                     )}
