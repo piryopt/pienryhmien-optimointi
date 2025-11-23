@@ -31,14 +31,15 @@ class UserRankingsService:
                 - multistage_ranking (bool): Whether this ranking belongs to a multistage survey.
         """
         multistage_ranking = kwargs.get("multistage_ranking", False)
-    
+        ranking_exists = kwargs.get("ranking_exists", False)
+
         if multistage_ranking:
             ranking = self._user_rankings_repository.add_multistage_user_ranking(
-                user_id, survey_id, ranking, rejections, reason, kwargs["stage"], kwargs["not_available"]
+                user_id, survey_id, ranking, rejections, reason, kwargs["stage"], kwargs["not_available"], ranking_exists
             )
         else:
             ranking = self._user_rankings_repository.add_user_ranking(
-                user_id, survey_id, ranking, rejections, reason
+                user_id, survey_id, ranking, rejections, reason, ranking_exists
             )
     
         return ranking
@@ -52,6 +53,13 @@ class UserRankingsService:
             user_id: The id of the user
         """
         return self._user_rankings_repository.get_user_ranking(user_id, survey_id)
+
+    def user_ranking_exists_fast(self, survey_id, user_id):
+        """
+        Check if a user ranking exists for a survey. Returns boolean instead of the ranking.
+        Should be more efficient than user_ranking_exists function
+        """
+        return self._user_rankings_repository.user_ranking_exists(user_id, survey_id)
 
     def get_user_multistage_rankings(self, survey_id, user_id):
         """
@@ -90,7 +98,7 @@ class UserRankingsService:
             survey_id: The id of the survey
             current_user_id: The id of the user
         """
-        ranking = self._user_rankings_repository.get_user_ranking(current_user_id, survey_id)
+        ranking = self._user_rankings_repository.user_ranking_exists(current_user_id, survey_id)
         if not ranking:
             return False
         return self._user_rankings_repository.delete_user_ranking(current_user_id, survey_id)

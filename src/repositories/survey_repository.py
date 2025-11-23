@@ -111,10 +111,13 @@ class SurveyRepository:
         try:
             sql = "UPDATE surveys SET closed = True WHERE id=:survey_id"
             db.session.execute(text(sql), {"survey_id": survey_id})
+            update_statistics_sql = "UPDATE statistics SET active_surveys_count = active_surveys_count - 1 WHERE is_current_row = TRUE"
+            db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            db.session.rollback()
             return False
 
     def open_survey(self, survey_id, new_end_time):
@@ -127,10 +130,13 @@ class SurveyRepository:
         try:
             sql = "UPDATE surveys SET closed = False, time_end = :new_end_time WHERE id=:survey_id"
             db.session.execute(text(sql), {"survey_id": survey_id, "new_end_time": new_end_time})
+            update_statistics_sql = "UPDATE statistics SET active_surveys_count = active_surveys_count + 1 WHERE is_current_row = TRUE"
+            db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            db.session.rollback()
             return False
 
     def get_active_surveys(self, user_id):
@@ -240,11 +246,12 @@ class SurveyRepository:
             while self.get_survey(id):
                 id = generate_unique_id(10)
 
-            sql = (
-                "INSERT INTO surveys (id, surveyname, min_choices, min_choices_per_stage, closed, results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility, allow_absences, deleted)"
-                " VALUES (:id, :surveyname, :min_choices, :min_choices_per_stage, :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, :a_a, False) RETURNING id"
-            )
-
+            sql = """
+                INSERT INTO surveys (id, surveyname, min_choices, min_choices_per_stage, closed,
+                results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility,
+                allow_absences, deleted) VALUES (:id, :surveyname, :min_choices, :min_choices_per_stage, 
+                :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, :a_a, False) RETURNING id
+                """
             result = db.session.execute(
                 text(sql),
                 {
@@ -261,10 +268,17 @@ class SurveyRepository:
                     "a_a": allow_absences,
                 },
             )
+            update_statistics_sql = """
+                UPDATE statistics SET total_created_surveys = total_created_surveys + 1,
+                active_surveys_count = active_surveys_count + 1
+                WHERE is_current_row = TRUE
+            """
+            db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            db.session.rollback()
             return None
 
     def get_survey_description(self, survey_id):

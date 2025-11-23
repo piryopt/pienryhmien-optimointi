@@ -505,15 +505,18 @@ def api_multistage_survey_submit(survey_id):
 
     # no validations, refactoring needs to be done anyway
     for stage in data["stages"]:
-        good_ids = stage["good"]
-        bad_ids = stage["bad"]
+        good_ids = [] if stage["notAvailable"] else stage["good"]
+        bad_ids = [] if stage["notAvailable"] else stage["bad"]
         reason = stage.get("reason", "")
 
         ranking = convert_to_string(good_ids)
         rejections = convert_to_string(bad_ids)
 
+        ranking_exists = user_rankings_service.user_ranking_exists_fast(survey_id, user_id)
+
         succesful_add = user_rankings_service.add_user_ranking(
-            user_id, survey_id, ranking, rejections, reason, stage=stage["stageId"], not_available=stage["notAvailable"], multistage_ranking=True
+            user_id, survey_id, ranking, rejections, reason, stage=stage["stageId"], 
+            not_available=stage["notAvailable"], multistage_ranking=True, ranking_exists=ranking_exists
         )
         if not succesful_add:
             return jsonify({"status": "0", "message": "adding user ranking failed"})
