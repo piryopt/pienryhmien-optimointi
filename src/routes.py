@@ -1082,7 +1082,6 @@ def survey_results(survey_id):
 
         try:
             for stage in output_data:
-                print(stage)
                 results_list = stage.get("results", []) if isinstance(stage, dict) else []
                 stage_id = stage.get("stage") if isinstance(stage, dict) else None
                 for res in results_list:

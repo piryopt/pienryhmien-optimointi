@@ -170,8 +170,8 @@ const MultiStageAnswerPage = () => {
             stageId: s.id,
             notAvailable: true,
             good: [],
-            bad: allIds,
-            neutral: [],
+            bad: [],
+            neutral: allIds,
             reason: reasons[s.id]
           };
         }

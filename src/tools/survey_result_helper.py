@@ -52,10 +52,13 @@ def build_multistage_output(survey_id):
         groups_dict = convert_choices_groups(survey_choices)
         students_dict, absent_students_dict = convert_users_students(multistage_user_rankings[stage.stage])
 
-        stage_output_data = hungarian_results(survey_id, multistage_user_rankings[stage.stage], groups_dict, students_dict, survey_choices)
+        if students_dict == {}:
+            stage_output_data = [[], 0, [], [], [], []]
+        else:
+            stage_output_data = hungarian_results(survey_id, multistage_user_rankings[stage.stage], groups_dict, students_dict, survey_choices)
+
         absent_students_list = absent_students_output(absent_students_dict)
-        results = stage_output_data[0] + absent_students_list
-        print(results)
+        results = stage_output_data[0] + absent_students_list if absent_students_list != [] else stage_output_data[0]
 
         stage_result = {
             "stage": stage.stage,
