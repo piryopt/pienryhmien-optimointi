@@ -192,15 +192,17 @@ const MultistageSurveyResultsPage = () => {
       <h2>{t("Monivaiheisen kyselyn tulokset")}</h2>
 
       <div style={{ marginTop: "0.5em", marginBottom: "1em" }}>
-        <button className="btn btn-outline-primary" onClick={exportToExcel}>
+        <button className="btn btn-outline-primary" style={{ marginTop: "1em", marginBottom: "1em" }} onClick={exportToExcel}>
           {t("Vie tulokset Excel-taulukkoon")}
         </button>
         &nbsp;
+        <div>
         {!resultsSaved && (
           <button className="btn btn-outline-success" onClick={saveAllResults}>
             {t("Tallenna kaikkien vaiheiden tulokset")}
           </button>
         )}
+        </div>
       </div>
 
       <div style={{ marginBottom: "1em" }}>
