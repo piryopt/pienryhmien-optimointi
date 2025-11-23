@@ -159,14 +159,31 @@ const MultiStageAnswerPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const payload = stages.map((s) => ({
-        stageId: s.id,
-        notAvailable: s.notAvailable,
-        good: s.good.map((c) => c.id),
-        bad: s.bad.map((c) => c.id),
-        neutral: s.neutral.map((c) => c.id),
-        reason: reasons[s.id]
-      }));
+      const payload = stages.map((s) => {
+        if (s.notAvailable) {
+          const allIds = [
+            ...(s.neutral || []),
+            ...(s.good || []),
+            ...(s.bad || [])
+          ].map((c) => c.id);
+          return {
+            stageId: s.id,
+            notAvailable: true,
+            good: [],
+            bad: allIds,
+            neutral: [],
+            reason: reasons[s.id]
+          };
+        }
+        return {
+          stageId: s.id,
+          notAvailable: s.notAvailable,
+          good: s.good.map((c) => c.id),
+          bad: s.bad.map((c) => c.id),
+          neutral: s.neutral.map((c) => c.id),
+          reason: reasons[s.id]
+        };
+      });
       const result = await surveyService.submitMultiStageAnswers({
         surveyId,
         minChoices: survey.min_choices,
