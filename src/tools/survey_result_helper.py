@@ -29,8 +29,7 @@ def build_output(survey_id):
 
     survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
     groups_dict = convert_choices_groups(survey_choices)
-    students_dict, absent_students_dict = convert_users_students(user_rankings)
-    print(students_dict)
+    students_dict = convert_users_students(user_rankings)
 
     output_data = hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices)
     return output_data
@@ -51,7 +50,11 @@ def build_multistage_output(survey_id):
 
         survey_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
         groups_dict = convert_choices_groups(survey_choices)
-        students_dict, absent_students_dict = convert_users_students(multistage_user_rankings[stage.stage])
+
+        try:
+            students_dict, absent_students_dict = convert_users_students(multistage_user_rankings[stage.stage])
+        except ValueError:
+            students_dict = convert_users_students(multistage_user_rankings[stage.stage])
 
         if students_dict == {}:
             stage_output_data = [[], 0, [], [], [], []]
@@ -531,7 +534,10 @@ def convert_users_students(user_rankings):
                 students[user_id] = Student(user_id, name, int_ranking, int_rejections)
         except IndexError:
             students[user_id] = Student(user_id, name, int_ranking, int_rejections)
-    return students, absent_students
+
+    if absent_students != {}:
+        return students, absent_students
+    return students
 
 
 def convert_date(data):
