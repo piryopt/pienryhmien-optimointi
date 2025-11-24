@@ -15,7 +15,7 @@ const ReasonsBox = ({ reason, setReason }) => {
         placeholder={`${t('Kirjoita tähän perustelut hylkäyksille')}...`}
       />
       <div style={{ margin: 6, fontSize: 12, color: "#bbb" }}>
-        {reason.length}/300 merkkiä
+        {reason.length}/300 {t('merkkiä')}
       </div>
     </div>
   )
