@@ -8,6 +8,8 @@ import MinChoicesSection from "../components/edit_survey_page_components/MinChoi
 import DenyChoicesSection from "../components/edit_survey_page_components/DenyChoicesSection";
 import SearchVisibilitySection from "../components/edit_survey_page_components/SearchVisibilitySection";
 import PrioritizedGroupsSection from "../components/edit_survey_page_components/PrioritizedGroupsSection";
+import AllowAbsencesSection from "../components/edit_survey_page_components/AllowAbsencesSection";
+import LimitParticipation from "../components/edit_survey_page_components/LimitParticipation";
 import surveyService from "../services/surveys";
 import { useEffect, useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -28,7 +30,8 @@ const EditSurveyPage = () => {
   const [survey, setSurvey] = useState(null);
   const [loading, setLoading] = useState(true);
   const [choices, setChoices] = useState("");
-  const [choices_not_shuffled, setChoicesNotShuffled] = useState("");
+  const [multistage, setMultistage] = useState(false);
+  const [choices_not_shuffled, setChoicesNotShuffled] = useState(null);
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -52,11 +55,22 @@ const EditSurveyPage = () => {
     setLoading(true);
     const fetchSurvey = async () => {
       try {
-        const response = await surveyService.getSurvey(surveyId);
+        const isMultistageResponse = await surveyService.isMultistage(surveyId);
+        const isMultistage = isMultistageResponse.multistage;
+        isMultistage ? setMultistage(true) : setMultistage(false);
+        const response = isMultistage
+          ? await surveyService.getMultiStageSurvey(surveyId)
+          : await surveyService.getSurvey(surveyId);
+
         if (!mounted) return;
+
         setSurvey(response.survey);
-        setChoices(response.choices);
-        setChoicesNotShuffled(response.choices_not_shuffled);
+        !isMultistage
+          ? setChoices(response.choices)
+          : setChoices(response.stages);
+        if (!isMultistage) {
+          setChoicesNotShuffled(response.choices_not_shuffled);
+        }
         const parsed = response?.survey?.deadline
           ? parse(response.survey.deadline, "dd.MM.yyyy HH:mm", new Date())
           : null;
@@ -81,7 +95,6 @@ const EditSurveyPage = () => {
   const { handleSubmit } = methods;
 
   const onSubmit = async (data) => {
-    console.log(data.enddate, data.endtime);
     const csrfToken = await csrfService.fetchCsrfToken();
     const updatedSurvey = {
       surveyGroupname: data.groupname,
@@ -152,10 +165,25 @@ const EditSurveyPage = () => {
             }
           />
           <EditSurveyInfo placeholder={survey.description} />
-          <MinChoicesSection choices={choices} survey={survey} />
+          <MinChoicesSection
+            choices={choices}
+            survey={survey}
+            multistage={multistage}
+          />
           <DenyChoicesSection survey={survey} />
+          {multistage && (
+            <>
+              {" "}
+              <AllowAbsencesSection survey={survey} />
+              <LimitParticipation survey={survey} choices={choices} />
+            </>
+          )}
           <SearchVisibilitySection survey={survey} />
-          <PrioritizedGroupsSection choices={choices_not_shuffled} />
+          <PrioritizedGroupsSection
+            choices_not_shuffled={choices_not_shuffled}
+            choices={choices}
+            multistage={multistage}
+          />
           <button
             type="submit"
             className="btn btn-primary"

@@ -427,8 +427,23 @@ const updateGroupSizes = async (surveyId, choices) => {
         },
         withCredentials: true
       }
-    )
-    return response.data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const isMultistage = async (surveyId) => {
+  try {
+    const csrfToken = await csrfService.fetchCsrfToken();
+    const response = await axios.get(
+      `${baseUrl}/surveys/${surveyId}/is_multistage`,
+      {
+        withCredentials: true
+      }
+    );
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -459,5 +474,6 @@ export default {
   getMultistageStages: getMultistageStages,
   saveMultistageResults: saveMultistageResults,
   getGroupSizesData: getGroupSizesData,
-  updateGroupSizes: updateGroupSizes
+  updateGroupSizes: updateGroupSizes,
+  isMultistage: isMultistage
 };
