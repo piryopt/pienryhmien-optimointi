@@ -19,7 +19,7 @@
   "Ei": "Nej",
   "Ei järjestetty": "",
   "Ei kyselyitä": "",
-  "Ei paikalla": "",
+  "Ei paikalla": "Frånvarande",
   "Ei palautetta": "",
   "Ei palautteita": "",
   "Ei tietoja": "",
@@ -56,6 +56,7 @@
   "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "",
   "Haluatko varmasti sulkea kyselyn?": "",
   "Haluatko varmasti sulkea palautteen?": "",
+  "Huom!": "",
   "HUOM! ": "OBS! ",
   "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
     " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
@@ -68,13 +69,17 @@
   "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
     "": ""
   },
-  "Hylätty": "",
   "Hylkäykset": "Avvisningar",
   "Hylkäysmäärä": "",
   "ID": "",
+  "Info": "",
   "Jaa ryhmiin": "Dela in i grupper",
   "Jaettavia paikkoja": "Platser att tilldela",
-  "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.": "Det finns {{total}} platser, men {{answers}} svar. Lägg till fler platser.",
+  "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja": {
+      "": ""
+    }
+  },
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
@@ -96,12 +101,13 @@
     }
   },
   "Kaikki käynnissä olevat kyselyt": "",
+  "Kaikki rivit olivat virheellisiä": "",
   "Kaikkien vaiheiden tulokset tallennettu": "",
   "Käynnissä olevat kyselyt": "Pågående enkäter",
   "Käyttäjätunnus": "Användarnamn",
   "Kello": "Klockan",
   "Kentän tulee olla kokonaisluku": "Fältet måste vara ett heltal",
-  "Kentän tulee olla vähintään 0": "",
+  "Kielletty": "",
   "Kielletyt": "",
   "Kirjaudu sisään": "Logga ut",
   "Kirjaudu ulos": "Logga ut",
@@ -142,9 +148,9 @@
     "": ""
   },
   "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
-  " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
-    "": "Det finns fler svarande än tillgängliga platser att tilldela. Redigera gruppstorlekarna innan gruppindelningen."
-  }
+    " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+      "": "Det finns fler svarande än tillgängliga platser att tilldela. Redigera gruppstorlekarna innan gruppindelningen."
+    }
   },
   "Kyselyt": "",
   "laatikkoon": "rutan",
@@ -193,7 +199,7 @@
   "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordning på val",
-  "Monivaiheisen kyselyn tulokset": "",
+  "Monivaiheisen kyselyn tulokset": "Sorteringsresultat",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera enkäten eller lägg till en administratör",
   "Muokkaa ryhmäkokoja": "Redigera gruppstorlekar",
   "Muu": "Annat",
@@ -248,6 +254,8 @@
     }
   },
   "Priorisoitavat ryhmät": "Prioriterade grupper",
+  "Priorisoitavien ryhmien vähimmäismäärän on oltava enintään {{max}}": "",
+  "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1": "",
   "Priorisoitujen ryhmien vähimmäismäärä": "Minsta antal prioriterade grupper",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
   "punaiseen": "röd",
@@ -262,15 +270,15 @@
   "Ryhmäjako tallennettu": "",
   "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "",
   "Ryhmäjaon tallennus epäonnistui": "",
-  "Ryhmäkoot päivitettiin onnistuneesti": "Gruppstorlekarna uppdaterades framgångsrikt",
   "Ryhmäkokojen päivittäminen epäonnistui": "Uppdatering av gruppstorlekar misslyckades",
+  "Ryhmäkoot päivitettiin onnistuneesti": "Gruppstorlekarna uppdaterades framgångsrikt",
   "Ryhmän maksimikoko": "Maximal gruppstorlek",
   "Ryhmän minimikoko": "Minsta gruppstorlek",
   "Ryhmän minimikoko vaaditaan": "",
   "Ryhmän minimikoon on oltava vähintään 1": "",
   "Ryhmät luotu": "Grupper skapade",
   "Ryhmät, jotka pudotettiin jaosta": "Grupper som uteslöts från fördelning",
-  "Ryhmävalintojen keskiarvo": "",
+  "Ryhmävalintojen keskiarvo": "Genomsnitt för gruppval",
   "Ryhmien määrä": "",
   "Sähköposti": "E-postadress",
   "sähköpostiosoite": "E-postadress",
@@ -281,6 +289,10 @@
   "Sallitaanko poissaolot?": "Är frånvaro tillåten?",
   "Sallitaanko valintojen kieltäminen?": "Tillåts det att förbjuda val?",
   "Sallittu kiellettyjen ryhmien määrä": "Antal tillåtna förbjudna grupper",
+  "Sallittujen kiellettyjen ryhmien määrä vaaditaan": "",
+  "Sallittujen kiellettyjen ryhmien määrän on oltava enintään {{max}}": "",
+  "Sallittujen kiellettyjen ryhmien määrän on oltava vähintään 1": "",
+  "Sallittujen kiellettyjen ryhmien määrän tulee olla kokonaisluku": "",
   "Sisältö": "Innehåll",
   "Sulje kysely": "Stäng enkäten",
   "Sulje kysely?": "",
@@ -314,17 +326,19 @@
     }
   },
   "tai": "eller",
-  "Tallenna kaikkien vaiheiden tulokset": "",
+  "Tallenna kaikkien vaiheiden tulokset": "Spara resultat",
   "Tallenna muutokset": "Spara ändringar",
   "Tallenna tulokset": "Spara resultat",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
     "": "Den här enkäten är stängd och kan inte längre besvaras."
   },
+  "Tämän vaiheen vienti epäonnistui": "",
   "Tarkastele": "",
   "Tarkastele kyselyitä": "",
   "Tarkastele palautteita": "",
   "Tarkastele tilastoja": "",
   "Tarkastele tuloksia": "Visa resultat",
+  "Tieto puuttuu tai on rikkoutunut": "",
   "Tietosuojaseloste": "Integritetspolicy",
   "Tilastojen lataus epäonnistui": "",
   "Tilastot": "Statistik",
@@ -332,9 +346,11 @@
   "tulokset": "",
   "Tulokset": "Resultat",
   "Tulosten tallennus epäonnistui": "",
+  "Tulosten vienti epäonnistui": "",
   "Tuo valinnat CSV-tiedostosta": "Importera val från en CSV-fil",
   "UKK": "FAQ",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Krävs det att alla grupper ordnas?",
+  "vaihe": "",
   "Vaiheen nimi": "",
   "Vaiheen tunniste": "Fasens identifierare",
   "vaihtoehtoa": "alternativ",
@@ -359,7 +375,10 @@
   "Vie tulokset Excel-taulukkoon": "Exportera resultat till Excel-tabell",
   "vihreään": "grön",
   "Voit kieltää": "Du kan förbjuda",
+  "Virhe": "",
+  "Virheellinen rivi": "",
   "Voit muokata kyselyn kuvausta": "Du kan redigera enkätens beskrivning",
+  "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "",
   "Yhteys palvelimeen epäonnistui": "",
   "yli 5 merkkiä pitkiä": "längre än 5 tecken"
 }
