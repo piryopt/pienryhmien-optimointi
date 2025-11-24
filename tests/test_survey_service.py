@@ -321,7 +321,7 @@ def test_get_list_active_answered(setup_env):
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     active_list = ss.get_list_active_answered(d["user_id3"])
     assert len(active_list) == 1
 
@@ -336,7 +336,7 @@ def test_get_list_closed_answered(setup_env):
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     ss.close_survey(survey_id, d["user_id"])
     closed_list = ss.get_list_closed_answered(d["user_id3"])
     assert len(closed_list) == 1
@@ -562,8 +562,8 @@ def test_new_enough_survey_not_deleted(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["response_count"] == 2
@@ -589,8 +589,8 @@ def test_deleting_old_survey_permanently_delete_all_related_data(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["response_count"] == 2
@@ -659,8 +659,8 @@ def test_get_correct_active_surveys_and_response_count(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["surveyname"] == "Test survey 16"

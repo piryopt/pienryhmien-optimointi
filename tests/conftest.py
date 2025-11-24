@@ -33,6 +33,9 @@ def setup_db():
         user2 = User("Maija Mallikas", "maija@tester.com", True)
         user3 = User("Tero Testaaja", "tero@tester.com", True)
 
+        # Add initial row for statistics 
+        
+
         ur.register(user1)
         ur.register(user2)
         ur.register(user3)

@@ -117,7 +117,8 @@ class SurveyRepository:
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
 
     def open_survey(self, survey_id, new_end_time):
@@ -136,7 +137,8 @@ class SurveyRepository:
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
 
     def get_active_surveys(self, user_id):
@@ -278,7 +280,8 @@ class SurveyRepository:
             return result.fetchone()[0]
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return None
 
     def get_survey_description(self, survey_id):

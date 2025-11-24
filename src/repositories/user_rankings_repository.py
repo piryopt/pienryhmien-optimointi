@@ -46,7 +46,8 @@ class UserRankingsRepository:
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
 
     def add_multistage_user_ranking(self, user_id, survey_id, ranking, rejections, reason, stage, not_available, ranking_exists):
@@ -87,7 +88,8 @@ class UserRankingsRepository:
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
 
     def get_user_ranking(self, user_id, survey_id):
@@ -171,7 +173,8 @@ class UserRankingsRepository:
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
         
     def get_all_rankings(self):
