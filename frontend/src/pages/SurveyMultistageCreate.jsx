@@ -35,6 +35,8 @@ const SurveyMultistageCreate = () => {
   const schema = buildCreateSurveySchema(t);
 
   const stageNextId = useRef(1);
+  // global counter to ensure unique ids
+  const rowNextId = useRef(1);
   const [newStageName, setNewStageName] = useState("");
   const [tables, setTables] = useState([]);
 
@@ -105,7 +107,7 @@ const SurveyMultistageCreate = () => {
             }, {});
 
             return {
-              id: choice.id,
+              id: rowNextId.current++,
               mandatory: choice.mandatory,
               min_size: choice.min_size,
               max_spaces: choice.slots,
@@ -117,7 +119,7 @@ const SurveyMultistageCreate = () => {
           loadedTables.push({
             id,
             name: stage.name,
-            nextRowId: stage.choices.length,
+            nextRowId: rowNextId.current,
             columns:
               stage.choices[0].infos?.length > 0
                 ? stage.choices[0].infos.map((info) => ({
@@ -134,6 +136,14 @@ const SurveyMultistageCreate = () => {
           });
         }
         setTables(loadedTables);
+        {
+          let maxId = rowNextId.current;
+          for (const t of loadedTables) {
+            for (const r of t.rows || []) maxId = Math.max(maxId, r.id || 0);
+            if (t.nextRowId) maxId = Math.max(maxId, t.nextRowId);
+          }
+          rowNextId.current = Math.max(rowNextId.current, maxId + 1);
+        }
       } catch (error) {
         console.error("Failed to load survey template:", error);
       }
@@ -172,16 +182,23 @@ const SurveyMultistageCreate = () => {
         choiceErrors: []
       }
     ]);
+    rowNextId.current = Math.max(rowNextId.current, 2);
     setNewStageName("");
   };
 
   const copyStage = (tableId) => {
     const tableToCopy = tables.find((t) => t.id === tableId);
     if (tableToCopy) {
+      const newRows = (tableToCopy.rows || []).map((r) => ({
+        ...r,
+        id: rowNextId.current++
+      }))
       const newTable = {
         ...tableToCopy,
         id: stageNextId.current++,
-        name: `${tableToCopy.name} ${t("(kopio)")}`
+        name: `${tableToCopy.name} ${t("(kopio)")}`,
+        rows: newRows,
+        nextRowId: rowNextId.current
       };
       setTables((ts) => [...ts, newTable]);
     }
@@ -194,11 +211,11 @@ const SurveyMultistageCreate = () => {
     setTables((ts) =>
       ts.map((t) => {
         if (t.id !== tableId) return t;
-        const id = t.nextRowId + 1;
+        const id = rowNextId.current++;
         const extra = t.columns.reduce((a, c) => ({ ...a, [c.name]: "" }), {});
         return {
           ...t,
-          nextRowId: id,
+          nextRowId: rowNextId.current,
           rows: [
             ...t.rows,
             {
@@ -371,6 +388,10 @@ const SurveyMultistageCreate = () => {
           }
           return copy;
         });
+
+        if (update.nextRowId) {
+          rowNextId.current = Math.max(rowNextId.current, update.nextRowId);
+        }
 
         return {
           ...t,
