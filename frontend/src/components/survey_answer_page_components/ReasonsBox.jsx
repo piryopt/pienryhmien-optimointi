@@ -1,6 +1,8 @@
 import '../../static/css/answerPage.css';
+import { useTranslation } from "react-i18next";
 
 const ReasonsBox = ({ reason, setReason }) => {
+  const { t } = useTranslation();
   return (
     <div style={{ width: "100%", marginTop: 8 }}>
 
@@ -10,10 +12,10 @@ const ReasonsBox = ({ reason, setReason }) => {
         value={reason}
         onChange={(e) => setReason(e.target.value)}
         maxLength={300}
-        placeholder="Kirjoita tähän perustelut hylkäyksille..."
+        placeholder={`${t('Kirjoita tähän perustelut hylkäyksille')}...`}
       />
       <div style={{ margin: 6, fontSize: 12, color: "#bbb" }}>
-        {reason.length}/300 merkkiä
+        {reason.length}/300 {t('merkkiä')}
       </div>
     </div>
   )
