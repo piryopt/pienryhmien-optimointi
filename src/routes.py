@@ -577,6 +577,15 @@ def api_survey_submit(survey_id):
     return jsonify(response)
 
 
+@bp.route("/api/surveys/<string:survey_id>/is_multistage", methods=["GET"])
+def api_is_survey_multistage(survey_id):
+    """
+    Checks whether survey is multistage or not
+    """
+    is_multistage = survey_service.is_multistage(survey_id)
+    response = {"multistage":is_multistage}
+    return jsonify(response)
+
 @bp.route("/api/surveys/<string:survey_id>/submission", methods=["DELETE"])
 def api_delete_submission(survey_id):
     """
