@@ -56,6 +56,7 @@
   "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ",
   "Haluatko varmasti sulkea kyselyn?": "Haluatko varmasti sulkea kyselyn?",
   "Haluatko varmasti sulkea palautteen?": "Haluatko varmasti sulkea palautteen?",
+  "Huom!": "Huom!",
   "HUOM! ": "HUOM! ",
   "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
     " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
@@ -68,13 +69,17 @@
   "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
     "": "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti."
   },
-  "Hylätty": "Hylätty",
   "Hylkäykset": "Hylkäykset",
   "Hylkäysmäärä": "Hylkäysmäärä",
   "ID": "ID",
+  "Info": "Info",
   "Jaa ryhmiin": "Jaa ryhmiin",
   "Jaettavia paikkoja": "Jaettavia paikkoja",
-  "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.": "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.",
+  "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja": {
+      "": "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja."
+    }
+  },
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "Jakajassa luodut kyselyt",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
@@ -96,12 +101,13 @@
     }
   },
   "Kaikki käynnissä olevat kyselyt": "Kaikki käynnissä olevat kyselyt",
+  "Kaikki rivit olivat virheellisiä": "Kaikki rivit olivat virheellisiä",
   "Kaikkien vaiheiden tulokset tallennettu": "Kaikkien vaiheiden tulokset tallennettu",
   "Käynnissä olevat kyselyt": "Käynnissä olevat kyselyt",
   "Käyttäjätunnus": "Käyttäjätunnus",
   "Kello": "Kello",
   "Kentän tulee olla kokonaisluku": "Kentän tulee olla kokonaisluku",
-  "Kentän tulee olla vähintään 0": "Kentän tulee olla vähintään 0",
+  "Kielletty": "Kielletty",
   "Kielletyt": "Kielletyt",
   "Kirjaudu sisään": "Kirjaudu sisään",
   "Kirjaudu ulos": "Kirjaudu ulos",
@@ -140,9 +146,9 @@
     "": "Kyselyn vastauksien tallennus epäonnistui."
   },
   "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
-  " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
-    "": "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa ryhmäkokoja ennen ryhmäjakoa."
-  }
+    " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+      "": "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa ryhmäkokoja ennen ryhmäjakoa."
+    }
   },
   "Kyselyt": "Kyselyt",
   "Ladataan": {
@@ -244,6 +250,8 @@
     }
   },
   "Priorisoitavat ryhmät": "Priorisoitavat ryhmät",
+  "Priorisoitavien ryhmien vähimmäismäärän on oltava enintään {{max}}": "Priorisoitavien ryhmien vähimmäismäärän on oltava enintään {{max}}",
+  "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1": "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1",
   "Priorisoitujen ryhmien vähimmäismäärä": "Priorisoitujen ryhmien vähimmäismäärä",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "Priorisoitujen ryhmien vähimmäismäärä vaaditaan",
   "Rajoita osallistumiskertoja": "Rajoita osallistumiskertoja",
@@ -255,8 +263,8 @@
   "Ryhmäjako tallennettu": "Ryhmäjako tallennettu",
   "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia",
   "Ryhmäjaon tallennus epäonnistui": "Ryhmäjaon tallennus epäonnistui",
-  "Ryhmäkoot päivitettiin onnistuneesti": "Ryhmäkoot päivitettiin onnistuneesti",
   "Ryhmäkokojen päivittäminen epäonnistui": "Ryhmäkokojen päivittäminen epäonnistui",
+  "Ryhmäkoot päivitettiin onnistuneesti": "Ryhmäkoot päivitettiin onnistuneesti",
   "Ryhmän maksimikoko": "Ryhmän maksimikoko",
   "Ryhmän minimikoko": "Ryhmän minimikoko",
   "Ryhmän minimikoko vaaditaan": "Ryhmän minimikoko vaaditaan",
@@ -274,6 +282,10 @@
   "Sallitaanko poissaolot?": "Sallitaanko poissaolot?",
   "Sallitaanko valintojen kieltäminen?": "Sallitaanko valintojen kieltäminen?",
   "Sallittu kiellettyjen ryhmien määrä": "Sallittu kiellettyjen ryhmien määrä",
+  "Sallittujen kiellettyjen ryhmien määrä vaaditaan": "Sallittujen kiellettyjen ryhmien määrä vaaditaan",
+  "Sallittujen kiellettyjen ryhmien määrän on oltava enintään {{max}}": "Sallittujen kiellettyjen ryhmien määrän on oltava enintään {{max}}",
+  "Sallittujen kiellettyjen ryhmien määrän on oltava vähintään 1": "Sallittujen kiellettyjen ryhmien määrän on oltava vähintään 1",
+  "Sallittujen kiellettyjen ryhmien määrän tulee olla kokonaisluku": "Sallittujen kiellettyjen ryhmien määrän tulee olla kokonaisluku",
   "Sisältö": "Sisältö",
   "Sulje kysely": "Sulje kysely",
   "Sulje kysely?": "Sulje kysely?",
@@ -312,11 +324,13 @@
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
     "": "Tämä kysely on suljettu eikä siihen voi enää vastata."
   },
+  "Tämän vaiheen vienti epäonnistui": "Tämän vaiheen vienti epäonnistui",
   "Tarkastele": "Tarkastele",
   "Tarkastele kyselyitä": "Tarkastele kyselyitä",
   "Tarkastele palautteita": "Tarkastele palautteita",
   "Tarkastele tilastoja": "Tarkastele tilastoja",
   "Tarkastele tuloksia": "Tarkastele tuloksia",
+  "Tieto puuttuu tai on rikkoutunut": "Tieto puuttuu tai on rikkoutunut",
   "Tietosuojaseloste": "Tietosuojaseloste",
   "Tilastojen lataus epäonnistui": "Tilastojen lataus epäonnistui",
   "Tilastot": "Tilastot",
@@ -324,9 +338,11 @@
   "tulokset": "tulokset",
   "Tulokset": "Tulokset",
   "Tulosten tallennus epäonnistui": "Tulosten tallennus epäonnistui",
+  "Tulosten vienti epäonnistui": "Tulosten vienti epäonnistui",
   "Tuo valinnat CSV-tiedostosta": "Tuo valinnat CSV-tiedostosta",
   "UKK": "UKK",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Vaaditaanko kaikkien ryhmien järjestämistä?",
+  "vaihe": "vaihe",
   "Vaiheen nimi": "Vaiheen nimi",
   "Vaiheen tunniste": "Vaiheen tunniste",
   "Valinnat": "Valinnat",
@@ -348,7 +364,10 @@
   "Vastausaika päättyy": "Vastausaika päättyy",
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Vastausajan päättyminen ei voi olla menneisyydessä",
   "Vie tulokset Excel-taulukkoon": "Vie tulokset Excel-taulukkoon",
+  "Virhe": "Virhe",
+  "Virheellinen rivi": "Virheellinen rivi",
   "Voit muokata kyselyn kuvausta": "Voit muokata kyselyn kuvausta",
+  "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta",
   "Yhteys palvelimeen epäonnistui": "Yhteys palvelimeen epäonnistui",
   "yli 5 merkkiä pitkiä": "yli 5 merkkiä pitkiä"
 }

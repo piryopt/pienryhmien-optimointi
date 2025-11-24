@@ -51,10 +51,7 @@ def build_multistage_output(survey_id):
         survey_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
         groups_dict = convert_choices_groups(survey_choices)
 
-        try:
-            students_dict, absent_students_dict = convert_users_students(multistage_user_rankings[stage.stage])
-        except ValueError:
-            students_dict = convert_users_students(multistage_user_rankings[stage.stage])
+        students_dict, absent_students_dict = convert_users_students(multistage_user_rankings[stage.stage], True)
 
         if students_dict == {}:
             stage_output_data = [[], 0, [], [], [], []]
@@ -508,12 +505,17 @@ def convert_choices_groups(survey_choices):
     return groups
 
 
-def convert_users_students(user_rankings):
+def convert_users_students(user_rankings, allow_absences=False):
     """
     Converts database data into the class "Student", which is used in the sorting algorithm
 
     args:
         user_rankings: The list of user rankings for a survey
+        allow_absences: Whether to include absent students or not
+
+    Returns:
+        If allow_absences is True, returns a tuple of two dicts: (students, absent_students).
+        If allow_absences is False, returns only the students dict.
     """
     students = {}
     absent_students = {}
@@ -527,15 +529,16 @@ def convert_users_students(user_rankings):
             if len(user_ranking[2]) > 0:
                 rejections = convert_to_list(user_ranking[2])
                 int_rejections = [int(i) for i in rejections]
-        try:
+
+        if allow_absences:
             if user_ranking[4]:
                 absent_students[user_id] = Student(user_id, name, int_ranking, int_rejections, not_available=user_ranking[4])
             else:
                 students[user_id] = Student(user_id, name, int_ranking, int_rejections)
-        except IndexError:
+        else:
             students[user_id] = Student(user_id, name, int_ranking, int_rejections)
 
-    if absent_students != {}:
+    if allow_absences:
         return students, absent_students
     return students
 
