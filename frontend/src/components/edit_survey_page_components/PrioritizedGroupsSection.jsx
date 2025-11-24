@@ -10,7 +10,12 @@ const PrioritizedGroupsSection = ({
   const { t } = useTranslation();
 
   const singleStageTable = useMemo(() => {
-    const rowsSource = Array.isArray(choices) ? choices : [];
+    const rowsSource =
+      !multistage && Array.isArray(choices_not_shuffled)
+        ? choices_not_shuffled
+        : Array.isArray(choices)
+          ? choices
+          : [];
     const infoKeySet = new Set();
     const normalizedRows = rowsSource.map((c) => {
       const row = { ...c };
