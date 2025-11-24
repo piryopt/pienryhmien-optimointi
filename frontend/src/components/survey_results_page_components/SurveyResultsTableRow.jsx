@@ -39,6 +39,8 @@ const SurveyResultsTableRow = ({ result, surveyId, currStage }) => {
           ord = idx + 1
         } else if (RejectionIds.indexOf(allocatedChoiceId) !== -1) {
           ord = t("Kielletty")
+        } else if (result[2][1] === "Absent") {
+          ord = "-"
         } else {
           ord = t("Ei järjestetty")
         }
@@ -95,7 +97,11 @@ const SurveyResultsTableRow = ({ result, surveyId, currStage }) => {
         <p>{result[1]}</p>
       </td>
       <td>
-        <p>{result[2][1]}</p>
+        {result[2][1] === "Absent" ? (
+          <p style={{ color: "#ff5c5c",fontWeight: 500, }}>{t("Ei paikalla")}</p>
+        ) : (
+          <p>{result[2][1]}</p>
+        )}
       </td>
       <td>
         <p style={rankingStyle}>{ordinal}</p>
