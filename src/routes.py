@@ -1873,3 +1873,9 @@ def delete_old_surveys():
     Weekly check if survey end time was over two year ago. If so, delete said surveys and all related data.
     """
     survey_service.check_for_surveys_to_delete()
+
+def save_old_statistics():
+    """
+    Weekly save of statistics numbers used for backups/history data.
+    """
+    survey_service.save_statistics()

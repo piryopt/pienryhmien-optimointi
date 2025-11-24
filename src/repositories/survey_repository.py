@@ -645,5 +645,36 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
+        
+    def save_statistics(self):
+        """
+        Adds a new row to the DB, copy of current_row with is_current_row = FALSE
+        """
+        try:
+            sql = """
+                 INSERT INTO statistics (
+                    total_created_surveys,
+                    active_surveys_count,
+                    registered_teachers_count,
+                    registered_students_count,
+                    total_survey_answers,
+                    is_current_row
+                )
+                SELECT
+                    total_created_surveys,
+                    active_surveys_count,
+                    registered_teachers_count,
+                    registered_students_count,
+                    total_survey_answers,
+                    FALSE AS is_current_row
+                FROM statistics
+                WHERE is_current_row = TRUE
+            """
+            db.session.execute(text(sql))
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
 
 survey_repository = SurveyRepository()
