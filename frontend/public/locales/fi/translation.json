@@ -114,6 +114,8 @@
   "Kirjautuminen epäonnistui": "Kirjautuminen epäonnistui",
   "Kirjautuminen onnistui": "Kirjautuminen onnistui",
   "Kirjautuminen ulos onnistui": "Kirjautuminen ulos onnistui",
+  "Kirjoita tähän perustelut hylkäyksille": "Kirjoita tähän perustelut hylkäyksille",
+  "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa",
   "kokonaislukuja": "kokonaislukuja",
   "Kopioi kysely": "Kopioi kysely",
   "Kopioi kyselyn osoite leikepöydälle": "Kopioi kyselyn osoite leikepöydälle",
@@ -151,6 +153,7 @@
     }
   },
   "Kyselyt": "Kyselyt",
+  "laatikkoon": "laatikkoon",
   "Ladataan": {
     "": {
       "": {
@@ -192,6 +195,7 @@
   "merkityt ryhmät priorisoidaan jakamisprosessissa": {
     " ": "merkityt ryhmät priorisoidaan jakamisprosessissa. "
   },
+  "merkkiä": "merkkiä",
   "Min valinnat": "Min valinnat",
   "Minimikoon on oltava vähintään 0": "Minimikoon on oltava vähintään 0",
   "Monesko valinta": "Monesko valinta",
@@ -254,6 +258,9 @@
   "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1": "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1",
   "Priorisoitujen ryhmien vähimmäismäärä": "Priorisoitujen ryhmien vähimmäismäärä",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "Priorisoitujen ryhmien vähimmäismäärä vaaditaan",
+  "punaiseen": "punaiseen",
+  "Raahaa ainakin": "Raahaa ainakin",
+  "Raahaa kaikki vaihtoehdot": "Raahaa kaikki vaihtoehdot",
   "Rajoita osallistumiskertoja": "Rajoita osallistumiskertoja",
   "Rekisteröityneet opettajat": "Rekisteröityneet opettajat",
   "Rekisteröityneet opiskelijat": "Rekisteröityneet opiskelijat",
@@ -318,6 +325,7 @@
       "": "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen. Kuvausteksti näytetään vastaajalle kyselyn yhteydessä."
     }
   },
+  "tai": "tai",
   "Tallenna kaikkien vaiheiden tulokset": "Tallenna kaikkien vaiheiden tulokset",
   "Tallenna muutokset": "Tallenna muutokset",
   "Tallenna tulokset": "Tallenna tulokset",
@@ -345,6 +353,7 @@
   "vaihe": "vaihe",
   "Vaiheen nimi": "Vaiheen nimi",
   "Vaiheen tunniste": "Vaiheen tunniste",
+  "vaihtoehtoa": "vaihtoehtoa",
   "Valinnat": "Valinnat",
   "Valitse päättymisaika": "Valitse päättymisaika",
   "Valitse päättymispäivä": "Valitse päättymispäivä",
@@ -364,6 +373,8 @@
   "Vastausaika päättyy": "Vastausaika päättyy",
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Vastausajan päättyminen ei voi olla menneisyydessä",
   "Vie tulokset Excel-taulukkoon": "Vie tulokset Excel-taulukkoon",
+  "vihreään": "vihreään",
+  "Voit kieltää": "Voit kieltää",
   "Virhe": "Virhe",
   "Virheellinen rivi": "Virheellinen rivi",
   "Voit muokata kyselyn kuvausta": "Voit muokata kyselyn kuvausta",

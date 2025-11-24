@@ -114,6 +114,8 @@
   "Kirjautuminen epäonnistui": "",
   "Kirjautuminen onnistui": "",
   "Kirjautuminen ulos onnistui": "",
+  "Kirjoita tähän perustelut hylkäyksille": "Write reasons for rejections here",
+  "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Click the choice option to see additional information about it",
   "kokonaislukuja": "integers",
   "Kopioi kysely": "Copy survey",
   "Kopioi kyselyn osoite leikepöydälle": "Copy the survey link to the clipboard",
@@ -151,6 +153,7 @@
     }
   },
   "Kyselyt": "",
+  "laatikkoon": "box",
   "Ladataan": {
     "": {
       "": {
@@ -192,6 +195,7 @@
   "merkityt ryhmät priorisoidaan jakamisprosessissa": {
     " ": " groups are prioritized in the allocation process."
   },
+  "merkkiä": "characters",
   "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordinal choice",
@@ -254,6 +258,9 @@
   "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1": "",
   "Priorisoitujen ryhmien vähimmäismäärä": "Minimum number of prioritized groups",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
+  "punaiseen": "red",
+  "Raahaa ainakin": "Drag at least",
+  "Raahaa kaikki vaihtoehdot": "Drag all options to the",
   "Rajoita osallistumiskertoja": "Limit participation times",
   "Rekisteröityneet opettajat": "",
   "Rekisteröityneet opiskelijat": "",
@@ -318,6 +325,7 @@
       "": "Here you can provide a description of the survey and instructions for responding. The description text will be shown to the respondents alongside the survey."
     }
   },
+  "tai": "or",
   "Tallenna kaikkien vaiheiden tulokset": "Save results",
   "Tallenna muutokset": "Save changes",
   "Tallenna tulokset": "Save results",
@@ -345,6 +353,7 @@
   "vaihe": "",
   "Vaiheen nimi": "Stage name",
   "Vaiheen tunniste": "",
+  "vaihtoehtoa": "options to the",
   "Valinnat": "Choices",
   "Valitse päättymisaika": "Choose an end time",
   "Valitse päättymispäivä": "Choose an end date",
@@ -364,6 +373,8 @@
   "Vastausaika päättyy": "Response time expires",
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Response period's end can't be in the past",
   "Vie tulokset Excel-taulukkoon": "Export results to Excel spreadsheet",
+  "vihreään": "green",
+  "Voit kieltää": "You can deny",
   "Virhe": "",
   "Virheellinen rivi": "",
   "Voit muokata kyselyn kuvausta": "You can edit the survey description.",
