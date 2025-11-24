@@ -108,6 +108,8 @@
   "Kirjautuminen epäonnistui": "",
   "Kirjautuminen onnistui": "",
   "Kirjautuminen ulos onnistui": "",
+  "Kirjoita tähän perustelut hylkäyksille": "Skriv skälen för avvisningar här",
+  "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klicka på valalternativet för att se ytterligare information om det",
   "kokonaislukuja": "heltal",
   "Kopioi kysely": "Kopiera enkät",
   "Kopioi kyselyn osoite leikepöydälle": "Kopiera enkätens webbadress till urklipp",
@@ -145,6 +147,7 @@
   }
   },
   "Kyselyt": "",
+  "laatikkoon": "rutan",
   "Ladataan": {
     "": {
       "": {
@@ -186,6 +189,7 @@
   "merkityt ryhmät priorisoidaan jakamisprosessissa": {
     " ": "grupper prioriteras i delningsprocessen."
   },
+  "merkkiä": "tecken",
   "Min valinnat": "",
   "Minimikoon on oltava vähintään 0": "",
   "Monesko valinta": "Ordning på val",
@@ -246,6 +250,9 @@
   "Priorisoitavat ryhmät": "Prioriterade grupper",
   "Priorisoitujen ryhmien vähimmäismäärä": "Minsta antal prioriterade grupper",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
+  "punaiseen": "röd",
+  "Raahaa ainakin": "Dra åtminstone",
+  "Raahaa kaikki vaihtoehdot": "Dra alla alternativ",
   "Rajoita osallistumiskertoja": "Begränsa deltagandetider",
   "Rekisteröityneet opettajat": "",
   "Rekisteröityneet opiskelijat": "",
@@ -306,6 +313,7 @@
       "": "Här kan du ange en beskrivning av enkäten och instruktioner för att svara på den. Beskrivningstexten visas för svaranden i samband med enkäten."
     }
   },
+  "tai": "eller",
   "Tallenna kaikkien vaiheiden tulokset": "",
   "Tallenna muutokset": "Spara ändringar",
   "Tallenna tulokset": "Spara resultat",
@@ -329,6 +337,7 @@
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Krävs det att alla grupper ordnas?",
   "Vaiheen nimi": "",
   "Vaiheen tunniste": "Fasens identifierare",
+  "vaihtoehtoa": "alternativ",
   "Valinnat": "Val",
   "Valitse päättymisaika": "",
   "Valitse päättymispäivä": "",
@@ -348,6 +357,8 @@
   "Vastausaika päättyy": "Svarstid utgår",
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Slutet av svarsperioden får inte vara i det förflutna",
   "Vie tulokset Excel-taulukkoon": "Exportera resultat till Excel-tabell",
+  "vihreään": "grön",
+  "Voit kieltää": "Du kan förbjuda",
   "Voit muokata kyselyn kuvausta": "Du kan redigera enkätens beskrivning",
   "Yhteys palvelimeen epäonnistui": "",
   "yli 5 merkkiä pitkiä": "längre än 5 tecken"
