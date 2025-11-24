@@ -680,3 +680,21 @@ def test_len_active_surveys_admin(setup_env):
     )
     length = ss.len_active_surveys()
     assert length == 1
+
+def test_get_admin_analytics(setup_env):
+    """
+    Test that admin analytics fetched from statistics table are correct
+    """
+    d = setup_env
+    initial_stats = ss.get_admin_analytics()
+    assert(list(initial_stats.values()) == [0,0,0,0,3])
+
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
+    )
+    ranking = "2,1,5,6,3,4"
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
+
+    updated_stats = ss.get_admin_analytics()
+    assert(list(updated_stats.values()) == [1,1,0,1,3])
+    

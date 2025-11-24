@@ -630,4 +630,20 @@ class SurveyRepository:
             print(e)
             return None
 
+    def add_initial_statistics_row(self):
+        """
+        Creating the initial row for statistics in the DB. Used mainly in tests
+        """
+        try:
+            sql = """
+                INSERT INTO statistics (total_created_surveys, active_surveys_count, registered_teachers_count, 
+                registered_students_count, total_survey_answers, is_current_row) VALUES (0, 0, 0, 0, 0, TRUE);
+            """
+            db.session.execute(text(sql))
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
 survey_repository = SurveyRepository()

@@ -3,6 +3,7 @@ import pytest
 from dotenv import load_dotenv
 from src import create_app, db
 from src.repositories.user_repository import user_repository as ur
+from src.repositories.survey_repository import survey_repository as sr
 from src.entities.user import User
 from src.tools.db_tools import clear_database
 
@@ -34,7 +35,7 @@ def setup_db():
         user3 = User("Tero Testaaja", "tero@tester.com", True)
 
         # Add initial row for statistics 
-        
+        sr.add_initial_statistics_row()
 
         ur.register(user1)
         ur.register(user2)
