@@ -645,21 +645,13 @@ class SurveyService:
         }
         """
         try:
-            total_surveys = self.len_all_surveys()
-            active_surveys = self.len_active_surveys()
-            total_students = self._user_service.len_all_students()
-            total_teachers = self._user_service.len_all_teachers()
-
-            from src.services.user_rankings_service import user_rankings_service
-
-            total_responses = user_rankings_service.len_all_rankings()
-
+            statistics = self._survey_repository.get_admintools_statistics()
             return {
-                "total_surveys": int(total_surveys or 0),
-                "active_surveys": int(active_surveys or 0),
-                "total_students": int(total_students or 0),
-                "total_responses": int(total_responses or 0),
-                "total_teachers": int(total_teachers or 0),
+                "total_surveys": statistics.total_created_surveys,
+                "active_surveys": statistics.active_surveys_count,
+                "total_students": statistics.registered_students_count,
+                "total_responses": statistics.total_survey_answers,
+                "total_teachers": statistics.registered_teachers_count
             }
         except Exception as e:
             print("Error collecting admin analytics:", e)

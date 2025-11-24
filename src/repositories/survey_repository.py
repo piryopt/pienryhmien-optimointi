@@ -612,5 +612,19 @@ class SurveyRepository:
             print(e)
             return []
 
+    def get_admintools_statistics(self):
+        """
+        SQL code for getting the admintools statistics
+        """
+        try:
+            sql = """
+                SELECT total_created_surveys, active_surveys_count, registered_teachers_count,
+                registered_students_count, total_survey_answers FROM statistics WHERE is_current_row = TRUE
+            """
+            result = db.session.execute(text(sql))
+            return result.fetchone()
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return None
 
 survey_repository = SurveyRepository()

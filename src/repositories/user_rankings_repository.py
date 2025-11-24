@@ -49,7 +49,7 @@ class UserRankingsRepository:
             db.session.rollback()
             return False
 
-    def add_multistage_user_ranking(self, user_id, survey_id, ranking, rejections, reason, stage, not_available):
+    def add_multistage_user_ranking(self, user_id, survey_id, ranking, rejections, reason, stage, not_available, ranking_exists):
         """
         SQL code for adding a new entry into user_survey_rankings table
 
@@ -78,10 +78,16 @@ class UserRankingsRepository:
                  "stage": stage, "not_available": not_available
                  },
             )
+            if not ranking_exists:
+                update_statistics_sql = """
+                    UPDATE statistics SET total_survey_answers = total_survey_answers + 1 WHERE is_current_row = TRUE
+                """
+                db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            db.session.rollback()
             return False
 
     def get_user_ranking(self, user_id, survey_id):
