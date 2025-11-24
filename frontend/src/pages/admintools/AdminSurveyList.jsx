@@ -95,7 +95,7 @@ const AdminSurveyList = () => {
                   <th>{t("Nimi")}</th>
                   <th>{t("Min valinnat")}</th>
                   <th>{t("Ryhmien määrä")}</th>
-                  <th>{t("Hylkäysmäärä")}</th>
+                  <th>{t("Kieltomäärä")}</th>
                   <th>{t("Päättyy")}</th>
                   <th>{t("Hakunäkyvyys")}</th>
                   <th>{t("Toiminnot")}</th>

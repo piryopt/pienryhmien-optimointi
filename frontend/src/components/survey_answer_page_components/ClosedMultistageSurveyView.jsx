@@ -74,7 +74,7 @@ const ClosedMultistageSurveyView = ({
                   <div className="right-column" style={{ marginLeft: 15 }}>
                     {stage.bad.length > 0 && (
                       <>
-                        <h2 className="closed-survey-title">{t("Hylkäykset")}:</h2>
+                        <h2 className="closed-survey-title">{t("Kiellot")}:</h2>
                         <GroupList
                           id="bad"
                           items={stage.bad}
@@ -86,7 +86,7 @@ const ClosedMultistageSurveyView = ({
                         {reasons[stage.id] && reasons[stage.id].length > 0 ? (
                           <div style={{ paddingLeft: 11 }}>
                             <p>
-                              {t("Perustelut hylkäyksille")}:
+                              {t("Perustelut kielloille")}:
                               <br /> {reasons[stage.id]}
                             </p>
                           </div>

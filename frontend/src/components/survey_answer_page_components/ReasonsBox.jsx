@@ -10,7 +10,7 @@ const ReasonsBox = ({ reason, setReason }) => {
         value={reason}
         onChange={(e) => setReason(e.target.value)}
         maxLength={300}
-        placeholder="Kirjoita tähän perustelut hylkäyksille..."
+        placeholder="Kirjoita tähän perustelut kielloille..."
       />
       <div style={{ margin: 6, fontSize: 12, color: "#bbb" }}>
         {reason.length}/300 merkkiä
