@@ -147,3 +147,23 @@ def test_exceptions():
     assert not success
     success = scr.get_all_additional_infos(-1)
     assert not success
+    success = scr.edit_choice_group_size(-1, "", -1)
+    assert not success
+    success = scr.edit_choice_group_size_by_id(-1, -1)
+    assert not success
+    success = scr.get_choice_additional_infos(-1)
+    assert not success
+    success = scr.get_choice_additional_infos_not_hidden(-1)
+    assert not success
+    success = scr.set_choices_deleted_true(-1)
+    assert not success
+    success = scr.set_choices_deleted_false(-1)
+    assert not success
+    success = scr.get_choices_grouped_by_stage(-1)
+    assert not success
+    success = scr.get_stage_choices(-1, 0)
+    assert not success
+    success = scr.count_spaces_in_stage(-1, 0)
+    assert not success
+    success = scr.remove_empty_choices(-1)
+    assert not success

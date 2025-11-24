@@ -20,27 +20,6 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return None
-    
-    def is_multistage(self, survey_id):
-        """
-        SQL code for checking whether or not a survey is multistage
-        
-        args:
-            survey_id: The id of the survey
-        
-        returns
-            True if the survey is multistage, False otherwise
-        """
-        try:
-            sql = "SELECT EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = :survey_id) AS is_multistage"
-            result = db.session.execute(text(sql), {"survey_id": survey_id})
-            row = result.fetchone()
-            if not row:
-                return False
-            return bool(row[0])
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return None
 
     def is_multistage(self, survey_id):
         """
