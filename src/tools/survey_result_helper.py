@@ -43,59 +43,28 @@ def build_multistage_output(survey_id):
     if not multistage_user_rankings:
         return None
 
-    participation_limits = {}
-    participation_limit_groups = {}
-    for stage in survey_service.get_all_survey_stages(survey_id):
-        stage_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
-        for choice in stage_choices:
-            limit = getattr(choice, "participation_limit", 0)
-            if limit > 0:
-                participation_limits[choice.name] = limit
-                participation_limit_groups[choice[0]] = choice.name
+    stages = survey_service.get_all_survey_stages(survey_id)
 
+    participation_limits, participation_limit_group_names = get_participation_limits(survey_id, stages)
     participation_counts = {}
-
     output_data = []
-    for stage in survey_service.get_all_survey_stages(survey_id):
+
+    for stage in stages:
         survey_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
         groups_dict = convert_choices_groups(survey_choices)
         students_dict, absent_students_dict = convert_users_students(multistage_user_rankings.get(stage.stage, []), True)
 
-        # Enforce participation limits by pruning selections that would exceed the limit for a student
-        if students_dict:
-            for user_id, student in students_dict.items():
-                user_counts = participation_counts.setdefault(user_id, {})
-                new_selections = []
-                for sel in student.selections:
-                    if sel in participation_limit_groups:
-                        name = participation_limit_groups[sel]
-                        limit = participation_limits.get(name, 0)
-                        if user_counts.get(name, 0) >= limit:
-                            # skip this selection — student already reached limit for this name
-                            continue
-                    new_selections.append(sel)
-                student.selections = new_selections
+        prune_students_for_limits(students_dict, participation_limit_group_names, participation_limits, participation_counts)
 
         if students_dict == {}:
-            stage_output_data = [[], 0, [], [], [], []]
+            # Fix bug where app crashes when all students are absent
+            dropped_group_names = [group.name for group in groups_dict.values()]
+            stage_output_data = [[], 0, [], dropped_group_names, [], []]
         else:
             stage_output_data = hungarian_results(
                 survey_id, multistage_user_rankings.get(stage.stage, []), groups_dict, students_dict, survey_choices
             )
-
-            # Update participation_counts based on assignments produced by hungarian_results
-            assignments = stage_output_data[0]
-            for entry in assignments:
-                student_info = entry[0]
-                assigned_group = entry[2]
-                if not student_info or not assigned_group:
-                    continue
-                user_id = student_info[0]
-                group_id = assigned_group[0]
-                if group_id in participation_limit_groups:
-                    name = participation_limit_groups[group_id]
-                    user_counts = participation_counts.setdefault(user_id, {})
-                    user_counts[name] = user_counts.get(name, 0) + 1
+            update_participation_counts(stage_output_data[0], participation_limit_group_names, participation_counts)
 
         absent_students_list = absent_students_output(absent_students_dict)
         results = stage_output_data[0] + absent_students_list if absent_students_list != [] else stage_output_data[0]
@@ -530,6 +499,79 @@ def absent_students_output(absent_students_dict):
         ]
         output_data.append(student_entry)
     return output_data
+
+
+def update_participation_counts(allocation_result, participation_limit_group_names, participation_counts):
+    """
+    Update participation counts based on the output data from the hungarian algorithm.
+
+    args:
+        output_data: The output data from the hungarian algorithm
+        students_dict: A dict containing users which have been converted into students entities.
+        participation_limit_group_names: { choice_id: choice_name } for choices with limits
+        participation_counts: { user_id: { choice_name: count } } tracking current counts
+    """
+    for entry in allocation_result:
+        student_info = entry[0]
+        assigned_group = entry[2]
+        if not student_info or not assigned_group:
+            continue
+        user_id = student_info[0]
+        group_id = assigned_group[0]
+        if group_id in participation_limit_group_names:
+            name = participation_limit_group_names[group_id]
+            user_counts = participation_counts.setdefault(user_id, {})
+            user_counts[name] = user_counts.get(name, 0) + 1
+
+
+def get_participation_limits(survey_id, stages):
+    """
+    Get participation limits and corresponding groups from survey stages.
+
+    args:
+        stages: The stages of the survey
+
+    Returns:
+      participation_limits: { choice_name: limit } for limits > 0
+      participation_limit_groups: { choice_id: choice_name } for those choices
+    """
+
+    participation_limits = {}
+    participation_limit_groups = {}
+    for stage in stages:
+        stage_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
+        for choice in stage_choices:
+            cid = choice[0]
+            name = choice[2]
+            limit = choice[6] if len(choice) > 6 else 0
+            if limit > 0:
+                participation_limits[name] = limit
+                participation_limit_groups[cid] = name
+    return participation_limits, participation_limit_groups
+
+
+def prune_students_for_limits(students_dict, participation_limit_groups, participation_limits, participation_counts):
+    """
+    Prune students' selections to enforce participation limits.
+
+    args:
+        students_dict: A dict containing users which have been converted into students entities.
+        participation_limit_groups: { choice_id: choice_name } for choices with limits
+        participation_limits: { choice_name: limit } for limits > 0
+        participation_counts: { user_id: { choice_name: count } } tracking current counts
+    """
+    for user_id, student in students_dict.items():
+        user_counts = participation_counts.setdefault(user_id, {})
+        new_selections = []
+        for sel in student.selections:
+            if sel in participation_limit_groups:
+                name = participation_limit_groups[sel]
+                limit = participation_limits.get(name, 0)
+                if user_counts.get(name, 0) >= limit:
+                    # skip this selection — student already reached limit for this name
+                    continue
+            new_selections.append(sel)
+        student.selections = new_selections
 
 
 def convert_choices_groups(survey_choices):
