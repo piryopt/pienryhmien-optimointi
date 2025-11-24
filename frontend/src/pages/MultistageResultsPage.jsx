@@ -116,8 +116,9 @@ const MultistageSurveyResultsPage = () => {
           try {
             const name = res?.[0]?.[1] ?? "";
             const email = res?.[1] ?? "";
-            const groupName = res?.[2]?.[1] ?? "";
-            let choiceIndex = res?.[3] ?? res?.[2]?.[2] ?? "";
+            const rawGroupName = res?.[2]?.[1];
+            const groupName = rawGroupName === "Absent" ? t("Ei paikalla") : (rawGroupName ?? "");
+            let choiceIndex = res?.[3] ?? res?.[2]?.[2] ?? ""
             if (choiceIndex === null || choiceIndex === undefined)
               choiceIndex = "";
             const additional = Object.fromEntries(
@@ -191,22 +192,26 @@ const MultistageSurveyResultsPage = () => {
       <h2>{t("Monivaiheisen kyselyn tulokset")}</h2>
 
       <div style={{ marginTop: "0.5em", marginBottom: "1em" }}>
-        <button className="btn btn-outline-primary" onClick={exportToExcel}>
+        <button className="btn btn-outline-primary" style={{ marginTop: "1em", marginBottom: "1em" }} onClick={exportToExcel}>
           {t("Vie tulokset Excel-taulukkoon")}
         </button>
         &nbsp;
+        <div>
         {!resultsSaved && (
           <button className="btn btn-outline-success" onClick={saveAllResults}>
             {t("Tallenna kaikkien vaiheiden tulokset")}
           </button>
         )}
+        </div>
       </div>
 
-      <StageDropdown
-        stages={stages}
-        currStage={currStage}
-        setCurrStage={setCurrStage}
-      />
+      <div style={{ marginBottom: "1em" }}>
+        <StageDropdown
+          stages={stages}
+          currStage={currStage}
+          setCurrStage={setCurrStage}
+        />
+      </div>
 
       {currResults && (
         <>
@@ -215,7 +220,7 @@ const MultistageSurveyResultsPage = () => {
             happinessData={happinessData}
           />
           {droppedGroups && droppedGroups.length > 0 && (
-            <div>
+            <div style={{ marginTop: "1em", marginBottom: "2em" }}>
               <b style={{ color: "orangered" }}>
                 {t("Ryhmät, jotka pudotettiin jaosta")}
               </b>

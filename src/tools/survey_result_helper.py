@@ -50,12 +50,20 @@ def build_multistage_output(survey_id):
 
         survey_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
         groups_dict = convert_choices_groups(survey_choices)
-        students_dict = convert_users_students(multistage_user_rankings[stage.stage])
 
-        stage_output_data = hungarian_results(survey_id, multistage_user_rankings[stage.stage], groups_dict, students_dict, survey_choices)
+        students_dict, absent_students_dict = convert_users_students(multistage_user_rankings[stage.stage], True)
+
+        if students_dict == {}:
+            stage_output_data = [[], 0, [], [], [], []]
+        else:
+            stage_output_data = hungarian_results(survey_id, multistage_user_rankings[stage.stage], groups_dict, students_dict, survey_choices)
+
+        absent_students_list = absent_students_output(absent_students_dict)
+        results = stage_output_data[0] + absent_students_list if absent_students_list != [] else stage_output_data[0]
+
         stage_result = {
             "stage": stage.stage,
-            "results": stage_output_data[0],
+            "results": results,
             "happinessData": stage_output_data[2],
             "happiness": stage_output_data[1],
             "infos": stage_output_data[4],
@@ -63,6 +71,22 @@ def build_multistage_output(survey_id):
             "droppedGroups": stage_output_data[3],
         }
         output_data.append(stage_result)
+    return output_data
+
+
+def absent_students_output(absent_students_dict):
+    """
+    Build results structure for absent students in a survey.
+    Returns a list of absent student dicts.
+    """
+    output_data = []
+    for student_id, student in absent_students_dict.items():
+        student_entry = [
+            [student.id, student.name],
+            user_service.get_email(student.id),
+            [None, "Absent"],
+        ]
+        output_data.append(student_entry)
     return output_data
 
 
@@ -92,7 +116,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     happiness_avg = (happiness_sum / valid_count) if valid_count > 0 else 1
 
     infos = survey_choices_service.get_choice_additional_infos(survey_choices[0].id)
-    
+
     additional_info_keys = [list(i.keys()) for i in infos]
     infos = [list(i.values()) for i in infos]
 
@@ -157,8 +181,10 @@ def run_hungarian(survey_id, survey_answers_amount, groups_dict, students_dict, 
         violation = False
         sorted_groups = [k for k, v in sorted(group_sizes.items(), key=lambda item: item[1])]
         for survey_choice_id in sorted_groups:
-            min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
-            mandatory = survey_choices_service.get_survey_choice_mandatory(survey_choice_id)
+            # min_size = survey_choices_service.get_survey_choice_min_size(survey_choice_id)
+            min_size = groups_dict[survey_choice_id].min_size
+            # mandatory = survey_choices_service.get_survey_choice_mandatory(survey_choice_id)
+            mandatory = groups_dict[survey_choice_id].mandatory
 
             if min_size > group_sizes[survey_choice_id]:
                 violation = True
@@ -246,6 +272,9 @@ def get_candidates(students_dict, survey_choice_id, output_data, group_sizes, ne
         if assigned_group == survey_choice_id:
             continue
 
+        if students_dict[student_id].not_available:
+            continue
+
         # Skip students in other mandatory groups if they prefer their current mandatory group more
         if survey_choices_service.get_survey_choice_mandatory(assigned_group):
             current_group_rank = rank(students_dict, student_id, assigned_group)
@@ -258,7 +287,7 @@ def get_candidates(students_dict, survey_choice_id, output_data, group_sizes, ne
 
         candidates.append((i, student_id, assigned_group))
 
-    # If not enough candidates, Phase 2: pull from any group (respect min_size for mandatory groups)
+    # If not enough candidates, Phase 2: pull from other mandatory groups (respect min_size for mandatory groups)
     if len(candidates) < needed:
         for i, student_id, assigned_group in students_in_mandatory_groups:
             current_group_min_size = survey_choices_service.get_survey_choice_min_size(assigned_group)
@@ -392,7 +421,7 @@ def get_happiness_data(output_data, survey_id):
         else:
             ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
             rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
-        
+
         happiness = get_happiness(choice_id, ranking, rejections)
         if isinstance(happiness, (int, float)):
             happiness_sum += happiness
@@ -400,7 +429,7 @@ def get_happiness_data(output_data, survey_id):
             happiness_results[happiness] = happiness_results.get(happiness, 0) + 1
         else:
             happiness_results[happiness] = happiness_results.get(happiness, 0) + 1
-        
+
     return happiness_sum, happiness_results, valid_count
 
 
@@ -472,18 +501,24 @@ def convert_choices_groups(survey_choices):
     """
     groups = {}
     for choice in survey_choices:
-        groups[choice[0]] = Group(choice[0], choice[2], choice[3], choice[5], choice[6])
+        groups[choice[0]] = Group(choice[0], choice[2], choice[3], choice[5], choice[6], choice[7])
     return groups
 
 
-def convert_users_students(user_rankings):
+def convert_users_students(user_rankings, allow_absences=False):
     """
     Converts database data into the class "Student", which is used in the sorting algorithm
 
     args:
         user_rankings: The list of user rankings for a survey
+        allow_absences: Whether to include absent students or not
+
+    Returns:
+        If allow_absences is True, returns a tuple of two dicts: (students, absent_students).
+        If allow_absences is False, returns only the students dict.
     """
     students = {}
+    absent_students = {}
     for user_ranking in user_rankings:
         user_id = user_ranking[0]
         name = user_service.get_name(user_id)
@@ -494,7 +529,17 @@ def convert_users_students(user_rankings):
             if len(user_ranking[2]) > 0:
                 rejections = convert_to_list(user_ranking[2])
                 int_rejections = [int(i) for i in rejections]
-        students[user_id] = Student(user_id, name, int_ranking, int_rejections)
+
+        if allow_absences:
+            if user_ranking[4]:
+                absent_students[user_id] = Student(user_id, name, int_ranking, int_rejections, not_available=user_ranking[4])
+            else:
+                students[user_id] = Student(user_id, name, int_ranking, int_rejections)
+        else:
+            students[user_id] = Student(user_id, name, int_ranking, int_rejections)
+
+    if allow_absences:
+        return students, absent_students
     return students
 
 

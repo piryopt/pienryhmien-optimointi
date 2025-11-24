@@ -20,14 +20,14 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return None
-    
+
     def is_multistage(self, survey_id):
         """
         SQL code for checking whether or not a survey is multistage
-        
+
         args:
             survey_id: The id of the survey
-        
+
         returns
             True if the survey is multistage, False otherwise
         """
@@ -229,7 +229,7 @@ class SurveyRepository:
         allow_search_visibility=True,
         allow_absences=False,
         user_id=None,
-        min_choices_per_stage=None
+        min_choices_per_stage=None,
     ):
         """
         Creates a new survey, updates just surveys table
@@ -358,7 +358,7 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return []
-    
+
     def fetch_survey_responses_grouped_by_stages(self, survey_id):
         """Returns survey answers grouped by stage (grouping done in SQL)."""
         try:
@@ -374,7 +374,7 @@ class SurveyRepository:
             grouped = {}
             for stage, user_id, ranking, rejections, reason in rows:
                 grouped.setdefault(stage, []).append((user_id, ranking, rejections, reason))
-            
+
             return grouped
         except Exception as e:
             print(e)
@@ -384,7 +384,7 @@ class SurveyRepository:
         """Returns survey answers grouped by stage (grouping done in SQL)."""
         try:
             sql = text(
-                "SELECT stage, user_id, ranking, rejections, reason "
+                "SELECT stage, user_id, ranking, rejections, reason, not_available "
                 "FROM user_survey_rankings "
                 "WHERE survey_id = :survey_id AND deleted IS FALSE "
                 "ORDER BY stage, user_id"
@@ -393,8 +393,8 @@ class SurveyRepository:
             rows = result.fetchall()
 
             grouped = {}
-            for stage, user_id, ranking, rejections, reason in rows:
-                grouped.setdefault(stage, []).append((user_id, ranking, rejections, reason))
+            for stage, user_id, ranking, rejections, reason, not_available in rows:
+                grouped.setdefault(stage, []).append((user_id, ranking, rejections, reason, not_available))
 
             return grouped
         except Exception as e:
