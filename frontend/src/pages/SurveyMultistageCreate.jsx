@@ -486,8 +486,7 @@ const SurveyMultistageCreate = () => {
       return;
     }
 
-    const allowedDenied =
-      data.denyChoicesSetting === "hide" ? 1 : data.allowedDeniedChoices;
+    const allowedDenied = data.denyChoicesSetting === "hide" ? 0 : data.allowedDeniedChoices;
 
     const minChoicesPerStage = {};
     stages.forEach((s) => {
