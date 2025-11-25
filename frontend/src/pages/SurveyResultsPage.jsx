@@ -53,33 +53,197 @@ const SurveyResultsPage = () => {
         return;
       }
 
-      // info key sanitization
-      const safeInfoKeys = Array.isArray(infoKeys)
-        ? infoKeys.filter((k) => k && k.info_key)
-        : [];
+      let surveyMeta = null;
+      try {
+        surveyMeta = await surveyService.getSurvey(id);
+      } catch (err) {
+        console.warn("Could not load survey metadata for infos lookup", err);
+      }
+
+      const rawInfos = infoKeys ?? [];
+      const infoKeyNames = [];
+      const infoDefaults = {};
+      const pushKey = (k, def) => {
+        if (!k && k !== 0) return;
+        const sk = String(k);
+        if (!infoKeyNames.includes(sk)) infoKeyNames.push(sk);
+        if (def !== undefined && def !== null && infoDefaults[sk] === undefined) infoDefaults[sk] = def;
+      };
+
+      if (Array.isArray(rawInfos)) {
+        rawInfos.forEach((entry) => {
+          if (!entry) return;
+          if (typeof entry === "string") pushKey(entry, "");
+          else if (Array.isArray(entry)) pushKey(entry[0], entry[1]);
+          else if (typeof entry === "object") {
+            if (entry.info_key) pushKey(entry.info_key, entry.info_value ?? entry.info_value_string ?? "");
+            else Object.keys(entry).forEach((k) => pushKey(k, entry[k]));
+          }
+        });
+      }
+
       const additionalInfosPerSurvey = additionalInfos || {};
+      const additionalKeysSet = new Set(Object.keys(additionalInfosPerSurvey).map((k) => String(k)));
+
+      const sourceChoices =
+        (surveyMeta && Array.isArray(surveyMeta.choices) && surveyMeta.choices) ||
+        (surveyResultsData && Array.isArray(surveyResultsData.choices) && surveyResultsData.choices) ||
+        [];
+      const choiceIdToPos = {};
+      sourceChoices.forEach((c, i) => {
+        const cid = String(c.id ?? c.choice_id ?? c.choiceId ?? c.key ?? c.value ?? "");
+        if (cid) choiceIdToPos[cid] = String(i);
+        if (c.value !== undefined) choiceIdToPos[String(c.value)] = String(i);
+        if (c.name !== undefined) choiceIdToPos[String(c.name)] = String(i);
+      });
+
+      const findAdditionalKey = (rawKey) => {
+        if (rawKey === undefined || rawKey === null) return null;
+        const s = String(rawKey);
+        if (additionalKeysSet.has(s)) return s;
+        if (additionalKeysSet.has(String(Number(s)))) return String(Number(s));
+        if (choiceIdToPos[String(s)] && additionalKeysSet.has(choiceIdToPos[String(s)])) return choiceIdToPos[String(s)];
+        const n = Number(s);
+        if (!Number.isNaN(n)) {
+          for (const k of additionalKeysSet) {
+            if (String(n) === String(k)) return k;
+          }
+        }
+        for (const [choiceId, pos] of Object.entries(choiceIdToPos)) {
+          if (String(choiceId) === String(rawKey) && additionalKeysSet.has(String(pos))) return String(pos);
+        }
+        return null;
+      };
+
+      const resolveAdditionalForChoice = (map, choiceKey) => {
+        if (!map) return null;
+        const tryKeys = [choiceKey, String(choiceKey), Number(choiceKey)];
+        for (const k of tryKeys) {
+          if (k === undefined || k === null) continue;
+          if (Object.prototype.hasOwnProperty.call(map, k)) return map[k];
+        }
+        if (Array.isArray(map)) {
+          for (const el of map) {
+            if (!el) continue;
+            if (Array.isArray(el) && el.length > 0) {
+              if (String(el[0]) === String(choiceKey)) return el[1] ?? el[2] ?? null;
+            } else if (typeof el === "object") {
+              if (el.choice_id !== undefined && String(el.choice_id) === String(choiceKey)) return el.infos ?? el.additional ?? el;
+              if (el.choiceId !== undefined && String(el.choiceId) === String(choiceKey)) return el.infos ?? el.additional ?? el;
+              if (Object.prototype.hasOwnProperty.call(el, String(choiceKey))) return el[String(choiceKey)];
+            }
+          }
+        }
+        return null;
+      };
+
+      const normalizeChoiceAdditional = (raw) => {
+        if (raw == null) return {};
+        if (typeof raw === "object" && !Array.isArray(raw)) {
+          const keys = Object.keys(raw);
+          const isIndexLike = keys.length > 0 && keys.every((k) => String(parseInt(k)) === k);
+          if (isIndexLike && infoKeyNames.length > 0) {
+            const arr = keys.map((k) => raw[k]);
+            const obj = {};
+            arr.forEach((v, i) => {
+              const ik = infoKeyNames[i] ?? `info_${i + 1}`;
+              obj[ik] = v;
+            });
+            return obj;
+          }
+          return { ...raw };
+        }
+        if (Array.isArray(raw)) {
+          const allSingleKeyObjects = raw.every(
+            (a) => a && typeof a === "object" && !Array.isArray(a) && Object.keys(a).length === 1
+          );
+          if (allSingleKeyObjects) {
+            const obj = {};
+            raw.forEach((a) => {
+              const k = Object.keys(a)[0];
+              obj[k] = a[k];
+            });
+            return obj;
+          }
+          if (infoKeyNames.length > 0) {
+            const obj = {};
+            raw.forEach((v, i) => {
+              const ik = infoKeyNames[i] ?? `info_${i + 1}`;
+              obj[ik] = v;
+            });
+            return obj;
+          }
+          const merged = {};
+          raw.forEach((it) => {
+            if (it && typeof it === "object" && !Array.isArray(it)) Object.assign(merged, it);
+          });
+          return merged;
+        }
+        if (infoKeyNames.length > 0) return { [infoKeyNames[0]]: raw };
+        return { info: raw };
+      };
 
       const groupData = [];
+
       results.forEach((res) => {
         try {
           const name = res?.[0]?.[1] ?? "";
           const email = res?.[1] ?? "";
           const groupName = res?.[2]?.[1] ?? "";
           let choiceIndex = res?.[3] ?? res?.[2]?.[2] ?? "";
-          if (choiceIndex === null || choiceIndex === undefined)
-            choiceIndex = "";
+          if (choiceIndex === null || choiceIndex === undefined) choiceIndex = "";
 
-          const additional = Object.fromEntries(
-            safeInfoKeys
-              .map((pair, index) => [
-                pair.info_key,
-                (additionalInfosPerSurvey?.[res?.[2]?.[0]] || [])[index]
-              ])
-              .filter(
-                ([key, value]) =>
-                  key && value !== undefined && value !== null && value !== ""
-              )
-          );
+          const choiceKey = res?.[2]?.[0] ?? choiceIndex;
+          const canonical = findAdditionalKey(choiceKey);
+          let rawForChoice = canonical ? additionalInfosPerSurvey[canonical] : resolveAdditionalForChoice(additionalInfosPerSurvey, choiceKey);
+
+          const isHeaderLike = (v) => Array.isArray(v) && v.length > 0 && v.every((x) => typeof x === "string");
+          if (isHeaderLike(rawForChoice)) rawForChoice = null;
+
+          if (!rawForChoice && sourceChoices.length > 0) {
+            const matchedChoice =
+              sourceChoices.find(
+                (c) =>
+                  String(c.id) === String(choiceKey) ||
+                  String(c.choice_id) === String(choiceKey) ||
+                  String(c.choiceId) === String(choiceKey) ||
+                  String(c.name) === String(choiceKey)
+              ) ?? null;
+
+            if (matchedChoice) {
+              const infos = matchedChoice.infos ?? matchedChoice.info_columns ?? [];
+              if (Array.isArray(infos) && infos.length > 0) {
+                const obj = {};
+                infos.forEach((entry) => {
+                  if (!entry) return;
+                  if (typeof entry === "object" && !Array.isArray(entry)) {
+                    const keys = Object.keys(entry);
+                    if (keys.length === 2 && (entry.info_key || entry.info_value)) {
+                      const k = entry.info_key ?? keys[0];
+                      const v = entry.info_value ?? entry[entry.info_key] ?? entry[keys[1]] ?? "";
+                      if (k) obj[String(k)] = v;
+                    } else {
+                      keys.forEach((k) => (obj[String(k)] = entry[k]));
+                    }
+                  } else if (Array.isArray(entry) && entry.length >= 2) {
+                    obj[String(entry[0])] = entry[1];
+                  }
+                });
+                rawForChoice = obj;
+              }
+            }
+          }
+
+          if (!rawForChoice) rawForChoice = resolveAdditionalForChoice(additionalInfosPerSurvey, choiceKey);
+
+          const normalized = normalizeChoiceAdditional(rawForChoice);
+
+          const additional = {};
+          infoKeyNames.forEach((ik) => {
+            let v = normalized?.[ik];
+            if (v === undefined || v === null || v === "") v = infoDefaults[ik] ?? "";
+            additional[ik] = v;
+          });
 
           groupData.push({
             [t("Nimi")]: name,

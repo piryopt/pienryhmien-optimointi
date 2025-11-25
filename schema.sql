@@ -84,6 +84,16 @@ CREATE TABLE feedback (
 	solved BOOLEAN
 );
 
+CREATE TABLE statistics ( -- One row that is updated, others for (weekly?) history/backups
+	id SERIAL PRIMARY KEY,
+	total_created_surveys INTEGER,
+	active_surveys_count INTEGER,
+	registered_teachers_count INTEGER,
+	registered_students_count INTEGER,
+	total_survey_answers INTEGER,
+	is_current_row BOOLEAN,
+	updated_at TIMESTAMP DEFAULT NOW()
+);
 
 CREATE UNIQUE INDEX idx_user_survey_rankings_user_id_survey_id_stage
 ON user_survey_rankings (user_id, survey_id, stage);

@@ -49,6 +49,17 @@ class UserRepository:
                 text(sql),
                 {"name": user.name, "email": user.email, "isteacher": user.isteacher, "admin": admin_flag, "language": "fi"},
             )
+            if user.isteacher:
+                update_statistics_sql = """
+                    UPDATE statistics SET registered_teachers_count = registered_teachers_count + 1 
+                    WHERE is_current_row = TRUE
+                """
+            else:
+                update_statistics_sql = """
+                    UPDATE statistics SET registered_students_count = registered_students_count + 1 
+                    WHERE is_current_row = TRUE
+                """
+            db.session.execute(text(update_statistics_sql))
             db.session.commit()
             # Reflect admin flag on returned entity so callers see it
             try:

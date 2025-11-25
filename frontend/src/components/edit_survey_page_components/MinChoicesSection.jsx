@@ -1,10 +1,34 @@
 import { useTranslation } from "react-i18next";
 
-const MinChoicesSection = ({ choices, survey }) => {
+const MinChoicesSection = ({ choices, survey, multistage = false }) => {
   const { t } = useTranslation();
-  const choicesAmount = choices.length;
-  const minChoices = survey.min_choices;
+
+  const choicesAmount = choices?.length ?? 0;
+  const minChoices = survey?.min_choices ?? 0;
   const allRequired = minChoices === choicesAmount;
+
+  const minChoicesPerStage = multistage
+    ? Object.values(survey.min_choices_per_stage).map((v) => Number(v))
+    : null;
+
+  const choiceAmountsPerStage = multistage
+    ? choices.map((c) => c.choices.length)
+    : null;
+
+  // checks if in each stage min choices amount equals stage choices amount
+  const allRequired2 = multistage
+    ? minChoicesPerStage.length === choiceAmountsPerStage.length &&
+      minChoicesPerStage.every((v, i) => v === choiceAmountsPerStage[i])
+    : null;
+
+  const showMinChoicesSection = !multistage
+    ? minChoices !== choicesAmount
+    : !allRequired2;
+
+  const minChoicesValue = !multistage
+    ? minChoices
+    : (minChoicesPerStage[0] ?? "");
+
   return (
     <div>
       <section>
@@ -19,22 +43,22 @@ const MinChoicesSection = ({ choices, survey }) => {
           <input
             type="radio"
             id="min-choices-all"
-            checked={allRequired}
+            checked={!multistage ? allRequired : allRequired2}
             readOnly
-            disabled={!allRequired}
+            disabled={!multistage ? !allRequired : !allRequired2}
           />
           <label htmlFor="min-choices-all">{t("Kyllä")}</label>
           <input
             type="radio"
             id="min-choices-custom"
-            checked={!allRequired}
+            checked={!multistage ? !allRequired : !allRequired2}
             readOnly
-            disabled={allRequired}
+            disabled={!multistage ? allRequired : allRequired2}
           />
           <label htmlFor="min-choices-custom">{t("Ei")}</label>
         </div>
 
-        {minChoices !== choicesAmount && (
+        {showMinChoicesSection && (
           <div className="min-choices-section">
             <label htmlFor="minchoices" className="input-label">
               {t("Priorisoitujen ryhmien vähimmäismäärä")}
@@ -43,7 +67,7 @@ const MinChoicesSection = ({ choices, survey }) => {
               type="number"
               id="minchoices"
               className="form-control"
-              value={minChoices}
+              value={minChoicesValue}
               readOnly
             />
           </div>

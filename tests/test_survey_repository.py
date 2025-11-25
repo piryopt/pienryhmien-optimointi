@@ -167,7 +167,7 @@ def test_get_list_active_answered(setup_db):
     survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2024-01-01 02:02")
     sor.add_owner_to_survey(survey_id, d["user_id"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     active_answered = sr.get_list_active_answered(d["user_id3"])
     assert len(active_answered) == 1
 
@@ -180,7 +180,7 @@ def test_get_active_surveys_with_response_count_correct_id(setup_db):
     survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2024-01-01 02:02")
     sor.add_owner_to_survey(survey_id, d["user_id"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     surveys = sr.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0].surveyname == "Test survey 14"
     assert surveys[0].response_count == 1
@@ -194,7 +194,7 @@ def test_dont_get_active_surveys_with_response_count_incorrect_id(setup_db):
     survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2024-01-01 02:02")
     sor.add_owner_to_survey(survey_id, d["user_id"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     surveys = sr.get_active_surveys_and_response_count(d["user_id2"])
     assert not surveys
 
@@ -207,7 +207,7 @@ def test_get_list_closed_answered(setup_db):
     survey_id = sr.create_new_survey("Test survey 15", 10, "Motivaatio", "2024-01-01 02:02")
     sor.add_owner_to_survey(survey_id, d["user_id"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     sr.close_survey(survey_id)
     closed_answered = sr.get_list_closed_answered(d["user_id3"])
     assert len(closed_answered) == 1

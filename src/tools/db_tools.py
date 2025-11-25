@@ -13,6 +13,7 @@ def clear_database():
     db.session.execute(text("DELETE FROM surveys"))
     db.session.execute(text("DELETE FROM feedback"))
     db.session.execute(text("DELETE FROM users"))
+    db.session.execute(text("DELETE FROM statistics"))
     db.session.commit()
 
 

@@ -13,8 +13,10 @@ import ReasonsBox from "../components/survey_answer_page_components/ReasonsBox.j
 import ButtonRow from "../components/survey_answer_page_components/ButtonRow.jsx";
 import "../static/css/answerPage.css";
 import GroupSearch from "../components/GroupSearch.jsx";
+import { useTranslation } from "react-i18next";
 
 const AnswerSurveyPage = () => {
+  const { t } = useTranslation();
   const { surveyId } = useParams();
   const { showNotification } = useNotification();
   const [neutral, setNeutral] = useState([]);
@@ -182,9 +184,14 @@ const AnswerSurveyPage = () => {
               choices={choices}
             />
             <p className="note">
-              HUOM! <span className="mandatory">{"Pakolliseksi"}</span> merkityt
-              ryhmät priorisoidaan jakamisprosessissa. Ne täytetään aina
-              vähintään minimikokoon asti vastauksista riippumatta.
+              {t("HUOM! ")}
+              <span className="mandatory">{t("Pakolliseksi ")}</span>
+              {t(
+                "merkityt ryhmät priorisoidaan jakamisprosessissa. "
+              )}{" "}
+              {t(
+                "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
+              )}
             </p>
           </>
         )}

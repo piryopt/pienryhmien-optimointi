@@ -6,7 +6,6 @@ const UserRankings = ({ rankings, rejections, notAvailable = false }) => {
   const notAvailableStyle = {
     color: "#ff5c5c",
     fontWeight: 500,
-    fontSize: "0.9rem",
     padding: "0.4em 0.6em",
     borderRadius: "4px",
     display: "inline-block"

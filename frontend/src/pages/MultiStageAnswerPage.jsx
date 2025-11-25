@@ -159,20 +159,32 @@ const MultiStageAnswerPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const payload = stages.map((s) => ({
-        stageId: s.id,
-        notAvailable: s.notAvailable,
-        good: s.good.map((c) => c.id),
-        bad: s.bad.map((c) => c.id),
-        neutral: s.neutral.map((c) => c.id),
-        reason: reasons[s.id]
-      }));
-      const result = await surveyService.submitMultiStageAnswers({
-        surveyId,
-        minChoices: survey.min_choices,
-        deniedAllowedChoices: survey.denied_allowed_choices,
-        stages: payload
+      const payload = stages.map((s) => {
+        if (s.notAvailable) {
+          const allIds = [
+            ...(s.neutral || []),
+            ...(s.good || []),
+            ...(s.bad || [])
+          ].map((c) => c.id);
+          return {
+            stageId: s.id,
+            notAvailable: true,
+            good: [],
+            bad: [],
+            neutral: allIds,
+            reason: reasons[s.id]
+          };
+        }
+        return {
+          stageId: s.id,
+          notAvailable: s.notAvailable,
+          good: s.good.map((c) => c.id),
+          bad: s.bad.map((c) => c.id),
+          neutral: s.neutral.map((c) => c.id),
+          reason: reasons[s.id]
+        };
       });
+
       for (const stage of stages) {
         if (stage.notAvailable) continue;
 
@@ -215,7 +227,12 @@ const MultiStageAnswerPage = () => {
           return;
         }
       }
-
+      const result = await surveyService.submitMultiStageAnswers({
+        surveyId,
+        minChoices: survey.min_choices,
+        deniedAllowedChoices: survey.denied_allowed_choices,
+        stages: payload
+      });
       setExisting(true);
       if (result.status === "0") throw new Error(result.msg);
       showNotification(t("Kyselyn vastaukset tallennettu."), "success");
