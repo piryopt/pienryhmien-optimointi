@@ -212,7 +212,8 @@ class SurveyChoicesRepository:
             return new_choice_id
         except Exception as e:
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return None
 
     def get_choices_grouped_by_stage(self, survey_id):

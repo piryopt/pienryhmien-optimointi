@@ -3,7 +3,7 @@ from src import db
 
 
 class UserRankingsRepository:
-    def add_user_ranking(self, user_id, survey_id, ranking, rejections, reason):
+    def add_user_ranking(self, user_id, survey_id, ranking, rejections, reason, ranking_exists):
         """
         SQL code for adding a new entry into user_survey_rankings table
 
@@ -13,6 +13,7 @@ class UserRankingsRepository:
             ranking: The ranking of the user for the survey in question
             rejections: The rejections of the user for the survey in question
             reason: The reason of the user for the rejections of the survey in question
+            ranking_exists: Boolean of ranking existing
         """
         try:
             sql = """
@@ -34,13 +35,22 @@ class UserRankingsRepository:
                 text(sql),
                 {"user_id": user_id, "survey_id": survey_id, "ranking": ranking, "rejections": rejections, "reason": reason, "deleted": False},
             )
+            
+            if not ranking_exists:
+                update_statistics_sql = """
+                    UPDATE statistics SET total_survey_answers = total_survey_answers + 1 WHERE is_current_row = TRUE
+                """
+                db.session.execute(text(update_statistics_sql))
+
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
 
-    def add_multistage_user_ranking(self, user_id, survey_id, ranking, rejections, reason, stage, not_available):
+    def add_multistage_user_ranking(self, user_id, survey_id, ranking, rejections, reason, stage, not_available, ranking_exists):
         """
         SQL code for adding a new entry into user_survey_rankings table
 
@@ -69,10 +79,17 @@ class UserRankingsRepository:
                  "stage": stage, "not_available": not_available
                  },
             )
+            if not ranking_exists:
+                update_statistics_sql = """
+                    UPDATE statistics SET total_survey_answers = total_survey_answers + 1 WHERE is_current_row = TRUE
+                """
+                db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
 
     def get_user_ranking(self, user_id, survey_id):
@@ -122,6 +139,21 @@ class UserRankingsRepository:
             print(e)
             return []
 
+    def user_ranking_exists(self, user_id, survey_id):
+        """
+        Returns boolean of a survey ranking existing for a user
+        """
+        try:
+            sql = """
+                SELECT EXISTS (SELECT 1 FROM user_survey_rankings
+                WHERE user_id = :user_id AND survey_id = :survey_id AND deleted = FALSE)
+            """
+            result = db.session.execute(text(sql), {"user_id": user_id, "survey_id": survey_id})
+            return result.fetchone()[0]
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
     def delete_user_ranking(self, user_id, survey_id):
         """
         SQL code for deleting a user_survey_ranking entry. It can be manually restored if no new ranking is added
@@ -133,12 +165,18 @@ class UserRankingsRepository:
         try:
             sql = "UPDATE user_survey_rankings SET deleted = True WHERE (user_id=:user_id AND survey_id=:survey_id)"
             db.session.execute(text(sql), {"user_id": user_id, "survey_id": survey_id})
+            update_statistics_sql = """
+                UPDATE statistics SET total_survey_answers = total_survey_answers - 1 WHERE is_current_row = TRUE
+            """
+            db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
-
+        
     def get_all_rankings(self):
         """
         SQL code for getting the amount of all rankings. Used for analytics in the admin page.

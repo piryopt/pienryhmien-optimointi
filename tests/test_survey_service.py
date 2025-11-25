@@ -321,7 +321,7 @@ def test_get_list_active_answered(setup_env):
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     active_list = ss.get_list_active_answered(d["user_id3"])
     assert len(active_list) == 1
 
@@ -336,7 +336,7 @@ def test_get_list_closed_answered(setup_env):
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     ss.close_survey(survey_id, d["user_id"])
     closed_list = ss.get_list_closed_answered(d["user_id3"])
     assert len(closed_list) == 1
@@ -562,8 +562,8 @@ def test_new_enough_survey_not_deleted(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["response_count"] == 2
@@ -589,8 +589,8 @@ def test_deleting_old_survey_permanently_delete_all_related_data(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["response_count"] == 2
@@ -659,8 +659,8 @@ def test_get_correct_active_surveys_and_response_count(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["surveyname"] == "Test survey 16"
@@ -680,3 +680,21 @@ def test_len_active_surveys_admin(setup_env):
     )
     length = ss.len_active_surveys()
     assert length == 1
+
+def test_get_admin_analytics(setup_env):
+    """
+    Test that admin analytics fetched from statistics table are correct
+    """
+    d = setup_env
+    initial_stats = ss.get_admin_analytics()
+    assert(list(initial_stats.values()) == [0,0,0,0,3])
+
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
+    )
+    ranking = "2,1,5,6,3,4"
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
+
+    updated_stats = ss.get_admin_analytics()
+    assert(list(updated_stats.values()) == [1,1,0,1,3])
+    

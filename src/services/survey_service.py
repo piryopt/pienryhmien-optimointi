@@ -645,21 +645,13 @@ class SurveyService:
         }
         """
         try:
-            total_surveys = self.len_all_surveys()
-            active_surveys = self.len_active_surveys()
-            total_students = self._user_service.len_all_students()
-            total_teachers = self._user_service.len_all_teachers()
-
-            from src.services.user_rankings_service import user_rankings_service
-
-            total_responses = user_rankings_service.len_all_rankings()
-
+            statistics = self._survey_repository.get_admintools_statistics()
             return {
-                "total_surveys": int(total_surveys or 0),
-                "active_surveys": int(active_surveys or 0),
-                "total_students": int(total_students or 0),
-                "total_responses": int(total_responses or 0),
-                "total_teachers": int(total_teachers or 0),
+                "total_surveys": statistics.total_created_surveys,
+                "active_surveys": statistics.active_surveys_count,
+                "total_students": statistics.registered_students_count,
+                "total_responses": statistics.total_survey_answers,
+                "total_teachers": statistics.registered_teachers_count
             }
         except Exception as e:
             print("Error collecting admin analytics:", e)
@@ -667,10 +659,12 @@ class SurveyService:
 
     def set_survey_deleted_true(self, survey_id):
         """
-        Sets survey and choices tables column deleted to true, doesn't actually delete the survey or choices
+        Sets survey and choices tables column deleted to true, doesn't actually 
+        delete the survey or choices. Also closes the survey. 
         RETURNS whether updating was successful
         """
-
+        if not self.check_if_survey_closed(survey_id):
+            self._survey_repository.close_survey(survey_id)
         self._choices_repository.set_choices_deleted_true(survey_id)
         return self._survey_repository.set_survey_deleted_true(survey_id)
 
@@ -705,5 +699,10 @@ class SurveyService:
         surveys = self._survey_repository.get_deleted_surveys(user_id)
         return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
 
+    def save_statistics(self):
+        """
+        Saves old statistics
+        """
+        self._survey_repository.save_statistics()
 
 survey_service = SurveyService()
