@@ -41,8 +41,8 @@ CREATE TABLE survey_choices ( -- singular group, daycare etc.
 );
 
 CREATE TABLE survey_stages (
-	survey_id VARCHAR(10) REFERENCES surveys,
-	choice_id INTEGER REFERENCES survey_choices,
+	survey_id VARCHAR(10) REFERENCES surveys ON DELETE CASCADE,
+	choice_id INTEGER REFERENCES survey_choices ON DELETE CASCADE,
 	stage TEXT NOT NULL,
 	order_number INTEGER,
 	PRIMARY KEY (survey_id, choice_id, stage)

@@ -60,18 +60,6 @@ class SurveyService:
         if not survey:
             return False
         return survey.surveyname
-    
-    def is_multistage(self, survey_id):
-        """
-        Returns True if the survey has stages (is multistage), False otherwise.
-
-        args:
-            survey_id: The id of the survey
-        """
-        result = self._survey_repository.is_multistage(survey_id)
-        if not result:
-            return False
-        return result
 
     def is_multistage(self, survey_id):
         """
@@ -364,7 +352,7 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
-    
+
     def fetch_survey_responses_grouped_by_stages(self, survey_id):
         """
         Gets a list of user_survey_rankings for the survey grouped by stage
@@ -487,7 +475,7 @@ class SurveyService:
                 if len(stage.get("choices", [])) < required_min:
                     msg = "There are less choices than the minimum amount of prioritized groups!"
                     return {"success": False, "message": msg}
-                
+ 
                 for choice in stage.get("choices", []):
                     result = self.validate_survey_choice(choice)
                     if not result["success"]:
@@ -687,7 +675,7 @@ class SurveyService:
     def create_new_multiphase_survey(self, **kwargs):
         if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):
             return None
-    
+
         survey_id = self._survey_repository.create_new_survey(**kwargs)
         return survey_id
 

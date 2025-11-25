@@ -179,7 +179,7 @@ class SurveyChoicesService:
             name (str): The display name of the choice.
             max_spaces (int): Maximum number of participants allowed.
             min_size (int): Minimum number of participants required.
-            stages (list[str]): A list of stage identifiers (e.g., ["week1", "week2"]).
+            stage (list[str]): A list of stage identifiers (e.g., ["week1", "week2"]).
             mandatory (bool): Whether the group is mandatory. Defaults to False.
 
         Returns:
@@ -243,6 +243,7 @@ class SurveyChoicesService:
                     "hidden": row["hidden"]
                 })
         return sorted(stages, key=lambda s: s["orderNumber"])
+
     def set_choices_deleted_true(self, survey_id):
         """
         Sets choices of survey to deleted status. Returns boolean.
