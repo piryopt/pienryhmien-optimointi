@@ -355,29 +355,11 @@ class SurveyRepository:
             print(e)
             return []
 
-    def fetch_survey_responses_grouped_by_stages(self, survey_id):
-        """Returns survey answers grouped by stage (grouping done in SQL)."""
-        try:
-            sql = text(
-                "SELECT stage, user_id, ranking, rejections, reason "
-                "FROM user_survey_rankings "
-                "WHERE survey_id = :survey_id AND deleted IS FALSE "
-                "ORDER BY stage, user_id"
-            )
-            result = db.session.execute(sql, {"survey_id": survey_id})
-            rows = result.fetchall()
+    def fetch_survey_responses_grouped_by_stage(self, survey_id):
+        """
+        Returns survey answers grouped by stage (grouping done in SQL).
+        """
 
-            grouped = {}
-            for stage, user_id, ranking, rejections, reason in rows:
-                grouped.setdefault(stage, []).append((user_id, ranking, rejections, reason))
-
-            return grouped
-        except Exception as e:
-            print(e)
-            return {}
-
-    def fetch_survey_response_grouped_by_stages(self, survey_id): (kopio)
-        """Returns survey answers grouped by stage (grouping done in SQL)."""
         try:
             sql = text(
                 "SELECT stage, user_id, ranking, rejections, reason, not_available "
@@ -624,7 +606,7 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
-        
+
     def save_statistics(self):
         """
         Adds a new row to the DB, copy of current_row with is_current_row = FALSE
@@ -655,5 +637,6 @@ class SurveyRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return False
+
 
 survey_repository = SurveyRepository()

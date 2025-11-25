@@ -35,7 +35,7 @@ class UserRankingsRepository:
                 text(sql),
                 {"user_id": user_id, "survey_id": survey_id, "ranking": ranking, "rejections": rejections, "reason": reason, "deleted": False},
             )
-            
+
             if not ranking_exists:
                 update_statistics_sql = """
                     UPDATE statistics SET total_survey_answers = total_survey_answers + 1 WHERE is_current_row = TRUE
@@ -73,11 +73,16 @@ class UserRankingsRepository:
                 """
             db.session.execute(
                 text(sql),
-                {"user_id": user_id, "survey_id": survey_id, 
-                 "ranking": ranking, "rejections": rejections, 
-                 "reason": reason, "deleted": False,
-                 "stage": stage, "not_available": not_available
-                 },
+                {
+                    "user_id": user_id,
+                    "survey_id": survey_id,
+                    "ranking": ranking,
+                    "rejections": rejections,
+                    "reason": reason,
+                    "deleted": False,
+                    "stage": stage,
+                    "not_available": not_available,
+                },
             )
             if not ranking_exists:
                 update_statistics_sql = """
@@ -176,7 +181,7 @@ class UserRankingsRepository:
             if "Working outside of application context." not in str(e):
                 db.session.rollback()
             return False
-        
+
     def get_all_rankings(self):
         """
         SQL code for getting the amount of all rankings. Used for analytics in the admin page.
@@ -211,7 +216,7 @@ class UserRankingsRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return []
-        
+
     def get_user_multistage_rankings_by_stage(self, survey_id, user_id, stage):
         """
         SQL code for getting user rankings from a multistage survey stage
@@ -232,5 +237,6 @@ class UserRankingsRepository:
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return None
+
 
 user_rankings_repository = UserRankingsRepository()

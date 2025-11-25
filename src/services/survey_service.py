@@ -353,15 +353,6 @@ class SurveyService:
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
 
-    def fetch_survey_responses_grouped_by_stages(self, survey_id):
-        """
-        Gets a list of user_survey_rankings for the survey grouped by stage
-
-        args:
-            survey_id: The id of the survey
-        """
-        return self._survey_repository.fetch_survey_responses_grouped_by_stages(survey_id)
-
     def fetch_survey_responses_grouped_by_stage(self, survey_id):
         """
         Gets a list of user_survey_rankings for the survey grouped by stage
@@ -369,7 +360,7 @@ class SurveyService:
         args:
             survey_id: The id of the survey
         """
-        return self._survey_repository.fetch_survey_response_grouped_by_stages(survey_id)
+        return self._survey_repository.fetch_survey_responses_grouped_by_stage(survey_id)
 
     def get_choice_popularities(self, survey_id: str):
         """
@@ -639,7 +630,7 @@ class SurveyService:
                 "active_surveys": statistics.active_surveys_count,
                 "total_students": statistics.registered_students_count,
                 "total_responses": statistics.total_survey_answers,
-                "total_teachers": statistics.registered_teachers_count
+                "total_teachers": statistics.registered_teachers_count,
             }
         except Exception as e:
             print("Error collecting admin analytics:", e)
@@ -647,8 +638,8 @@ class SurveyService:
 
     def set_survey_deleted_true(self, survey_id):
         """
-        Sets survey and choices tables column deleted to true, doesn't actually 
-        delete the survey or choices. Also closes the survey. 
+        Sets survey and choices tables column deleted to true, doesn't actually
+        delete the survey or choices. Also closes the survey.
         RETURNS whether updating was successful
         """
         if not self.check_if_survey_closed(survey_id):
@@ -692,5 +683,6 @@ class SurveyService:
         Saves old statistics
         """
         self._survey_repository.save_statistics()
+
 
 survey_service = SurveyService()

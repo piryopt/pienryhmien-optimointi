@@ -322,9 +322,7 @@ def test_exceptions():
     assert not success
     success = sr.fetch_survey_responses(-1)
     assert not success
-    success = sr.fetch_survey_responses_grouped_by_stages(-1)
-    assert not success
-    success = sr.fetch_survey_response_grouped_by_stages(-1)
+    success = sr.fetch_survey_responses_grouped_by_stage(-1)
     assert not success
     success = sr.get_active_surveys_and_response_count(-1)
     assert not success
