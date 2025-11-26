@@ -14,16 +14,21 @@ const SurveysTable = ({ surveys, setSurveys }) => {
   const handleDeleteClick = async (surveyId) => {
     openDialog(
       t("Poista kysely?"),
-      t("Haluatko siirtää kyselyn roskakoriin?"),
+      t(
+        "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan."
+      ),
       surveyId,
       async () => {
         try {
           await surveyService.trashSurvey(surveyId);
           setSurveys((prev) => prev.filter((s) => s.id !== surveyId));
-          showNotification(t("Kysely poistettu"), "success");
+          showNotification(t("Kysely siirretty roskakoriin"), "success");
         } catch (err) {
-          showNotification(t("Kyselyn poistaminen epäonnistui"), "error");
-          console.error("Error deleting survey:", err);
+          showNotification(
+            t("Kyselyn siirto roskakoriin epäonnistui"),
+            "error"
+          );
+          console.error("Error trashing survey:", err);
         }
       }
     );

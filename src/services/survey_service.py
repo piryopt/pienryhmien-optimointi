@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from flask_babel import gettext
 from flask import session
 from src.repositories.survey_repository import survey_repository as default_survey_repository
@@ -330,9 +330,10 @@ class SurveyService:
         """
 
         surveys = self._survey_repository.get_all_deleted_surveys()
+        current_date = datetime.combine(datetime.today().date(), time(23, 59))
 
         for survey in surveys:
-            if survey.deleted_at <= datetime.now() - timedelta(days=7):
+            if survey.deleted_at <= current_date - timedelta(days=7):
                 self._survey_repository.delete_survey_permanently(survey.id)
 
     def delete_survey_permanently(self, survey_id):
