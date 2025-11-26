@@ -68,6 +68,19 @@ ALTER TABLE surveys ADD COLUMN min_choices_per_stage JSONB DEFAULT NULL;
 ALTER TABLE surveys
 ALTER COLUMN min_choices SET DEFAULT NULL;
 
+ALTER TABLE survey_stages
+    DROP CONSTRAINT survey_stages_survey_id_fkey,
+    DROP CONSTRAINT survey_stages_choice_id_fkey;
+
+ALTER TABLE survey_stages
+    ADD CONSTRAINT survey_stages_survey_id_fkey
+        FOREIGN KEY (survey_id)
+        REFERENCES surveys(id)
+        ON DELETE CASCADE,
+    ADD CONSTRAINT survey_stages_choice_id_fkey
+        FOREIGN KEY (choice_id)
+        REFERENCES survey_choices(id)
+        ON DELETE CASCADE;
 
 -- These have to be added to prod db before merging the changes
 -- CREATE TABLE statistics ( -- One row that is updated, others for (weekly?) history/backups
