@@ -3,9 +3,17 @@ import { useTranslation } from "react-i18next";
 const LimitParticipation = ({ survey, choices }) => {
   const { t } = useTranslation();
 
-  const hasParticipationLimit = Boolean(
-    choices?.[0]?.choices?.[0]?.participation_limit
-  );
+  // Collect participation_limit values from every stage choice
+  const participationLimits =
+    choices?.flatMap(
+      (stage) =>
+        stage?.choices?.map((c) => Number(c?.participation_limit ?? 0)) ?? []
+    ) ?? [];
+
+  // If all values are 0 (or there are no values) then no participation limit is set
+  const hasParticipationLimit =
+    participationLimits.length > 0 &&
+    !participationLimits.every((v) => v === 0);
 
   return (
     <section>
