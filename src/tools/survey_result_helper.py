@@ -547,6 +547,13 @@ def get_participation_limits(survey_id, stages):
             if limit > 0:
                 participation_limits[name] = limit
                 participation_limit_groups[cid] = name
+    try:
+        from flask import current_app
+        current_app.logger.debug(f"Participation limits: {participation_limits}")
+        current_app.logger.debug(f"Participation limit groups: {participation_limit_groups}")
+    except Exception:
+        pass
+    
     return participation_limits, participation_limit_groups
 
 
