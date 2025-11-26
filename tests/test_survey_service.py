@@ -681,6 +681,57 @@ def test_len_active_surveys_admin(setup_env):
     length = ss.len_active_surveys()
     assert length == 1
 
+
+def test_get_true_if_survey_is_multistage(setup_env):
+    """
+    Test that checking if multistage on multistage survey returns true
+    """
+    d = setup_env
+
+    data = {
+        "surveyname": "multi stage test 1",
+        "min_choices": None,
+        "description": "",
+        "enddate": "2027-12-03 00:00",
+        "allowed_denied_choices": 1,
+        "allow_search_visibility": False,
+        "allow_absences": False,
+        "user_id": 1,
+        "min_choices_per_stage": {"viikko 1": 2, "viikko 2": 2},
+    }
+
+    survey_id = ss.create_new_multiphase_survey(
+        surveyname=data["surveyname"],
+        min_choices=data["min_choices"],
+        description=data["description"],
+        enddate=data["enddate"],
+        allowed_denied_choices=data["allowed_denied_choices"],
+        allow_search_visibility=data["allow_search_visibility"],
+        allow_absences=data["allow_absences"],
+        user_id=data["user_id"],
+        min_choices_per_stage=data.get("min_choices_per_stage"),
+    )
+
+    scs.add_multistage_choice(survey_id=survey_id, name="Valinta", max_spaces=2, min_size=0, stage=["viikko 1", "viikko2"], mandatory=False)
+
+    multistage = ss.is_multistage(survey_id)
+    assert multistage
+
+
+def test_get_false_if_survey_is_not_multistage(setup_env):
+    """
+    Test that checking if multistage on regular survey returns false
+    """
+    d = setup_env
+
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey 17", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
+    )
+
+    multistage = ss.is_multistage(survey_id)
+    assert not multistage
+
+
 def test_get_admin_analytics(setup_env):
     """
     Test that admin analytics fetched from statistics table are correct

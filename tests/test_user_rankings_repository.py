@@ -85,3 +85,13 @@ def test_exceptions(setup_env):
     user_id = setup_env["user_id"]
     success = urr.delete_user_ranking(user_id, -1)
     assert not success
+    success = urr.add_multistage_user_ranking(user_id, -1, "", "", "", "", False, False)
+    assert not success
+    success = urr.get_user_multistage_rankings(-1, user_id)
+    assert not success
+    success = urr.get_all_rankings()
+    assert not success
+    success = urr.get_all_rankings_by_stage(-1, "")
+    assert not success
+    success = urr.get_user_multistage_rankings_by_stage(-1, user_id, "")
+    assert not success
