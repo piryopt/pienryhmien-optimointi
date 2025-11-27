@@ -1093,7 +1093,7 @@ def survey_results(survey_id):
             current_app.logger.info("outputdata for multistage: %s", output_data)
         except Exception:
             # fallback to stdout if logger is not available
-            print("outputdata for multistage:", output_data)
+            current_app.logger.debug("outputdata for multistage", output_data)
         if output_data is None:
             return jsonify({"error": "Survey answers not found"}), 404
 
