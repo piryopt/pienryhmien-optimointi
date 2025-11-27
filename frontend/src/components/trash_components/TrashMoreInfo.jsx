@@ -24,20 +24,6 @@ const TrashMoreInfo = ({ survey, handleDeleteClick, handleRestoreClick }) => {
       <br></br>
       <Link
         className="surveys_link"
-        to={`/surveys/${survey.is_multistage ? "multistage/" : ""}${survey.id}/answers`}
-      >
-        <img
-          src={`${imagesBaseUrl}/manage_search_white_36dp.svg`}
-          alt=""
-          className="d-inline-block align-text-top"
-          width="20"
-          height="20"
-        />
-        &nbsp;{t("Tarkastele tuloksia")}
-      </Link>
-      <br></br>
-      <Link
-        className="surveys_link"
         to={`/surveys/${survey.is_multistage ? "multistage/" : ""}create?fromtemplate=${survey.id}`}
       >
         <img

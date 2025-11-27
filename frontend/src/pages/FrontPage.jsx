@@ -1,49 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import FrontPageButton from "../components/FrontPageButton.jsx";
 import surveyService from "../services/surveys.js";
 import { useAuth } from "../context/AuthProvider";
 import { imagesBaseUrl } from "../utils/constants.js";
-
-const FrontPageButton = ({
-  path,
-  imgSrc,
-  mainText,
-  additionalText,
-  topRightText,
-  additionalVars
-}) => {
-  const { t } = useTranslation();
-
-  return (
-    <Link
-      to={path}
-      className="list-group-item list-group-item-action"
-      style={{ borderRadius: "12px" }}
-    >
-      <div className="d-flex w-100">
-        <div className="d-flex w-100">
-          <img
-            src={imgSrc}
-            alt=""
-            width="34"
-            height="30"
-            className=""
-            style={{ marginRight: "8px" }}
-          />
-          <p style={{ fontSize: "130%" }}>{t(mainText, additionalVars)}</p>
-        </div>
-
-        {topRightText && (
-          <small className="text-muted text-nowrap">
-            {t(topRightText, additionalVars)}
-          </small>
-        )}
-      </div>
-      <small className="text-muted">{t(additionalText, additionalVars)}</small>
-    </Link>
-  );
-};
 
 const FrontPage = () => {
   const [createdSurveys, setCreatedSurveys] = useState(0);

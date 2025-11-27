@@ -69,6 +69,16 @@ jobs:
       - name: Lint backend
         run: pylint src/
 
+      - name: Run Eslint
+        working-directory: frontend
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Check Prettier formatting
+        working-directory: frontend
+        run: npx prettier . --check
+        continue-on-error: true
+
       - name: Build React
         working-directory: frontend
         env:

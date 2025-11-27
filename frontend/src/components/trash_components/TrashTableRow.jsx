@@ -2,22 +2,12 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import TrashMoreInfo from "./TrashMoreInfo";
+import ParseDeleteDate from "./ParseDeleteDate";
 import { imagesBaseUrl } from "../../utils/constants";
 
 const TrashTableRow = ({ survey, handleDeleteClick, handleRestoreClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
   const { t } = useTranslation();
-
-  const timestamp = Date.parse(survey.deleted_at);
-  const timeDate = new Date(timestamp);
-  const nextWeek = new Date();
-  nextWeek.setDate(timeDate.getDate() + 7);
-
-  const day = nextWeek.getDate();
-  const month = nextWeek.getMonth() + 1;
-  const year = nextWeek.getFullYear();
-
-  const deleteDate = `${day}.${month}.${year} 00:00`;
 
   if (survey.id === "separatingRow") {
     return (
@@ -88,7 +78,9 @@ const TrashTableRow = ({ survey, handleDeleteClick, handleRestoreClick }) => {
           />
         )}
       </td>
-      <td>{deleteDate}</td>
+      <td>
+        <ParseDeleteDate deletedAt={survey.deleted_at} />
+      </td>
     </tr>
   );
 };

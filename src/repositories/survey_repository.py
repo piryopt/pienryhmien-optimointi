@@ -551,7 +551,7 @@ class SurveyRepository:
         """
         try:
             sql = """
-                SELECT s.id, s.surveyname, s.closed, s.deleted_at,
+                SELECT s.id, s.surveyname, s.closed, s.results_saved, s.deleted_at,
                 EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id)
                     AS is_multistage FROM surveys s, survey_owners so
                 WHERE (so.user_id=:user_id AND s.id=so.survey_id AND s.deleted=True)
@@ -568,8 +568,8 @@ class SurveyRepository:
         SQL code getting the list of all set to be deleted surveys.
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.closed, s.deleted_at FROM surveys WHERE (deleted=True)"
-            result = db.session.execute(text(sql), {"user_id": user_id})
+            sql = "SELECT s.id, s.surveyname, s.closed, s.deleted_at FROM surveys s WHERE (deleted=True)"
+            result = db.session.execute(text(sql))
             surveys = result.fetchall()
             return surveys
         except Exception as e:  # pylint: disable=W0718

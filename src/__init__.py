@@ -88,7 +88,7 @@ def create_app(test_config=None):
             with app.app_context():
                 close_surveys()
 
-        @scheduler.task("cron", id="delete_old_surveys", hour=0, minute=0)
+        @scheduler.task("cron", id="delete_trashed_surveys", hour=0, minute=0)
         def scheduled_delete_trashed_surveys():
             with app.app_context():
                 delete_trashed_surveys()
