@@ -548,7 +548,7 @@ def get_participation_limits(survey_id, stages):
         for choice in stage_choices:
             cid = choice[0]
             name = choice[2]
-            limit = choice[6] if len(choice) > 6 else 0
+            limit = choice[7] if len(choice) > 6 else 0
             if limit > 0:
                 participation_limits[name] = limit
                 participation_limit_groups[cid] = name
