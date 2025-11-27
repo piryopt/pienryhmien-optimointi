@@ -31,6 +31,6 @@ ENV FLASK_APP=src
 
 ENV FLASK_ENV=production
 
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "src:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "--log-level", "DEBUG", "src:app"]
 
 EXPOSE 5000/tcp

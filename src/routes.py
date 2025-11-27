@@ -1097,6 +1097,49 @@ def survey_results(survey_id):
         if output_data is None:
             return jsonify({"error": "Survey answers not found"}), 404
 
+        try:
+            for stage in output_data:
+                results_list = stage.get("results", []) if isinstance(stage, dict) else []
+                stage_id = stage.get("stage") if isinstance(stage, dict) else None
+                for res in results_list:
+                    try:
+                        user_id = res[0][0]
+                        choice_id = res[2][0]
+                        ur = None
+                        if stage_id:
+                            ur = user_rankings_service.get_user_multistage_rankings_by_stage(survey_id, user_id, stage_id)
+                        if not ur:
+                            ur = user_rankings_service.user_ranking_exists(survey_id, user_id)
+                        ordinal = ""
+                        if ur and getattr(ur, "ranking", None):
+                            ranking_list = convert_to_list(ur.ranking)
+                            if str(choice_id) in ranking_list:
+                                ordinal = ranking_list.index(str(choice_id)) + 1
+                        rejections = None
+                        if ur and getattr(ur, "rejections", None) is not None:
+                            rejections = ur.rejections
+                        else:
+                            try:
+                                rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
+                            except Exception:
+                                rejections = None
+                        if rejections:
+                            rej_list = convert_to_list(rejections)
+                            if str(choice_id) in rej_list:
+                                ordinal = "Kielletty"
+                        if len(res) < 4:
+                            while len(res) < 4:
+                                res.append(None)
+                        res[3] = ordinal
+                        if len(res[2]) < 3:
+                            while len(res[2]) < 3:
+                                res[2].append(None)
+                        res[2][2] = ordinal
+                    except Exception:
+                        continue
+        except Exception:
+            current_app.logger.exception("Error computing ordinals for multistage results")
+
         if request.method == "GET":
             return jsonify(
                 {
