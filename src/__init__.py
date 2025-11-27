@@ -34,15 +34,8 @@ def get_locale():
 
 def create_app(test_config=None):
     load_dotenv()
-
     app = Flask(__name__, static_folder="./static/react", static_url_path="/")
-    try:
-        gunicorn_logger = logging.getLogger("gunicorn.error")
-        if gunicorn_logger.handlers:
-            app.logger.handlers = gunicorn_logger.handlers
-            app.logger.setLevel(gunicorn_logger.level)
-    except Exception:
-        pass
+    
     CORS(app, origins=["http://localhost:5173", "http://localhost:5001"], supports_credentials=True)
 
     # app.config.from_object(Config())

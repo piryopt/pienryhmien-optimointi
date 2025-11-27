@@ -540,24 +540,14 @@ def get_participation_limits(survey_id, stages):
     participation_limit_groups = {}
     for stage in stages:
         stage_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
-        try:
-            from flask import current_app
-            current_app.logger.debug(f"stage choices: {stage_choices}")
-        except Exception:
-            pass
+
         for choice in stage_choices:
-            cid = choice[0]
-            name = choice[2]
-            limit = choice[7] if len(choice) > 6 else 0
+            cid = choice["id"]
+            name = choice["name"]
+            limit = choice.get("participation_limit", 0)
             if limit > 0:
                 participation_limits[name] = limit
                 participation_limit_groups[cid] = name
-    try:
-        from flask import current_app
-        current_app.logger.debug(f"Participation limits: {participation_limits}")
-        current_app.logger.debug(f"Participation limit groups: {participation_limit_groups}")
-    except Exception:
-        pass
     
     return participation_limits, participation_limit_groups
 
@@ -595,7 +585,14 @@ def convert_choices_groups(survey_choices):
     """
     groups = {}
     for choice in survey_choices:
-        groups[choice[0]] = Group(choice[0], choice[2], choice[3], choice[5], choice[6], choice[7])
+        cid = choice["id"]
+        name = choice["name"]
+        max_spaces = choice.get("max_spaces", choice.get("spaces"))
+        min_size = choice.get("min_size", choice.get("minSize"))
+        participation_limit = choice.get("participation_limit", 0)
+        mandatory = choice.get("mandatory", choice.get("hidden", False))
+
+        groups[cid] = Group(cid, name, max_spaces, min_size, participation_limit, mandatory)
     return groups
 
 
