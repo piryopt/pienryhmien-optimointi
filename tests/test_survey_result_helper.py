@@ -43,7 +43,7 @@ def setup_survey4(setup_db):
 
 
 def _group_ids_by_name(survey_choices):
-    return {choice[2]: choice[0] for choice in survey_choices}
+    return {choice["name"]: choice["id"] for choice in survey_choices}
 
 
 def _assignments_by_user(output):

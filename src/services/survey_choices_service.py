@@ -24,7 +24,7 @@ class SurveyChoicesService:
             survey_id: The id of the survey from which we want the survey choices
         """
         return self._survey_choices_repository.find_survey_choices(survey_id)
-    
+
     def get_list_of_stage_survey_choices(self, survey_id: str, stage: str):
         """
         Returns a list of survey choices from a survey for a given stage
@@ -34,7 +34,6 @@ class SurveyChoicesService:
             stage: The stage of the survey choices
         """
         return self._survey_choices_repository.get_stage_choices(survey_id, stage)
- 
 
     def get_survey_choice(self, survey_choice_id: int):
         """
@@ -186,10 +185,7 @@ class SurveyChoicesService:
                     # no hidden field feature implemented yet
                     self._survey_choices_repository.create_new_choice_info(choice_id, key, val, False)
         except Exception as e:
-            return {
-                "success": False,
-                "message": f"Unexpected service error: {e}"
-            }
+            return {"success": False, "message": f"Unexpected service error: {e}"}
 
     def get_survey_choices_by_stage(self, survey_id):
         """
@@ -204,12 +200,14 @@ class SurveyChoicesService:
 
             if stage_id not in stageIndices:
                 stageIndices[stage_id] = index
-                stages.append({
-                    "name": stage_id,
-                    "orderNumber": row["order_number"],
-                    "hasMandatory": any(map(lambda r: r["mandatory"] if r["stage"] == stage_id else False, rows)),
-                    "choices": []
-                })
+                stages.append(
+                    {
+                        "name": stage_id,
+                        "orderNumber": row["order_number"],
+                        "hasMandatory": any(map(lambda r: r["mandatory"] if r["stage"] == stage_id else False, rows)),
+                        "choices": [],
+                    }
+                )
                 index += 1
             choices = stages[stageIndices[stage_id]]["choices"]
 
@@ -224,15 +222,12 @@ class SurveyChoicesService:
                     "min_size": row["min_size"],
                     "mandatory": row["mandatory"],
                     "participation_limit": row["participation_limit"],
-                    "infos": []
+                    "infos": [],
                 }
                 choices.append(choice)
 
             if row.get("info_key"):
-                choice["infos"].append({
-                    row["info_key"]: row["info_value"],
-                    "hidden": row["hidden"]
-                })
+                choice["infos"].append({row["info_key"]: row["info_value"], "hidden": row["hidden"]})
         return sorted(stages, key=lambda s: s["orderNumber"])
 
     def set_choices_deleted_true(self, survey_id):

@@ -2,6 +2,7 @@ from sqlalchemy import text
 from src import db
 from flask import current_app
 
+
 class SurveyChoicesRepository:
     def find_survey_choices(self, survey_id):
         """
@@ -13,7 +14,8 @@ class SurveyChoicesRepository:
         try:
             sql = "SELECT * FROM survey_choices WHERE (survey_id=:survey_id AND deleted=False)"
             result = db.session.execute(text(sql), {"survey_id": survey_id})
-            survey_choices = result.fetchall()
+            survey_choices = result.mappings().all()
+            print(survey_choices)
             return survey_choices
         except Exception as e:  # pylint: disable=W0718
             print(e)
@@ -169,7 +171,6 @@ class SurveyChoicesRepository:
             print(e)
             return False
 
-
     def create_new_multistage_choice(self, **kwargs):
         """
         Creates a new multistage survey choice
@@ -249,7 +250,7 @@ class SurveyChoicesRepository:
         except Exception as e:
             print(e)
             return []
-    
+
     def get_stage_choices(self, survey_id, stage):
         """
         Returns a list of survey choices from a survey for a given stage
@@ -270,7 +271,6 @@ class SurveyChoicesRepository:
             print(e)
             return []
 
-
     def count_spaces_in_stage(self, survey_id, stage):
         """
         Returns the number of spaces in a survey stages groups
@@ -289,7 +289,7 @@ class SurveyChoicesRepository:
         except Exception as e:
             print(e)
             return None
-        
+
     def remove_empty_choices(self, survey_id):
         """
         Removes empty groups with the name "Tyhjä" created during assignment
@@ -304,5 +304,6 @@ class SurveyChoicesRepository:
         except Exception as e:
             print(e)
             return False
+
 
 survey_choices_repository = SurveyChoicesRepository()
