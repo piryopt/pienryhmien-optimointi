@@ -540,7 +540,11 @@ def get_participation_limits(survey_id, stages):
     participation_limit_groups = {}
     for stage in stages:
         stage_choices = survey_choices_service.get_list_of_stage_survey_choices(survey_id, stage.stage)
-        current_app.logger.debug(f"stage choices: {stage_choices}")
+        try:
+            from flask import current_app
+            current_app.logger.debug(f"stage choices: {stage_choices}")
+        except Exception:
+            pass
         for choice in stage_choices:
             cid = choice[0]
             name = choice[2]
