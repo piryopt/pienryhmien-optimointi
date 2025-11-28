@@ -211,7 +211,6 @@ class SurveyService:
         date_end,
         time_end,
         allowed_denied_choices=0,
-        allow_search_visibility=True,
     ):
         """
         Calls tools.parsers dictionary to survey parser
@@ -222,7 +221,7 @@ class SurveyService:
             return False
 
         return parser_dict_to_survey(
-            survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility
+            survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices
         )
 
     def get_survey_description(self, survey_id):
@@ -395,7 +394,6 @@ class SurveyService:
         date_end = survey_dict.get("enddate", "")
         time_end = survey_dict.get("endtime", "")
         allowed_denied_choices = survey_dict.get("allowedDeniedChoices", 0)
-        allow_search_visibility = survey_dict.get("allowSearchVisibility", False)
 
         date_string = f"{date_end} {time_end}"
         format_code = "%d.%m.%Y %H:%M"
@@ -410,10 +408,6 @@ class SurveyService:
 
         if not isinstance(allowed_denied_choices, int):
             msg = "Survey denied choices must be an integer"
-            return {"success": False, "message": msg}
-
-        if not isinstance(allow_search_visibility, bool):
-            msg = "Survey search visibility must be a boolean"
             return {"success": False, "message": msg}
 
         if len(survey_name) < 5:

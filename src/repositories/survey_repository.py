@@ -213,7 +213,6 @@ class SurveyRepository:
         description,
         enddate,
         allowed_denied_choices=0,
-        allow_search_visibility=True,
         allow_absences=False,
         user_id=None,
         min_choices_per_stage=None,
@@ -245,7 +244,7 @@ class SurveyRepository:
                     "desc": description,
                     "t_e": enddate,
                     "a_d_c": allowed_denied_choices,
-                    "a_s_v": allow_search_visibility,
+                    "a_s_v": True,
                     "a_a": allow_absences,
                 },
             )
