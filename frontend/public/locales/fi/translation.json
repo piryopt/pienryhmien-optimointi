@@ -51,7 +51,9 @@
     }
   },
   "Haluatko palauttaa kyselyn roskakorista?": "Haluatko palauttaa kyselyn roskakorista?",
-  "Haluatko siirtää kyselyn roskakoriin?": "Haluatko siirtää kyselyn roskakoriin?",
+  "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
+    "": "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan."
+  },
   "Haluatko varmasti avata kyselyn uudestaan?": "Haluatko varmasti avata kyselyn uudestaan?",
   "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ",
   "Haluatko varmasti sulkea kyselyn?": "Haluatko varmasti sulkea kyselyn?",
@@ -128,6 +130,7 @@
   "Kysely palautettu": "Kysely palautettu",
   "Kysely poistetaan": "Kysely poistetaan",
   "Kysely poistettu": "Kysely poistettu",
+  "Kysely siirretty roskakoriin": "Kysely siirretty roskakoriin",
   "Kysely suljettu": "Kysely suljettu",
   "Kyselyjen lataus epäonnistui": "Kyselyjen lataus epäonnistui",
   "Kyselyn kuvaus": "Kyselyn kuvaus",
@@ -139,6 +142,7 @@
   "Kyselyn osoite kopioitu leikepöydälle": "Kyselyn osoite kopioitu leikepöydälle",
   "Kyselyn palauttaminen epäonnistui": "Kyselyn palauttaminen epäonnistui",
   "Kyselyn poistaminen epäonnistui": "Kyselyn poistaminen epäonnistui",
+  "Kyselyn siirto roskakoriin epäonnistui": "Kyselyn siirto roskakoriin epäonnistui",
   "Kyselyn tila": "Kyselyn tila",
   "Kyselyn vastaukset tallennettu": {
     "": "Kyselyn vastaukset tallennettu."
