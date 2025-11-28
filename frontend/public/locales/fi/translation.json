@@ -10,6 +10,7 @@
   "Anna sähköpostiosoite": "Anna sähköpostiosoite",
   "Antamasi sähköpostiosoite ei ole kelvollinen": "Antamasi sähköpostiosoite ei ole kelvollinen",
   "Avaa": "Avaa",
+  "Avaa järjestelmänhallintanäkymä": "Avaa järjestelmänhallintanäkymä",
   "Avaa kysely uudelleen": "Avaa kysely uudelleen",
   "Avaa uudestaan?": "Avaa uudestaan?",
   "Avoimet palautteet": "Avoimet palautteet",
@@ -50,6 +51,7 @@
       "": "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle."
     }
   },
+  "Hallintatyökalut": "Hallintatyökalut",
   "Haluatko palauttaa kyselyn roskakorista?": "Haluatko palauttaa kyselyn roskakorista?",
   "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
     "": "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan."

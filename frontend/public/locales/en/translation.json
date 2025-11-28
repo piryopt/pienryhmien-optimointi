@@ -10,6 +10,7 @@
   "Anna sähköpostiosoite": "Email is missing",
   "Antamasi sähköpostiosoite ei ole kelvollinen": "The provided email address is not valid",
   "Avaa": "Open",
+  "Avaa järjestelmänhallintanäkymä": "Open administrator view",
   "Avaa kysely uudelleen": "Reopen the survey",
   "Avaa uudestaan?": "Open again?",
   "Avoimet palautteet": "Open feedback",
@@ -50,6 +51,7 @@
       "": "With the search bar, the respondent can filter options based on their name and choices. It is advisable to allow for surveys with a lot of response options, not all of which need to be organized, and conversely, to disallow surveys with few response options where all must be organized."
     }
   },
+  "Hallintatyökalut": "Administration tools",
   "Haluatko palauttaa kyselyn roskakorista?": "Do you want to restore this survey from the trash?",
   "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
     "": "Do you want to move the survey into the trash? Open surveys will be closed."

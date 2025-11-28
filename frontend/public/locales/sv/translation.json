@@ -1,16 +1,17 @@
 {
   "(kopio)": "(kopia)",
-  "Aiemmat kyselyt": "Tidigare enkäter",
-  "Aktiiviset kyselyt": "Aktiva enkäter",
+  "Aiemmat kyselyt": "Tidigare undersökningar",
+  "Aktiiviset kyselyt": "Aktiva undersökningar",
   "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
-    "": "Tilldela administrativa rättigheter till användaren för enkäten."
+    "": "Tilldela administrativa rättigheter till användaren för undersökningen."
   },
   "Anna palaute": "Ge feedback",
   "Anna palautetta": "Ge feedback",
   "Anna sähköpostiosoite": "E-postadress saknas!",
   "Antamasi sähköpostiosoite ei ole kelvollinen": "Den angivna e-postadressen är inte giltig.",
   "Avaa": "Öppna",
-  "Avaa kysely uudelleen": "Öppna enkäten igen",
+  "Avaa järjestelmänhallintanäkymä": "Öppna administratörsvyn",
+  "Avaa kysely uudelleen": "Öppna undersökningen igen",
   "Avaa uudestaan?": "Öppna igen",
   "Avoimet palautteet": "Öppen feedback",
   "Avoin": "Öppen",
@@ -50,6 +51,7 @@
       "": "Med hjälp av sökfältet kan respondenterna filtrera alternativen de ser baserat på deras namn och alternativ.   Det rekommenderas att tillåta undersökningar med ett stort antal svarsalternativ, som alla inte behöver ordnas,   och på samma sätt förbjuda undersökningar med få svarsalternativ, som alla måste ordnas."
     }
   },
+  "Hallintatyökalut": "administratörsverktyg",
   "Haluatko palauttaa kyselyn roskakorista?": "Vill du returnera undersökningen från skräpkorgen?",
   "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
     "": "Vill du flytta undersökningen till skräpkorgen? Öppna undersökningar kommer att stängas samtidigt"
@@ -103,7 +105,7 @@
   "Kaikki käynnissä olevat kyselyt": "Alla pågående undersökningar",
   "Kaikki rivit olivat virheellisiä": "Alla rader var felaktiga",
   "Kaikkien vaiheiden tulokset tallennettu": "Resultat från alla steg sparade",
-  "Käynnissä olevat kyselyt": "Pågående enkäter",
+  "Käynnissä olevat kyselyt": "Pågående undersökningar",
   "Käyttäjätunnus": "Användarnamn",
   "Kello": "Klockan",
   "Kentän tulee olla kokonaisluku": "Fältet måste vara ett heltal",
@@ -118,11 +120,11 @@
   "Kirjautuminen ulos onnistui": "Utloggning lyckades",
   "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klicka på valalternativet för att se ytterligare information om det",
   "kokonaislukuja": "heltal",
-  "Kopioi kysely": "Kopiera enkät",
-  "Kopioi kyselyn osoite leikepöydälle": "Kopiera enkätens webbadress till urklipp",
+  "Kopioi kysely": "Kopiera undersökningen",
+  "Kopioi kyselyn osoite leikepöydälle": "Kopiera undersökningens webbadress till urklipp",
   "Kopioi vaihe": "Kopiera fas",
   "Kyllä": "Ja",
-  "Kysely": "Enkät",
+  "Kysely": "Undersökning",
   "Kysely avattu": "Undersökningen öppnad",
   "Kysely luotu onnistuneesti": "Undersökningen skapats",
   "Kysely muokattu onnistuneesti": "Undersökningen redigerads",
@@ -133,22 +135,22 @@
   "Kysely siirretty roskakoriin": "Undersökningen flyttades till skräpkorgen",
   "Kysely suljettu": "Undersökningen stängd",
   "Kyselyjen lataus epäonnistui": "Misslyckades med att ladda undersökningar",
-  "Kyselyn kuvaus": "Enkätens beskrivning",
+  "Kyselyn kuvaus": "Undersökningens beskrivning",
   "Kyselyn luonti epäonnistui": "Undersökningens skapande misslyckades",
-  "Kyselyn muokkaus": "Redigering av enkät",
+  "Kyselyn muokkaus": "Redigering av undersökning",
   "Kyselyn muokkaus epäonnistui": "Redigering av undersökning misslyckades",
-  "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä": "Enkätens namn måste vara minst 5 tecken långt",
-  "Kyselyn nimi": "Enkätens namn",
+  "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä": "Undersökningens namn måste vara minst 5 tecken långt",
+  "Kyselyn nimi": "Undersökningens namn",
   "Kyselyn osoite kopioitu leikepöydälle": "Undersökningsadress kopierad till urklipp",
   "Kyselyn palauttaminen epäonnistui": "Misslyckades med att skicka in undersökningen",
   "Kyselyn poistaminen epäonnistui": "Det gick inte att ta bort undersökningen",
   "Kyselyn siirto roskakoriin epäonnistui": "Flyttade undersökningen till skräpkorgen misslyckades",
-  "Kyselyn tila": "Enkätens status",
+  "Kyselyn tila": "Undersökningens status",
   "Kyselyn vastaukset tallennettu": {
     "": "Undersökningsvaren sparade"
   },
   "Kyselyn vastauksien tallennus epäonnistui": {
-    "": "Det gick inte att spara enkätsvaren"
+    "": "Det gick inte att spara undersökningsvaren"
   },
   "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
     " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
@@ -189,12 +191,12 @@
   "Lisätietoa ei saatavilla": {
     "": "Ingen ytterligare information tillgänglig"
   },
-  "Luo kysely": "Skapa enkät",
-  "Luo uusi kysely": "Skapa en ny enkät",
-  "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Skapa en ny enkät eller importera färdiga svarsalternativ från en CSV-fil",
+  "Luo kysely": "Skapa undersökning",
+  "Luo uusi kysely": "Skapa en ny undersökning",
+  "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta": "Skapa en ny undersökning eller importera färdiga svarsalternativ från en CSV-fil",
   "Luo uusi monivaiheinen kysely": "Skapa ny flerfasundersökning",
-  "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Skapa en ny enkät i flera steg och ange svarsalternativ för varje steg",
-  "Luotuja kyselyitä": "Skapade enkäter: {{count}}",
+  "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot": "Skapa en ny undersökning i flera steg och ange svarsalternativ för varje steg",
+  "Luotuja kyselyitä": "Skapade undersökningar: {{count}}",
   "merkityt ryhmät priorisoidaan jakamisprosessissa": {
     " ": "grupper prioriteras i delningsprocessen."
   },
@@ -203,12 +205,12 @@
   "Minimikoon on oltava vähintään 0": "Minimistorleken måste vara minst 0",
   "Monesko valinta": "Ordning på val",
   "Monivaiheisen kyselyn tulokset": "Sorteringsresultat",
-  "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera enkäten eller lägg till en administratör",
+  "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera undersökningen eller lägg till en administratör",
   "Muokkaa ryhmäkokoja": "Redigera gruppstorlekar",
   "Muu": "Annat",
   "Näe poistettavaksi asetetut kyselyt": "Se undersökningar som ska raderas",
   "Näytä": "Visa",
-  "Näytä vanhat kyselyt": "Visa gamla enkäter",
+  "Näytä vanhat kyselyt": "Visa gamla undersökningar",
   "Näytetäänkö vastaajalle hakupalkki?": "Visas sökfältet för respondenten?",
   "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
     "": "De är alltid fyllda till åtminstone minimistorleken oavsett svaren."
@@ -244,7 +246,7 @@
   "poissa": "frånvarande",
   "Poista": "Ta bort",
   "Poista kaikki kyselyn data?": "Radera all undersökningsdata?",
-  "Poista kysely": "Ta bort enkät",
+  "Poista kysely": "Ta bort undersökning",
   "Poista kysely?": "Radera undersökning?",
   "Poista sarake": "Ta bort kolumn",
   "Poista vaihe": "Ta bort fas",
@@ -325,7 +327,7 @@
   },
   "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen": {
     " Kuvausteksti näytetään vastaajalle kyselyn yhteydessä": {
-      "": "Här kan du ange en beskrivning av enkäten och instruktioner för att svara på den. Beskrivningstexten visas för svaranden i samband med enkäten."
+      "": "Här kan du ange en beskrivning av undersökningen och instruktioner för att svara på den. Beskrivningstexten visas för svaranden i samband med undersökningen."
     }
   },
   "tai": "eller",
@@ -333,7 +335,7 @@
   "Tallenna muutokset": "Spara ändringar",
   "Tallenna tulokset": "Spara resultat",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
-    "": "Den här enkäten är stängd och kan inte längre besvaras."
+    "": "Den här undersökningen är stängd och kan inte längre besvaras."
   },
   "Tämän vaiheen vienti epäonnistui": "Exporten av det här steget misslyckades",
   "Tarkastele": "Visa",
@@ -372,7 +374,7 @@
   "Vastaus poistettu": "Svar borttaget",
   "Vastausaika": "Svarstid",
   "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
-    "": "Svarstiden anger tidsintervallet när enkäten kan   besvaras."
+    "": "Svarstiden anger tidsintervallet när undersökningen kan   besvaras."
   },
   "Vastausaika päättyy": "Svarstid utgår",
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Slutet av svarsperioden får inte vara i det förflutna",
@@ -381,7 +383,7 @@
   "Virhe": "Fel",
   "Virheellinen rivi": "Ogiltig rad",
   "Voit kieltää": "Du kan förbjuda",
-  "Voit muokata kyselyn kuvausta": "Du kan redigera enkätens beskrivning",
+  "Voit muokata kyselyn kuvausta": "Du kan redigera undersökningens beskrivning",
   "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Du kan bara redigera undersöknings namn, svarstid eller dess beskrivning",
   "Yhteys palvelimeen epäonnistui": "Anslutningen till servern misslyckades",
   "yli 5 merkkiä pitkiä": "längre än 5 tecken"
