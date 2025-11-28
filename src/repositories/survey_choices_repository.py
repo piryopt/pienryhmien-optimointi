@@ -15,7 +15,6 @@ class SurveyChoicesRepository:
             sql = "SELECT * FROM survey_choices WHERE (survey_id=:survey_id AND deleted=False)"
             result = db.session.execute(text(sql), {"survey_id": survey_id})
             survey_choices = result.mappings().all()
-            print(survey_choices)
             return survey_choices
         except Exception as e:  # pylint: disable=W0718
             print(e)
