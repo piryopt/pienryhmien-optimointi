@@ -51,7 +51,7 @@
       "": "Med hjälp av sökfältet kan respondenterna filtrera alternativen de ser baserat på deras namn och alternativ.   Det rekommenderas att tillåta undersökningar med ett stort antal svarsalternativ, som alla inte behöver ordnas,   och på samma sätt förbjuda undersökningar med få svarsalternativ, som alla måste ordnas."
     }
   },
-  "Hallintatyökalut": "administratörsverktyg",
+  "Hallintatyökalut": "Administratörsverktyg",
   "Haluatko palauttaa kyselyn roskakorista?": "Vill du returnera undersökningen från skräpkorgen?",
   "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
     "": "Vill du flytta undersökningen till skräpkorgen? Öppna undersökningar kommer att stängas samtidigt"
