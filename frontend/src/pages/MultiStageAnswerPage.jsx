@@ -408,12 +408,10 @@ const MultiStageAnswerPage = () => {
                         )}
                       </div>
                       <div className="right-column">
-                        {survey?.search_visibility && (
-                          <GroupSearch
-                            searchTerm={searchTerm}
-                            setSearchTerm={setSearchTerm}
-                          />
-                        )}
+                        <GroupSearch
+                          searchTerm={searchTerm}
+                          setSearchTerm={setSearchTerm}
+                        />
                         <GroupList
                           id={`${stage.id}-neutral`}
                           items={stage.neutral}

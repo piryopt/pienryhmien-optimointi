@@ -6,7 +6,6 @@ import AddAdminSection from "../components/edit_survey_page_components/AddAdminS
 import EditSurveyName from "../components/edit_survey_page_components/EditSurveyName";
 import MinChoicesSection from "../components/edit_survey_page_components/MinChoicesSection";
 import DenyChoicesSection from "../components/edit_survey_page_components/DenyChoicesSection";
-import SearchVisibilitySection from "../components/edit_survey_page_components/SearchVisibilitySection";
 import PrioritizedGroupsSection from "../components/edit_survey_page_components/PrioritizedGroupsSection";
 import AllowAbsencesSection from "../components/edit_survey_page_components/AllowAbsencesSection";
 import LimitParticipation from "../components/edit_survey_page_components/LimitParticipation";
@@ -178,7 +177,6 @@ const EditSurveyPage = () => {
               <LimitParticipation survey={survey} choices={choices} />
             </>
           )}
-          <SearchVisibilitySection survey={survey} />
           <PrioritizedGroupsSection
             choices_not_shuffled={choices_not_shuffled}
             choices={choices}

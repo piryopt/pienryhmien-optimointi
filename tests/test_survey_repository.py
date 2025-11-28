@@ -308,7 +308,7 @@ def test_exceptions():
     assert not success
     success = sr.update_survey_answered(-1)
     assert not success
-    success = sr.create_new_survey(-1, 0, "", 0, 0, True, False, None, None)
+    success = sr.create_new_survey(-1, 0, "", 0, 0, True, False, None)
     assert not success
     success = sr.get_survey_description(-1)
     assert not success

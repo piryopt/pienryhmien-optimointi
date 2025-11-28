@@ -12,7 +12,6 @@ import SurveyDateOfClosing from "../components/create_survey_page_components/Sur
 import SurveyDescription from "../components/create_survey_page_components/SurveyDescription";
 import MinChoicesSection from "../components/create_survey_page_components/MinChoicesSection";
 import DenyChoicesSection from "../components/create_survey_page_components/DenyChoicesSection";
-import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
 import PrioritizedGroupsDescription from "../components/create_survey_page_components/PrioritizedGroupsDescription";
 import ChoiceTable from "../components/create_survey_page_components/ChoiceTable";
 import { parseCsvFile, updateTableFromCSV } from "../services/csv";
@@ -49,8 +48,7 @@ const CreateSurveyPage = () => {
       // radio setting defaults
       minChoicesSetting: "all",
       denyChoicesSetting: "hide",
-      allowedDeniedChoices: 1,
-      allowSearchVisibility: false
+      allowedDeniedChoices: 1
     },
     mode: "onBlur"
   });
@@ -79,11 +77,6 @@ const CreateSurveyPage = () => {
           deniedCount > 0 ? "show" : "hide"
         );
         methods.setValue("allowedDeniedChoices", deniedCount);
-
-        methods.setValue(
-          "allowSearchVisibility",
-          !!data.survey.search_visibility
-        );
 
         const dynamicCols = new Set();
         data.choices.forEach((choice) => {
@@ -312,8 +305,7 @@ const CreateSurveyPage = () => {
       minchoices: finalMinchoices,
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
-      allowedDeniedChoices: finalAllowedDenied,
-      allowSearchVisibility: !!data.allowSearchVisibility
+      allowedDeniedChoices: finalAllowedDenied
     };
 
     const extractMessage = (json, res) => {
@@ -374,7 +366,6 @@ const CreateSurveyPage = () => {
           <SurveyDescription />
           <MinChoicesSection />
           <DenyChoicesSection />
-          <SearchVisibilitySection />
           <PrioritizedGroupsDescription importCsv={importCsv} />
           <ChoiceTable
             columns={columns}

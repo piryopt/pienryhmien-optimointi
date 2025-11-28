@@ -223,7 +223,6 @@ def multistage_survey_create():
             description=data["surveyInformation"],
             enddate=f"{date_to_sql_valid(data['enddate'])} {data['endtime']}",
             allowed_denied_choices=data["allowedDeniedChoices"],
-            allow_search_visibility=data["allowSearchVisibility"],
             allow_absences=data["allowAbsences"],
             user_id=user_id,
             min_choices_per_stage=data.get("minChoicesPerStage"),
@@ -274,10 +273,9 @@ def new_survey_post():
         date_end = data.get("enddate", "")
         time_end = data.get("endtime", "")
         allowed_denied_choices = data.get("allowedDeniedChoices", 0)
-        allow_search_visibility = data.get("allowSearchVisibility", False)
 
         survey_id = survey_service.create_new_survey_manual(
-            survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility
+            survey_choices, survey_name, user_id, description, minchoices, date_end, time_end, allowed_denied_choices
         )
         if not survey_id:
             msg = "There already exists a survey with the same name! Close it or change the name!"
@@ -391,7 +389,6 @@ def api_survey(survey_id):
                     "deadline": format_datestring(survey.time_end),
                     "description": survey.survey_description,
                     "min_choices": survey.min_choices,
-                    "search_visibility": survey.allow_search_visibility,
                     "denied_allowed_choices": survey.allowed_denied_choices,
                     "closed": closed,
                 },
@@ -414,7 +411,6 @@ def api_survey(survey_id):
                 "deadline": format_datestring(survey.time_end),
                 "description": survey.survey_description,
                 "min_choices": survey.min_choices,
-                "search_visibility": survey.allow_search_visibility,
                 "denied_allowed_choices": survey.allowed_denied_choices,
                 "closed": closed,
             },
@@ -452,7 +448,6 @@ def api_multistage_survey_choices(survey_id):
                     "deadline": format_datestring(survey.time_end),
                     "description": survey.survey_description,
                     "min_choices_per_stage": survey.min_choices_per_stage,
-                    "search_visibility": survey.allow_search_visibility,
                     "denied_allowed_choices": survey.allowed_denied_choices,
                     "allow_absences": survey.allow_absences,
                     "closed": closed,
@@ -471,7 +466,6 @@ def api_multistage_survey_choices(survey_id):
                 "deadline": format_datestring(survey.time_end),
                 "description": survey.survey_description,
                 "min_choices_per_stage": survey.min_choices_per_stage,
-                "search_visibility": survey.allow_search_visibility,
                 "denied_allowed_choices": survey.allowed_denied_choices,
                 "allow_absences": survey.allow_absences,
                 "closed": survey.closed,
