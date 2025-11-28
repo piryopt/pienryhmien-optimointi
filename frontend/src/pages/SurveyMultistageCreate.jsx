@@ -192,7 +192,7 @@ const SurveyMultistageCreate = () => {
       const newRows = (tableToCopy.rows || []).map((r) => ({
         ...r,
         id: rowNextId.current++
-      }))
+      }));
       const newTable = {
         ...tableToCopy,
         id: stageNextId.current++,
@@ -429,7 +429,11 @@ const SurveyMultistageCreate = () => {
         return choice;
       })
     }));
-
+    // validation: require at least one stage
+    if (!stages || stages.length === 0) {
+      showNotification(t("Lisää ainakin yksi vaihe"), "error");
+      return;
+    }
     let anyValidationFailed = false;
     let firstTopErrorPath = null;
     await Promise.all(
@@ -507,7 +511,8 @@ const SurveyMultistageCreate = () => {
       return;
     }
 
-    const allowedDenied = data.denyChoicesSetting === "hide" ? 0 : data.allowedDeniedChoices;
+    const allowedDenied =
+      data.denyChoicesSetting === "hide" ? 0 : data.allowedDeniedChoices;
 
     const minChoicesPerStage = {};
     stages.forEach((s) => {
