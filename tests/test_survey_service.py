@@ -528,8 +528,9 @@ def test_survey_deleted(setup_env):
     surveys = ss.get_all_active_surveys()
     assert len(surveys) == 1
 
-    choices = scs.get_list_of_survey_choices(survey_id1)
-    assert len(choices) == 0
+    ss.set_survey_deleted_true(survey_id2)
+    surveys = ss.get_all_active_surveys()
+    assert len(surveys) == 0
 
 
 def test_deleting_closed_survey_decreases_created_surveys_count(setup_env):
