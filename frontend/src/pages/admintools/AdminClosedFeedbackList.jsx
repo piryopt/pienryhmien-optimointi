@@ -10,23 +10,29 @@ const AdminClosedFeedbackList = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { showNotification } = useNotification();
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let mounted = true;
     const load = async () => {
       setLoading(true);
-      const res = await feedbackService.fetchClosedFeedbacks();
-      if (!res.success) {
-        showNotification(
-          res.message || t("Palautteiden lataus epäonnistui"),
-          "error"
-        );
-        navigate("/");
-      } else if (mounted) {
-        setItems(res.data);
+      try {
+        const res = await feedbackService.fetchClosedFeedbacks();
+        if (!res.success) {
+          showNotification(
+            res.message || t("Palautteiden lataus epäonnistui"),
+            "error"
+          );
+          navigate("/");
+          return;
+        }
+        if (mounted) setItems(res.data || []);
+      } catch (err) {
+        console.error("Failed to load closed feedbacks:", err);
+        showNotification(t("Palautteiden lataus epäonnistui"), "error");
+      } finally {
+        if (mounted) setLoading(false);
       }
-      setLoading(false);
     };
     load();
     return () => {

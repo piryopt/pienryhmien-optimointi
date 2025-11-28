@@ -17,14 +17,20 @@ const AdminFeedbackDetail = () => {
     let mounted = true;
     const load = async () => {
       setLoading(true);
-      const res = await feedbackService.fetchFeedback(id);
-      if (!res.success) {
-        showNotification(res.message || t("Lataus epäonnistui"), "error");
-        navigate("/");
-      } else if (mounted) {
-        setFeedback(res.data);
+      try {
+        const res = await feedbackService.fetchFeedback(id);
+        if (!res.success) {
+          showNotification(res.message || t("Lataus epäonnistui"), "error");
+          navigate("/");
+          return;
+        }
+        if (mounted) setFeedback(res.data);
+      } catch (err) {
+        console.error("Failed to load feedback detail:", err);
+        showNotification(t("Lataus epäonnistui"), "error");
+      } finally {
+        if (mounted) setLoading(false);
       }
-      setLoading(false);
     };
     load();
     return () => {

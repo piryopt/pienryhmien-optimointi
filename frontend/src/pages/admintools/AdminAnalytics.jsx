@@ -9,20 +9,23 @@ const AdminAnalytics = () => {
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
   const { showNotification } = useNotification();
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let mounted = true;
     const load = async () => {
       setLoading(true);
-      const res = await adminService.fetchAnalytics();
-      if (!res.success) {
-        showNotification(
-          res.message || t("Tilastojen lataus epäonnistui"),
-          "error"
-        );
-        navigate("/");
-      } else if (mounted) {
+      try {
+        const res = await adminService.fetchAnalytics();
+        if (!res.success) {
+          showNotification(
+            res.message || t("Tilastojen lataus epäonnistui"),
+            "error"
+          );
+          navigate("/");
+          return;
+        }
+        if (!mounted) return;
         const payload = res.data;
         let named = null;
         if (Array.isArray(payload)) {
@@ -68,14 +71,20 @@ const AdminAnalytics = () => {
           };
         }
         setMetrics(named);
+      } catch (err) {
+        // Prevent repeated failures from throwing and causing unstable behavior
+        console.error("Failed to load admin analytics:", err);
+        showNotification(t("Tilastojen lataus epäonnistui"), "error");
+        setMetrics(null);
+      } finally {
+        if (mounted) setLoading(false);
       }
-      setLoading(false);
     };
     load();
     return () => {
       mounted = false;
     };
-  }, [showNotification, t]);
+  }, [showNotification, t, navigate]);
 
   return (
     <div>

@@ -10,23 +10,29 @@ const AdminSurveyList = () => {
   const [surveys, setSurveys] = useState([]);
   const [loading, setLoading] = useState(true);
   const { showNotification } = useNotification();
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let mounted = true;
     const load = async () => {
       setLoading(true);
-      const res = await adminService.fetchAdminSurveys();
-      if (!res.success) {
-        showNotification(
-          res.message || t("Kyselyjen lataus epäonnistui"),
-          "error"
-        );
-        navigate("/");
-      } else if (mounted) {
-        setSurveys(res.data || []);
+      try {
+        const res = await adminService.fetchAdminSurveys();
+        if (!res.success) {
+          showNotification(
+            res.message || t("Kyselyjen lataus epäonnistui"),
+            "error"
+          );
+          navigate("/");
+          return;
+        }
+        if (mounted) setSurveys(res.data || []);
+      } catch (err) {
+        console.error("Failed to load admin surveys:", err);
+        showNotification(t("Kyselyjen lataus epäonnistui"), "error");
+      } finally {
+        if (mounted) setLoading(false);
       }
-      setLoading(false);
     };
     load();
     return () => {
