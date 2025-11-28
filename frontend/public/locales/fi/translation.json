@@ -63,14 +63,12 @@
       "": "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko."
     }
   },
-  "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
-    "": "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
+  "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
+    "": "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
   },
   "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
     "": "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti."
   },
-  "Hylkäykset": "Hylkäykset",
-  "Hylkäysmäärä": "Hylkäysmäärä",
   "ID": "ID",
   "Info": "Info",
   "Jaa ryhmiin": "Jaa ryhmiin",
@@ -109,12 +107,13 @@
   "Kentän tulee olla kokonaisluku": "Kentän tulee olla kokonaisluku",
   "Kielletty": "Kielletty",
   "Kielletyt": "Kielletyt",
+  "Kiellot": "Kiellot",
+  "Kieltomäärä": "Kieltomäärä",
   "Kirjaudu sisään": "Kirjaudu sisään",
   "Kirjaudu ulos": "Kirjaudu ulos",
   "Kirjautuminen epäonnistui": "Kirjautuminen epäonnistui",
   "Kirjautuminen onnistui": "Kirjautuminen onnistui",
   "Kirjautuminen ulos onnistui": "Kirjautuminen ulos onnistui",
-  "Kirjoita tähän perustelut kielloille": "Kirjoita tähän perustelut kielloille",
   "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa",
   "kokonaislukuja": "kokonaislukuja",
   "Kopioi kysely": "Kopioi kysely",
@@ -351,6 +350,7 @@
   "UKK": "UKK",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Vaaditaanko kaikkien ryhmien järjestämistä?",
   "vaihe": "vaihe",
+  "Vaihe": "Vaihe",
   "Vaiheen nimi": "Vaiheen nimi",
   "Vaiheen tunniste": "Vaiheen tunniste",
   "vaihtoehtoa": "vaihtoehtoa",
@@ -374,9 +374,9 @@
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Vastausajan päättyminen ei voi olla menneisyydessä",
   "Vie tulokset Excel-taulukkoon": "Vie tulokset Excel-taulukkoon",
   "vihreään": "vihreään",
-  "Voit kieltää": "Voit kieltää",
   "Virhe": "Virhe",
   "Virheellinen rivi": "Virheellinen rivi",
+  "Voit kieltää": "Voit kieltää",
   "Voit muokata kyselyn kuvausta": "Voit muokata kyselyn kuvausta",
   "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta",
   "Yhteys palvelimeen epäonnistui": "Yhteys palvelimeen epäonnistui",
