@@ -10,6 +10,7 @@
   "Anna sähköpostiosoite": "Email is missing",
   "Antamasi sähköpostiosoite ei ole kelvollinen": "The provided email address is not valid",
   "Avaa": "Open",
+  "Avaa järjestelmänhallintanäkymä": "Open administrator view",
   "Avaa kysely uudelleen": "Reopen the survey",
   "Avaa uudestaan?": "Open again?",
   "Avoimet palautteet": "Open feedback",
@@ -17,21 +18,21 @@
   "Bugi": "Bug",
   "CSV-ohje": "CSV guide",
   "Ei": "No",
-  "Ei järjestetty": "",
+  "Ei järjestetty": "Not ordered",
   "Ei kyselyitä": "No surveys",
   "Ei paikalla": "Not present",
   "Ei palautetta": "No feedback",
   "Ei palautteita": "No feedback",
   "Ei tietoja": "No info",
-  "Ei tuloksia tälle vaiheelle": "",
-  "Ei tuloksia vietäväksi": "",
+  "Ei tuloksia tälle vaiheelle": "No results for this stage",
+  "Ei tuloksia vietäväksi": "No results to export",
   "Ei vaiheita ladattuna": "No survey loaded",
   "En ole paikalla tässä vaiheessa": "I am absent",
   "Enimmäispaikat": "Maximum capacity",
-  "Enimmäispaikat vaaditaan": "",
+  "Enimmäispaikat vaaditaan": "Maximum capacity required",
   "Enimmäispaikkojen määrä on oltava vähintään 1": "Maximum capacity must be at least 1",
   "Et ole vastannut tähän kyselyyn": {
-    "": ""
+    "": "You have not responded to this survey"
   },
   "etusivu": {
     "Vastausaika päättyy": "Response time expires: {{timeEnd}}"
@@ -39,49 +40,50 @@
   "Hae ryhmiä": {
     "": {
       "": {
-        "": ""
+        "": "Search groups"
       }
     }
   },
-  "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "",
-  "Hakunäkyvyys": "",
+  "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "In this field, you can search for an individual response by a respondent's email",
+  "Hakunäkyvyys": "Search visibility",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
       "": "With the search bar, the respondent can filter options based on their name and choices. It is advisable to allow for surveys with a lot of response options, not all of which need to be organized, and conversely, to disallow surveys with few response options where all must be organized."
     }
   },
-  "Haluatko palauttaa kyselyn roskakorista?": "",
-  "Haluatko siirtää kyselyn roskakoriin?": "",
-  "Haluatko varmasti avata kyselyn uudestaan?": "",
-  "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "",
-  "Haluatko varmasti sulkea kyselyn?": "",
-  "Haluatko varmasti sulkea palautteen?": "",
-  "Huom!": "",
+  "Hallintatyökalut": "Administration tools",
+  "Haluatko palauttaa kyselyn roskakorista?": "Do you want to restore this survey from the trash?",
+  "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
+    "": "Do you want to move the survey into the trash? Open surveys will be closed."
+  },
+  "Haluatko varmasti avata kyselyn uudestaan?": "Are you sure you want to reopen this survey?",
+  "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Are you sure you want to delete this survey and all data related to it permanently? ",
+  "Haluatko varmasti sulkea kyselyn?": "Are you sure you want to close this survey?",
+  "Haluatko varmasti sulkea palautteen?": "Are you sure you want to close this feedback?",
+  "Huom!": "Note!",
   "HUOM! ": "NOTE! ",
   "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
     " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
       "": "NOTE! Groups below the minimum size will be dropped. If you wish for a group to be mandatory, click the checkbox on the left."
     }
   },
-  "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
-    "": ""
+  "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
+    "": "Note! Students allocated into rejected or unordered choices do not affect the average happiness value"
   },
   "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
-    "": ""
+    "": "NOTE! Surveys will be automatically deleted from the trash after a week"
   },
-  "Hylkäykset": "Rejections",
-  "Hylkäysmäärä": "",
-  "ID": "",
-  "Info": "",
+  "ID": "ID",
+  "Info": "Info",
   "Jaa ryhmiin": "Allocate groups",
-  "Jaettavia paikkoja": "Allocated spots",
+  "Jaettavia paikkoja": "Available spots",
   "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}": {
     " Lisää paikkoja": {
-      "": ""
+      "": "The number of available spots is {{total}} but there are {{answers}} responses. Add more spots"
     }
   },
   "Jakaja": "Jakaja",
-  "Jakajassa luodut kyselyt": "",
+  "Jakajassa luodut kyselyt": "Surveys created in Jakaja",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
     "": "Arrange options in order of preference or mark yourself as absent"
   },
@@ -100,21 +102,22 @@
       "": "If the minimum size of the group doesn't matter, enter 0. A mandatory group can not be set to 0."
     }
   },
-  "Kaikki käynnissä olevat kyselyt": "",
-  "Kaikki rivit olivat virheellisiä": "",
-  "Kaikkien vaiheiden tulokset tallennettu": "",
+  "Kaikki käynnissä olevat kyselyt": "All active surveys",
+  "Kaikki rivit olivat virheellisiä": "All rows were invalid",
+  "Kaikkien vaiheiden tulokset tallennettu": "All stages' results have been saved",
   "Käynnissä olevat kyselyt": "Ongoing surveys",
   "Käyttäjätunnus": "Username",
   "Kello": "Time",
   "Kentän tulee olla kokonaisluku": "The field must be an integer",
-  "Kielletty": "",
-  "Kielletyt": "",
+  "Kielletty": "Rejected",
+  "Kielletyt": "Rejected",
+  "Kiellot": "Rejected",
+  "Kieltomäärä": "Rejections",
   "Kirjaudu sisään": "Sign in",
   "Kirjaudu ulos": "Log out",
-  "Kirjautuminen epäonnistui": "",
-  "Kirjautuminen onnistui": "",
-  "Kirjautuminen ulos onnistui": "",
-  "Kirjoita tähän perustelut hylkäyksille": "Write reasons for rejections here",
+  "Kirjautuminen epäonnistui": "Logging in failed",
+  "Kirjautuminen onnistui": "Logged in successfully",
+  "Kirjautuminen ulos onnistui": "Logged out successfully",
   "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Click the choice option to see additional information about it",
   "kokonaislukuja": "integers",
   "Kopioi kysely": "Copy survey",
@@ -122,58 +125,60 @@
   "Kopioi vaihe": "Copy stage",
   "Kyllä": "Yes",
   "Kysely": "Survey",
-  "Kysely avattu": "",
-  "Kysely luotu onnistuneesti": "",
+  "Kysely avattu": "Survey opened",
+  "Kysely luotu onnistuneesti": "Survey created successfully",
   "Kysely muokattu onnistuneesti": "Survey updated successfully",
   "Kysely on suljettu": "The survey is closed.",
-  "Kysely palautettu": "",
-  "Kysely poistetaan": "",
-  "Kysely poistettu": "",
-  "Kysely suljettu": "",
-  "Kyselyjen lataus epäonnistui": "",
+  "Kysely palautettu": "Survey restored",
+  "Kysely poistetaan": "Deleting survey",
+  "Kysely poistettu": "Survey deleted",
+  "Kysely siirretty roskakoriin": "Survey moved to the trash",
+  "Kysely suljettu": "Survey closed",
+  "Kyselyjen lataus epäonnistui": "Loading surveys failed",
   "Kyselyn kuvaus": "Survey description",
-  "Kyselyn luonti epäonnistui": "",
+  "Kyselyn luonti epäonnistui": "Creating survey failed",
   "Kyselyn muokkaus": "Survey editing",
   "Kyselyn muokkaus epäonnistui": "Error occurred when updating survey!",
   "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä": "The name of the survey must be at least 5 characters long.",
   "Kyselyn nimi": "The name of the survey",
-  "Kyselyn osoite kopioitu leikepöydälle": "",
-  "Kyselyn palauttaminen epäonnistui": "",
-  "Kyselyn poistaminen epäonnistui": "",
+  "Kyselyn osoite kopioitu leikepöydälle": "Survey URL copied to clipboard",
+  "Kyselyn palauttaminen epäonnistui": "Survey restoration failed",
+  "Kyselyn poistaminen epäonnistui": "Survey deletion failed",
+  "Kyselyn siirto roskakoriin epäonnistui": "Moving survey into the trash failed",
   "Kyselyn tila": "Survey status",
   "Kyselyn vastaukset tallennettu": {
-    "": ""
+    "": "Survey results saved successfully"
   },
   "Kyselyn vastauksien tallennus epäonnistui": {
-    "": ""
+    "": "Saving survey results failed"
   },
   "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
     " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
       "": "There are more respondents than available spots. Edit group sizes before allocating groups."
     }
   },
-  "Kyselyt": "",
+  "Kyselyt": "Surveys",
   "laatikkoon": "box",
   "Ladataan": {
     "": {
       "": {
-        "": ""
+        "": "Loading"
       }
     }
   },
   "Ladataan kyselyä": {
     "": {
       "": {
-        "": ""
+        "": "Loading survey"
       }
     }
   },
-  "Ladataan…": "",
+  "Ladataan…": "Loading...",
   "Lähetä valinnat": "Submit selections",
   "Lähetetään": {
     "": {
       "": {
-        "": ""
+        "": "Submitting"
       }
     }
   },
@@ -184,7 +189,7 @@
   "Lisää vaihe": "Add stage",
   "Lisää vaihtoehto": "Add option",
   "Lisätietoa ei saatavilla": {
-    "": ""
+    "": "Additional information not available"
   },
   "Luo kysely": "Create survey",
   "Luo uusi kysely": "Create a new survey",
@@ -196,8 +201,8 @@
     " ": " groups are prioritized in the allocation process."
   },
   "merkkiä": "characters",
-  "Min valinnat": "",
-  "Minimikoon on oltava vähintään 0": "",
+  "Min valinnat": "Min choices",
+  "Minimikoon on oltava vähintään 0": "Minimum size has to be at least 0",
   "Monesko valinta": "Ordinal choice",
   "Monivaiheisen kyselyn tulokset": "Sorting results",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Edit the survey or add an administrator",
@@ -211,36 +216,36 @@
     "": "They are filled to at least the minimum size regardless of the answers."
   },
   "Nimi": "Name",
-  "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "",
+  "Nimi on liian lyhyt, oltava vähintään 5 merkkiä": "Name has to be at least 5 characters",
   "Nimi vaaditaan": "Name required",
-  "Olet ilmoittautunut poissaolevaksi": "",
+  "Olet ilmoittautunut poissaolevaksi": "You have signed up as absent",
   "Opiskelijat on lajiteltu ryhmiin seuraavasti": "Students have been sorted into groups as follows",
-  "Osallistumiskerrat*": "",
+  "Osallistumiskerrat*": "Participation count*",
   "Otsikko": "Title",
-  "Päättyy": "",
-  "Päivämäärä on virheellinen": "",
+  "Päättyy": "Ends",
+  "Päivämäärä on virheellinen": "Invalid date",
   "Pakollinen": "Mandatory",
   "Pakolliseksi ": "Mandatory ",
   "Pakota minimikoko": "Force minimum group size",
   "Palaa kyselylistaan": "Return to the survey list",
-  "Palaa listaan": "",
+  "Palaa listaan": "Return to the list",
   "Palaa takaisin": "Return",
-  "Palauta kysely": "",
-  "Palauta kysely?": "",
+  "Palauta kysely": "Restore survey",
+  "Palauta kysely?": "Restore survey?",
   "Palaute": "Feedback",
-  "Palaute lähetetty": "",
-  "Palaute suljettu": "",
-  "Palautteen lähettäjä": "",
-  "Palautteen lähetys epäonnistui": "",
-  "Palautteen tyyppi": "",
-  "Palautteiden lataus epäonnistui": "",
+  "Palaute lähetetty": "Feedback sent",
+  "Palaute suljettu": "Feedback cloesd",
+  "Palautteen lähettäjä": "Feedback submitter",
+  "Palautteen lähetys epäonnistui": "Submitting feedback failed",
+  "Palautteen tyyppi": "Feedback type",
+  "Palautteiden lataus epäonnistui": "Loading feedback failed",
   "Perustelut": "Reasons",
-  "Perustelut hylkäyksille": "Reasons for rejections",
+  "Perustelut kielloille": "Reasons for rejections",
   "Peruuta": "Cancel",
   "Piilota": "Hide",
   "poissa": "absent",
   "Poista": "Delete",
-  "Poista kaikki kyselyn data?": "",
+  "Poista kaikki kyselyn data?": "Delete all survey data?",
   "Poista kysely": "Delete survey",
   "Poista kysely?": "Delete survey?",
   "Poista sarake": "Delete coulumn",
@@ -250,36 +255,36 @@
   "Poistettavat kyselyt": "Surveys to be deleted: {{count}}",
   "pp": {
     "kk": {
-      "vvvv": ""
+      "vvvv": "dd/mm/yyyy"
     }
   },
   "Priorisoitavat ryhmät": "Prioritized groups",
-  "Priorisoitavien ryhmien vähimmäismäärän on oltava enintään {{max}}": "",
-  "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1": "",
+  "Priorisoitavien ryhmien vähimmäismäärän on oltava enintään {{max}}": "Minimum number of prioritized groups can be {{max}} at most",
+  "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1": "Minimum number of prioritized groups has to be at least 1",
   "Priorisoitujen ryhmien vähimmäismäärä": "Minimum number of prioritized groups",
-  "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "",
+  "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "Minimum number of prioritized groups required",
   "punaiseen": "red",
   "Raahaa ainakin": "Drag at least",
   "Raahaa kaikki vaihtoehdot": "Drag all options to the",
   "Rajoita osallistumiskertoja": "Limit participation times",
-  "Rekisteröityneet opettajat": "",
-  "Rekisteröityneet opiskelijat": "",
+  "Rekisteröityneet opettajat": "Registered teachers",
+  "Rekisteröityneet opiskelijat": "Registered students",
   "Roskakori": "Trash bin",
   "Ryhmä": "Group",
   "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan": "Group \"{{name}}\" must contain at least 1 spot",
-  "Ryhmäjako tallennettu": "",
-  "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "",
-  "Ryhmäjaon tallennus epäonnistui": "",
+  "Ryhmäjako tallennettu": "Group allocation saved",
+  "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "Group allocation can not be done because the survey has no respondents",
+  "Ryhmäjaon tallennus epäonnistui": "Saving group allocation failed",
   "Ryhmäkokojen päivittäminen epäonnistui": "Updating group sizes failed",
   "Ryhmäkoot päivitettiin onnistuneesti": "Group sizes were updated successfully",
   "Ryhmän maksimikoko": "Maximum group size",
   "Ryhmän minimikoko": "Minimum group size",
-  "Ryhmän minimikoko vaaditaan": "",
-  "Ryhmän minimikoon on oltava vähintään 1": "",
+  "Ryhmän minimikoko vaaditaan": "Group minimum size required",
+  "Ryhmän minimikoon on oltava vähintään 1": "Group minimum size has to be at least 1",
   "Ryhmät luotu": "Groups saved",
   "Ryhmät, jotka pudotettiin jaosta": "Groups dropped from distribution",
   "Ryhmävalintojen keskiarvo": "Average of group selections",
-  "Ryhmien määrä": "",
+  "Ryhmien määrä": "Number of groups",
   "Sähköposti": "Email",
   "sähköpostiosoite": "Email address",
   "Salasana": "Password",
@@ -289,24 +294,24 @@
   "Sallitaanko poissaolot?": "Allow absences?",
   "Sallitaanko valintojen kieltäminen?": "Can participants deny selections?",
   "Sallittu kiellettyjen ryhmien määrä": "Allowed number of denied groups",
-  "Sallittujen kiellettyjen ryhmien määrä vaaditaan": "",
-  "Sallittujen kiellettyjen ryhmien määrän on oltava enintään {{max}}": "",
-  "Sallittujen kiellettyjen ryhmien määrän on oltava vähintään 1": "",
-  "Sallittujen kiellettyjen ryhmien määrän tulee olla kokonaisluku": "",
+  "Sallittujen kiellettyjen ryhmien määrä vaaditaan": "Number of allowed rejections is required",
+  "Sallittujen kiellettyjen ryhmien määrän on oltava enintään {{max}}": "Number of allowed rejections can be {{max}} at most",
+  "Sallittujen kiellettyjen ryhmien määrän on oltava vähintään 1": "Number of allowed rejections has to be at least 1",
+  "Sallittujen kiellettyjen ryhmien määrän tulee olla kokonaisluku": "Number of allowed groups has to be an integer",
   "Sisältö": "Content",
   "Sulje kysely": "Close survey",
-  "Sulje kysely?": "",
-  "Sulje palaute": "",
+  "Sulje kysely?": "Close survey?",
+  "Sulje palaute": "Close survey",
   "Suljetaan": {
     "": {
       "": {
-        "": ""
+        "": "Closing"
       }
     }
   },
   "Suljettu": "Closed",
-  "Suljetut palautteet": "",
-  "Sulkeminen epäonnistui": "",
+  "Suljetut palautteet": "Closed feedback",
+  "Sulkeminen epäonnistui": "Closing failed",
   "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "It is recommended that all groups be organized unless there is a large number of them (>10).",
   "Syötä käyttäjän sähköpostiosoite": {
     "": "Give user email"
@@ -332,33 +337,34 @@
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
     "": "This survey is closed and no longer accepting responses."
   },
-  "Tämän vaiheen vienti epäonnistui": "",
+  "Tämän vaiheen vienti epäonnistui": "Exporting stage failed",
   "Tarkastele": "Review",
   "Tarkastele kyselyitä": "Review surveys",
   "Tarkastele palautteita": "Review feedback",
   "Tarkastele tilastoja": "Review statistics",
   "Tarkastele tuloksia": "Review results",
-  "Tieto puuttuu tai on rikkoutunut": "",
+  "Tieto puuttuu tai on rikkoutunut": "Information missing or broken",
   "Tietosuojaseloste": "Privacy Policy",
   "Tilastojen lataus epäonnistui": "Failed to load statistics",
   "Tilastot": "Statistics",
   "Toiminnot": "Actions",
   "tulokset": "results",
   "Tulokset": "Results",
-  "Tulosten tallennus epäonnistui": "",
-  "Tulosten vienti epäonnistui": "",
+  "Tulosten tallennus epäonnistui": "Saving results failed",
+  "Tulosten vienti epäonnistui": "Exporting results failed",
   "Tuo valinnat CSV-tiedostosta": "Import selections from a CSV file.",
   "UKK": "FAQ",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Is organizing all groups required?",
-  "vaihe": "",
+  "vaihe": "stage",
+  "Vaihe": "Stage",
   "Vaiheen nimi": "Stage name",
-  "Vaiheen tunniste": "",
+  "Vaiheen tunniste": "Stage ID",
   "vaihtoehtoa": "options to the",
   "Valinnat": "Choices",
   "Valitse päättymisaika": "Choose an end time",
   "Valitse päättymispäivä": "Choose an end date",
   "Vastauksen poistaminen": "Delete response",
-  "Vastauksen poistaminen epäonnistui": "",
+  "Vastauksen poistaminen epäonnistui": "Deleting answers failed",
   "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta": {
     "": "Your survey response has been saved, and you can view your selections below."
   },
@@ -374,11 +380,11 @@
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Response period's end can't be in the past",
   "Vie tulokset Excel-taulukkoon": "Export results to Excel spreadsheet",
   "vihreään": "green",
+  "Virhe": "Error",
+  "Virheellinen rivi": "Invalid row",
   "Voit kieltää": "You can deny",
-  "Virhe": "",
-  "Virheellinen rivi": "",
   "Voit muokata kyselyn kuvausta": "You can edit the survey description.",
-  "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "",
-  "Yhteys palvelimeen epäonnistui": "",
+  "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "You can only edit the name, time and the description of a survey",
+  "Yhteys palvelimeen epäonnistui": "Connection to server failed",
   "yli 5 merkkiä pitkiä": "Over 5 characters long"
 }

@@ -12,7 +12,7 @@ const Happiness = ({ happinessData, average }) => {
         .some((isString) => isString) && (
         <p>
           {t(
-            "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
+            "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
           )}
         </p>
       )}
@@ -22,7 +22,7 @@ const Happiness = ({ happinessData, average }) => {
             <label
               style={{
                 color:
-                  h[0] === "Hylättyyn"
+                  h[0] === "Kiellettyyn"
                     ? "red"
                     : h[0] === "Ei järjestettyyn"
                       ? "yellow"

@@ -39,7 +39,7 @@ const ClosedSurveyView = ({
         <div className="right-column" style={{ marginLeft: 15 }}>
           {bad.length > 0 && (
             <>
-              <h2 className="closed-survey-title">{t("Hylkäykset")}:</h2>
+              <h2 className="closed-survey-title">{t("Kiellot")}:</h2>
               <GroupList
                 id="bad"
                 items={bad}
@@ -51,7 +51,7 @@ const ClosedSurveyView = ({
               {reason && reason.length > 0 ? (
                 <div style={{ paddingLeft: 11 }}>
                   <p>
-                    {t("Perustelut hylkäyksille")}:
+                    {t("Perustelut kielloille")}:
                     <br /> {reason}
                   </p>
                 </div>

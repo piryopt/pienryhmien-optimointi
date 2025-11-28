@@ -70,8 +70,8 @@ const FrontPage = () => {
               <FrontPageButton
                 path="/admintools/analytics"
                 imgSrc={`${imagesBaseUrl}/list_white_36dp.svg`}
-                mainText="Hallintatyökalut"
-                additionalText="Avaa järjestelmänhallintanäkymä"
+                mainText={t("Hallintatyökalut")}
+                additionalText={t("Avaa järjestelmänhallintanäkymä")}
               />
             </>
           )}
