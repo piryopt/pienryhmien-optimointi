@@ -1,7 +1,6 @@
 {
   "(kopio)": "(kopia)",
   "Aiemmat kyselyt": "Tidigare undersökningar",
-  "Aktiiviset kyselyt": "Aktiva undersökningar",
   "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
     "": "Tilldela administrativa rättigheter till användaren för undersökningen."
   },
@@ -45,7 +44,6 @@
     }
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Sök efter ett enskilt svar genom att ange respondentens email i detta fält",
-  "Hakunäkyvyys": "Sökbarhet",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
       "": "Med hjälp av sökfältet kan respondenterna filtrera alternativen de ser baserat på deras namn och alternativ.   Det rekommenderas att tillåta undersökningar med ett stort antal svarsalternativ, som alla inte behöver ordnas,   och på samma sätt förbjuda undersökningar med få svarsalternativ, som alla måste ordnas."
