@@ -184,12 +184,7 @@ const MultiStageAnswerPage = () => {
           reason: reasons[s.id]
         };
       });
-      const result = await surveyService.submitMultiStageAnswers({
-        surveyId,
-        minChoices: survey.min_choices,
-        deniedAllowedChoices: survey.denied_allowed_choices,
-        stages: payload
-      });
+
       for (const stage of stages) {
         if (stage.notAvailable) continue;
 
@@ -232,7 +227,12 @@ const MultiStageAnswerPage = () => {
           return;
         }
       }
-
+      const result = await surveyService.submitMultiStageAnswers({
+        surveyId,
+        minChoices: survey.min_choices,
+        deniedAllowedChoices: survey.denied_allowed_choices,
+        stages: payload
+      });
       setExisting(true);
       if (result.status === "0") throw new Error(result.msg);
       showNotification(t("Kyselyn vastaukset tallennettu."), "success");

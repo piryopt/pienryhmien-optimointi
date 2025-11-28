@@ -34,16 +34,7 @@ class SurveyChoicesService:
             stage: The stage of the survey choices
         """
         return self._survey_choices_repository.get_stage_choices(survey_id, stage)
-
-    def get_list_of_stage_survey_choices(self, survey_id: str, stage: str):
-        """
-        Returns a list of survey choices from a survey for a given stage
-
-        args:
-            survey_id: The id of the survey from which we want the survey choices
-            stage: The stage of the survey choices
-        """
-        return self._survey_choices_repository.get_stage_choices(survey_id, stage)  
+ 
 
     def get_survey_choice(self, survey_choice_id: int):
         """
@@ -179,7 +170,7 @@ class SurveyChoicesService:
             name (str): The display name of the choice.
             max_spaces (int): Maximum number of participants allowed.
             min_size (int): Minimum number of participants required.
-            stages (list[str]): A list of stage identifiers (e.g., ["week1", "week2"]).
+            stage (list[str]): A list of stage identifiers (e.g., ["week1", "week2"]).
             mandatory (bool): Whether the group is mandatory. Defaults to False.
 
         Returns:
@@ -243,6 +234,7 @@ class SurveyChoicesService:
                     "hidden": row["hidden"]
                 })
         return sorted(stages, key=lambda s: s["orderNumber"])
+
     def set_choices_deleted_true(self, survey_id):
         """
         Sets choices of survey to deleted status. Returns boolean.

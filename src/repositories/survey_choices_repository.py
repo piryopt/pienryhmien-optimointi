@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from src import db
-
+from flask import current_app
 
 class SurveyChoicesRepository:
     def find_survey_choices(self, survey_id):
@@ -212,7 +212,8 @@ class SurveyChoicesRepository:
             return new_choice_id
         except Exception as e:
             print(e)
-            db.session.rollback()
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return None
 
     def get_choices_grouped_by_stage(self, survey_id):
@@ -263,31 +264,12 @@ class SurveyChoicesRepository:
                 ORDER BY ss.order_number, sc.id
             """
             result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage})
-            survey_choices = result.fetchall()
+            survey_choices = result.mappings().all()
             return survey_choices
         except Exception as e:
             print(e)
             return []
 
-    def get_stage_choices(self, survey_id, stage):
-        """
-        Returns a list of survey choices from a survey for a given stage
-        """
-        try:
-            sql = """
-                SELECT sc.*
-                FROM survey_choices sc
-                JOIN survey_stages ss
-                  ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
-                WHERE sc.survey_id = :survey_id AND sc.deleted = False AND ss.stage = :stage
-                ORDER BY ss.order_number, sc.id
-            """
-            result = db.session.execute(text(sql), {"survey_id": survey_id, "stage": stage})
-            survey_choices = result.fetchall()
-            return survey_choices
-        except Exception as e:
-            print(e)
-            return []
 
     def count_spaces_in_stage(self, survey_id, stage):
         """

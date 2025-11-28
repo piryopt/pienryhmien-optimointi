@@ -14,7 +14,7 @@ def setup_env(setup_db):
     sor.add_owner_to_survey(survey_id, setup_db["user_id"])
 
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(setup_db["user_id"], survey_id, ranking, "", "")
+    urr.add_user_ranking(setup_db["user_id"], survey_id, ranking, "", "", False)
 
     setup_db["survey_id"] = survey_id
     setup_db["ranking"] = ranking
@@ -29,7 +29,7 @@ def test_add_user_ranking_returns_false_if_user_id_not_correct(setup_env):
     user_id = setup_env["user_id"]
     survey_id = setup_env["survey_id"]
     ranking = setup_env["ranking"]
-    success = urr.add_user_ranking(user_id + 12, survey_id, ranking, "", "")
+    success = urr.add_user_ranking(user_id + 12, survey_id, ranking, "", "", False)
     assert success is False
 
 
@@ -73,7 +73,7 @@ def test_user_ranking_rejections(setup_env):
     ranking = "2,3,5,4,1,6"
     rejections = "9,8"
     reason = "Because seven ate nine"
-    urr.add_user_ranking(user_id2, survey_id, ranking, rejections, reason)
+    urr.add_user_ranking(user_id2, survey_id, ranking, rejections, reason, False)
     db_rejections = urr.get_user_ranking(user_id2, survey_id).rejections
     assert db_rejections == rejections
 
@@ -84,4 +84,14 @@ def test_exceptions(setup_env):
     """
     user_id = setup_env["user_id"]
     success = urr.delete_user_ranking(user_id, -1)
+    assert not success
+    success = urr.add_multistage_user_ranking(user_id, -1, "", "", "", "", False, False)
+    assert not success
+    success = urr.get_user_multistage_rankings(-1, user_id)
+    assert not success
+    success = urr.get_all_rankings()
+    assert not success
+    success = urr.get_all_rankings_by_stage(-1, "")
+    assert not success
+    success = urr.get_user_multistage_rankings_by_stage(-1, user_id, "")
     assert not success

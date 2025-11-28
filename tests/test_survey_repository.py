@@ -17,7 +17,7 @@ def test_get_survey(setup_db):
     assert survey[0] == survey_id
 
 
-def test_check_that_survey_doesnt_exist():
+def test_check_that_survey_doesnt_exist(setup_db):
     """
     Test that survey with invalid id doesn't exist
     """
@@ -167,7 +167,7 @@ def test_get_list_active_answered(setup_db):
     survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2024-01-01 02:02")
     sor.add_owner_to_survey(survey_id, d["user_id"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     active_answered = sr.get_list_active_answered(d["user_id3"])
     assert len(active_answered) == 1
 
@@ -180,7 +180,7 @@ def test_get_active_surveys_with_response_count_correct_id(setup_db):
     survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2024-01-01 02:02")
     sor.add_owner_to_survey(survey_id, d["user_id"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     surveys = sr.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0].surveyname == "Test survey 14"
     assert surveys[0].response_count == 1
@@ -194,7 +194,7 @@ def test_dont_get_active_surveys_with_response_count_incorrect_id(setup_db):
     survey_id = sr.create_new_survey("Test survey 14", 10, "Motivaatio", "2024-01-01 02:02")
     sor.add_owner_to_survey(survey_id, d["user_id"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     surveys = sr.get_active_surveys_and_response_count(d["user_id2"])
     assert not surveys
 
@@ -207,7 +207,7 @@ def test_get_list_closed_answered(setup_db):
     survey_id = sr.create_new_survey("Test survey 15", 10, "Motivaatio", "2024-01-01 02:02")
     sor.add_owner_to_survey(survey_id, d["user_id"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     sr.close_survey(survey_id)
     closed_answered = sr.get_list_closed_answered(d["user_id3"])
     assert len(closed_answered) == 1
@@ -292,6 +292,8 @@ def test_exceptions():
     """
     success = sr.get_survey(-1)
     assert not success
+    success = sr.is_multistage(-1)
+    assert not success
     success = sr.survey_name_exists("Motivaatio", -1)
     assert not success
     success = sr.count_created_surveys(-1)
@@ -306,6 +308,8 @@ def test_exceptions():
     assert not success
     success = sr.update_survey_answered(-1)
     assert not success
+    success = sr.create_new_survey(-1, 0, "", 0, 0, True, False, None, None)
+    assert not success
     success = sr.get_survey_description(-1)
     assert not success
     success = sr.get_survey_time_end(-1)
@@ -316,6 +320,10 @@ def test_exceptions():
     assert not success
     success = sr.get_survey_search_visibility(-1)
     assert not success
+    success = sr.fetch_survey_responses(-1)
+    assert not success
+    success = sr.fetch_survey_responses_grouped_by_stage(-1)
+    assert not success
     success = sr.get_active_surveys_and_response_count(-1)
     assert not success
     success = sr.get_all_active_surveys()
@@ -325,4 +333,16 @@ def test_exceptions():
     success = sr.get_all_surveys()
     assert not success
     success = sr.set_survey_deleted_true(-1)
+    assert not success
+    success = sr.set_survey_deleted_false(-1)
+    assert not success
+    success = sr.delete_survey_permanently(-1)
+    assert not success
+    success = sr.get_all_survey_stages(-1)
+    assert not success
+    success = sr.get_trash_count(-1)
+    assert not success
+    success = sr.get_deleted_surveys(-1)
+    assert not success
+    success = sr.get_all_deleted_surveys()
     assert not success

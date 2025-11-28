@@ -321,7 +321,7 @@ def test_get_list_active_answered(setup_env):
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     active_list = ss.get_list_active_answered(d["user_id3"])
     assert len(active_list) == 1
 
@@ -336,7 +336,7 @@ def test_get_list_closed_answered(setup_env):
     )
     sos.add_owner_to_survey(survey_id, d["user_email"])
     ranking = "2,3,5,4,1,6"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
     ss.close_survey(survey_id, d["user_id"])
     closed_list = ss.get_list_closed_answered(d["user_id3"])
     assert len(closed_list) == 1
@@ -562,8 +562,8 @@ def test_new_enough_survey_not_deleted(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["response_count"] == 2
@@ -589,8 +589,8 @@ def test_deleting_old_survey_permanently_delete_all_related_data(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["response_count"] == 2
@@ -659,8 +659,8 @@ def test_get_correct_active_surveys_and_response_count(setup_env):
 
     ranking3 = "2,1,5,6,3,4"
     ranking2 = "1,2,5,6,4,3"
-    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "")
-    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "")
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking3, "", "", False)
+    urr.add_user_ranking(d["user_id2"], survey_id, ranking2, "", "", False)
 
     surveys = ss.get_active_surveys_and_response_count(d["user_id"])
     assert surveys[0]["surveyname"] == "Test survey 16"
@@ -680,3 +680,72 @@ def test_len_active_surveys_admin(setup_env):
     )
     length = ss.len_active_surveys()
     assert length == 1
+
+
+def test_get_true_if_survey_is_multistage(setup_env):
+    """
+    Test that checking if multistage on multistage survey returns true
+    """
+    d = setup_env
+
+    data = {
+        "surveyname": "multi stage test 1",
+        "min_choices": None,
+        "description": "",
+        "enddate": "2027-12-03 00:00",
+        "allowed_denied_choices": 1,
+        "allow_search_visibility": False,
+        "allow_absences": False,
+        "user_id": 1,
+        "min_choices_per_stage": {"viikko 1": 2, "viikko 2": 2},
+    }
+
+    survey_id = ss.create_new_multiphase_survey(
+        surveyname=data["surveyname"],
+        min_choices=data["min_choices"],
+        description=data["description"],
+        enddate=data["enddate"],
+        allowed_denied_choices=data["allowed_denied_choices"],
+        allow_search_visibility=data["allow_search_visibility"],
+        allow_absences=data["allow_absences"],
+        user_id=data["user_id"],
+        min_choices_per_stage=data.get("min_choices_per_stage"),
+    )
+
+    scs.add_multistage_choice(survey_id=survey_id, name="Valinta", max_spaces=2, min_size=0, stage=["viikko 1", "viikko2"], mandatory=False)
+
+    multistage = ss.is_multistage(survey_id)
+    assert multistage
+
+
+def test_get_false_if_survey_is_not_multistage(setup_env):
+    """
+    Test that checking if multistage on regular survey returns false
+    """
+    d = setup_env
+
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey 17", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
+    )
+
+    multistage = ss.is_multistage(survey_id)
+    assert not multistage
+
+
+def test_get_admin_analytics(setup_env):
+    """
+    Test that admin analytics fetched from statistics table are correct
+    """
+    d = setup_env
+    initial_stats = ss.get_admin_analytics()
+    assert(list(initial_stats.values()) == [0,0,0,0,3])
+
+    survey_id = ss.create_new_survey_manual(
+        d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
+    )
+    ranking = "2,1,5,6,3,4"
+    urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
+
+    updated_stats = ss.get_admin_analytics()
+    assert(list(updated_stats.values()) == [1,1,0,1,3])
+    

@@ -505,15 +505,18 @@ def api_multistage_survey_submit(survey_id):
 
     # no validations, refactoring needs to be done anyway
     for stage in data["stages"]:
-        good_ids = stage["good"]
-        bad_ids = stage["bad"]
+        good_ids = [] if stage["notAvailable"] else stage["good"]
+        bad_ids = [] if stage["notAvailable"] else stage["bad"]
         reason = stage.get("reason", "")
 
         ranking = convert_to_string(good_ids)
         rejections = convert_to_string(bad_ids)
 
+        ranking_exists = user_rankings_service.user_ranking_exists_fast(survey_id, user_id)
+
         succesful_add = user_rankings_service.add_user_ranking(
-            user_id, survey_id, ranking, rejections, reason, stage=stage["stageId"], not_available=stage["notAvailable"], multistage_ranking=True
+            user_id, survey_id, ranking, rejections, reason, stage=stage["stageId"], 
+            not_available=stage["notAvailable"], multistage_ranking=True, ranking_exists=ranking_exists
         )
         if not succesful_add:
             return jsonify({"status": "0", "message": "adding user ranking failed"})
@@ -576,6 +579,15 @@ def api_survey_submit(survey_id):
         response = {"status": "0", "msg": msg}
     return jsonify(response)
 
+
+@bp.route("/api/surveys/<string:survey_id>/is_multistage", methods=["GET"])
+def api_is_survey_multistage(survey_id):
+    """
+    Checks whether survey is multistage or not
+    """
+    is_multistage = survey_service.is_multistage(survey_id)
+    response = {"multistage":is_multistage}
+    return jsonify(response)
 
 @bp.route("/api/surveys/<string:survey_id>/submission", methods=["DELETE"])
 def api_delete_submission(survey_id):
@@ -1861,3 +1873,9 @@ def delete_old_surveys():
     Weekly check if survey end time was over two year ago. If so, delete said surveys and all related data.
     """
     survey_service.check_for_surveys_to_delete()
+
+def save_old_statistics():
+    """
+    Weekly save of statistics numbers used for backups/history data.
+    """
+    survey_service.save_statistics()

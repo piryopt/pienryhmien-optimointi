@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from flask_babel import gettext
 from flask import session
 from src.repositories.survey_repository import survey_repository as default_survey_repository
@@ -60,18 +60,6 @@ class SurveyService:
         if not survey:
             return False
         return survey.surveyname
-
-    def is_multistage(self, survey_id):
-        """
-        Returns True if the survey has stages (is multistage), False otherwise.
-
-        args:
-            survey_id: The id of the survey
-        """
-        result = self._survey_repository.is_multistage(survey_id)
-        if not result:
-            return False
-        return result
 
     def is_multistage(self, survey_id):
         """
@@ -342,9 +330,10 @@ class SurveyService:
         """
 
         surveys = self._survey_repository.get_all_deleted_surveys()
+        current_date = datetime.combine(datetime.today().date(), time(23, 59))
 
         for survey in surveys:
-            if survey.deleted_at <= datetime.now() - timedelta(days=7):
+            if survey.deleted_at <= current_date - timedelta(days=7):
                 self._survey_repository.delete_survey_permanently(survey.id)
 
     def delete_survey_permanently(self, survey_id):
@@ -365,15 +354,6 @@ class SurveyService:
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
 
-    def fetch_survey_responses_grouped_by_stages(self, survey_id):
-        """
-        Gets a list of user_survey_rankings for the survey grouped by stage
-
-        args:
-            survey_id: The id of the survey
-        """
-        return self._survey_repository.fetch_survey_responses_grouped_by_stages(survey_id)
-
     def fetch_survey_responses_grouped_by_stage(self, survey_id):
         """
         Gets a list of user_survey_rankings for the survey grouped by stage
@@ -381,7 +361,7 @@ class SurveyService:
         args:
             survey_id: The id of the survey
         """
-        return self._survey_repository.fetch_survey_response_grouped_by_stages(survey_id)
+        return self._survey_repository.fetch_survey_responses_grouped_by_stage(survey_id)
 
     def get_choice_popularities(self, survey_id: str):
         """
@@ -645,21 +625,13 @@ class SurveyService:
         }
         """
         try:
-            total_surveys = self.len_all_surveys()
-            active_surveys = self.len_active_surveys()
-            total_students = self._user_service.len_all_students()
-            total_teachers = self._user_service.len_all_teachers()
-
-            from src.services.user_rankings_service import user_rankings_service
-
-            total_responses = user_rankings_service.len_all_rankings()
-
+            statistics = self._survey_repository.get_admintools_statistics()
             return {
-                "total_surveys": int(total_surveys or 0),
-                "active_surveys": int(active_surveys or 0),
-                "total_students": int(total_students or 0),
-                "total_responses": int(total_responses or 0),
-                "total_teachers": int(total_teachers or 0),
+                "total_surveys": statistics.total_created_surveys,
+                "active_surveys": statistics.active_surveys_count,
+                "total_students": statistics.registered_students_count,
+                "total_responses": statistics.total_survey_answers,
+                "total_teachers": statistics.registered_teachers_count,
             }
         except Exception as e:
             print("Error collecting admin analytics:", e)
@@ -667,10 +639,12 @@ class SurveyService:
 
     def set_survey_deleted_true(self, survey_id):
         """
-        Sets survey and choices tables column deleted to true, doesn't actually delete the survey or choices
+        Sets survey and choices tables column deleted to true, doesn't actually
+        delete the survey or choices. Also closes the survey.
         RETURNS whether updating was successful
         """
-
+        if not self.check_if_survey_closed(survey_id):
+            self._survey_repository.close_survey(survey_id)
         self._choices_repository.set_choices_deleted_true(survey_id)
         return self._survey_repository.set_survey_deleted_true(survey_id)
 
@@ -704,6 +678,12 @@ class SurveyService:
         """
         surveys = self._survey_repository.get_deleted_surveys(user_id)
         return [{key: format_datestring(val) if key == "time_end" else val for key, val in survey._mapping.items()} for survey in surveys]
+
+    def save_statistics(self):
+        """
+        Saves old statistics
+        """
+        self._survey_repository.save_statistics()
 
 
 survey_service = SurveyService()

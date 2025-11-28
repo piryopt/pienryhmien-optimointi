@@ -42,27 +42,6 @@ class SurveyRepository:
             print(e)
             return None
 
-    def is_multistage(self, survey_id):
-        """
-        SQL code for checking whether or not a survey is multistage
-
-        args:
-            survey_id: The id of the survey
-
-        returns
-            True if the survey is multistage, False otherwise
-        """
-        try:
-            sql = "SELECT EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = :survey_id) AS is_multistage"
-            result = db.session.execute(text(sql), {"survey_id": survey_id})
-            row = result.fetchone()
-            if not row:
-                return False
-            return bool(row[0])
-        except Exception as e:  # pylint: disable=W0718
-            print(e)
-            return None
-
     def survey_name_exists(self, surveyname, user_id):
         """
         SQL code for getting the id from a survey that has a certain name, is open has access to by a certain user.
@@ -111,10 +90,14 @@ class SurveyRepository:
         try:
             sql = "UPDATE surveys SET closed = True WHERE id=:survey_id"
             db.session.execute(text(sql), {"survey_id": survey_id})
+            update_statistics_sql = "UPDATE statistics SET active_surveys_count = active_surveys_count - 1 WHERE is_current_row = TRUE"
+            db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
 
     def open_survey(self, survey_id, new_end_time):
@@ -127,10 +110,14 @@ class SurveyRepository:
         try:
             sql = "UPDATE surveys SET closed = False, time_end = :new_end_time WHERE id=:survey_id"
             db.session.execute(text(sql), {"survey_id": survey_id, "new_end_time": new_end_time})
+            update_statistics_sql = "UPDATE statistics SET active_surveys_count = active_surveys_count + 1 WHERE is_current_row = TRUE"
+            db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return True
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return False
 
     def get_active_surveys(self, user_id):
@@ -240,11 +227,12 @@ class SurveyRepository:
             while self.get_survey(id):
                 id = generate_unique_id(10)
 
-            sql = (
-                "INSERT INTO surveys (id, surveyname, min_choices, min_choices_per_stage, closed, results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility, allow_absences, deleted)"
-                " VALUES (:id, :surveyname, :min_choices, :min_choices_per_stage, :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, :a_a, False) RETURNING id"
-            )
-
+            sql = """
+                INSERT INTO surveys (id, surveyname, min_choices, min_choices_per_stage, closed,
+                results_saved, survey_description, time_end, allowed_denied_choices, allow_search_visibility,
+                allow_absences, deleted) VALUES (:id, :surveyname, :min_choices, :min_choices_per_stage, 
+                :closed, :saved, :desc, :t_e, :a_d_c, :a_s_v, :a_a, False) RETURNING id
+                """
             result = db.session.execute(
                 text(sql),
                 {
@@ -261,10 +249,18 @@ class SurveyRepository:
                     "a_a": allow_absences,
                 },
             )
+            update_statistics_sql = """
+                UPDATE statistics SET total_created_surveys = total_created_surveys + 1,
+                active_surveys_count = active_surveys_count + 1
+                WHERE is_current_row = TRUE
+            """
+            db.session.execute(text(update_statistics_sql))
             db.session.commit()
             return result.fetchone()[0]
         except Exception as e:  # pylint: disable=W0718
             print(e)
+            if "Working outside of application context." not in str(e):
+                db.session.rollback()
             return None
 
     def get_survey_description(self, survey_id):
@@ -359,29 +355,11 @@ class SurveyRepository:
             print(e)
             return []
 
-    def fetch_survey_responses_grouped_by_stages(self, survey_id):
-        """Returns survey answers grouped by stage (grouping done in SQL)."""
-        try:
-            sql = text(
-                "SELECT stage, user_id, ranking, rejections, reason "
-                "FROM user_survey_rankings "
-                "WHERE survey_id = :survey_id AND deleted IS FALSE "
-                "ORDER BY stage, user_id"
-            )
-            result = db.session.execute(sql, {"survey_id": survey_id})
-            rows = result.fetchall()
+    def fetch_survey_responses_grouped_by_stage(self, survey_id):
+        """
+        Returns survey answers grouped by stage (grouping done in SQL).
+        """
 
-            grouped = {}
-            for stage, user_id, ranking, rejections, reason in rows:
-                grouped.setdefault(stage, []).append((user_id, ranking, rejections, reason))
-
-            return grouped
-        except Exception as e:
-            print(e)
-            return {}
-
-    def fetch_survey_response_grouped_by_stages(self, survey_id):
-        """Returns survey answers grouped by stage (grouping done in SQL)."""
         try:
             sql = text(
                 "SELECT stage, user_id, ranking, rejections, reason, not_available "
@@ -573,7 +551,7 @@ class SurveyRepository:
         """
         try:
             sql = """
-                SELECT s.id, s.surveyname, s.closed, s.deleted_at,
+                SELECT s.id, s.surveyname, s.closed, s.results_saved, s.deleted_at,
                 EXISTS (SELECT 1 FROM survey_stages ss WHERE ss.survey_id = s.id)
                     AS is_multistage FROM surveys s, survey_owners so
                 WHERE (so.user_id=:user_id AND s.id=so.survey_id AND s.deleted=True)
@@ -590,13 +568,75 @@ class SurveyRepository:
         SQL code getting the list of all set to be deleted surveys.
         """
         try:
-            sql = "SELECT s.id, s.surveyname, s.closed, s.deleted_at FROM surveys WHERE (deleted=True)"
-            result = db.session.execute(text(sql), {"user_id": user_id})
+            sql = "SELECT s.id, s.surveyname, s.closed, s.deleted_at FROM surveys s WHERE (deleted=True)"
+            result = db.session.execute(text(sql))
             surveys = result.fetchall()
             return surveys
         except Exception as e:  # pylint: disable=W0718
             print(e)
             return []
+
+    def get_admintools_statistics(self):
+        """
+        SQL code for getting the admintools statistics
+        """
+        try:
+            sql = """
+                SELECT total_created_surveys, active_surveys_count, registered_teachers_count,
+                registered_students_count, total_survey_answers FROM statistics WHERE is_current_row = TRUE
+            """
+            result = db.session.execute(text(sql))
+            return result.fetchone()
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return None
+
+    def add_initial_statistics_row(self):
+        """
+        Creating the initial row for statistics in the DB. Used mainly in tests
+        """
+        try:
+            sql = """
+                INSERT INTO statistics (total_created_surveys, active_surveys_count, registered_teachers_count, 
+                registered_students_count, total_survey_answers, is_current_row) VALUES (0, 0, 0, 0, 0, TRUE);
+            """
+            db.session.execute(text(sql))
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
+
+    def save_statistics(self):
+        """
+        Adds a new row to the DB, copy of current_row with is_current_row = FALSE
+        """
+        try:
+            sql = """
+                 INSERT INTO statistics (
+                    total_created_surveys,
+                    active_surveys_count,
+                    registered_teachers_count,
+                    registered_students_count,
+                    total_survey_answers,
+                    is_current_row
+                )
+                SELECT
+                    total_created_surveys,
+                    active_surveys_count,
+                    registered_teachers_count,
+                    registered_students_count,
+                    total_survey_answers,
+                    FALSE AS is_current_row
+                FROM statistics
+                WHERE is_current_row = TRUE
+            """
+            db.session.execute(text(sql))
+            db.session.commit()
+            return True
+        except Exception as e:  # pylint: disable=W0718
+            print(e)
+            return False
 
 
 survey_repository = SurveyRepository()
