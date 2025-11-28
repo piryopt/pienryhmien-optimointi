@@ -14,6 +14,7 @@ import "../static/css/answerPage.css";
 import { imagesBaseUrl } from "../utils/constants.js";
 import ClosedMultistageSurveyView from "../components/survey_answer_page_components/ClosedMultistageSurveyView.jsx";
 import ButtonRow from "../components/survey_answer_page_components/ButtonRow.jsx";
+import GroupSearch from "../components/GroupSearch.jsx";
 
 const MultiStageAnswerPage = () => {
   const { surveyId } = useParams();
@@ -158,14 +159,31 @@ const MultiStageAnswerPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const payload = stages.map((s) => ({
-        stageId: s.id,
-        notAvailable: s.notAvailable,
-        good: s.good.map((c) => c.id),
-        bad: s.bad.map((c) => c.id),
-        neutral: s.neutral.map((c) => c.id),
-        reason: reasons[s.id]
-      }));
+      const payload = stages.map((s) => {
+        if (s.notAvailable) {
+          const allIds = [
+            ...(s.neutral || []),
+            ...(s.good || []),
+            ...(s.bad || [])
+          ].map((c) => c.id);
+          return {
+            stageId: s.id,
+            notAvailable: true,
+            good: [],
+            bad: [],
+            neutral: allIds,
+            reason: reasons[s.id]
+          };
+        }
+        return {
+          stageId: s.id,
+          notAvailable: s.notAvailable,
+          good: s.good.map((c) => c.id),
+          bad: s.bad.map((c) => c.id),
+          neutral: s.neutral.map((c) => c.id),
+          reason: reasons[s.id]
+        };
+      });
       const result = await surveyService.submitMultiStageAnswers({
         surveyId,
         minChoices: survey.min_choices,
@@ -391,15 +409,10 @@ const MultiStageAnswerPage = () => {
                       </div>
                       <div className="right-column">
                         {survey?.search_visibility && (
-                          <div className="search-container">
-                            <input
-                              id="searchChoices"
-                              type="text"
-                              placeholder={t("Hae ryhmiä...")}
-                              value={searchTerm}
-                              onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                          </div>
+                          <GroupSearch
+                            searchTerm={searchTerm}
+                            setSearchTerm={setSearchTerm}
+                          />
                         )}
                         <GroupList
                           id={`${stage.id}-neutral`}

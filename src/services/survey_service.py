@@ -60,7 +60,7 @@ class SurveyService:
         if not survey:
             return False
         return survey.surveyname
-    
+
     def is_multistage(self, survey_id):
         """
         Returns True if the survey has stages (is multistage), False otherwise.
@@ -364,7 +364,7 @@ class SurveyService:
             survey_id: The id of the survey
         """
         return self._survey_repository.fetch_survey_responses(survey_id)
-    
+
     def fetch_survey_responses_grouped_by_stages(self, survey_id):
         """
         Gets a list of user_survey_rankings for the survey grouped by stage
@@ -480,14 +480,14 @@ class SurveyService:
                 if stage_name == "":
                     return {"success": False, "message": "Every stage must have a non-empty name"}
                 if stage_name not in min_choices_map:
-                    print("stage name:",stage_name)
-                    print("min choices per stages:",min_choices_map)
+                    print("stage name:", stage_name)
+                    print("min choices per stages:", min_choices_map)
                     return {"success": False, "message": f"Missing minchoices entry for stage '{stage_name}'"}
                 required_min = min_choices_map.get(stage_name, 0)
                 if len(stage.get("choices", [])) < required_min:
                     msg = "There are less choices than the minimum amount of prioritized groups!"
                     return {"success": False, "message": msg}
-                
+
                 for choice in stage.get("choices", []):
                     result = self.validate_survey_choice(choice)
                     if not result["success"]:
@@ -581,9 +581,7 @@ class SurveyService:
                     seats_int = int(seats_val)
                 except Exception:
                     seats_int = 0
-                success = self._choices_repository.edit_choice_group_size(
-                    survey_id, choice.get(name_key, ""), seats_int
-                )
+                success = self._choices_repository.edit_choice_group_size(survey_id, choice.get(name_key, ""), seats_int)
             if not success:
                 if count > 0:
                     message = gettext("Häiriö. Osa ryhmäkoon päivityksistä ei onnistunut")
@@ -687,7 +685,7 @@ class SurveyService:
     def create_new_multiphase_survey(self, **kwargs):
         if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):
             return None
-    
+
         survey_id = self._survey_repository.create_new_survey(**kwargs)
         return survey_id
 
