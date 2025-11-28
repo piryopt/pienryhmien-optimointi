@@ -14,7 +14,6 @@ import MinChoicesSection from "../components/create_survey_page_components/MinCh
 import DenyChoicesSection from "../components/create_survey_page_components/DenyChoicesSection";
 import AllowAbsencesSection from "../components/create_multistage_survey_components/AllowAbsences";
 import LimitParticipationSection from "../components/create_multistage_survey_components/LimitParticipation";
-import SearchVisibilitySection from "../components/create_survey_page_components/SearchVisibilitySection";
 import MultistageSurveyPrioritizedGroupsDescription from "../components/create_multistage_survey_components/MultistageSurveyPrioritizedGroupsDescription";
 import StageTables from "../components/create_multistage_survey_components/StageTables";
 import Button from "react-bootstrap/Button";
@@ -52,7 +51,6 @@ const SurveyMultistageCreate = () => {
       minChoicesSetting: "all",
       denyChoicesSetting: "hide",
       allowedDeniedChoices: 1,
-      allowSearchVisibility: false,
       allowAbsences: false,
       limitParticipation: false
     },
@@ -82,11 +80,6 @@ const SurveyMultistageCreate = () => {
           deniedCount > 0 ? "show" : "hide"
         );
         methods.setValue("allowedDeniedChoices", deniedCount);
-
-        methods.setValue(
-          "allowSearchVisibility",
-          !!data.survey.search_visibility
-        );
 
         methods.setValue("allowAbsences", data.survey.allow_absences);
 
@@ -531,7 +524,6 @@ const SurveyMultistageCreate = () => {
       enddate: data.enddate ? format(data.enddate, "dd.MM.yyyy") : "",
       endtime: data.endtime || "",
       allowedDeniedChoices: allowedDenied,
-      allowSearchVisibility: data.allowSearchVisibility || false,
       allowAbsences: data.allowAbsences || false
     };
     console.log("Payload:", payload);
@@ -601,7 +593,6 @@ const SurveyMultistageCreate = () => {
             limitParticipationVisible={limitParticipationVisible}
             setLimitParticipationVisible={setLimitParticipationVisible}
           />
-          <SearchVisibilitySection />
           <MultistageSurveyPrioritizedGroupsDescription />
           <StageTables
             tables={tables}
