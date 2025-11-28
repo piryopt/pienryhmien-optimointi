@@ -52,9 +52,9 @@
     }
   },
   "Hallintatyökalut": "Administratörsverktyg",
-  "Haluatko palauttaa kyselyn roskakorista?": "Vill du returnera undersökningen från skräpkorgen?",
+  "Haluatko palauttaa kyselyn roskakorista?": "Vill du returnera undersökningen från papperskorgen?",
   "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
-    "": "Vill du flytta undersökningen till skräpkorgen? Öppna undersökningar kommer att stängas samtidigt"
+    "": "Vill du flytta undersökningen till papperskorgen? Öppna undersökningar kommer att stängas samtidigt"
   },
   "Haluatko varmasti avata kyselyn uudestaan?": "Är du säker på att du vill öppna undersökningen igen?",
   "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Är du säker på att du vill radera undersökningen och alla relaterade data permanent? ",
@@ -71,7 +71,7 @@
     "": "Obs! Det faktum att vissa elever har placerats i förbjudna eller oorganiserade val påverkar inte genomsnittet"
   },
   "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
-    "": "OBS! Undersökninger som har legat i skräpkorgen i mer än en vecka raderas automatiskt"
+    "": "OBS! Undersökninger som har legat i papperskorgen i mer än en vecka raderas automatiskt"
   },
   "ID": "ID",
   "Info": "Info",
@@ -132,7 +132,7 @@
   "Kysely palautettu": "Undersökningen returnerad",
   "Kysely poistetaan": "Undersökningen kommer att raderas",
   "Kysely poistettu": "Undersökningen raderad",
-  "Kysely siirretty roskakoriin": "Undersökningen flyttades till skräpkorgen",
+  "Kysely siirretty roskakoriin": "Undersökningen flyttades till papperskorgen",
   "Kysely suljettu": "Undersökningen stängd",
   "Kyselyjen lataus epäonnistui": "Misslyckades med att ladda undersökningar",
   "Kyselyn kuvaus": "Undersökningens beskrivning",
@@ -144,7 +144,7 @@
   "Kyselyn osoite kopioitu leikepöydälle": "Undersökningsadress kopierad till urklipp",
   "Kyselyn palauttaminen epäonnistui": "Misslyckades med att skicka in undersökningen",
   "Kyselyn poistaminen epäonnistui": "Det gick inte att ta bort undersökningen",
-  "Kyselyn siirto roskakoriin epäonnistui": "Flyttade undersökningen till skräpkorgen misslyckades",
+  "Kyselyn siirto roskakoriin epäonnistui": "Flyttade undersökningen till papperskorgen misslyckades",
   "Kyselyn tila": "Undersökningens status",
   "Kyselyn vastaukset tallennettu": {
     "": "Undersökningsvaren sparade"
@@ -269,7 +269,7 @@
   "Rajoita osallistumiskertoja": "Begränsa deltagandetider",
   "Rekisteröityneet opettajat": "Registrerade lärare",
   "Rekisteröityneet opiskelijat": "Registrerade studenter",
-  "Roskakori": "Skräpkorg",
+  "Roskakori": "Papperskorg",
   "Ryhmä": "Grupp",
   "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan": "Gruppen \"{{name}}\" måste innehålla minst 1 plats.",
   "Ryhmäjako tallennettu": "Gruppdelning sparad",
