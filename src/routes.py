@@ -175,18 +175,6 @@ def surveys_deleted():
     deleted_surveys = survey_service.get_list_deleted_surveys(user_id)
     return jsonify(deleted_surveys)
 
-
-@bp.route("/surveys/getinfo", methods=["POST"])
-def get_info():
-    """
-    When a choice is clicked, display choice info.
-    """
-    choice_id = int(request.get_json())
-    basic_info = survey_choices_service.get_choice_name_and_spaces(choice_id)
-    additional_info = survey_choices_service.get_choice_additional_infos_not_hidden(choice_id)
-    return render_template("moreinfo.html", basic=basic_info, infos=additional_info)
-
-
 @bp.route("/api/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"], defaults={"stage": None})
 @bp.route("/api/surveys/<string:survey_id>/<string:stage>/studentranking/<string:email>", methods=["GET"])
 def expand_ranking(survey_id, email, stage):
@@ -604,90 +592,6 @@ def api_delete_submission(survey_id):
 
     return jsonify(response)
 
-
-@bp.route("/surveys/<string:survey_id>/answered")
-def surveys_answer_exists(survey_id, survey_all_info, additional_info):
-    """
-    The answer page for surveys if an answer exists.
-    """
-    user_id = session.get("user_id", 0)
-    survey_choices = survey_choices_service.get_list_of_survey_choices(survey_id)
-    survey = survey_service.get_survey(survey_id)
-
-    user_survey_ranking = user_rankings_service.user_ranking_exists(survey_id, user_id)
-    existing = "1"
-    user_rankings = user_survey_ranking.ranking
-    rejections = user_survey_ranking.rejections
-    reason = user_survey_ranking.reason
-
-    list_of_good_survey_choice_id = convert_to_list(user_rankings)
-
-    good_survey_choices = []
-    for survey_choice_id in list_of_good_survey_choice_id:
-        survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
-        good_choice = {}
-        good_choice["name"] = survey_choice.name
-        good_choice["id"] = survey_choice.id
-        good_choice["slots"] = survey_choice.max_spaces
-        good_choice["mandatory"] = survey_choice.mandatory
-        good_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
-        good_choice["min_size"] = survey_choice.min_size
-        if not survey_choice:
-            continue
-        good_survey_choices.append(good_choice)
-        survey_choices.remove(survey_choice)
-
-    bad_survey_choices = []
-    if len(rejections) > 0:
-        list_of_bad_survey_choice_id = convert_to_list(rejections)
-        for survey_choice_id in list_of_bad_survey_choice_id:
-            survey_choice = survey_choices_service.get_survey_choice(survey_choice_id)
-            bad_choice = {}
-            bad_choice["name"] = survey_choice.name
-            bad_choice["id"] = survey_choice.id
-            bad_choice["slots"] = survey_choice.max_spaces
-            bad_choice["mandatory"] = survey_choice.mandatory
-            bad_choice["search"] = survey_all_info[int(survey_choice_id)]["search"]
-            bad_choice["min_size"] = survey_choice.min_size
-            if not survey_choice:
-                continue
-            bad_survey_choices.append(bad_choice)
-            survey_choices.remove(survey_choice)
-
-    neutral_choices = []
-    for survey_choice in survey_choices:
-        neutral_choice = {}
-        neutral_choice["name"] = survey_choice.name
-        neutral_choice["id"] = survey_choice.id
-        neutral_choice["slots"] = survey_choice.max_spaces
-        neutral_choice["mandatory"] = survey_choice.mandatory
-        neutral_choice["search"] = survey_all_info[int(survey_choice[0])]["search"]
-        neutral_choice["min_size"] = survey_choice.min_size
-        neutral_choices.append(neutral_choice)
-
-    # If the survey is closed, return a different page, where the student can view their answers.
-    closed = survey_service.check_if_survey_closed(survey_id)
-    if closed:
-        return render_template(
-            "closedsurvey.html",
-            bad_survey_choices=bad_survey_choices,
-            good_survey_choices=good_survey_choices,
-            survey_name=survey.surveyname,
-            min_choices=survey.min_choices,
-        )
-
-    return render_template(
-        "survey.html",
-        choices=neutral_choices,
-        existing=existing,
-        bad_survey_choices=bad_survey_choices,
-        good_survey_choices=good_survey_choices,
-        reason=reason,
-        survey=survey,
-        additional_info=additional_info,
-    )
-
-
 @bp.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
     """
@@ -717,40 +621,6 @@ def owner_deletes_submission(survey_id):
     if not success:
         return jsonify({"message": "Deleting answer failed"})
     return "", 204
-
-
-@bp.route("/surveys/<string:survey_id>/edit", methods=["GET"])
-def edit_survey_form(survey_id):
-    """
-    Page for editing survey. Fields are filled automatically based on the original survey.
-    The fields that can be edited depend on whether there are answers to the survey or not
-
-    args:
-        survey_id: id of the survey to be edited
-    """
-    if not check_if_owner(survey_id):
-        return redirect("/")
-    survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [
-        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
-    ]
-
-    # Check if the survey has answers. If it has, survey choices cannot be edited.
-    survey_answers = survey_service.fetch_survey_responses(survey_id)
-    edit_choices = True
-    if len(survey_answers) > 0:
-        edit_choices = False
-
-    # Convert datetime.datetime(year, month, day, hour, minute) to date (dd.mm.yyyy) and time (hh:mm)
-    end_date_data = survey["time_end"]
-    end_date = convert_date(end_date_data)
-    end_time = convert_time(end_date_data)
-
-    survey["end_time"] = end_time
-    survey["end_date"] = end_date
-
-    return render_template("edit_survey.html", survey=survey, survey_id=survey_id, edit_choices=edit_choices)
-
 
 @bp.route("/surveys/<string:survey_id>/edit", methods=["POST"])
 def edit_survey_post(survey_id):
@@ -858,32 +728,6 @@ def api_add_owner(survey_id):
         return jsonify(response)
     response = {"status": "1", "msg": message}
     return jsonify(response)
-
-
-@bp.route("/surveys/<string:survey_id>/group_sizes", methods=["GET"])
-def edit_group_sizes(survey_id):
-    """
-    Edit group sizes in a survey and display total number of spaces vs answers
-    Args:
-        survey_id (int): id of the survey
-    """
-    if not check_if_owner(survey_id):
-        return redirect("/")
-    survey = survey_service.get_survey_as_dict(survey_id)
-    survey["variable_columns"] = [
-        column for column in survey["choices"][0] if (column not in {"id", "survey_id", "mandatory", "max_spaces", "deleted", "min_size", "name"})
-    ]
-    (survey_answers_amount, choice_popularities) = survey_service.get_choice_popularities(survey_id)
-    available_spaces = survey_choices_service.count_number_of_available_spaces(survey_id)
-    return render_template(
-        "group_sizes.html",
-        survey_id=survey_id,
-        survey=survey,
-        survey_answers_amount=survey_answers_amount,
-        available_spaces=available_spaces,
-        popularities=choice_popularities,
-    )
-
 
 @bp.route("/surveys/<string:survey_id>/group_sizes", methods=["POST"])
 def post_group_sizes(survey_id):
@@ -1432,88 +1276,6 @@ def api_logout():
 
 
 """
-ADMINTOOLS -ROUTES:
-"""
-
-
-@bp.route("/admintools/analytics")
-def admin_analytics():
-    # Only admins permitted!
-    user_id = session.get("user_id", 0)
-    admin = user_service.check_if_admin(user_id)
-    if not admin:
-        return redirect("/")
-
-    data = []
-    all_created_surveys = survey_service.len_all_surveys()
-    all_active_surveys = survey_service.len_active_surveys()
-    all_students = user_service.len_all_students()
-    all_student_rankings = user_rankings_service.len_all_rankings()
-    all_teachers = user_service.len_all_teachers()
-
-    data.append(all_created_surveys)
-    data.append(all_active_surveys)
-    data.append(all_students)
-    data.append(all_student_rankings)
-    data.append(all_teachers)
-
-    return render_template("admintools/admin_analytics.html", data=data)
-
-
-@bp.route("/admintools/feedback")
-def admin_feedback():
-    # Only admins permitted!
-    user_id = session.get("user_id", 0)
-    admin = user_service.check_if_admin(user_id)
-    if not admin:
-        return redirect("/")
-
-    data = feedback_service.get_unsolved_feedback()
-
-    return render_template("admintools/admin_feedback.html", data=data)
-
-
-@bp.route("/admintools/feedback/closed")
-def admin_closed_feedback():
-    # Only admins permitted!
-    user_id = session.get("user_id", 0)
-    admin = user_service.check_if_admin(user_id)
-    if not admin:
-        return redirect("/")
-
-    data = feedback_service.get_solved_feedback()
-
-    return render_template("admintools/admin_closed_feedback.html", data=data)
-
-
-@bp.route("/admintools/feedback/<int:feedback_id>")
-def admin_feedback_data(feedback_id):
-    # Only admins permitted!
-    user_id = session.get("user_id", 0)
-    admin = user_service.check_if_admin(user_id)
-    if not admin:
-        return redirect("/")
-
-    feedback = feedback_service.get_feedback(feedback_id)
-    if not feedback:
-        return redirect("/")
-    return render_template("admintools/admin_feedback_data.html", feedback=feedback)
-
-
-@bp.route("/admintools/feedback/<int:feedback_id>/close", methods=["POST"])
-def admin_feedback_close_feedback(feedback_id):
-    # Only admins permitted!
-    user_id = session.get("user_id", 0)
-    admin = user_service.check_if_admin(user_id)
-    if not admin:
-        return redirect("/")
-    success = feedback_service.mark_feedback_solved(feedback_id)
-    if not success:
-        return redirect("/")
-    return redirect("/admintools/feedback")
-
-
-"""
 API ADMINTOOLS
 """
 
@@ -1607,20 +1369,6 @@ def api_admin_all_active_surveys():
 
     return jsonify({"success": True, "data": data}), 200
 
-
-@bp.route("/admintools/surveys", methods=["GET"])
-def admin_all_active_surveys():
-    # Only admins permitted!
-    user_id = session.get("user_id", 0)
-    admin = user_service.check_if_admin(user_id)
-    if not admin:
-        return redirect("/")
-    data = survey_service.get_all_active_surveys()
-    if not data:
-        return redirect("/")
-    return render_template("/admintools/admin_survey_list.html", data=data)
-
-
 # @app.route("/admintools/gen_data", methods=["GET", "POST"])
 # def admin_gen_data():
 #    """
@@ -1658,58 +1406,6 @@ def admin_all_active_surveys():
 """
 MISCELLANEOUS ROUTES:
 """
-
-
-@bp.route("/privacy-policy")
-def privacy_policy():
-    """
-    Route returns the Privacy Policy -page linked in the footer
-    """
-    privacy_policy_file = Path(__file__).parents[0] / "static" / "content" / "Tietosuojaseloste.md"
-    title = "Tietosuojaseloste"
-    if session.get("language", 0) == "en":
-        privacy_policy_file = Path(__file__).parents[0] / "static" / "content" / "privacypolicy-en.md"
-        title = "Privacy policy"
-    elif session.get("language", 0) == "sv":
-        privacy_policy_file = Path(__file__).parents[0] / "static" / "content" / "privacypolicy-sv.md"
-        title = "Integritets policy"
-    content = open(privacy_policy_file, "r", encoding="utf-8").read()
-    return render_template("content-page.html", content=markdown.markdown(content), title=title)
-
-
-@bp.route("/faq")
-def faq():
-    """
-    Route returns the Frequently Asked Questions -page linked in the footer
-    """
-    faq_file = Path(__file__).parents[0] / "static" / "content" / "faq-fi.md"
-    title = "UKK"
-    if session.get("language", 0) == "en":
-        faq_file = Path(__file__).parents[0] / "static" / "content" / "faq-en.md"
-        title = "FAQ"
-    elif session.get("language", 0) == "sv":
-        faq_file = Path(__file__).parents[0] / "static" / "content" / "faq-sv.md"
-        title = "FAQ"
-    content = open(faq_file, "r", encoding="utf-8").read()
-    return render_template("content-page.html", content=markdown.markdown(content), title=title)
-
-
-@bp.route("/csv-instructions")
-def csv_instructions():
-    """
-    Route returns the csv instructions -page linked in the footer
-    """
-    csv_file = Path(__file__).parents[0] / "static" / "content" / "csv-instructions-fi.md"
-    title = "CSV ohjeet"
-    if session.get("language", 0) == "en":
-        csv_file = Path(__file__).parents[0] / "static" / "content" / "csv-instructions-en.md"
-        title = "CSV instructions"
-    elif session.get("language", 0) == "sv":
-        csv_file = Path(__file__).parents[0] / "static" / "content" / "csv-instructions-sv.md"
-        title = "CSV guide"
-    content = open(csv_file, "r", encoding="utf-8").read()
-    return render_template("content-page.html", content=markdown.markdown(content), title=title)
-
 
 @bp.route("/get_choices/<string:survey_id>", methods=["POST"])
 def get_choices(survey_id):

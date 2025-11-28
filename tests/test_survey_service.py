@@ -68,13 +68,13 @@ def test_survey_creation_case_normal(setup_env):
 
     # check choice mandatory informations
     choices = scs.get_list_of_survey_choices(survey_id)
-    assert choices[0][2] == "Esimerkkipäiväkoti 1"
-    assert choices[0][3] == 8
-    assert choices[1][2] == "Esimerkkipäiväkoti 2"
-    assert choices[1][3] == 6
+    assert choices[0]["name"] == "Esimerkkipäiväkoti 1"
+    assert choices[0]["max_spaces"] == 8
+    assert choices[1]["name"] == "Esimerkkipäiväkoti 2"
+    assert choices[1]["max_spaces"] == 6
 
-    choice1_infos = scs.get_choice_additional_infos(choices[0][0])
-    choice2_infos = scs.get_choice_additional_infos(choices[1][0])
+    choice1_infos = scs.get_choice_additional_infos(choices[0]["id"])
+    choice2_infos = scs.get_choice_additional_infos(choices[1]["id"])
     assert choice1_infos[0]["info_key"] == "Osoite"
     assert choice1_infos[0]["info_value"] == "Keijukaistenpolku 14"
     assert choice1_infos[1]["info_key"] == "Postinumero"
@@ -738,7 +738,7 @@ def test_get_admin_analytics(setup_env):
     """
     d = setup_env
     initial_stats = ss.get_admin_analytics()
-    assert(list(initial_stats.values()) == [0,0,0,0,3])
+    assert list(initial_stats.values()) == [0, 0, 0, 0, 3]
 
     survey_id = ss.create_new_survey_manual(
         d["json_object"]["choices"], "Test survey 16", d["user_id"], d["json_object"]["surveyInformation"], 2, "01.01.2026", "02:02"
@@ -747,5 +747,4 @@ def test_get_admin_analytics(setup_env):
     urr.add_user_ranking(d["user_id3"], survey_id, ranking, "", "", False)
 
     updated_stats = ss.get_admin_analytics()
-    assert(list(updated_stats.values()) == [1,1,0,1,3])
-    
+    assert list(updated_stats.values()) == [1, 1, 0, 1, 3]
