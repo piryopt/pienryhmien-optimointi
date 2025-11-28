@@ -12,7 +12,7 @@ class SurveyChoicesRepository:
             survey_id: The id of the survey
         """
         try:
-            sql = "SELECT * FROM survey_choices WHERE (survey_id=:survey_id AND deleted=False)"
+            sql = "SELECT * FROM survey_choices WHERE (survey_id=:survey_id)"
             result = db.session.execute(text(sql), {"survey_id": survey_id})
             survey_choices = result.mappings().all()
             return survey_choices
@@ -130,7 +130,7 @@ class SurveyChoicesRepository:
                 SELECT I.choice_id, I.info_key, I.info_value
                 FROM choice_infos I JOIN survey_choices S
                 ON I.choice_id = S.id
-                WHERE (S.survey_id =:survey_id AND S.deleted = False)
+                WHERE (S.survey_id =:survey_id)
                 """
             result = db.session.execute(text(sql), {"survey_id": survey_id})
             return result.fetchall()
@@ -241,7 +241,7 @@ class SurveyChoicesRepository:
                     ON ss.choice_id = sc.id AND ss.survey_id = sc.survey_id
                 LEFT JOIN choice_infos ci
                     ON ci.choice_id = sc.id
-                WHERE sc.survey_id = :survey_id AND sc.deleted = FALSE
+                WHERE sc.survey_id = :survey_id
                 ORDER BY ss.order_number, ss.stage NULLS LAST, sc.id;
             """
             result = db.session.execute(text(sql), {"survey_id": survey_id}).mappings().all()
