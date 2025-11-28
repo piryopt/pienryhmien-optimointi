@@ -52,7 +52,7 @@ def test_get_list_of_survey_choices_returns_correct_number_of_spaces(setup_env):
     """
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
-    assert choices[0][3] + choices[1][3] == 14
+    assert choices[0]["max_spaces"] + choices[1]["max_spaces"] == 14
 
 
 def test_get_list_of_survey_choices_returns_correct_choice_names(setup_env):
@@ -62,7 +62,7 @@ def test_get_list_of_survey_choices_returns_correct_choice_names(setup_env):
     """
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
-    assert choices[0][2] + " " + choices[1][2] == "Esimerkkipäiväkoti 1 Esimerkkipäiväkoti 2"
+    assert choices[0]["name"] + " " + choices[1]["name"] == "Esimerkkipäiväkoti 1 Esimerkkipäiväkoti 2"
 
 
 def test_get_survey_choice_returns_false_if_survey_not_found():
@@ -82,8 +82,8 @@ def test_get_survey_choice_gets_correct_choice(setup_env):
     """
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
-    one_choice = scs.get_survey_choice(choices[0][0])
-    assert choices[0].name == one_choice["name"]
+    one_choice = scs.get_survey_choice(choices[0]["id"])
+    assert choices[0]["name"] == one_choice["name"]
 
 
 def test_get_survey_choice_min_size(setup_env):
@@ -94,8 +94,8 @@ def test_get_survey_choice_min_size(setup_env):
     """
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
-    min_size = scs.get_survey_choice_min_size(choices[0].id)
-    assert min_size == choices[0].min_size
+    min_size = scs.get_survey_choice_min_size(choices[0]["id"])
+    assert min_size == choices[0]["min_size"]
 
 
 def test_get_survey_choice_min_size_invalid_id():
@@ -114,8 +114,8 @@ def test_get_choice_name_and_spaces_gets_correct_choice(setup_env):
     """
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
-    _, name, spaces = scs.get_choice_name_and_spaces(choices[0][0])
-    assert choices[0][2] == name
+    _, name, spaces = scs.get_choice_name_and_spaces(choices[0]["id"])
+    assert choices[0]["name"] == name
 
 
 def test_get_choice_additional_infos_returns_correct_data(setup_env):
@@ -126,7 +126,7 @@ def test_get_choice_additional_infos_returns_correct_data(setup_env):
     """
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
-    choice_infos = scs.get_choice_additional_infos(choices[0][0])
+    choice_infos = scs.get_choice_additional_infos(choices[0]["id"])
     # headers
     assert choice_infos[0]["info_key"] + " " + choice_infos[1]["info_key"] == "Osoite Postinumero"
     # info
@@ -162,7 +162,7 @@ def test_get_survey_choice_mandatory_returns_false_when_group_is_not_mandatory(s
     """
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
-    assert scs.get_survey_choice_mandatory(choices[0][0]) is False
+    assert scs.get_survey_choice_mandatory(choices[0]["id"]) is False
 
 
 def test_get_survey_choice_mandatory(setup_env):
@@ -172,7 +172,7 @@ def test_get_survey_choice_mandatory(setup_env):
     """
     d = setup_env
     choices = scs.get_list_of_survey_choices(d["survey_id"])
-    assert scs.get_survey_choice_mandatory(choices[1][0]) is True
+    assert scs.get_survey_choice_mandatory(choices[1]["id"]) is True
 
 
 def test_check_answers_less_than_min_size(setup_env):

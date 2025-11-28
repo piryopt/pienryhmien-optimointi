@@ -94,7 +94,7 @@ def parser_existing_survey_to_dict(survey_id):
     survey_dict["choices"] = []
     for row in survey_choices:
         additional_infos = survey_choices_repository.get_choice_additional_infos(row.id)
-        survey_dict["choices"].append(dict(row._mapping) | dict(additional_infos))
+        survey_dict["choices"].append(dict(row) | dict(additional_infos))
 
     return survey_dict
 
