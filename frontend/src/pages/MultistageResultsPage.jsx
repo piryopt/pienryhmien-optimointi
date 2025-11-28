@@ -459,7 +459,7 @@ const MultistageSurveyResultsPage = () => {
     <div>
       <h2>{t("Monivaiheisen kyselyn tulokset")}</h2>
 
-      <div style={{ marginTop: "0.5em", marginBottom: "1em" }}>
+      <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}>
         <button
           className="btn btn-outline-primary"
           style={{ marginTop: "1em", marginBottom: "1em" }}
