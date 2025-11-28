@@ -1,7 +1,6 @@
 {
   "(kopio)": "(kopio)",
   "Aiemmat kyselyt": "Aiemmat kyselyt",
-  "Aktiiviset kyselyt": "Aktiiviset kyselyt",
   "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
     "": "Anna käyttäjälle hallinnointioikeudet kyselyyn."
   },
@@ -45,7 +44,6 @@
     }
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä",
-  "Hakunäkyvyys": "Hakunäkyvyys",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
       "": "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle."

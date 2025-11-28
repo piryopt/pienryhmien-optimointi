@@ -1,25 +1,33 @@
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-import adminService from "../../services/admin"
-import { useNotification } from "../../context/NotificationContext"
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import adminService from "../../services/admin";
+import { useNotification } from "../../context/NotificationContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminAnalytics = () => {
-  const { t } = useTranslation()
-  const [metrics, setMetrics] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const { showNotification } = useNotification()
-  
+  const { t } = useTranslation();
+  const [metrics, setMetrics] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { showNotification } = useNotification();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
     const load = async () => {
-      setLoading(true)
-      const res = await adminService.fetchAnalytics()
-      if (!res.success) {
-        showNotification(res.message || t("Tilastojen lataus epäonnistui"), "error")
-      } else if (mounted) {
-        const payload = res.data
-        let named = null
+      setLoading(true);
+      try {
+        const res = await adminService.fetchAnalytics();
+        if (!res.success) {
+          showNotification(
+            res.message || t("Tilastojen lataus epäonnistui"),
+            "error"
+          );
+          navigate("/");
+          return;
+        }
+        if (!mounted) return;
+        const payload = res.data;
+        let named = null;
         if (Array.isArray(payload)) {
           named = {
             total_surveys: payload[0] ?? 0,
@@ -27,24 +35,31 @@ const AdminAnalytics = () => {
             total_students: payload[2] ?? 0,
             total_responses: payload[3] ?? 0,
             total_teachers: payload[4] ?? 0
-          }
+          };
         } else if (payload && typeof payload === "object") {
-          if (payload.total_surveys !== undefined || payload.active_surveys !== undefined) {
+          if (
+            payload.total_surveys !== undefined ||
+            payload.active_surveys !== undefined
+          ) {
             named = {
               total_surveys: payload.total_surveys ?? 0,
               active_surveys: payload.active_surveys ?? 0,
               total_students: payload.total_students ?? 0,
               total_responses: payload.total_responses ?? 0,
               total_teachers: payload.total_teachers ?? 0
-            }
+            };
           } else {
             named = {
-              total_surveys: payload.created_by_distributor ?? payload.total_surveys ?? 0,
+              total_surveys:
+                payload.created_by_distributor ?? payload.total_surveys ?? 0,
               active_surveys: payload.active_surveys ?? 0,
-              total_students: payload.registered_students ?? payload.total_students ?? 0,
-              total_responses: payload.responses_created ?? payload.total_responses ?? 0,
-              total_teachers: payload.registered_teachers ?? payload.total_teachers ?? 0
-            }
+              total_students:
+                payload.registered_students ?? payload.total_students ?? 0,
+              total_responses:
+                payload.responses_created ?? payload.total_responses ?? 0,
+              total_teachers:
+                payload.registered_teachers ?? payload.total_teachers ?? 0
+            };
           }
         } else {
           named = {
@@ -53,17 +68,23 @@ const AdminAnalytics = () => {
             total_students: 0,
             total_responses: 0,
             total_teachers: 0
-          }
+          };
         }
-        setMetrics(named)
+        setMetrics(named);
+      } catch (err) {
+        // Prevent repeated failures from throwing and causing unstable behavior
+        console.error("Failed to load admin analytics:", err);
+        showNotification(t("Tilastojen lataus epäonnistui"), "error");
+        setMetrics(null);
+      } finally {
+        if (mounted) setLoading(false);
       }
-      setLoading(false)
-    }
-    load()
+    };
+    load();
     return () => {
-      mounted = false
-    }
-  }, [showNotification, t])
+      mounted = false;
+    };
+  }, [showNotification, t, navigate]);
 
   return (
     <div>
@@ -79,7 +100,9 @@ const AdminAnalytics = () => {
         </Link>
       </div>
 
-      {loading ? <p>{t("Ladataan...")}</p> : (
+      {loading ? (
+        <p>{t("Ladataan...")}</p>
+      ) : (
         <>
           {!metrics ? (
             <p>{t("Ei tietoja")}</p>
@@ -108,7 +131,7 @@ const AdminAnalytics = () => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default AdminAnalytics
+export default AdminAnalytics;

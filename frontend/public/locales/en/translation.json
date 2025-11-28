@@ -1,7 +1,6 @@
 {
   "(kopio)": "(copy)",
   "Aiemmat kyselyt": "Previous surveys",
-  "Aktiiviset kyselyt": "Active surveys",
   "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
     "": "Give user administrative rights to the survey"
   },
@@ -45,7 +44,6 @@
     }
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "In this field, you can search for an individual response by a respondent's email",
-  "Hakunäkyvyys": "Search visibility",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
       "": "With the search bar, the respondent can filter options based on their name and choices. It is advisable to allow for surveys with a lot of response options, not all of which need to be organized, and conversely, to disallow surveys with few response options where all must be organized."

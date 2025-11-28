@@ -1,31 +1,44 @@
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { useTranslation } from "react-i18next"
-import feedbackService from "../../services/feedback"
-import { useNotification } from "../../context/NotificationContext"
-import FeedbackTable from "../../components/feedback_components/FeedbackTable"
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import feedbackService from "../../services/feedback";
+import { useNotification } from "../../context/NotificationContext";
+import FeedbackTable from "../../components/feedback_components/FeedbackTable";
 
 const AdminClosedFeedbackList = () => {
-  const { t } = useTranslation()
-  const [items, setItems] = useState([])
-  const [loading, setLoading] = useState(true)
-  const { showNotification } = useNotification()
+  const { t } = useTranslation();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { showNotification } = useNotification();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
     const load = async () => {
-      setLoading(true)
-      const res = await feedbackService.fetchClosedFeedbacks()
-      if (!res.success) {
-        showNotification(res.message || t("Palautteiden lataus epäonnistui"), "error")
-      } else if (mounted) {
-        setItems(res.data)
+      setLoading(true);
+      try {
+        const res = await feedbackService.fetchClosedFeedbacks();
+        if (!res.success) {
+          showNotification(
+            res.message || t("Palautteiden lataus epäonnistui"),
+            "error"
+          );
+          navigate("/");
+          return;
+        }
+        if (mounted) setItems(res.data || []);
+      } catch (err) {
+        console.error("Failed to load closed feedbacks:", err);
+        showNotification(t("Palautteiden lataus epäonnistui"), "error");
+      } finally {
+        if (mounted) setLoading(false);
       }
-      setLoading(false)
-    }
-    load()
-    return () => { mounted = false }
-  }, [showNotification, t])
+    };
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, [showNotification, t]);
 
   return (
     <div>
@@ -46,13 +59,19 @@ const AdminClosedFeedbackList = () => {
         </Link>
       </div>
 
-      {loading ? <p>{t("Ladataan...")}</p> : (
+      {loading ? (
+        <p>{t("Ladataan...")}</p>
+      ) : (
         <>
-          {items.length === 0 ? <p>{t("Ei palautteita")}</p> : <FeedbackTable items={items} />}
+          {items.length === 0 ? (
+            <p>{t("Ei palautteita")}</p>
+          ) : (
+            <FeedbackTable items={items} />
+          )}
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default AdminClosedFeedbackList
+export default AdminClosedFeedbackList;
