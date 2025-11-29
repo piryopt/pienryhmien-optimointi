@@ -616,7 +616,7 @@ const SurveyMultistageCreate = () => {
           <button type="submit" className="btn btn-success">
             <img
               className="create-survey-icon"
-              src={`${imagesBaseUrl}/note_add_white_36dp.svg`}
+              src={`${imagesBaseUrl}/note_stack_add_36dp.svg`}
             />
             {t("Luo kysely")}
           </button>
