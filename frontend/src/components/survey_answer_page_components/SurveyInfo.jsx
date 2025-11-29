@@ -20,14 +20,14 @@ const SurveyInfo = ({ survey, additionalInfo, choices, stageName = null }) => {
         <i>
           {isAll && !denySome && (
             <>
-              {t('Järjestä vaihtoehdot mieluisuusjärjestykseen')}{" "}
+              {t('Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen')}{" "}
               <span className="highlight-green">{t('vihreään')}</span> {t('laatikkoon')}.
             </>
           )}
 
           {isAll && denySome && (
             <>
-              {t('Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen')}{" "}
+              {t('Järjestä vaihtoehdot mieluisuusjärjestykseen')}{" "}
               <span className="highlight-green">{t('vihreään')}</span> {t('tai')}{" "}
               <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.{" "}
               <span>
@@ -40,14 +40,14 @@ const SurveyInfo = ({ survey, additionalInfo, choices, stageName = null }) => {
 
           {!isAll && !denySome && (
             <>
-              {t('Järjestä vähintään')} {min_choices} {t('vaihtoehtoa mieluisuusjärjestykseen ')}{" "}
+              {t('Järjestä vähintään')} {min_choices} {t('vaihtoehtoa mieluisuusjärjestykseen')}{" "}
               <span className="highlight-green">{t('vihreään')}</span> {t('laatikkoon')}.
             </>
           )}
 
           {!isAll && denySome && (
             <>
-              {t('Järjestä vähintään')} {min_choices} {t('vaihtoehtoa')} {t('mieluisuusjärjestykseen')}{" "}
+              {t('Järjestä vähintään')} {min_choices} {t('vaihtoehtoa mieluisuusjärjestykseen')}{" "}
               <span className="highlight-green">{t('vihreään')}</span> {t('tai')}{" "}
               <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.{" "}
               <span>

@@ -44,11 +44,6 @@
     }
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Sök efter ett enskilt svar genom att ange respondentens email i detta fält",
-  "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
-    " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
-      "": "Med hjälp av sökfältet kan respondenterna filtrera alternativen de ser baserat på deras namn och alternativ.   Det rekommenderas att tillåta undersökningar med ett stort antal svarsalternativ, som alla inte behöver ordnas,   och på samma sätt förbjuda undersökningar med få svarsalternativ, som alla måste ordnas."
-    }
-  },
   "Hallintatyökalut": "Administratörsverktyg",
   "Haluatko palauttaa kyselyn roskakorista?": "Vill du returnera undersökningen från papperskorgen?",
   "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
@@ -82,6 +77,9 @@
   },
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "Undersökningar som skapats i Jakaja",
+  "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen": "Ordna alla alternativ i preferensordning i den",
+  "Järjestä vähintään": "Ordna minst",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen": "Ordna alternativ i preferensordning i den",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
     "": "Ordna alternativen i preferensordning eller markera dig själv som frånvarande"
   },
@@ -116,6 +114,13 @@
   "Kirjautuminen epäonnistui": "Inloggningen misslyckades",
   "Kirjautuminen onnistui": "Inloggningen lyckades",
   "Kirjautuminen ulos onnistui": "Utloggning lyckades",
+  "Kirjoita tähän perustelut kielloille": {
+    "": {
+      "": {
+        "": "Skriv orsakerna till avvisningarna här..."
+      }
+    }
+  },
   "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klicka på valalternativet för att se ytterligare information om det",
   "kokonaislukuja": "heltal",
   "Kopioi kysely": "Kopiera undersökningen",
@@ -210,7 +215,6 @@
   "Näe poistettavaksi asetetut kyselyt": "Se undersökningar som ska raderas",
   "Näytä": "Visa",
   "Näytä vanhat kyselyt": "Visa gamla undersökningar",
-  "Näytetäänkö vastaajalle hakupalkki?": "Visas sökfältet för respondenten?",
   "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
     "": "De är alltid fyllda till åtminstone minimistorleken oavsett svaren."
   },
@@ -262,9 +266,7 @@
   "Priorisoitavien ryhmien vähimmäismäärän on oltava vähintään 1": "Det minsta antalet grupper som ska prioriteras måste vara minst 1",
   "Priorisoitujen ryhmien vähimmäismäärä": "Minsta antal prioriterade grupper",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "Minsta antal prioriterade grupper som krävs",
-  "punaiseen": "röd",
-  "Raahaa ainakin": "Dra åtminstone",
-  "Raahaa kaikki vaihtoehdot": "Dra alla alternativ",
+  "punaiseen": "röda",
   "Rajoita osallistumiskertoja": "Begränsa deltagandetider",
   "Rekisteröityneet opettajat": "Registrerade lärare",
   "Rekisteröityneet opiskelijat": "Registrerade studenter",
@@ -358,7 +360,8 @@
   "Vaihe": "Steg",
   "Vaiheen nimi": "Stegnamn",
   "Vaiheen tunniste": "Fasens identifierare",
-  "vaihtoehtoa": "alternativ",
+  "vaihtoehtoa": "alternativ i den",
+  "vaihtoehtoa mieluisuusjärjestykseen": "alternativ i preferensordning i den",
   "Valinnat": "Val",
   "Valitse päättymisaika": "Välj sluttid",
   "Valitse päättymispäivä": "Välj slutdag",
@@ -378,7 +381,7 @@
   "Vastausaika päättyy": "Svarstid utgår",
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Slutet av svarsperioden får inte vara i det förflutna",
   "Vie tulokset Excel-taulukkoon": "Exportera resultat till Excel-tabell",
-  "vihreään": "grön",
+  "vihreään": "gröna",
   "Virhe": "Fel",
   "Virheellinen rivi": "Ogiltig rad",
   "Voit kieltää": "Du kan förbjuda",

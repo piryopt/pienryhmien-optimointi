@@ -44,11 +44,6 @@
     }
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä",
-  "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
-    " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
-      "": "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle."
-    }
-  },
   "Hallintatyökalut": "Hallintatyökalut",
   "Haluatko palauttaa kyselyn roskakorista?": "Haluatko palauttaa kyselyn roskakorista?",
   "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
@@ -82,6 +77,9 @@
   },
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "Jakajassa luodut kyselyt",
+  "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen": "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen",
+  "Järjestä vähintään": "Järjestä vähintään",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen": "Järjestä vaihtoehdot mieluisuusjärjestykseen",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
     "": "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi."
   },
@@ -116,6 +114,13 @@
   "Kirjautuminen epäonnistui": "Kirjautuminen epäonnistui",
   "Kirjautuminen onnistui": "Kirjautuminen onnistui",
   "Kirjautuminen ulos onnistui": "Kirjautuminen ulos onnistui",
+  "Kirjoita tähän perustelut kielloille": {
+    "": {
+      "": {
+        "": "Kirjoita tähän perustelut kielloille..."
+      }
+    }
+  },
   "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa",
   "kokonaislukuja": "kokonaislukuja",
   "Kopioi kysely": "Kopioi kysely",
@@ -210,7 +215,6 @@
   "Näe poistettavaksi asetetut kyselyt": "Näe poistettavaksi asetetut kyselyt",
   "Näytä": "Näytä",
   "Näytä vanhat kyselyt": "Näytä vanhat kyselyt",
-  "Näytetäänkö vastaajalle hakupalkki?": "Näytetäänkö vastaajalle hakupalkki?",
   "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
     "": "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
   },
@@ -263,8 +267,6 @@
   "Priorisoitujen ryhmien vähimmäismäärä": "Priorisoitujen ryhmien vähimmäismäärä",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "Priorisoitujen ryhmien vähimmäismäärä vaaditaan",
   "punaiseen": "punaiseen",
-  "Raahaa ainakin": "Raahaa ainakin",
-  "Raahaa kaikki vaihtoehdot": "Raahaa kaikki vaihtoehdot",
   "Rajoita osallistumiskertoja": "Rajoita osallistumiskertoja",
   "Rekisteröityneet opettajat": "Rekisteröityneet opettajat",
   "Rekisteröityneet opiskelijat": "Rekisteröityneet opiskelijat",
@@ -359,6 +361,7 @@
   "Vaiheen nimi": "Vaiheen nimi",
   "Vaiheen tunniste": "Vaiheen tunniste",
   "vaihtoehtoa": "vaihtoehtoa",
+  "vaihtoehtoa mieluisuusjärjestykseen": "vaihtoehtoa mieluisuusjärjestykseen",
   "Valinnat": "Valinnat",
   "Valitse päättymisaika": "Valitse päättymisaika",
   "Valitse päättymispäivä": "Valitse päättymispäivä",
