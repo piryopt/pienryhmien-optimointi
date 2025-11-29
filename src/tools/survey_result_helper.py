@@ -62,7 +62,7 @@ def build_multistage_output(survey_id):
             stage_output_data = [[], 0, [], dropped_group_names, [], []]
         else:
             stage_output_data = hungarian_results(
-                survey_id, multistage_user_rankings.get(stage.stage, []), groups_dict, students_dict, survey_choices
+                survey_id, multistage_user_rankings.get(stage.stage, []), groups_dict, students_dict, survey_choices, stage.stage
             )
             update_participation_counts(stage_output_data[0], participation_limit_group_names, participation_counts)
 
@@ -83,7 +83,7 @@ def build_multistage_output(survey_id):
     return output_data
 
 
-def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices):
+def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, survey_choices, stage=None):
     """
     Run the hungarian algorithm until there is no violation for the min_size portion
 
@@ -105,7 +105,7 @@ def hungarian_results(survey_id, user_rankings, groups_dict, students_dict, surv
     )
     additional_infos, cinfos = get_additional_infos(survey_choices)
 
-    happiness_sum, happiness_results, valid_count = get_happiness_data(output_data, original_students_dict)
+    happiness_sum, happiness_results, valid_count = get_happiness_data(output_data, original_students_dict, survey_id, stage)
     happiness_avg = (happiness_sum / valid_count) if valid_count > 0 else 1
 
     infos = survey_choices_service.get_choice_additional_infos(survey_choices[0].id)
@@ -390,7 +390,7 @@ def get_additional_infos(survey_choices):
     return additional_infos, cinfos
 
 
-def get_happiness_data(output_data, survey_id):
+def get_happiness_data(output_data, students_dict, survey_id, stage=None):
     """
     Extract happiness data from the output data.
 
@@ -398,7 +398,7 @@ def get_happiness_data(output_data, survey_id):
         output_data: The output data from the hungarian algorithm along with happiness average, happiness results, dropped groups and additional infos
         survey_id: The id of the survey
     """
-    students_dict = survey_id if isinstance(survey_id, dict) else None
+    students_dict = students_dict if isinstance(students_dict, dict) else None
 
     happiness_results = {}
     happiness_sum = 0
@@ -409,8 +409,13 @@ def get_happiness_data(output_data, survey_id):
         choice_id = results[2][0]
 
         if students_dict and user_id in students_dict:
-            ranking = students_dict[user_id].selections
-            rejections = students_dict[user_id].rejections
+            if stage:
+                selections = user_rankings_service.get_user_multistage_rankings_by_stage(survey_id, user_id, stage)
+                ranking = selections.ranking
+                rejections = selections.rejections
+            else:
+                ranking = students_dict[user_id].selections
+                rejections = students_dict[user_id].rejections
         else:
             ranking = user_rankings_service.get_user_ranking(user_id, survey_id)
             rejections = user_rankings_service.get_user_rejections(user_id, survey_id)
