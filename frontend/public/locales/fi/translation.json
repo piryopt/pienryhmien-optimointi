@@ -1,7 +1,6 @@
 {
   "(kopio)": "(kopio)",
   "Aiemmat kyselyt": "Aiemmat kyselyt",
-  "Aktiiviset kyselyt": "Aktiiviset kyselyt",
   "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
     "": "Anna käyttäjälle hallinnointioikeudet kyselyyn."
   },
@@ -10,6 +9,7 @@
   "Anna sähköpostiosoite": "Anna sähköpostiosoite",
   "Antamasi sähköpostiosoite ei ole kelvollinen": "Antamasi sähköpostiosoite ei ole kelvollinen",
   "Avaa": "Avaa",
+  "Avaa järjestelmänhallintanäkymä": "Avaa järjestelmänhallintanäkymä",
   "Avaa kysely uudelleen": "Avaa kysely uudelleen",
   "Avaa uudestaan?": "Avaa uudestaan?",
   "Avoimet palautteet": "Avoimet palautteet",
@@ -44,14 +44,16 @@
     }
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä",
-  "Hakunäkyvyys": "Hakunäkyvyys",
   "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
     " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
       "": "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella. Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle."
     }
   },
+  "Hallintatyökalut": "Hallintatyökalut",
   "Haluatko palauttaa kyselyn roskakorista?": "Haluatko palauttaa kyselyn roskakorista?",
-  "Haluatko siirtää kyselyn roskakoriin?": "Haluatko siirtää kyselyn roskakoriin?",
+  "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
+    "": "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan."
+  },
   "Haluatko varmasti avata kyselyn uudestaan?": "Haluatko varmasti avata kyselyn uudestaan?",
   "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ",
   "Haluatko varmasti sulkea kyselyn?": "Haluatko varmasti sulkea kyselyn?",
@@ -63,14 +65,12 @@
       "": "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko."
     }
   },
-  "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
-    "": "Huom! Se, että osa opiskelijoista on sijoitettu hylättyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
+  "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
+    "": "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
   },
   "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
     "": "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti."
   },
-  "Hylkäykset": "Hylkäykset",
-  "Hylkäysmäärä": "Hylkäysmäärä",
   "ID": "ID",
   "Info": "Info",
   "Jaa ryhmiin": "Jaa ryhmiin",
@@ -109,12 +109,13 @@
   "Kentän tulee olla kokonaisluku": "Kentän tulee olla kokonaisluku",
   "Kielletty": "Kielletty",
   "Kielletyt": "Kielletyt",
+  "Kiellot": "Kiellot",
+  "Kieltomäärä": "Kieltomäärä",
   "Kirjaudu sisään": "Kirjaudu sisään",
   "Kirjaudu ulos": "Kirjaudu ulos",
   "Kirjautuminen epäonnistui": "Kirjautuminen epäonnistui",
   "Kirjautuminen onnistui": "Kirjautuminen onnistui",
   "Kirjautuminen ulos onnistui": "Kirjautuminen ulos onnistui",
-  "Kirjoita tähän perustelut hylkäyksille": "Kirjoita tähän perustelut hylkäyksille",
   "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa",
   "kokonaislukuja": "kokonaislukuja",
   "Kopioi kysely": "Kopioi kysely",
@@ -129,6 +130,7 @@
   "Kysely palautettu": "Kysely palautettu",
   "Kysely poistetaan": "Kysely poistetaan",
   "Kysely poistettu": "Kysely poistettu",
+  "Kysely siirretty roskakoriin": "Kysely siirretty roskakoriin",
   "Kysely suljettu": "Kysely suljettu",
   "Kyselyjen lataus epäonnistui": "Kyselyjen lataus epäonnistui",
   "Kyselyn kuvaus": "Kyselyn kuvaus",
@@ -140,6 +142,7 @@
   "Kyselyn osoite kopioitu leikepöydälle": "Kyselyn osoite kopioitu leikepöydälle",
   "Kyselyn palauttaminen epäonnistui": "Kyselyn palauttaminen epäonnistui",
   "Kyselyn poistaminen epäonnistui": "Kyselyn poistaminen epäonnistui",
+  "Kyselyn siirto roskakoriin epäonnistui": "Kyselyn siirto roskakoriin epäonnistui",
   "Kyselyn tila": "Kyselyn tila",
   "Kyselyn vastaukset tallennettu": {
     "": "Kyselyn vastaukset tallennettu."
@@ -179,6 +182,7 @@
   },
   "Lajittelun tulokset": "Lajittelun tulokset",
   "Lataus epäonnistui": "Lataus epäonnistui",
+  "Lisää ainakin yksi vaihe": "Lisää ainakin yksi vaihe",
   "Lisää käyttäjä": "Lisää käyttäjä",
   "Lisää tietokenttä": "Lisää tietokenttä",
   "Lisää vaihe": "Lisää vaihe",
@@ -235,7 +239,7 @@
   "Palautteen tyyppi": "Palautteen tyyppi",
   "Palautteiden lataus epäonnistui": "Palautteiden lataus epäonnistui",
   "Perustelut": "Perustelut",
-  "Perustelut hylkäyksille": "Perustelut hylkäyksille",
+  "Perustelut kielloille": "Perustelut kielloille",
   "Peruuta": "Peruuta",
   "Piilota": "Piilota",
   "poissa": "poissa",
@@ -351,6 +355,7 @@
   "UKK": "UKK",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Vaaditaanko kaikkien ryhmien järjestämistä?",
   "vaihe": "vaihe",
+  "Vaihe": "Vaihe",
   "Vaiheen nimi": "Vaiheen nimi",
   "Vaiheen tunniste": "Vaiheen tunniste",
   "vaihtoehtoa": "vaihtoehtoa",
@@ -374,9 +379,9 @@
   "Vastausajan päättyminen ei voi olla menneisyydessä": "Vastausajan päättyminen ei voi olla menneisyydessä",
   "Vie tulokset Excel-taulukkoon": "Vie tulokset Excel-taulukkoon",
   "vihreään": "vihreään",
-  "Voit kieltää": "Voit kieltää",
   "Virhe": "Virhe",
   "Virheellinen rivi": "Virheellinen rivi",
+  "Voit kieltää": "Voit kieltää",
   "Voit muokata kyselyn kuvausta": "Voit muokata kyselyn kuvausta",
   "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta",
   "Yhteys palvelimeen epäonnistui": "Yhteys palvelimeen epäonnistui",

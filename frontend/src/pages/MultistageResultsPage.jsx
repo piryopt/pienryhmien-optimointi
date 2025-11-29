@@ -69,7 +69,7 @@ const MultistageSurveyResultsPage = () => {
       setResults(active.results || []);
       setDroppedGroups(active.droppedGroups || []);
       setHappinessData(active.happinessData || []);
-      setResultsSaved(Boolean(active.resultsSaved));
+      setResultsSaved(Boolean(surveyResultsData.resultsSaved));
     } else {
       setResults([]);
       setDroppedGroups([]);
@@ -100,7 +100,9 @@ const MultistageSurveyResultsPage = () => {
     for (let idx = 0; idx < surveyResultsData.stageResults.length; idx += 1) {
       const stageObj = surveyResultsData.stageResults[idx];
       try {
-        const resultsArr = Array.isArray(stageObj.results) ? stageObj.results : [];
+        const resultsArr = Array.isArray(stageObj.results)
+          ? stageObj.results
+          : [];
         const rawName = stageObj.stage || `${t("Vaihe")}_${idx + 1}`;
         const sheetName = String(rawName).substring(0, 31);
 
@@ -118,7 +120,11 @@ const MultistageSurveyResultsPage = () => {
           if (!k) return;
           const sk = String(k);
           if (!infoKeys.includes(sk)) infoKeys.push(sk);
-          if (defaultVal !== undefined && defaultVal !== null && infoDefaults[sk] === undefined) {
+          if (
+            defaultVal !== undefined &&
+            defaultVal !== null &&
+            infoDefaults[sk] === undefined
+          ) {
             infoDefaults[sk] = defaultVal;
           }
         };
@@ -132,7 +138,10 @@ const MultistageSurveyResultsPage = () => {
               pushKey(entry[0], entry[1]);
             } else if (typeof entry === "object") {
               if (entry.info_key) {
-                pushKey(entry.info_key, entry.info_value ?? entry.info_value_string ?? "");
+                pushKey(
+                  entry.info_key,
+                  entry.info_value ?? entry.info_value_string ?? ""
+                );
               } else {
                 Object.keys(entry).forEach((k) => pushKey(k, entry[k]));
               }
@@ -155,30 +164,42 @@ const MultistageSurveyResultsPage = () => {
         }
 
         const additionalInfosPerStage = stageObj.additionalInfoKeys || {};
-        const additionalKeysSet = new Set(Object.keys(additionalInfosPerStage).map((k) => String(k)));
+        const additionalKeysSet = new Set(
+          Object.keys(additionalInfosPerStage).map((k) => String(k))
+        );
 
         let stageMeta = null;
         if (multistageMeta && Array.isArray(multistageMeta.stages)) {
-          stageMeta = 
-            multistageMeta.stages.find((s) => String(s.name) === String(stageObj.stage)) ||
+          stageMeta =
+            multistageMeta.stages.find(
+              (s) => String(s.name) === String(stageObj.stage)
+            ) ||
             multistageMeta.stages[idx] ||
             null;
         }
 
         const sourceChoices =
-          (stageMeta && Array.isArray(stageMeta.choices) && stageMeta.choices) ||
+          (stageMeta &&
+            Array.isArray(stageMeta.choices) &&
+            stageMeta.choices) ||
           (Array.isArray(stageObj.choices) && stageObj.choices) ||
           [];
 
         const isHeaderLike = (v) => {
           if (v == null) return false;
-          if (Array.isArray(v) && v.length > 0 && v.every((x) => typeof x === "string")) return true;
+          if (
+            Array.isArray(v) &&
+            v.length > 0 &&
+            v.every((x) => typeof x === "string")
+          )
+            return true;
           return false;
         };
 
         const getInfosFromChoice = (choice) => {
           if (!choice) return null;
-          const infos = choice.infos ?? choice.info_columns ?? choice.infos_columns ?? [];
+          const infos =
+            choice.infos ?? choice.info_columns ?? choice.infos_columns ?? [];
           if (!Array.isArray(infos)) return null;
           const obj = {};
           infos.forEach((entry) => {
@@ -187,7 +208,11 @@ const MultistageSurveyResultsPage = () => {
               const keys = Object.keys(entry);
               if (keys.length === 2 && (entry.info_key || entry.info_value)) {
                 const k = entry.info_key ?? keys[0];
-                const v = entry.info_value ?? entry[entry.info_key] ?? entry[keys[1]] ?? "";
+                const v =
+                  entry.info_value ??
+                  entry[entry.info_key] ??
+                  entry[keys[1]] ??
+                  "";
                 if (k) obj[String(k)] = v;
               } else {
                 keys.forEach((k) => {
@@ -203,7 +228,9 @@ const MultistageSurveyResultsPage = () => {
 
         const choiceIdToPos = {};
         sourceChoices.forEach((c, i) => {
-          const cid = String(c.id ?? c.choice_id ?? c.choiceId ?? c.key ?? c.value ?? "");
+          const cid = String(
+            c.id ?? c.choice_id ?? c.choiceId ?? c.key ?? c.value ?? ""
+          );
           if (cid) choiceIdToPos[cid] = String(i);
           if (c.value !== undefined) choiceIdToPos[String(c.value)] = String(i);
           if (c.name !== undefined) choiceIdToPos[String(c.name)] = String(i);
@@ -213,17 +240,26 @@ const MultistageSurveyResultsPage = () => {
           if (rawKey === undefined || rawKey === null) return null;
           const s = String(rawKey);
           if (additionalKeysSet.has(s)) return s;
-          if (additionalKeysSet.has(String(Number(s)))) return String(Number(s));
-          if (choiceIdToPos[String(s)] && additionalKeysSet.has(choiceIdToPos[String(s)])) return choiceIdToPos[String(s)];
+          if (additionalKeysSet.has(String(Number(s))))
+            return String(Number(s));
+          if (
+            choiceIdToPos[String(s)] &&
+            additionalKeysSet.has(choiceIdToPos[String(s)])
+          )
+            return choiceIdToPos[String(s)];
           const n = Number(s);
           if (!Number.isNaN(n)) {
             for (const k of additionalKeysSet) {
               if (String(n) === String(k)) return k;
             }
           }
-          
+
           for (const [choiceId, pos] of Object.entries(choiceIdToPos)) {
-            if (String(choiceId) === String(rawKey) && additionalKeysSet.has(String(pos))) return String(pos);
+            if (
+              String(choiceId) === String(rawKey) &&
+              additionalKeysSet.has(String(pos))
+            )
+              return String(pos);
           }
           return null;
         };
@@ -239,11 +275,21 @@ const MultistageSurveyResultsPage = () => {
             for (const el of map) {
               if (!el) continue;
               if (Array.isArray(el) && el.length > 0) {
-                if (String(el[0]) === String(choiceKey)) return el[1] ?? el[2] ?? null;
+                if (String(el[0]) === String(choiceKey))
+                  return el[1] ?? el[2] ?? null;
               } else if (typeof el === "object") {
-                if (el.choice_id !== undefined && String(el.choice_id) === String(choiceKey)) return el.infos ?? el.additional ?? el;
-                if (el.choiceId !== undefined && String(el.choiceId) === String(choiceKey)) return el.infos ?? el.additional ?? el;
-                if (Object.prototype.hasOwnProperty.call(el, String(choiceKey))) return el[String(choiceKey)];
+                if (
+                  el.choice_id !== undefined &&
+                  String(el.choice_id) === String(choiceKey)
+                )
+                  return el.infos ?? el.additional ?? el;
+                if (
+                  el.choiceId !== undefined &&
+                  String(el.choiceId) === String(choiceKey)
+                )
+                  return el.infos ?? el.additional ?? el;
+                if (Object.prototype.hasOwnProperty.call(el, String(choiceKey)))
+                  return el[String(choiceKey)];
               }
             }
           }
@@ -254,7 +300,8 @@ const MultistageSurveyResultsPage = () => {
           if (raw == null) return {};
           if (typeof raw === "object" && !Array.isArray(raw)) {
             const keys = Object.keys(raw);
-            const isIndexLike = keys.length > 0 && keys.every((k) => String(parseInt(k)) === k);
+            const isIndexLike =
+              keys.length > 0 && keys.every((k) => String(parseInt(k)) === k);
             if (isIndexLike && infoKeys.length > 0) {
               const arr = keys.map((k) => raw[k]);
               const obj = {};
@@ -268,7 +315,11 @@ const MultistageSurveyResultsPage = () => {
           }
           if (Array.isArray(raw)) {
             const allSingleKeyObjects = raw.every(
-              (a) => a && typeof a === "object" && !Array.isArray(a) && Object.keys(a).length === 1
+              (a) =>
+                a &&
+                typeof a === "object" &&
+                !Array.isArray(a) &&
+                Object.keys(a).length === 1
             );
             if (allSingleKeyObjects) {
               const obj = {};
@@ -288,7 +339,8 @@ const MultistageSurveyResultsPage = () => {
             }
             const merged = {};
             raw.forEach((it) => {
-              if (it && typeof it === "object" && !Array.isArray(it)) Object.assign(merged, it);
+              if (it && typeof it === "object" && !Array.isArray(it))
+                Object.assign(merged, it);
             });
             return merged;
           }
@@ -302,13 +354,19 @@ const MultistageSurveyResultsPage = () => {
             const name = res?.[0]?.[1] ?? "";
             const email = res?.[1] ?? "";
             const rawGroupName = res?.[2]?.[1];
-            const groupName = rawGroupName === "Absent" ? t("Ei paikalla") : (rawGroupName ?? "");
+            const groupName =
+              rawGroupName === "Absent"
+                ? t("Ei paikalla")
+                : (rawGroupName ?? "");
             let choiceIndex = res?.[3] ?? res?.[2]?.[2] ?? "";
-            if (choiceIndex === null || choiceIndex === undefined) choiceIndex = "";
+            if (choiceIndex === null || choiceIndex === undefined)
+              choiceIndex = "";
 
             const choiceKey = res?.[2]?.[0] ?? choiceIndex;
             const canonical = findAdditionalKey(choiceKey);
-            let rawForChoice = canonical ? additionalInfosPerStage[canonical] : resolveAdditionalForChoice(additionalInfosPerStage, choiceKey);
+            let rawForChoice = canonical
+              ? additionalInfosPerStage[canonical]
+              : resolveAdditionalForChoice(additionalInfosPerStage, choiceKey);
 
             if (isHeaderLike(rawForChoice)) rawForChoice = null;
 
@@ -326,7 +384,11 @@ const MultistageSurveyResultsPage = () => {
               }
             }
 
-            if (!rawForChoice) rawForChoice = resolveAdditionalForChoice(additionalInfosPerStage, choiceKey);
+            if (!rawForChoice)
+              rawForChoice = resolveAdditionalForChoice(
+                additionalInfosPerStage,
+                choiceKey
+              );
 
             const normalized = normalizeChoiceAdditional(rawForChoice);
 
@@ -375,7 +437,7 @@ const MultistageSurveyResultsPage = () => {
       XLSX.writeFile(wb, filename);
     } catch (writeErr) {
       showNotification(t("Tulosten vienti epäonnistui"), "error");
-      console.error("Excel write error", writeErr)
+      console.error("Excel write error", writeErr);
     }
   };
 
@@ -397,17 +459,24 @@ const MultistageSurveyResultsPage = () => {
     <div>
       <h2>{t("Monivaiheisen kyselyn tulokset")}</h2>
 
-      <div style={{ marginTop: "0.5em", marginBottom: "1em" }}>
-        <button className="btn btn-outline-primary" style={{ marginTop: "1em", marginBottom: "1em" }} onClick={exportToExcel}>
+      <div style={{ marginTop: "0.5em", marginBottom: "0.5em" }}>
+        <button
+          className="btn btn-outline-primary"
+          style={{ marginTop: "1em", marginBottom: "1em" }}
+          onClick={exportToExcel}
+        >
           {t("Vie tulokset Excel-taulukkoon")}
         </button>
         &nbsp;
         <div>
-        {!resultsSaved && (
-          <button className="btn btn-outline-success" onClick={saveAllResults}>
-            {t("Tallenna kaikkien vaiheiden tulokset")}
-          </button>
-        )}
+          {!resultsSaved && (
+            <button
+              className="btn btn-outline-success"
+              onClick={saveAllResults}
+            >
+              {t("Tallenna kaikkien vaiheiden tulokset")}
+            </button>
+          )}
         </div>
       </div>
 

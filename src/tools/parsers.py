@@ -37,7 +37,7 @@ def parser_csv_to_dict(file):
     return ret_dict
 
 
-def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices, allow_search_visibility):
+def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices):
     """
     Parses a dictionary and creates a survey, its choices and their additional infos
     RETURNS created survey's id
@@ -46,7 +46,7 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
     datetime_end = date_to_sql_valid(date_end) + " " + time_end
 
     survey_id = survey_repository.create_new_survey(
-        survey_name, minchoices, description, datetime_end, allowed_denied_choices, allow_search_visibility
+        survey_name, minchoices, description, datetime_end, allowed_denied_choices
     )
 
     for choice in survey_choices:
