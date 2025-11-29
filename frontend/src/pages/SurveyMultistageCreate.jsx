@@ -275,14 +275,14 @@ const SurveyMultistageCreate = () => {
       if (!sourceTable) return updated;
       const updatedRow = sourceTable.rows.find((r) => r.id === id);
       if (!updatedRow || !updatedRow.name) return updated;
-      const nameKey = (updatedRow.name || "").toString().trim().toLowerCase();
+      const nameKey = (updatedRow.name || "").toString().trim();
       if (!nameKey) return updated;
 
       // apply the same participation_limit value to all rows in all tables that have the same group name
       return updated.map((t) => ({
         ...t,
         rows: t.rows.map((r) =>
-          (r.name || "").toString().trim().toLowerCase() === nameKey
+          (r.name || "").toString().trim() === nameKey
             ? { ...r, [key]: value }
             : r
         )
@@ -349,12 +349,12 @@ const SurveyMultistageCreate = () => {
 
     setTables((ts) => {
       const targetIndex = ts.findIndex((t) => t.id === tableId);
-      // gather participation_limit values from earlier stages only
+      // gather participation_limit values from earlier stages
       const nameToParticipation = {};
       if (targetIndex > 0) {
         ts.slice(0, targetIndex).forEach((stage) => {
           stage.rows.forEach((r) => {
-            const nk = (r.name || "").toString().trim().toLowerCase();
+            const nk = (r.name || "").toString().trim();
             if (!nk) return;
             const val = r.participation_limit;
             if (typeof val !== "undefined" && val !== "") {
@@ -373,10 +373,9 @@ const SurveyMultistageCreate = () => {
         if (t.id !== tableId) return t;
         const update = updateTableFromCSV(headers, rowsToParse, t);
         const filledRows = update.rows.map((r) => {
-          // ensure CSV-provided participation-like props are removed
           const copy = { ...r };
           // fill participation limit from earlier stages when possible
-          const nameKey = (copy.name || "").toString().trim().toLowerCase();
+          const nameKey = (copy.name || "").toString().trim();
           if (
             nameKey &&
             Object.prototype.hasOwnProperty.call(nameToParticipation, nameKey)
@@ -413,7 +412,7 @@ const SurveyMultistageCreate = () => {
 
     const stages = tables.map((t) => ({
       id: t.id,
-      name: t.name || "",
+      name: (t.name || "").toString().trim(),
       columns: t.columns.map((c) => ({ ...c })),
       choices: t.rows.map((r) => {
         const choice = {
@@ -511,14 +510,14 @@ const SurveyMultistageCreate = () => {
 
     const minChoicesPerStage = {};
     stages.forEach((s) => {
-      const key = s.name;
+      const key = s.name.toString().trim();
       minChoicesPerStage[key] =
         data.minChoicesSetting === "all"
           ? s.choices?.length
           : (data.minchoices ?? 1);
     });
     const payload = {
-      surveyGroupname: data.groupname,
+      surveyGroupname: (data.groupname || "").toString().trim(),
       surveyInformation: data.surveyInformation || "",
       stages,
       minchoices: null,

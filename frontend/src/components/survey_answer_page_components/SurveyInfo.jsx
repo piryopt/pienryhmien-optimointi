@@ -20,41 +20,41 @@ const SurveyInfo = ({ survey, additionalInfo, choices, stageName = null }) => {
         <i>
           {isAll && !denySome && (
             <>
-              {t('Raahaa kaikki vaihtoehdot')}{" "}
+              {t('Järjestä vaihtoehdot mieluisuusjärjestykseen')}{" "}
               <span className="highlight-green">{t('vihreään')}</span> {t('laatikkoon')}.
             </>
           )}
 
           {isAll && denySome && (
             <>
-              {t('Raahaa kaikki vaihtoehdot')}{" "}
+              {t('Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen')}{" "}
               <span className="highlight-green">{t('vihreään')}</span> {t('tai')}{" "}
-              <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.
-              <br />
+              <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.{" "}
               <span>
                 {t('Voit kieltää')} {a_d_c} {t('vaihtoehtoa')}{" "}
                 <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.
               </span>
+              <br />
             </>
           )}
 
           {!isAll && !denySome && (
             <>
-              {t('Raahaa ainakin')} {min_choices} {t('vaihtoehtoa')}{" "}
+              {t('Järjestä vähintään')} {min_choices} {t('vaihtoehtoa mieluisuusjärjestykseen ')}{" "}
               <span className="highlight-green">{t('vihreään')}</span> {t('laatikkoon')}.
             </>
           )}
 
           {!isAll && denySome && (
             <>
-              {t('Raahaa ainakin')} {min_choices} {t('vaihtoehtoa')}{" "}
+              {t('Järjestä vähintään')} {min_choices} {t('vaihtoehtoa')} {t('mieluisuusjärjestykseen')}{" "}
               <span className="highlight-green">{t('vihreään')}</span> {t('tai')}{" "}
-              <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.
-              <br />
+              <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.{" "}
               <span>
                 {t('Voit kieltää')} {a_d_c} {t('vaihtoehtoa')}{" "}
                 <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.
               </span>
+              <br />
             </>
           )}
         </i>

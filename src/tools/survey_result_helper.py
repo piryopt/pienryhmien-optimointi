@@ -11,6 +11,7 @@ import src.algorithms.weights as w
 import copy
 from flask import current_app
 
+
 def build_output(survey_id):
     """
     Build results structure for a regular (single-stage) survey.
@@ -548,7 +549,7 @@ def get_participation_limits(survey_id, stages):
             if limit > 0:
                 participation_limits[name] = limit
                 participation_limit_groups[cid] = name
-    
+
     return participation_limits, participation_limit_groups
 
 
