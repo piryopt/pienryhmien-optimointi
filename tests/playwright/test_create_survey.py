@@ -1,6 +1,6 @@
 from pathlib import Path
 from playwright.sync_api import Page, expect
-from .playwright_tools import login, mouse_dnd
+from .playwright_tools import login
 
 TEST_FILES_PATH = Path(__file__).parent / ".." / "test_files"
 

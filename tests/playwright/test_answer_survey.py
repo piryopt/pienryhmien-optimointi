@@ -1,8 +1,5 @@
-from pathlib import Path
 from playwright.sync_api import Page, expect
 from .playwright_tools import login, mouse_dnd
-
-TEST_FILES_PATH = Path(__file__).parent / ".." / "test_files"
 
 
 def test_go_to_all_surveys_page(setup_db, page: Page):
