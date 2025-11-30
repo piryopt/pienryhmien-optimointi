@@ -150,6 +150,11 @@
   "Kyselyn poistaminen epäonnistui": "Survey deletion failed",
   "Kyselyn siirto roskakoriin epäonnistui": "Moving survey into the trash failed",
   "Kyselyn tila": "Survey status",
+  "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa": {
+      "": "There are more respondents than available spots in the survey stages. Edit group sizes for stages before allocating groups."
+    }
+  },
   "Kyselyn vastaukset tallennettu": {
     "": "Survey results saved successfully"
   },
@@ -212,6 +217,7 @@
   "Monivaiheisen kyselyn tulokset": "Sorting results",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Edit the survey or add an administrator",
   "Muokkaa ryhmäkokoja": "Edit group sizes",
+  "Muokkaa vaiheiden ryhmäkokoja": "Edit group sizes for stages",
   "Muu": "Other",
   "Näe poistettavaksi asetetut kyselyt": "See surveys to be deleted",
   "Näytä": "Open",
@@ -359,6 +365,11 @@
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Is organizing all groups required?",
   "vaihe": "stage",
   "Vaihe": "Stage",
+  "Vaihe \"{{name}}\" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja vaiheeseen": {
+      "": "Stage \"{{name}}\" contains {{total}} spots, but there are {{answers}} responses. Add more spots to the stage."
+    }
+  },
   "Vaiheen nimi": "Stage name",
   "Vaiheen tunniste": "Stage ID",
   "vaihtoehtoa": "options to the",

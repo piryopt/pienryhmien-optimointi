@@ -150,6 +150,11 @@
   "Kyselyn poistaminen epäonnistui": "Det gick inte att ta bort undersökningen",
   "Kyselyn siirto roskakoriin epäonnistui": "Flyttade undersökningen till papperskorgen misslyckades",
   "Kyselyn tila": "Undersökningens status",
+  "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa": {
+      "": "Det finns fler respondenter än tillgängliga platser i enkätens steg. Justera stegstorlekarna innan gruppindelningen."
+    }
+  },
   "Kyselyn vastaukset tallennettu": {
     "": "Undersökningsvaren sparade"
   },
@@ -212,6 +217,7 @@
   "Monivaiheisen kyselyn tulokset": "Sorteringsresultat",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera undersökningen eller lägg till en administratör",
   "Muokkaa ryhmäkokoja": "Redigera gruppstorlekar",
+  "Muokkaa vaiheiden ryhmäkokoja": "Redigera gruppstorlekar för stegen",
   "Muu": "Annat",
   "Näe poistettavaksi asetetut kyselyt": "Se undersökningar som ska raderas",
   "Näytä": "Visa",
@@ -359,6 +365,11 @@
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Krävs det att alla grupper ordnas?",
   "vaihe": "steg",
   "Vaihe": "Steg",
+  "Vaihe \"{{name}}\" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja vaiheeseen": {
+      "": "Steget \"{{name}}\" innehåller {{total}} platser, men det finns {{answers}} svar. Lägg till fler platser i steget."
+    }
+  },
   "Vaiheen nimi": "Stegnamn",
   "Vaiheen tunniste": "Fasens identifierare",
   "vaihtoehtoa": "alternativ i den",
