@@ -57,6 +57,37 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
     }));
   };
 
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      const updatedChoices = [];
+      Object.keys(editedChoices).forEach((idStr) => {
+        const id = parseInt(idStr, 10);
+        const raw = editedChoices[idStr];
+        const seats = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
+        updatedChoices.push({ id, max_spaces: seats });
+      });
+
+      await surveyService.updateGroupSizes(surveyId, updatedChoices);
+      showNotification(
+        t("Ryhmäkoot päivitettiin onnistuneesti"),
+        "success"
+      );
+      if (onSuccess) {
+        onSuccess();
+      }
+      onClose();
+    } catch (err) {
+      showNotification(
+        t("Ryhmäkokojen päivittäminen epäonnistui"),
+        "error"
+      );
+      console.error("Error saving multistage group sizes", err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const getStageTotal = useCallback((stage) => {
     const total = (stage.choices || []).reduce((sum, c) => {
       const raw = editedChoices[c.id];
@@ -72,41 +103,27 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
       const answersCount = (answersByStage[stage.name] || []).length;
       const total = getStageTotal(stage);
       if (total < answersCount) {
-        errors.push(t(`Vaihe "${stage.name}" tarvitsee vähintään ${answersCount} paikkaa, nyt ${total}`));
+        errors.push(
+          t('Vaihe "{{name}}" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}. Lisää paikkoja vaiheeseen.', {
+            name: stage.name,
+            answers: answersCount,
+            total: total
+          })
+        );
       }
       (stage.choices || []).forEach((choice) => {
         const raw = editedChoices[choice.id];
         const seats = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
+
         if (seats <= 0) {
-          errors.push(t(`Ryhmä "${choice.name}" täytyy sisältää vähintään 1 paikan`));
+          errors.push(
+            t('Ryhmä "{{name}}" täytyy sisältää vähintään 1 paikan', { name: choice.name })
+          );
         }
       });
     });
     return errors;
   }, [stages, editedChoices, answersByStage, getStageTotal, t]);
-
-  const handleSave = async () => {
-    try {
-      setSaving(true);
-      const updatedChoices = [];
-      Object.keys(editedChoices).forEach((idStr) => {
-        const id = parseInt(idStr, 10);
-        const raw = editedChoices[idStr];
-        const seats = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
-        updatedChoices.push({ id, max_spaces: seats });
-      });
-
-      await surveyService.updateGroupSizes(surveyId, updatedChoices);
-      showNotification(t("Ryhmäkoot päivitettiin onnistuneesti"), "success");
-      if (onSuccess) onSuccess();
-      onClose();
-    } catch (err) {
-      showNotification(t("Ryhmäkokojen päivittäminen epäonnistui"), "error");
-      console.error("Error saving multistage group sizes", err);
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const handleSaveWithValidation = useCallback(async () => {
     const errors = validateInputs();
@@ -130,7 +147,7 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
     <div className="group-sizes-dialog-content">
       <p>
         <b>
-          {t("Kyselyn vaiheissa enemmän vastaajia kuin jaettavia paikkoja. Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa.")}
+          {t("Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa.")}
         </b>
       </p>
 
