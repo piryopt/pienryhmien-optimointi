@@ -114,15 +114,12 @@ def frontpage() -> str:
     if not reloaded:
         session["reloaded"] = True
         return redirect("/")
+    
     user_id = session.get("user_id", 0)
     if user_id == 0:
-        return render_template("index.html")
-    surveys_created = survey_service.count_surveys_created(user_id)
-    active_surveys = survey_service.get_active_surveys_and_response_count(user_id)
-    if not active_surveys:
-        return render_template("index.html", surveys_created=surveys_created, exists=False)
+        return jsonify("You are not logged in!")
 
-    return render_template("index.html", surveys_created=surveys_created, exists=True, data=active_surveys)
+    return jsonify("Logged in successfully!")
 
 
 @bp.route("/static/images/<path:filename>")
@@ -295,13 +292,6 @@ def new_survey_post():
         return jsonify({"status": "0", "msg": gettext("Server error")}), 500
 
 
-@bp.route("/surveys/create/import", methods=["POST"])
-def import_survey_choices():
-    """
-    Post method for creating a new survey when it uses data imported from a csv file.
-    """
-    data = request.get_json()
-    return jsonify(parser_csv_to_dict(data["uploadedFileContent"])["choices"])
 
 
 """
@@ -1164,43 +1154,6 @@ def api_session():
     )
 
 
-@bp.route("/auth/login", methods=["GET", "POST"])
-def login():
-    if not current_app.debug:
-        return redirect("/")
-
-    users = [
-        User("outi1", "testi.opettaja@helsinki.fi", True),
-        User("olli1", "testi.opiskelija@helsinki.fi", False),
-        User("robottiStudent", "robotti.student@helsinki.fi", False),
-        User("robottiTeacher", "robotti.teacher@helsinki.fi", True),
-        User("robottiTeacher2", "robotti.2.teacher@helsinki.fi", True),
-        User("Ääpö Wokki", "hm@helsinki.fi", True),
-        User("opettaja", "opettaja@mail.com", True),
-    ]
-
-    username = request.form.get("username")
-
-    email = name = role_bool = ""
-
-    for user in users:
-        if user.name == username:
-            email = user.email
-            name = user.name
-            role_bool = user.isteacher
-            break
-
-    if not email:
-        return jsonify({"message": "Invalid username"}), 401
-
-    if not user_service.find_by_email(email):  # account doesn't exist, register
-        user_service.create_user(name, email, role_bool)  # actual registration
-
-    if user_service.check_credentials(email):  # log in, update session etc.
-        if role_bool:
-            user_service.make_user_teacher(email)
-
-    return redirect("/")
 
 
 @bp.route("/api/auth/login", methods=["GET", "POST"])
@@ -1242,16 +1195,6 @@ def api_login():
     return redirect("/")
 
 
-@bp.route("/auth/logout")
-def logout():
-    user_service.logout()
-
-    # stupid, but Openshift getenv() can't find Openshift secrets,
-    # so here we are
-    if current_app.debug:
-        return redirect("/")
-    else:
-        return redirect("/Shibboleth.sso/Logout")
 
 
 @bp.route("/api/logout", methods=["GET", "POST"])
