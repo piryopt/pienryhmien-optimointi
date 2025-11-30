@@ -17,7 +17,7 @@
   "Bugi": "Bug",
   "CSV-ohje": "CSV guide",
   "Ei": "No",
-  "Ei järjestetty": "Not ordered",
+  "Ei järjestetty": "Not ranked",
   "Ei kyselyitä": "No surveys",
   "Ei paikalla": "Not present",
   "Ei palautetta": "No feedback",
@@ -44,11 +44,6 @@
     }
   },
   "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "In this field, you can search for an individual response by a respondent's email",
-  "Hakupalkin avulla kyselyyn vastaaja voi suodattaa näkemiään             vaihtoehtoja sen nimen ja vaihtoehtojen perusteella": {
-    " Suositeltavaa sallia             kyselyille, joissa on runsaasti ei-pakollisia vaihtoehtoja,             ja vastaavasti kieltää pakollisia vaihtoehtoja sisältävälle             tai pienelle kyselylle": {
-      "": "With the search bar, the respondent can filter options based on their name and choices. It is advisable to allow for surveys with a lot of response options, not all of which need to be organized, and conversely, to disallow surveys with few response options where all must be organized."
-    }
-  },
   "Hallintatyökalut": "Administration tools",
   "Haluatko palauttaa kyselyn roskakorista?": "Do you want to restore this survey from the trash?",
   "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
@@ -66,7 +61,7 @@
     }
   },
   "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
-    "": "Note! Students allocated into rejected or unordered choices do not affect the average happiness value"
+    "": "Note! Students allocated into rejected or unranked choices do not affect the average happiness value"
   },
   "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
     "": "NOTE! Surveys will be automatically deleted from the trash after a week"
@@ -82,6 +77,9 @@
   },
   "Jakaja": "Jakaja",
   "Jakajassa luodut kyselyt": "Surveys created in Jakaja",
+  "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen": "Rank all options in order of preference in the",
+  "Järjestä vähintään": "Rank at least",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen": "Rank options in order of preference in the",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
     "": "Arrange options in order of preference or mark yourself as absent"
   },
@@ -116,6 +114,13 @@
   "Kirjautuminen epäonnistui": "Logging in failed",
   "Kirjautuminen onnistui": "Logged in successfully",
   "Kirjautuminen ulos onnistui": "Logged out successfully",
+  "Kirjoita tähän perustelut kielloille": {
+    "": {
+      "": {
+        "": "Write reasons for rejections here..."
+      }
+    }
+  },
   "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Click the choice option to see additional information about it",
   "kokonaislukuja": "integers",
   "Kopioi kysely": "Copy survey",
@@ -210,7 +215,6 @@
   "Näe poistettavaksi asetetut kyselyt": "See surveys to be deleted",
   "Näytä": "Open",
   "Näytä vanhat kyselyt": "Show old surveys",
-  "Näytetäänkö vastaajalle hakupalkki?": "Show the search bar?",
   "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
     "": "They are filled to at least the minimum size regardless of the answers."
   },
@@ -263,8 +267,6 @@
   "Priorisoitujen ryhmien vähimmäismäärä": "Minimum number of prioritized groups",
   "Priorisoitujen ryhmien vähimmäismäärä vaaditaan": "Minimum number of prioritized groups required",
   "punaiseen": "red",
-  "Raahaa ainakin": "Drag at least",
-  "Raahaa kaikki vaihtoehdot": "Drag all options to the",
   "Rajoita osallistumiskertoja": "Limit participation times",
   "Rekisteröityneet opettajat": "Registered teachers",
   "Rekisteröityneet opiskelijat": "Registered students",
@@ -359,6 +361,7 @@
   "Vaiheen nimi": "Stage name",
   "Vaiheen tunniste": "Stage ID",
   "vaihtoehtoa": "options to the",
+  "vaihtoehtoa mieluisuusjärjestykseen": "options in order of preference in the",
   "Valinnat": "Choices",
   "Valitse päättymisaika": "Choose an end time",
   "Valitse päättymispäivä": "Choose an end date",
