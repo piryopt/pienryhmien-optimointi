@@ -108,7 +108,8 @@ const AnswersButtons = ({
           const answersCount = {};
           answers.forEach((obj) => {
             const key = Object.keys(obj)[0];
-            answersCount[key] = (obj[key] || []).length;
+            const arr = obj[key] || [];
+            answersCount[key] = arr.filter((a) => !a.notAvailable).length;
           });
           const stagesNeedingEdit = Object.keys(answersCount).filter((stage) => {
             const count = answersCount[stage] || 0;
@@ -128,8 +129,12 @@ const AnswersButtons = ({
               />
             );
             return;
+          } else {
+            navigate(`/surveys/multistage/${surveyId}/results`);
+            return;
           }
         })
+        return;
     }
     if (multistage) {
       navigate(`/surveys/multistage/${surveyId}/results`);
