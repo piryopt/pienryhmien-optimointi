@@ -358,7 +358,11 @@ const MultiStageAnswerPage = () => {
                     }}
                   >
                     {t(
-                      "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi."
+                      `Järjestä vaihtoehdot mieluisuusjärjestykseen${
+                        survey.allow_absences
+                          ? " tai merkitse itsesi poissaolevaksi."
+                          : "."
+                      }`
                     )}
                   </p>
                   {stage.hasMandatory && !stage.notAvailable && (
