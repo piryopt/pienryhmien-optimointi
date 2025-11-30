@@ -1,5 +1,6 @@
 import pytest
 import json
+from src.entities import survey
 from src.tools import survey_result_helper as srh
 from src.services.survey_service import survey_service as ss
 from src.services.survey_choices_service import survey_choices_service as scs
@@ -9,6 +10,7 @@ from src.services.user_rankings_service import user_rankings_service as urs
 
 SURVEY3_FILE = "tests/test_files/test_survey3.json"
 SURVEY4_FILE = "tests/test_files/test_survey4.json"
+MULTISTAGE_FILE = "tests/test_files/test_survey5.json"
 
 
 def _load_survey_json(path):
@@ -23,10 +25,26 @@ def _create_survey_from_file(setup_db, path):
         json_object["choices"],
         json_object["surveyGroupname"],
         user.id,
-        json_object["surveyInformation"],
+        json_object.get("surveyInformation", ""),
         1,
-        "01.01.2024",
+        "01.01.2026",
         "10:00",
+    )
+    setup_db["survey_id"] = survey_id
+    return setup_db
+
+
+def _create_multistage_survey_from_file(setup_db, path):
+    user = ur.get_user_data(setup_db["user_id"])
+    json_object = _load_survey_json(path)
+    survey_id = ss.create_new_mutistage_survey_manual(
+        json_object["stages"],
+        json_object["surveyGroupname"],
+        user.id,
+        json_object.get("surveyInformation", ""),
+        "01.01.2026",
+        "10:00",
+        json_object["minchoices_per_stage"],
     )
     setup_db["survey_id"] = survey_id
     return setup_db
@@ -40,6 +58,11 @@ def setup_survey3(setup_db):
 @pytest.fixture()
 def setup_survey4(setup_db):
     return _create_survey_from_file(setup_db, SURVEY4_FILE)
+
+
+@pytest.fixture()
+def setup_multistage_survey(setup_db):
+    return _create_multistage_survey_from_file(setup_db, MULTISTAGE_FILE)
 
 
 def _group_ids_by_name(survey_choices):
@@ -372,3 +395,28 @@ def test_happiness_results_students_in_unranked_or_rejected(setup_survey3):
         ("Ei järjestettyyn", " valintaan sijoitetut käyttäjät: ", 1),
         ("Kiellettyyn", " valintaan sijoitetut käyttäjät: ", 1),
     ]
+
+
+def test_multistage_creation_from_json(setup_multistage_survey):
+    """
+    Ensure multistage survey is created from JSON and stage choices are available.
+    """
+    d = setup_multistage_survey
+    survey_id = d["survey_id"]
+
+    stage1_choices = scs.get_list_of_stage_survey_choices(survey_id, "Vaihe 1")
+    stage2_choices = scs.get_list_of_stage_survey_choices(survey_id, "Vaihe 2")
+
+    # Expect two choices in each stage as defined in tests/test_files/test_survey5.json
+    assert isinstance(stage1_choices, list)
+    assert isinstance(stage2_choices, list)
+    assert len(stage1_choices) == 2
+    assert len(stage2_choices) == 2
+
+    names_stage1 = {c["name"] for c in stage1_choices}
+    names_stage2 = {c["name"] for c in stage2_choices}
+
+    assert "Päiväkoti Toivo" in names_stage1
+    assert "Päiväkoti Nalli" in names_stage1
+    assert "Päiväkoti Toivo" in names_stage2
+    assert "Päiväkoti Nalli" in names_stage2

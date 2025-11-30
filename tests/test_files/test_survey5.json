@@ -1,0 +1,52 @@
+{
+    "surveyGroupname": "Monivaiheinen testikysely JSON",
+    "minchoices_per_stage": {
+      "Vaihe 1": 1,
+      "Vaihe 2": 1
+    },
+    "stages": [
+      {
+        "stageName": "Vaihe 1",
+        "choices": [
+          {
+            "mandatory": true,
+            "Nimi": "Päiväkoti Toivo",
+            "Enimmäispaikat": "4",
+            "Ryhmän minimikoko": "1",
+            "Osoite": "Apteekkarinraitti 3",
+            "Postinumero": "00790"
+          },
+          {
+            "mandatory": true,
+            "Nimi": "Päiväkoti Nalli",
+            "Enimmäispaikat": "5",
+            "Ryhmän minimikoko": "1",
+            "Osoite": "Nallitie 3",
+            "Postinumero": "00940"
+          }
+        ]
+      },
+      {
+        "stageName": "Vaihe 2",
+        "choices": [
+          {
+            "mandatory": false,
+            "Nimi": "Päiväkoti Toivo",
+            "Enimmäispaikat": "3",
+            "Ryhmän minimikoko": "1",
+            "Osoite": "Apteekkarinraitti 3",
+            "Postinumero": "00790"
+          },
+          {
+            "mandatory": false,
+            "Nimi": "Päiväkoti Nalli",
+            "Enimmäispaikat": "3",
+            "Ryhmän minimikoko": "1",
+            "Osoite": "Nallitie 3",
+            "Postinumero": "00940"
+          }
+        ]
+      }
+    ],
+    "surveyInformation": "Tällä testataan monivaiheisen kyselyn ryhmäjakoa"
+  }
