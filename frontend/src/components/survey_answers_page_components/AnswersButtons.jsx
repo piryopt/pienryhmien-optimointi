@@ -126,6 +126,7 @@ const AnswersButtons = ({
                 surveyId={surveyId}
                 onClose={() => closeDialog()}
                 onSuccess={() => navigate(`/surveys/multistage/${surveyId}/results`)}
+                hideModalFooter={true}
               />
             );
             return;
