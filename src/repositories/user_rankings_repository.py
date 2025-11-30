@@ -135,7 +135,6 @@ class UserRankingsRepository:
                    AND usr.stage = ss.stage
                 WHERE usr.survey_id = :survey_id
                   AND usr.user_id = :user_id
-                  AND usr.deleted = FALSE
                 ORDER BY ss.order_number NULLS LAST, usr.stage;
             """
             result = db.session.execute(text(sql), {"survey_id": survey_id, "user_id": user_id})
