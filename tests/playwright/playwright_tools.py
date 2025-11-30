@@ -19,24 +19,40 @@ def mouse_dnd(page, source: str, target: str):
         source: text on the draggable item
         target: dnd id of the drop area
     """
-    # Items located by text, answer boxes located by dnd id
 
+    # Items located by text, answer boxes located by dnd id
     s = page.get_by_text(source)
     t = page.locator(target)
+
+    page.locator(".right-column").scroll_into_view_if_needed()
+    page.wait_for_timeout(50)
 
     s.scroll_into_view_if_needed()
     t.scroll_into_view_if_needed()
 
-    s = s.bounding_box()
-    t = t.bounding_box()
+    s.wait_for()
+    t.wait_for()
 
-    # Hold mouse on location
-    page.mouse.move(s["x"] + s["width"] / 2, s["y"] + s["height"] / 2)
+    sbox = s.bounding_box()
+    tbox = t.bounding_box()
+
+    page.wait_for_timeout(0)
+    sbox = s.bounding_box()
+
+    sx = sbox["x"] + sbox["width"] / 2
+    sy = sbox["y"] + sbox["height"] / 2
+    tx = tbox["x"] + tbox["width"] / 2
+    ty = tbox["y"] + tbox["height"] / 2
+
+    # Move to source
+    page.mouse.move(sx, sy)
     page.mouse.down()
 
-    # Move to target location
-    page.mouse.move(s["x"] + s["width"] / 2, s["y"] + s["height"] / 2)
-    page.mouse.move(t["x"] + t["width"] / 2, t["y"] + t["height"] / 2, steps=15)
+    # Activate drag sensor
+    page.mouse.move(sx, sy + 10, steps=5)
 
-    # Release
+    page.mouse.move(tx, ty, steps=20)
+
     page.mouse.up()
+
+    page.wait_for_timeout(50)
