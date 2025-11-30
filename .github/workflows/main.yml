@@ -66,6 +66,9 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Run Vitest and get coverage
+        run: npm run test -- --coverage
+
       - name: Lint backend
         run: pylint src/
 
