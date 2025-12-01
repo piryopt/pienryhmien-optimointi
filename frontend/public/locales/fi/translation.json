@@ -149,6 +149,11 @@
   "Kyselyn poistaminen epäonnistui": "Kyselyn poistaminen epäonnistui",
   "Kyselyn siirto roskakoriin epäonnistui": "Kyselyn siirto roskakoriin epäonnistui",
   "Kyselyn tila": "Kyselyn tila",
+  "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa": {
+      "": "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa."
+    }
+  },
   "Kyselyn vastaukset tallennettu": {
     "": "Kyselyn vastaukset tallennettu."
   },
@@ -211,6 +216,7 @@
   "Monivaiheisen kyselyn tulokset": "Monivaiheisen kyselyn tulokset",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Muokkaa kyselyä tai lisää siihen ylläpitäjä",
   "Muokkaa ryhmäkokoja": "Muokkaa ryhmäkokoja",
+  "Muokkaa vaiheiden ryhmäkokoja": "Muokkaa vaiheiden ryhmäkokoja",
   "Muu": "Muu",
   "Näe poistettavaksi asetetut kyselyt": "Näe poistettavaksi asetetut kyselyt",
   "Näytä": "Näytä",
@@ -358,6 +364,11 @@
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Vaaditaanko kaikkien ryhmien järjestämistä?",
   "vaihe": "vaihe",
   "Vaihe": "Vaihe",
+  "Vaihe \"{{name}}\" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja vaiheeseen": {
+      "": "Vaihe \"{{name}}\" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}. Lisää paikkoja vaiheeseen."
+    }
+  },
   "Vaiheen nimi": "Vaiheen nimi",
   "Vaiheen tunniste": "Vaiheen tunniste",
   "vaihtoehtoa": "vaihtoehtoa",

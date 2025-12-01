@@ -94,10 +94,10 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
     const total = getTotalEditedSpaces();
     if (total < surveyAnswersAmount) {
       errors.push(
-        t('Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.'), {
+        t('Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.', {
           total: total,
           answers: surveyAnswersAmount
-        }
+        })
       );
     }
 
