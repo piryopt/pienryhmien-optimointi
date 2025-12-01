@@ -1,6 +1,6 @@
-import { Navigate } from "react-router-dom"
-import { useAuth } from "../context/AuthProvider"
-import LoginPage from "../pages/LoginPage"
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
+import LoginPage from "../pages/LoginPage";
 
 /**
  * RequireAdmin
@@ -10,23 +10,23 @@ import LoginPage from "../pages/LoginPage"
  * - otherwise renders children
  */
 const RequireAdmin = ({ children }) => {
-  const { user, loading, debug } = useAuth()
+  const { user, loading, debug } = useAuth();
 
-  if (loading) return null
+  if (loading) return null;
 
   if (!user || user.logged_in === false) {
     if (debug) {
-      return <LoginPage />
+      return <LoginPage />;
     }
-    window.location.href = "/auth/login"
-    return null
+    window.location.href = "/auth/login";
+    return null;
   }
 
   if (!user.admin) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
 
-  return children
-}
+  return children;
+};
 
-export default RequireAdmin
+export default RequireAdmin;

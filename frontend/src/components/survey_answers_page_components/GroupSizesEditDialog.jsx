@@ -46,24 +46,19 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
       setSaving(true);
       const updatedChoices = choices.map((choice) => {
         const raw = editedChoices[choice.id];
-        const seats = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
+        const seats =
+          raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
         return { id: choice.id, max_spaces: seats };
       });
 
       await surveyService.updateGroupSizes(surveyId, updatedChoices);
-      showNotification(
-        t("Ryhmäkoot päivitettiin onnistuneesti"),
-        "success"
-      );
+      showNotification(t("Ryhmäkoot päivitettiin onnistuneesti"), "success");
       if (onSuccess) {
         onSuccess();
       }
       onClose();
     } catch (err) {
-      showNotification(
-        t("Ryhmäkokojen päivittäminen epäonnistui"),
-        "error"
-      );
+      showNotification(t("Ryhmäkokojen päivittäminen epäonnistui"), "error");
       console.error("Error saving group sizes", err);
     } finally {
       setSaving(false);
@@ -82,11 +77,14 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
 
     choices.forEach((choice) => {
       const raw = editedChoices[choice.id];
-      const seats = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
+      const seats =
+        raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
 
       if (seats <= 0) {
         errors.push(
-          t('Ryhmä "{{name}}" täytyy sisältää vähintään 1 paikan', { name: choice.name })
+          t('Ryhmä "{{name}}" täytyy sisältää vähintään 1 paikan', {
+            name: choice.name
+          })
         );
       }
     });
@@ -94,10 +92,13 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
     const total = getTotalEditedSpaces();
     if (total < surveyAnswersAmount) {
       errors.push(
-        t('Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.', {
-          total: total,
-          answers: surveyAnswersAmount
-        })
+        t(
+          "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja.",
+          {
+            total: total,
+            answers: surveyAnswersAmount
+          }
+        )
       );
     }
 
@@ -120,13 +121,19 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
     <div className="group-sizes-dialog-content">
       <h3>{survey?.surveyname}</h3>
       <p>
-        <i>{t("Vastauksia")}: {surveyAnswersAmount}</i>
+        <i>
+          {t("Vastauksia")}: {surveyAnswersAmount}
+        </i>
         <br />
-        <i>{t("Jaettavia paikkoja")}: {getTotalEditedSpaces()}</i>
+        <i>
+          {t("Jaettavia paikkoja")}: {getTotalEditedSpaces()}
+        </i>
       </p>
       <p>
         <b>
-          {t("Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa ryhmäkokoja ennen ryhmäjakoa.")}
+          {t(
+            "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa ryhmäkokoja ennen ryhmäjakoa."
+          )}
         </b>
       </p>
 
@@ -146,8 +153,14 @@ const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
                   <input
                     type="number"
                     min="0"
-                    value={editedChoices[choice.id] !== undefined ? editedChoices[choice.id] : String(choice.max_spaces)}
-                    onChange={(e) => handleSeatsChange(choice.id, e.target.value)}
+                    value={
+                      editedChoices[choice.id] !== undefined
+                        ? editedChoices[choice.id]
+                        : String(choice.max_spaces)
+                    }
+                    onChange={(e) =>
+                      handleSeatsChange(choice.id, e.target.value)
+                    }
                     className="form-control form-control-sm"
                     disabled={saving}
                   />

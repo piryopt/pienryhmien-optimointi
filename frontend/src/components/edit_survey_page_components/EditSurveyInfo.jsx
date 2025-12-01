@@ -8,11 +8,7 @@ const EditSurveyInfo = ({ placeholder }) => {
   return (
     <section>
       <h2>{t("Kyselyn kuvaus")}</h2>
-      <p>
-        {t(
-          "Voit muokata kyselyn kuvausta"
-        )}
-      </p>
+      <p>{t("Voit muokata kyselyn kuvausta")}</p>
       <textarea
         id="survey-information"
         className="form-control"

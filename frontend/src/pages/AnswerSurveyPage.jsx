@@ -186,9 +186,7 @@ const AnswerSurveyPage = () => {
             <p className="note">
               {t("HUOM! ")}
               <span className="mandatory">{t("Pakolliseksi ")}</span>
-              {t(
-                "merkityt ryhmät priorisoidaan jakamisprosessissa. "
-              )}{" "}
+              {t("merkityt ryhmät priorisoidaan jakamisprosessissa. ")}{" "}
               {t(
                 "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
               )}

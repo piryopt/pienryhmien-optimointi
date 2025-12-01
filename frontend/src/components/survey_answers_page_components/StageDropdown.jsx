@@ -16,7 +16,7 @@ const StageDropdown = ({
   if (setCurrStageAvailableSpaces) {
     useEffect(() => {
       setCurrStageAvailableSpaces(spacesData[currStage]);
-    })
+    });
   }
 
   return (

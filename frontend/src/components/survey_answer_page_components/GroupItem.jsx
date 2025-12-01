@@ -20,11 +20,17 @@ const GroupItem = ({ item, choice, expanded, onToggle, index, id }) => {
         >
           {item.name}
         </span>
-        {item.mandatory && <span className="group-mandatory">{t("Pakollinen")}</span>}
+        {item.mandatory && (
+          <span className="group-mandatory">{t("Pakollinen")}</span>
+        )}
       </h2>
-      <p className="group-slots">{t("Ryhmän maksimikoko")}: {item.slots}</p>
+      <p className="group-slots">
+        {t("Ryhmän maksimikoko")}: {item.slots}
+      </p>
       {item.mandatory && (
-        <p className="group-minsize">{t("Ryhmän minimikoko")}: {item.min_size}</p>
+        <p className="group-minsize">
+          {t("Ryhmän minimikoko")}: {item.min_size}
+        </p>
       )}
       {expanded && (
         <div className="group-expanded">

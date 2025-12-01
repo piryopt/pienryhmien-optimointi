@@ -1,12 +1,11 @@
 const ParseDeleteDate = ({ deletedAt }) => {
   const timestamp = Date.parse(deletedAt);
-  const timeDate = new Date(timestamp);
-  const nextWeek = new Date();
-  nextWeek.setDate(timeDate.getDate() + 7);
+  const deleteDate = new Date(timestamp);
+  deleteDate.setDate(deleteDate.getDate() + 7);
 
-  const day = nextWeek.getDate();
-  const month = nextWeek.getMonth() + 1;
-  const year = nextWeek.getFullYear();
+  const day = deleteDate.getDate();
+  const month = deleteDate.getMonth() + 1;
+  const year = deleteDate.getFullYear();
 
   return `${day}.${month}.${year} 00:00`;
 };

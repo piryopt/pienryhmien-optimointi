@@ -16,7 +16,7 @@ const AnswersButtons = ({
   surveyId,
   surveyData,
   answers,
-  multistage=false,
+  multistage = false
 }) => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
@@ -86,56 +86,58 @@ const AnswersButtons = ({
       );
       return;
     } else if (!multistage && answers.length > surveyData.availableSpaces) {
-        openDialog(
-          t("Muokkaa ryhmäkokoja"),
-          null,
-          null,
-          null,
-          <GroupSizesEditDialog
-            surveyId={surveyId}
-            onClose={() => closeDialog()}
-            onSuccess={() => {
-              navigate(`/surveys/${surveyId}/results`);
-            }}
-            hideModalFooter={true}
-          />
-        );
-        return;
-      } else if (multistage) {
-        surveyService.getMultiStageSurveyAnswersData(surveyId).then((data) => {
-          const answers = data.answers || [];
-          const available = data.availableSpaces || {};
-          const answersCount = {};
-          answers.forEach((obj) => {
-            const key = Object.keys(obj)[0];
-            const arr = obj[key] || [];
-            answersCount[key] = arr.filter((a) => !a.notAvailable).length;
-          });
-          const stagesNeedingEdit = Object.keys(answersCount).filter((stage) => {
-            const count = answersCount[stage] || 0;
-            const avail = available[stage] || 0;
-            return count > avail;
-          });
-          if (stagesNeedingEdit.length > 0) {
-            openDialog(
-              t("Muokkaa vaiheiden ryhmäkokoja"),
-              null,
-              null,
-              null,
-              <MultiStageGroupSizesEditDialog
-                surveyId={surveyId}
-                onClose={() => closeDialog()}
-                onSuccess={() => navigate(`/surveys/multistage/${surveyId}/results`)}
-                hideModalFooter={true}
-              />
-            );
-            return;
-          } else {
-            navigate(`/surveys/multistage/${surveyId}/results`);
-            return;
-          }
-        })
-        return;
+      openDialog(
+        t("Muokkaa ryhmäkokoja"),
+        null,
+        null,
+        null,
+        <GroupSizesEditDialog
+          surveyId={surveyId}
+          onClose={() => closeDialog()}
+          onSuccess={() => {
+            navigate(`/surveys/${surveyId}/results`);
+          }}
+          hideModalFooter={true}
+        />
+      );
+      return;
+    } else if (multistage) {
+      surveyService.getMultiStageSurveyAnswersData(surveyId).then((data) => {
+        const answers = data.answers || [];
+        const available = data.availableSpaces || {};
+        const answersCount = {};
+        answers.forEach((obj) => {
+          const key = Object.keys(obj)[0];
+          const arr = obj[key] || [];
+          answersCount[key] = arr.filter((a) => !a.notAvailable).length;
+        });
+        const stagesNeedingEdit = Object.keys(answersCount).filter((stage) => {
+          const count = answersCount[stage] || 0;
+          const avail = available[stage] || 0;
+          return count > avail;
+        });
+        if (stagesNeedingEdit.length > 0) {
+          openDialog(
+            t("Muokkaa vaiheiden ryhmäkokoja"),
+            null,
+            null,
+            null,
+            <MultiStageGroupSizesEditDialog
+              surveyId={surveyId}
+              onClose={() => closeDialog()}
+              onSuccess={() =>
+                navigate(`/surveys/multistage/${surveyId}/results`)
+              }
+              hideModalFooter={true}
+            />
+          );
+          return;
+        } else {
+          navigate(`/surveys/multistage/${surveyId}/results`);
+          return;
+        }
+      });
+      return;
     }
     if (multistage) {
       navigate(`/surveys/multistage/${surveyId}/results`);
