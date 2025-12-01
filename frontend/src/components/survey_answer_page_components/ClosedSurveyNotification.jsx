@@ -24,7 +24,9 @@ const ClosedSurveyNotification = ({ existing }) => {
           {existing ? (
             <>
               {" "}
-              {t("Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta.")}
+              {t(
+                "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta."
+              )}
             </>
           ) : (
             <> {t("Et ole vastannut tähän kyselyyn.")}</>

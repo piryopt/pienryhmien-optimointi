@@ -4,7 +4,6 @@ import GroupList from "./GroupList.jsx";
 import ClosedSurveyNotification from "./ClosedSurveyNotification.jsx";
 import StageDropdown from "./../survey_answers_page_components/StageDropdown.jsx";
 
-
 const ClosedMultistageSurveyView = ({
   stages,
   reasons,
@@ -14,7 +13,9 @@ const ClosedMultistageSurveyView = ({
 }) => {
   const { t } = useTranslation();
   const stageLabels = (stages || []).map((s) => s.stage ?? s.id);
-  const [currStage, setCurrStage] = useState(stageLabels.length > 0 ? stageLabels[0] : "");
+  const [currStage, setCurrStage] = useState(
+    stageLabels.length > 0 ? stageLabels[0] : ""
+  );
 
   useEffect(() => {
     const labels = (stages || []).map((s) => s.stage ?? s.id);
@@ -44,7 +45,6 @@ const ClosedMultistageSurveyView = ({
           {stages
             .filter((stage) => (stage.stage ?? stage.id) === currStage)
             .map((stage) => {
-        
               if (stage.notAvailable) {
                 return (
                   <div className="answer-layout" key={stage.id}>
@@ -58,7 +58,9 @@ const ClosedMultistageSurveyView = ({
                   <div className="left-column">
                     {stage.good.length > 0 && (
                       <>
-                        <h2 className="closed-survey-title">{t("Valinnat")}:</h2>
+                        <h2 className="closed-survey-title">
+                          {t("Valinnat")}:
+                        </h2>
                         <GroupList
                           id="good"
                           items={stage.good}

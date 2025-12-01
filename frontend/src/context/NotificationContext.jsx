@@ -16,7 +16,7 @@ export const NotificationProvider = ({ children }) => {
         notification,
         showNotification,
         hideNotification,
-        setNotification,
+        setNotification
       }}
     >
       {children}

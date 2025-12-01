@@ -13,26 +13,31 @@ const SurveyInfo = ({ survey, additionalInfo, choices, stageName = null }) => {
 
   return (
     <>
-      <p className="deadline">{t('Vastausaika päättyy')} {survey.deadline}</p>
+      <p className="deadline">
+        {t("Vastausaika päättyy")} {survey.deadline}
+      </p>
       <p style={{ padding: "1.5em 0" }}>{survey.description}</p>
 
       <p className="instructions">
         <i>
           {isAll && !denySome && (
             <>
-              {t('Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen')}{" "}
-              <span className="highlight-green">{t('vihreään')}</span> {t('laatikkoon')}.
+              {t("Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen")}{" "}
+              <span className="highlight-green">{t("vihreään")}</span>{" "}
+              {t("laatikkoon")}.
             </>
           )}
 
           {isAll && denySome && (
             <>
-              {t('Järjestä vaihtoehdot mieluisuusjärjestykseen')}{" "}
-              <span className="highlight-green">{t('vihreään')}</span> {t('tai')}{" "}
-              <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.{" "}
+              {t("Järjestä vaihtoehdot mieluisuusjärjestykseen")}{" "}
+              <span className="highlight-green">{t("vihreään")}</span>{" "}
+              {t("tai")} <span className="highlight-red">{t("punaiseen")}</span>{" "}
+              {t("laatikkoon")}.{" "}
               <span>
-                {t('Voit kieltää')} {a_d_c} {t('vaihtoehtoa')}{" "}
-                <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.
+                {t("Voit kieltää")} {a_d_c} {t("vaihtoehtoa")}{" "}
+                <span className="highlight-red">{t("punaiseen")}</span>{" "}
+                {t("laatikkoon")}.
               </span>
               <br />
             </>
@@ -40,19 +45,24 @@ const SurveyInfo = ({ survey, additionalInfo, choices, stageName = null }) => {
 
           {!isAll && !denySome && (
             <>
-              {t('Järjestä vähintään')} {min_choices} {t('vaihtoehtoa mieluisuusjärjestykseen')}{" "}
-              <span className="highlight-green">{t('vihreään')}</span> {t('laatikkoon')}.
+              {t("Järjestä vähintään")} {min_choices}{" "}
+              {t("vaihtoehtoa mieluisuusjärjestykseen")}{" "}
+              <span className="highlight-green">{t("vihreään")}</span>{" "}
+              {t("laatikkoon")}.
             </>
           )}
 
           {!isAll && denySome && (
             <>
-              {t('Järjestä vähintään')} {min_choices} {t('vaihtoehtoa mieluisuusjärjestykseen')}{" "}
-              <span className="highlight-green">{t('vihreään')}</span> {t('tai')}{" "}
-              <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.{" "}
+              {t("Järjestä vähintään")} {min_choices}{" "}
+              {t("vaihtoehtoa mieluisuusjärjestykseen")}{" "}
+              <span className="highlight-green">{t("vihreään")}</span>{" "}
+              {t("tai")} <span className="highlight-red">{t("punaiseen")}</span>{" "}
+              {t("laatikkoon")}.{" "}
               <span>
-                {t('Voit kieltää')} {a_d_c} {t('vaihtoehtoa')}{" "}
-                <span className="highlight-red">{t('punaiseen')}</span> {t('laatikkoon')}.
+                {t("Voit kieltää")} {a_d_c} {t("vaihtoehtoa")}{" "}
+                <span className="highlight-red">{t("punaiseen")}</span>{" "}
+                {t("laatikkoon")}.
               </span>
               <br />
             </>
@@ -60,7 +70,7 @@ const SurveyInfo = ({ survey, additionalInfo, choices, stageName = null }) => {
         </i>
 
         {additionalInfo ? (
-          <i> {t('Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa')}.</i>
+          <i> {t("Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa")}.</i>
         ) : null}
       </p>
     </>

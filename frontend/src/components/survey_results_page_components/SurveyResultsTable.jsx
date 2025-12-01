@@ -26,10 +26,10 @@ const SurveyResultsTable = ({ results, surveyId, currStage }) => {
       columns={columns}
       data={results}
       renderRow={(result, i) => (
-        <SurveyResultsTableRow 
-          key={i} 
-          result={result} 
-          surveyId={surveyId} 
+        <SurveyResultsTableRow
+          key={i}
+          result={result}
+          surveyId={surveyId}
           currStage={currStage}
         />
       )}

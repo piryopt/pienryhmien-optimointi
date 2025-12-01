@@ -29,7 +29,9 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
           const keys = Object.keys(obj);
           if (keys.length > 0) {
             const stageName = keys[0];
-            answersMap[stageName] = (obj[stageName] || []).filter((a) => !a.notAvailable);
+            answersMap[stageName] = (obj[stageName] || []).filter(
+              (a) => !a.notAvailable
+            );
           }
         });
         setAnswersByStage(answersMap);
@@ -38,7 +40,9 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
         const initial = {};
         stagesList.forEach((stage) => {
           (stage.choices || []).forEach((choice) => {
-            initial[choice.id] = String(choice.slots ?? choice.max_spaces ?? "");
+            initial[choice.id] = String(
+              choice.slots ?? choice.max_spaces ?? ""
+            );
           });
         });
         setEditedChoices(initial);
@@ -64,38 +68,36 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
       Object.keys(editedChoices).forEach((idStr) => {
         const id = parseInt(idStr, 10);
         const raw = editedChoices[idStr];
-        const seats = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
+        const seats =
+          raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
         updatedChoices.push({ id, max_spaces: seats });
       });
 
       await surveyService.updateGroupSizes(surveyId, updatedChoices);
-      showNotification(
-        t("Ryhmäkoot päivitettiin onnistuneesti"),
-        "success"
-      );
+      showNotification(t("Ryhmäkoot päivitettiin onnistuneesti"), "success");
       if (onSuccess) {
         onSuccess();
       }
       onClose();
     } catch (err) {
-      showNotification(
-        t("Ryhmäkokojen päivittäminen epäonnistui"),
-        "error"
-      );
+      showNotification(t("Ryhmäkokojen päivittäminen epäonnistui"), "error");
       console.error("Error saving multistage group sizes", err);
     } finally {
       setSaving(false);
     }
   };
 
-  const getStageTotal = useCallback((stage) => {
-    const total = (stage.choices || []).reduce((sum, c) => {
-      const raw = editedChoices[c.id];
-      const n = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
-      return sum + n;
-    }, 0);
-    return total;
-  }, [editedChoices]);
+  const getStageTotal = useCallback(
+    (stage) => {
+      const total = (stage.choices || []).reduce((sum, c) => {
+        const raw = editedChoices[c.id];
+        const n = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
+        return sum + n;
+      }, 0);
+      return total;
+    },
+    [editedChoices]
+  );
 
   const validateInputs = useCallback(() => {
     const errors = [];
@@ -104,20 +106,26 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
       const total = getStageTotal(stage);
       if (total < answersCount) {
         errors.push(
-          t('Vaihe "{{name}}" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}. Lisää paikkoja vaiheeseen.', {
-            name: stage.name,
-            answers: answersCount,
-            total: total
-          })
+          t(
+            'Vaihe "{{name}}" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}. Lisää paikkoja vaiheeseen.',
+            {
+              name: stage.name,
+              answers: answersCount,
+              total: total
+            }
+          )
         );
       }
       (stage.choices || []).forEach((choice) => {
         const raw = editedChoices[choice.id];
-        const seats = raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
+        const seats =
+          raw === undefined || raw === "" ? 0 : parseInt(raw, 10) || 0;
 
         if (seats <= 0) {
           errors.push(
-            t('Ryhmä "{{name}}" täytyy sisältää vähintään 1 paikan', { name: choice.name })
+            t('Ryhmä "{{name}}" täytyy sisältää vähintään 1 paikan', {
+              name: choice.name
+            })
           );
         }
       });
@@ -147,7 +155,9 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
     <div className="group-sizes-dialog-content">
       <p>
         <b>
-          {t("Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa.")}
+          {t(
+            "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa."
+          )}
         </b>
       </p>
 
@@ -155,9 +165,13 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
         <div key={stage.name} style={{ marginBottom: "1rem" }}>
           <h3>{stage.name}</h3>
           <p>
-            <i>{t("Vastauksia")}: {(answersByStage[stage.name] || []).length}</i>
+            <i>
+              {t("Vastauksia")}: {(answersByStage[stage.name] || []).length}
+            </i>
             <br />
-            <i>{t("Jaettavia paikkoja")}: {getStageTotal(stage)}</i>
+            <i>
+              {t("Jaettavia paikkoja")}: {getStageTotal(stage)}
+            </i>
           </p>
           <div className="group-sizes-table-wrapper">
             <table className="table table-dark table-striped table-hover group-sizes-table">
@@ -175,8 +189,14 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
                       <input
                         type="number"
                         min="0"
-                        value={editedChoices[choice.id] !== undefined ? editedChoices[choice.id] : String(choice.slots ?? choice.max_spaces)}
-                        onChange={(e) => handleSeatsChange(choice.id, e.target.value)}
+                        value={
+                          editedChoices[choice.id] !== undefined
+                            ? editedChoices[choice.id]
+                            : String(choice.slots ?? choice.max_spaces)
+                        }
+                        onChange={(e) =>
+                          handleSeatsChange(choice.id, e.target.value)
+                        }
                         className="form-control form-control-sm"
                         disabled={saving}
                       />

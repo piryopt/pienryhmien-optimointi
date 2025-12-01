@@ -58,4 +58,3 @@ vi.mock("../src/services/csrf", () => ({
     fetchCsrfToken: vi.fn().mockResolvedValue("test-csrf-token")
   }
 }));
-

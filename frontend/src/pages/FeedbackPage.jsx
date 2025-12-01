@@ -1,57 +1,61 @@
-import { useState } from "react"
-import { useTranslation } from "react-i18next"
-import { useNotification } from "../context/NotificationContext"
-import feedbackService from "../services/feedback"
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNotification } from "../context/NotificationContext";
+import feedbackService from "../services/feedback";
 
 const FeedbackPage = () => {
-  const { t } = useTranslation()
-  const { showNotification } = useNotification()
+  const { t } = useTranslation();
+  const { showNotification } = useNotification();
 
-  const [title, setTitle] = useState("")
-  const [type, setType] = useState("palaute")
-  const [content, setContent] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("palaute");
+  const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const add_feedback = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const result = await feedbackService.createFeedback({ title, type, content })
+      const result = await feedbackService.createFeedback({
+        title,
+        type,
+        content
+      });
 
       if (!result.success) {
-        const msg = 
+        const msg =
           (result.key ? t(result.key) : null) ||
           result.message ||
-          t("Palautteen lähetys epäonnistui")
-        showNotification(msg, "error")
-        return
+          t("Palautteen lähetys epäonnistui");
+        showNotification(msg, "error");
+        return;
       }
 
       const successMsg =
         (result.key ? t(result.key) : null) ||
         result.message ||
-        t("Palaute lähetetty")
-      showNotification(successMsg, "success")
+        t("Palaute lähetetty");
+      showNotification(successMsg, "success");
 
-      setTitle("")
-      setType("palaute")
-      setContent("")
+      setTitle("");
+      setType("palaute");
+      setContent("");
     } catch (err) {
-      showNotification(t("Yhteys palvelimeen epäonnistui"), "error")
+      showNotification(t("Yhteys palvelimeen epäonnistui"), "error");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-	return (
+  return (
     <div>
       <br />
       <h2>{t("Palaute")}</h2>
       <div className="form-group">
         <label>{t("Otsikko")}</label>
-        <input 
-          type="text" 
-          className="form-control" 
-          name="title" 
+        <input
+          type="text"
+          className="form-control"
+          name="title"
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -90,9 +94,9 @@ const FeedbackPage = () => {
         disabled={loading}
       >
         {loading ? t("Lähetetään...") : t("Anna palaute")}
-        </button>
+      </button>
     </div>
-	)
-}
+  );
+};
 
-export default FeedbackPage
+export default FeedbackPage;

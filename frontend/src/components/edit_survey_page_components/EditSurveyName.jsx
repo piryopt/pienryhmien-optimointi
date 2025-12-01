@@ -2,7 +2,7 @@ import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import "../../static/css/createSurveyPage.css";
 
-const EditSurveyName = ({placeholder}) => {
+const EditSurveyName = ({ placeholder }) => {
   const { register, formState } = useFormContext();
   const { errors } = formState;
   const { t } = useTranslation();

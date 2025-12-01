@@ -40,18 +40,17 @@ describe("<FrontPage />", () => {
       screen.getByText("Näytä vanhat kyselyt");
       screen.getByText("Luo uusi monivaiheinen kysely");
       screen.getByText("Roskakori");
-
     });
   });
 
   test("fetch front page data on load", async () => {
     await waitFor(() => {
       expect(surveyService.getFrontPageData).toHaveBeenCalledTimes(1);
-    })
+    });
   });
 
   test("render front page with surveys", async () => {
-    // Override the mock for this test only 
+    // Override the mock for this test only
     surveyService.getFrontPageData.mockResolvedValueOnce({
       createdSurveys: 5,
       activeSurveys: [
@@ -86,4 +85,4 @@ describe("<FrontPage />", () => {
       screen.getByText("Mega survey");
     });
   });
-})
+});

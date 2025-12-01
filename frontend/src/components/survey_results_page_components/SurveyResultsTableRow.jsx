@@ -8,58 +8,58 @@ const SurveyResultsTableRow = ({ result, surveyId, currStage }) => {
   const [rankingsVisible, setRankingsVisible] = useState(false);
   const [rankings, setRankings] = useState([]);
   const [rejections, setRejections] = useState([]);
-  const [ordinal, setOrdinal] = useState(result[3])
+  const [ordinal, setOrdinal] = useState(result[3]);
   const { t } = useTranslation();
 
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
     const computeOrdinal = async () => {
       try {
         const resp = await surveyService.getStudentRankings(
           surveyId,
           result[1], // email
           currStage
-        )
+        );
 
         const normalize = (arr) =>
           (arr || []).map((c) =>
             typeof c === "object"
               ? String(c.id ?? c.choice_id ?? c[0] ?? "")
               : String(c)
-          )
+          );
 
-        const rankingIds = normalize(resp.choices)
-        const RejectionIds = normalize(resp.rejections)
+        const rankingIds = normalize(resp.choices);
+        const RejectionIds = normalize(resp.rejections);
 
-        const allocatedChoiceId = String(result[2][0])
+        const allocatedChoiceId = String(result[2][0]);
 
-        const idx = rankingIds.indexOf(allocatedChoiceId)
-        let ord
+        const idx = rankingIds.indexOf(allocatedChoiceId);
+        let ord;
         if (idx !== -1) {
-          ord = idx + 1
+          ord = idx + 1;
         } else if (RejectionIds.indexOf(allocatedChoiceId) !== -1) {
-          ord = t("Kielletty")
+          ord = t("Kielletty");
         } else if (result[2][1] === "Absent") {
-          ord = "-"
+          ord = "-";
         } else {
-          ord = t("Ei järjestetty")
+          ord = t("Ei järjestetty");
         }
 
         if (mounted) {
-          setOrdinal(ord)
-          setRankings(resp.choices || [])
-          setRejections(resp.rejections || [])
+          setOrdinal(ord);
+          setRankings(resp.choices || []);
+          setRejections(resp.rejections || []);
         }
       } catch (err) {
-        console.error("Error computing ordinal", err)
+        console.error("Error computing ordinal", err);
       }
-    }
+    };
 
-    computeOrdinal()
+    computeOrdinal();
     return () => {
-      mounted = false
-    }
-  }, [surveyId, result, currStage, t])
+      mounted = false;
+    };
+  }, [surveyId, result, currStage, t]);
 
   const handleRankingClick = async () => {
     try {
@@ -98,7 +98,9 @@ const SurveyResultsTableRow = ({ result, surveyId, currStage }) => {
       </td>
       <td>
         {result[2][1] === "Absent" ? (
-          <p style={{ color: "#ff5c5c",fontWeight: 500, }}>{t("Ei paikalla")}</p>
+          <p style={{ color: "#ff5c5c", fontWeight: 500 }}>
+            {t("Ei paikalla")}
+          </p>
         ) : (
           <p>{result[2][1]}</p>
         )}
