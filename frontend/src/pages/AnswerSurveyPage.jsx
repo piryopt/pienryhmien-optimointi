@@ -39,7 +39,13 @@ const AnswerSurveyPage = () => {
         const data = await surveyService.getSurvey(surveyId);
         if (!mountedRef.current) return;
 
-        const choices = data.choices || [];
+        let choices = data.choices || [];
+        const minChoices = data.survey.min_choices;
+        if (choices.length !== minChoices) {
+          choices = [...choices].sort((a, b) =>
+            (a?.name || "").localeCompare(b?.name || "")
+          );
+        }
         let neutralChoices = [...choices];
         let goodChoices = [];
         let badChoices = [];
@@ -186,9 +192,7 @@ const AnswerSurveyPage = () => {
             <p className="note">
               {t("HUOM! ")}
               <span className="mandatory">{t("Pakolliseksi ")}</span>
-              {t(
-                "merkityt ryhmät priorisoidaan jakamisprosessissa. "
-              )}{" "}
+              {t("merkityt ryhmät priorisoidaan jakamisprosessissa. ")}{" "}
               {t(
                 "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
               )}
