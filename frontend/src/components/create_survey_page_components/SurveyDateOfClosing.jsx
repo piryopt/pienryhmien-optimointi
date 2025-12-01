@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import "react-datepicker/dist/react-datepicker.css";
+import { useEffect } from "react";
 
 const hours = Array.from({ length: 24 }).map(
   (_, i) => String(i).padStart(2, "0") + ":00"
@@ -12,6 +13,15 @@ const SurveyDateOfClosing = ({ placeholderDate, placeholderTime }) => {
   const { t } = useTranslation();
   const { control, register, formState } = useFormContext();
   const { errors } = formState;
+
+  useEffect(() => {
+    if (errors.enddate) {
+      const endDateElement = document.querySelector("#end-date");
+      if (endDateElement) {
+        endDateElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  }, [errors]);
 
   return (
     <section>
