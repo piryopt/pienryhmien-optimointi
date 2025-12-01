@@ -38,7 +38,6 @@ const MultiStageAnswerPage = () => {
     (async () => {
       try {
         const data = await surveyService.getMultiStageSurvey(surveyId);
-        console.log("multistage survey data:", data);
         if (!mountedRef.current) return;
 
         const stagesData = [];
@@ -46,7 +45,7 @@ const MultiStageAnswerPage = () => {
 
         for (const stage of data.stages || []) {
           const stageId = stage.name;
-          const choices = stage.choices || [];
+          let choices = stage.choices || [];
           let neutralChoices = [...choices];
           let goodChoices = [];
           let badChoices = [];
