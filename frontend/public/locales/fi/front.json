@@ -1,0 +1,17 @@
+{
+  "actions": "actions",
+  "activeSurveys": "Käynnissä olevat kyselyt",
+  "adminTools": "Hallintatyökalut",
+  "createMultiStageSurvey": "Luo uusi monivaiheinen kysely",
+  "createMultiStageSurveyDescription": "Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot",
+  "createSurvey": "Luo uusi kysely",
+  "createSurveyDescription": "Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta",
+  "openAdminTools": "Avaa järjestelmänhallintanäkymä",
+  "showAllSurveys": "Näytä kaikki kyselyt",
+  "showTrashedSurveys": "Näe poistettavaksi asetetut kyselyt",
+  "trashBin": "Roskakori",
+  "responseTimeEnd": "Vastausaika päättyy: {{timeEnd}}",
+  "answers": "Vastauksia: {{count}}",
+  "surveysToBeDeleted": "Poistettavat kyselyt: {{count}}",
+  "createdSurveys": "Luotuja kyselyitä: {{count}}"
+}

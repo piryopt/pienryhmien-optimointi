@@ -1,0 +1,17 @@
+{
+  "actions": "Actions",
+  "activeSurveys": "Ongoing surveys",
+  "adminTools": "Administration tools",
+  "answers": "Answers: {{count}}",
+  "createMultiStageSurvey": "Create a new multistage survey",
+  "createMultiStageSurveyDescription": "Create a multistage survey and specify answer options for each phase",
+  "createSurvey": "Create a new survey",
+  "createSurveyDescription": "Create a new survey or import existing response options from a CSV file",
+  "openAdminTools": "Open administrator view",
+  "showAllSurveys": "Show all surveys",
+  "showTrashedSurveys": "See surveys to be deleted",
+  "trashBin": "Trash bin",
+  "responseTimeEnd": "Response time expires: {{timeEnd}}",
+  "surveysToBeDeleted": "Surveys to be deleted: {{count}}",
+  "createdSurveys": "Created surveys: {{count}}"
+}

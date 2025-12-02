@@ -1,6 +1,17 @@
 {
-  "Avaa järjestelmänhallintanäkymä": "Öppna administratörsvyn",
-  "Hallintatyökalut": "Administratörsverktyg",
-  "Käynnissä olevat kyselyt": "Pågående undersökningar",
-  "Toiminnot": "Åtgärder"
+  "actions": "Åtgärder",
+  "activeSurveys": "Alla pågående undersökningar",
+  "adminTools": "Administratörsverktyg",
+  "createMultiStageSurvey": "Skapa ny flerfasundersökning",
+  "createMultiStageSurveyDescription": "Skapa en ny undersökning i flera steg och ange svarsalternativ för varje steg",
+  "createSurvey": "Skapa en ny undersökning",
+  "createSurveyDescription": "Skapa en ny undersökning eller importera färdiga svarsalternativ från en CSV-fil",
+  "openAdminTools": "Öppna administratörsvyn",
+  "showAllSurveys": "Visa alla undersökningar",
+  "showTrashedSurveys": "Se undersökningar som ska raderas",
+  "trashBin": "Papperskorg",
+  "responseTimeEnd": "Svarstid utgår: {{timeEnd}}",
+  "answers": "Svar: {{count}}",
+  "surveysToBeDeleted": "Undersökningar som ska raderas: {{count}}",
+  "createdSurveys": "Skapade undersökningar: {{count}}"
 }

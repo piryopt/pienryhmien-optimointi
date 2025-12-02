@@ -18,6 +18,7 @@
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
     "": "Arrange options in order of preference or mark yourself as absent"
   },
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen.": "",
   "Kiellot": "Rejected",
   "Kirjoita tähän perustelut kielloille": {
     "": {
@@ -54,6 +55,7 @@
     "": "They are filled to at least the minimum size regardless of the answers."
   },
   "Olet ilmoittautunut poissaolevaksi": "You have signed up as absent",
+  "Olet ilmoittautunut poissaolevaksi.": "",
   "Pakollinen": "Mandatory",
   "Pakolliseksi ": "Mandatory ",
   "Perustelut kielloille": "Reasons for rejections",

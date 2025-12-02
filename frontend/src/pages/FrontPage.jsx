@@ -29,38 +29,38 @@ const FrontPage = () => {
 
   return (
     <>
-      <p>{t("Toiminnot")}</p>
+      <p>{t("actions")}</p>
       <div className="row mb-5">
         <div className="col-sm">
           <FrontPageButton
             path="/surveys/create"
             imgSrc={`${imagesBaseUrl}/note_add_white_36dp.svg`}
-            mainText="Luo uusi kysely"
-            additionalText="Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta"
+            mainText={t("createSurvey")}
+            additionalText={t("createSurveyDescription")}
           />
           <br></br>
           <FrontPageButton
             path="/surveys/multistage/create"
             imgSrc={`${imagesBaseUrl}/note_stack_add_36dp.svg`}
-            mainText="Luo uusi monivaiheinen kysely"
-            additionalText="Luo uusi monivaiheinen kysely, jossa määritetään eri vaiheiden vastausvaihtoehdot"
+            mainText={t("createMultiStageSurvey")}
+            additionalText={t("createMultiStageSurveyDescription")}
           />
         </div>
         <div className="col-sm">
           <FrontPageButton
             path="/surveys"
             imgSrc={`${imagesBaseUrl}/list_white_36dp.svg`}
-            mainText="Näytä vanhat kyselyt"
-            additionalText="Luotuja kyselyitä"
+            mainText={t("showAllSurveys")}
+            additionalText="createdSurveys"
             additionalVars={{ count: createdSurveys }}
           />
           <br></br>
           <FrontPageButton
             path="/trash"
             imgSrc={`${imagesBaseUrl}/delete_36dp.svg`}
-            mainText="Roskakori"
-            additionalText="Näe poistettavaksi asetetut kyselyt"
-            topRightText="Poistettavat kyselyt"
+            mainText={t("trashBin")}
+            additionalText={t("showTrashedSurveys")}
+            topRightText="surveysToBeDeleted"
             additionalVars={{ count: trashCount }}
           />
           {/* Admin-only link */}
@@ -70,14 +70,14 @@ const FrontPage = () => {
               <FrontPageButton
                 path="/admintools/analytics"
                 imgSrc={`${imagesBaseUrl}/list_white_36dp.svg`}
-                mainText={t("Hallintatyökalut")}
-                additionalText={t("Avaa järjestelmänhallintanäkymä")}
+                mainText={t("adminTools")}
+                additionalText={t("openAdminTools")}
               />
             </>
           )}
         </div>
       </div>
-      <p>{t("Käynnissä olevat kyselyt")}</p>
+      <p>{t("activeSurveys")}</p>
       <div className="row">
         <div className="col-sm">
           {activeSurveys.map((survey) => (
@@ -91,8 +91,8 @@ const FrontPage = () => {
                 }
                 imgSrc={`${imagesBaseUrl}/assignment_white_36dp.svg`}
                 mainText={survey.surveyname}
-                additionalText="Vastaukset"
-                topRightText="etusivu.Vastausaika päättyy"
+                additionalText="answers"
+                topRightText="responseTimeEnd"
                 additionalVars={{
                   timeEnd: survey.time_end,
                   count: survey.response_count

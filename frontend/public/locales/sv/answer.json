@@ -18,6 +18,7 @@
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
     "": "Ordna alternativen i preferensordning eller markera dig själv som frånvarande"
   },
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen.": "",
   "Kiellot": "Förbud",
   "Kirjoita tähän perustelut kielloille": {
     "": {
@@ -54,6 +55,7 @@
     "": "De är alltid fyllda till åtminstone minimistorleken oavsett svaren."
   },
   "Olet ilmoittautunut poissaolevaksi": "Du har registrerat dig som frånvarande",
+  "Olet ilmoittautunut poissaolevaksi.": "",
   "Pakollinen": "Obligatorisk",
   "Pakolliseksi ": "Obligatoriska ",
   "Perustelut kielloille": "Motiveringar för avvisningar",
