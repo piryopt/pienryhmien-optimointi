@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { Link } from "react-router-dom";
 
 const langToFile = {
   fi: "/content/faq-fi.md",
@@ -21,7 +22,22 @@ const FAQ = () => {
 
   return (
     <div className="container">
-      <ReactMarkdown>{markdown}</ReactMarkdown>
+      <ReactMarkdown
+        components={{
+          a: ({ href, children, ...props }) =>
+            href && href.startsWith("/") ? (
+              <Link to={href} {...props}>
+                {children}
+              </Link>
+            ) : (
+              <a href={href} {...props}>
+                {children}
+              </a>
+            )
+        }}
+      >
+        {markdown}
+      </ReactMarkdown>
     </div>
   );
 };

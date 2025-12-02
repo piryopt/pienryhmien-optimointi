@@ -25,6 +25,7 @@ import MultiStageAnswerPage from "./pages/MultiStageAnswerPage";
 import SurveyMultistageAnswersPage from "./pages/SurveyMultistageAnswersPage";
 import TrashPage from "./pages/TrashPage";
 import EditSurveyPage from "./pages/EditSurveypage";
+import JakajaChangelog from "./components/footer_components/JakajaChangelog";
 
 const App = () => {
   return (
@@ -84,6 +85,8 @@ const App = () => {
           <Route path="/faq" element={<FAQ />} />
 
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+          <Route path="/jakaja2.0/changelog" element={<JakajaChangelog />} />
 
           <Route
             path="/csv-instructions"
