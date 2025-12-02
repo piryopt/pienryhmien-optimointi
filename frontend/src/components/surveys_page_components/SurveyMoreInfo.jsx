@@ -4,7 +4,7 @@ import { useNotification } from "../../context/NotificationContext";
 import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("list");
   const { showNotification } = useNotification();
 
   const handleCopyUrlClick = () => {

@@ -1,0 +1,110 @@
+{
+  "(kopio)": "(kopio)",
+  "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
+    "": "Anna käyttäjälle hallinnointioikeudet kyselyyn."
+  },
+  "CSV-ohje": "CSV-ohje",
+  "Ei": "Ei",
+  "Enimmäispaikat": "Enimmäispaikat",
+  "Huom!": "Huom!",
+  "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
+    " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
+      "": "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta. Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko."
+    }
+  },
+  "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
+    " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
+      " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
+        "": "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä. Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa. Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa."
+      }
+    }
+  },
+  "Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa             opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *": {
+    "": "Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa             opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *."
+  },
+  "Jos ryhmän minimikoolla ei ole väliä, syötä 0": {
+    " Pakollisen ryhmän             mimimikoko ei voi olla 0": {
+      "": "Jos ryhmän minimikoolla ei ole väliä, syötä 0. Pakollisen ryhmän             mimimikoko ei voi olla 0."
+    }
+  },
+  "Kello": "Kello",
+  "kokonaislukuja": "kokonaislukuja",
+  "Kopioi vaihe": "Kopioi vaihe",
+  "Kyllä": "Kyllä",
+  "Kysely luotu onnistuneesti": "Kysely luotu onnistuneesti",
+  "Kysely muokattu onnistuneesti": "Kysely muokattu onnistuneesti",
+  "Kyselyn kuvaus": "Kyselyn kuvaus",
+  "Kyselyn luonti epäonnistui": "Kyselyn luonti epäonnistui",
+  "Kyselyn muokkaus": "Kyselyn muokkaus",
+  "Kyselyn muokkaus epäonnistui": "Kyselyn muokkaus epäonnistui",
+  "Kyselyn nimi": "Kyselyn nimi",
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Ladataan..."
+      }
+    }
+  },
+  "Lisää ainakin yksi vaihe": "Lisää ainakin yksi vaihe",
+  "Lisää käyttäjä": "Lisää käyttäjä",
+  "Lisää tietokenttä": "Lisää tietokenttä",
+  "Lisää vaihe": "Lisää vaihe",
+  "Lisää vaihtoehto": "Lisää vaihtoehto",
+  "Luo kysely": "Luo kysely",
+  "Luo uusi kysely": "Luo uusi kysely",
+  "Luo uusi monivaiheinen kysely": "Luo uusi monivaiheinen kysely",
+  "Nimi": "Nimi",
+  "Osallistumiskerrat*": "Osallistumiskerrat*",
+  "Pakota minimikoko": "Pakota minimikoko",
+  "Palaa takaisin": "Palaa takaisin",
+  "Poista": "Poista",
+  "Poista sarake": "Poista sarake",
+  "Poista vaihe": "Poista vaihe",
+  "pp": {
+    "kk": {
+      "vvvv": "pp.kk.vvvv"
+    }
+  },
+  "Priorisoitavat ryhmät": "Priorisoitavat ryhmät",
+  "Priorisoitujen ryhmien vähimmäismäärä": "Priorisoitujen ryhmien vähimmäismäärä",
+  "Rajoita osallistumiskertoja": "Rajoita osallistumiskertoja",
+  "Ryhmän minimikoko": "Ryhmän minimikoko",
+  "sähköpostiosoite": "sähköpostiosoite",
+  "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista": {
+    "": "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista."
+  },
+  "Sallitaanko poissaolot?": "Sallitaanko poissaolot?",
+  "Sallitaanko valintojen kieltäminen?": "Sallitaanko valintojen kieltäminen?",
+  "Sallittu kiellettyjen ryhmien määrä": "Sallittu kiellettyjen ryhmien määrä",
+  "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)",
+  "Syötä käyttäjän sähköpostiosoite": {
+    "": "Syötä käyttäjän sähköpostiosoite."
+  },
+  "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa         mielekkyysjärjestykseen": {
+    " Anna kullekkin ryhmälle myös sen enimmäiskoko": {
+      "         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa": {
+        " Sarakkeen         voit luoda painamalla '+ Lisää tietokenttä'": {
+          "": "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa         mielekkyysjärjestykseen. Anna kullekkin ryhmälle myös sen enimmäiskoko.         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa. Sarakkeen         voit luoda painamalla '+ Lisää tietokenttä'."
+        }
+      }
+    }
+  },
+  "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen": {
+    " Kuvausteksti näytetään vastaajalle kyselyn yhteydessä": {
+      "": "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen. Kuvausteksti näytetään vastaajalle kyselyn yhteydessä."
+    }
+  },
+  "Tallenna muutokset": "Tallenna muutokset",
+  "Tuo valinnat CSV-tiedostosta": "Tuo valinnat CSV-tiedostosta",
+  "Vaaditaanko kaikkien ryhmien järjestämistä?": "Vaaditaanko kaikkien ryhmien järjestämistä?",
+  "Vaiheen nimi": "Vaiheen nimi",
+  "Vaiheen tunniste": "Vaiheen tunniste",
+  "Vastausaika": "Vastausaika",
+  "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
+    "": "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata."
+  },
+  "Vastausaika päättyy": "Vastausaika päättyy",
+  "Voit muokata kyselyn kuvausta": "Voit muokata kyselyn kuvausta",
+  "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta",
+  "yli 5 merkkiä pitkiä": "yli 5 merkkiä pitkiä"
+}

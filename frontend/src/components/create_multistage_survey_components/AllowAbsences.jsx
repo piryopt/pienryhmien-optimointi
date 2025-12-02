@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 const AllowAbsencesSection = () => {
   const { setValue, watch } = useFormContext();
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   const value = watch("allowAbsences", false);
 

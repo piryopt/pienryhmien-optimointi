@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import { useTranslation } from "react-i18next";
 
 const ButtonRow = ({ handleSubmit, handleDelete, existing }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
 
   return (
     <div className="submit-row">

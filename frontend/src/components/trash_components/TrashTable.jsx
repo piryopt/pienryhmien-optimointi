@@ -7,7 +7,7 @@ import { imagesBaseUrl } from "../../utils/constants";
 import { useSurveyDialog } from "../../context/SurveyDialogContext";
 
 const TrashTable = ({ surveys, setSurveys }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("list");
   const { showNotification } = useNotification();
   const { openDialog } = useSurveyDialog();
 

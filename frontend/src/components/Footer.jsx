@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { imagesBaseUrl } from "../utils/constants";
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
   return (
     <footer className="footer mt-auto py-3 bg-dark">
       <div className="container">

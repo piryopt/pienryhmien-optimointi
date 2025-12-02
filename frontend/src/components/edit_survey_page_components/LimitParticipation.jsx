@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 const LimitParticipation = ({ survey, choices }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   // Collect participation_limit values from every stage choice
   const participationLimits =

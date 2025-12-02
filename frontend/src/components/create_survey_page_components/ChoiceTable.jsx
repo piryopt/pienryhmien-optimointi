@@ -15,7 +15,7 @@ const ChoiceTable = ({
   choiceErrors = [],
   limitParticipationVisible = false
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   const [isAddingColumn, setIsAddingColumn] = useState(false);
   const [newColumnName, setNewColumnName] = useState("");

@@ -6,7 +6,7 @@ const SurveyDialogContext = createContext();
 export const useSurveyDialog = () => useContext(SurveyDialogContext);
 
 export const SurveyDialogProvider = ({ children }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
 
   const [dialogState, setDialogState] = useState({
     open: false,

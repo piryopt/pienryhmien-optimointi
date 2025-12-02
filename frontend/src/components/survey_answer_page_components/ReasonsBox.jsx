@@ -2,7 +2,7 @@ import "../../static/css/answerPage.css";
 import { useTranslation } from "react-i18next";
 
 const ReasonsBox = ({ reason, setReason }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
   return (
     <div style={{ width: "100%", marginTop: 8 }}>
       <textarea

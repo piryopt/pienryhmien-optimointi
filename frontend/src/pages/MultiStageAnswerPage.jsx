@@ -19,7 +19,7 @@ import GroupSearch from "../components/GroupSearch.jsx";
 const MultiStageAnswerPage = () => {
   const { surveyId } = useParams();
   const { showNotification } = useNotification();
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
 
   const [stages, setStages] = useState([]);
   const [survey, setSurvey] = useState({});

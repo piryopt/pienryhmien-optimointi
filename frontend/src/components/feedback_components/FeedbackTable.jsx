@@ -14,7 +14,7 @@ const FeedbackTable = ({
   items = [],
   viewPathPrefix = "/admintools/feedback"
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
 
   const columns = [
     { title: t("Otsikko") },

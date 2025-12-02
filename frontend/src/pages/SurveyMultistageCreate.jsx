@@ -24,7 +24,7 @@ import { parseCsvFile, updateTableFromCSV } from "../services/csv";
 import { useSearchParams } from "react-router-dom";
 
 const SurveyMultistageCreate = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   const [searchParams] = useSearchParams();
   const templateId = searchParams.get("fromtemplate");
   const { showNotification } = useNotification();

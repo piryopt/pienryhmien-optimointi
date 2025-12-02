@@ -9,7 +9,7 @@ import { safeParseJson, extractMessage } from "../../utils/parsers";
 import { baseUrl } from "../../utils/constants.js";
 
 const AddAdminSection = ({ value = "", onChange = () => {}, surveyId }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   const { showNotification } = useNotification();
 
   const schema = buildEditSurveyAdminSchema(t);

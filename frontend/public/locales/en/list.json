@@ -1,0 +1,40 @@
+{
+  "Aiemmat kyselyt": "Previous surveys",
+  "Avoin": "Open",
+  "Ei": "No",
+  "Haluatko palauttaa kyselyn roskakorista?": "Do you want to restore this survey from the trash?",
+  "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
+    "": "Do you want to move the survey into the trash? Open surveys will be closed."
+  },
+  "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Are you sure you want to delete this survey and all data related to it permanently? ",
+  "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
+    "": "NOTE! Surveys will be automatically deleted from the trash after a week"
+  },
+  "Kopioi kysely": "Copy survey",
+  "Kopioi kyselyn osoite leikepöydälle": "Copy the survey link to the clipboard",
+  "Kyllä": "Yes",
+  "Kysely": "Survey",
+  "Kysely palautettu": "Survey restored",
+  "Kysely poistetaan": "Deleting survey",
+  "Kysely poistettu": "Survey deleted",
+  "Kysely siirretty roskakoriin": "Survey moved to the trash",
+  "Kyselyn osoite kopioitu leikepöydälle": "Survey URL copied to clipboard",
+  "Kyselyn palauttaminen epäonnistui": "Survey restoration failed",
+  "Kyselyn poistaminen epäonnistui": "Survey deletion failed",
+  "Kyselyn siirto roskakoriin epäonnistui": "Moving survey into the trash failed",
+  "Kyselyn tila": "Survey status",
+  "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Edit the survey or add an administrator",
+  "Näytä": "Open",
+  "Palauta kysely": "Restore survey",
+  "Palauta kysely?": "Restore survey?",
+  "Piilota": "Hide",
+  "Poista kaikki kyselyn data?": "Delete all survey data?",
+  "Poista kysely": "Delete survey",
+  "Poista kysely?": "Delete survey?",
+  "Roskakori": "Trash bin",
+  "Ryhmät luotu": "Groups saved",
+  "Suljettu": "Closed",
+  "Tarkastele tuloksia": "Review results",
+  "Toiminnot": "Actions",
+  "Vastausaika päättyy": "Response time expires"
+}

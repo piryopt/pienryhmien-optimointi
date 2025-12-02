@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const MultistageSurveyPrioritizedGroupsDescription = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   return (
     <section>

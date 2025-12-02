@@ -6,7 +6,7 @@ import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyTableRow = ({ survey, handleDeleteClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
-  const { t } = useTranslation();
+  const { t } = useTranslation("list");
 
   if (survey.id === "separatingRow") {
     return (

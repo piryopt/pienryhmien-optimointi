@@ -4,8 +4,6 @@ const ChoiceRowDisplay = ({
   columns = [],
   limitParticipationVisible = false
 }) => {
-  const { t } = useTranslation();
-
   return (
     <tr>
       <td style={{ textAlign: "center" }}>

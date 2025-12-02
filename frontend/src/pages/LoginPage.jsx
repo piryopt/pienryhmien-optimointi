@@ -10,7 +10,7 @@ const Login = () => {
   const { login, debug } = useAuth();
   const { showNotification } = useNotification();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
 
   const handleLogin = async (e) => {
     e.preventDefault();

@@ -9,7 +9,7 @@ const SurveyResultsTableRow = ({ result, surveyId, currStage }) => {
   const [rankings, setRankings] = useState([]);
   const [rejections, setRejections] = useState([]);
   const [ordinal, setOrdinal] = useState(result[3]);
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
 
   useEffect(() => {
     let mounted = true;

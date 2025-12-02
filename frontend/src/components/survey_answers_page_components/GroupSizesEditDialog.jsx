@@ -4,7 +4,7 @@ import { useNotification } from "../../context/NotificationContext";
 import surveyService from "../../services/surveys";
 
 const GroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   const { showNotification } = useNotification();
   const [saving, setSaving] = useState(false);
   const [survey, setSurvey] = useState(null);

@@ -1,0 +1,110 @@
+{
+  "(kopio)": "(kopia)",
+  "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
+    "": "Tilldela administrativa rättigheter till användaren för undersökningen."
+  },
+  "CSV-ohje": "CSV guide",
+  "Ei": "Nej",
+  "Enimmäispaikat": "Max antal platser",
+  "Huom!": "Obs!",
+  "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
+    " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
+      "": "OBS! Grupper som understiger minsta storlek kommer att uteslutas från tilldelningen. Om du vill säkerställa att en viss grupp bildas, kryssa i rutan till vänster om gruppen."
+    }
+  },
+  "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
+    " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
+      " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
+        "": "Om du vill begränsa hur många gånger en respondent kan delta i samma grupp, svara ja här. Du kan senare ställa in det maximala antalet deltagandetider för varje grupp i stegtabellen. För att detta ska fungera måste gruppen ha samma namn i alla steg."
+      }
+    }
+  },
+  "Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa             opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *": {
+    "": "Om du vill att informationen för en viss kolumn inte ska visas för respondentena under svarsfasen, sätt * som sista tecknet i kolumnnamnet."
+  },
+  "Jos ryhmän minimikoolla ei ole väliä, syötä 0": {
+    " Pakollisen ryhmän             mimimikoko ei voi olla 0": {
+      "": "Om det inte spelar roll med minimistorleken, ange 0. Minsta storlek för en obligatorisk grupp kan inte vara 0."
+    }
+  },
+  "Kello": "Klockan",
+  "kokonaislukuja": "heltal",
+  "Kopioi vaihe": "Kopiera fas",
+  "Kyllä": "Ja",
+  "Kysely luotu onnistuneesti": "Undersökningen skapats",
+  "Kysely muokattu onnistuneesti": "Undersökningen redigerads",
+  "Kyselyn kuvaus": "Undersökningens beskrivning",
+  "Kyselyn luonti epäonnistui": "Undersökningens skapande misslyckades",
+  "Kyselyn muokkaus": "Redigering av undersökning",
+  "Kyselyn muokkaus epäonnistui": "Redigering av undersökning misslyckades",
+  "Kyselyn nimi": "Undersökningens namn",
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Laddar"
+      }
+    }
+  },
+  "Lisää ainakin yksi vaihe": "Lägg till minst ett steg",
+  "Lisää käyttäjä": "Lägg till användare",
+  "Lisää tietokenttä": "Lägg till fält",
+  "Lisää vaihe": "Lägg till fas",
+  "Lisää vaihtoehto": "Lägg till alternativ",
+  "Luo kysely": "Skapa undersökning",
+  "Luo uusi kysely": "Skapa en ny undersökning",
+  "Luo uusi monivaiheinen kysely": "Skapa ny flerfasundersökning",
+  "Nimi": "Namn",
+  "Osallistumiskerrat*": "Deltagandetider*",
+  "Pakota minimikoko": "Kraft minsta gruppstorlek",
+  "Palaa takaisin": "Gå tillbaka",
+  "Poista": "Ta bort",
+  "Poista sarake": "Ta bort kolumn",
+  "Poista vaihe": "Ta bort fas",
+  "pp": {
+    "kk": {
+      "vvvv": "dd/mm/åååå"
+    }
+  },
+  "Priorisoitavat ryhmät": "Prioriterade grupper",
+  "Priorisoitujen ryhmien vähimmäismäärä": "Minsta antal prioriterade grupper",
+  "Rajoita osallistumiskertoja": "Begränsa deltagandetider",
+  "Ryhmän minimikoko": "Minsta gruppstorlek",
+  "sähköpostiosoite": "E-postadress",
+  "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista": {
+    "": "När du tillåter frånvaro kan respondenter markera sig själva som frånvarande från de steg de väljer."
+  },
+  "Sallitaanko poissaolot?": "Är frånvaro tillåten?",
+  "Sallitaanko valintojen kieltäminen?": "Tillåts det att förbjuda val?",
+  "Sallittu kiellettyjen ryhmien määrä": "Antal tillåtna förbjudna grupper",
+  "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "Det rekommenderas att alla grupper organiseras om det inte finns ett stort antal (>10).",
+  "Syötä käyttäjän sähköpostiosoite": {
+    "": "Ange användarens e-postadress."
+  },
+  "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa         mielekkyysjärjestykseen": {
+    " Anna kullekkin ryhmälle myös sen enimmäiskoko": {
+      "         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa": {
+        " Sarakkeen         voit luoda painamalla '+ Lisää tietokenttä'": {
+          "": "Ange grupperna som respondenten kan placera i meningsordning. Ge också varje grupp dess maximala storlek. Om du vill kan du lägga till ytterligare information om objektet i dess egna kolumner. Du kan skapa kolumnen genom att trycka på '+ Lägg till datafält.'"
+        }
+      }
+    }
+  },
+  "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen": {
+    " Kuvausteksti näytetään vastaajalle kyselyn yhteydessä": {
+      "": "Här kan du ange en beskrivning av undersökningen och instruktioner för att svara på den. Beskrivningstexten visas för svaranden i samband med undersökningen."
+    }
+  },
+  "Tallenna muutokset": "Spara ändringar",
+  "Tuo valinnat CSV-tiedostosta": "Importera val från en CSV-fil",
+  "Vaaditaanko kaikkien ryhmien järjestämistä?": "Krävs det att alla grupper ordnas?",
+  "Vaiheen nimi": "Stegnamn",
+  "Vaiheen tunniste": "Fasens identifierare",
+  "Vastausaika": "Svarstid",
+  "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
+    "": "Svarstiden anger tidsintervallet när undersökningen kan   besvaras."
+  },
+  "Vastausaika päättyy": "Svarstid utgår",
+  "Voit muokata kyselyn kuvausta": "Du kan redigera undersökningens beskrivning",
+  "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Du kan bara redigera undersöknings namn, svarstid eller dess beskrivning",
+  "yli 5 merkkiä pitkiä": "längre än 5 tecken"
+}

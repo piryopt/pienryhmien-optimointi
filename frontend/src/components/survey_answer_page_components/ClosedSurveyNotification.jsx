@@ -3,7 +3,7 @@ import { imagesBaseUrl } from "../../utils/constants";
 import { useTranslation } from "react-i18next";
 
 const ClosedSurveyNotification = ({ existing }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
   console.log("ClosedSurveyNotification existing:", existing);
   return (
     <div className="closed-survey-notifier">

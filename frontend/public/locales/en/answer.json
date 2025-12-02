@@ -1,0 +1,78 @@
+{
+  "Ei vaiheita ladattuna": "No survey loaded",
+  "En ole paikalla tässä vaiheessa": "I am absent",
+  "Et ole vastannut tähän kyselyyn": {
+    "": "You have not responded to this survey"
+  },
+  "Hae ryhmiä": {
+    "": {
+      "": {
+        "": "Search groups"
+      }
+    }
+  },
+  "HUOM! ": "NOTE! ",
+  "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen": "Rank all options in order of preference in the",
+  "Järjestä vähintään": "Rank at least",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen": "Rank options in order of preference in the",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
+    "": "Arrange options in order of preference or mark yourself as absent"
+  },
+  "Kiellot": "Rejected",
+  "Kirjoita tähän perustelut kielloille": {
+    "": {
+      "": {
+        "": "Write reasons for rejections here..."
+      }
+    }
+  },
+  "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Click the choice option to see additional information about it",
+  "Kysely on suljettu": "The survey is closed.",
+  "Kyselyn vastaukset tallennettu": {
+    "": "Survey results saved successfully"
+  },
+  "Kyselyn vastauksien tallennus epäonnistui": {
+    "": "Saving survey results failed"
+  },
+  "laatikkoon": "box",
+  "Ladataan kyselyä": {
+    "": {
+      "": {
+        "": "Loading survey"
+      }
+    }
+  },
+  "Lähetä valinnat": "Submit selections",
+  "Lisätietoa ei saatavilla": {
+    "": "Additional information not available"
+  },
+  "merkityt ryhmät priorisoidaan jakamisprosessissa": {
+    " ": " groups are prioritized in the allocation process."
+  },
+  "merkkiä": "characters",
+  "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
+    "": "They are filled to at least the minimum size regardless of the answers."
+  },
+  "Olet ilmoittautunut poissaolevaksi": "You have signed up as absent",
+  "Pakollinen": "Mandatory",
+  "Pakolliseksi ": "Mandatory ",
+  "Perustelut kielloille": "Reasons for rejections",
+  "poissa": "absent",
+  "Poista valinnat": "Delete selections",
+  "punaiseen": "red",
+  "Ryhmän maksimikoko": "Maximum group size",
+  "Ryhmän minimikoko": "Minimum group size",
+  "tai": "or",
+  "Tämä kysely on suljettu eikä siihen voi enää vastata": {
+    "": "This survey is closed and no longer accepting responses."
+  },
+  "vaihtoehtoa": "options to the",
+  "vaihtoehtoa mieluisuusjärjestykseen": "options in order of preference in the",
+  "Valinnat": "Choices",
+  "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta": {
+    "": "Your survey response has been saved, and you can view your selections below."
+  },
+  "Vastausaika päättyy": "Response time expires",
+  "vihreään": "green",
+  "Voit kieltää": "You can deny"
+}

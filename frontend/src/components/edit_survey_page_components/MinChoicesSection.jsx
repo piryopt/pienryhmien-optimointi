@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 const MinChoicesSection = ({ choices, survey, multistage = false }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   const choicesAmount = choices?.length ?? 0;
   const minChoices = survey?.min_choices ?? 0;

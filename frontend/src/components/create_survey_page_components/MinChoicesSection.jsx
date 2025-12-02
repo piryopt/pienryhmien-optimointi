@@ -7,7 +7,7 @@ const MinChoicesSection = () => {
     watch,
     formState: { errors }
   } = useFormContext();
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   const setting = watch("minChoicesSetting", "all");
 

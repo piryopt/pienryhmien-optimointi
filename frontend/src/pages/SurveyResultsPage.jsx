@@ -16,7 +16,7 @@ const SurveyResultsPage = () => {
   const [resultsSaved, setResultsSaved] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   const { id } = useParams();
   const { showNotification } = useNotification();
   const navigate = useNavigate();

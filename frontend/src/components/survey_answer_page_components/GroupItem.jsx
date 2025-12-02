@@ -2,7 +2,7 @@ import "../../static/css/answerPage.css";
 import { useTranslation } from "react-i18next";
 
 const GroupItem = ({ item, choice, expanded, onToggle, index, id }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
 
   return (
     <div

@@ -1,0 +1,40 @@
+{
+  "Aiemmat kyselyt": "Tidigare undersökningar",
+  "Avoin": "Öppen",
+  "Ei": "Nej",
+  "Haluatko palauttaa kyselyn roskakorista?": "Vill du returnera undersökningen från papperskorgen?",
+  "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
+    "": "Vill du flytta undersökningen till papperskorgen? Öppna undersökningar kommer att stängas samtidigt"
+  },
+  "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Är du säker på att du vill radera undersökningen och alla relaterade data permanent? ",
+  "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
+    "": "OBS! Undersökninger som har legat i papperskorgen i mer än en vecka raderas automatiskt"
+  },
+  "Kopioi kysely": "Kopiera undersökningen",
+  "Kopioi kyselyn osoite leikepöydälle": "Kopiera undersökningens webbadress till urklipp",
+  "Kyllä": "Ja",
+  "Kysely": "Undersökning",
+  "Kysely palautettu": "Undersökningen returnerad",
+  "Kysely poistetaan": "Undersökningen kommer att raderas",
+  "Kysely poistettu": "Undersökningen raderad",
+  "Kysely siirretty roskakoriin": "Undersökningen flyttades till papperskorgen",
+  "Kyselyn osoite kopioitu leikepöydälle": "Undersökningsadress kopierad till urklipp",
+  "Kyselyn palauttaminen epäonnistui": "Misslyckades med att skicka in undersökningen",
+  "Kyselyn poistaminen epäonnistui": "Det gick inte att ta bort undersökningen",
+  "Kyselyn siirto roskakoriin epäonnistui": "Flyttade undersökningen till papperskorgen misslyckades",
+  "Kyselyn tila": "Undersökningens status",
+  "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera undersökningen eller lägg till en administratör",
+  "Näytä": "Visa",
+  "Palauta kysely": "Återstell undersökningen",
+  "Palauta kysely?": "Återstell undersökningen?",
+  "Piilota": "Dölja",
+  "Poista kaikki kyselyn data?": "Radera all undersökningsdata?",
+  "Poista kysely": "Ta bort undersökning",
+  "Poista kysely?": "Radera undersökning?",
+  "Roskakori": "Papperskorg",
+  "Ryhmät luotu": "Grupper skapade",
+  "Suljettu": "Stängd",
+  "Tarkastele tuloksia": "Visa resultat",
+  "Toiminnot": "Åtgärder",
+  "Vastausaika päättyy": "Svarstid utgår"
+}

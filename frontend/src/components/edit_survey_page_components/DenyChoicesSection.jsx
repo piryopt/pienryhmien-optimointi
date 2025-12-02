@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 const DenyChoicesSection = ({ survey }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   const a_d_c = survey.denied_allowed_choices;
   const denyAllowed = a_d_c !== 0;
   return (

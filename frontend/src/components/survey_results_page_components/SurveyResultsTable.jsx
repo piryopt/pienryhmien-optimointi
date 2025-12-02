@@ -4,7 +4,7 @@ import SurveyResultsTableRow from "./SurveyResultsTableRow";
 import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyResultsTable = ({ results, surveyId, currStage }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
 
   const columns = [
     { title: t("Nimi"), icon: `${imagesBaseUrl}/person_off_white_36dp.svg` },

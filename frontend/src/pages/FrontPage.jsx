@@ -9,7 +9,7 @@ const FrontPage = () => {
   const [createdSurveys, setCreatedSurveys] = useState(0);
   const [trashCount, setTrashCount] = useState(0);
   const [activeSurveys, setActiveSurveys] = useState([]);
-  const { t } = useTranslation();
+  const { t } = useTranslation("front");
   const { user, loading } = useAuth();
   const isAdmin = !loading && user && user.admin;
 

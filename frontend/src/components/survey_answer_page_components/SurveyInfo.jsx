@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 const SurveyInfo = ({ survey, additionalInfo, choices, stageName = null }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
   const min_choices = !stageName
     ? Number(survey.min_choices)
     : Number(survey.min_choices_per_stage[stageName]);

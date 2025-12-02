@@ -19,7 +19,7 @@ const StageTables = ({
   limitParticipationVisible,
   copyStage
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   return (
     <>

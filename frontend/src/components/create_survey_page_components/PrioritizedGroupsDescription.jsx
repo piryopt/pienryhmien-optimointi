@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useRef } from "react";
 
 const PrioritizedGroupsDescription = ({ importCsv }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   const fileInputRef = useRef(null);
   const openFilePicker = () => fileInputRef.current?.click();
 

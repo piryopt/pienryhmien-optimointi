@@ -1,0 +1,95 @@
+{
+  "Avaa kysely uudelleen": "Öppna undersökningen igen",
+  "Avaa uudestaan?": "Öppna igen",
+  "Ei järjestetty": "Inte organiserad",
+  "Ei paikalla": "Frånvarande",
+  "Ei tuloksia tälle vaiheelle": "Inga resultat för detta steg",
+  "Ei tuloksia vietäväksi": "Inga resultat att exportera",
+  "Enimmäispaikat": "Max antal platser",
+  "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Sök efter ett enskilt svar genom att ange respondentens email i detta fält",
+  "Haluatko varmasti avata kyselyn uudestaan?": "Är du säker på att du vill öppna undersökningen igen?",
+  "Haluatko varmasti sulkea kyselyn?": "Är du säker på att du vill stänga undersökningen?",
+  "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
+    "": "Obs! Det faktum att vissa elever har placerats i förbjudna eller oorganiserade val påverkar inte genomsnittet"
+  },
+  "Info": "Info",
+  "Jaa ryhmiin": "Dela in i grupper",
+  "Jaettavia paikkoja": "Platser att tilldela",
+  "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja": {
+      "": "Det finns {{total}} platser att fördela, men det finns {{answers}} svar. Lägg till platser"
+    }
+  },
+  "Kaikki rivit olivat virheellisiä": "Alla rader var felaktiga",
+  "Kaikkien vaiheiden tulokset tallennettu": "Resultat från alla steg sparade",
+  "Kielletty": "Förbjudet",
+  "Kielletyt": "Förbjudna",
+  "Kysely avattu": "Undersökningen öppnad",
+  "Kysely suljettu": "Undersökningen stängd",
+  "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa": {
+      "": "Det finns fler respondenter än tillgängliga platser i enkätens steg. Justera stegstorlekarna innan gruppindelningen."
+    }
+  },
+  "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+      "": "Det finns fler svarande än tillgängliga platser att tilldela. Redigera gruppstorlekarna innan gruppindelningen."
+    }
+  },
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Laddar"
+      }
+    }
+  },
+  "Lajittelun tulokset": "Sorteringsresultat",
+  "Monesko valinta": "Ordning på val",
+  "Monivaiheisen kyselyn tulokset": "Sorteringsresultat",
+  "Muokkaa ryhmäkokoja": "Redigera gruppstorlekar",
+  "Muokkaa vaiheiden ryhmäkokoja": "Redigera gruppstorlekar för stegen",
+  "Näytä": "Visa",
+  "Nimi": "Namn",
+  "Opiskelijat on lajiteltu ryhmiin seuraavasti": "Studenter har sorterats i grupper enligt följande",
+  "Palaa kyselylistaan": "Återgå till frågelistan",
+  "Perustelut": "Motiveringar",
+  "Peruuta": "Avbryt",
+  "Piilota": "Dölja",
+  "Poista vastaus?": "Ta bort svar?",
+  "Ryhmä": "Grupp",
+  "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan": "Gruppen \"{{name}}\" måste innehålla minst 1 plats.",
+  "Ryhmäjako tallennettu": "Gruppdelning sparad",
+  "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "Gruppering är inte möjlig eftersom undersökningen inte har några respondenter",
+  "Ryhmäjaon tallennus epäonnistui": "Misslyckades med att spara gruppdelningen",
+  "Ryhmäkokojen päivittäminen epäonnistui": "Uppdatering av gruppstorlekar misslyckades",
+  "Ryhmäkoot päivitettiin onnistuneesti": "Gruppstorlekarna uppdaterades framgångsrikt",
+  "Ryhmät, jotka pudotettiin jaosta": "Grupper som uteslöts från fördelning",
+  "Ryhmävalintojen keskiarvo": "Genomsnitt för gruppval",
+  "Sähköposti": "E-postadress",
+  "Sulje kysely": "Stäng undersökningen",
+  "Sulje kysely?": "Stäng undersökningen?",
+  "Tallenna kaikkien vaiheiden tulokset": "Spara resultat",
+  "Tallenna muutokset": "Spara ändringar",
+  "Tallenna tulokset": "Spara resultat",
+  "Tämän vaiheen vienti epäonnistui": "Exporten av det här steget misslyckades",
+  "Tieto puuttuu tai on rikkoutunut": "Data saknas eller är skadade",
+  "tulokset": "resultat",
+  "Tulokset": "Resultat",
+  "Tulosten tallennus epäonnistui": "Kunde inte spara resultaten",
+  "Tulosten vienti epäonnistui": "Exporten av resultaten misslyckades",
+  "vaihe": "steg",
+  "Vaihe": "Steg",
+  "Vaihe \"{{name}}\" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja vaiheeseen": {
+      "": "Steget \"{{name}}\" innehåller {{total}} platser, men det finns {{answers}} svar. Lägg till fler platser i steget."
+    }
+  },
+  "Valinnat": "Val",
+  "Vastauksen poistaminen": "Ta bort svar",
+  "Vastauksen poistaminen epäonnistui": "Misslyckades med att radera svaret",
+  "Vastauksia": "Svar",
+  "Vastaus poistettu": "Svar borttaget",
+  "Vie tulokset Excel-taulukkoon": "Exportera resultat till Excel-tabell",
+  "Virhe": "Fel",
+  "Virheellinen rivi": "Ogiltig rad"
+}

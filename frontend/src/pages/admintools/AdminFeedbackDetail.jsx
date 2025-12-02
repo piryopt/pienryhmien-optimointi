@@ -5,7 +5,7 @@ import feedbackService from "../../services/feedback";
 import { useNotification } from "../../context/NotificationContext";
 
 const AdminFeedbackDetail = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
   const { id } = useParams();
   const navigate = useNavigate();
   const [feedback, setFeedback] = useState(null);

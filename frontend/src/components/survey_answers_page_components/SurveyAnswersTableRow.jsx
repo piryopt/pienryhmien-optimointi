@@ -14,7 +14,7 @@ const SurveyAnswersTableRow = ({
   const [rankings, setRankings] = useState([]);
   const [rejections, setRejections] = useState([]);
   const [notAvailable, setNotAvailable] = useState(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
 
   useEffect(() => {
     setRankingsVisible(false);

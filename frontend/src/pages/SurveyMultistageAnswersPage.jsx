@@ -10,7 +10,7 @@ import { imagesBaseUrl } from "../utils/constants";
 
 const SurveyMultistageAnswersPage = () => {
   const { surveyId } = useParams();
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   const navigate = useNavigate();
   const mountedRef = useRef(false);
 

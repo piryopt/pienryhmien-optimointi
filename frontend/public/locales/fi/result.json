@@ -1,0 +1,95 @@
+{
+  "Avaa kysely uudelleen": "Avaa kysely uudelleen",
+  "Avaa uudestaan?": "Avaa uudestaan?",
+  "Ei järjestetty": "Ei järjestetty",
+  "Ei paikalla": "Ei paikalla",
+  "Ei tuloksia tälle vaiheelle": "Ei tuloksia tälle vaiheelle",
+  "Ei tuloksia vietäväksi": "Ei tuloksia vietäväksi",
+  "Enimmäispaikat": "Enimmäispaikat",
+  "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä",
+  "Haluatko varmasti avata kyselyn uudestaan?": "Haluatko varmasti avata kyselyn uudestaan?",
+  "Haluatko varmasti sulkea kyselyn?": "Haluatko varmasti sulkea kyselyn?",
+  "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
+    "": "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon."
+  },
+  "Info": "Info",
+  "Jaa ryhmiin": "Jaa ryhmiin",
+  "Jaettavia paikkoja": "Jaettavia paikkoja",
+  "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja": {
+      "": "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}. Lisää paikkoja."
+    }
+  },
+  "Kaikki rivit olivat virheellisiä": "Kaikki rivit olivat virheellisiä",
+  "Kaikkien vaiheiden tulokset tallennettu": "Kaikkien vaiheiden tulokset tallennettu",
+  "Kielletty": "Kielletty",
+  "Kielletyt": "Kielletyt",
+  "Kysely avattu": "Kysely avattu",
+  "Kysely suljettu": "Kysely suljettu",
+  "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa": {
+      "": "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa."
+    }
+  },
+  "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+      "": "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja. Muokkaa ryhmäkokoja ennen ryhmäjakoa."
+    }
+  },
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Ladataan..."
+      }
+    }
+  },
+  "Lajittelun tulokset": "Lajittelun tulokset",
+  "Monesko valinta": "Monesko valinta",
+  "Monivaiheisen kyselyn tulokset": "Monivaiheisen kyselyn tulokset",
+  "Muokkaa ryhmäkokoja": "Muokkaa ryhmäkokoja",
+  "Muokkaa vaiheiden ryhmäkokoja": "Muokkaa vaiheiden ryhmäkokoja",
+  "Näytä": "Näytä",
+  "Nimi": "Nimi",
+  "Opiskelijat on lajiteltu ryhmiin seuraavasti": "Opiskelijat on lajiteltu ryhmiin seuraavasti",
+  "Palaa kyselylistaan": "Palaa kyselylistaan",
+  "Perustelut": "Perustelut",
+  "Peruuta": "Peruuta",
+  "Piilota": "Piilota",
+  "Poista vastaus?": "Poista vastaus?",
+  "Ryhmä": "Ryhmä",
+  "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan": "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan",
+  "Ryhmäjako tallennettu": "Ryhmäjako tallennettu",
+  "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia",
+  "Ryhmäjaon tallennus epäonnistui": "Ryhmäjaon tallennus epäonnistui",
+  "Ryhmäkokojen päivittäminen epäonnistui": "Ryhmäkokojen päivittäminen epäonnistui",
+  "Ryhmäkoot päivitettiin onnistuneesti": "Ryhmäkoot päivitettiin onnistuneesti",
+  "Ryhmät, jotka pudotettiin jaosta": "Ryhmät, jotka pudotettiin jaosta",
+  "Ryhmävalintojen keskiarvo": "Ryhmävalintojen keskiarvo",
+  "Sähköposti": "Sähköposti",
+  "Sulje kysely": "Sulje kysely",
+  "Sulje kysely?": "Sulje kysely?",
+  "Tallenna kaikkien vaiheiden tulokset": "Tallenna kaikkien vaiheiden tulokset",
+  "Tallenna muutokset": "Tallenna muutokset",
+  "Tallenna tulokset": "Tallenna tulokset",
+  "Tämän vaiheen vienti epäonnistui": "Tämän vaiheen vienti epäonnistui",
+  "Tieto puuttuu tai on rikkoutunut": "Tieto puuttuu tai on rikkoutunut",
+  "tulokset": "tulokset",
+  "Tulokset": "Tulokset",
+  "Tulosten tallennus epäonnistui": "Tulosten tallennus epäonnistui",
+  "Tulosten vienti epäonnistui": "Tulosten vienti epäonnistui",
+  "vaihe": "vaihe",
+  "Vaihe": "Vaihe",
+  "Vaihe \"{{name}}\" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja vaiheeseen": {
+      "": "Vaihe \"{{name}}\" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}. Lisää paikkoja vaiheeseen."
+    }
+  },
+  "Valinnat": "Valinnat",
+  "Vastauksen poistaminen": "Vastauksen poistaminen",
+  "Vastauksen poistaminen epäonnistui": "Vastauksen poistaminen epäonnistui",
+  "Vastauksia": "Vastauksia",
+  "Vastaus poistettu": "Vastaus poistettu",
+  "Vie tulokset Excel-taulukkoon": "Vie tulokset Excel-taulukkoon",
+  "Virhe": "Virhe",
+  "Virheellinen rivi": "Virheellinen rivi"
+}

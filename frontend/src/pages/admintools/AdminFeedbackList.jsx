@@ -6,7 +6,7 @@ import { useNotification } from "../../context/NotificationContext";
 import FeedbackTable from "../../components/feedback_components/FeedbackTable";
 
 const AdminFeedbackList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { showNotification } = useNotification();

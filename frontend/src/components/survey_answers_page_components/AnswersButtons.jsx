@@ -18,7 +18,7 @@ const AnswersButtons = ({
   answers,
   multistage = false
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   const { showNotification } = useNotification();
   const { openDialog, closeDialog } = useSurveyDialog();
   const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { imagesBaseUrl } from "../../utils/constants";
 
 const TrashMoreInfo = ({ survey, handleDeleteClick, handleRestoreClick }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("list");
 
   return (
     <div>

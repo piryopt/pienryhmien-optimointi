@@ -18,7 +18,7 @@ const SurveyAnswersPage = () => {
   const [answersSaved, setAnswersSaved] = useState(false);
 
   const { id } = useParams();
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   const navigate = useNavigate();
   const mountedRef = useRef(false);
 

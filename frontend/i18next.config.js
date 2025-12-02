@@ -7,6 +7,7 @@ export default defineConfig({
     input: "src/**/*.{js,jsx,ts,tsx}",
     output: "public/locales/{{language}}/{{namespace}}.json",
     primaryLanguage: "fi",
-    secondaryLanguages: ["en", "sv"]
+    secondaryLanguages: ["en", "sv"],
+    removeUnusedKeys: false
   }
 });

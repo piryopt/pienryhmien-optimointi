@@ -16,7 +16,7 @@ import GroupSearch from "../components/GroupSearch.jsx";
 import { useTranslation } from "react-i18next";
 
 const AnswerSurveyPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
   const { surveyId } = useParams();
   const { showNotification } = useNotification();
   const [neutral, setNeutral] = useState([]);

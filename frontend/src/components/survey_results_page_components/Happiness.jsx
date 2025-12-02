@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 const Happiness = ({ happinessData, average }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   return (
     <>
       <b>

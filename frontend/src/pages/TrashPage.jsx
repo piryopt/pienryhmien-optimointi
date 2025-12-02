@@ -6,7 +6,7 @@ import { imagesBaseUrl } from "../utils/constants";
 
 const TrashPage = () => {
   const [surveys, setSurveys] = useState([]);
-  const { t } = useTranslation();
+  const { t } = useTranslation("list");
 
   useEffect(() => {
     const getSurveys = async () => {

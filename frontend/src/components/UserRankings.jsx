@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 const UserRankings = ({ rankings, rejections, notAvailable = false }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
 
   const notAvailableStyle = {
     color: "#ff5c5c",

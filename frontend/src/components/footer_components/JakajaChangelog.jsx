@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { imagesBaseUrl } from "../../utils/constants.js";
 
 const JakajaChangelog = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
 
   return (
     <div>

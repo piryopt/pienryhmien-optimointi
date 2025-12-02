@@ -1,0 +1,78 @@
+{
+  "Ei vaiheita ladattuna": "Ei vaiheita ladattuna",
+  "En ole paikalla tässä vaiheessa": "En ole paikalla tässä vaiheessa",
+  "Et ole vastannut tähän kyselyyn": {
+    "": "Et ole vastannut tähän kyselyyn."
+  },
+  "Hae ryhmiä": {
+    "": {
+      "": {
+        "": "Hae ryhmiä..."
+      }
+    }
+  },
+  "HUOM! ": "HUOM! ",
+  "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen": "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen",
+  "Järjestä vähintään": "Järjestä vähintään",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen": "Järjestä vaihtoehdot mieluisuusjärjestykseen",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
+    "": "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi."
+  },
+  "Kiellot": "Kiellot",
+  "Kirjoita tähän perustelut kielloille": {
+    "": {
+      "": {
+        "": "Kirjoita tähän perustelut kielloille..."
+      }
+    }
+  },
+  "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa",
+  "Kysely on suljettu": "Kysely on suljettu",
+  "Kyselyn vastaukset tallennettu": {
+    "": "Kyselyn vastaukset tallennettu."
+  },
+  "Kyselyn vastauksien tallennus epäonnistui": {
+    "": "Kyselyn vastauksien tallennus epäonnistui."
+  },
+  "laatikkoon": "laatikkoon",
+  "Ladataan kyselyä": {
+    "": {
+      "": {
+        "": "Ladataan kyselyä..."
+      }
+    }
+  },
+  "Lähetä valinnat": "Lähetä valinnat",
+  "Lisätietoa ei saatavilla": {
+    "": "Lisätietoa ei saatavilla."
+  },
+  "merkityt ryhmät priorisoidaan jakamisprosessissa": {
+    " ": "merkityt ryhmät priorisoidaan jakamisprosessissa. "
+  },
+  "merkkiä": "merkkiä",
+  "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
+    "": "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
+  },
+  "Olet ilmoittautunut poissaolevaksi": "Olet ilmoittautunut poissaolevaksi",
+  "Pakollinen": "Pakollinen",
+  "Pakolliseksi ": "Pakolliseksi ",
+  "Perustelut kielloille": "Perustelut kielloille",
+  "poissa": "poissa",
+  "Poista valinnat": "Poista valinnat",
+  "punaiseen": "punaiseen",
+  "Ryhmän maksimikoko": "Ryhmän maksimikoko",
+  "Ryhmän minimikoko": "Ryhmän minimikoko",
+  "tai": "tai",
+  "Tämä kysely on suljettu eikä siihen voi enää vastata": {
+    "": "Tämä kysely on suljettu eikä siihen voi enää vastata."
+  },
+  "vaihtoehtoa": "vaihtoehtoa",
+  "vaihtoehtoa mieluisuusjärjestykseen": "vaihtoehtoa mieluisuusjärjestykseen",
+  "Valinnat": "Valinnat",
+  "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta": {
+    "": "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta."
+  },
+  "Vastausaika päättyy": "Vastausaika päättyy",
+  "vihreään": "vihreään",
+  "Voit kieltää": "Voit kieltää"
+}

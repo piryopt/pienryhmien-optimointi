@@ -7,7 +7,7 @@ import { imagesBaseUrl } from "../../utils/constants";
 
 const TrashTableRow = ({ survey, handleDeleteClick, handleRestoreClick }) => {
   const [moreInfoVisible, setMoreInfoVisible] = useState(!survey.closed);
-  const { t } = useTranslation();
+  const { t } = useTranslation("list");
 
   if (survey.id === "separatingRow") {
     return (

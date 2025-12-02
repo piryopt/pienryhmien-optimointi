@@ -1,0 +1,40 @@
+{
+  "Aiemmat kyselyt": "Aiemmat kyselyt",
+  "Avoin": "Avoin",
+  "Ei": "Ei",
+  "Haluatko palauttaa kyselyn roskakorista?": "Haluatko palauttaa kyselyn roskakorista?",
+  "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan": {
+    "": "Haluatko siirtää kyselyn roskakoriin? Avoimet kyselyt samalla suljetaan."
+  },
+  "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ": "Haluatko varmasti poistaa kyselyn ja kaiken siihen liittyvän datan pysyvästi? ",
+  "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti": {
+    "": "HUOM! Yli viikon roskakorissa olleet kyselyt poistetaan automaattisesti."
+  },
+  "Kopioi kysely": "Kopioi kysely",
+  "Kopioi kyselyn osoite leikepöydälle": "Kopioi kyselyn osoite leikepöydälle",
+  "Kyllä": "Kyllä",
+  "Kysely": "Kysely",
+  "Kysely palautettu": "Kysely palautettu",
+  "Kysely poistetaan": "Kysely poistetaan",
+  "Kysely poistettu": "Kysely poistettu",
+  "Kysely siirretty roskakoriin": "Kysely siirretty roskakoriin",
+  "Kyselyn osoite kopioitu leikepöydälle": "Kyselyn osoite kopioitu leikepöydälle",
+  "Kyselyn palauttaminen epäonnistui": "Kyselyn palauttaminen epäonnistui",
+  "Kyselyn poistaminen epäonnistui": "Kyselyn poistaminen epäonnistui",
+  "Kyselyn siirto roskakoriin epäonnistui": "Kyselyn siirto roskakoriin epäonnistui",
+  "Kyselyn tila": "Kyselyn tila",
+  "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Muokkaa kyselyä tai lisää siihen ylläpitäjä",
+  "Näytä": "Näytä",
+  "Palauta kysely": "Palauta kysely",
+  "Palauta kysely?": "Palauta kysely?",
+  "Piilota": "Piilota",
+  "Poista kaikki kyselyn data?": "Poista kaikki kyselyn data?",
+  "Poista kysely": "Poista kysely",
+  "Poista kysely?": "Poista kysely?",
+  "Roskakori": "Roskakori",
+  "Ryhmät luotu": "Ryhmät luotu",
+  "Suljettu": "Suljettu",
+  "Tarkastele tuloksia": "Tarkastele tuloksia",
+  "Toiminnot": "Toiminnot",
+  "Vastausaika päättyy": "Vastausaika päättyy"
+}

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { imagesBaseUrl } from "../../utils/constants";
 
 const Header = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   return (
     <h1 className="page-title">
       <img

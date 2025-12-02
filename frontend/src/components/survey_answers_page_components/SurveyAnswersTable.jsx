@@ -8,7 +8,7 @@ import { useSurveyDialog } from "../../context/SurveyDialogContext";
 import { imagesBaseUrl } from "../../utils/constants";
 
 const SurveyAnswersTable = (props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   const { showNotification } = useNotification();
   const { openDialog } = useSurveyDialog();
 

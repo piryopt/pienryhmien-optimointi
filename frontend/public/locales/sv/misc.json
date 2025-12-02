@@ -1,0 +1,105 @@
+{
+  "- Jakajaan on lisätty myös roskakori, johon kyselyt päätyvät poistaessasi niitä": {
+    "\n            Roskakorissa olevan kyselyn voi tarvittaessa palauttaa tai kopioida": {
+      "\n            Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": {
+        "\n          ": ""
+      }
+    }
+  },
+  "- Jakajan uusimmassa versiossa käyttäjä voi kyselyn luomisvaiheessa määrittää ryhmiä pakollisiksi,\n          joihin opiskelijat pyritään sijoittamaan ensisijaisesti valinnoista riippumatta": {
+    "\n          ": ""
+  },
+  "- Jakajassa on nyt mahdollista myös luoda monivaiheinen kysely, jossa käyttäjä määrittää yksittäisten vaiheiden ryhmävalinnat,\n          jolloin ryhmäjako suoritetaan vaihekohtaisesti huomioiden myös mahdolliset pakolliset ryhmät kussakin vaiheessa": {
+    "\n          ": ""
+  },
+  "- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös rajoittaa tietyn ryhmän vastaajien osallistumiskertojen määrää, mikä\n            huomioidaan vastaavasti ryhmäjaossa kyseisen rajoitetun ryhmän kohdalla": {
+    "\n          ": ""
+  },
+  "- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös valita sallitaanko vastaajien poissaolo, jolloin\n              vastaajat voivat merkitä itsensä poissaolevaksi vastaamislomakkeessa valitsemastaan vaiheesta": {
+    "\n              Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa": {
+      "\n            ": ""
+    }
+  },
+  "Anna palaute": "Ge feedback",
+  "Anna palautetta": "Ge feedback",
+  "Avaa": "Öppna",
+  "Avoimet palautteet": "Öppen feedback",
+  "Bugi": "Bugg",
+  "Ei": "Nej",
+  "Ei kyselyitä": "Inga undersökningar",
+  "Ei palautetta": "Ingen feedback",
+  "Ei palautteita": "Ingen feedback",
+  "Ei tietoja": "Ingen information",
+  "Haluatko varmasti sulkea palautteen?": "Är du säker på att du vill stänga feedback?",
+  "ID": "ID",
+  "Jakaja": "Jakaja",
+  "Jakajassa luodut kyselyt": "Undersökningar som skapats i Jakaja",
+  "Kaikki käynnissä olevat kyselyt": "Alla pågående undersökningar",
+  "Käyttäjätunnus": "Användarnamn",
+  "Kieltomäärä": "Antal förbud",
+  "Kirjaudu sisään": "Logga in",
+  "Kirjaudu ulos": "Logga ut",
+  "Kirjautuminen epäonnistui": "Inloggningen misslyckades",
+  "Kirjautuminen onnistui": "Inloggningen lyckades",
+  "Kirjautuminen ulos onnistui": "Utloggning lyckades",
+  "Kyllä": "Ja",
+  "Kyselyjen lataus epäonnistui": "Misslyckades med att ladda undersökningar",
+  "Kyselyt": "Undersökningar",
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Laddar"
+      }
+    }
+  },
+  "Ladataan…": "Laddar...",
+  "Lähetetään": {
+    "": {
+      "": {
+        "": "Sändning"
+      }
+    }
+  },
+  "Lataus epäonnistui": "Laddningen misslyckades",
+  "Min valinnat": "Min gruppval",
+  "Muu": "Annat",
+  "Nimi": "Namn",
+  "Otsikko": "Rubrik",
+  "Päättyy": "Slutar",
+  "Palaa listaan": "Återgå till listan",
+  "Palaute": "Feedback",
+  "Palaute lähetetty": "Feedback skickad",
+  "Palaute suljettu": "Feedback stängd",
+  "Palautteen lähettäjä": "Feedbackavsändare",
+  "Palautteen lähetys epäonnistui": "Feedbackinlämning misslyckades",
+  "Palautteen tyyppi": "Feedbacktyp",
+  "Palautteiden lataus epäonnistui": "Feedbackinläsningen misslyckades",
+  "Peruuta": "Avbryt",
+  "Rekisteröityneet opettajat": "Registrerade lärare",
+  "Rekisteröityneet opiskelijat": "Registrerade studenter",
+  "Ryhmien määrä": "Antal grupper",
+  "Sähköposti": "E-postadress",
+  "Salasana": "Lösenord",
+  "Sisältö": "Innehåll",
+  "Sulje palaute": "Stäng feedback",
+  "Suljetaan": {
+    "": {
+      "": {
+        "": "Stängning"
+      }
+    }
+  },
+  "Suljetut palautteet": "Stängda feedbacks",
+  "Sulkeminen epäonnistui": "Stängningen misslyckades",
+  "Tarkastele": "Visa",
+  "Tarkastele kyselyitä": "Visa undersökningar",
+  "Tarkastele palautteita": "Visa feedbacks",
+  "Tarkastele tilastoja": "Visa statistik",
+  "Tietosuojaseloste": "Integritetspolicy",
+  "Tilastojen lataus epäonnistui": "Misslyckades med att ladda statistiken",
+  "Tilastot": "Statistik",
+  "Toiminnot": "Åtgärder",
+  "UKK": "FAQ",
+  "Vastauksia luotu": "Svar skapade",
+  "Yhteys palvelimeen epäonnistui": "Anslutningen till servern misslyckades"
+}

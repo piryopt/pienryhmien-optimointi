@@ -1,11 +1,9 @@
-// ...existing code...
-import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const LimitParticipationSection = ({ setLimitParticipationVisible }) => {
   const { setValue, watch } = useFormContext();
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   const value = watch("limitParticipation", false);
 

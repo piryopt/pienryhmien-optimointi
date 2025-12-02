@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const SurveyAnswersInfo = ({ answersAmount, availableSpaces }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   return (
     <>
       <br />

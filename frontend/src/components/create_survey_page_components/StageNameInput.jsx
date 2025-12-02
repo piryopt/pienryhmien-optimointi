@@ -7,7 +7,7 @@ const StageNameInput = ({
   id,
   placeholder
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   return (
     <input

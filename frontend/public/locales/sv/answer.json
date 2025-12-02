@@ -1,0 +1,78 @@
+{
+  "Ei vaiheita ladattuna": "Inga resultat att ladda ner",
+  "En ole paikalla tässä vaiheessa": "Jag är frånvarande",
+  "Et ole vastannut tähän kyselyyn": {
+    "": "Du har inte svarat på denna undersökning"
+  },
+  "Hae ryhmiä": {
+    "": {
+      "": {
+        "": "Sök efter grupper"
+      }
+    }
+  },
+  "HUOM! ": "OBS! ",
+  "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen": "Ordna alla alternativ i preferensordning i den",
+  "Järjestä vähintään": "Ordna minst",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen": "Ordna alternativ i preferensordning i den",
+  "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
+    "": "Ordna alternativen i preferensordning eller markera dig själv som frånvarande"
+  },
+  "Kiellot": "Förbud",
+  "Kirjoita tähän perustelut kielloille": {
+    "": {
+      "": {
+        "": "Skriv orsakerna till avvisningarna här..."
+      }
+    }
+  },
+  "Klikkaa valintavaihtoehtoa nähdäksesi siitä lisätietoa": "Klicka på valalternativet för att se ytterligare information om det",
+  "Kysely on suljettu": "Undersökningen är stängd",
+  "Kyselyn vastaukset tallennettu": {
+    "": "Undersökningsvaren sparade"
+  },
+  "Kyselyn vastauksien tallennus epäonnistui": {
+    "": "Det gick inte att spara undersökningsvaren"
+  },
+  "laatikkoon": "rutan",
+  "Ladataan kyselyä": {
+    "": {
+      "": {
+        "": "Laddar undersökning"
+      }
+    }
+  },
+  "Lähetä valinnat": "Skicka val",
+  "Lisätietoa ei saatavilla": {
+    "": "Ingen ytterligare information tillgänglig"
+  },
+  "merkityt ryhmät priorisoidaan jakamisprosessissa": {
+    " ": "grupper prioriteras i delningsprocessen."
+  },
+  "merkkiä": "tecken",
+  "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta": {
+    "": "De är alltid fyllda till åtminstone minimistorleken oavsett svaren."
+  },
+  "Olet ilmoittautunut poissaolevaksi": "Du har registrerat dig som frånvarande",
+  "Pakollinen": "Obligatorisk",
+  "Pakolliseksi ": "Obligatoriska ",
+  "Perustelut kielloille": "Motiveringar för avvisningar",
+  "poissa": "frånvarande",
+  "Poista valinnat": "Ta bort val",
+  "punaiseen": "röda",
+  "Ryhmän maksimikoko": "Maximal gruppstorlek",
+  "Ryhmän minimikoko": "Minsta gruppstorlek",
+  "tai": "eller",
+  "Tämä kysely on suljettu eikä siihen voi enää vastata": {
+    "": "Den här undersökningen är stängd och kan inte längre besvaras."
+  },
+  "vaihtoehtoa": "alternativ i den",
+  "vaihtoehtoa mieluisuusjärjestykseen": "alternativ i preferensordning i den",
+  "Valinnat": "Val",
+  "Vastauksesi kyselyyn on talletettu ja näet tekemäsi valinnat alta": {
+    "": "Ditt svar har sparats och du kan se dina val nedan."
+  },
+  "Vastausaika päättyy": "Svarstid utgår",
+  "vihreään": "gröna",
+  "Voit kieltää": "Du kan förbjuda"
+}

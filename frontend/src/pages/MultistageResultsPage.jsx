@@ -22,7 +22,7 @@ const MultistageSurveyResultsPage = () => {
   const [resultsSaved, setResultsSaved] = useState(false);
   const [results, setResults] = useState([]);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation("result");
   const { showNotification } = useNotification();
 
   useEffect(() => {

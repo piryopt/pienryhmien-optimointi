@@ -11,7 +11,7 @@ const ClosedMultistageSurveyView = ({
   expandedIds,
   toggleExpand
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
   const stageLabels = (stages || []).map((s) => s.stage ?? s.id);
   const [currStage, setCurrStage] = useState(
     stageLabels.length > 0 ? stageLabels[0] : ""

@@ -6,7 +6,7 @@ import adminService from "../../services/admin";
 import { useNotification } from "../../context/NotificationContext";
 
 const AdminSurveyList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
   const [surveys, setSurveys] = useState([]);
   const [loading, setLoading] = useState(true);
   const { showNotification } = useNotification();

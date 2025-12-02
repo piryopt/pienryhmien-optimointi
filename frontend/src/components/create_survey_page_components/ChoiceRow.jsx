@@ -8,7 +8,7 @@ const ChoiceRow = ({
   limitParticipationVisible = false,
   errors = {}
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   const handleChange = (field) => (e) => {
     updateCell(

@@ -6,7 +6,7 @@ const ChoicesDisplayTable = ({
   rows = [],
   limitParticipationVisible = false
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   return (
     <div className="choice-table-wrapper">

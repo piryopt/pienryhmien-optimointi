@@ -1,0 +1,95 @@
+{
+  "Avaa kysely uudelleen": "Reopen the survey",
+  "Avaa uudestaan?": "Open again?",
+  "Ei järjestetty": "Not ranked",
+  "Ei paikalla": "Not present",
+  "Ei tuloksia tälle vaiheelle": "No results for this stage",
+  "Ei tuloksia vietäväksi": "No results to export",
+  "Enimmäispaikat": "Maximum capacity",
+  "Hae yksittäistä vastausta kirjoittamalla tähän kenttään\n            vastaajan sähköposti tai osa siitä": "In this field, you can search for an individual response by a respondent's email",
+  "Haluatko varmasti avata kyselyn uudestaan?": "Are you sure you want to reopen this survey?",
+  "Haluatko varmasti sulkea kyselyn?": "Are you sure you want to close this survey?",
+  "Huom! Se, että osa opiskelijoista on sijoitettu kiellettyihin tai ei-järjestettyihin valintoihin ei vaikuta keskiarvoon": {
+    "": "Note! Students allocated into rejected or unranked choices do not affect the average happiness value"
+  },
+  "Info": "Info",
+  "Jaa ryhmiin": "Allocate groups",
+  "Jaettavia paikkoja": "Available spots",
+  "Jaettavia paikkoja on {{total}}, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja": {
+      "": "The number of available spots is {{total}} but there are {{answers}} responses. Add more spots"
+    }
+  },
+  "Kaikki rivit olivat virheellisiä": "All rows were invalid",
+  "Kaikkien vaiheiden tulokset tallennettu": "All stages' results have been saved",
+  "Kielletty": "Rejected",
+  "Kielletyt": "Rejected",
+  "Kysely avattu": "Survey opened",
+  "Kysely suljettu": "Survey closed",
+  "Kyselyn vaiheissa on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa vaiheiden ryhmäkokoja ennen ryhmäjakoa": {
+      "": "There are more respondents than available spots in the survey stages. Edit group sizes for stages before allocating groups."
+    }
+  },
+  "Kyselyssä on enemmän vastaajia kuin jaettavia paikkoja": {
+    " Muokkaa ryhmäkokoja ennen ryhmäjakoa": {
+      "": "There are more respondents than available spots. Edit group sizes before allocating groups."
+    }
+  },
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Loading"
+      }
+    }
+  },
+  "Lajittelun tulokset": "Sorting results",
+  "Monesko valinta": "Ordinal choice",
+  "Monivaiheisen kyselyn tulokset": "Sorting results",
+  "Muokkaa ryhmäkokoja": "Edit group sizes",
+  "Muokkaa vaiheiden ryhmäkokoja": "Edit group sizes for stages",
+  "Näytä": "Open",
+  "Nimi": "Name",
+  "Opiskelijat on lajiteltu ryhmiin seuraavasti": "Students have been sorted into groups as follows",
+  "Palaa kyselylistaan": "Return to the survey list",
+  "Perustelut": "Reasons",
+  "Peruuta": "Cancel",
+  "Piilota": "Hide",
+  "Poista vastaus?": "Delete answer?",
+  "Ryhmä": "Group",
+  "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan": "Group \"{{name}}\" must contain at least 1 spot",
+  "Ryhmäjako tallennettu": "Group allocation saved",
+  "Ryhmäjakoa ei voida tehdä, sillä kyselyllä ei ole vastaajia": "Group allocation can not be done because the survey has no respondents",
+  "Ryhmäjaon tallennus epäonnistui": "Saving group allocation failed",
+  "Ryhmäkokojen päivittäminen epäonnistui": "Updating group sizes failed",
+  "Ryhmäkoot päivitettiin onnistuneesti": "Group sizes were updated successfully",
+  "Ryhmät, jotka pudotettiin jaosta": "Groups dropped from distribution",
+  "Ryhmävalintojen keskiarvo": "Average of group selections",
+  "Sähköposti": "Email",
+  "Sulje kysely": "Close survey",
+  "Sulje kysely?": "Close survey?",
+  "Tallenna kaikkien vaiheiden tulokset": "Save results",
+  "Tallenna muutokset": "Save changes",
+  "Tallenna tulokset": "Save results",
+  "Tämän vaiheen vienti epäonnistui": "Exporting stage failed",
+  "Tieto puuttuu tai on rikkoutunut": "Information missing or broken",
+  "tulokset": "results",
+  "Tulokset": "Results",
+  "Tulosten tallennus epäonnistui": "Saving results failed",
+  "Tulosten vienti epäonnistui": "Exporting results failed",
+  "vaihe": "stage",
+  "Vaihe": "Stage",
+  "Vaihe \"{{name}}\" sisältää {{total}} paikkaa, mutta vastauksia on {{answers}}": {
+    " Lisää paikkoja vaiheeseen": {
+      "": "Stage \"{{name}}\" contains {{total}} spots, but there are {{answers}} responses. Add more spots to the stage."
+    }
+  },
+  "Valinnat": "Choices",
+  "Vastauksen poistaminen": "Delete response",
+  "Vastauksen poistaminen epäonnistui": "Deleting answers failed",
+  "Vastauksia": "Answers",
+  "Vastaus poistettu": "Answer deleted",
+  "Vie tulokset Excel-taulukkoon": "Export results to Excel spreadsheet",
+  "Virhe": "Error",
+  "Virheellinen rivi": "Invalid row"
+}

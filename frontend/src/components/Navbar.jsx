@@ -5,7 +5,7 @@ import { useNotification } from "../context/NotificationContext";
 import { imagesBaseUrl } from "../utils/constants";
 
 const Navbar = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
   const { showNotification } = useNotification();
   const { user, loading, logout, debug } = useAuth();
   const navigate = useNavigate();

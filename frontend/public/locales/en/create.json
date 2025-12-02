@@ -1,0 +1,110 @@
+{
+  "(kopio)": "(copy)",
+  "Anna käyttäjälle hallinnointioikeudet kyselyyn": {
+    "": "Give user administrative rights to the survey"
+  },
+  "CSV-ohje": "CSV guide",
+  "Ei": "No",
+  "Enimmäispaikat": "Maximum capacity",
+  "Huom!": "Note!",
+  "HUOM! Alle minimikoon jäävät ryhmät jätetään pois jaosta": {
+    " Jos haluat,             että tietty ryhmä toteutuu varmasti, rastita ryhmän vasemmalla puolella             oleva laatikko": {
+      "": "NOTE! Groups below the minimum size will be dropped. If you wish for a group to be mandatory, click the checkbox on the left."
+    }
+  },
+  "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
+    " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
+      " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
+        "": "If you want to limit how many times a respondent can participate in the same group, answer yes here. You can later set the maximum number of participation times for each group in the stage table. For this to work, the group must have the same name in all stages."
+      }
+    }
+  },
+  "Jos haluat, ettei jonkun tietyn sarakkeen tieto näy vastausvaiheessa             opiskelijoille, laita sen sarakkeen nimen viimeiseksi merkiksi *": {
+    "": "If you want to ensure that information from a specific column is not shown to students during the response phase, append an asterisk (*) at the end of the column name."
+  },
+  "Jos ryhmän minimikoolla ei ole väliä, syötä 0": {
+    " Pakollisen ryhmän             mimimikoko ei voi olla 0": {
+      "": "If the minimum size of the group doesn't matter, enter 0. A mandatory group can not be set to 0."
+    }
+  },
+  "Kello": "Time",
+  "kokonaislukuja": "integers",
+  "Kopioi vaihe": "Copy stage",
+  "Kyllä": "Yes",
+  "Kysely luotu onnistuneesti": "Survey created successfully",
+  "Kysely muokattu onnistuneesti": "Survey updated successfully",
+  "Kyselyn kuvaus": "Survey description",
+  "Kyselyn luonti epäonnistui": "Creating survey failed",
+  "Kyselyn muokkaus": "Survey editing",
+  "Kyselyn muokkaus epäonnistui": "Error occurred when updating survey!",
+  "Kyselyn nimi": "The name of the survey",
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Loading"
+      }
+    }
+  },
+  "Lisää ainakin yksi vaihe": "Add at least one stage",
+  "Lisää käyttäjä": "Add user",
+  "Lisää tietokenttä": "Add additional field",
+  "Lisää vaihe": "Add stage",
+  "Lisää vaihtoehto": "Add option",
+  "Luo kysely": "Create survey",
+  "Luo uusi kysely": "Create a new survey",
+  "Luo uusi monivaiheinen kysely": "Create a new multiphase survey",
+  "Nimi": "Name",
+  "Osallistumiskerrat*": "Participation count*",
+  "Pakota minimikoko": "Force minimum group size",
+  "Palaa takaisin": "Return",
+  "Poista": "Delete",
+  "Poista sarake": "Delete coulumn",
+  "Poista vaihe": "Delete stage",
+  "pp": {
+    "kk": {
+      "vvvv": "dd/mm/yyyy"
+    }
+  },
+  "Priorisoitavat ryhmät": "Prioritized groups",
+  "Priorisoitujen ryhmien vähimmäismäärä": "Minimum number of prioritized groups",
+  "Rajoita osallistumiskertoja": "Limit participation times",
+  "Ryhmän minimikoko": "Minimum group size",
+  "sähköpostiosoite": "Email address",
+  "Salliessasi poissaolot, vastaajat voivat merkitä itsensä             poissaoleviksi valitsemistaan vaiheista": {
+    "": "If you allow absences, respondents can mark themselves as absent from the stages they select."
+  },
+  "Sallitaanko poissaolot?": "Allow absences?",
+  "Sallitaanko valintojen kieltäminen?": "Can participants deny selections?",
+  "Sallittu kiellettyjen ryhmien määrä": "Allowed number of denied groups",
+  "Suositellaan, että vaaditaan kaikkien ryhmien järjestämistä ellei niitä ole suuri määrä (>10)": "It is recommended that all groups be organized unless there is a large number of them (>10).",
+  "Syötä käyttäjän sähköpostiosoite": {
+    "": "Give user email"
+  },
+  "Syötä ryhmät, jotka kyselyyn vastaaja voi asettaa         mielekkyysjärjestykseen": {
+    " Anna kullekkin ryhmälle myös sen enimmäiskoko": {
+      "         Halutessasi voit lisätä lisätietoa kohteesta omiin sarakkeisiinsa": {
+        " Sarakkeen         voit luoda painamalla '+ Lisää tietokenttä'": {
+          "": "Enter the groups that the survey respondent can prioritize   in order of preference. Also, provide the maximum size for each group. If desired, you can add additional information about each item in separate columns. Create a new column by clicking on '+ Add Field'."
+        }
+      }
+    }
+  },
+  "Tähän voit antaa kuvauksen kyselystä ja ohjeita siihen vastaamiseen": {
+    " Kuvausteksti näytetään vastaajalle kyselyn yhteydessä": {
+      "": "Here you can provide a description of the survey and instructions for responding. The description text will be shown to the respondents alongside the survey."
+    }
+  },
+  "Tallenna muutokset": "Save changes",
+  "Tuo valinnat CSV-tiedostosta": "Import selections from a CSV file.",
+  "Vaaditaanko kaikkien ryhmien järjestämistä?": "Is organizing all groups required?",
+  "Vaiheen nimi": "Stage name",
+  "Vaiheen tunniste": "Stage ID",
+  "Vastausaika": "Response time",
+  "Vastausaika määrittää aikavälin, jolloin kyselyyn on mahdollista vastata": {
+    "": "Response time defines the period during which it is possible to   respond to the survey."
+  },
+  "Vastausaika päättyy": "Response time expires",
+  "Voit muokata kyselyn kuvausta": "You can edit the survey description.",
+  "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "You can only edit the name, time and the description of a survey",
+  "yli 5 merkkiä pitkiä": "Over 5 characters long"
+}

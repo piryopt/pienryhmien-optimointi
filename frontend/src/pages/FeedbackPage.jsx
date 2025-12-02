@@ -4,7 +4,7 @@ import { useNotification } from "../context/NotificationContext";
 import feedbackService from "../services/feedback";
 
 const FeedbackPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
   const { showNotification } = useNotification();
 
   const [title, setTitle] = useState("");

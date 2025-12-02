@@ -21,7 +21,7 @@ import { safeParseJson, extractMessage } from "../utils/parsers";
 import { baseUrl } from "../utils/constants";
 
 const EditSurveyPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   const { showNotification } = useNotification();
 
   const schema = buildEditSurveySchema(t);

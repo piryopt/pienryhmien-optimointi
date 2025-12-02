@@ -11,7 +11,7 @@ const ClosedSurveyView = ({
   reason,
   existing
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
 
   return (
     <>

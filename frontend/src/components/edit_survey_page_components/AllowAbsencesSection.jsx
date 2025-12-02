@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 const AllowAbsencesSection = ({ survey }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   const allow_absences = survey.allow_absences;
 
   return (

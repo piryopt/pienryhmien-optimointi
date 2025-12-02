@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 const SurveyDescription = () => {
   const { register } = useFormContext();
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   return (
     <section>

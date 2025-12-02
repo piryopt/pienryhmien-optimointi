@@ -1,0 +1,105 @@
+{
+  "- Jakajaan on lisätty myös roskakori, johon kyselyt päätyvät poistaessasi niitä": {
+    "\n            Roskakorissa olevan kyselyn voi tarvittaessa palauttaa tai kopioida": {
+      "\n            Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": {
+        "\n          ": "- Jakajaan on lisätty myös roskakori, johon kyselyt päätyvät poistaessasi niitä.\n            Roskakorissa olevan kyselyn voi tarvittaessa palauttaa tai kopioida.\n            Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti.\n          "
+      }
+    }
+  },
+  "- Jakajan uusimmassa versiossa käyttäjä voi kyselyn luomisvaiheessa määrittää ryhmiä pakollisiksi,\n          joihin opiskelijat pyritään sijoittamaan ensisijaisesti valinnoista riippumatta": {
+    "\n          ": "- Jakajan uusimmassa versiossa käyttäjä voi kyselyn luomisvaiheessa määrittää ryhmiä pakollisiksi,\n          joihin opiskelijat pyritään sijoittamaan ensisijaisesti valinnoista riippumatta.\n          "
+  },
+  "- Jakajassa on nyt mahdollista myös luoda monivaiheinen kysely, jossa käyttäjä määrittää yksittäisten vaiheiden ryhmävalinnat,\n          jolloin ryhmäjako suoritetaan vaihekohtaisesti huomioiden myös mahdolliset pakolliset ryhmät kussakin vaiheessa": {
+    "\n          ": "- Jakajassa on nyt mahdollista myös luoda monivaiheinen kysely, jossa käyttäjä määrittää yksittäisten vaiheiden ryhmävalinnat,\n          jolloin ryhmäjako suoritetaan vaihekohtaisesti huomioiden myös mahdolliset pakolliset ryhmät kussakin vaiheessa.\n          "
+  },
+  "- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös rajoittaa tietyn ryhmän vastaajien osallistumiskertojen määrää, mikä\n            huomioidaan vastaavasti ryhmäjaossa kyseisen rajoitetun ryhmän kohdalla": {
+    "\n          ": "- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös rajoittaa tietyn ryhmän vastaajien osallistumiskertojen määrää, mikä\n            huomioidaan vastaavasti ryhmäjaossa kyseisen rajoitetun ryhmän kohdalla.\n          "
+  },
+  "- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös valita sallitaanko vastaajien poissaolo, jolloin\n              vastaajat voivat merkitä itsensä poissaolevaksi vastaamislomakkeessa valitsemastaan vaiheesta": {
+    "\n              Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa": {
+      "\n            ": "- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös valita sallitaanko vastaajien poissaolo, jolloin\n              vastaajat voivat merkitä itsensä poissaolevaksi vastaamislomakkeessa valitsemastaan vaiheesta.\n              Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa.\n            "
+    }
+  },
+  "Anna palaute": "Anna palaute",
+  "Anna palautetta": "Anna palautetta",
+  "Avaa": "Avaa",
+  "Avoimet palautteet": "Avoimet palautteet",
+  "Bugi": "Bugi",
+  "Ei": "Ei",
+  "Ei kyselyitä": "Ei kyselyitä",
+  "Ei palautetta": "Ei palautetta",
+  "Ei palautteita": "Ei palautteita",
+  "Ei tietoja": "Ei tietoja",
+  "Haluatko varmasti sulkea palautteen?": "Haluatko varmasti sulkea palautteen?",
+  "ID": "ID",
+  "Jakaja": "Jakaja",
+  "Jakajassa luodut kyselyt": "Jakajassa luodut kyselyt",
+  "Kaikki käynnissä olevat kyselyt": "Kaikki käynnissä olevat kyselyt",
+  "Käyttäjätunnus": "Käyttäjätunnus",
+  "Kieltomäärä": "Kieltomäärä",
+  "Kirjaudu sisään": "Kirjaudu sisään",
+  "Kirjaudu ulos": "Kirjaudu ulos",
+  "Kirjautuminen epäonnistui": "Kirjautuminen epäonnistui",
+  "Kirjautuminen onnistui": "Kirjautuminen onnistui",
+  "Kirjautuminen ulos onnistui": "Kirjautuminen ulos onnistui",
+  "Kyllä": "Kyllä",
+  "Kyselyjen lataus epäonnistui": "Kyselyjen lataus epäonnistui",
+  "Kyselyt": "Kyselyt",
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Ladataan..."
+      }
+    }
+  },
+  "Ladataan…": "Ladataan…",
+  "Lähetetään": {
+    "": {
+      "": {
+        "": "Lähetetään..."
+      }
+    }
+  },
+  "Lataus epäonnistui": "Lataus epäonnistui",
+  "Min valinnat": "Min valinnat",
+  "Muu": "Muu",
+  "Nimi": "Nimi",
+  "Otsikko": "Otsikko",
+  "Päättyy": "Päättyy",
+  "Palaa listaan": "Palaa listaan",
+  "Palaute": "Palaute",
+  "Palaute lähetetty": "Palaute lähetetty",
+  "Palaute suljettu": "Palaute suljettu",
+  "Palautteen lähettäjä": "Palautteen lähettäjä",
+  "Palautteen lähetys epäonnistui": "Palautteen lähetys epäonnistui",
+  "Palautteen tyyppi": "Palautteen tyyppi",
+  "Palautteiden lataus epäonnistui": "Palautteiden lataus epäonnistui",
+  "Peruuta": "Peruuta",
+  "Rekisteröityneet opettajat": "Rekisteröityneet opettajat",
+  "Rekisteröityneet opiskelijat": "Rekisteröityneet opiskelijat",
+  "Ryhmien määrä": "Ryhmien määrä",
+  "Sähköposti": "Sähköposti",
+  "Salasana": "Salasana",
+  "Sisältö": "Sisältö",
+  "Sulje palaute": "Sulje palaute",
+  "Suljetaan": {
+    "": {
+      "": {
+        "": "Suljetaan..."
+      }
+    }
+  },
+  "Suljetut palautteet": "Suljetut palautteet",
+  "Sulkeminen epäonnistui": "Sulkeminen epäonnistui",
+  "Tarkastele": "Tarkastele",
+  "Tarkastele kyselyitä": "Tarkastele kyselyitä",
+  "Tarkastele palautteita": "Tarkastele palautteita",
+  "Tarkastele tilastoja": "Tarkastele tilastoja",
+  "Tietosuojaseloste": "Tietosuojaseloste",
+  "Tilastojen lataus epäonnistui": "Tilastojen lataus epäonnistui",
+  "Tilastot": "Tilastot",
+  "Toiminnot": "Toiminnot",
+  "UKK": "UKK",
+  "Vastauksia luotu": "Vastauksia luotu",
+  "Yhteys palvelimeen epäonnistui": "Yhteys palvelimeen epäonnistui"
+}

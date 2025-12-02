@@ -7,7 +7,7 @@ const PrioritizedGroupsSection = ({
   choices,
   multistage
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
 
   const singleStageTable = useMemo(() => {
     const rowsSource =

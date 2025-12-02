@@ -1,0 +1,105 @@
+{
+  "- Jakajaan on lisätty myös roskakori, johon kyselyt päätyvät poistaessasi niitä": {
+    "\n            Roskakorissa olevan kyselyn voi tarvittaessa palauttaa tai kopioida": {
+      "\n            Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": {
+        "\n          ": ""
+      }
+    }
+  },
+  "- Jakajan uusimmassa versiossa käyttäjä voi kyselyn luomisvaiheessa määrittää ryhmiä pakollisiksi,\n          joihin opiskelijat pyritään sijoittamaan ensisijaisesti valinnoista riippumatta": {
+    "\n          ": ""
+  },
+  "- Jakajassa on nyt mahdollista myös luoda monivaiheinen kysely, jossa käyttäjä määrittää yksittäisten vaiheiden ryhmävalinnat,\n          jolloin ryhmäjako suoritetaan vaihekohtaisesti huomioiden myös mahdolliset pakolliset ryhmät kussakin vaiheessa": {
+    "\n          ": ""
+  },
+  "- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös rajoittaa tietyn ryhmän vastaajien osallistumiskertojen määrää, mikä\n            huomioidaan vastaavasti ryhmäjaossa kyseisen rajoitetun ryhmän kohdalla": {
+    "\n          ": ""
+  },
+  "- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös valita sallitaanko vastaajien poissaolo, jolloin\n              vastaajat voivat merkitä itsensä poissaolevaksi vastaamislomakkeessa valitsemastaan vaiheesta": {
+    "\n              Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa": {
+      "\n            ": ""
+    }
+  },
+  "Anna palaute": "Give feedback",
+  "Anna palautetta": "Give feedback",
+  "Avaa": "Open",
+  "Avoimet palautteet": "Open feedback",
+  "Bugi": "Bug",
+  "Ei": "No",
+  "Ei kyselyitä": "No surveys",
+  "Ei palautetta": "No feedback",
+  "Ei palautteita": "No feedback",
+  "Ei tietoja": "No info",
+  "Haluatko varmasti sulkea palautteen?": "Are you sure you want to close this feedback?",
+  "ID": "ID",
+  "Jakaja": "Jakaja",
+  "Jakajassa luodut kyselyt": "Surveys created in Jakaja",
+  "Kaikki käynnissä olevat kyselyt": "All active surveys",
+  "Käyttäjätunnus": "Username",
+  "Kieltomäärä": "Rejections",
+  "Kirjaudu sisään": "Sign in",
+  "Kirjaudu ulos": "Log out",
+  "Kirjautuminen epäonnistui": "Logging in failed",
+  "Kirjautuminen onnistui": "Logged in successfully",
+  "Kirjautuminen ulos onnistui": "Logged out successfully",
+  "Kyllä": "Yes",
+  "Kyselyjen lataus epäonnistui": "Loading surveys failed",
+  "Kyselyt": "Surveys",
+  "Ladataan": {
+    "": {
+      "": {
+        "": "Loading"
+      }
+    }
+  },
+  "Ladataan…": "Loading...",
+  "Lähetetään": {
+    "": {
+      "": {
+        "": "Submitting"
+      }
+    }
+  },
+  "Lataus epäonnistui": "Failed to load",
+  "Min valinnat": "Min choices",
+  "Muu": "Other",
+  "Nimi": "Name",
+  "Otsikko": "Title",
+  "Päättyy": "Ends",
+  "Palaa listaan": "Return to the list",
+  "Palaute": "Feedback",
+  "Palaute lähetetty": "Feedback sent",
+  "Palaute suljettu": "Feedback cloesd",
+  "Palautteen lähettäjä": "Feedback submitter",
+  "Palautteen lähetys epäonnistui": "Submitting feedback failed",
+  "Palautteen tyyppi": "Feedback type",
+  "Palautteiden lataus epäonnistui": "Loading feedback failed",
+  "Peruuta": "Cancel",
+  "Rekisteröityneet opettajat": "Registered teachers",
+  "Rekisteröityneet opiskelijat": "Registered students",
+  "Ryhmien määrä": "Number of groups",
+  "Sähköposti": "Email",
+  "Salasana": "Password",
+  "Sisältö": "Content",
+  "Sulje palaute": "Close survey",
+  "Suljetaan": {
+    "": {
+      "": {
+        "": "Closing"
+      }
+    }
+  },
+  "Suljetut palautteet": "Closed feedback",
+  "Sulkeminen epäonnistui": "Closing failed",
+  "Tarkastele": "Review",
+  "Tarkastele kyselyitä": "Review surveys",
+  "Tarkastele palautteita": "Review feedback",
+  "Tarkastele tilastoja": "Review statistics",
+  "Tietosuojaseloste": "Privacy Policy",
+  "Tilastojen lataus epäonnistui": "Failed to load statistics",
+  "Tilastot": "Statistics",
+  "Toiminnot": "Actions",
+  "UKK": "FAQ",
+  "Vastauksia luotu": "Answers created",
+  "Yhteys palvelimeen epäonnistui": "Connection to server failed"
+}

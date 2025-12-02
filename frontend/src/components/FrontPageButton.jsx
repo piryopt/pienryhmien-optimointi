@@ -9,7 +9,7 @@ const FrontPageButton = ({
   topRightText,
   additionalVars
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("front");
 
   return (
     <Link

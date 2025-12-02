@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { imagesBaseUrl } from "../utils/constants";
 
 const GroupSearch = ({ searchTerm, setSearchTerm }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
 
   return (
     <InputGroup className="mb-2 group-search-input" style={{ width: "250px" }}>

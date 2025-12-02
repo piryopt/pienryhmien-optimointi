@@ -21,7 +21,7 @@ import "../static/css/createSurveyPage.css";
 import { baseUrl, imagesBaseUrl } from "../utils/constants";
 
 const CreateSurveyPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   const { showNotification } = useNotification();
   const [searchParams] = useSearchParams();
 

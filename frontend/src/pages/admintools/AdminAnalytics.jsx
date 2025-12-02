@@ -5,7 +5,7 @@ import { useNotification } from "../../context/NotificationContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const AdminAnalytics = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("misc");
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
   const { showNotification } = useNotification();

@@ -5,7 +5,7 @@ import "../../static/css/createSurveyPage.css";
 const EditSurveyName = ({ placeholder }) => {
   const { register, formState } = useFormContext();
   const { errors } = formState;
-  const { t } = useTranslation();
+  const { t } = useTranslation("create");
   return (
     <section>
       <input type="hidden" id="edit_choices" value="True" />

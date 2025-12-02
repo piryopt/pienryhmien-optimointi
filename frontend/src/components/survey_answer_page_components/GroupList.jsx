@@ -13,7 +13,7 @@ const GroupList = ({
   multiphase = false,
   searchTerm = ""
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("answer");
 
   const borderColor = multiphase
     ? id.endsWith("good")
