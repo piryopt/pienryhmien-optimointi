@@ -19,6 +19,8 @@
 
 **HUOM!** Pakollinen ryhmä voidaan kuitenkin edelleen pudottaa jaosta, jos vastaajia on niin vähän, etteivät he riitä täyttämään kaikkia pakollisia ryhmiä minimikokoon asti.
 
+## Mitä uutta löytyy Jakajasta 2.0 löydät [tästä](/jakaja2.0/changelog)
+
 ## Minulla on kysyttävää sovelluksesta – kehen voin olla yhteydessä?
 
 Jakajassa on palautesivu, jossa voit kysyä mitä vain.
