@@ -24,8 +24,8 @@ const SurveyResultsPage = () => {
   useEffect(() => {
     const getSurveyResults = async () => {
       try {
-        const isMsRes = await surveyService.isMultistage(id);
-        if (isMsRes?.multistage) {
+        const isMultistage = await surveyService.isMultistage(id);
+        if (isMultistage) {
           navigate(`/surveys/multistage/${id}/results`, { replace: true });
         }
         const response = await surveyService.getSurveyResultsData(id);

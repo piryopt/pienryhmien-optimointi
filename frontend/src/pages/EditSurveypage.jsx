@@ -54,8 +54,7 @@ const EditSurveyPage = () => {
     setLoading(true);
     const fetchSurvey = async () => {
       try {
-        const isMultistageResponse = await surveyService.isMultistage(surveyId);
-        const isMultistage = isMultistageResponse.multistage;
+        const isMultistage = await surveyService.isMultistage(surveyId);
         isMultistage ? setMultistage(true) : setMultistage(false);
         const response = isMultistage
           ? await surveyService.getMultiStageSurvey(surveyId)

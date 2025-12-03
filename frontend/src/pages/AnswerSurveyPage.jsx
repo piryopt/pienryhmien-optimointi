@@ -37,8 +37,8 @@ const AnswerSurveyPage = () => {
     mountedRef.current = true;
     (async () => {
       try {
-        const isMsRes = await surveyService.isMultistage(surveyId);
-        if (isMsRes?.multistage) {
+        const isMultistage = await surveyService.isMultistage(surveyId);
+        if (isMultistage) {
           navigate(`/surveys/multistage/${surveyId}`, {
             replace: true
           });
