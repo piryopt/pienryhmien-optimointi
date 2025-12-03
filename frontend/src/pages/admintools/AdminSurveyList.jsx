@@ -124,7 +124,6 @@ const AdminSurveyList = () => {
                   const minChoices = s[2] ?? "-";
                   const endRaw = s[3] ?? null;
                   const deniedAllowed = s[4] ?? "-";
-                  const searchVisibility = s[5] ? t("Kyllä") : t("Ei");
                   const numGroups = s[6] ?? "-";
                   return (
                     <tr key={id}>
@@ -134,7 +133,6 @@ const AdminSurveyList = () => {
                       <td>{numGroups}</td>
                       <td>{deniedAllowed}</td>
                       <td>{formatEndDate(endRaw)}</td>
-                      <td>{searchVisibility}</td>
                       <td>
                         <Link to={`/surveys/${id}/answers`}>{t("Avaa")}</Link>
                       </td>
