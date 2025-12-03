@@ -164,6 +164,14 @@ const GroupList = ({
                       </p>
                     )}
 
+                    {item.participation_limit !== undefined &&
+                      item.participation_limit > 0 && (
+                        <p className="group-participation">
+                          {t("Osallistumiskertojen enimmäismäärä")}:{" "}
+                          {item.participation_limit}
+                        </p>
+                      )}
+
                     {expandedIds.has(String(item.id)) && (
                       <div className="group-expanded">
                         {choice &&
