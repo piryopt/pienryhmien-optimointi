@@ -86,8 +86,8 @@ const FrontPage = () => {
                 key={survey.id}
                 path={
                   survey.is_multistage
-                    ? `surveys/multistage/${survey.id}`
-                    : `surveys/${survey.id}`
+                    ? `surveys/multistage/${survey.id}/answers`
+                    : `surveys/${survey.id}/answers`
                 }
                 imgSrc={`${imagesBaseUrl}/assignment_white_36dp.svg`}
                 mainText={survey.surveyname}
