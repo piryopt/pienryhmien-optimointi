@@ -26,6 +26,12 @@ const SurveyAnswersPage = () => {
     mountedRef.current = true;
     const getSurveyAnswersData = async () => {
       try {
+        const isMsRes = await surveyService.isMultistage(id);
+        if (isMsRes?.multistage) {
+          navigate(`/surveys/multistage/${id}/answers`, {
+            replace: true
+          });
+        }
         const responseData = await surveyService.getSurveyAnswersData(id);
         if (responseData.answersSaved) {
           setAnswersSaved(true);
