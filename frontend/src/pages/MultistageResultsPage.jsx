@@ -362,6 +362,8 @@ const MultistageSurveyResultsPage = () => {
             if (choiceIndex === null || choiceIndex === undefined)
               choiceIndex = "";
 
+            const isAbsent = rawGroupName === "Absent";
+
             const choiceKey = res?.[2]?.[0] ?? choiceIndex;
             const canonical = findAdditionalKey(choiceKey);
             let rawForChoice = canonical
@@ -393,13 +395,20 @@ const MultistageSurveyResultsPage = () => {
             const normalized = normalizeChoiceAdditional(rawForChoice);
 
             const additional = {};
-            infoKeys.forEach((ik) => {
-              let v = normalized?.[ik];
-              if (v === undefined || v === null || v === "") {
-                v = infoDefaults[ik] ?? "";
-              }
-              additional[ik] = v;
-            });
+            if (isAbsent) {
+              infoKeys.forEach((ik) => {
+                additional[ik] = "-";
+              });
+              choiceIndex = "-";
+            } else {
+              infoKeys.forEach((ik) => {
+                let v = normalized?.[ik];
+                if (v === undefined || v === null || v === "") {
+                  v = infoDefaults[ik] ?? "";
+                }
+                additional[ik] = v;
+              });
+            }
 
             groupData.push({
               [t("Nimi")]: name,
