@@ -196,6 +196,13 @@ li {
   margin-right: 14px;
 }
 
+/* participation limit */
+.group-participation {
+  font-size: 15px;
+  color: orangered;
+  margin: 0;
+}
+
 /* meta text */
 .group-slots,
 .group-minsize {

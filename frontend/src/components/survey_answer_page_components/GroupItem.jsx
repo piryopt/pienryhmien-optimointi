@@ -32,6 +32,13 @@ const GroupItem = ({ item, choice, expanded, onToggle, index, id }) => {
           {t("Ryhmän minimikoko")}: {item.min_size}
         </p>
       )}
+      {item.participation_limit !== undefined &&
+        item.participation_limit > 0 && (
+          <p className="group-participation">
+            {t("Osallistumiskertojen enimmäismäärä")}:{" "}
+            {item.participation_limit}
+          </p>
+        )}
       {expanded && (
         <div className="group-expanded">
           {choice && Array.isArray(choice.infos) && choice.infos.length > 0 ? (
