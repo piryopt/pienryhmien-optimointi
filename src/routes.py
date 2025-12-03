@@ -129,6 +129,13 @@ def serve_images(filename):
     if file_path.exists() and file_path.is_file():
         return send_from_directory(str(images_dir), filename)
 
+@bp.route("/favicon.ico")
+def favicon():
+    images_dir = Path(__file__).parent / "static" / "images"
+    favicon_path = images_dir / "favicon.ico"
+
+    if favicon_path.exists():
+        return send_from_directory(images_dir, "favicon.ico")
 
 @bp.route("/api/frontpage", methods=["GET"])
 @ad_login
