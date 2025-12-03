@@ -22,7 +22,7 @@ export function parseCSV(text) {
         } else {
           inQuotes = !inQuotes;
         }
-      } else if (ch === "," && !inQuotes) {
+      } else if ((ch === "," || ch === ";") && !inQuotes) {
         row.push(cur);
         cur = "";
       } else {

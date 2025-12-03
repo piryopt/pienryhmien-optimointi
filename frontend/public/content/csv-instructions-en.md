@@ -2,7 +2,7 @@
 
 It is possible to import survey choices from a CSV file, as long as the file follows the following set of rules. CSV stands for "Comma-Separated Values". In short, a CSV-file stores tabular information, with values seperated by some character (typically a comma is used).
 
-In this case, the seperator in the CSV-file doest not matter (it can be , or ; etc.). The file must at minimun contain name, capacity and minimum group size for each choice. The first row of the file must be a header row.</br>
+In this case, the seperator in the CSV-file must be either comma or a semicolon ( , or ; ). The file must at minimun contain name, capacity and minimum group size for each choice. The first row of the file must be a header row.</br>
 
 The image below shows the format of an example file:</br>
 <img src="/static/images/csv.png" alt="Example CSV-file" class="md-image-small">

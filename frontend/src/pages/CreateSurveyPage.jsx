@@ -194,7 +194,7 @@ const CreateSurveyPage = () => {
     async (file) => {
       try {
         const parsed = await parseCsvFile(file); // returns array-of-arrays
-        if (!parsed || parsed.length < 2) return;
+        if (!parsed || parsed.length < 2) throw new Error("failed parsing");
         const headers = parsed[0].map((h) => (h ?? "").toString().trim());
         const dataRows = parsed.slice(1);
         const existingTable = { columns, rows, nextRowId: nextRowId.current };
@@ -205,6 +205,12 @@ const CreateSurveyPage = () => {
         nextRowId.current = merged.nextRowId;
       } catch (err) {
         console.error("CSV import failed", err);
+        showNotification(
+          t(
+            "CSV tiedoston tuonti epäonnistui. Tarkista, että CSV-tiedosto on CSV-ohjeen mukainen"
+          ),
+          "error"
+        );
       }
     },
     [columns, rows]

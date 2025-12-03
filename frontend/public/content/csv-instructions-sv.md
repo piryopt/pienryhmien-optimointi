@@ -2,7 +2,7 @@
 
 Det är möjligt att importera undersökningsalternativ från en csv-fil, så länge filen följer följande regler.</br>
 
-De enda obligatoriska fälten är facilitetens namn, kapacitet och minsta gruppsstorlek. Avgränsaren i .csv-filen spelar ingen roll (det kan vara ,, ; eller "," osv.), eftersom Separator automatiskt kommer att ändra dem till ;. </br></br>
+De enda obligatoriska fälten är facilitetens namn, kapacitet och minsta gruppsstorlek. I det här fallet måste avgränsaren i .csv-filen vara en punkt eller semikolon ( , eller ; ). </br></br>
 
 Bilden nedan visar formatet på en exempelfil:</br>
 <img src="/static/images/csv.png" alt="Exempel CSV-fil" class="md-image-small">
