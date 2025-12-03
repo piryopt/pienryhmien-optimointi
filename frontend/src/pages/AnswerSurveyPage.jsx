@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext.jsx";
 import surveyService from "../services/surveys.js";
 import Header from "../components/survey_answer_page_components/Header.jsx";
@@ -31,11 +31,18 @@ const AnswerSurveyPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [choices, setChoices] = useState("");
   const mountedRef = useRef(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     mountedRef.current = true;
     (async () => {
       try {
+        const isMultistage = await surveyService.isMultistage(surveyId);
+        if (isMultistage) {
+          navigate(`/surveys/multistage/${surveyId}`, {
+            replace: true
+          });
+        }
         const data = await surveyService.getSurvey(surveyId);
         if (!mountedRef.current) return;
 

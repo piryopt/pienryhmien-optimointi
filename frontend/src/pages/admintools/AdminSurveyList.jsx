@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format, parseISO, isValid, parse } from "date-fns";
 import adminService from "../../services/admin";
+import surveyService from "../../services/surveys";
 import { useNotification } from "../../context/NotificationContext";
 
 const AdminSurveyList = () => {
@@ -26,7 +27,31 @@ const AdminSurveyList = () => {
           navigate("/");
           return;
         }
-        if (mounted) setSurveys(res.data || []);
+
+        const raw = res.data || [];
+        const enhanced = await Promise.all(
+          raw.map(async (s, idx) => {
+            const id = s[0] ?? `row-${idx}`;
+            let multistage = false;
+            try {
+              multistage = await surveyService.isMultistage(id);
+            } catch (e) {
+              console.error("isMultistage check failed for", id, e);
+            }
+            return {
+              raw: s,
+              id,
+              name: s[1] ?? "-",
+              minChoices: s[2] ?? "-",
+              endRaw: s[3] ?? null,
+              deniedAllowed: s[4] ?? "-",
+              numGroups: s[6] ?? "-",
+              multistage
+            };
+          })
+        );
+
+        if (mounted) setSurveys(enhanced);
       } catch (err) {
         console.error("Failed to load admin surveys:", err);
         showNotification(t("Kyselyjen lataus epäonnistui"), "error");
@@ -38,7 +63,7 @@ const AdminSurveyList = () => {
     return () => {
       mounted = false;
     };
-  }, [showNotification, t]);
+  }, [showNotification, t, navigate]);
 
   const formatEndDate = (raw) => {
     if (raw === null || raw == undefined || raw === "") return "-";
@@ -118,25 +143,25 @@ const AdminSurveyList = () => {
                 </tr>
               </thead>
               <tbody>
-                {surveys.map((s, idx) => {
-                  const id = s[0] ?? `row-${idx}`;
-                  const name = s[1] ?? "-";
-                  const minChoices = s[2] ?? "-";
-                  const endRaw = s[3] ?? null;
-                  const deniedAllowed = s[4] ?? "-";
-                  const searchVisibility = s[5] ? t("Kyllä") : t("Ei");
-                  const numGroups = s[6] ?? "-";
+                {surveys.map((s) => {
                   return (
-                    <tr key={id}>
-                      <td>{id}</td>
-                      <td>{name}</td>
-                      <td>{minChoices}</td>
-                      <td>{numGroups}</td>
-                      <td>{deniedAllowed}</td>
-                      <td>{formatEndDate(endRaw)}</td>
-                      <td>{searchVisibility}</td>
+                    <tr key={s.id}>
+                      <td>{s.id}</td>
+                      <td>{s.name}</td>
+                      <td>{s.minChoices}</td>
+                      <td>{s.numGroups}</td>
+                      <td>{s.deniedAllowed}</td>
+                      <td>{formatEndDate(s.endRaw)}</td>
                       <td>
-                        <Link to={`/surveys/${id}/answers`}>{t("Avaa")}</Link>
+                        <Link
+                          to={
+                            s.multistage
+                              ? `/surveys/multistage/${s.id}/answers`
+                              : `/surveys/${s.id}/answers`
+                          }
+                        >
+                          {t("Avaa")}
+                        </Link>
                       </td>
                     </tr>
                   );

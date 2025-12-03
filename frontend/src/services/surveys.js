@@ -443,7 +443,22 @@ const isMultistage = async (surveyId) => {
         withCredentials: true
       }
     );
-    return response.data;
+    const data = response.data;
+
+    if (typeof data === "boolean") return data;
+    if (typeof data === "number") return data !== 0;
+    if (typeof data === "string") {
+      const v = data.trim().toLowerCase();
+      if (v === "1" || v === "true") return true;
+      if (v === "0" || v === "false") return false;
+    }
+    if (data && typeof data === "object") {
+      if ("is_multistage" in data) return !!data.is_multistage;
+      if ("multistage" in data) return !!data.multistage;
+      if ("status" in data) return data.status === "1" || data.status === 1;
+    }
+
+    return false;
   } catch (error) {
     throw error;
   }

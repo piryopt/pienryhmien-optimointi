@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import surveyService from "../services/surveys";
 import SurveyAnswersTable from "../components/survey_answers_page_components/SurveyAnswersTable";
@@ -26,6 +26,12 @@ const SurveyAnswersPage = () => {
     mountedRef.current = true;
     const getSurveyAnswersData = async () => {
       try {
+        const isMultistage = await surveyService.isMultistage(id);
+        if (isMultistage) {
+          navigate(`/surveys/multistage/${id}/answers`, {
+            replace: true
+          });
+        }
         const responseData = await surveyService.getSurveyAnswersData(id);
         if (responseData.answersSaved) {
           setAnswersSaved(true);
