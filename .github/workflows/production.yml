@@ -5,7 +5,6 @@ on:
     types: [published]
 
 jobs:
-
   build-and-push:
     runs-on: ubuntu-latest
 
@@ -19,7 +18,8 @@ jobs:
           image: pienryhmien-optimointi
           tags: production ${{ github.sha }}
           containerfiles: |
-            ./Dockerfile
+            ./Dockerfile.prod
+          build-args: VITE_STAGE=production
 
       - name: Push to quay.io
         uses: redhat-actions/push-to-registry@v2
@@ -29,3 +29,4 @@ jobs:
           registry: quay.io/pienryhmien-optimointi
           username: pienryhmien-optimointi+robotti
           password: ${{ secrets.QUAY_TOKEN }}
+
