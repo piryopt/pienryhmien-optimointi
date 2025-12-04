@@ -409,13 +409,11 @@ const MultiStageAnswerPage = () => {
                             />
                           </>
                         )}
-                        <div className="submit-row mt-4">
-                          <ButtonRow
-                            handleSubmit={handleSubmit}
-                            handleDelete={handleDelete}
-                            existing={existing}
-                          />
-                        </div>
+                        <ButtonRow
+                          handleSubmit={handleSubmit}
+                          handleDelete={handleDelete}
+                          existing={existing}
+                        />
                       </div>
                       <div className="right-column">
                         <GroupSearch
@@ -443,13 +441,11 @@ const MultiStageAnswerPage = () => {
                       }}
                     >
                       {t("Olet ilmoittautunut poissaolevaksi.")}
-                      <div className="submit-row mt-4">
-                        <ButtonRow
-                          handleSubmit={handleSubmit}
-                          handleDelete={handleDelete}
-                          existing={existing}
-                        />
-                      </div>
+                      <ButtonRow
+                        handleSubmit={handleSubmit}
+                        handleDelete={handleDelete}
+                        existing={existing}
+                      />
                     </div>
                   )}
                 </div>
