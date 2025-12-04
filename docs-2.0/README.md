@@ -6,7 +6,6 @@
 **NOTE! This is version 2.0! Old documentation can be found in [here](https://github.com/piryopt/pienryhmien-optimointi/tree/main/documentation)**
 
 https://jakaja.it.helsinki.fi/
-https://jakaja-test.it.helsinki.fi/
 
 Jakaja is a group assignment optimization application originally developed in the Software Engineering Lab course at the University of Helsinki.  
 The system helps assign students into groups based on their preferences, using the **Hungarian Algorithm**. For simplicity's sake, survey creators will be referred to as teachers and responders as students. Teachers can create surveys, to which students submit their preferences for the selection. After the teacher closes the survey, the system divides students into groups based on their responses. The results can be exported to Excel.
@@ -15,21 +14,35 @@ The goal of **Jakaja 2.0** is to extend and refine the original system to better
 
 ## Differences from Jakaja 1.0
 
-### Improvements
+## Improvements
 
-- **Group size constraints:**
+### Group Size Constraints
 
-  - Teachers can define **minimum and maximum group sizes**
-  - Group size rules are **stronger than student preferences** (Mandatory groups must still reach a minimum size)
+- Teachers can define **minimum and maximum group sizes**.
+- Groups can be marked as **mandatory**.
+- With mandatory groups, group sizes are **strictly enforced**, taking priority over student preferences. (Mandatory groups must still meet the minimum size.)
 
-- **Multi-dimensional preferences:**
+### Multi-Stage Surveys
 
-  - Instead of only a single theme, students can express preferences along **two axes** (_topic_ and _schedule_, or _placement_ and _partner experience_)
-  - The assignment algorithm considers both dimensions in optimization
+- Introduces a new survey type that consists of **multiple stages** (e.g., weeks or time periods).
+- During survey creation, **group options are defined separately for each stage**.
+- During the answering phase, users **rank group options for each stage**.
+  - Groups can have **a shared participation limit across all stages**.
+  - Users can mark themselves as **absent** for specific stages.
+- After the answering phase, group assignment is performed using the **Hungarian algorithm**, taking absences and participation limits into account.
+- Results can be exported as a **single Excel file**, with a **separate sheet for each stage**.
+- Multi-stage surveys support all regular survey features such as **copying** and **editing**.
 
-- **Priority groups:**
-  - Teachers can assign higher or lower **priority weights** to certain groups
-  - Algorithm adapts to balance preferences with these weights
+### User Interface & Usability
+
+- The whole interface has been redesigned to be **faster, cleaner, and easier to use**.
+- Navigation and layouts are more intuitive, making it simpler to find what you need.
+- Includes many **small improvements and fixes** to make the overall experience smoother and more reliable.
+
+### Trash Bin
+
+- Deleted surveys remain in the trash bin for **one week** before being automatically removed.
+- Surveys in the trash bin include options to **restore** or **permanently delete** them.
 
 ### Demos
 
