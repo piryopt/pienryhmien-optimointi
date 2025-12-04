@@ -441,11 +441,13 @@ const MultiStageAnswerPage = () => {
                       }}
                     >
                       {t("Olet ilmoittautunut poissaolevaksi.")}
-                      <ButtonRow
-                        handleSubmit={handleSubmit}
-                        handleDelete={handleDelete}
-                        existing={existing}
-                      />
+                      <div className="submit-row mt-4">
+                        <ButtonRow
+                          handleSubmit={handleSubmit}
+                          handleDelete={handleDelete}
+                          existing={existing}
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
