@@ -2,7 +2,9 @@
 
 Kyselyn vaihtoehdot on mahdollista tuoda CSV-tiedostosta näitä ohjeita noudattamalla. CSV on lyhenne sanoista "Comma-Separated Values". CSV-tiedostossa tieto on siis tallennettu siten, että sarakkeet on eroteltu jollain merkillä (tyypillisesti pilkulla).
 
-Jakajassa CSV-tiedoston erottajan tulee olla pilkku tai puolipiste ( , tai ; ). Pakolliset tiedot jokaiselle kohtelle on nimi, paikkamäärä ja ryhmien minimikoko. Tiedoston ylimmän rivin tulee olla otsikkorivi eli vähintään seuraavanlainen: </br>
+Jakajassa CSV-tiedoston erottajan tulee olla pilkku tai puolipiste ( , tai ; ). Jos CSV-tiedostosi tietokentissä on pilkkuja tai puolipisteitä, laita ainakin nämä tiedot lainausmerkkien sisälle. Muissa tapauksissa lainausmerkkien käyttö ei ole pakollista.
+
+Pakolliset tiedot jokaiselle kohtelle on nimi, paikkamäärä ja ryhmien minimikoko. Tiedoston ylimmän rivin tulee olla otsikkorivi eli vähintään seuraavanlainen: </br>
 "Päiväkodin nimi", "Paikkamäärä", "Minimikoko"</br></br>
 
 Alla oleva kuva näyttää esimerkkitiedoston muodon ja siitä syntyvän kyselyn:</br>
