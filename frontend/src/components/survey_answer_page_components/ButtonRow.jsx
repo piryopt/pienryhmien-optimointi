@@ -12,7 +12,7 @@ const ButtonRow = ({ handleSubmit, handleDelete, existing }) => {
         data-testid="submit-button"
         onClick={handleSubmit}
       >
-        {t("Lähetä valinnat")}
+        {t(`${existing ? "Päivitä" : "Lähetä"} valinnat`)}
       </Button>
       {existing && (
         <Button
