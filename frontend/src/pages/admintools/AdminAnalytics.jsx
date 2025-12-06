@@ -16,6 +16,7 @@ const AdminAnalytics = () => {
     const load = async () => {
       setLoading(true);
       try {
+        // No data means a redirect to the front page.
         const res = await adminService.fetchAnalytics();
         if (!res.success) {
           showNotification(
@@ -28,6 +29,8 @@ const AdminAnalytics = () => {
         if (!mounted) return;
         const payload = res.data;
         let named = null;
+        /* Fallbacks for different payload types, possibly overly safe.
+        Checks Array, object, else; returns nothing after repeated failures. */
         if (Array.isArray(payload)) {
           named = {
             total_surveys: payload[0] ?? 0,

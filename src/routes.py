@@ -1226,7 +1226,10 @@ API ADMINTOOLS
 
 @bp.route("/api/admintools/feedback")
 def api_admin_feedback_list():
-    # Only admins permitted!
+    """
+    Returns a list of unresolved feedback.
+    Checks user's admin status before fetching data.
+    """
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
@@ -1240,7 +1243,10 @@ def api_admin_feedback_list():
 
 @bp.route("/api/admintools/feedback/closed")
 def api_admin_feedback_closed_list():
-    # Only admins permitted!
+    """
+    Returns a list of resolved / closed feedback.
+    Checks user's admin status before fetching data.
+    """
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
@@ -1254,6 +1260,10 @@ def api_admin_feedback_closed_list():
 
 @bp.route("/api/admintools/feedback/<int:feedback_id>")
 def api_admin_feedback_get(feedback_id):
+    """
+    Shows the contents of the selected feedback.
+    Checks user's admin status before fetching data.
+    """
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
@@ -1268,7 +1278,10 @@ def api_admin_feedback_get(feedback_id):
 
 @bp.route("/api/admintools/feedback/<int:feedback_id>/close", methods=["POST"])
 def api_admin_feedback_close(feedback_id):
-    # Only admins permitted!
+    """
+    Resolves feedback and sets it to closed. 
+    Checks user's admin status before modifying data.
+    """
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
@@ -1282,6 +1295,16 @@ def api_admin_feedback_close(feedback_id):
 
 @bp.route("/api/admintools/analytics", methods=["GET"])
 def api_admin_analytics():
+    """
+    Displays various statistics of the site:
+        - total_surveys (number of all surveys created)
+        - active_surveys (number of surveys that are still open)
+        - total_students (number of users marked as students)
+        - total_responses (number of times surveys have been answered)
+        - total_teachers (number of users marked as teachers)
+
+    Checks user's admin status before fetching data.
+    """
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
@@ -1303,6 +1326,10 @@ def api_admin_analytics():
 
 @bp.route("/api/admintools/surveys", methods=["GET"])
 def api_admin_all_active_surveys():
+    """
+    Returns a list of all active surveys.
+    Checks user's admin status before fetching data.
+    """
     user_id = session.get("user_id", 0)
     if not user_service.check_if_admin(user_id):
         return jsonify({"success": False, "error": "unauthorized"}), 403
