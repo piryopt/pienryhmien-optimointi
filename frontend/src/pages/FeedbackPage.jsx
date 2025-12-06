@@ -4,6 +4,7 @@ import { useNotification } from "../context/NotificationContext";
 import feedbackService from "../services/feedback";
 
 const FeedbackPage = () => {
+  // Page for users to submit feedback using a simple form.
   const { t } = useTranslation();
   const { showNotification } = useNotification();
 

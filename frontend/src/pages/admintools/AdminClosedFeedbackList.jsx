@@ -17,6 +17,7 @@ const AdminClosedFeedbackList = () => {
     const load = async () => {
       setLoading(true);
       try {
+        // No data means a redirect to the front page.
         const res = await feedbackService.fetchClosedFeedbacks();
         if (!res.success) {
           showNotification(

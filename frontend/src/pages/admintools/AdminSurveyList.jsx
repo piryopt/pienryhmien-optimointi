@@ -18,6 +18,7 @@ const AdminSurveyList = () => {
     const load = async () => {
       setLoading(true);
       try {
+        // No data means a redirect to the front page.
         const res = await adminService.fetchAdminSurveys();
         if (!res.success) {
           showNotification(
@@ -32,6 +33,7 @@ const AdminSurveyList = () => {
         const enhanced = await Promise.all(
           raw.map(async (s, idx) => {
             const id = s[0] ?? `row-${idx}`;
+            // Check whether survey is multistage or not, for later use.
             let multistage = false;
             try {
               multistage = await surveyService.isMultistage(id);
@@ -153,6 +155,7 @@ const AdminSurveyList = () => {
                       <td>{s.deniedAllowed}</td>
                       <td>{formatEndDate(s.endRaw)}</td>
                       <td>
+                        {/* If survey is multistage, the link is adjusted accordinly. */}
                         <Link
                           to={
                             s.multistage
