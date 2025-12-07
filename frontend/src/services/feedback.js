@@ -3,6 +3,7 @@ import { baseUrl } from "../utils/constants";
 import csrfService from "./csrf";
 
 const validate = ({ title, content }) => {
+  // Validation method for when creating new feedback.
   const t = (title || "").trim();
   const c = (content || "").trim();
 
@@ -39,6 +40,7 @@ const validate = ({ title, content }) => {
 };
 
 const createFeedback = async ({ title, type = "palaute", content }) => {
+  // Sends a POST request with valid feedback
   const v = validate({ title, content });
   if (!v.ok) return { success: false, ...v };
 
@@ -85,6 +87,8 @@ const createFeedback = async ({ title, type = "palaute", content }) => {
 };
 
 const fetchOpenFeedbacks = async () => {
+  /* Method for fetching all unresolved / open feedback.
+  Only admins permitted! */
   try {
     const response = await axios.get(`${baseUrl}/admintools/feedback`, {
       withCredentials: true
@@ -100,6 +104,8 @@ const fetchOpenFeedbacks = async () => {
 };
 
 const fetchClosedFeedbacks = async () => {
+  /* Method for fetching all resolved / closed feedback.
+  Only admins permitted! */
   try {
     const response = await axios.get(`${baseUrl}/admintools/feedback/closed`, {
       withCredentials: true
@@ -115,6 +121,8 @@ const fetchClosedFeedbacks = async () => {
 };
 
 const fetchFeedback = async (id) => {
+  /* Fetch further details about a specific piece of feedback.
+  Only admins permitted! */
   try {
     const response = await axios.get(`${baseUrl}/admintools/feedback/${id}`, {
       withCredentials: true
@@ -132,6 +140,8 @@ const fetchFeedback = async (id) => {
 };
 
 const closeFeedback = async (id) => {
+  /* Sends a POST request to close a given feedback. 
+  Only admins permitted! */
   try {
     const csrfToken = await csrfService.fetchCsrfToken();
     const response = await axios.post(

@@ -18,6 +18,7 @@ const AdminFeedbackDetail = () => {
     const load = async () => {
       setLoading(true);
       try {
+        // No data means a redirect to the front page.
         const res = await feedbackService.fetchFeedback(id);
         if (!res.success) {
           showNotification(res.message || t("Lataus epäonnistui"), "error");
@@ -39,6 +40,7 @@ const AdminFeedbackDetail = () => {
   }, [id, showNotification, t]);
 
   const onClose = async () => {
+    // Close feedback when the issue is resolved.
     if (!window.confirm(t("Haluatko varmasti sulkea palautteen?"))) return;
     setClosing(true);
     const res = await feedbackService.closeFeedback(id);
