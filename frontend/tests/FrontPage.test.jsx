@@ -30,10 +30,6 @@ describe("<FrontPage />", () => {
     );
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   test("render front page buttons", async () => {
     await waitFor(() => {
       screen.getByText("Luo uusi kysely");

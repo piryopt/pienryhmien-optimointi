@@ -53,8 +53,18 @@ vi.mock("react-i18next", () => ({
 }));
 
 // Mock the CSRF service
-vi.mock("../src/services/csrf", () => ({
+vi.mock("/src/services/csrf", () => ({
   default: {
     fetchCsrfToken: vi.fn().mockResolvedValue("test-csrf-token")
   }
+}));
+
+// Mock the notification context
+vi.mock("/src/context/NotificationContext", () => ({
+  useNotification: vi.fn(() => ({
+    notification: null,
+    showNotification: vi.fn(),
+    hideNotification: vi.fn(),
+    setNotification: vi.fn()
+  }))
 }));
