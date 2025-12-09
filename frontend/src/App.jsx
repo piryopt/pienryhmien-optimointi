@@ -147,6 +147,7 @@ const App = () => {
           />
           <Route
             path="/admintools/feedback"
+            /* Only admins permitted! */
             element={
               <RequireAuth>
                 <RequireAdmin>
@@ -157,6 +158,7 @@ const App = () => {
           />
           <Route
             path="/admintools/feedback/closed"
+            /* Only admins permitted! */
             element={
               <RequireAuth>
                 <RequireAdmin>
@@ -167,6 +169,7 @@ const App = () => {
           />
           <Route
             path="/admintools/feedback/:id"
+            /* Only admins permitted! */
             element={
               <RequireAuth>
                 <RequireAdmin>
@@ -185,6 +188,7 @@ const App = () => {
           />
           <Route
             path="/admintools/analytics"
+            /* Only admins permitted! */
             element={
               <RequireAuth>
                 <RequireAdmin>
@@ -195,6 +199,7 @@ const App = () => {
           />
           <Route
             path="/admintools/surveys"
+            /* Only admins permitted! */
             element={
               <RequireAuth>
                 <RequireAdmin>

@@ -1,6 +1,5 @@
 import { useFormContext, Controller } from "react-hook-form";
 import DatePicker from "react-datepicker";
-import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import "react-datepicker/dist/react-datepicker.css";
 import { useEffect } from "react";

@@ -5,8 +5,6 @@ import {
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { SurveyDialogProvider } from "../context/SurveyDialogContext";
-import configService from "../services/config";
-import Notification from "./Notification";
 
 const Layout = ({ children }) => {
   return (
