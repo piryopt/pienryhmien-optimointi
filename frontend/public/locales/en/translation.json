@@ -15,6 +15,9 @@
   "Avoimet palautteet": "Open feedback",
   "Avoin": "Open",
   "Bugi": "Bug",
+  "CSV tiedoston tuonti epäonnistui": {
+    " Tarkista, että CSV-tiedosto on CSV-ohjeen mukainen": "CSV import failed: Check that the CSV file complies with the CSV guidelines"
+  },
   "CSV-ohje": "CSV guide",
   "Ei": "No",
   "Ei järjestetty": "Not ranked",
@@ -76,14 +79,20 @@
     }
   },
   "Jakaja": "Jakaja",
+  "Jakajaan on lisätty myös roskakori, johon kyselyt päätyvät poistaessasi niitä": "A trashbin has also been added to Jakaja where surveys end up when deleting them",
+  "Jakajaan tehdyt muutokset versiossa": "Changes made to Jakaja in version",
+  "Jakajan uusimmassa versiossa käyttäjä voi kyselyn luomisvaiheessa määrittää ryhmiä pakollisiksi": "In the newest version of Jakaja the user can specify groups as mandatory when creating a survey",
   "Jakajassa luodut kyselyt": "Surveys created in Jakaja",
+  "Jakajassa on nyt mahdollista myös luoda monivaiheinen kysely, jossa käyttäjä määrittää yksittäisten vaiheiden ryhmävalinnat": "In Jakaja it is now also possible to create multiphase surveys in which the user specifies group selections per phase",
   "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen": "Rank all options in order of preference in the",
   "Järjestä vähintään": "Rank at least",
-  "Järjestä vaihtoehdot mieluisuusjärjestykseen.": "Arrange options in order of preference.",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen": "Rank options in order of preference in the",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
     "": "Arrange options in order of preference or mark yourself as absent"
   },
+  "joihin opiskelijat pyritään sijoittamaan ensisijaisesti valinnoista riippumatta": "where students are primarily placed regardless of their choices",
+  "jolloin ryhmäjako suoritetaan vaihekohtaisesti huomioiden myös mahdolliset pakolliset ryhmät kussakin vaiheessa": "in which case the group division is performed on a phase-by-phase basis, also taking into account any mandatory groups in each phase",
+  "jolloin vastaajat voivat merkitä itsensä poissaolevaksi vastaamislomakkeessa valitsemastaan vaiheesta": "allowing respondents to mark themselves as absent from the phase they selected on the response form",
   "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
     " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
       " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
@@ -184,7 +193,6 @@
   },
   "Ladataan…": "Loading...",
   "Lähetä valinnat": "Submit selections",
-  "Päivitä valinnat": "Update selections",
   "Lähetetään": {
     "": {
       "": {
@@ -215,6 +223,8 @@
   "Min valinnat": "Min choices",
   "Minimikoon on oltava vähintään 0": "Minimum size has to be at least 0",
   "Monesko valinta": "Ordinal choice",
+  "Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös rajoittaa tietyn ryhmän vastaajien osallistumiskertojen määrää, mikä huomioidaan vastaavasti ryhmäjaossa kyseisen rajoitetun ryhmän kohdalla": "When creating a multi-step survey, the user can also limit the number of times a certain group of respondents can participate, which will be taken into account in the group division for that limited group",
+  "Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös valita sallitaanko vastaajien poissaolo": "During the creation phase of a multiphase survey, the user can also choose whether to allow respondents to be absent",
   "Monivaiheisen kyselyn tulokset": "Sorting results",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Edit the survey or add an administrator",
   "Muokkaa ryhmäkokoja": "Edit group sizes",
@@ -236,6 +246,7 @@
   "Otsikko": "Title",
   "Päättyy": "Ends",
   "Päivämäärä on virheellinen": "Invalid date",
+  "Päivitä valinnat": "Update selections",
   "Pakollinen": "Mandatory",
   "pakolliseen": "mandatory",
   "Pakolliseksi ": "Mandatory ",
@@ -281,6 +292,7 @@
   "Rekisteröityneet opettajat": "Registered teachers",
   "Rekisteröityneet opiskelijat": "Registered students",
   "Roskakori": "Trash bin",
+  "Roskakorissa olevan kyselyn voi tarvittaessa palauttaa tai kopioida": "A survey in the trashbin can be copied or returned if needed",
   "Ryhmä": "Group",
   "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan": "Group \"{{name}}\" must contain at least 1 spot",
   "Ryhmäjako tallennettu": "Group allocation saved",
@@ -347,6 +359,7 @@
   "Tallenna kaikkien vaiheiden tulokset": "Save results",
   "Tallenna muutokset": "Save changes",
   "Tallenna tulokset": "Save results",
+  "Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa": "In this case the user is not taken into account in the group division",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
     "": "This survey is closed and no longer accepting responses."
   },
@@ -405,5 +418,6 @@
   "Voit muokata kyselyn kuvausta": "You can edit the survey description.",
   "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "You can only edit the name, time and the description of a survey",
   "Yhteys palvelimeen epäonnistui": "Connection to server failed",
-  "yli 5 merkkiä pitkiä": "Over 5 characters long"
+  "yli 5 merkkiä pitkiä": "Over 5 characters long",
+  "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": ""
 }

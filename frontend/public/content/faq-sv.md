@@ -1,6 +1,7 @@
 # FAQ
 
 ## Hur fungerar Jakaja?
+
 - Jakaja använder den så kallade **ungerska algoritmen**.
 - Användaren prioriterar de angivna grupperna baserat på deras preferenser.
 - Preferenser översätts till poäng så att användaren ger flest poäng till de grupper de har valt som första. Minsta antal poäng ges till det senaste valet eller något icke-markerat alternativ.
@@ -9,13 +10,17 @@
 - En mer detaljerad (engelsk) förklaring av algoritmen finns på [Jakajas GitHub-sida](https://github.com/piryopt/pienryhmien-optimointi/blob/main/documentation/hungarian.md)
 
 ## Hur fylls obligatoriska grupper?
+
 - Som standard tar Jakaja bort de grupper som inte uppnår minsta gruppstorlek. Enkätskaparen kan dock ange att en grupp är obligatorisk. I så fall fylls gruppen till minst sin minimistorlek, oavsett svaren.
-    - Det betyder att deltagare som inte har valt gruppen kan placeras där vid behov. Jakaja försöker dock alltid i första hand placera de deltagare som har visat störst intresse för gruppen.
+  - Det betyder att deltagare som inte har valt gruppen kan placeras där vid behov. Jakaja försöker dock alltid i första hand placera de deltagare som har visat störst intresse för gruppen.
 - En student som har **avvisat** en grupp kan i vissa fall ändå placeras i den.
-    - Detta sker endast om gruppen inte kan uppnå sin minimistorlek med deltagare som inte har avvisat den.
-    - I sådana fall är det enkätskaparens ansvar att granska deltagarnas motiveringar till avvisningen och avgöra om studenten kan placeras i gruppen.
+  - Detta sker endast om gruppen inte kan uppnå sin minimistorlek med deltagare som inte har avvisat den.
+  - I sådana fall är det enkätskaparens ansvar att granska deltagarnas motiveringar till avvisningen och avgöra om studenten kan placeras i gruppen.
 
 **OBS!** En obligatorisk grupp kan ändå tas bort från fördelningen om det finns så få deltagare att det inte går att fylla alla obligatoriska grupper till minimistorlek.
 
+## Vad som är nytt i Jakaja 2.0 kan du hitta [här](/jakaja2.0/changelog)
+
 ## Jag har frågor – Vem kan jag vända mig till?
+
 Jakaja har en feedbacksida där du kan ställa dina frågor.
