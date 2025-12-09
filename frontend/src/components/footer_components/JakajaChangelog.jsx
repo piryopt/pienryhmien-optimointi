@@ -6,14 +6,18 @@ const JakajaChangelog = () => {
 
   return (
     <div>
-      <h1>{t("Jakajaan 2.0 tehdyt muutokset:")}</h1>
+      <h1>{t("Jakajaan tehdyt muutokset versiossa")} 2.0:</h1>
       <br />
       <h4>
+        -{" "}
         {t(
-          `- Jakajan uusimmassa versiossa käyttäjä voi kyselyn luomisvaiheessa määrittää ryhmiä pakollisiksi,
-          joihin opiskelijat pyritään sijoittamaan ensisijaisesti valinnoista riippumatta.
-          `
+          "Jakajan uusimmassa versiossa käyttäjä voi kyselyn luomisvaiheessa määrittää ryhmiä pakollisiksi"
         )}
+        ,{" "}
+        {t(
+          "joihin opiskelijat pyritään sijoittamaan ensisijaisesti valinnoista riippumatta"
+        )}
+        .
       </h4>
       <img
         src={`${imagesBaseUrl}/jakaja2.0-pakollisetryhmät.png`}
@@ -30,9 +34,15 @@ const JakajaChangelog = () => {
       <br />
       <br />
       <h4>
-        {t(`- Jakajassa on nyt mahdollista myös luoda monivaiheinen kysely, jossa käyttäjä määrittää yksittäisten vaiheiden ryhmävalinnat,
-          jolloin ryhmäjako suoritetaan vaihekohtaisesti huomioiden myös mahdolliset pakolliset ryhmät kussakin vaiheessa.
-          `)}
+        -{" "}
+        {t(
+          "Jakajassa on nyt mahdollista myös luoda monivaiheinen kysely, jossa käyttäjä määrittää yksittäisten vaiheiden ryhmävalinnat"
+        )}
+        ,{" "}
+        {t(
+          "jolloin ryhmäjako suoritetaan vaihekohtaisesti huomioiden myös mahdolliset pakolliset ryhmät kussakin vaiheessa"
+        )}
+        .
       </h4>
       <img
         src={`${imagesBaseUrl}/jakaja2.0-monivaiheinen.png`}
@@ -48,10 +58,16 @@ const JakajaChangelog = () => {
       <br />
       <br />
       <h4>
-        {t(`- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös valita sallitaanko vastaajien poissaolo, jolloin
-              vastaajat voivat merkitä itsensä poissaolevaksi vastaamislomakkeessa valitsemastaan vaiheesta.
-              Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa.
-            `)}
+        -{" "}
+        {t(
+          "Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös valita sallitaanko vastaajien poissaolo"
+        )}
+        ,{" "}
+        {t(
+          "jolloin vastaajat voivat merkitä itsensä poissaolevaksi vastaamislomakkeessa valitsemastaan vaiheesta"
+        )}
+        .{" "}
+        {t("Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa")}.
       </h4>
       <img
         src={`${imagesBaseUrl}/jakaja2.0-poissaolot.png`}
@@ -66,9 +82,11 @@ const JakajaChangelog = () => {
       <br />
       <br />
       <h4>
-        {t(`- Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös rajoittaa tietyn ryhmän vastaajien osallistumiskertojen määrää, mikä
-            huomioidaan vastaavasti ryhmäjaossa kyseisen rajoitetun ryhmän kohdalla.
-          `)}
+        -{" "}
+        {t(
+          "Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös rajoittaa tietyn ryhmän vastaajien osallistumiskertojen määrää, mikä huomioidaan vastaavasti ryhmäjaossa kyseisen rajoitetun ryhmän kohdalla"
+        )}
+        .
       </h4>
       <img
         src={`${imagesBaseUrl}/jakaja2.0-osallistumiskerrat.png`}
@@ -84,10 +102,16 @@ const JakajaChangelog = () => {
       <br />
       <br />
       <h4>
-        {t(`- Jakajaan on lisätty myös roskakori, johon kyselyt päätyvät poistaessasi niitä.
-            Roskakorissa olevan kyselyn voi tarvittaessa palauttaa tai kopioida.
-            Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti.
-          `)}
+        -{" "}
+        {t(
+          "Jakajaan on lisätty myös roskakori, johon kyselyt päätyvät poistaessasi niitä"
+        )}
+        .{" "}
+        {t(
+          "Roskakorissa olevan kyselyn voi tarvittaessa palauttaa tai kopioida"
+        )}
+        .{" "}
+        {t("Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti")}
       </h4>
       <img
         src={`${imagesBaseUrl}/jakaja2.0-trashbin.png`}

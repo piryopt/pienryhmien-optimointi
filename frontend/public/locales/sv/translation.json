@@ -15,6 +15,9 @@
   "Avoimet palautteet": "Öppen feedback",
   "Avoin": "Öppen",
   "Bugi": "Bugg",
+  "CSV tiedoston tuonti epäonnistui": {
+    " Tarkista, että CSV-tiedosto on CSV-ohjeen mukainen": "Import av CSV-filen misslyckades: Kontrollera att CSV-filen följer CSV-anvisningen"
+  },
   "CSV-ohje": "CSV guide",
   "Ei": "Nej",
   "Ei järjestetty": "Inte organiserad",
@@ -76,14 +79,20 @@
     }
   },
   "Jakaja": "Jakaja",
+  "Jakajaan on lisätty myös roskakori, johon kyselyt päätyvät poistaessasi niitä": "I Jakaja har det också lagts till en papperskorg dit frågorna hamnar när du tar bort dem",
+  "Jakajaan tehdyt muutokset versiossa": "Ändringar som gjorts i Jakaja i versionen",
+  "Jakajan uusimmassa versiossa käyttäjä voi kyselyn luomisvaiheessa määrittää ryhmiä pakollisiksi": "I den senaste versionen av Jakaja kan användaren vid skapandet av en enkät ange grupper som obligatoriska",
   "Jakajassa luodut kyselyt": "Undersökningar som skapats i Jakaja",
+  "Jakajassa on nyt mahdollista myös luoda monivaiheinen kysely, jossa käyttäjä määrittää yksittäisten vaiheiden ryhmävalinnat": "I Jakaja är det nu också möjligt att skapa en flerstegsenkät där användaren anger gruppvalen för de enskilda stegen",
   "Järjestä kaikki vaihtoehdot mieluisuusjärjestykseen": "Ordna alla alternativ i preferensordning i den",
   "Järjestä vähintään": "Ordna minst",
-  "Järjestä vaihtoehdot mieluisuusjärjestykseen.": "Ordna alternativen i preferensordning.",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen": "Ordna alternativ i preferensordning i den",
   "Järjestä vaihtoehdot mieluisuusjärjestykseen tai merkitse itsesi poissaolevaksi": {
     "": "Ordna alternativen i preferensordning eller markera dig själv som frånvarande"
   },
+  "joihin opiskelijat pyritään sijoittamaan ensisijaisesti valinnoista riippumatta": "dit studenterna i första hand försöks placeras oberoende av valen",
+  "jolloin ryhmäjako suoritetaan vaihekohtaisesti huomioiden myös mahdolliset pakolliset ryhmät kussakin vaiheessa": "varvid gruppindelningen genomförs stegvis med beaktande av eventuella obligatoriska grupper i varje steg",
+  "jolloin vastaajat voivat merkitä itsensä poissaolevaksi vastaamislomakkeessa valitsemastaan vaiheesta": "varvid respondenterna kan markera sig som frånvarande från det steg de valt i svarsformuläret",
   "Jos haluat rajoittaa kuinka monta kertaa vastaaja voi osallistua            johonkin ryhmään, vastaa tähän kyllä": {
     " Enimmäiskertojen määrän voit             myöhemmin asettaa jokaiselle ryhmälle vaiheen taulukossa": {
       " Jotta tämä             toimisi, tulee ryhmällä olla sama nimi kaikissa vaiheissa": {
@@ -184,7 +193,6 @@
   },
   "Ladataan…": "Laddar...",
   "Lähetä valinnat": "Skicka val",
-  "Päivitä valinnat": "Uppdatera val",
   "Lähetetään": {
     "": {
       "": {
@@ -215,6 +223,8 @@
   "Min valinnat": "Min gruppval",
   "Minimikoon on oltava vähintään 0": "Minimistorleken måste vara minst 0",
   "Monesko valinta": "Ordning på val",
+  "Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös rajoittaa tietyn ryhmän vastaajien osallistumiskertojen määrää, mikä huomioidaan vastaavasti ryhmäjaossa kyseisen rajoitetun ryhmän kohdalla": "Vid skapandet av en flerstegsenkät kan användaren också begränsa antalet deltagartillfällen för en viss grupp, vilket beaktas på motsvarande sätt vid gruppindelningen för den begränsade gruppen",
+  "Monivaiheisen kyselyn luomisvaiheessa käyttäjä voi myös valita sallitaanko vastaajien poissaolo": "Vid skapandet av en flerstegsenkät kan användaren också välja om frånvaro för respondenter ska tillåtas",
   "Monivaiheisen kyselyn tulokset": "Sorteringsresultat",
   "Muokkaa kyselyä tai lisää siihen ylläpitäjä": "Redigera undersökningen eller lägg till en administratör",
   "Muokkaa ryhmäkokoja": "Redigera gruppstorlekar",
@@ -236,6 +246,7 @@
   "Otsikko": "Rubrik",
   "Päättyy": "Slutar",
   "Päivämäärä on virheellinen": "Datumet är felaktigt",
+  "Päivitä valinnat": "Uppdatera val",
   "Pakollinen": "Obligatorisk",
   "Pakolliseksi ": "Obligatoriska ",
   "Pakota minimikoko": "Kraft minsta gruppstorlek",
@@ -280,6 +291,7 @@
   "Rekisteröityneet opettajat": "Registrerade lärare",
   "Rekisteröityneet opiskelijat": "Registrerade studenter",
   "Roskakori": "Papperskorg",
+  "Roskakorissa olevan kyselyn voi tarvittaessa palauttaa tai kopioida": "En enkät i papperskorgen kan vid behov återställas eller kopieras",
   "Ryhmä": "Grupp",
   "Ryhmä \"{{name}}\" täytyy sisältää vähintään 1 paikan": "Gruppen \"{{name}}\" måste innehålla minst 1 plats.",
   "Ryhmäjako tallennettu": "Gruppdelning sparad",
@@ -344,6 +356,7 @@
   "Tallenna kaikkien vaiheiden tulokset": "Spara resultat",
   "Tallenna muutokset": "Spara ändringar",
   "Tallenna tulokset": "Spara resultat",
+  "Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa": "I så fall tas inte respondenten med i gruppindelningen för det aktuella steget",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
     "": "Den här undersökningen är stängd och kan inte längre besvaras."
   },
@@ -402,5 +415,6 @@
   "Voit muokata kyselyn kuvausta": "Du kan redigera undersökningens beskrivning",
   "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Du kan bara redigera undersöknings namn, svarstid eller dess beskrivning",
   "Yhteys palvelimeen epäonnistui": "Anslutningen till servern misslyckades",
-  "yli 5 merkkiä pitkiä": "längre än 5 tecken"
+  "yli 5 merkkiä pitkiä": "längre än 5 tecken",
+  "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": ""
 }
