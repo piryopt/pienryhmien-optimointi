@@ -26,6 +26,7 @@ const SurveyAnswersPage = () => {
     mountedRef.current = true;
     const getSurveyAnswersData = async () => {
       try {
+        // Redirect to multistage page if survey is multistage
         const isMultistage = await surveyService.isMultistage(id);
         if (isMultistage) {
           navigate(`/surveys/multistage/${id}/answers`, {

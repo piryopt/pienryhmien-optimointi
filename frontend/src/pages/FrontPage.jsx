@@ -85,6 +85,7 @@ const FrontPage = () => {
               <FrontPageButton
                 key={survey.id}
                 path={
+                  /* Gets the correct link type; single-stage or multistage */
                   survey.is_multistage
                     ? `surveys/multistage/${survey.id}/answers`
                     : `surveys/${survey.id}/answers`

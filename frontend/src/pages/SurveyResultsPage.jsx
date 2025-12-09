@@ -24,6 +24,7 @@ const SurveyResultsPage = () => {
   useEffect(() => {
     const getSurveyResults = async () => {
       try {
+        // Redirect to the multistage results page if survey is multistage
         const isMultistage = await surveyService.isMultistage(id);
         if (isMultistage) {
           navigate(`/surveys/multistage/${id}/results`, { replace: true });
@@ -57,6 +58,7 @@ const SurveyResultsPage = () => {
         return;
       }
 
+      // Helper for getting data about the survey
       let surveyMeta = null;
       try {
         surveyMeta = await surveyService.getSurvey(id);
@@ -114,6 +116,7 @@ const SurveyResultsPage = () => {
         if (c.name !== undefined) choiceIdToPos[String(c.name)] = String(i);
       });
 
+      // Method for obtaining additional information keys
       const findAdditionalKey = (rawKey) => {
         if (rawKey === undefined || rawKey === null) return null;
         const s = String(rawKey);
@@ -140,6 +143,7 @@ const SurveyResultsPage = () => {
         return null;
       };
 
+      // Fallback for unusual keys
       const resolveAdditionalForChoice = (map, choiceKey) => {
         if (!map) return null;
         const tryKeys = [choiceKey, String(choiceKey), Number(choiceKey)];
@@ -172,6 +176,7 @@ const SurveyResultsPage = () => {
         return null;
       };
 
+      // Normalizes additional information data into the proper format
       const normalizeChoiceAdditional = (raw) => {
         if (raw == null) return {};
         if (typeof raw === "object" && !Array.isArray(raw)) {
