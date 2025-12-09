@@ -1340,30 +1340,22 @@ def api_admin_all_active_surveys():
 
     return jsonify({"success": True, "data": data}), 200
 
-# @app.route("/admintools/gen_data", methods=["GET", "POST"])
-# def admin_gen_data():
-#    """
-#    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
-#    """
-#    from scripts import fill_database_with_survey_answers
-#
-#    students = int(request.args.get("students"))
-#    groups = int(request.args.get("groups"))
-#    fill_database_with_survey_answers.fill_database(groups, students)
-#    return redirect("/")
-#
-#
-#    user_id = session.get("user_id",0)
-#    surveys = survey_repository.fetch_all_active_surveys(user_id)
-#    if request.method == "GET":
-#        return render_template("/admintools/gen_data.html", surveys = surveys)
-#
-#    if request.method == "POST":
-#        student_n = request.form.get("student_n")
-#        gen_data.generate_users(int(student_n))
-#        gen_data.add_generated_users_db()
-#        return redirect("/admintools/gen_data")
-#
+@bp.route("/admintools/gen_data", methods=["GET", "POST"])
+def admin_gen_data():
+    """
+    Page for generating users, a survey and user rankings. DELETE BEFORE PRODUCTION!!!
+    """
+    from scripts import fill_database_with_survey_answers
+
+    # open this in browser
+    # http://localhost:5001/admintools/gen_data?students=123&groups=5&multistage=1
+
+    students = int(request.args.get("students"))
+    groups = int(request.args.get("groups"))
+    multistage = int(request.args.get("multistage"))
+    fill_database_with_survey_answers.fill_database(groups, students, multistage=bool(multistage))
+    return redirect("/")
+
 # @bp.route("/admintools/gen_data/rankings", methods = ["POST"])
 # def admin_gen_rankings():
 #    """

@@ -20,3 +20,4 @@ Flask-Babel
 pandas
 flask-cors
 gunicorn
+Faker
