@@ -34,7 +34,7 @@ const SurveyMultistageCreate = () => {
   const schema = buildCreateSurveySchema(t);
 
   const stageNextId = useRef(1);
-  // global counter to ensure unique ids
+  // Global counter to ensure unique ids
   const rowNextId = useRef(1);
   const [newStageName, setNewStageName] = useState("");
   const [tables, setTables] = useState([]);
@@ -62,6 +62,7 @@ const SurveyMultistageCreate = () => {
   useEffect(() => {
     if (!templateId) return;
 
+    // A new survey can be copied from an existing template
     const loadTemplate = async () => {
       try {
         const data = await surveyService.getMultiStageSurvey(templateId);
@@ -342,7 +343,7 @@ const SurveyMultistageCreate = () => {
 
     setTables((ts) => {
       const targetIndex = ts.findIndex((t) => t.id === tableId);
-      // gather participation_limit values from earlier stages
+      // Gather participation_limit values from earlier stages
       const nameToParticipation = {};
       if (targetIndex > 0) {
         ts.slice(0, targetIndex).forEach((stage) => {
@@ -361,13 +362,13 @@ const SurveyMultistageCreate = () => {
         });
       }
 
-      // apply CSV to the target table
+      // Apply CSV to the target table
       return ts.map((t) => {
         if (t.id !== tableId) return t;
         const update = updateTableFromCSV(headers, rowsToParse, t);
         const filledRows = update.rows.map((r) => {
           const copy = { ...r };
-          // fill participation limit from earlier stages when possible
+          // Fill participation limit from earlier stages when possible
           const nameKey = (copy.name || "").toString().trim();
           if (
             nameKey &&
@@ -421,7 +422,7 @@ const SurveyMultistageCreate = () => {
         return choice;
       })
     }));
-    // validation: require at least one stage
+    // Validation: require at least one stage
     if (!stages || stages.length === 0) {
       showNotification(t("Lisää ainakin yksi vaihe"), "error");
       return;
@@ -450,7 +451,7 @@ const SurveyMultistageCreate = () => {
             },
             { abortEarly: false }
           );
-          // clear previous errors for this stage
+          // Clear previous errors for this stage
           setTables((ts) =>
             ts.map((t) => (t.id !== stage.id ? t : { ...t, choiceErrors: [] }))
           );
@@ -473,7 +474,7 @@ const SurveyMultistageCreate = () => {
                 perRowErrors[idx][field] =
                   perRowErrors[idx][field] || err.message;
               } else {
-                // top-level field (e.g. "minchoices" or "allowedDeniedChoices")
+                // Top-level field (e.g. "minchoices" or "allowedDeniedChoices")
                 try {
                   setError(err.path, {
                     type: err.type || "manual",
@@ -481,7 +482,7 @@ const SurveyMultistageCreate = () => {
                   });
                   if (!firstTopErrorPath) firstTopErrorPath = err.path;
                 } catch (e) {
-                  // ignore setError failures
+                  // Ignore setError failures
                 }
               }
             });

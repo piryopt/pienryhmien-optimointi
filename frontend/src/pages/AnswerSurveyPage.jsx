@@ -37,12 +37,14 @@ const AnswerSurveyPage = () => {
     mountedRef.current = true;
     (async () => {
       try {
+        // Redirect to the multistage answer page if survey is multistage
         const isMultistage = await surveyService.isMultistage(surveyId);
         if (isMultistage) {
           navigate(`/surveys/multistage/${surveyId}`, {
             replace: true
           });
         }
+
         const data = await surveyService.getSurvey(surveyId);
         if (!mountedRef.current) return;
 
@@ -53,6 +55,12 @@ const AnswerSurveyPage = () => {
             (a?.name || "").localeCompare(b?.name || "")
           );
         }
+
+        /* Choice types in a survey:
+          - Neutral: Not ordered
+          - Good: Choices placed in green box
+          - Bad: Choices placed in red box
+        */
         let neutralChoices = [...choices];
         let goodChoices = [];
         let badChoices = [];
@@ -135,6 +143,7 @@ const AnswerSurveyPage = () => {
     }
   };
 
+  // Additional information per item
   const toggleExpand = (itemId) => {
     setExpandedIds((prev) => {
       const next = new Set(prev);
