@@ -30,6 +30,7 @@ const AnswerSurveyPage = () => {
   const [existing, setExisting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [choices, setChoices] = useState("");
+  const [hasMandatory, setHasMandatory] = useState(false);
   const mountedRef = useRef(false);
   const navigate = useNavigate();
 
@@ -57,6 +58,8 @@ const AnswerSurveyPage = () => {
         let goodChoices = [];
         let badChoices = [];
         setChoices(choices);
+        const hasMandatoryGroup = choices.some((choice) => choice.mandatory);
+        setHasMandatory(hasMandatoryGroup);
 
         if (data.existing === "1") {
           setExisting(true);
@@ -196,14 +199,24 @@ const AnswerSurveyPage = () => {
               additionalInfo={additionalInfo}
               choices={choices}
             />
-            <p className="note">
-              {t("HUOM! ")}
-              <span className="mandatory">{t("Pakolliseksi ")}</span>
-              {t("merkityt ryhmät priorisoidaan jakamisprosessissa. ")}{" "}
-              {t(
-                "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
-              )}
-            </p>
+            {hasMandatory && (
+              <p className="note">
+                {t("HUOM! ")}
+                <span className="mandatory">{t("Pakolliseksi ")}</span>
+                {t("merkityt ryhmät priorisoidaan jakamisprosessissa. ")}{" "}
+                {t(
+                  "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
+                )}
+                <br></br>
+                {(survey.denied_allowed_choices ?? 0) !== 0 && (
+                  <>
+                    {t("Sinut voidaan tarvittaessa sijoittaa")}{" "}
+                    <span className="mandatory">{t("pakolliseen")}</span>{" "}
+                    {t("ryhmään, vaikka olisitkin kieltänyt sen.")}
+                  </>
+                )}
+              </p>
+            )}
           </>
         )}
       </div>
