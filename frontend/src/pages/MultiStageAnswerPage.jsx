@@ -368,12 +368,20 @@ const MultiStageAnswerPage = () => {
                     <p className="note">
                       {t("HUOM! ")}
                       <span className="mandatory">{t("Pakolliseksi ")}</span>
-                      {t("merkityt ryhmät priorisoidaan jakamisprosessissa. ")}{" "}
-                      {t("Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta.")}
+                      {t(
+                        "merkityt ryhmät priorisoidaan jakamisprosessissa. "
+                      )}{" "}
+                      {t(
+                        "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
+                      )}
                       <br></br>
-                      {t("Sinut voidaan tarvittaessa sijoittaa")}{" "}
-                      <span className="mandatory">{t("pakolliseen")}</span>{" "}
-                      {t("ryhmään, vaikka olisitkin kieltänyt sen.")}
+                      {(survey.denied_allowed_choices ?? 0) !== 0 && (
+                        <>
+                          {t("Sinut voidaan tarvittaessa sijoittaa")}{" "}
+                          <span className="mandatory">{t("pakolliseen")}</span>{" "}
+                          {t("ryhmään, vaikka olisitkin kieltänyt sen.")}
+                        </>
+                      )}
                     </p>
                   )}
 
