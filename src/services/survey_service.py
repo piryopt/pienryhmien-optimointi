@@ -388,6 +388,9 @@ class SurveyService:
         return (answers, popularities)
 
     def validate_created_survey(self, survey_dict, edited=False, multistage=False):
+        """
+        Method for validating a newly created survey.
+        """
         survey_name = survey_dict.get("surveyGroupname", "")
         description = survey_dict.get("surveyInformation", "")
         survey_choices = survey_dict.get("choices", [])
@@ -470,7 +473,7 @@ class SurveyService:
 
     def validate_survey_choice(self, choice):
         """
-        method for validating a survey choice
+        Method for validating a survey choice
         """
         if len(choice["name"]) < 5:
             msg = "Group requires a name that is at least 5 characters long"
@@ -651,6 +654,10 @@ class SurveyService:
         return self._survey_repository.set_survey_deleted_false(survey_id)
 
     def create_new_multiphase_survey(self, **kwargs):
+        """
+        Creates a new multistage survey.
+        TODO: change multiphase to multistage!
+        """
         if self._survey_repository.survey_name_exists(kwargs["surveyname"], kwargs["user_id"]):
             return None
 
@@ -658,9 +665,15 @@ class SurveyService:
         return survey_id
 
     def get_all_survey_stages(self, survey_id):
+        """
+        Method for obtaining all stages of a multistage survey.
+        """
         return self._survey_repository.get_all_survey_stages(survey_id)
 
     def get_trash_count(self, user_id):
+        """
+        Method for getting the number of items in the trash bin.
+        """
         return self._survey_repository.get_trash_count(user_id)
 
     def get_list_deleted_surveys(self, user_id):

@@ -124,6 +124,9 @@ def frontpage() -> str:
 
 @bp.route("/static/images/<path:filename>")
 def serve_images(filename):
+    """
+    Method for displaying images.
+    """
     images_dir = Path(__file__).parents[0] / "static" / "images"
     file_path = images_dir / filename
     if file_path.exists() and file_path.is_file():
@@ -131,6 +134,9 @@ def serve_images(filename):
 
 @bp.route("/favicon.ico")
 def favicon():
+    """
+    Method for displaying favicon.
+    """
     images_dir = Path(__file__).parent / "static" / "images"
     favicon_path = images_dir / "favicon.ico"
 
@@ -159,6 +165,9 @@ def frontpage_data():
 @bp.route("/api/surveys/active")
 @ad_login
 def surveys_active():
+    """
+    Method for obtaining active surveys.
+    """
     user_id = session.get("user_id", 0)
     active_surveys = survey_service.get_active_surveys(user_id)
     return jsonify(active_surveys)
@@ -167,6 +176,9 @@ def surveys_active():
 @bp.route("/api/surveys/closed")
 @ad_login
 def surveys_closed():
+    """
+    Method for obtaining closed surveys.
+    """
     user_id = session.get("user_id", 0)
     closed_surveys = survey_service.get_list_closed_surveys(user_id)
     return jsonify(closed_surveys)
@@ -175,6 +187,9 @@ def surveys_closed():
 @bp.route("/api/surveys/deleted")
 @ad_login
 def surveys_deleted():
+    """
+    Method for obtaining deleted surveys.
+    """
     user_id = session.get("user_id", 0)
     deleted_surveys = survey_service.get_list_deleted_surveys(user_id)
     return jsonify(deleted_surveys)
@@ -209,6 +224,9 @@ def expand_ranking(survey_id, email, stage):
 @bp.route("/api/multistage/survey/create", methods=["POST"])
 @ad_login
 def multistage_survey_create():
+    """
+    Method for creating a new multistage survey.
+    """
     try:
         data = request.get_json()
         user_id = session.get("user_id", 0)
@@ -309,6 +327,9 @@ def new_survey_post():
 @bp.route("/api/csrf_token", methods=["GET"])
 @ad_login
 def get_csrf():
+    """
+    Method for obtaining a csrf token.
+    """
     csrf_token = generate_csrf()
     response = {"csrfToken": csrf_token}
     return jsonify(response)
@@ -421,6 +442,9 @@ def api_survey(survey_id):
 
 @bp.route("/api/surveys/multistage/<string:survey_id>", methods=["GET"])
 def api_multistage_survey_choices(survey_id):
+    """
+    Method for obtaining choices for a multistage survey.
+    """
     user_id = session.get("user_id", 0)
     stages = survey_choices_service.get_survey_choices_by_stage(survey_id)
     survey = survey_service.get_survey(survey_id)
@@ -659,6 +683,9 @@ def api_edit_survey_post(survey_id):
 
 @bp.route("/api/surveys/<string:survey_id>/delete")
 def delete_survey(survey_id):
+    """
+    Method for moving the survey to the trash.
+    """
     if not check_if_owner(survey_id):
         return redirect("/")
     survey_service.set_survey_deleted_true(survey_id)
@@ -667,6 +694,9 @@ def delete_survey(survey_id):
 
 @bp.route("/api/surveys/<string:survey_id>", methods=["DELETE"])
 def delete_surveys_endpoint(survey_id):
+    """
+    Method for permanently deleting a survey.
+    """
     if not check_if_owner(survey_id):
         response = {"message": "No permission to delete survey"}
         return jsonify(response), 403
@@ -676,6 +706,9 @@ def delete_surveys_endpoint(survey_id):
 
 @bp.route("/api/surveys/<string:survey_id>/trash", methods=["PATCH"])
 def trash_survey(survey_id):
+    """
+    Method for obtaining a survey located in the trash.
+    """
     if not check_if_owner(survey_id):
         response = {"message": "No permission to trash survey"}
         return jsonify(response), 403
@@ -685,6 +718,9 @@ def trash_survey(survey_id):
 
 @bp.route("/api/surveys/<string:survey_id>/return", methods=["PATCH"])
 def return_survey(survey_id):
+    """
+    Method for restoring a survey out of the trash.
+    """
     if not check_if_owner(survey_id):
         response = {"message": "No permission to return survey"}
         return jsonify(response), 403
@@ -694,6 +730,9 @@ def return_survey(survey_id):
 
 @bp.route("/surveys/<string:survey_id>/edit/add_owner/<string:email>", methods=["POST"])
 def add_owner(survey_id, email):
+    """
+    (OLD) method for adding a new owner to a survey.
+    """
     if not email:
         msg = gettext("Sähköpostiosoite puuttuu!")
         response = {"status": "0", "msg": msg}
@@ -710,6 +749,9 @@ def add_owner(survey_id, email):
 
 @bp.route("/api/surveys/<string:survey_id>/add_owner", methods=["POST"])
 def api_add_owner(survey_id):
+    """
+    Method for adding a new owner to a survey.
+    """
     email = request.json.get("email")
     if not check_if_owner(survey_id):
         return redirect("/")
@@ -1041,6 +1083,9 @@ def survey_results(survey_id):
 
 @bp.route("/surveys/<string:survey_id>/results/save")
 def save_survey_results(survey_id, output_data):
+    """
+    Method for saving the results of a survey.
+    """
     if not check_if_owner(survey_id):
         return jsonify({"msg": "Only survey owners can save results"})
     # Check if results have been saved. If they have, redirect to previous_surveys page.
@@ -1165,6 +1210,9 @@ def api_session():
 
 @bp.route("/api/auth/login", methods=["GET", "POST"])
 def api_login():
+    """
+    Method for logging in for development purposes.
+    """
     if not current_app.debug:
         return redirect("/")
 
@@ -1449,6 +1497,9 @@ def get_choices(survey_id):
 
 @bp.route("/api/feedback", methods=["GET", "POST"])
 def feedback():
+    """
+    Page for submitting feedback.
+    """
     if request.method == "GET":
         return jsonify({"success": False, "status": "0", "key": "use_react", "msg": gettext("Please use the React frontend for feedback")}), 200
     try:
