@@ -23,7 +23,7 @@ const MultiStageGroupSizesEditDialog = ({ surveyId, onClose, onSuccess }) => {
         setStages(stagesList);
 
         const answers = answersData?.answers || [];
-        // filter out answers where the respondent marked themselves not available
+        // Filter out answers where the respondent marked themselves not available
         const answersMap = {};
         answers.forEach((obj) => {
           const keys = Object.keys(obj);

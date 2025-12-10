@@ -88,6 +88,7 @@ const MultistageSurveyResultsPage = () => {
       return;
     }
 
+    // Helper for getting data about the survey
     let multistageMeta = null;
     try {
       multistageMeta = await surveyService.getMultiStageSurvey(id);
@@ -168,6 +169,7 @@ const MultistageSurveyResultsPage = () => {
           Object.keys(additionalInfosPerStage).map((k) => String(k))
         );
 
+        // Helper for getting data about each stage
         let stageMeta = null;
         if (multistageMeta && Array.isArray(multistageMeta.stages)) {
           stageMeta =
@@ -196,6 +198,7 @@ const MultistageSurveyResultsPage = () => {
           return false;
         };
 
+        // Additional information per choice
         const getInfosFromChoice = (choice) => {
           if (!choice) return null;
           const infos =
@@ -236,6 +239,7 @@ const MultistageSurveyResultsPage = () => {
           if (c.name !== undefined) choiceIdToPos[String(c.name)] = String(i);
         });
 
+        // Method for obtaining additional information keys
         const findAdditionalKey = (rawKey) => {
           if (rawKey === undefined || rawKey === null) return null;
           const s = String(rawKey);
@@ -264,6 +268,7 @@ const MultistageSurveyResultsPage = () => {
           return null;
         };
 
+        // Fallback for unusual keys
         const resolveAdditionalForChoice = (map, choiceKey) => {
           if (!map) return null;
           const tryKeys = [choiceKey, String(choiceKey), Number(choiceKey)];
@@ -296,6 +301,7 @@ const MultistageSurveyResultsPage = () => {
           return null;
         };
 
+        // Normalizes additional information data into the proper format
         const normalizeChoiceAdditional = (raw) => {
           if (raw == null) return {};
           if (typeof raw === "object" && !Array.isArray(raw)) {
