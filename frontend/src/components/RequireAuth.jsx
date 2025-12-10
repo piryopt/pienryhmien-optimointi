@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
-
 const RequireAuth = ({ children }) => {
-  const { user, loading, debug } = useAuth();
+  const { user, loading, debug, refreshSession } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -25,7 +24,7 @@ const RequireAuth = ({ children }) => {
       "redirectAfterLogin",
       location.pathname + location.search
     );
-
+    refreshSession();
     if (debug) return <LoginPage />;
   }
 
