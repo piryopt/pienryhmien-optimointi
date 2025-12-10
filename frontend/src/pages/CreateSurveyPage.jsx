@@ -58,6 +58,7 @@ const CreateSurveyPage = () => {
   useEffect(() => {
     if (!templateId) return;
 
+    // A new survey can be copied from an existing template
     const loadTemplate = async () => {
       try {
         const data = await surveyService.getSurvey(templateId);

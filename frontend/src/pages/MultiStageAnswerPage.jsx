@@ -46,6 +46,11 @@ const MultiStageAnswerPage = () => {
         for (const stage of data.stages || []) {
           const stageId = stage.name;
           let choices = stage.choices || [];
+          /* Choice types in a survey:
+            - Neutral: Not ordered
+            - Good: Choices placed in green box
+            - Bad: Choices placed in red box
+          */
           let neutralChoices = [...choices];
           let goodChoices = [];
           let badChoices = [];
@@ -138,6 +143,7 @@ const MultiStageAnswerPage = () => {
     );
   };
 
+  // Additional information per item
   const toggleExpand = (itemId) => {
     setExpandedIds((prev) => {
       const next = new Set(prev);
@@ -148,6 +154,7 @@ const MultiStageAnswerPage = () => {
     });
   };
 
+  // Marked as absent for current stage
   const toggleNotAvailable = (stageId) => {
     setStages((prev) =>
       prev.map((s) =>

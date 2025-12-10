@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      let debugFlag = false;
       try {
         debugFlag = await configService.fetchDebugFlag();
         setDebug(debugFlag);
@@ -53,6 +52,7 @@ export const AuthProvider = ({ children }) => {
           setUser(false);
         }
       }
+
       setLoading(false);
     })();
   }, []);
@@ -78,9 +78,7 @@ export const AuthProvider = ({ children }) => {
       throw new Error(err?.message || "Login failed");
     }
 
-    sessionStorage.removeItem("ssoAttempted");
     await refreshSession();
-    return user;
   };
 
   const logout = async () => {
@@ -92,17 +90,16 @@ export const AuthProvider = ({ children }) => {
         headers: { "X-CSRFToken": csrf, "Content-Type": "application/json" }
       });
       await refreshSession();
-      return;
     }
-    // If debug is false we expect caller to do a full redirect to api/auth/logout
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, debug, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, debug, login, logout, refreshSession }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
-export default AuthContext;

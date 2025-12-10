@@ -1,14 +1,30 @@
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useAuth } from "../context/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
-
 const RequireAuth = ({ children }) => {
-  const { user, loading, debug } = useAuth();
+  const { user, loading, debug, refreshSession } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // still loading session
-  if (loading) return null; // or a spinner
+  useEffect(() => {
+    const redirect = async () => {
+      if (!loading && user && user.logged_in) {
+        await new Promise((resolve) => setTimeout(resolve, 10));
 
-  // user not logged in
+        const redirectTo = localStorage.getItem("redirectAfterLogin");
+        if (redirectTo) {
+          localStorage.removeItem("redirectAfterLogin");
+          await refreshSession();
+          window.location.replace(redirectTo);
+        }
+      }
+    };
+    redirect();
+  }, [loading, user, refreshSession]);
+
+  if (loading) return null;
+
   if (!user || user.logged_in === false) {
     if (debug) {
       return <LoginPage />;
@@ -17,7 +33,6 @@ const RequireAuth = ({ children }) => {
     localStorage.setItem("redirectAfterLogin", window.location.href);
   }
 
-  // logged in
   return children;
 };
 
