@@ -35,7 +35,23 @@ export const AuthProvider = ({ children }) => {
         setDebug(false);
       }
 
-      await refreshSession();
+      try {
+        const initial = await refreshSession();
+
+        const hasRedirect = !!localStorage.getItem("redirectAfterLogin");
+        if (!initial?.logged_in && hasRedirect) {
+          // retry up to 3 times with increasing delay (500ms, 1000ms, ...)
+          const maxRetries = 3;
+          for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            await new Promise((r) => setTimeout(r, 500 * attempt));
+            const retried = await refreshSession();
+            if (retried?.logged_in) break;
+          }
+        }
+      } catch (e) {
+        console.error("refreshSession retries failed", e);
+      }
+
       setLoading(false);
     })();
   }, []);
