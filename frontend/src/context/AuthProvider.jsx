@@ -27,27 +27,15 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      let debugFlag = false;
       try {
-        const debugFlag = await configService.fetchDebugFlag();
-        setDebug(debugFlag);
+        const flag = await configService.fetchDebugFlag();
+        setDebug(flag);
       } catch (e) {
         console.error("fetchDebugFlag failed", e);
         setDebug(false);
       }
-      const sessionData = await refreshSession();
-      // if not debug and user not logged in, trigger redirect to backend so SSO can authenticate
-      // sessionStorage used to prevent infinite loops if SSO fails
-      if (debugFlag === false && !sessionData.logged_in) {
-        const attempted = sessionStorage.getItem("ssoAttempted");
-        if (!attempted) {
-          sessionStorage.setItem("ssoAttempted", 1);
-          window.location.href = "/";
-          return;
-        } else {
-          setUser(false);
-        }
-      }
+
+      await refreshSession();
       setLoading(false);
     })();
   }, []);
@@ -73,9 +61,7 @@ export const AuthProvider = ({ children }) => {
       throw new Error(err?.message || "Login failed");
     }
 
-    sessionStorage.removeItem("ssoAttempted");
     await refreshSession();
-    return user;
   };
 
   const logout = async () => {
@@ -87,9 +73,7 @@ export const AuthProvider = ({ children }) => {
         headers: { "X-CSRFToken": csrf, "Content-Type": "application/json" }
       });
       await refreshSession();
-      return;
     }
-    // If debug is false we expect caller to do a full redirect to api/auth/logout
   };
 
   return (
@@ -100,4 +84,3 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
-export default AuthContext;

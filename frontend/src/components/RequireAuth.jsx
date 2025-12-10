@@ -1,22 +1,34 @@
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useAuth } from "../context/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 
 const RequireAuth = ({ children }) => {
   const { user, loading, debug } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // still loading session
-  if (loading) return null; // or a spinner
-
-  // user not logged in
-  if (!user || user.logged_in === false) {
-    if (debug) {
-      return <LoginPage />;
+  useEffect(() => {
+    if (!loading && user && user.logged_in) {
+      const redirectTo = localStorage.getItem("redirectAfterLogin");
+      if (redirectTo) {
+        localStorage.removeItem("redirectAfterLogin");
+        navigate(redirectTo, { replace: true });
+      }
     }
-    // server handles Haka login
+  }, [loading, user, navigate]);
+
+  if (loading) return null;
+
+  if (!user || user.logged_in === false) {
+    localStorage.setItem(
+      "redirectAfterLogin",
+      location.pathname + location.search
+    );
+
+    if (debug) return <LoginPage />;
   }
 
-  // logged in
   return children;
 };
 
