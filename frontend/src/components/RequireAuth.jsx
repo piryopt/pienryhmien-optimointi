@@ -14,7 +14,7 @@ const RequireAuth = ({ children }) => {
         if (redirectTo) {
           localStorage.removeItem("redirectAfterLogin");
           await refreshSession();
-          window.location.href = redirectTo;
+          window.location.reload();
         }
       }
     };
