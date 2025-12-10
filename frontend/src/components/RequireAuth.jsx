@@ -14,6 +14,7 @@ const RequireAuth = ({ children }) => {
       return <LoginPage />;
     }
     // server handles Haka login
+    localStorage.setItem("redirectAfterLogin", window.location.href);
   }
 
   // logged in

@@ -17,7 +17,7 @@ const Login = () => {
     try {
       await login({ username, password });
       showNotification(t("Kirjautuminen onnistui"), "success");
-      navigate("/"); // go to frontpage after login
+      //navigate("/"); // go to frontpage after login
     } catch (err) {
       showNotification(t("Kirjautuminen epäonnistui"), "error");
       console.error("Login failed", err);

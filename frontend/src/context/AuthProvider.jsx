@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     (async () => {
       let debugFlag = false;
       try {
-        const debugFlag = await configService.fetchDebugFlag();
+        debugFlag = await configService.fetchDebugFlag();
         setDebug(debugFlag);
       } catch (e) {
         console.error("fetchDebugFlag failed", e);
@@ -38,6 +38,11 @@ export const AuthProvider = ({ children }) => {
       const sessionData = await refreshSession();
       // if not debug and user not logged in, trigger redirect to backend so SSO can authenticate
       // sessionStorage used to prevent infinite loops if SSO fails
+      const redirectTo = localStorage.getItem("redirectAfterLogin");
+      if (redirectTo) {
+        localStorage.removeItem("redirectAfterLogin");
+        window.location.replace(redirectTo);
+      }
       if (debugFlag === false && !sessionData.logged_in) {
         const attempted = sessionStorage.getItem("ssoAttempted");
         if (!attempted) {
