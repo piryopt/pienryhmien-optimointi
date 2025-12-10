@@ -8,13 +8,17 @@ const RequireAuth = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && user && user.logged_in) {
-      const redirectTo = localStorage.getItem("redirectAfterLogin");
-      if (redirectTo) {
-        localStorage.removeItem("redirectAfterLogin");
-        navigate(redirectTo, { replace: true });
+    const redirect = async () => {
+      if (!loading && user && user.logged_in) {
+        const redirectTo = localStorage.getItem("redirectAfterLogin");
+        if (redirectTo) {
+          localStorage.removeItem("redirectAfterLogin");
+          await refreshSession();
+          navigate(redirectTo, { replace: true });
+        }
       }
-    }
+    };
+    redirect();
   }, [loading, user, navigate]);
 
   if (loading) return null;
