@@ -7,6 +7,22 @@ const RequireAuth = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const redirect = async () => {
+      if (!loading && user && user.logged_in) {
+        await new Promise((resolve) => setTimeout(resolve, 10));
+
+        const redirectTo = localStorage.getItem("redirectAfterLogin");
+        if (redirectTo) {
+          localStorage.removeItem("redirectAfterLogin");
+          await refreshSession();
+          window.location.replace(redirectTo);
+        }
+      }
+    };
+    redirect();
+  }, [loading, user, refreshSession]);
+
   if (loading) return null;
 
   if (!user || user.logged_in === false) {
@@ -14,12 +30,7 @@ const RequireAuth = ({ children }) => {
       "redirectAfterLogin",
       location.pathname + location.search
     );
-
-    const redirectTo = localStorage.getItem("redirectAfterLogin");
-    if (redirectTo) {
-      localStorage.removeItem("redirectAfterLogin");
-      navigate(redirectTo);
-    }
+    refreshSession();
     if (debug) return <LoginPage />;
   }
 
