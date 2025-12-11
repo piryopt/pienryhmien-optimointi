@@ -14,6 +14,9 @@ const Footer = () => {
         <Link to="/feedback" className="text-muted">
           {t("Anna palautetta")}
         </Link>
+        <Link to="/user-manual" className="text-muted">
+          {t("Käyttöohje")}
+        </Link>
         <Link to="/privacy-policy" className="text-muted">
           {t("Tietosuojaseloste")}
         </Link>
