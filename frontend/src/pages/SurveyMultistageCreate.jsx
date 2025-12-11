@@ -559,20 +559,20 @@ const SurveyMultistageCreate = () => {
 
       if (!res.ok) {
         const msg = extractMessage(json, res);
-        showNotification(msg, "error");
+        showNotification(t(msg), "error");
         return;
       }
 
       if (!json || String(json.status) !== "1") {
         const msg = extractMessage(json, res);
-        showNotification(msg, "error");
+        showNotification(t(msg), "error");
         return;
       }
 
-      showNotification(json.msg || t("Kysely luotu onnistuneesti"), "success");
+      showNotification(t(json.msg) || t("Kysely luotu onnistuneesti"), "success");
     } catch (err) {
       showNotification(
-        err?.message || t("Kyselyn luonti epäonnistui"),
+        t(err?.message) || t("Kyselyn luonti epäonnistui"),
         "error"
       );
     }
