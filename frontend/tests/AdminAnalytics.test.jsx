@@ -17,7 +17,13 @@ describe("<AdminAnalytics />", () => {
   beforeEach(() => {
     adminService.fetchAnalytics.mockResolvedValue({
       success: true,
-      message: [0, 0, 0, 0, 0]
+      data: {
+        total_surveys: 15,
+        active_surveys: 2,
+        total_teachers: 3,
+        total_students: 4,
+        total_responses: 45
+      }
     });
 
     render(
@@ -36,6 +42,12 @@ describe("<AdminAnalytics />", () => {
       screen.getByText("Rekisteröityneet opettajat");
       screen.getByText("Rekisteröityneet opiskelijat");
       screen.getByText("Vastauksia luotu");
+    });
+  });
+
+  test("render admin analytics stats", async () => {
+    await waitFor(() => {
+      screen.getByRole("row", { name: /15 2 3 4 45/i });
     });
   });
 });
