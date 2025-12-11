@@ -1,11 +1,11 @@
 # Käyttöohje
 
-1. [Kyselyn luominen](#1-kyselyn-luominen)
-2. [Monivaihisen kyselyn luominen](#2-monivaiheisen-kyselyn-luominen)
-3. [Kyselyn hallinta](#3-kyselyn-hallinta)
-4. [Vastausten käsittely](#4-vastausten-käsittely)
-5. [Kyselyyn vastaaminen](#5-kyselyyn-vastaaminen)
-6. [Monivaiheiseen kyselyyn vastaaminen](#6-monivaiheiseen-kyselyyn-vastaaminen)
+1. Kyselyn luominen
+2. Monivaihisen kyselyn luominen
+3. Kyselyn hallinta
+4. Vastausten käsittely
+5. Kyselyyn vastaaminen
+6. Monivaiheiseen kyselyyn vastaaminen
 
 ***
 

@@ -5,6 +5,7 @@ import SurveysPage from "./pages/SurveysPage";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
 import FAQ from "./components/footer_components/FAQ";
+import UserManual from "./components/footer_components/UserManual";
 import PrivacyPolicy from "./components/footer_components/PrivacyPolicy";
 import SurveyAnswersPage from "./pages/SurveyAnswersPage";
 import FrontPage from "./pages/FrontPage";
@@ -83,6 +84,8 @@ const App = () => {
           <Route path="/auth/login" element={<LoginPage />} />
 
           <Route path="/faq" element={<FAQ />} />
+
+          <Route path="/user-manual" element={<UserManual />} />
 
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
