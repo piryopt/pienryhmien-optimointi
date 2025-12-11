@@ -1,19 +1,17 @@
 # Käyttöohje
 
-1. [Kyselyn luominen](#1-kyselyn-luominen)
-2. [Monivaihisen kyselyn luominen](#2-monivaiheisen-kyselyn-luominen)
-3. [Kyselyn hallinta](#3-kyselyn-hallinta)
-4. [Vastausten käsittely](#4-vastausten-käsittely)
-5. [Kyselyyn vastaaminen](#5-kyselyyn-vastaaminen)
-6. [Monivaiheiseen kyselyyn vastaaminen](#6-monivaiheiseen-kyselyyn-vastaaminen)
+1. Kyselyn luominen
+2. Monivaihisen kyselyn luominen
+3. Kyselyn hallinta
+4. Vastausten käsittely
+5. Kyselyyn vastaaminen
+6. Monivaiheiseen kyselyyn vastaaminen
 
-***
 
 Jakajan toiminnalisuudet näkyvät etusivulla seuraavasti:
 
 ![](images/front_page.png)
 
-***
 
 ## 1. Kyselyn luominen
 
@@ -90,7 +88,6 @@ Kun vähintään kaikki pakolliset kohdat on täytetty voit luoda kyselyn painam
 - Kysely näkyy myös etusivulla "Käynnissä olevat kyselyt" otsikon alla
 
 
-***
 
 
 ## 2. Monivaiheisen kyselyn luominen
@@ -146,8 +143,6 @@ Lomakkessa on kuitenkin lisäksi lomakkeessa on seuraavat lisäkohdat:
 
 - Voit poistaa vaiheen painamalla punaista "poista vaihe" nappia
 
-
-***
 
 
 ## 3. Kyselyn hallinta
@@ -207,14 +202,11 @@ Kaikki tekemäsi kyselyt näkyvät "Näytä vanhat kyselyt"-sivulla, jonne pää
 
 ### 3.8 Kyselyn kopioiminen
 
-- Mene "Aiemmat kyselyt listaukseen"
-- Valitse haluamasi kyselyn riviltä "Kopioi kysely"-linkki
-- Avautuu kyselynluontipohja, jossa on esisyötettynä vanhan kyselyn tiedot
+- Mene "Aiemmat kyselyt listaukseen".
+- Valitse haluamasi kyselyn riviltä "Kopioi kysely"-linkki.
+- Avautuu kyselynluontipohja, jossa on esisyötettynä vanhan kyselyn tiedot.
 - Voit päivittää kaikkia kyselyyn liittyviä kenttiä samoin kuin uuden kyselyn luonnissa.
-- Mikäli kopioimasi kysely on edelleen käynnissä, täytyy kopioidulla kyselyllä olla eri nimi ennen kuin sen voi tallentaa
-
-
-***
+- Mikäli kopioimasi kysely on edelleen käynnissä, täytyy kopioidulla kyselyllä olla eri nimi ennen kuin sen voi tallentaa.
 
 
 ## 4. Vastausten käsittely
@@ -250,7 +242,6 @@ Kaikki tekemäsi kyselyt näkyvät "Näytä vanhat kyselyt"-sivulla, jonne pää
 - Kun ryhmäjaon tulokset on tallennettu _et voi enää avata kyselyä uudestaan_ mutta sitä voi käyttää pohjana uudelle kyselylle
 - Ryhmäjaon tulokset voi tallentaa Excel-taulukkoon klikkaamalla "Vie tulokset Excel-taulukkoon"-nappia
 
-***
 
 ## 5. Kyselyyn vastaaminen
 
@@ -270,7 +261,6 @@ Vastaussivu näyttää tältä:
 - Jos kyselyn luoja on sallinut vaihtoehtojen kiltämisen, voit kieltää vaihtoehtoja rehaamalla ne punaiseen laatikkoon. 
 - Vaihtoehtojen kieltämiseen vaaditaan vähintään 10 merkki pitä perustelu, joka tulee kirjoittaa punaisen laatikon alapuolella olevaan laatikkoon.
 
-***
 
 ## 6. Monivaiheiseen kyselyyn vastaaminen
 
