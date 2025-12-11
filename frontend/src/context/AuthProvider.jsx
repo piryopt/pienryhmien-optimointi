@@ -43,8 +43,6 @@ export const AuthProvider = ({ children }) => {
         if (!attempted) {
           sessionStorage.setItem("ssoAttempted", 1);
           return;
-        } else {
-          setUser(false);
         }
       }
       setLoading(false);
