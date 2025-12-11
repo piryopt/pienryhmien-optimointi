@@ -6,7 +6,7 @@ from src.repositories.survey_owners_repository import survey_owners_repository a
 from src.repositories.survey_choices_repository import survey_choices_repository as default_survey_choices_repository
 from src.services.user_service import user_service as default_user_service
 from src.services.user_rankings_service import user_rankings_service as default_user_rankings_service
-from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict
+from src.tools.parsers import parser_csv_to_dict, parser_dict_to_survey, parser_existing_survey_to_dict, parser_dict_to_multistage_survey
 from src.tools.date_converter import time_to_close, format_datestring
 from src.tools.parsers import date_to_sql_valid
 from src.tools.constants import SURVEY_FIELDS
@@ -220,9 +220,27 @@ class SurveyService:
         if self._survey_repository.survey_name_exists(survey_name, user_id):
             return False
 
-        return parser_dict_to_survey(
-            survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices
-        )
+        return parser_dict_to_survey(survey_choices, survey_name, description, minchoices, date_end, time_end, allowed_denied_choices)
+
+    def create_new_mutistage_survey_manual(
+        self,
+        stages,
+        survey_name,
+        user_id,
+        description,
+        date_end,
+        time_end,
+        minchoices_per_stage,
+    ):
+        """
+        Calls tools.parsers dictionary to survey parser
+        that creates the multistage survey, its stages, choices and their additional infos
+        RETURNS created survey's id
+        """
+        if self._survey_repository.survey_name_exists(survey_name, user_id):
+            return False
+
+        return parser_dict_to_multistage_survey(stages, survey_name, description, minchoices_per_stage, date_end, time_end, 0)
 
     def get_survey_description(self, survey_id):
         """

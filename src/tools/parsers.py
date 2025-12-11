@@ -45,9 +45,7 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
 
     datetime_end = date_to_sql_valid(date_end) + " " + time_end
 
-    survey_id = survey_repository.create_new_survey(
-        survey_name, minchoices, description, datetime_end, allowed_denied_choices
-    )
+    survey_id = survey_repository.create_new_survey(survey_name, minchoices, description, datetime_end, allowed_denied_choices)
 
     for choice in survey_choices:
         # unsophisticated, but since all the data is key-value pairs,
@@ -77,6 +75,58 @@ def parser_dict_to_survey(survey_choices, survey_name, description, minchoices, 
 
             survey_choices_repository.create_new_choice_info(choice_id, pair, choice[pair], hidden)
             count += 1
+
+    return survey_id
+
+
+def parser_dict_to_multistage_survey(stages, survey_name, description, minchoices_per_stage, date_end, time_end, allowed_denied_choices=0):
+    """
+    Parses a dictionary and creates a multistage survey, its choices and their additional infos
+    RETURNS created survey's id
+    """
+
+    datetime_end = date_to_sql_valid(date_end) + " " + time_end
+
+    survey_id = survey_repository.create_new_survey(
+        survey_name,
+        min_choices=None,
+        description=description,
+        enddate=datetime_end,
+        allowed_denied_choices=allowed_denied_choices,
+        min_choices_per_stage=minchoices_per_stage,
+    )
+
+    for stage in stages:
+        stage_name = stage["stageName"]
+
+        for choice in stage["choices"]:
+            count = 0
+            choice_id = 0
+            for pair in choice:
+                if count == 0:
+                    mandatory = choice[pair]
+                    count += 1
+                    continue
+                if count == 1:
+                    name = choice[pair]
+                    count += 1
+                    continue
+                if count == 2:
+                    max_spaces = choice[pair]
+                    count += 1
+                    continue
+                if count == 3:
+                    min_size = choice[pair]
+                    count += 1
+                    choice_id = survey_choices_repository.create_new_multistage_choice(
+                        survey_id=survey_id, stage=stage_name, name=name, max_spaces=max_spaces, min_size=min_size, mandatory=mandatory
+                    )
+                    continue
+
+                hidden = pair[-1] == "*"
+
+                survey_choices_repository.create_new_choice_info(choice_id, pair, choice[pair], hidden)
+                count += 1
 
     return survey_id
 
