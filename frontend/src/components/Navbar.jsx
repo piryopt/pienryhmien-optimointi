@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
 import { imagesBaseUrl } from "../utils/constants";
 import { useEffect, useState } from "react";
+import { baseUrl } from "../utils/constants";
 
 const Navbar = () => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
-  const { user, loading, logout, debug } = useAuth();
+  const { loading, logout, debug } = useAuth();
   const [displayName, setDisplayName] = useState("");
   const navigate = useNavigate();
 
@@ -23,12 +24,16 @@ const Navbar = () => {
       window.location.replace("/api/logout");
     }
   };
-
+  const fetchSession = async () => {
+    const res = await fetch(`${baseUrl}/session`, {
+      credentials: "include"
+    });
+    const data = await res.json();
+    setDisplayName(data.logged_in ? data.full_name : "");
+  };
   useEffect(() => {
-    if (user && user.full_name) {
-      setDisplayName(user.full_name);
-    }
-  }, [user]);
+    fetchSession();
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark">
