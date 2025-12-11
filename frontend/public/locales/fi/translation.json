@@ -380,6 +380,7 @@
   "Tulosten vienti epäonnistui": "Tulosten vienti epäonnistui",
   "Tuo valinnat CSV-tiedostosta": "Tuo valinnat CSV-tiedostosta",
   "UKK": "UKK",
+  "Uusi kysely luotu!": "Uusi kysely luotu!",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Vaaditaanko kaikkien ryhmien järjestämistä?",
   "vaihe": "vaihe",
   "Vaihe": "Vaihe",
@@ -419,5 +420,9 @@
   "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta",
   "Yhteys palvelimeen epäonnistui": "Yhteys palvelimeen epäonnistui",
   "yli 5 merkkiä pitkiä": "yli 5 merkkiä pitkiä",
-  "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti"
+  "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti",
+
+  "Every stage must have a non-empty name": "Jokaisella vaiheella tulee olla ei-tyhjä nimi",
+  "Group minimum size must be smaller than maximum size": "Ryhmän minimikoon tulee olla pienempi kuin maksimikoko",
+  "There already exists a survey with the same name! Close it or change the name!": "Kyselyllä on jo sama nimi! Sulje se tai muuta nimeä!"
 }

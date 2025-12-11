@@ -380,6 +380,7 @@
   "Tulosten vienti epäonnistui": "Exporting results failed",
   "Tuo valinnat CSV-tiedostosta": "Import selections from a CSV file.",
   "UKK": "FAQ",
+  "Uusi kysely luotu!": "New survey created!",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Is organizing all groups required?",
   "vaihe": "stage",
   "Vaihe": "Stage",
@@ -419,5 +420,9 @@
   "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "You can only edit the name, time and the description of a survey",
   "Yhteys palvelimeen epäonnistui": "Connection to server failed",
   "yli 5 merkkiä pitkiä": "Over 5 characters long",
-  "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": ""
+  "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": "",
+
+  "Every stage must have a non-empty name": "Every stage must have a non-empty name",
+  "Group minimum size must be smaller than maximum size": "Group minimum size must be smaller than maximum size",
+  "There already exists a survey with the same name! Close it or change the name!": "There already exists a survey with the same name! Close it or change the name!"
 }

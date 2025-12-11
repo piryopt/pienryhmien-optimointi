@@ -380,6 +380,7 @@
   "Tulosten vienti epäonnistui": "Exporten av resultaten misslyckades",
   "Tuo valinnat CSV-tiedostosta": "Importera val från en CSV-fil",
   "UKK": "FAQ",
+  "Uusi kysely luotu!": "Ny undersökning skapad",
   "Vaaditaanko kaikkien ryhmien järjestämistä?": "Krävs det att alla grupper ordnas?",
   "vaihe": "steg",
   "Vaihe": "Steg",
@@ -419,5 +420,9 @@
   "Voit muokata vain kyselyn nimeä, vastausaikaa tai sen kuvausta": "Du kan bara redigera undersöknings namn, svarstid eller dess beskrivning",
   "Yhteys palvelimeen epäonnistui": "Anslutningen till servern misslyckades",
   "yli 5 merkkiä pitkiä": "längre än 5 tecken",
-  "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": ""
+  "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": "",
+
+  "Every stage must have a non-empty name":" Varje steg måste ha ett icke-tomt namn",
+  "Group minimum size must be smaller than maximum size": "Gruppens minimistorlek måste vara mindre än maximistorleken",
+  "There already exists a survey with the same name! Close it or change the name!": "Det finns redan en undersökning med samma namn! Stäng den eller ändra namnet!"
 }
