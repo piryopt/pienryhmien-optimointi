@@ -3,11 +3,13 @@ import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
 import { imagesBaseUrl } from "../utils/constants";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const { t } = useTranslation();
   const { showNotification } = useNotification();
   const { user, loading, logout, debug } = useAuth();
+  const [displayName, setDisplayName] = useState("");
   const navigate = useNavigate();
 
   const handleLogout = async (e) => {
@@ -22,7 +24,11 @@ const Navbar = () => {
     }
   };
 
-  const displayName = user && user.full_name ? user.full_name : "";
+  useEffect(() => {
+    if (user && user.full_name) {
+      setDisplayName(user.full_name);
+    }
+  }, [user]);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark">
