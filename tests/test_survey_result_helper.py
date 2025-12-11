@@ -1,6 +1,5 @@
 import pytest
 import json
-from src.entities import survey
 from src.tools import survey_result_helper as srh
 from src.services.survey_service import survey_service as ss
 from src.services.survey_choices_service import survey_choices_service as scs
@@ -397,9 +396,9 @@ def test_happiness_results_students_in_unranked_or_rejected(setup_survey3):
     ]
 
 
-def test_multistage_creation_from_json(setup_multistage_survey):
+def test_run_hungarian_multistage(setup_multistage_survey):
     """
-    Ensure multistage survey is created from JSON and stage choices are available.
+    Test Hungarian algorithm on multistage survey.
     """
     d = setup_multistage_survey
     survey_id = d["survey_id"]
@@ -407,16 +406,113 @@ def test_multistage_creation_from_json(setup_multistage_survey):
     stage1_choices = scs.get_list_of_stage_survey_choices(survey_id, "Vaihe 1")
     stage2_choices = scs.get_list_of_stage_survey_choices(survey_id, "Vaihe 2")
 
-    # Expect two choices in each stage as defined in tests/test_files/test_survey5.json
-    assert isinstance(stage1_choices, list)
-    assert isinstance(stage2_choices, list)
-    assert len(stage1_choices) == 2
-    assert len(stage2_choices) == 2
+    ids_stage1 = _group_ids_by_name(stage1_choices)
+    ids_stage2 = _group_ids_by_name(stage2_choices)
 
-    names_stage1 = {c["name"] for c in stage1_choices}
-    names_stage2 = {c["name"] for c in stage2_choices}
+    ranking1_stage1 = ",".join(map(str, [ids_stage1["Päiväkoti Toivo"], ids_stage1["Päiväkoti Nalli"]]))
+    ranking1_stage2 = ",".join(map(str, [ids_stage2["Päiväkoti Nalli"], ids_stage2["Päiväkoti Toivo"]]))
 
-    assert "Päiväkoti Toivo" in names_stage1
-    assert "Päiväkoti Nalli" in names_stage1
-    assert "Päiväkoti Toivo" in names_stage2
-    assert "Päiväkoti Nalli" in names_stage2
+    urs.add_user_ranking(d["user_id"], survey_id, ranking1_stage1, "", "", stage="Vaihe 1")
+    urs.add_user_ranking(d["user_id"], survey_id, ranking1_stage2, "", "", stage="Vaihe 2")
+
+    user_rankings = ss.fetch_survey_responses(survey_id)
+    groups_dict_stage1 = srh.convert_choices_groups(stage1_choices)
+    groups_dict_stage2 = srh.convert_choices_groups(stage2_choices)
+    students_dict = srh.convert_users_students(user_rankings)
+
+    output_stage1 = srh.run_hungarian(survey_id, len(user_rankings), groups_dict_stage1, students_dict, [])
+    output_stage2 = srh.run_hungarian(survey_id, len(user_rankings), groups_dict_stage2, students_dict, [])
+
+    output_dict_stage1 = _assignments_by_user(output_stage1[0])
+    output_dict_stage2 = _assignments_by_user(output_stage2[0])
+
+    assert output_dict_stage1[d["user_id"]] == "Päiväkoti Toivo"
+    assert output_dict_stage2[d["user_id"]] == "Päiväkoti Nalli"
+
+
+def test_run_hungarian_multistage_rejected_mandatory_group(setup_multistage_survey):
+    """
+    Test Hungarian algorithm on multistage survey when a user rejected a mandatory group.
+    """
+    d = setup_multistage_survey
+    survey_id = d["survey_id"]
+
+    stage1_choices = scs.get_list_of_stage_survey_choices(survey_id, "Vaihe 1")
+    stage2_choices = scs.get_list_of_stage_survey_choices(survey_id, "Vaihe 2")
+
+    ids_stage1 = _group_ids_by_name(stage1_choices)
+    ids_stage2 = _group_ids_by_name(stage2_choices)
+
+    ranking1_stage1 = ",".join(map(str, [ids_stage1["Päiväkoti Nalli"], ids_stage1["Päiväkoti Floora"]]))
+    ranking1_stage2 = ",".join(map(str, [ids_stage2["Päiväkoti Floora"], ids_stage2["Päiväkoti Toivo"]]))
+
+    rejections1_stage1 = ",".join(map(str, [ids_stage1["Päiväkoti Toivo"]]))
+
+    urs.add_user_ranking(
+        d["user_id"],
+        survey_id,
+        ranking1_stage1,
+        rejections1_stage1,
+        "Hyvä perustelu",
+        stage="Vaihe 1",
+    )
+    urs.add_user_ranking(
+        d["user_id"],
+        survey_id,
+        ranking1_stage2,
+        "",
+        "Hyvä perustelu",
+        stage="Vaihe 2",
+    )
+
+    user_rankings = ss.fetch_survey_responses(survey_id)
+    groups_dict_stage1 = srh.convert_choices_groups(stage1_choices)
+    groups_dict_stage2 = srh.convert_choices_groups(stage2_choices)
+    students_dict = srh.convert_users_students(user_rankings)
+
+    output_stage1 = srh.run_hungarian(survey_id, len(user_rankings), groups_dict_stage1, students_dict, [])
+    output_stage2 = srh.run_hungarian(survey_id, len(user_rankings), groups_dict_stage2, students_dict, [])
+
+    output_dict_stage1 = _assignments_by_user(output_stage1[0])
+    output_dict_stage2 = _assignments_by_user(output_stage2[0])
+
+    assert output_dict_stage1[d["user_id"]] == "Päiväkoti Toivo"
+    assert output_dict_stage2[d["user_id"]] == "Päiväkoti Floora"
+    assert output_stage1[1] == 1
+    assert output_stage2[1] == 0
+
+
+def test_happiness_results_multistage(setup_multistage_survey):
+    """
+    Test happiness results calculation on multistage survey.
+    """
+    d = setup_multistage_survey
+    survey_id = d["survey_id"]
+
+    stage1_choices = scs.get_list_of_stage_survey_choices(survey_id, "Vaihe 1")
+    stage2_choices = scs.get_list_of_stage_survey_choices(survey_id, "Vaihe 2")
+
+    ids_stage1 = _group_ids_by_name(stage1_choices)
+    ids_stage2 = _group_ids_by_name(stage2_choices)
+
+    ranking1_stage1 = ",".join(map(str, [ids_stage1["Päiväkoti Floora"], ids_stage1["Päiväkoti Nalli"]]))
+    ranking1_stage2 = ",".join(map(str, [ids_stage2["Päiväkoti Nalli"], ids_stage2["Päiväkoti Toivo"]]))
+
+    rejections1_stage1 = ",".join(map(str, [ids_stage1["Päiväkoti Toivo"]]))
+
+    urs.add_user_ranking(d["user_id"], survey_id, ranking1_stage1, rejections1_stage1, "Hyvä perustelu", stage="Vaihe 1")
+    urs.add_user_ranking(d["user_id"], survey_id, ranking1_stage2, "", "", stage="Vaihe 2")
+
+    user_rankings = ss.fetch_survey_responses(survey_id)
+    groups_dict_stage1 = srh.convert_choices_groups(stage1_choices)
+    groups_dict_stage2 = srh.convert_choices_groups(stage2_choices)
+    students_dict = srh.convert_users_students(user_rankings)
+
+    output_stage1 = srh.hungarian_results(survey_id, user_rankings, groups_dict_stage1, students_dict, stage1_choices)
+
+    output_stage2 = srh.hungarian_results(survey_id, user_rankings, groups_dict_stage2, students_dict, stage2_choices)
+
+    # assert output_stage1[1] == 0.0
+    assert output_stage1[2] == [("Ei järjestettyyn", " valintaan sijoitetut käyttäjät: ", 1)]
+    assert output_stage2[1] == 1.0
+    assert output_stage2[2] == [(1, ". valintaansa sijoitetut käyttäjät: ", 1)]

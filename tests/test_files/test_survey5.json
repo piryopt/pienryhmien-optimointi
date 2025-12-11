@@ -17,12 +17,20 @@
             "Postinumero": "00790"
           },
           {
-            "mandatory": true,
+            "mandatory": false,
             "Nimi": "Päiväkoti Nalli",
             "Enimmäispaikat": "5",
             "Ryhmän minimikoko": "1",
             "Osoite": "Nallitie 3",
             "Postinumero": "00940"
+          },
+          {
+            "mandatory": false,
+            "Nimi": "Päiväkoti Floora",
+            "Enimmäispaikat": "2",
+            "Ryhmän minimikoko": "1",
+            "Osoite": "Syyriankatu 4",
+            "Postinumero": "00560"
           }
         ]
       },
@@ -44,6 +52,14 @@
             "Ryhmän minimikoko": "1",
             "Osoite": "Nallitie 3",
             "Postinumero": "00940"
+          },
+          {
+            "mandatory": false,
+            "Nimi": "Päiväkoti Floora",
+            "Enimmäispaikat": "2",
+            "Ryhmän minimikoko": "1",
+            "Osoite": "Syyriankatu 4",
+            "Postinumero": "00560"
           }
         ]
       }
