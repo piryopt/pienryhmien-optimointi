@@ -114,7 +114,7 @@ def frontpage() -> str:
     if not reloaded:
         session["reloaded"] = True
         return redirect("/")
-    
+
     user_id = session.get("user_id", 0)
     if user_id == 0:
         return jsonify("You are not logged in!")
@@ -129,6 +129,7 @@ def serve_images(filename):
     if file_path.exists() and file_path.is_file():
         return send_from_directory(str(images_dir), filename)
 
+
 @bp.route("/favicon.ico")
 def favicon():
     images_dir = Path(__file__).parent / "static" / "images"
@@ -136,6 +137,7 @@ def favicon():
 
     if favicon_path.exists():
         return send_from_directory(images_dir, "favicon.ico")
+
 
 @bp.route("/api/frontpage", methods=["GET"])
 @ad_login
@@ -178,6 +180,7 @@ def surveys_deleted():
     user_id = session.get("user_id", 0)
     deleted_surveys = survey_service.get_list_deleted_surveys(user_id)
     return jsonify(deleted_surveys)
+
 
 @bp.route("/api/surveys/<string:survey_id>/studentranking/<string:email>", methods=["GET"], defaults={"stage": None})
 @bp.route("/api/surveys/<string:survey_id>/<string:stage>/studentranking/<string:email>", methods=["GET"])
@@ -297,8 +300,6 @@ def new_survey_post():
     except Exception as e:
         current_app.logger.exception("Error creating survey")
         return jsonify({"status": "0", "msg": gettext("Server error")}), 500
-
-
 
 
 """
@@ -494,8 +495,15 @@ def api_multistage_survey_submit(survey_id):
         ranking_exists = user_rankings_service.user_ranking_exists_fast(survey_id, user_id)
 
         succesful_add = user_rankings_service.add_user_ranking(
-            user_id, survey_id, ranking, rejections, reason, stage=stage["stageId"], 
-            not_available=stage["notAvailable"], multistage_ranking=True, ranking_exists=ranking_exists
+            user_id,
+            survey_id,
+            ranking,
+            rejections,
+            reason,
+            stage=stage["stageId"],
+            not_available=stage["notAvailable"],
+            multistage_ranking=True,
+            ranking_exists=ranking_exists,
         )
         if not succesful_add:
             return jsonify({"status": "0", "message": "adding user ranking failed"})
@@ -565,8 +573,9 @@ def api_is_survey_multistage(survey_id):
     Checks whether survey is multistage or not
     """
     is_multistage = survey_service.is_multistage(survey_id)
-    response = {"multistage":is_multistage}
+    response = {"multistage": is_multistage}
     return jsonify(response)
+
 
 @bp.route("/api/surveys/<string:survey_id>/submission", methods=["DELETE"])
 def api_delete_submission(survey_id):
@@ -582,6 +591,7 @@ def api_delete_submission(survey_id):
         response = {"status": "1", "msg": msg}
 
     return jsonify(response)
+
 
 @bp.route("/surveys/<string:survey_id>/deletesubmission", methods=["POST"])
 def delete_submission(survey_id):
@@ -612,6 +622,7 @@ def owner_deletes_submission(survey_id):
     if not success:
         return jsonify({"message": "Deleting answer failed"})
     return "", 204
+
 
 @bp.route("/surveys/<string:survey_id>/edit", methods=["POST"])
 def edit_survey_post(survey_id):
@@ -719,6 +730,7 @@ def api_add_owner(survey_id):
         return jsonify(response)
     response = {"status": "1", "msg": message}
     return jsonify(response)
+
 
 @bp.route("/surveys/<string:survey_id>/group_sizes", methods=["POST"])
 def post_group_sizes(survey_id):
@@ -1161,8 +1173,6 @@ def api_session():
     )
 
 
-
-
 @bp.route("/api/auth/login", methods=["GET", "POST"])
 def api_login():
     if not current_app.debug:
@@ -1200,8 +1210,6 @@ def api_login():
             user_service.make_user_teacher(email)
 
     return redirect("/")
-
-
 
 
 @bp.route("/api/logout", methods=["GET", "POST"])
@@ -1279,7 +1287,7 @@ def api_admin_feedback_get(feedback_id):
 @bp.route("/api/admintools/feedback/<int:feedback_id>/close", methods=["POST"])
 def api_admin_feedback_close(feedback_id):
     """
-    Resolves feedback and sets it to closed. 
+    Resolves feedback and sets it to closed.
     Checks user's admin status before modifying data.
     """
     user_id = session.get("user_id", 0)
@@ -1313,15 +1321,15 @@ def api_admin_analytics():
     if not analytics:
         return jsonify({"success": False, "error": "server_error"}), 500
 
-    items_array = [
-        analytics.get("total_surveys", 0),
-        analytics.get("active_surveys", 0),
-        analytics.get("total_students", 0),
-        analytics.get("total_responses", 0),
-        analytics.get("total_teachers", 0),
-    ]
+    items = {
+        "total_surveys": analytics.get("total_surveys", 0),
+        "active_surveys": analytics.get("active_surveys", 0),
+        "total_teachers": analytics.get("total_teachers", 0),
+        "total_students": analytics.get("total_students", 0),
+        "total_responses": analytics.get("total_responses", 0),
+    }
 
-    return jsonify({"success": True, "data": items_array, "meta": analytics}), 200
+    return jsonify({"success": True, "data": items, "meta": analytics}), 200
 
 
 @bp.route("/api/admintools/surveys", methods=["GET"])
@@ -1339,6 +1347,7 @@ def api_admin_all_active_surveys():
         return jsonify({"success": False, "error": "server_error"}), 500
 
     return jsonify({"success": True, "data": data}), 200
+
 
 # @app.route("/admintools/gen_data", methods=["GET", "POST"])
 # def admin_gen_data():
@@ -1377,6 +1386,7 @@ def api_admin_all_active_surveys():
 """
 MISCELLANEOUS ROUTES:
 """
+
 
 @bp.route("/get_choices/<string:survey_id>", methods=["POST"])
 def get_choices(survey_id):
@@ -1540,6 +1550,7 @@ def delete_old_surveys():
     Weekly check if survey end time was over two year ago. If so, delete said surveys and all related data.
     """
     survey_service.check_for_surveys_to_delete()
+
 
 def save_old_statistics():
     """
