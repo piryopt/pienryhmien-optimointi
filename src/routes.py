@@ -1185,6 +1185,7 @@ def api_config():
     return jsonify({"debug": current_app.debug})
 
 
+@ad_login
 @bp.route("/api/session", methods=["GET"])
 def api_session():
     """
