@@ -18,7 +18,7 @@ Jakajan toiminnalisuudet näkyvät etusivulla seuraavasti:
 Kyselyn luominen alkaa etusivun "Luo uusi kysely"-nappia painamalla. Sovellus avaa lomakkeen, joka täytetään seuraavasti:
 
 ##### 1.1 Kyselyn nimi
-- Anna kyselylle selkeä, kuvaava nimi. Nimen tulee olla vähintää 5 merkkiä pitkä.
+- Anna kyselylle selkeä, kuvaava nimi. Nimen tulee olla vähintään 5 merkkiä pitkä.
 - Nimen täytyy myös olla uniikki, koska Jakajassa ei voi olla samaan aikaan käynnissä montaa samannimistä kyselyä.
 
 ##### 1.2 Vastausaika
@@ -50,7 +50,7 @@ Kyselyn luominen alkaa etusivun "Luo uusi kysely"-nappia painamalla. Sovellus av
 ##### 1.5 Sallitaanko valintojen kieltäminen
 
 - Vastaa tähän kohtaan "kyllä", jos haluat antaa vastaajille mahdollisuuden kieltää joitan vaihtoehtoja. Tällöin avautuu uusi kenttä "Sallittu kiellettyjen ryhmien määrä", johon voit määrittää sallittujen kieltojen määrän kokonaislukuna
-- Vastaajilta vaaditaan kieltämiseen vähintää 10 merkkiä pitä perustelu, jotka näet vastauksien yhteenvedossa:
+- Vastaajilta vaaditaan kieltämiseen vähintään 10 merkkiä pitä perustelu, jotka näet vastauksien yhteenvedossa:
 
 ![](images/allow_denied_choices.png)
 
@@ -88,6 +88,7 @@ Kun vähintään kaikki pakolliset kohdat on täytetty voit luoda kyselyn painam
 - Kysely näkyy myös etusivulla "Käynnissä olevat kyselyt" otsikon alla
 
 
+***
 
 
 ## 2. Monivaiheisen kyselyn luominen
@@ -109,7 +110,7 @@ Lomakkessa on kuitenkin lisäksi lomakkeessa on seuraavat lisäkohdat:
 
 ![](images/participation_limit.png)
 
-- Jotta osallistumiskertojen rajoittaminen toimiii oikein, tulee ryhmällä olla sama nimi kaikissa vaiheissa.
+- Jotta osallistumiskertojen rajoittaminen toimii oikein, tulee ryhmällä olla sama nimi kaikissa vaiheissa.
 
 
 ### 2.3 Vaiheiden hallinta
@@ -126,7 +127,6 @@ Lomakkessa on kuitenkin lisäksi lomakkeessa on seuraavat lisäkohdat:
 - Jokaiselle vaiheelle tulee antaa uniikki tunniste.
   - Tunniste voi olla esimerkiksi vaiheen päivämäärä tai viikko.
 - Vastaaja navigoi tunnisteiden avulla vaiheiden välillä, joten on suositeltavaa, että tunniste kuvaa selkeästi vaihetta.
-- Vaiheet näkyvät vastaussivulla seuraavasti:
 
 
 ##### 2.3.3 Vaihtoehtojen lisääminen vaiheeseen
@@ -143,6 +143,8 @@ Lomakkessa on kuitenkin lisäksi lomakkeessa on seuraavat lisäkohdat:
 
 - Voit poistaa vaiheen painamalla punaista "poista vaihe" nappia
 
+
+***
 
 
 ## 3. Kyselyn hallinta
@@ -189,7 +191,7 @@ Kaikki tekemäsi kyselyt näkyvät "Näytä vanhat kyselyt"-sivulla, jonne pää
 - Voit muokata ryhmäkokoja vain silloin, kun kyselyyn vastanneita on enemmän kuin paikkoja (ks. kohta 4, Ryhmäjako, kun vastauksia on enemmän kuin paikkoja)
 
 
-### 3.5 Kyselyn poistaminen
+### 3.6 Kyselyn poistaminen
 
 -  Kyselyn voi poistaa Näytä vanhat kyselyt" sivulta klikkaamalla kohtaa "Poista kyselyt". Tällöin kysely siirretään roskakoriin.
 - Roskakorista kysely poistuu pysysvästi automaattisesti viikon kouluttua. Jos haluat poistaa kyselyn välittömästi, etsi se roskakorista ja paina jälleen kohtaa "Poista kysely"
@@ -202,27 +204,28 @@ Kaikki tekemäsi kyselyt näkyvät "Näytä vanhat kyselyt"-sivulla, jonne pää
 
 ### 3.8 Kyselyn kopioiminen
 
-- Mene "Aiemmat kyselyt listaukseen".
-- Valitse haluamasi kyselyn riviltä "Kopioi kysely"-linkki.
-- Avautuu kyselynluontipohja, jossa on esisyötettynä vanhan kyselyn tiedot.
+- Mene "Aiemmat kyselyt listaukseen"
+- Valitse haluamasi kyselyn riviltä "Kopioi kysely"-linkki
+- Avautuu kyselynluontipohja, jossa on esisyötettynä vanhan kyselyn tiedot
 - Voit päivittää kaikkia kyselyyn liittyviä kenttiä samoin kuin uuden kyselyn luonnissa.
-- Mikäli kopioimasi kysely on edelleen käynnissä, täytyy kopioidulla kyselyllä olla eri nimi ennen kuin sen voi tallentaa.
+- Mikäli kopioimasi kysely on edelleen käynnissä, täytyy kopioidulla kyselyllä olla eri nimi ennen kuin sen voi tallentaa
+
 
 
 ## 4. Vastausten käsittely
 
-### 4.1 Vastauksien tarkastelu
+#### 4.1 Vastauksien tarkastelu
 
 - Pääset tarkastelemaan kyselyn vastauksia, menemällä "Näytä vanhat kyselyt" sivulle ja klikkaamalla kyselyn kohdalla " Tarkastele tuloksia". 
 
-### 4.2 Ryhmäjako
+#### 4.2 Ryhmäjako
 
 - Siirry kyselyn yhteenvetosivulle sovelluksen etusivulta klikkaamalla ensin "Näytä vanhat kyselyt" -nappia ja valitse sitten haluamasi kysely klikkaamalla kohtaa "Tarkastele tuloksia".
 - Jos kyselyä ei ole vielä suljettu, tee se ensin painamalla "Sulje kysely"-nappia
 - Kun kysely on suljetty, yhteenvetosivulle ilmestyy sininen nappi "Jaa ryhmiin", jota painamalla voit suorittaa ryhmäjaon.
   -**HUOM!** Ennen ryhmäjaon tekemistä on suositeltavaa ensin tarkastaa vastaukset. Jos vastauksissa on mukana ylimääräisiä vastauksia (esimerkiksi opiskelijoilta, jotka ovat peruneet kurssille osallistumisensa), voit poistaa kyseiset vastaukset klikkaamalla vastauksen kohdalla olevaa nappia "Poista tämä vastaus".
 
-### 4.3 Ryhmäjako, kun vastauksia on enemmän kuin paikkoja
+#### 4.3 Ryhmäjako, kun vastauksia on enemmän kuin paikkoja
 
 - Jos vastauksia on enemmän kuin paikkoja, ohjeistaa sovellus muokkaamaan ryhmäkokoja.
 - Pääset muokkaamaan ryhmäkokoja painamalla "Muokkaa ryhmäkokoja"-nappia
@@ -235,7 +238,7 @@ Kaikki tekemäsi kyselyt näkyvät "Näytä vanhat kyselyt"-sivulla, jonne pää
 - Kyselyyn vastanneet sijoitetaan toivoidensa mukaan ryhmiin sillä erotuksella, että nyt osa jää ryhmien ulkopuolelle ja näkyvät ryhmässä "Tyhjä" ryhmäjaon tuloksia tarkasteltaessa
  
 
-### 4.4 Tulosten käsittely
+#### 4.4 Tulosten käsittely
 
 - Kun ryhmäjako on tehty painamalla nappia "Jaa ryhmiin", voit tallentaa tehdyn ryhmäjaon painamalla nappia "Tallenna tulokset", jolloin ryhmäjako tallentuu sovellukseen. Muuten poistuessasi sivulta unohtaa sovellus tehdyn ryhmäjaon ja voit jakaa opiskelijat uudelleen ryhmiin.
 - Tuloksessa voi olla ryhmäjakokertojen välillä eroa mikäli kovin monella opiskelijalla on samat valinnat kyselyssä, sillä ryhmäjakoa tehdessä opiskelijoiden järjestys satunnaistetaan ja algoritmi suosii listassa ensimmäisenä olevaa henkilöä joilla on samat valinnat.
