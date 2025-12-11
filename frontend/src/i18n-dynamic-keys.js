@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 t("Luo uusi kysely");
 t("Luotuja kyselyitä");
 t("Käynnissä olevat kyselyt");

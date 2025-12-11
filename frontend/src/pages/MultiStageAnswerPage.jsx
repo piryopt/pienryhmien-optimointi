@@ -381,7 +381,7 @@ const MultiStageAnswerPage = () => {
                       {t(
                         "Ne täytetään aina vähintään minimikokoon asti vastauksista riippumatta."
                       )}
-                      <br></br>
+                      <br />
                       {(survey.denied_allowed_choices ?? 0) !== 0 && (
                         <>
                           {t("Sinut voidaan tarvittaessa sijoittaa")}{" "}

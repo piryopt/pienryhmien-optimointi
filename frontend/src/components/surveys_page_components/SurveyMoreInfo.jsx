@@ -55,7 +55,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
           </span>
         </>
       )}
-      <br></br>
+      <br />
       <Link to={`/surveys/${survey.id}/edit`} className="surveys_link">
         <img
           src={`${imagesBaseUrl}/edit_white_36dp.svg`}
@@ -66,7 +66,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
         />
         &nbsp;{t("Muokkaa kyselyä tai lisää siihen ylläpitäjä")}
       </Link>
-      <br></br>
+      <br />
       <Link
         className="surveys_link"
         to={
@@ -84,7 +84,7 @@ const SurveyMoreInfo = ({ survey, handleDeleteClick }) => {
         />
         &nbsp;{t("Kopioi kysely")}
       </Link>
-      <br></br>
+      <br />
       <span
         style={{ cursor: "pointer" }}
         className="surveys_link"

@@ -39,9 +39,9 @@ const ChoiceTable = ({
         <thead>
           <tr id="column-delete-btns">
             {limitParticipationVisible ? (
-              <td colSpan="5"></td>
+              <td colSpan="5" />
             ) : (
-              <td colSpan="4"></td>
+              <td colSpan="4" />
             )}
             {columns.map(({ name }) => (
               <th key={name} className="variable-header">
@@ -49,11 +49,11 @@ const ChoiceTable = ({
                   className="delete-col-btn-visible"
                   onClick={() => removeColumn(name)}
                   title={t("Poista sarake")}
-                ></div>
+                 />
                 <span>{name}</span>
               </th>
             ))}
-            <td></td>
+            <td />
           </tr>
 
           <tr id="choice-table-headers">

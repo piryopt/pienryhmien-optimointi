@@ -109,7 +109,7 @@ const ChoiceRow = ({
           className="delete-row-btn"
           onClick={onDelete}
           title={t("Poista")}
-        ></div>
+         />
       </td>
     </tr>
   );

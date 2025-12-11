@@ -10,7 +10,7 @@ const hours = Array.from({ length: 24 }).map(
 
 const SurveyDateOfClosing = ({ placeholderDate, placeholderTime }) => {
   const { t } = useTranslation();
-  const { control, register, formState } = useFormContext();
+  const { control, formState } = useFormContext();
   const { errors } = formState;
 
   useEffect(() => {
