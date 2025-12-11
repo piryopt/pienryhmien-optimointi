@@ -1550,6 +1550,7 @@ def language_sv():
 
 
 @bp.app_errorhandler(404)
+@ad_login
 def spa_fallback_404(e):
     path = request.path or ""
     # let API and static requests return normal 404/serve assets
