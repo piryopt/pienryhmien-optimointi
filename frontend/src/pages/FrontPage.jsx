@@ -38,7 +38,7 @@ const FrontPage = () => {
             mainText="Luo uusi kysely"
             additionalText="Luo uusi kysely tai tuo valmiit vastausvaihtoehdot csv-tiedostosta"
           />
-          <br></br>
+          <br />
           <FrontPageButton
             path="/surveys/multistage/create"
             imgSrc={`${imagesBaseUrl}/note_stack_add_36dp.svg`}
@@ -54,7 +54,7 @@ const FrontPage = () => {
             additionalText="Luotuja kyselyitä"
             additionalVars={{ count: createdSurveys }}
           />
-          <br></br>
+          <br />
           <FrontPageButton
             path="/trash"
             imgSrc={`${imagesBaseUrl}/delete_36dp.svg`}
@@ -101,7 +101,7 @@ const FrontPage = () => {
               />
             </div>
           ))}
-          <br></br>
+          <br />
         </div>
       </div>
     </>

@@ -21,7 +21,7 @@ const TrashMoreInfo = ({ survey, handleDeleteClick, handleRestoreClick }) => {
         />
         &nbsp;{t("Palauta kysely")}
       </span>
-      <br></br>
+      <br />
       <Link
         className="surveys_link"
         to={`/surveys/${survey.is_multistage ? "multistage/" : ""}create?fromtemplate=${survey.id}`}
@@ -35,7 +35,7 @@ const TrashMoreInfo = ({ survey, handleDeleteClick, handleRestoreClick }) => {
         />
         &nbsp;{t("Kopioi kysely")}
       </Link>
-      <br></br>
+      <br />
       <span
         style={{ cursor: "pointer" }}
         className="surveys_link"

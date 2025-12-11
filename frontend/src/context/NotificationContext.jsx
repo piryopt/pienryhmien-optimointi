@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import Notification from "../components/Notification";
 
 const NotificationContext = createContext();
@@ -27,9 +27,6 @@ export const NotificationProvider = ({ children }) => {
 export const NotificationDisplay = () => {
   const { notification, hideNotification } = useNotification();
   return (
-    <Notification
-      notification={notification}
-      onClose={hideNotification}
-    ></Notification>
+    <Notification notification={notification} onClose={hideNotification} />
   );
 };
