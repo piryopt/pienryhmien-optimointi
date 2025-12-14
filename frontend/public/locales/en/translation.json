@@ -20,6 +20,7 @@
   },
   "CSV-ohje": "CSV guide",
   "Ei": "No",
+  "Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui.": "No reasons are accepted if there are no rejections! Saving failed.",
   "Ei järjestetty": "Not ranked",
   "Ei kyselyitä": "No surveys",
   "Ei paikalla": "Not present",
@@ -263,6 +264,7 @@
   "Palautteen lähetys epäonnistui": "Submitting feedback failed",
   "Palautteen tyyppi": "Feedback type",
   "Palautteiden lataus epäonnistui": "Loading feedback failed",
+  "Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10.": "Reason is too short, saving failed. There must be at least 10 characters.",
   "Perustelut": "Reasons",
   "Perustelut kielloille": "Reasons for rejections",
   "Peruuta": "Cancel",
@@ -360,6 +362,9 @@
   "Tallenna kaikkien vaiheiden tulokset": "Save results",
   "Tallenna muutokset": "Save changes",
   "Tallenna tulokset": "Save results",
+  "Tallennus epäonnistui. Valitse vähintään": "Save failed. Select at least ",
+  "Tallennus epäonnistui. Voit hylätä enintään": "Save failed. You can deny at most ",
+  "Tallennus onnistui.": "Save successful.",
   "Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa": "In this case the user is not taken into account in the group division",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
     "": "This survey is closed and no longer accepting responses."

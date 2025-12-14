@@ -20,6 +20,7 @@
   },
   "CSV-ohje": "CSV-ohje",
   "Ei": "Ei",
+  "Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui.": "Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui.",
   "Ei järjestetty": "Ei järjestetty",
   "Ei kyselyitä": "Ei kyselyitä",
   "Ei paikalla": "Ei paikalla",
@@ -263,6 +264,7 @@
   "Palautteen lähetys epäonnistui": "Palautteen lähetys epäonnistui",
   "Palautteen tyyppi": "Palautteen tyyppi",
   "Palautteiden lataus epäonnistui": "Palautteiden lataus epäonnistui",
+  "Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10.": "Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10.",
   "Perustelut": "Perustelut",
   "Perustelut kielloille": "Perustelut kielloille",
   "Peruuta": "Peruuta",
@@ -360,6 +362,9 @@
   "Tallenna kaikkien vaiheiden tulokset": "Tallenna kaikkien vaiheiden tulokset",
   "Tallenna muutokset": "Tallenna muutokset",
   "Tallenna tulokset": "Tallenna tulokset",
+  "Tallennus epäonnistui. Valitse vähintään": "Tallennus epäonnistui. Valitse vähintään ",
+  "Tallennus epäonnistui. Voit hylätä enintään": "Tallennus epäonnistui. Voit hylätä enintään ",
+  "Tallennus onnistui.": "Tallennus onnistui.",
   "Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa": "Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
     "": "Tämä kysely on suljettu eikä siihen voi enää vastata."

@@ -20,6 +20,7 @@
   },
   "CSV-ohje": "CSV guide",
   "Ei": "Nej",
+  "Ei hyväksytä perusteluita, jos ei ole hylkäyksiä! Tallennus epäonnistui.": "Inga motiveringar accepteras om det inte finns några avvisningar! Sparandet misslyckades.",
   "Ei järjestetty": "Inte organiserad",
   "Ei kyselyitä": "Inga undersökningar",
   "Ei paikalla": "Frånvarande",
@@ -264,6 +265,7 @@
   "Palautteen lähetys epäonnistui": "Feedbackinlämning misslyckades",
   "Palautteen tyyppi": "Feedbacktyp",
   "Palautteiden lataus epäonnistui": "Feedbackinläsningen misslyckades",
+  "Perustelu on liian lyhyt, tallennus epäonnistui. Merkkeja tulee olla vähintään 10.": "Motiveringen är för kort, sparandet misslyckades. Det måste finnas minst 10 tecken.",
   "Perustelut": "Motiveringar",
   "Perustelut kielloille": "Motiveringar för avvisningar",
   "Peruuta": "Avbryt",
@@ -361,6 +363,9 @@
   "Tallenna kaikkien vaiheiden tulokset": "Spara resultat",
   "Tallenna muutokset": "Spara ändringar",
   "Tallenna tulokset": "Spara resultat",
+  "Tallennus epäonnistui. Valitse vähintään": "Sparandet misslyckades. Välj minst",
+  "Tallennus epäonnistui. Voit hylätä enintään": "Sparandet misslyckades. Du kan förkasta högst",
+  "Tallennus onnistui.": "Sparandet lyckades.",
   "Tällöin vastaajaa ei oteta huomioon kyseisen vaiheen ryhmäjaossa": "I så fall tas inte respondenten med i gruppindelningen för det aktuella steget",
   "Tämä kysely on suljettu eikä siihen voi enää vastata": {
     "": "Den här undersökningen är stängd och kan inte längre besvaras."
