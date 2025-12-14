@@ -394,6 +394,7 @@
   "vaihtoehtoa": "options to the",
   "vaihtoehtoa mieluisuusjärjestykseen": "options in order of preference in the",
   "Valinnat": "Choices",
+  "Valinnat poistettu": "Choices deleted",
   "Valitse päättymisaika": "Choose an end time",
   "Valitse päättymispäivä": "Choose an end date",
   "Vastauksen poistaminen": "Delete response",
@@ -424,5 +425,10 @@
 
   "Every stage must have a non-empty name": "Every stage must have a non-empty name",
   "Group minimum size must be smaller than maximum size": "Group minimum size must be smaller than maximum size",
+  "Response period's end can't be in the past": "Response period's end can't be in the past",
+  "Survey created": "Survey created",
+  "Survey denied choices must be an integer": "Survey denied choices must be an integer",
+  "Survey description must be a string": "Survey description must be a string",
+  "Survey name must be atleast 5 characters long": "Survey name must be atleast 5 characters long",
   "There already exists a survey with the same name! Close it or change the name!": "There already exists a survey with the same name! Close it or change the name!"
 }

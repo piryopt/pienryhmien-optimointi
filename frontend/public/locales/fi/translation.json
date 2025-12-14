@@ -394,6 +394,7 @@
   "vaihtoehtoa": "vaihtoehtoa",
   "vaihtoehtoa mieluisuusjärjestykseen": "vaihtoehtoa mieluisuusjärjestykseen",
   "Valinnat": "Valinnat",
+  "Valinnat poistettu": "Valinnat poistettu",
   "Valitse päättymisaika": "Valitse päättymisaika",
   "Valitse päättymispäivä": "Valitse päättymispäivä",
   "Vastauksen poistaminen": "Vastauksen poistaminen",
@@ -424,5 +425,10 @@
 
   "Every stage must have a non-empty name": "Jokaisella vaiheella tulee olla ei-tyhjä nimi",
   "Group minimum size must be smaller than maximum size": "Ryhmän minimikoon tulee olla pienempi kuin maksimikoko",
+  "Response period's end can't be in the past": "Vastausajan päättyminen ei voi olla menneisyydessä",
+  "Survey created": "Kysely luotu",
+  "Survey denied choices must be an integer": "Kiellettyjen valintojen määrä tulee olla kokonaisluku",
+  "Survey description must be a string": "Kyselyn kuvauksen tulee olla merkkijono",
+  "Survey name must be atleast 5 characters long": "Kyselyn nimen tulee olla vähintään 5 merkkiä pitkä",
   "There already exists a survey with the same name! Close it or change the name!": "Kyselyllä on jo sama nimi! Sulje se tai muuta nimeä!"
 }

@@ -230,6 +230,7 @@
   "Muokkaa ryhmäkokoja": "Redigera gruppstorlekar",
   "Muokkaa vaiheiden ryhmäkokoja": "Redigera gruppstorlekar för stegen",
   "Muu": "Annat",
+  "Muutokset tallennettu!": "Ändringar sparade!",
   "Näe poistettavaksi asetetut kyselyt": "Se undersökningar som ska raderas",
   "Näytä": "Visa",
   "Näytä vanhat kyselyt": "Visa gamla undersökningar",
@@ -394,6 +395,7 @@
   "vaihtoehtoa": "alternativ i den",
   "vaihtoehtoa mieluisuusjärjestykseen": "alternativ i preferensordning i den",
   "Valinnat": "Val",
+  "Valinnat poistettu": "Val tas bort",
   "Valitse päättymisaika": "Välj sluttid",
   "Valitse päättymispäivä": "Välj slutdag",
   "Vastauksen poistaminen": "Ta bort svar",
@@ -424,5 +426,10 @@
 
   "Every stage must have a non-empty name":" Varje steg måste ha ett icke-tomt namn",
   "Group minimum size must be smaller than maximum size": "Gruppens minimistorlek måste vara mindre än maximistorleken",
+  "Response period's end can't be in the past": "Slutet av svarstiden kan inte vara i det förflutna",
+  "Survey created": "Undersökning skapad",
+  "Survey denied choices must be an integer": "Förbjudna val i undersökningen måste vara ett heltal",
+  "Survey description must be a string": "Undersökningens beskrivning måste vara en sträng",
+  "Survey name must be atleast 5 characters long": "Undersökningens namn måste vara minst 5 tecken långt",
   "There already exists a survey with the same name! Close it or change the name!": "Det finns redan en undersökning med samma namn! Stäng den eller ändra namnet!"
 }
