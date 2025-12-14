@@ -157,6 +157,18 @@ const AnswerSurveyPage = () => {
     });
   };
 
+  // Translates error messages that are built on backend with dynamic numbers
+  const translateMessage = (message) => {
+    if (!message) return "";
+    const numberMatch = message.match(/\s+(\d+)$/);
+    if (numberMatch) {
+      const baseMsg = message.slice(0, -numberMatch[0].length);
+      const translated = t(baseMsg);
+      return `${translated} ${numberMatch[1]}`;
+    }
+    return t(message);
+  };
+
   const handleSubmit = async () => {
     try {
       const result = await surveyService.submitSurveyAnswer({
@@ -172,7 +184,7 @@ const AnswerSurveyPage = () => {
       showNotification(t(result.msg), "success");
       setExisting(true);
     } catch (error) {
-      showNotification(t(error.message), "error");
+      showNotification(translateMessage(error.message), "error");
       console.error("Error submitting survey", error);
     }
   };
@@ -188,7 +200,7 @@ const AnswerSurveyPage = () => {
       setBad([]);
       setReason("");
     } catch (error) {
-      showNotification(t(error.message), "error");
+      showNotification(translateMessage(error.message), "error");
       console.error("Error deleting survey", error);
     }
   };
