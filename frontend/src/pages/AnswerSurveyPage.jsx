@@ -169,10 +169,10 @@ const AnswerSurveyPage = () => {
         deniedAllowedChoices: survey.denied_allowed_choices
       });
       if (result.status === "0") throw new Error(result.msg);
-      showNotification(result.msg, "success");
+      showNotification(t(result.msg), "success");
       setExisting(true);
     } catch (error) {
-      showNotification(error.message, "error");
+      showNotification(t(error.message), "error");
       console.error("Error submitting survey", error);
     }
   };
@@ -181,14 +181,14 @@ const AnswerSurveyPage = () => {
     try {
       const result = await surveyService.deleteSurveyAnswer(surveyId);
       if (result.status === "0") throw new Error(result.msg);
-      showNotification(result.msg, "success");
+      showNotification(t(result.msg), "success");
       setExisting(false);
       setNeutral([...neutral, ...good, ...bad]);
       setGood([]);
       setBad([]);
       setReason("");
     } catch (error) {
-      showNotification(error.message, "error");
+      showNotification(t(error.message), "error");
       console.error("Error deleting survey", error);
     }
   };
