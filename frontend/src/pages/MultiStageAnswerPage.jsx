@@ -202,11 +202,13 @@ const MultiStageAnswerPage = () => {
         ) {
           showNotification(
             t(
-              `Sijoita vähintään ${survey.min_choices_per_stage[stage.name]} ryhmää jokaisesta vaiheesta vihreään tai punaiseen laatikkoon${
-                survey.allow_absences
-                  ? " tai merkitse itsesi poissaolevaksi vaiheesta"
+              "Sijoita vähintään {{min}} ryhmää jokaisesta vaiheesta vihreään tai punaiseen laatikkoon {{absence}}",
+              {
+                min: survey.min_choices_per_stage[stage.name],
+                absence: survey.allow_absences
+                  ? t("tai merkitse itsesi poissaolevaksi vaiheesta")
                   : ""
-              }`
+              }
             ),
             "error"
           );
@@ -216,7 +218,10 @@ const MultiStageAnswerPage = () => {
         if (stage.bad.length > survey.denied_allowed_choices) {
           showNotification(
             t(
-              `Voit kieltää enintään ${survey.denied_allowed_choices} jokaisesta vaiheesta`
+              "Voit kieltää enintään {{max}} jokaisesta vaiheesta",
+              {
+                max: survey.denied_allowed_choices
+              }
             ),
             "error"
           );
@@ -226,7 +231,10 @@ const MultiStageAnswerPage = () => {
         if (stage.bad.length > 0 && (reasons[stage.name]?.length ?? 0) < 10) {
           showNotification(
             t(
-              `Vaiheen ${stage.name} kieltojen perustelun tulee olla vähintään 10 merkkiä pitkä`
+              "Vaiheen {{name}} kieltojen perustelun tulee olla vähintään 10 merkkiä pitkä",
+              {
+                name: stage.name
+              }
             ),
             "error"
           );
@@ -255,7 +263,7 @@ const MultiStageAnswerPage = () => {
     try {
       const result = await surveyService.deleteSurveyAnswer(surveyId);
       if (result.status === "0") throw new Error(result.msg);
-      showNotification(result.msg, "success");
+      showNotification(t(result.msg), "success");
       setStages((prev) =>
         prev.map((s) => ({
           ...s,
@@ -268,7 +276,7 @@ const MultiStageAnswerPage = () => {
       setReasons({});
       setExisting(false);
     } catch (error) {
-      showNotification(error.message, "error");
+      showNotification(t(error.message), "error");
       console.error("Error deleting survey", error);
     }
   };
