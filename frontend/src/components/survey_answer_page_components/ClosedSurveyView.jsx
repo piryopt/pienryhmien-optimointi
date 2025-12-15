@@ -49,12 +49,14 @@ const ClosedSurveyView = ({
                 readOnly
               />
               {reason && reason.length > 0 ? (
-                <div style={{ paddingLeft: 11 }}>
-                  <p>
+                <>
+                  <h2 className="closed-survey-title">
                     {t("Perustelut kielloille")}:
-                    <br /> {reason}
-                  </p>
-                </div>
+                  </h2>
+                  <div style={{ paddingLeft: 11 }}>
+                    <p>{reason}</p>
+                  </div>
+                </>
               ) : null}
             </>
           )}

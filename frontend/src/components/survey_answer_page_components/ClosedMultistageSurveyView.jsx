@@ -86,12 +86,14 @@ const ClosedMultistageSurveyView = ({
                           readOnly={true}
                         />
                         {reasons[stage.id] && reasons[stage.id].length > 0 ? (
-                          <div style={{ paddingLeft: 11 }}>
-                            <p>
+                          <>
+                            <h2 className="closed-survey-title">
                               {t("Perustelut kielloille")}:
-                              <br /> {reasons[stage.id]}
-                            </p>
-                          </div>
+                            </h2>
+                            <div style={{ paddingLeft: 11 }}>
+                              <p>{reasons[stage.id]}</p>
+                            </div>
+                          </>
                         ) : null}
                       </>
                     )}

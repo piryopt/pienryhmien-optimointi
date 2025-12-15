@@ -434,6 +434,7 @@
   "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": "",
 
   "Every stage must have a non-empty name": "Every stage must have a non-empty name",
+  "Name of every stage must be unique within a survey": "Name of every stage must be unique within a survey",
   "Group minimum size must be smaller than maximum size": "Group minimum size must be smaller than maximum size",
   "Response period's end can't be in the past": "Response period's end can't be in the past",
   "Survey created": "Survey created",

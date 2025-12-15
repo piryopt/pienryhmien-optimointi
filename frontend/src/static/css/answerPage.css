@@ -50,10 +50,6 @@ li {
   .search-container {
     width: 100% !important;
   }
-
-  .group-item {
-    touch-action: none;
-  }
 }
 
 .answer-title {

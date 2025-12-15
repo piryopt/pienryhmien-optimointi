@@ -569,7 +569,10 @@ const SurveyMultistageCreate = () => {
         return;
       }
 
-      showNotification(t(json.msg) || t("Kysely luotu onnistuneesti"), "success");
+      showNotification(
+        t(json.msg) || t("Kysely luotu onnistuneesti"),
+        "success"
+      );
     } catch (err) {
       showNotification(
         t(err?.message) || t("Kyselyn luonti epäonnistui"),
