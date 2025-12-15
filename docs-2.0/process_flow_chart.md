@@ -1,66 +1,90 @@
 # Process flowcharts
 
-Charts made with using [Mermaidchart.com](https://www.mermaidchart.com/play)
+Charts made with using [mermaidchart.com](https://www.mermaidchart.com/play)
 
-## Survery creator chart
+## Create and edit survey flowchart
 
 ```mermaid
 flowchart TB
     A["Log-in page"] --> n1(["login"])
-    B("GET /frontpage") --> C@{ label: "Teacher's main page" }
-    C --> D{"What to do?"} & H(["Open an active survey"]) & S(["Create a new survey"]) & BC(["log out"]) & n2(["Open surveys list"])
-    S --> T["GET /surveys/create"]
-    T --> U(["Name the survey"])
-    H --> E("GET /surveys/:id")
+    B("GET /api/frontpage") --> C["Front page"]
+    C --> H(["Open an active survey"]) & S(["Create a new survey"]) & BC(["log out"]) & n2(["Open surveys list"])
+    S --> T["GET /api/surveys/create"]
+    T --> n11["Create survey page"]
+    H --> E("GET /api/surveys/:id")
     X{"How to add groups?"} --> Y(["Add groups manually"]) & AA(["Import from CSV-file"])
-    AA --> BB(["Import data and edit form"])
-    BB --> CC["POST /surveys"]
-    CC --> EE(["Save survey"])
-    EE --> FF["POST /surveys"] & GG["POST /surveys/:id"]
-    FF --> C
-    D --> KL(["copy survey"]) & MN(["edit survey"]) & OP(["close survey"]) & ST(["delete survey"]) & WX(["See current answers"])
-    MN --> IJ["GET /surveys/:id/edit"]
+    AA -- Changes needed to groups --> BB(["Edit imported data"])
+    AA -- No changes needed --> EE(["Create survey"])
+    EE --> FF["POST /api/surveys/create"]
+    D{"What to do?"} --> KL(["copy survey"]) & MN(["edit survey"])
+    MN --> IJ["GET /api/surveys/:id/edit"]
     IJ --> n7["Edit survey page"]
-    GG --> C
-    KL --> U
-    IC{"Is there enough available seats for students?"} -- NO --> ID{"Choose fix method"}
-    ID --> IE["POST /surveys/:id/close/delete-answers"] & IF["Add extra seats to groups"]
-    IE --> C
-    IF --> IG["POST /surveys/:id/edit"]
-    IG --> C
-    IC -- YES --> C
-    JK["export results to Excel"] --> JL("GET /surveys/:id/results/export")
-    JL --> D
-    KM("GET /surveys/:id/results") --> D
+    KL --> n11
     E --> D
     BC --> A
     n1 -- credentials correct --> B
     n1 -- credentials incorrect --> A
-    U --> X
-    Y --> CC
-    FG["What to edit?"] --> YZ(["Give administrative rights with email"])
-    n2 --> n3["GET /surveys"]
+    U(["Fill survey info and parameters"]) --> X
+    Y --> EE
+    n2 --> n3["GET /api/surveys"]
     n3 --> n4(["Choose a survey"])
     n4 --> D
-    YZ --> HI["POST /surveys/:id/add_owner"]
-    HI --> FG
-    WX --> n5["GET /surveys/:id/answers"]
-    n5 --> n6["Answers page"]
-    n7 --> FG
+    YZ(["Give administrative rights with email"]) --> HI["POST /api/surveys/:id/add_owner/:email"]
+    n8["Untitled Node"] --> A
+    BB --> EE
+    n7 --> YZ & n9(["Edit survey info and/or parameters"])
+    n9 --> n10@{ label: "<span style=\"padding-left:\">POST /api/surveys/:id/edit</span>" }
+    n11 --> U
 
     A@{ shape: rect}
     C@{ shape: rect}
     T@{ shape: rounded}
     FF@{ shape: rounded}
-    GG@{ shape: rounded}
     IJ@{ shape: rounded}
-    FG@{ shape: diam}
     n3@{ shape: rounded}
     HI@{ shape: rounded}
-    n5@{ shape: rounded}
+    n8@{ shape: anchor}
+    n10@{ shape: rounded}
 ```
 
-## Survery answerer chart
+## Allocate groups flowchart
+
+```mermaid
+flowchart TB
+    A["Log-in page"] --> n1(["login"])
+    B("GET /api/frontpage") --> C["Front page"]
+    C --> H(["Select an active survey"]) & n2(["Open surveys list"])
+    H -- <br> --> E("GET /api/surveys/:id/answers")
+    D["Survey answers page"] -- Survey open --> OP(["close survey"])
+    D -- Survey closed --> n9(["Allocate groups"])
+    E --> D
+    n1 -- credentials correct --> B
+    n1 -- credentials incorrect --> A
+    n2 --> n3["GET /api/surveys"]
+    n3 --> n4(["Select a survey and review results"])
+    n8["Untitled Node"] --> A
+    n4 -- Groups not saved --> E
+    n4 -- Groups saved --> n15@{ label: "<span style=\"padding-left:\">GET /api/surveys/:id/results</span>" }
+    OP --> n10["POST /api/surveys/:id/close"]
+    n10 --> n9
+    n9 --> n11@{ label: "<span style=\"padding-left:\">POST /api/surveys/:id/results</span>" }
+    n11 --> n15
+    n12["Survey results page"] --> JK(["export results to Excel"]) & n13(["Save results"])
+    n13 --> n14@{ label: "<span style=\"padding-left:\">POST /api/surveys/:id/results/export/save</span>" }
+    n15 --> n12
+
+    A@{ shape: rect}
+    C@{ shape: rect}
+    D@{ shape: rect}
+    n3@{ shape: rounded}
+    n8@{ shape: anchor}
+    n15@{ shape: rounded}
+    n10@{ shape: rounded}
+    n11@{ shape: rounded}
+    n14@{ shape: rect}
+```
+
+## Answer survey flowchart
 
 ```mermaid
 flowchart TB
@@ -80,4 +104,7 @@ flowchart TB
     Q -- <br> --> R(["Save answers"])
     M -- NO --> Q
     R --> S("POST /api/surveys/:id")
+    n1["Rectangle"] --> A
+
+    n1@{ shape: anchor}
 ```
