@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import { Link } from "react-router-dom";
+import "../../static/css/dark.css";
 
 const langToFile = {
   fi: "/content/user-manual-fi.md",
@@ -23,6 +25,7 @@ const UserManual = () => {
   return (
     <div className="container">
       <ReactMarkdown
+        rehypePlugins={[rehypeRaw]}
         components={{
           a: ({ href, children, ...props }) =>
             href && href.startsWith("/") ? (
