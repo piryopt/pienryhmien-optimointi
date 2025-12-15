@@ -8,33 +8,30 @@ Charts made with using [mermaidchart.com](https://www.mermaidchart.com/play)
 flowchart TB
     A["Log-in page"] --> n1(["login"])
     B("GET /api/frontpage") --> C["Front page"]
-    C --> H(["Open an active survey"]) & S(["Create a new survey"]) & BC(["log out"]) & n2(["Open surveys list"])
+    C --> S(["Create a new survey"]) & n2(["Open surveys list"])
     S --> T["GET /api/surveys/create"]
     T --> n11["Create survey page"]
-    H --> E("GET /api/surveys/:id")
-    X{"How to add groups?"} --> Y(["Add groups manually"]) & AA(["Import from CSV-file"])
-    AA -- Changes needed to groups --> BB(["Edit imported data"])
-    AA -- No changes needed --> EE(["Create survey"])
+    AA(["Import from CSV-file"]) -- <br> --> BB(["Edit imported data"])
+    AA -- </br> --> EE(["Create survey"])
     EE --> FF["POST /api/surveys/create"]
-    D{"What to do?"} --> KL(["copy survey"]) & MN(["edit survey"])
-    MN --> IJ["GET /api/surveys/:id/edit"]
+    MN(["edit survey"]) --> IJ["GET /api/surveys/:id/edit"]
     IJ --> n7["Edit survey page"]
-    KL --> n11
-    E --> D
-    BC --> A
     n1 -- credentials correct --> B
     n1 -- credentials incorrect --> A
-    U(["Fill survey info and parameters"]) --> X
+    U(["Fill survey info and parameters"]) --> Y(["Add groups manually"]) & AA
     Y --> EE
     n2 --> n3["GET /api/surveys"]
     n3 --> n4(["Choose a survey"])
-    n4 --> D
+    n4 --> KL(["copy survey"]) & MN
     YZ(["Give administrative rights with email"]) --> HI["POST /api/surveys/:id/add_owner/:email"]
     n8["Untitled Node"] --> A
     BB --> EE
     n7 --> YZ & n9(["Edit survey info and/or parameters"])
     n9 --> n10@{ label: "<span style=\"padding-left:\">POST /api/surveys/:id/edit</span>" }
     n11 --> U
+    KL --> n12@{ label: "<span style=\"padding-left:\">GET /api/surveys/:id</span>" }
+    n12 --> n13["Create survey from template page"]
+    n13 --> U
 
     A@{ shape: rect}
     C@{ shape: rect}
@@ -45,6 +42,7 @@ flowchart TB
     HI@{ shape: rounded}
     n8@{ shape: anchor}
     n10@{ shape: rounded}
+    n12@{ shape: rounded}
 ```
 
 ## Allocate groups flowchart
@@ -92,19 +90,16 @@ flowchart TB
     B -- credentials incorrect --> A
     B -- credentials correct --> E("GET /api/frontpage")
     E --> F["Front page"]
-    F --> K(["log out"]) & G(["Go to a survey with a link"])
-    K --> A
+    F --> G(["Go to a survey with a link"])
     G --> I("GET /api/surveys/:id")
-    I --> J{"Is the survey open?"}
-    J -- NO --> L["Survey closed page"]
-    J -- YES --> M{"Has student answered the survey previously?"}
-    M -- YES --> N{"Remove previous answer?"}
-    N -- YES --> P("DELETE /api/surveys/:id/submission")
-    P --> Q(["Add a new answer"])
-    Q -- <br> --> R(["Save answers"])
-    M -- NO --> Q
-    R --> S("POST /api/surveys/:id")
+    I -- Survey open --> n2["Survey answer page"]
+    I -- Survey closed --> L["Survey closed page"]
+    P("DELETE /api/surveys/:id/submission") --> Q(["Fill out and submit selections"])
     n1["Rectangle"] --> A
+    n2 -- Survey not answered --> Q
+    n2 -- Survey already answered --> n3(["Delete submission"])
+    n3 --> P
+    Q --> S("POST /api/surveys/:id")
 
     n1@{ shape: anchor}
 ```
