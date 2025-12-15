@@ -66,21 +66,18 @@ flowchart TB
 flowchart TB
     A["log-in page"] --> B(["login"])
     B -- credentials incorrect --> A
-    B -- credentials correct --> E("GET /frontpage")
+    B -- credentials correct --> E("GET /api/frontpage")
     E --> F["Front page"]
     F --> K(["log out"]) & G(["Go to a survey with a link"])
     K --> A
-    G --> I("GET /surveys/:id")
+    G --> I("GET /api/surveys/:id")
     I --> J{"Is the survey open?"}
     J -- NO --> L["Survey closed page"]
     J -- YES --> M{"Has student answered the survey previously?"}
     M -- YES --> N{"Remove previous answer?"}
-    N -- YES --> P("POST /surveys/:id/submission")
-    P --> Q{"Add new answer?"}
-    Q -- YES --> R(["Save answers"])
-    Q -- NO --> F
+    N -- YES --> P("DELETE /api/surveys/:id/submission")
+    P --> Q(["Add a new answer"])
+    Q -- <br> --> R(["Save answers"])
     M -- NO --> Q
-    R --> S("POST /surveys/:id")
-    S --> F
-    N -- NO --> Q
+    R --> S("POST /api/surveys/:id")
 ```
