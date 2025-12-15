@@ -435,6 +435,7 @@
   "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": "",
 
   "Every stage must have a non-empty name": " Varje steg måste ha ett icke-tomt namn",
+  "Name of every stage must be unique within a survey": "Namnet på varje steg måste vara unikt inom en undersökning",
   "Group minimum size must be smaller than maximum size": "Gruppens minimistorlek måste vara mindre än maximistorleken",
   "Response period's end can't be in the past": "Slutet av svarstiden kan inte vara i det förflutna",
   "Survey created": "Undersökning skapad",

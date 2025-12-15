@@ -434,6 +434,7 @@
   "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti",
 
   "Every stage must have a non-empty name": "Jokaisella vaiheella tulee olla ei-tyhjä nimi",
+  "Name of every stage must be unique within a survey": "Kyselyn eri vaiheilla ei voi olla sama nimi",
   "Group minimum size must be smaller than maximum size": "Ryhmän minimikoon tulee olla pienempi kuin maksimikoko",
   "Response period's end can't be in the past": "Vastausajan päättyminen ei voi olla menneisyydessä",
   "Survey created": "Kysely luotu",
