@@ -6,18 +6,17 @@ Charts made with using [mermaidchart.com](https://www.mermaidchart.com/play)
 
 ```mermaid
 flowchart TB
-    A["Log-in page"] --> n1(["login"])
+    A["Login page"] --> n1(["Sign in"])
     B("GET /api/frontpage") --> C["Front page"]
     C --> S(["Create a new survey"]) & n2(["Open surveys list"])
     S --> T["GET /api/surveys/create"]
     T --> n11["Create survey page"]
-    AA(["Import from CSV-file"]) -- <br> --> BB(["Edit imported data"])
-    AA -- </br> --> EE(["Create survey"])
+    AA(["Import from CSV-file"]) -- <br> --> BB(["Edit imported data"]) & EE(["Create survey"])
     EE --> FF["POST /api/surveys/create"]
     MN(["edit survey"]) --> IJ["GET /api/surveys/:id/edit"]
     IJ --> n7["Edit survey page"]
-    n1 -- credentials correct --> B
-    n1 -- credentials incorrect --> A
+    n1 -- Credentials correct --> B
+    n1 -- Credentials incorrect --> A
     U(["Fill survey info and parameters"]) --> Y(["Add groups manually"]) & AA
     Y --> EE
     n2 --> n3["GET /api/surveys"]
@@ -49,15 +48,15 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    A["Log-in page"] --> n1(["login"])
+    A["Login page"] --> n1(["Sign in"])
     B("GET /api/frontpage") --> C["Front page"]
     C --> H(["Select an active survey"]) & n2(["Open surveys list"])
     H -- <br> --> E("GET /api/surveys/:id/answers")
     D["Survey answers page"] -- Survey open --> OP(["close survey"])
     D -- Survey closed --> n9(["Allocate groups"])
     E --> D
-    n1 -- credentials correct --> B
-    n1 -- credentials incorrect --> A
+    n1 -- Credentials correct --> B
+    n1 -- Credentials incorrect --> A
     n2 --> n3["GET /api/surveys"]
     n3 --> n4(["Select a survey and review results"])
     n8["Untitled Node"] --> A
@@ -86,20 +85,18 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    A["log-in page"] --> B(["login"])
-    B -- credentials incorrect --> A
-    B -- credentials correct --> E("GET /api/frontpage")
-    E --> F["Front page"]
-    F --> G(["Go to a survey with a link"])
-    G --> I("GET /api/surveys/:id")
-    I -- Survey open --> n2["Survey answer page"]
+    A["Login page"] --> B(["Sign in"])
+    B -- Credentials incorrect --> A
+    G(["Go to a survey with a link"]) --> A
+    I("GET /api/surveys/:id") -- Survey open --> n2["Survey answer page"]
     I -- Survey closed --> L["Survey closed page"]
     P("DELETE /api/surveys/:id/submission") --> Q(["Fill out and submit selections"])
-    n1["Rectangle"] --> A
     n2 -- Survey not answered --> Q
     n2 -- Survey already answered --> n3(["Delete submission"])
     n3 --> P
     Q --> S("POST /api/surveys/:id")
+    n4["Anchor"] --> G
+    B -- "<span style=padding-left:>Credentials correct</span>" --> I
 
-    n1@{ shape: anchor}
+    n4@{ shape: anchor}
 ```
