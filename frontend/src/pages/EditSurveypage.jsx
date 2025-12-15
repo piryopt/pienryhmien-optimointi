@@ -115,25 +115,25 @@ const EditSurveyPage = () => {
       const json = await safeParseJson(res);
       if (!res.ok) {
         showNotification(
-          extractMessage(json, res, t("Kyselyn muokkaus epäonnistui")),
+          t(extractMessage(json, res, t("Kyselyn muokkaus epäonnistui"))),
           "error"
         );
         return;
       }
       if (!json || String(json.status) !== "1") {
         showNotification(
-          extractMessage(json, res, t("Kyselyn muokkaus epäonnistui")),
+          t(extractMessage(json, res, t("Kyselyn muokkaus epäonnistui"))),
           "error"
         );
         return;
       }
       showNotification(
-        json.msg || t("Kysely muokattu onnistuneesti"),
+        t(json.msg) || t("Kysely muokattu onnistuneesti"),
         "success"
       );
     } catch (err) {
       showNotification(
-        err?.message || t("Kyselyn muokkaus epäonnistui"),
+        t(err?.message) || t("Kyselyn muokkaus epäonnistui"),
         "error"
       );
     }
