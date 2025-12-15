@@ -114,6 +114,7 @@
   "Kaikkien vaiheiden tulokset tallennettu": "Resultat från alla steg sparade",
   "Käynnissä olevat kyselyt": "Pågående undersökningar",
   "Käyttäjätunnus": "Användarnamn",
+  "Käyttöohje": "Bruksanvisning",
   "Kello": "Klockan",
   "Kentän tulee olla kokonaisluku": "Fältet måste vara ett heltal",
   "Kielletty": "Förbjudet",
@@ -433,7 +434,7 @@
   "yli 5 merkkiä pitkiä": "längre än 5 tecken",
   "Yli viikon roskakorissa olevat kyselyt poistetaan automaattisesti": "",
 
-  "Every stage must have a non-empty name":" Varje steg måste ha ett icke-tomt namn",
+  "Every stage must have a non-empty name": " Varje steg måste ha ett icke-tomt namn",
   "Group minimum size must be smaller than maximum size": "Gruppens minimistorlek måste vara mindre än maximistorleken",
   "Response period's end can't be in the past": "Slutet av svarstiden kan inte vara i det förflutna",
   "Survey created": "Undersökning skapad",
