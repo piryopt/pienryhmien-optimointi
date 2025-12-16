@@ -36,3 +36,15 @@ def test_change_user_language_returns_false_for_invalid_user_id(setup_db):
     incorrect_ids = ["x", "kukkuluuruu", 3.14, "55", False, True, []]
     for item in incorrect_ids:
         assert ur.change_user_language(item, "en") is False
+
+
+def test_exceptions():
+    """
+    Test that exceptions return False
+    """
+    success = ur.get_all_students()
+    assert not success
+    success = ur.get_all_teachers()
+    assert not success
+    success = ur.get_user_by_email("")
+    assert not success
