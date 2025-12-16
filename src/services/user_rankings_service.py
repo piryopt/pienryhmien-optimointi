@@ -18,14 +18,14 @@ class UserRankingsService:
     def add_user_ranking(self, user_id, survey_id, ranking, rejections, reason, **kwargs):
         """
         Adds a user ranking to the database.
-    
+
         Args:
             user_id (int): The ID of the user submitting the ranking.
             survey_id (str): The ID of the survey being ranked.
             ranking (str): The ranking of the survey choices by the user (e.g., "1,2,3,4").
-            rejections (str): The rejected survey choices (comma-separated string). 
+            rejections (str): The rejected survey choices (comma-separated string).
                               Can be an empty string if no rejections are provided.
-            reason (str): The reasoning or justification for the ranking or rejections. 
+            reason (str): The reasoning or justification for the ranking or rejections.
                           Can be an empty string if no reason is provided.
             **kwargs: Optional keyword arguments. Supported keys:
                 - multistage_ranking (bool): Whether this ranking belongs to a multistage survey.
@@ -38,10 +38,8 @@ class UserRankingsService:
                 user_id, survey_id, ranking, rejections, reason, kwargs["stage"], kwargs["not_available"], ranking_exists
             )
         else:
-            ranking = self._user_rankings_repository.add_user_ranking(
-                user_id, survey_id, ranking, rejections, reason, ranking_exists
-            )
-    
+            ranking = self._user_rankings_repository.add_user_ranking(user_id, survey_id, ranking, rejections, reason, ranking_exists)
+
         return ranking
 
     def user_ranking_exists(self, survey_id, user_id):
@@ -72,12 +70,7 @@ class UserRankingsService:
         stages = {}
         for row in rows:
             stage_name = row.stage
-            stages[stage_name] = {
-                "ranking": row.ranking,
-                "rejections": row.rejections,
-                "reason": row.reason,
-                "not_available": row.not_available
-            }
+            stages[stage_name] = {"ranking": row.ranking, "rejections": row.rejections, "reason": row.reason, "not_available": row.not_available}
 
         return stages
 
@@ -127,13 +120,12 @@ class UserRankingsService:
         """
         ranking = self._user_rankings_repository.get_user_ranking(user_id, survey_id)
         return ranking.rejections
-    
+
     def len_all_rankings(self):
         """
         Get the amount of all rankings made in Jakaja. Used for analytics in the admin page.
         """
         return self._user_rankings_repository.get_all_rankings()
-        
 
 
 user_rankings_service = UserRankingsService()

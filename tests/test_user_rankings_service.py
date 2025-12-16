@@ -116,3 +116,15 @@ def test_len_all_rankings(setup_env):
     assert success
     rankings_length = urs.len_all_rankings()
     assert rankings_length == 1
+
+
+def test_get_user_rejections(setup_env):
+    """
+    Test that a correct rejections are returned
+    """
+    user_id = setup_env["user_id"]
+    survey_id = setup_env["survey_id"]
+    success = urs.add_user_ranking(user_id, survey_id, "1,2,3,4,5,8", "6,7,9", "Because seven ate nine")
+    assert success
+    rejections = urs.get_user_rejections(user_id, survey_id)
+    assert rejections == "6,7,9"
