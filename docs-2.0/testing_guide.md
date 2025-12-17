@@ -46,3 +46,11 @@ docker compose run --rm test tests/playwright/ --browser chromium
 ```
 docker compose run --rm test --cov=src --cov-report=html
 ```
+
+### Run vitests and get coverage
+
+Go to frontend directory and run:
+
+```
+npm run test -- --coverage
+```
