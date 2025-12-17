@@ -42,30 +42,37 @@ FLASK_DEBUG=1
 
 ---
 
-## 3. Start the Project with Docker Compose (development environment or testing environment)
+## 3. Start the Project with Docker Compose
 
-Make sure Docker is installed and running. Then, in your project root, run development environment with:
+Make sure Docker is installed and running. Then, in your project root directory, run development environment with:
 
 ```bash
 docker compose up web db --build
 ```
 
 - This will build and start both the web application and the PostgreSQL development database
-- The web app will be available at [http://localhost:5001](http://localhost:5001) (or the port you set in `docker-compose.yml`).
+- The backend will be available at [http://localhost:5001](http://localhost:5001) (or the port you set in `docker-compose.yml`).
 
-To run the application in testing environment which uses the test database run:
+Then go to /frontend directory and run
 
 ```bash
-docker compose run --rm test
+npm install
 ```
+
+Now run frontend with
+
+```bash
+npm run dev
+```
+
+This should've started frontend with Local: http://localhost:5173.
 
 ---
 
 ## 4. Access the Application
 
-- Open your browser and go to [http://localhost:5001](http://localhost:5001).
-- For local development, you can log in using the mock login page at `/auth/login`.
-- Username will be either robottiStudent or robottiTeacher and any password.
+- Open your browser and go to [http://localhost:5173](http://localhost:5173).
+- Working usernames are defined [here](/src/routes.py#L1230). Commonly used username is outi1 defined in .env above. Any password works.
 
 ---
 
