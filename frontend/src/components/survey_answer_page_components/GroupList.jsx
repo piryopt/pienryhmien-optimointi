@@ -121,7 +121,6 @@ const GroupList = ({
                         style={{
                           marginLeft: id.endsWith("good") ? "10px" : "0px"
                         }}
-                        className="group-name"
                       >
                         {item.name}
                       </span>
